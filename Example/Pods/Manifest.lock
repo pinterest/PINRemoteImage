@@ -1,0 +1,54 @@
+PODS:
+  - FLAnimatedImage (1.0.8)
+  - libwebp (0.4.3):
+    - libwebp/core (= 0.4.3)
+    - libwebp/dec (= 0.4.3)
+    - libwebp/demux (= 0.4.3)
+    - libwebp/dsp (= 0.4.3)
+    - libwebp/enc (= 0.4.3)
+    - libwebp/mux (= 0.4.3)
+    - libwebp/utils (= 0.4.3)
+    - libwebp/webp (= 0.4.3)
+  - libwebp/core (0.4.3):
+    - libwebp/webp
+  - libwebp/dec (0.4.3):
+    - libwebp/core
+  - libwebp/demux (0.4.3):
+    - libwebp/core
+  - libwebp/dsp (0.4.3):
+    - libwebp/core
+  - libwebp/enc (0.4.3):
+    - libwebp/core
+  - libwebp/mux (0.4.3):
+    - libwebp/core
+  - libwebp/utils (0.4.3):
+    - libwebp/core
+  - libwebp/webp (0.4.3)
+  - PINCache (2.0)
+  - PINRemoteImage (1.0):
+    - FLAnimatedImage (>= 1.0)
+    - PINCache (>= 1.2)
+
+DEPENDENCIES:
+  - libwebp
+  - PINCache (from `ssh://git@phabricator.pinadmin.com/diffusion/PCC/pincache.git`)
+  - PINRemoteImage (from `../`)
+
+EXTERNAL SOURCES:
+  PINCache:
+    :git: ssh://git@phabricator.pinadmin.com/diffusion/PCC/pincache.git
+  PINRemoteImage:
+    :path: ../
+
+CHECKOUT OPTIONS:
+  PINCache:
+    :commit: d68c82fbcf6300e6a968c7fd3be0092f5ab42786
+    :git: ssh://git@phabricator.pinadmin.com/diffusion/PCC/pincache.git
+
+SPEC CHECKSUMS:
+  FLAnimatedImage: f9422f796135aff80d8c00b2afc48015bb746e24
+  libwebp: 360ed8bc4ec8da413f07f84071e7f5a5c67a285d
+  PINCache: ca953ba93ce1edde056fdd99121ee65b295a08c9
+  PINRemoteImage: 4a5af055f6a93c1c29067c0fee4bc99b90205205
+
+COCOAPODS: 0.37.2

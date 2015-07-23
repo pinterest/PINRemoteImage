@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/PINRemoteImageManager.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/PINRemoteImageManager</TokenIdentifier>
+			<Abstract type="html">PINRemoteImageManager is the main workhorse of PINRemoteImage. It is unnecessary to access directly if you simply
+wish to download images and have them rendered in a UIImageView, UIButton or FLAnimatedImageView.</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+			
+			<NodeRef refid="2"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/PINRemoteImageManager/sharedImageManager</TokenIdentifier>
+			<Abstract type="html">Get the shared instance of PINRemoteImageManager</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)sharedImageManager</Declaration>
+			
+			<ReturnValue><Abstract type="html">Shared instance of PINRemoteImageManager</Abstract></ReturnValue>
+			<Anchor>//api/name/sharedImageManager</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/defaultImageCache</TokenIdentifier>
+			<Abstract type="html">The result of this method is assigned to self.cache in init. If you wish to provide a customized cache to the manager you can subclass PINRemoteImageManager and return a custom PINCache from this method.</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+			<Declaration>- (PINCache *)defaultImageCache</Declaration>
+			
+			<ReturnValue><Abstract type="html">An instance of a PINCache object.</Abstract></ReturnValue>
+			<Anchor>//api/name/defaultImageCache</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/setHighQualityBPSThreshold:completion:</TokenIdentifier>
+			<Abstract type="html">Set the minimum BPS to download the highest quality image in a set.</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/downloadImageWithURLs:options:progress:completion:</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (void)setHighQualityBPSThreshold:(float)highQualityBPSThreshold completion:(dispatch_block_t)completion</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>highQualityBPSThreshold</Name>
+					<Abstract type="html">bytes per second minimum. Defaults to 500000.</Abstract>
+				</Parameter><Parameter>
+					<Name>completion</Name>
+					<Abstract type="html">Completion to be called once highQualityBPSThreshold has been set.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setHighQualityBPSThreshold:completion:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/setLowQualityBPSThreshold:completion:</TokenIdentifier>
+			<Abstract type="html">Set the maximum BPS to download the lowest quality image in a set.</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/downloadImageWithURLs:options:progress:completion:</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (void)setLowQualityBPSThreshold:(float)lowQualityBPSThreshold completion:(dispatch_block_t)completion</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>lowQualityBPSThreshold</Name>
+					<Abstract type="html">bytes per second maximum. Defaults to 50000.</Abstract>
+				</Parameter><Parameter>
+					<Name>completion</Name>
+					<Abstract type="html">Completion to be called once lowQualityBPSThreshold has been set.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setLowQualityBPSThreshold:completion:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/setShouldUpgradeLowQualityImages:completion:</TokenIdentifier>
+			<Abstract type="html">Set whether high quality images should be downloaded when a low quality image is cached if network connectivity has improved.</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/downloadImageWithURLs:options:progress:completion:</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (void)setShouldUpgradeLowQualityImages:(BOOL)shouldUpgradeLowQualityImages completion:(dispatch_block_t)completion</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>shouldUpgradeLowQualityImages</Name>
+					<Abstract type="html">if YES, low quality images will be &apos;upgraded&apos;.</Abstract>
+				</Parameter><Parameter>
+					<Name>completion</Name>
+					<Abstract type="html">Completion to be called once shouldUpgradeLowQualityImages has been set.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setShouldUpgradeLowQualityImages:completion:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/setMaxNumberOfConcurrentOperations:completion:</TokenIdentifier>
+			<Abstract type="html">Set the maximum number of concurrent operations (decompressing images, creating gifs, etc).</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+			<Declaration>- (void)setMaxNumberOfConcurrentOperations:(NSInteger)maxNumberOfConcurrentOperations completion:(dispatch_block_t)completion</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>maxNumberOfConcurrentOperations</Name>
+					<Abstract type="html">The maximum number of concurrent operations. Defaults to NSOperationQueueDefaultMaxConcurrentOperationCount.</Abstract>
+				</Parameter><Parameter>
+					<Name>completion</Name>
+					<Abstract type="html">Completion to be called once maxNumberOfConcurrentOperations is set.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setMaxNumberOfConcurrentOperations:completion:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/setMaxNumberOfConcurrentDownloads:completion:</TokenIdentifier>
+			<Abstract type="html">Set the maximum number of concurrent downloads.</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+			<Declaration>- (void)setMaxNumberOfConcurrentDownloads:(NSInteger)maxNumberOfConcurrentDownloads completion:(dispatch_block_t)completion</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>maxNumberOfConcurrentDownloads</Name>
+					<Abstract type="html">The maximum number of concurrent downloads. Defaults to 10.</Abstract>
+				</Parameter><Parameter>
+					<Name>completion</Name>
+					<Abstract type="html">Completion to be called once maxNumberOfConcurrentDownloads is set.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setMaxNumberOfConcurrentDownloads:completion:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/setEstimatedRemainingTimeThresholdForProgressiveDownloads:completion:</TokenIdentifier>
+			<Abstract type="html">Set the estimated time remaining to download threshold at which to generate progressive images. Progressive images previews will only be generated if the estimated remaining time on a download is greater than estimatedTimeRemainingThreshold. If estimatedTimeRemainingThreshold is less than zero, this check is skipped.</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+			<Declaration>- (void)setEstimatedRemainingTimeThresholdForProgressiveDownloads:(NSTimeInterval)estimatedRemainingTimeThreshold completion:(dispatch_block_t)completion</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>estimatedRemainingTimeThreshold</Name>
+					<Abstract type="html">The estimated remaining time threshold used to decide to skip progressive rendering. Defaults to 0.1.</Abstract>
+				</Parameter><Parameter>
+					<Name>completion</Name>
+					<Abstract type="html">Completion to be called once estimatedTimeRemainingTimeThreshold is set.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setEstimatedRemainingTimeThresholdForProgressiveDownloads:completion:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/setProgressThresholds:completion:</TokenIdentifier>
+			<Abstract type="html">Sets the progress at which progressive images are generated. By default this is @[@0.00, @0.35, @0.65] which generates at most, 3 progressive images. The first progressive image will only be generated when at least one scan has been completed (so you never see half an image).</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+			<Declaration>- (void)setProgressThresholds:(NSArray *)progressThresholds completion:(dispatch_block_t)completion</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>progressThresholds</Name>
+					<Abstract type="html">an array of progress thresholds at which to generate progressive images. progress thresholds should range from 0.00 - 1.00. Defaults to @[@0.00, @0.35, @0.65]</Abstract>
+				</Parameter><Parameter>
+					<Name>completion</Name>
+					<Abstract type="html">Completion to be called once progressThresholds is set.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setProgressThresholds:completion:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/prefetchImageWithURL:</TokenIdentifier>
+			<Abstract type="html">Prefetch an image at the given URL.</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+			<Declaration>- (void)prefetchImageWithURL:(NSURL *)url</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>url</Name>
+					<Abstract type="html">NSURL where the image to prefetch resides.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/prefetchImageWithURL:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/prefetchImageWithURL:options:</TokenIdentifier>
+			<Abstract type="html">Prefetch an image at the given URL with given options.</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+			<Declaration>- (void)prefetchImageWithURL:(NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>url</Name>
+					<Abstract type="html">NSURL where the image to prefetch resides.</Abstract>
+				</Parameter><Parameter>
+					<Name>options</Name>
+					<Abstract type="html">PINRemoteImageManagerDownloadOptions options with which to pefetch the image.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/prefetchImageWithURL:options:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/prefetchImagesWithURLs:</TokenIdentifier>
+			<Abstract type="html">Prefetch images at the given URLs.</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+			<Declaration>- (void)prefetchImagesWithURLs:(NSArray *)urls</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>urls</Name>
+					<Abstract type="html">An array of NSURLs where the images to prefetch reside.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/prefetchImagesWithURLs:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/prefetchImagesWithURLs:options:</TokenIdentifier>
+			<Abstract type="html">Prefetch images at the given URLs with given options.</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+			<Declaration>- (void)prefetchImagesWithURLs:(NSArray *)urls options:(PINRemoteImageManagerDownloadOptions)options</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>urls</Name>
+					<Abstract type="html">An array of NSURLs where the images to prefetch reside.</Abstract>
+				</Parameter><Parameter>
+					<Name>options</Name>
+					<Abstract type="html">PINRemoteImageManagerDownloadOptions options with which to pefetch the image.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/prefetchImagesWithURLs:options:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/downloadImageWithURL:completion:</TokenIdentifier>
+			<Abstract type="html">Download or retrieve from cache the image found at the url. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+			<Declaration>- (NSUUID *)downloadImageWithURL:(NSURL *)url completion:(PINRemoteImageManagerImageCompletion)completion</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>url</Name>
+					<Abstract type="html">NSURL where the image to download resides.</Abstract>
+				</Parameter><Parameter>
+					<Name>completion</Name>
+					<Abstract type="html">PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).</Abstract></ReturnValue>
+			<Anchor>//api/name/downloadImageWithURL:completion:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/downloadImageWithURL:options:completion:</TokenIdentifier>
+			<Abstract type="html">Download or retrieve from cache the image found at the url. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+			<Declaration>- (NSUUID *)downloadImageWithURL:(NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options completion:(PINRemoteImageManagerImageCompletion)completion</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>url</Name>
+					<Abstract type="html">NSURL where the image to download resides.</Abstract>
+				</Parameter><Parameter>
+					<Name>options</Name>
+					<Abstract type="html">PINRemoteImageManagerDownloadOptions options with which to fetch the image.</Abstract>
+				</Parameter><Parameter>
+					<Name>completion</Name>
+					<Abstract type="html">PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).</Abstract></ReturnValue>
+			<Anchor>//api/name/downloadImageWithURL:options:completion:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/downloadImageWithURL:options:progress:completion:</TokenIdentifier>
+			<Abstract type="html">Download or retrieve from cache the image found at the url. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+			<Declaration>- (NSUUID *)downloadImageWithURL:(NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options progress:(PINRemoteImageManagerImageCompletion)progress completion:(PINRemoteImageManagerImageCompletion)completion</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>url</Name>
+					<Abstract type="html">NSURL where the image to download resides.</Abstract>
+				</Parameter><Parameter>
+					<Name>options</Name>
+					<Abstract type="html">PINRemoteImageManagerDownloadOptions options with which to fetch the image.</Abstract>
+				</Parameter><Parameter>
+					<Name>progress</Name>
+					<Abstract type="html">PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.</Abstract>
+				</Parameter><Parameter>
+					<Name>completion</Name>
+					<Abstract type="html">PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).</Abstract></ReturnValue>
+			<Anchor>//api/name/downloadImageWithURL:options:progress:completion:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/downloadImageWithURL:options:processorKey:processor:completion:</TokenIdentifier>
+			<Abstract type="html">Download or retrieve from cache the image found at the url and process it before calling completion. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+			<Declaration>- (NSUUID *)downloadImageWithURL:(NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor completion:(PINRemoteImageManagerImageCompletion)completion</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>url</Name>
+					<Abstract type="html">NSURL where the image to download resides.</Abstract>
+				</Parameter><Parameter>
+					<Name>options</Name>
+					<Abstract type="html">PINRemoteImageManagerDownloadOptions options with which to fetch the image.</Abstract>
+				</Parameter><Parameter>
+					<Name>processorKey</Name>
+					<Abstract type="html">NSString key to uniquely identify processor and process. Will be used for caching processed images.</Abstract>
+				</Parameter><Parameter>
+					<Name>processor</Name>
+					<Abstract type="html">PINRemoteImageManagerImageProcessor block which will be called to post-process downloaded image.</Abstract>
+				</Parameter><Parameter>
+					<Name>completion</Name>
+					<Abstract type="html">PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).</Abstract></ReturnValue>
+			<Anchor>//api/name/downloadImageWithURL:options:processorKey:processor:completion:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/downloadImageWithURLs:options:progress:completion:</TokenIdentifier>
+			<Abstract type="html">Download or retrieve from cache one of the images found at the urls in the passed in array based on current network performance. URLs should be sorted from lowest quality image URL to highest. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+			<Declaration>- (NSUUID *)downloadImageWithURLs:(NSArray *)urls options:(PINRemoteImageManagerDownloadOptions)options progress:(PINRemoteImageManagerImageCompletion)progress completion:(PINRemoteImageManagerImageCompletion)completion</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>urls</Name>
+					<Abstract type="html">An array of NSURLs of increasing size.</Abstract>
+				</Parameter><Parameter>
+					<Name>options</Name>
+					<Abstract type="html">PINRemoteImageManagerDownloadOptions options with which to fetch the image.</Abstract>
+				</Parameter><Parameter>
+					<Name>progress</Name>
+					<Abstract type="html">PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.</Abstract>
+				</Parameter><Parameter>
+					<Name>completion</Name>
+					<Abstract type="html">PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).</Abstract></ReturnValue>
+			<Anchor>//api/name/downloadImageWithURLs:options:progress:completion:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/cacheKeyForURL:processorKey:</TokenIdentifier>
+			<Abstract type="html">Returns the cacheKey for a given URL and processorKey. Exposed to be overridden if necessary or to be used with imageFromCacheWithCacheKey</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/imageFromCacheWithCacheKey:completion:</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (NSString *)cacheKeyForURL:(NSURL *)url processorKey:(NSString *)processorKey</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>url</Name>
+					<Abstract type="html">NSURL to be downloaded</Abstract>
+				</Parameter><Parameter>
+					<Name>processorKey</Name>
+					<Abstract type="html">NSString key to uniquely identify processor and process.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">returns an NSString which is the key used for caching.</Abstract></ReturnValue>
+			<Anchor>//api/name/cacheKeyForURL:processorKey:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/imageFromCacheWithCacheKey:completion:</TokenIdentifier>
+			<Abstract type="html">Directly get an image from the underlying cache.</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/cacheKeyForURL:processorKey:</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (void)imageFromCacheWithCacheKey:(NSString *)cacheKey completion:(PINRemoteImageManagerImageCompletion)completion</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>cacheKey</Name>
+					<Abstract type="html">NSString key to look up image in the cache.</Abstract>
+				</Parameter><Parameter>
+					<Name>completion</Name>
+					<Abstract type="html">PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/imageFromCacheWithCacheKey:completion:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/cancelTaskWithUUID:</TokenIdentifier>
+			<Abstract type="html">Cancel a download. Canceling will only cancel the download if all other downloads are also canceled with their associated UUIDs. Canceling does not guarantee that your completion will not be called. You can use the UUID provided on the result object verify the completion you want called is being called.</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/cl/PINRemoteImageCategoryManager</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (void)cancelTaskWithUUID:(NSUUID *)UUID</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>UUID</Name>
+					<Abstract type="html">NSUUID of the task to cancel.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/cancelTaskWithUUID:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINRemoteImageManager/setPriority:ofTaskWithUUID:</TokenIdentifier>
+			<Abstract type="html">Set the priority of a download task. Since there is only one task per download, the priority of the download task will always be the last priority this method was called with.</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			
+			<Declaration>- (void)setPriority:(PINRemoteImageManagerPriority)priority ofTaskWithUUID:(NSUUID *)UUID</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>priority</Name>
+					<Abstract type="html">priority to set on the task.</Abstract>
+				</Parameter><Parameter>
+					<Name>UUID</Name>
+					<Abstract type="html">NSUUID of the task to set the priority on.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setPriority:ofTaskWithUUID:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

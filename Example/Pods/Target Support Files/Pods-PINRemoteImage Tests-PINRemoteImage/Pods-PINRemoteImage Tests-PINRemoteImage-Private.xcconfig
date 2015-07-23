@@ -1,0 +1,6 @@
+#include "Pods-PINRemoteImage Tests-PINRemoteImage.xcconfig"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/PINRemoteImage" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/FLAnimatedImage" "${PODS_ROOT}/Headers/Public/PINCache" "${PODS_ROOT}/Headers/Public/PINRemoteImage" "${PODS_ROOT}/Headers/Public/libwebp" "${PODS_ROOT}/Headers/Public/libwebp/webp"
+OTHER_LDFLAGS = ${PODS_PINREMOTEIMAGE_TESTS_PINREMOTEIMAGE_OTHER_LDFLAGS} -ObjC
+PODS_ROOT = ${SRCROOT}
+SKIP_INSTALL = YES

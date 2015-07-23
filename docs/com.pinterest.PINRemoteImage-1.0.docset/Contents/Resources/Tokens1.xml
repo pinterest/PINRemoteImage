@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/PINRemoteImageCategoryManager.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/PINRemoteImageCategoryManager</TokenIdentifier>
+			<Abstract type="html">PINRemoteImageCategoryManager is a class that handles subclassing image display classes. UIImage+PINRemoteImage, UIButton+PINRemoteImage, etc, all delegate their work to this class. If you&apos;d like to create a category to display an image on a view, you should mimic one of the above categories.</Abstract>
+			<DeclaredIn>PINRemoteImageCategoryManager.h</DeclaredIn>
+            
+			
+			<NodeRef refid="1"/>
+		</Token>
+		
+		
+        
+        
+	</File>
+</Tokens>

@@ -1,0 +1,9 @@
+target 'PINRemoteImage', :exclusive => true do
+  pod "PINRemoteImage", :path => "../"
+  pod "PINCache", :git => "ssh://git@phabricator.pinadmin.com/diffusion/PCC/pincache.git"
+  pod "libwebp"
+end
+
+target 'PINRemoteImage Tests', :exclusive => true do
+  pod "PINRemoteImage", :path => "../"
+end

@@ -1,0 +1,5 @@
+# reference: http://www.objc.io/issue-6/travis-ci.html
+
+language: objective-c
+script:
+- xctool test -workspace Example/PIRemoteImage.xcworkspace -scheme PIRemoteImage -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
