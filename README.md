@@ -92,6 +92,8 @@ __PINRemoteImage__ requires iOS 7.0 or greater.
 ## Contact
 
 [Garrett Moon](mailto:garrett@pinterest.com)
+[@garrettmoon](https://twitter.com/garrettmoon)
+[Pinterest](https://www.pinterest.com/garrettlunar/)
 
 ## License
 
