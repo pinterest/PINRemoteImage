@@ -1,7 +1,7 @@
 {
   "name": "PINRemoteImage",
   "version": "1.0",
-  "summary": "YAIDCLIOS (Yet another image downloading and caching library for iOS)",
+  "summary": "A thread safe, performant, feature rich image fetcher",
   "homepage": "https://github.com/pinterest/PINRemoteImage",
   "license": "Apache 2.0",
   "authors": {

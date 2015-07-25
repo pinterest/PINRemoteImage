@@ -281,12 +281,12 @@
     XCTestExpectation *imageSetExpectation = [self expectationWithDescription:@"imageView did not have image set"];
     UIImageView *imageView = [[UIImageView alloc] init];
     __weak UIImageView *weakImageView = imageView;
-    [imageView setImageFromURL:[self JPEGURL]
-                    completion:^(PINRemoteImageManagerResult *result)
-    {
-        if (weakImageView.image)
-            [imageSetExpectation fulfill];
-    }];
+    [imageView pin_setImageFromURL:[self JPEGURL]
+                        completion:^(PINRemoteImageManagerResult *result)
+     {
+         if (weakImageView.image)
+             [imageSetExpectation fulfill];
+     }];
 
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
 }
@@ -296,13 +296,13 @@
     XCTestExpectation *imageSetExpectation = [self expectationWithDescription:@"animatedImageView did not have animated image set"];
     FLAnimatedImageView *imageView = [[FLAnimatedImageView alloc] init];
     __weak FLAnimatedImageView *weakImageView = imageView;
-    [imageView setImageFromURL:[self GIFURL]
-                    completion:^(PINRemoteImageManagerResult *result)
-    {
-        if (weakImageView.animatedImage)
-            [imageSetExpectation fulfill];
-    }];
-    
+    [imageView pin_setImageFromURL:[self GIFURL]
+                        completion:^(PINRemoteImageManagerResult *result)
+     {
+         if (weakImageView.animatedImage)
+             [imageSetExpectation fulfill];
+     }];
+
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
 }
 

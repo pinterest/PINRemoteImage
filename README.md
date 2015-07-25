@@ -15,34 +15,39 @@ PINRemoteImageManager's methods. Built in, are categories on UIImageView, FLAnim
 
 
 Download an image and set it on an image view:
-```objective-c
+
+```objc
 UIImageView *imageView = [[UIImageView alloc] init];
-[imageView setImageFromURL:[NSURL URLWithString:@"http://pinterest.com/kitten.jpg"]];
+[imageView pin_setImageFromURL:[NSURL URLWithString:@"http://pinterest.com/kitten.jpg"]];
 ```
     
 Download a progressive jpeg and get attractive blurred updates:
-```objective-c
+
+```objc
 UIImageView *imageView = [[UIImageView alloc] init];
-[imageView setUpdateWithProgress:YES];
-[imageView setImageFromURL:[NSURL URLWithString:@"http://pinterest.com/progressiveKitten.jpg"]];
+[imageView pin_setUpdateWithProgress:YES];
+[imageView pin_setImageFromURL:[NSURL URLWithString:@"http://pinterest.com/progressiveKitten.jpg"]];
 ```
 
 Download a WebP file
-```objective-c
+
+```objc
 UIImageView *imageView = [[UIImageView alloc] init];
-[imageView setImageFromURL:[NSURL URLWithString:@"http://pinterest.com/googleKitten.webp"]];
+[imageView pin_setImageFromURL:[NSURL URLWithString:@"http://pinterest.com/googleKitten.webp"]];
 ```
 
 Download a GIF and display with FLAnimatedImageView
-```objective-c
+
+```objc
 FLAnimatedImageView *animatedImageView = [[FLAnimatedImageView alloc] init];
-[animatedImageView setImageFromURL:[NSURL URLWithString:@"http://pinterest.com/flyingKitten.gif"]];
+[animatedImageView pin_setImageFromURL:[NSURL URLWithString:@"http://pinterest.com/flyingKitten.gif"]];
 ```
 
 Download and process an image
-```objective-c
+
+```objc
 UIImageView *imageView = [[UIImageView alloc] init];
-[self.imageView setImageFromURL:[NSURL URLWithString:@"https://s-media-cache-ak0.pinimg.com/736x/5b/c6/c5/5bc6c5387ff6f104fd642f2b375efba3.jpg"] processorKey:@"rounded" processor:^UIImage *(PINRemoteImageManagerResult *result, NSUInteger *cost)
+[self.imageView pin_setImageFromURL:[NSURL URLWithString:@"https://s-media-cache-ak0.pinimg.com/736x/5b/c6/c5/5bc6c5387ff6f104fd642f2b375efba3.jpg"] processorKey:@"rounded" processor:^UIImage *(PINRemoteImageManagerResult *result, NSUInteger *cost)
  {
      CGSize targetSize = CGSizeMake(200, 300);
      CGRect imageRect = CGRectMake(0, 0, targetSize.width, targetSize.height);

@@ -21,7 +21,7 @@
 {
     [super viewDidLoad];
     // MUST BE SET ON IMAGE VIEW TO GET PROGRESS UPDATES!
-    [self.imageView setUpdateWithProgress:YES];
+    self.imageView.pin_updateWithProgress = YES;
     // Do any additional setup after loading the view.
 }
 
@@ -43,7 +43,7 @@
     NSURL *progressiveURL = [NSURL URLWithString:@"https://s-media-cache-ak0.pinimg.com/1200x/2e/0c/c5/2e0cc5d86e7b7cd42af225c29f21c37f.jpg"];
     [[PINRemoteImageManager sharedImageManager] setProgressThresholds:@[@(0.1), @(0.2), @(0.3), @(0.4), @(0.5), @(0.6), @(0.7), @(0.8), @(0.9)] completion:nil];
     [[[PINRemoteImageManager sharedImageManager] cache] removeObjectForKey:[[PINRemoteImageManager sharedImageManager] cacheKeyForURL:progressiveURL processorKey:nil]];
-    [self.imageView setImageFromURL:progressiveURL];
+    [self.imageView pin_setImageFromURL:progressiveURL];
     
     NSMutableArray *progress = [[NSMutableArray alloc] init];
     [[PINRemoteImageManager sharedImageManager]

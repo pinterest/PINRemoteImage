@@ -8,9 +8,9 @@
 
 #import "NSData+ImageDetectors.h"
 
-@implementation NSData (ImageDetectors)
+@implementation NSData (PINImageDetectors)
 
-- (BOOL)isGIF
+- (BOOL)pin_isGIF
 {
     const NSInteger length = 3;
     Byte firstBytes[length];
@@ -25,7 +25,7 @@
 }
 
 #if __has_include(<webp/decode.h>)
-- (BOOL)isWebP
+- (BOOL)pin_isWebP
 {
     const NSInteger length = 12;
     Byte firstBytes[length];
@@ -37,6 +37,22 @@
         }
     }
     return NO;
+}
+#endif
+
+@end
+
+@implementation NSData (PINImageDetectors_Deprecated)
+
+- (BOOL)isGIF
+{
+    return [self pin_isGIF];
+}
+
+#if __has_include(<webp/decode.h>)
+- (BOOL)isWebP
+{
+    return [self pin_isWebP];
 }
 #endif
 

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Constants/PINRemoteImageResultType.html">
+	<File path="Constants/PINRemoteImageManagerPriority.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/c/tdef/PINRemoteImageResultType</TokenIdentifier>
-			<Abstract type="html">How the image was fetched.</Abstract>
-			<DeclaredIn>PINRemoteImageManagerResult.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/c/tdef/PINRemoteImageManagerPriority</TokenIdentifier>
+			<Abstract type="html">Priority to download and process image at.</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
             
 			
 			<NodeRef refid="7"/>
@@ -14,41 +14,51 @@
 		
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageResultTypeNone</TokenIdentifier>
-            <Abstract type="html">Returned if no image is returned</Abstract>
-            <Declaration>PINRemoteImageResultTypeNone</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityVeryLow</TokenIdentifier>
+            <Abstract type="html">Very low priority</Abstract>
+            <Declaration>PINRemoteImageManagerPriorityVeryLow</Declaration>
             
-            <DeclaredIn>PINRemoteImageManagerResult.h</DeclaredIn>
-            
-            <NodeRef refid="7"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageResultTypeMemoryCache</TokenIdentifier>
-            <Abstract type="html">Image was fetched from the memory cache</Abstract>
-            <Declaration>PINRemoteImageResultTypeMemoryCache</Declaration>
-            
-            <DeclaredIn>PINRemoteImageManagerResult.h</DeclaredIn>
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
             
             <NodeRef refid="7"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageResultTypeCache</TokenIdentifier>
-            <Abstract type="html">Image was fetched from the disk cache</Abstract>
-            <Declaration>PINRemoteImageResultTypeCache</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityLow</TokenIdentifier>
+            <Abstract type="html">Low priority</Abstract>
+            <Declaration>PINRemoteImageManagerPriorityLow</Declaration>
             
-            <DeclaredIn>PINRemoteImageManagerResult.h</DeclaredIn>
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
             
             <NodeRef refid="7"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageResultTypeDownload</TokenIdentifier>
-            <Abstract type="html">Image was downloaded</Abstract>
-            <Declaration>PINRemoteImageResultTypeDownload</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityMedium</TokenIdentifier>
+            <Abstract type="html">Medium priority</Abstract>
+            <Declaration>PINRemoteImageManagerPriorityMedium</Declaration>
             
-            <DeclaredIn>PINRemoteImageManagerResult.h</DeclaredIn>
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+            <NodeRef refid="7"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityHigh</TokenIdentifier>
+            <Abstract type="html">High priority</Abstract>
+            <Declaration>PINRemoteImageManagerPriorityHigh</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+            <NodeRef refid="7"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityVeryHigh</TokenIdentifier>
+            <Abstract type="html">Very high priority</Abstract>
+            <Declaration>PINRemoteImageManagerPriorityVeryHigh</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
             
             <NodeRef refid="7"/>
         </Token>

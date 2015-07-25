@@ -357,7 +357,7 @@
         CGImageRef outputImageRef = [self.processingContext createCGImage:outputImage fromRect:CGRectMake(0, 0, inputImage.size.width, inputImage.size.height)];
         
         //"decoding" the image here copies it to CPU memory?
-        outputUIImage = [UIImage decodedImageWithCGImageRef:outputImageRef];
+        outputUIImage = [UIImage pin_decodedImageWithCGImageRef:outputImageRef];
         CGImageRelease(outputImageRef);
     }
     

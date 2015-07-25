@@ -16,9 +16,9 @@ static void releaseData(void *info, const void *data, size_t size)
     free((void *)data);
 }
 
-@implementation UIImage (WebP)
+@implementation UIImage (PINWebP)
 
-+ (UIImage *)imageWithWebPData:(NSData *)webPData
++ (UIImage *)pin_imageWithWebPData:(NSData *)webPData
 {
     WebPBitstreamFeatures features;
     if (WebPGetFeatures([webPData bytes], [webPData length], &features) == VP8_STATUS_OK) {
@@ -70,6 +70,15 @@ static void releaseData(void *info, const void *data, size_t size)
         }
     }
     return nil;
+}
+
+@end
+
+@implementation UIImage (PINWebP_Deprecated)
+
++ (UIImage *)imageWithWebPData:(NSData *)webPData
+{
+    return [self pin_imageWithWebPData:webPData];
 }
 
 @end

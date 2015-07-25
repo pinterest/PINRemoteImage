@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Constants/PINRemoteImageManagerError.html">
+	<File path="Constants/PINRemoteImageManagerDownloadOptions.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/c/tdef/PINRemoteImageManagerError</TokenIdentifier>
-			<Abstract type="html">Error codes returned by PINRemoteImage</Abstract>
+			<TokenIdentifier>//apple_ref/c/tdef/PINRemoteImageManagerDownloadOptions</TokenIdentifier>
+			<Abstract type="html">Options with which to download and process images</Abstract>
 			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
             
 			
@@ -14,9 +14,9 @@
 		
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerErrorFailedToDecodeImage</TokenIdentifier>
-            <Abstract type="html">The image failed to decode</Abstract>
-            <Declaration>PINRemoteImageManagerErrorFailedToDecodeImage</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerDownloadOptionsNone</TokenIdentifier>
+            <Abstract type="html">Download and process with default options (no other options set)</Abstract>
+            <Declaration>PINRemoteImageManagerDownloadOptionsNone</Declaration>
             
             <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
             
@@ -24,9 +24,9 @@
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerErrorFailedToFetchImageForProcessing</TokenIdentifier>
-            <Abstract type="html">The image could not be downloaded and therefore could not be processed</Abstract>
-            <Declaration>PINRemoteImageManagerErrorFailedToFetchImageForProcessing</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerDownloadOptionsIgnoreGIFs</TokenIdentifier>
+            <Abstract type="html">Regardless of the image type downloaded, return UIImages and not FLAnimatedImage</Abstract>
+            <Declaration>PINRemoteImageManagerDownloadOptionsIgnoreGIFs</Declaration>
             
             <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
             
@@ -34,9 +34,29 @@
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerErrorFailedToProcessImage</TokenIdentifier>
-            <Abstract type="html">The image returned by the processor block was nil</Abstract>
-            <Declaration>PINRemoteImageManagerErrorFailedToProcessImage</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerDownloadOptionsSkipDecode</TokenIdentifier>
+            <Abstract type="html">Skip decoding the image before returning. This means smaller images returned, but images will be decoded on the main thread when set on an image view</Abstract>
+            <Declaration>PINRemoteImageManagerDownloadOptionsSkipDecode</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+            <NodeRef refid="5"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerDownloadOptionsSkipEarlyCheck</TokenIdentifier>
+            <Abstract type="html">Skip the early check of the memory cache</Abstract>
+            <Declaration>PINRemoteImageManagerDownloadOptionsSkipEarlyCheck</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+            <NodeRef refid="5"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerSaveProcessedImageAsJPEG</TokenIdentifier>
+            <Abstract type="html">Save processed images as JPEGs in the cache. The default is PNG to support transparency</Abstract>
+            <Declaration>PINRemoteImageManagerSaveProcessedImageAsJPEG</Declaration>
             
             <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
             

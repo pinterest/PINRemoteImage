@@ -36,12 +36,12 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   PINRemoteImage:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
   FLAnimatedImage: f9422f796135aff80d8c00b2afc48015bb746e24
   libwebp: 360ed8bc4ec8da413f07f84071e7f5a5c67a285d
   PINCache: ca953ba93ce1edde056fdd99121ee65b295a08c9
-  PINRemoteImage: 11adba0a2f6373b6e5777576f5e977b76177fbd1
+  PINRemoteImage: 549bfaee9043ea79fed7a2eb5b620d41557159df
 
 COCOAPODS: 0.37.2

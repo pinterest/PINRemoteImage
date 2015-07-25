@@ -9,9 +9,15 @@
 #if __has_include(<webp/decode.h>)
 @import UIKit;
 
-@interface UIImage (WebP)
+@interface UIImage (PINWebP)
 
-+ (UIImage *)imageWithWebPData:(NSData *)webPData;
++ (UIImage *)pin_imageWithWebPData:(NSData *)webPData;
+
+@end
+
+@interface UIImage (PINWebP_Deprecated)
+
++ (UIImage *)imageWithWebPData:(NSData *)webPData __attribute((deprecated("use pin_imageWithWebPData:")));
 
 @end
 #endif
