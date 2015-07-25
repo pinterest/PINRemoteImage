@@ -2,7 +2,7 @@
 
 ## Fast, non-deadlocking parallel image downloader and cache for iOS
 
-[PINRemoteImageManager](Pod/Classes/PINRemoteImageManager.h) is an image downloading, processing and caching manager. It uses the concept of download and processing tasks to ensure that even if multiple calls to download or process an image are made, it only occurs one time (unless an item is no longer in the cache). PINRemoteImageManager is backed by GCD and safe to access from multiple threads simultaneously. It ensures that images are decoded off the main thread so that animation performance isn't affected. None of it's exposed methods allow for synchronous access, however it is optimized to call completions on the calling thread if an item is in its memory cache.
+[PINRemoteImageManager](Pod/Classes/PINRemoteImageManager.h) is an image downloading, processing and caching manager. It uses the concept of download and processing tasks to ensure that even if multiple calls to download or process an image are made, it only occurs one time (unless an item is no longer in the cache). PINRemoteImageManager is backed by GCD and safe to access from multiple threads simultaneously. It ensures that images are decoded off the main thread so that animation performance isn't affected. None of its exposed methods allow for synchronous access, however it is optimized to call completions on the calling thread if an item is in its memory cache.
 
 PINRemoteImage supports downloading many types of files. It, of course, supports both PNGs and JPGs. It also supports decoding WebP images if Google's library is available. It even supports returning [FLAnimatedImages](https://github.com/Flipboard/FLAnimatedImage) if it's compiled in (though this can be disabled).
 
