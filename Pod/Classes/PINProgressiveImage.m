@@ -8,8 +8,8 @@
 
 #import "PINProgressiveImage.h"
 
-#import <ImageIO/ImageIO.h>
-#import <CoreImage/CoreImage.h>
+@import ImageIO;
+@import CoreImage;
 
 #import "PINRemoteImage.h"
 #import "UIImage+DecodedImage.h"

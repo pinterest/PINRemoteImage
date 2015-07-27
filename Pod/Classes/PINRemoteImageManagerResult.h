@@ -6,7 +6,7 @@
 //
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 
 #import <FLAnimatedImage/FLAnimatedImage.h>
 
