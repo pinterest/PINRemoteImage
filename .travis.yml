@@ -2,4 +2,4 @@
 
 language: objective-c
 script:
-- xctool test -workspace Example/PIRemoteImage.xcworkspace -scheme PIRemoteImage -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+- xctool test -workspace Example/PINRemoteImage.xcworkspace -scheme PINRemoteImage -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
