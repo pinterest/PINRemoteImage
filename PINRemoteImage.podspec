@@ -10,12 +10,11 @@
 Pod::Spec.new do |s|
   s.name             = "PINRemoteImage"
   s.version          = "1.0"
-  s.summary          = "YAIDCLIOS (Yet another image downloading and caching library for iOS)"
-  s.homepage         = "https://github.pinadmin.com/Pinterest/PINRemoteImage"
-  # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
+  s.summary          = "A thread safe, performant, feature rich image fetcher"
+  s.homepage         = "https://github.com/pinterest/PINRemoteImage"
   s.license          = 'Apache 2.0'
   s.author           = { "Garrett Moon" => "garrett@pinterest.com" }
-  s.source           = { :git => "git@github.pinadmin.com:Pinterest/PINRemoteImage.git", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/pinterest/PINRemoteImage.git", :tag => 1.0 }
   s.social_media_url = 'https://twitter.com/garrettmoon'
 
   s.platform     = :ios, '6.0'
@@ -26,7 +25,6 @@ Pod::Spec.new do |s|
   s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'UIKit', 'ImageIO', 'CoreImage'
   s.dependency 'FLAnimatedImage', '>= 1.0'
-  s.dependency 'PINCache', '>=1.2'
-
+  s.dependency 'PINCache', '>=2.0'
 
 end
