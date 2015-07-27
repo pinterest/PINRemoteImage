@@ -289,7 +289,7 @@ typedef void (^PINDiskCacheObjectBlock)(PINDiskCache *cache, NSString *key, id <
  @param key The key associated with the object.
  @result The object for the specified key.
  */
-- (__nullable id <NSCoding>)objectForKey:(NSString *)key;
+- (id <NSCoding>)objectForKey:(NSString *)key;
 
 /**
  Retrieves the file URL for the specified key. This method blocks the calling thread until the

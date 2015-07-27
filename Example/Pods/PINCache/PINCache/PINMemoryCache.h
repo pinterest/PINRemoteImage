@@ -246,7 +246,7 @@ typedef void (^PINMemoryCacheObjectBlock)(PINMemoryCache *cache, NSString *key, 
  @param key The key associated with the object.
  @result The object for the specified key.
  */
-- (__nullable id)objectForKey:(nullable NSString *)key;
+- (id)objectForKey:(nullable NSString *)key;
 
 /**
  Stores an object in the cache for the specified key. This method blocks the calling thread until the object
