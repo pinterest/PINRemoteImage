@@ -31,19 +31,12 @@ PODS:
 
 DEPENDENCIES:
   - libwebp
-  - PINCache (from `ssh://git@phabricator.pinadmin.com/diffusion/PCC/pincache.git`)
+  - PINCache
   - PINRemoteImage (from `../`)
 
 EXTERNAL SOURCES:
-  PINCache:
-    :git: ssh://git@phabricator.pinadmin.com/diffusion/PCC/pincache.git
   PINRemoteImage:
     :path: ../
-
-CHECKOUT OPTIONS:
-  PINCache:
-    :commit: d68c82fbcf6300e6a968c7fd3be0092f5ab42786
-    :git: ssh://git@phabricator.pinadmin.com/diffusion/PCC/pincache.git
 
 SPEC CHECKSUMS:
   FLAnimatedImage: f9422f796135aff80d8c00b2afc48015bb746e24
