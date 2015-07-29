@@ -145,6 +145,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
         _concurrentQueue = dispatch_queue_create("PINRemoteImageManagerConcurrentQueue", DISPATCH_QUEUE_CONCURRENT);
         _callbackQueue = dispatch_queue_create("PINRemoteImageManagerCallbackQueue", DISPATCH_QUEUE_CONCURRENT);
         _lock = [[NSLock alloc] init];
+        _lock.name = @"PINRemoteImageManager";
         _concurrentOperationQueue = [[NSOperationQueue alloc] init];
         _concurrentOperationQueue.name = @"PINRemoteImageManager Concurrent Operation Queue";
         _concurrentOperationQueue.maxConcurrentOperationCount = NSOperationQueueDefaultMaxConcurrentOperationCount;
