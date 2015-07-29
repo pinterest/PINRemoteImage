@@ -14,3 +14,7 @@
 @interface UIButton (PINRemoteImage) <PINRemoteImageCategory>
 
 @end
+
+@interface UIButton (PINRemoteImage_Deprecated) <PINRemoteImageCategory_Deprecated>
+
+@end

@@ -13,11 +13,11 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/setImageFromURL:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/pin_setImageFromURL:</TokenIdentifier>
 			<Abstract type="html">Set the image from the given URL.</Abstract>
 			<DeclaredIn>PINRemoteImageCategoryManager.h</DeclaredIn>
 			
-			<Declaration>- (void)setImageFromURL:(NSURL *)url</Declaration>
+			<Declaration>- (void)pin_setImageFromURL:(NSURL *)url</Declaration>
 			<Parameters>
 				<Parameter>
 					<Name>url</Name>
@@ -25,16 +25,16 @@
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/setImageFromURL:</Anchor>
+			<Anchor>//api/name/pin_setImageFromURL:</Anchor>
             <NodeRef refid="3"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/setImageFromURL:placeholderImage:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/pin_setImageFromURL:placeholderImage:</TokenIdentifier>
 			<Abstract type="html">Set the image from the given URL and set placeholder image while image at URL is being retrieved.</Abstract>
 			<DeclaredIn>PINRemoteImageCategoryManager.h</DeclaredIn>
 			
-			<Declaration>- (void)setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage</Declaration>
+			<Declaration>- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage</Declaration>
 			<Parameters>
 				<Parameter>
 					<Name>url</Name>
@@ -45,16 +45,16 @@
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/setImageFromURL:placeholderImage:</Anchor>
+			<Anchor>//api/name/pin_setImageFromURL:placeholderImage:</Anchor>
             <NodeRef refid="3"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/setImageFromURL:completion:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/pin_setImageFromURL:completion:</TokenIdentifier>
 			<Abstract type="html">Set the image from the given URL and call completion when finished.</Abstract>
 			<DeclaredIn>PINRemoteImageCategoryManager.h</DeclaredIn>
 			
-			<Declaration>- (void)setImageFromURL:(NSURL *)url completion:(PINRemoteImageManagerImageCompletion)completion</Declaration>
+			<Declaration>- (void)pin_setImageFromURL:(NSURL *)url completion:(PINRemoteImageManagerImageCompletion)completion</Declaration>
 			<Parameters>
 				<Parameter>
 					<Name>url</Name>
@@ -65,16 +65,16 @@
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/setImageFromURL:completion:</Anchor>
+			<Anchor>//api/name/pin_setImageFromURL:completion:</Anchor>
             <NodeRef refid="3"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/setImageFromURL:placeholderImage:completion:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/pin_setImageFromURL:placeholderImage:completion:</TokenIdentifier>
 			<Abstract type="html">Set the image from the given URL, set placeholder while image at url is being retrieved and call completion when finished.</Abstract>
 			<DeclaredIn>PINRemoteImageCategoryManager.h</DeclaredIn>
 			
-			<Declaration>- (void)setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion</Declaration>
+			<Declaration>- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion</Declaration>
 			<Parameters>
 				<Parameter>
 					<Name>url</Name>
@@ -88,16 +88,16 @@
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/setImageFromURL:placeholderImage:completion:</Anchor>
+			<Anchor>//api/name/pin_setImageFromURL:placeholderImage:completion:</Anchor>
             <NodeRef refid="3"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/setImageFromURL:processorKey:processor:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/pin_setImageFromURL:processorKey:processor:</TokenIdentifier>
 			<Abstract type="html">Retrieve the image from the given URL, process it using the passed in processor block and set result on view.</Abstract>
 			<DeclaredIn>PINRemoteImageCategoryManager.h</DeclaredIn>
 			
-			<Declaration>- (void)setImageFromURL:(NSURL *)url processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor</Declaration>
+			<Declaration>- (void)pin_setImageFromURL:(NSURL *)url processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor</Declaration>
 			<Parameters>
 				<Parameter>
 					<Name>url</Name>
@@ -111,16 +111,16 @@
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/setImageFromURL:processorKey:processor:</Anchor>
+			<Anchor>//api/name/pin_setImageFromURL:processorKey:processor:</Anchor>
             <NodeRef refid="3"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/setImageFromURL:placeholderImage:processorKey:processor:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/pin_setImageFromURL:placeholderImage:processorKey:processor:</TokenIdentifier>
 			<Abstract type="html">Set placeholder on view and retrieve the image from the given URL, process it using the passed in processor block and set result on view.</Abstract>
 			<DeclaredIn>PINRemoteImageCategoryManager.h</DeclaredIn>
 			
-			<Declaration>- (void)setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor</Declaration>
+			<Declaration>- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor</Declaration>
 			<Parameters>
 				<Parameter>
 					<Name>url</Name>
@@ -137,16 +137,16 @@
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/setImageFromURL:placeholderImage:processorKey:processor:</Anchor>
+			<Anchor>//api/name/pin_setImageFromURL:placeholderImage:processorKey:processor:</Anchor>
             <NodeRef refid="3"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/setImageFromURL:processorKey:processor:completion:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/pin_setImageFromURL:processorKey:processor:completion:</TokenIdentifier>
 			<Abstract type="html">Retrieve the image from the given URL, process it using the passed in processor block and set result on view. Call completion after image has been fetched, processed and set on view.</Abstract>
 			<DeclaredIn>PINRemoteImageCategoryManager.h</DeclaredIn>
 			
-			<Declaration>- (void)setImageFromURL:(NSURL *)url processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor completion:(PINRemoteImageManagerImageCompletion)completion</Declaration>
+			<Declaration>- (void)pin_setImageFromURL:(NSURL *)url processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor completion:(PINRemoteImageManagerImageCompletion)completion</Declaration>
 			<Parameters>
 				<Parameter>
 					<Name>url</Name>
@@ -163,16 +163,16 @@
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/setImageFromURL:processorKey:processor:completion:</Anchor>
+			<Anchor>//api/name/pin_setImageFromURL:processorKey:processor:completion:</Anchor>
             <NodeRef refid="3"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/setImageFromURL:placeholderImage:processorKey:processor:completion:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/pin_setImageFromURL:placeholderImage:processorKey:processor:completion:</TokenIdentifier>
 			<Abstract type="html">Set placeholder on view and retrieve the image from the given URL, process it using the passed in processor block and set result on view. Call completion after image has been fetched, processed and set on view.</Abstract>
 			<DeclaredIn>PINRemoteImageCategoryManager.h</DeclaredIn>
 			
-			<Declaration>- (void)setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor completion:(PINRemoteImageManagerImageCompletion)completion</Declaration>
+			<Declaration>- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor completion:(PINRemoteImageManagerImageCompletion)completion</Declaration>
 			<Parameters>
 				<Parameter>
 					<Name>url</Name>
@@ -192,16 +192,16 @@
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/setImageFromURL:placeholderImage:processorKey:processor:completion:</Anchor>
+			<Anchor>//api/name/pin_setImageFromURL:placeholderImage:processorKey:processor:completion:</Anchor>
             <NodeRef refid="3"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/setImageFromURLs:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/pin_setImageFromURLs:</TokenIdentifier>
 			<Abstract type="html">Retrieve one of the images at the passed in URLs depending on previous network performance and set result on view.</Abstract>
 			<DeclaredIn>PINRemoteImageCategoryManager.h</DeclaredIn>
 			
-			<Declaration>- (void)setImageFromURLs:(NSArray *)urls</Declaration>
+			<Declaration>- (void)pin_setImageFromURLs:(NSArray *)urls</Declaration>
 			<Parameters>
 				<Parameter>
 					<Name>urls</Name>
@@ -209,16 +209,16 @@
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/setImageFromURLs:</Anchor>
+			<Anchor>//api/name/pin_setImageFromURLs:</Anchor>
             <NodeRef refid="3"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/setImageFromURLs:placeholderImage:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/pin_setImageFromURLs:placeholderImage:</TokenIdentifier>
 			<Abstract type="html">Set placeholder on view and retrieve one of the images at the passed in URLs depending on previous network performance and set result on view.</Abstract>
 			<DeclaredIn>PINRemoteImageCategoryManager.h</DeclaredIn>
 			
-			<Declaration>- (void)setImageFromURLs:(NSArray *)urls placeholderImage:(UIImage *)placeholderImage</Declaration>
+			<Declaration>- (void)pin_setImageFromURLs:(NSArray *)urls placeholderImage:(UIImage *)placeholderImage</Declaration>
 			<Parameters>
 				<Parameter>
 					<Name>urls</Name>
@@ -229,16 +229,16 @@
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/setImageFromURLs:placeholderImage:</Anchor>
+			<Anchor>//api/name/pin_setImageFromURLs:placeholderImage:</Anchor>
             <NodeRef refid="3"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/setImageFromURLs:placeholderImage:completion:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/pin_setImageFromURLs:placeholderImage:completion:</TokenIdentifier>
 			<Abstract type="html">Set placeholder on view and retrieve one of the images at the passed in URLs depending on previous network performance and set result on view. Call completion after image has been fetched and set on view.</Abstract>
 			<DeclaredIn>PINRemoteImageCategoryManager.h</DeclaredIn>
 			
-			<Declaration>- (void)setImageFromURLs:(NSArray *)urls placeholderImage:(UIImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion</Declaration>
+			<Declaration>- (void)pin_setImageFromURLs:(NSArray *)urls placeholderImage:(UIImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion</Declaration>
 			<Parameters>
 				<Parameter>
 					<Name>urls</Name>
@@ -252,40 +252,40 @@
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/setImageFromURLs:placeholderImage:completion:</Anchor>
+			<Anchor>//api/name/pin_setImageFromURLs:placeholderImage:completion:</Anchor>
             <NodeRef refid="3"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/cancelImageDownload</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/pin_cancelImageDownload</TokenIdentifier>
 			<Abstract type="html">Cancels the image download. Guarantees that previous setImage calls will not have their results set on the image view after calling this (as opposed to PINRemoteImageManager which does not guarantee cancellation).</Abstract>
 			<DeclaredIn>PINRemoteImageCategoryManager.h</DeclaredIn>
 			
-			<Declaration>- (void)cancelImageDownload</Declaration>
+			<Declaration>- (void)pin_cancelImageDownload</Declaration>
 			
 			
-			<Anchor>//api/name/cancelImageDownload</Anchor>
+			<Anchor>//api/name/pin_cancelImageDownload</Anchor>
             <NodeRef refid="3"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/downloadImageOperationUUID</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/pin_downloadImageOperationUUID</TokenIdentifier>
 			<Abstract type="html">Returns the NSUUID associated with any PINRemoteImage task currently running on the view.</Abstract>
 			<DeclaredIn>PINRemoteImageCategoryManager.h</DeclaredIn>
 			
-			<Declaration>- (NSUUID *)downloadImageOperationUUID</Declaration>
+			<Declaration>- (NSUUID *)pin_downloadImageOperationUUID</Declaration>
 			
 			<ReturnValue><Abstract type="html">NSUUID associated with any PINRemoteImage task currently running on the view.</Abstract></ReturnValue>
-			<Anchor>//api/name/downloadImageOperationUUID</Anchor>
+			<Anchor>//api/name/pin_downloadImageOperationUUID</Anchor>
             <NodeRef refid="3"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/setDownloadImageOperationUUID:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/pin_setDownloadImageOperationUUID:</TokenIdentifier>
 			<Abstract type="html">Set the current NSUUID associated with a PINRemoteImage task running on the view.</Abstract>
 			<DeclaredIn>PINRemoteImageCategoryManager.h</DeclaredIn>
 			
-			<Declaration>- (void)setDownloadImageOperationUUID:(NSUUID *)downloadImageOperationUUID</Declaration>
+			<Declaration>- (void)pin_setDownloadImageOperationUUID:(NSUUID *)downloadImageOperationUUID</Declaration>
 			<Parameters>
 				<Parameter>
 					<Name>downloadImageOperationUUID</Name>
@@ -293,43 +293,43 @@
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/setDownloadImageOperationUUID:</Anchor>
+			<Anchor>//api/name/pin_setDownloadImageOperationUUID:</Anchor>
             <NodeRef refid="3"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/setUpdateWithProgress:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/setPin_updateWithProgress:</TokenIdentifier>
 			<Abstract type="html">Whether the view should update with progress images (such as those provided by progressive JPEG images).</Abstract>
 			<DeclaredIn>PINRemoteImageCategoryManager.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, assign) BOOL updateWithProgress</Declaration>
+			<Declaration>@property (nonatomic, assign) BOOL pin_updateWithProgress</Declaration>
 			
 			<ReturnValue><Abstract type="html">BOOL value indicating whether the view should update with progress images</Abstract></ReturnValue>
-			<Anchor>//api/name/updateWithProgress</Anchor>
+			<Anchor>//api/name/pin_updateWithProgress</Anchor>
             <NodeRef refid="3"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/updateWithProgress</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageCategory/pin_updateWithProgress</TokenIdentifier>
 			<Abstract type="html">Whether the view should update with progress images (such as those provided by progressive JPEG images).</Abstract>
 			<DeclaredIn>PINRemoteImageCategoryManager.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, assign) BOOL updateWithProgress</Declaration>
+			<Declaration>@property (nonatomic, assign) BOOL pin_updateWithProgress</Declaration>
 			
 			<ReturnValue><Abstract type="html">BOOL value indicating whether the view should update with progress images</Abstract></ReturnValue>
-			<Anchor>//api/name/updateWithProgress</Anchor>
+			<Anchor>//api/name/pin_updateWithProgress</Anchor>
             <NodeRef refid="3"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfp/PINRemoteImageCategory/updateWithProgress</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/intfp/PINRemoteImageCategory/pin_updateWithProgress</TokenIdentifier>
 			<Abstract type="html">Whether the view should update with progress images (such as those provided by progressive JPEG images).</Abstract>
 			<DeclaredIn>PINRemoteImageCategoryManager.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, assign) BOOL updateWithProgress</Declaration>
+			<Declaration>@property (nonatomic, assign) BOOL pin_updateWithProgress</Declaration>
 			
 			<ReturnValue><Abstract type="html">BOOL value indicating whether the view should update with progress images</Abstract></ReturnValue>
-			<Anchor>//api/name/updateWithProgress</Anchor>
+			<Anchor>//api/name/pin_updateWithProgress</Anchor>
             <NodeRef refid="3"/>
 		</Token>
 		

@@ -32,9 +32,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.imageView setImageFromURLs:@[[NSURL URLWithString:@"http://placekitten.com/101/101"],
-                                       [NSURL URLWithString:@"http://placekitten.com/401/401"],
-                                       [NSURL URLWithString:@"http://placekitten.com/801/801"]]];
+    [self.imageView pin_setImageFromURLs:@[[NSURL URLWithString:@"http://placekitten.com/101/101"],
+                                           [NSURL URLWithString:@"http://placekitten.com/401/401"],
+                                           [NSURL URLWithString:@"http://placekitten.com/801/801"]]];
 }
 
 /*

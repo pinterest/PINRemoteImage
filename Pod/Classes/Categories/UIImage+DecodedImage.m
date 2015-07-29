@@ -17,25 +17,25 @@
 #import "NSData+ImageDetectors.h"
 
 
-@implementation UIImage (DecodedImage)
+@implementation UIImage (PINDecodedImage)
 
-+ (UIImage *)decodedImageWithData:(NSData *)data
++ (UIImage *)pin_decodedImageWithData:(NSData *)data
 {
-    return [self decodedImageWithData:data skipDecodeIfPossible:NO];
+    return [self pin_decodedImageWithData:data skipDecodeIfPossible:NO];
 }
 
-+ (UIImage *)decodedImageWithData:(NSData *)data skipDecodeIfPossible:(BOOL)skipDecodeIfPossible
++ (UIImage *)pin_decodedImageWithData:(NSData *)data skipDecodeIfPossible:(BOOL)skipDecodeIfPossible
 {
     if (data == nil) {
         return nil;
     }
     
-    if ([data isGIF]) {
+    if ([data pin_isGIF]) {
         return [UIImage imageWithData:data];
     }
 #if __has_include(<webp/decode.h>)
-    if ([data isWebP]) {
-        return [UIImage imageWithWebPData:data];
+    if ([data pin_isWebP]) {
+        return [UIImage pin_imageWithWebPData:data];
     }
 #endif
     
@@ -49,7 +49,7 @@
     if (imageSourceRef) {
         CGImageRef imageRef = CGImageSourceCreateImageAtIndex(imageSourceRef, 0, (CFDictionaryRef)@{(NSString *)kCGImageSourceShouldCache : (NSNumber *)kCFBooleanFalse});
         if (imageRef) {
-            decodedImage = [self decodedImageWithCGImageRef:imageRef];
+            decodedImage = [self pin_decodedImageWithCGImageRef:imageRef];
             
             CGImageRelease(imageRef);
         }
@@ -60,7 +60,7 @@
     return decodedImage;
 }
 
-+ (UIImage *)decodedImageWithCGImageRef:(CGImageRef)imageRef
++ (UIImage *)pin_decodedImageWithCGImageRef:(CGImageRef)imageRef
 {
     BOOL opaque = YES;
     CGImageAlphaInfo alpha = CGImageGetAlphaInfo(imageRef);
@@ -83,6 +83,25 @@
     }
     
     return decodedImage;
+}
+
+@end
+
+@implementation UIImage (PINDecodedImage_Deprecated)
+
++ (UIImage *)decodedImageWithData:(NSData *)data
+{
+    return [self pin_decodedImageWithData:data];
+}
+
++ (UIImage *)decodedImageWithData:(NSData *)data skipDecodeIfPossible:(BOOL)skipDecodeIfPossible
+{
+    return [self pin_decodedImageWithData:data skipDecodeIfPossible:skipDecodeIfPossible];
+}
+
++ (UIImage *)decodedImageWithCGImageRef:(CGImageRef)imageRef
+{
+    return [self pin_decodedImageWithCGImageRef:imageRef];
 }
 
 @end

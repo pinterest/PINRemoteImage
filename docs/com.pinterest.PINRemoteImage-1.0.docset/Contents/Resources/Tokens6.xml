@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Constants/PINRemoteImageManagerPriority.html">
+	<File path="Constants/PINRemoteImageManagerError.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/c/tdef/PINRemoteImageManagerPriority</TokenIdentifier>
-			<Abstract type="html">Priority to download and process image at.</Abstract>
+			<TokenIdentifier>//apple_ref/c/tdef/PINRemoteImageManagerError</TokenIdentifier>
+			<Abstract type="html">Error codes returned by PINRemoteImage</Abstract>
 			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
             
 			
@@ -14,9 +14,9 @@
 		
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityVeryLow</TokenIdentifier>
-            <Abstract type="html">Very low priority</Abstract>
-            <Declaration>PINRemoteImageManagerPriorityVeryLow</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerErrorFailedToDecodeImage</TokenIdentifier>
+            <Abstract type="html">The image failed to decode</Abstract>
+            <Declaration>PINRemoteImageManagerErrorFailedToDecodeImage</Declaration>
             
             <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
             
@@ -24,9 +24,9 @@
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityLow</TokenIdentifier>
-            <Abstract type="html">Low priority</Abstract>
-            <Declaration>PINRemoteImageManagerPriorityLow</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerErrorFailedToFetchImageForProcessing</TokenIdentifier>
+            <Abstract type="html">The image could not be downloaded and therefore could not be processed</Abstract>
+            <Declaration>PINRemoteImageManagerErrorFailedToFetchImageForProcessing</Declaration>
             
             <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
             
@@ -34,29 +34,9 @@
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityMedium</TokenIdentifier>
-            <Abstract type="html">Medium priority</Abstract>
-            <Declaration>PINRemoteImageManagerPriorityMedium</Declaration>
-            
-            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
-            
-            <NodeRef refid="6"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityHigh</TokenIdentifier>
-            <Abstract type="html">High priority</Abstract>
-            <Declaration>PINRemoteImageManagerPriorityHigh</Declaration>
-            
-            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
-            
-            <NodeRef refid="6"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityVeryHigh</TokenIdentifier>
-            <Abstract type="html">Very high priority</Abstract>
-            <Declaration>PINRemoteImageManagerPriorityVeryHigh</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerErrorFailedToProcessImage</TokenIdentifier>
+            <Abstract type="html">The image returned by the processor block was nil</Abstract>
+            <Declaration>PINRemoteImageManagerErrorFailedToProcessImage</Declaration>
             
             <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
             

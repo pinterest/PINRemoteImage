@@ -169,16 +169,16 @@
     cell.imageView.alpha = 0.0f;
     __weak PINImageCell *weakCell = cell;
     
-    [cell.imageView setImageFromURL:kitten.imageURL
-                         completion:^(PINRemoteImageManagerResult *result) {
-                             if (result.requestDuration > 0.25) {
-                                 [UIView animateWithDuration:0.3 animations:^{
+    [cell.imageView pin_setImageFromURL:kitten.imageURL
+                             completion:^(PINRemoteImageManagerResult *result) {
+                                 if (result.requestDuration > 0.25) {
+                                     [UIView animateWithDuration:0.3 animations:^{
+                                         weakCell.imageView.alpha = 1.0f;
+                                     }];
+                                 } else {
                                      weakCell.imageView.alpha = 1.0f;
-                                 }];
-                             } else {
-                                 weakCell.imageView.alpha = 1.0f;
-                             }
-                         }];
+                                 }
+                             }];
     return cell;
 }
 

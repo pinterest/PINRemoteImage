@@ -160,15 +160,15 @@
     
     [self cancelImageDownloadOnView:view];
     if (urls == nil || urls.count == 0) {
-        [view clearImages];
+        [view pin_clearImages];
         return;
     }
     
     if (placeholderImage) {
-        [view setPlaceholderWithImage:placeholderImage];
+        [view pin_setPlaceholderWithImage:placeholderImage];
     }
     PINRemoteImageManagerDownloadOptions options = PINRemoteImageManagerDownloadOptionsNone;
-    if ([view ignoreGIFs]) {
+    if ([view pin_ignoreGIFs]) {
         options |= PINRemoteImageManagerDownloadOptionsIgnoreGIFs;
     }
     
@@ -183,7 +183,7 @@
                     return;
                 }
                 if (result.image) {
-                    [view updateUIWithImage:result.image animatedImage:nil];
+                    [view pin_updateUIWithImage:result.image animatedImage:nil];
                 }
             };
             if ([NSThread isMainThread]) {
@@ -212,7 +212,7 @@
                 return;
             }
             
-            [view updateUIWithImage:result.image animatedImage:result.animatedImage];
+            [view pin_updateUIWithImage:result.image animatedImage:result.animatedImage];
             
             if (completion) {
                 completion(result);
