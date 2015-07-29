@@ -47,6 +47,7 @@
 {
     if (self = [super init]) {
         self.lock = [[NSLock alloc] init];
+        self.lock.name = @"PINProgressiveImage";
         
         _imageSource = CGImageSourceCreateIncremental(NULL);;
         self.size = CGSizeZero;
