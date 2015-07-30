@@ -311,7 +311,13 @@
     [self.imageManager downloadImageWithURL:[self JPEGURL] completion:^(PINRemoteImageManagerResult *result) {
         dispatch_semaphore_signal(semaphore);
     }];
+    
     dispatch_semaphore_wait(semaphore, [self timeout]);
+    // callback can occur *before* image is stored in cache this is an optimization to avoid waiting on the cache to write.
+    // So, wait until it's actually in the cache.
+    while ([[self.imageManager cache] objectForKey:[self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil]] == nil) {
+        sleep(50);
+    }
     
     __block UIImage *image = nil;
     [self.imageManager downloadImageWithURL:[self JPEGURL] completion:^(PINRemoteImageManagerResult *result) {
