@@ -206,8 +206,9 @@
 
 - (void)waitForImageWithURLToBeCached:(NSURL *)URL
 {
+    NSString *key = [self.imageManager cacheKeyForURL:URL processorKey:nil];
     for (NSUInteger idx = 0; idx < 100; idx++) {
-        if ([[self.imageManager cache] objectForKey:[self.imageManager cacheKeyForURL:URL processorKey:nil]] != nil) {
+        if ([[self.imageManager cache] objectForKey:key] != nil) {
             break;
         }
         sleep(50);
@@ -606,8 +607,9 @@
     dispatch_semaphore_wait(semaphore, [self timeout]);
     
     //small image should have been removed from cache
+    NSString *key = [self.imageManager cacheKeyForURL:[self JPEGURL_Small] processorKey:nil];
     for (NSUInteger idx = 0; idx < 100; idx++) {
-        if ([[self.imageManager cache] objectForKey:[self.imageManager cacheKeyForURL:[self JPEGURL_Small] processorKey:nil]] == nil) {
+        if ([[self.imageManager cache] objectForKey:key] == nil) {
             break;
         }
         sleep(50);
