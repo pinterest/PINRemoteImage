@@ -1133,15 +1133,26 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
     [self.concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityMedium block:^{
         __block NSInteger highestQualityDownloadedIdx = -1;
         typeof(self) strongSelf = weakSelf;
+        
+        //check for the highest quality image already in cache. It's possible that an image is in the process of being
+        //cached when this is being run. In which case two things could happen:
+        // -    If network conditions dictate that a lower quality image should be downloaded than the one that is currently
+        //      being cached, it will be downloaded in addition. This is not ideal behavior, worst case scenario and unlikely.
+        // -    If network conditions dictate that the same quality image should be downloaded as the one being cached, no
+        //      new image will be downloaded as either the caching will have finished by the time we actually request it or
+        //      the task will still exist and our callback will be attached. In this case, no detrimental behavior will have
+        //      occured.
         [urls enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSURL *url, NSUInteger idx, BOOL *stop) {
             typeof(self) strongSelf = weakSelf;
             BlockAssert([url isKindOfClass:[NSURL class]], @"url must be of type URL");
             NSString *key = [strongSelf cacheKeyForURL:url processorKey:nil];
-            id object = [strongSelf.cache.memoryCache objectForKey:key];
-            if (object == nil) {
-                object = [strongSelf.cache.diskCache fileURLForKey:key];
+            
+            //we don't actually need the object, just need to know it exists so that we can request it later
+            id objectOrFileURL = [strongSelf.cache.memoryCache objectForKey:key];
+            if (objectOrFileURL == nil) {
+                objectOrFileURL = [strongSelf.cache.diskCache fileURLForKey:key];
             }
-            if (object) {
+            if (objectOrFileURL) {
                 highestQualityDownloadedIdx = idx;
                 *stop = YES;
             }
@@ -1165,15 +1176,17 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
             desiredImageURLIdx = ceilf((currentBytesPerSecond - lowQualityQPSThreshold) / ((highQualityQPSThreshold - lowQualityQPSThreshold) / (float)(urls.count - 2)));
         }
         
-        NSURL *downloadURL;
+        NSUInteger downloadIdx;
         //if the highest quality already downloaded is less than what currentBPS would dictate and shouldUpgrade is
         //set, download the new higher quality image. If no image has been cached, download the image dictated by
         //current bps
         if ((highestQualityDownloadedIdx < desiredImageURLIdx && shouldUpgradeLowQualityImages) || highestQualityDownloadedIdx == -1) {
-            downloadURL = [urls objectAtIndex:desiredImageURLIdx];
+            downloadIdx = desiredImageURLIdx;
         } else {
-            downloadURL = [urls objectAtIndex:highestQualityDownloadedIdx];
+            downloadIdx = highestQualityDownloadedIdx;
         }
+        
+        NSURL *downloadURL = [urls objectAtIndex:downloadIdx];
         
         [strongSelf downloadImageWithURL:downloadURL
                                  options:options
@@ -1181,7 +1194,17 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
                             processorKey:nil
                                processor:nil
                                 progress:progress
-                              completion:completion
+                              completion:^(PINRemoteImageManagerResult *result) {
+                                  typeof(self) strongSelf = weakSelf;
+                                  //clean out any lower quality images from the cache
+                                  for (NSInteger idx = downloadIdx - 1; idx >= 0; idx--) {
+                                      [[strongSelf cache] removeObjectForKey:[strongSelf cacheKeyForURL:[urls objectAtIndex:idx] processorKey:nil]];
+                                  }
+                                  
+                                  if (completion) {
+                                      completion(result);
+                                  }
+                              }
                                inputUUID:UUID];
     }];
     return UUID;

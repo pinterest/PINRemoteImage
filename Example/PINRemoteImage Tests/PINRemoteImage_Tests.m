@@ -204,6 +204,16 @@
     UIGraphicsEndImageContext();
 }
 
+- (void)waitForImageWithURLToBeCached:(NSURL *)URL
+{
+    for (NSUInteger idx = 0; idx < 100; idx++) {
+        if ([[self.imageManager cache] objectForKey:[self.imageManager cacheKeyForURL:URL processorKey:nil]] != nil) {
+            break;
+        }
+        sleep(50);
+    }
+}
+
 - (void)testTransparentWebPDownload
 {
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
@@ -315,12 +325,7 @@
     dispatch_semaphore_wait(semaphore, [self timeout]);
     // callback can occur *before* image is stored in cache this is an optimization to avoid waiting on the cache to write.
     // So, wait until it's actually in the cache.
-    for (NSUInteger idx = 0; idx < 100; idx++) {
-        if ([[self.imageManager cache] objectForKey:[self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil]] != nil) {
-            break;
-        }
-        sleep(50);
-    }
+    [self waitForImageWithURLToBeCached:[self JPEGURL]];
     
     __block UIImage *image = nil;
     [self.imageManager downloadImageWithURL:[self JPEGURL] completion:^(PINRemoteImageManagerResult *result) {
@@ -541,6 +546,10 @@
     }];
     dispatch_semaphore_wait(semaphore, [self timeout]);
     
+    // callback can occur *before* image is stored in cache this is an optimization to avoid waiting on the cache to write.
+    // So, wait until it's actually in the cache.
+    [self waitForImageWithURLToBeCached:[self JPEGURL_Large]];
+    
     [self.imageManager setCurrentBytesPerSecond:5];
     [self.imageManager downloadImageWithURLs:@[[self JPEGURL_Small], [self JPEGURL_Medium], [self JPEGURL_Large]]
                                      options:PINRemoteImageManagerDownloadOptionsNone
@@ -564,6 +573,8 @@
         dispatch_semaphore_signal(semaphore);
     }];
     dispatch_semaphore_wait(semaphore, [self timeout]);
+    
+    [self waitForImageWithURLToBeCached:[self JPEGURL_Small]];
     
     [self.imageManager setCurrentBytesPerSecond:100];
     [self.imageManager downloadImageWithURLs:@[[self JPEGURL_Small], [self JPEGURL_Medium], [self JPEGURL_Large]]
@@ -593,6 +604,15 @@
          dispatch_semaphore_signal(semaphore);
      }];
     dispatch_semaphore_wait(semaphore, [self timeout]);
+    
+    //small image should have been removed from cache
+    for (NSUInteger idx = 0; idx < 100; idx++) {
+        if ([[self.imageManager cache] objectForKey:[self.imageManager cacheKeyForURL:[self JPEGURL_Small] processorKey:nil]] == nil) {
+            break;
+        }
+        sleep(50);
+    }
+    XCTAssert([[self.imageManager cache] objectForKey:[self.imageManager cacheKeyForURL:[self JPEGURL_Small] processorKey:nil]] == nil, @"Small image should have been removed from cache");
     
     [self.imageManager.cache removeAllObjects];
     [self.imageManager setShouldUpgradeLowQualityImages:NO completion:^{
