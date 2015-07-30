@@ -262,6 +262,8 @@ typedef UIImage *(^PINRemoteImageManagerImageProcessor)(PINRemoteImageManagerRes
 /**
  Download or retrieve from cache one of the images found at the urls in the passed in array based on current network performance. URLs should be sorted from lowest quality image URL to highest. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).
  
+ Unless setShouldUpgradeLowQualityImages is set to YES, this method checks the cache for all URLs and returns the highest quality version stored. It is possible though unlikely for a cached image to not be returned if it is still being cached while a call is made to this method and if network conditions have changed. See source for more details.
+ 
  @param urls An array of NSURLs of increasing size.
  @param options PINRemoteImageManagerDownloadOptions options with which to fetch the image.
  @param progress PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.
