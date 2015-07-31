@@ -348,7 +348,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
                        processor:(PINRemoteImageManagerImageProcessor)processor
                         progress:(PINRemoteImageManagerImageCompletion)progress
                       completion:(PINRemoteImageManagerImageCompletion)completion
-                       inputUUID:(NSUUID *)inputUUID
+                       inputUUID:(NSUUID *)UUID
 {
     NSAssert((processor != nil && processorKey.length > 0) || (processor == nil && processorKey == nil), @"processor must not be nil and processorKey length must be greater than zero OR processor must be nil and processorKey must be nil");
     
@@ -370,14 +370,11 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
     if ([url isKindOfClass:[NSString class]]) {
         url = [NSURL URLWithString:(NSString *)url];
     }
-    
-    NSUUID *UUID;
-    if (inputUUID) {
-        UUID = inputUUID;
-    } else {
+
+    if (UUID == nil) {
         UUID = [NSUUID UUID];
     }
-    
+
     NSString *key = [self cacheKeyForURL:url processorKey:processorKey];
     //Check to see if the image is in memory cache and we're on the main thread.
     //If so, special case this to avoid flashing the UI
