@@ -358,11 +358,9 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
     } else {
         taskClass = [PINRemoteImageDownloadTask class];
     }
-    
-    BOOL earlyCheck = (PINRemoteImageManagerDownloadOptionsSkipEarlyCheck & options)?NO:YES;
-    BOOL ignoreGIF = (PINRemoteImageManagerDownloadOptionsIgnoreGIFs & options)?YES:NO;
+
     if (url == nil) {
-        [self earlyReturn:earlyCheck ignoreGIF:ignoreGIF url:nil object:nil queue:_callbackQueue completion:completion];
+        [self earlyReturnWithOptions:options url:nil object:nil completion:completion];
         return nil;
     }
     
@@ -380,7 +378,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
     //If so, special case this to avoid flashing the UI
     id object = [self.cache.memoryCache objectForKey:key];
     if (object) {
-        if ([self earlyReturn:earlyCheck ignoreGIF:ignoreGIF url:url object:object queue:_callbackQueue completion:completion]) {
+        if ([self earlyReturnWithOptions:options url:url object:object completion:completion]) {
             return nil;
         }
     }
@@ -608,24 +606,27 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
     [self unlock];
 }
 
-- (BOOL)earlyReturn:(BOOL)earlyReturn ignoreGIF:(BOOL)ignoreGIF url:(NSURL *)url object:(id)object queue:(dispatch_queue_t)callbackQueue completion:(PINRemoteImageManagerImageCompletion)completion
+- (BOOL)earlyReturnWithOptions:(PINRemoteImageManagerDownloadOptions)options url:(NSURL *)url object:(id)object completion:(PINRemoteImageManagerImageCompletion)completion
 {
     UIImage *image = nil;
     FLAnimatedImage *animatedImage = nil;
     PINRemoteImageResultType resultType = PINRemoteImageResultTypeNone;
-    
+
+    BOOL allowEarlyReturn = !(PINRemoteImageManagerDownloadOptionsSkipEarlyCheck & options);
+    BOOL allowAnimated = !(PINRemoteImageManagerDownloadOptionsIgnoreGIFs & options);
+
     if (url != nil) {
         resultType = PINRemoteImageResultTypeMemoryCache;
         if ([object isKindOfClass:[UIImage class]]) {
             image = (UIImage *)object;
-        } else if (ignoreGIF == NO && [object isKindOfClass:[NSData class]] && [(NSData *)object pin_isGIF]) {
+        } else if (allowAnimated && [object isKindOfClass:[NSData class]] && [(NSData *)object pin_isGIF]) {
             animatedImage = [FLAnimatedImage animatedImageWithGIFData:object];
         }
     }
     
     if (completion && ((image || animatedImage) || (url == nil))) {
         //If we're on the main thread, special case to call completion immediately
-        if (earlyReturn && [NSThread isMainThread]) {
+        if (allowEarlyReturn && [NSThread isMainThread]) {
             completion([PINRemoteImageManagerResult imageResultWithImage:image
                                                           animatedImage:animatedImage
                                                           requestLength:0
@@ -633,7 +634,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
                                                              resultType:resultType
                                                                    UUID:nil]);
         } else {
-            dispatch_async(_callbackQueue, ^{
+            dispatch_async(self.callbackQueue, ^{
                 completion([PINRemoteImageManagerResult imageResultWithImage:image
                                                               animatedImage:animatedImage
                                                               requestLength:0
