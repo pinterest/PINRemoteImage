@@ -104,7 +104,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 @property (nonatomic, strong) PINURLSessionManager *sessionManager;
 @property (nonatomic, assign) NSTimeInterval timeout;
 @property (nonatomic, strong) NSMutableDictionary *tasks;
-@property (nonatomic, strong) NSMutableArray *canceledTasks;
+@property (nonatomic, strong) NSMutableSet *canceledTasks;
 @property (nonatomic, strong) NSArray *progressThresholds;
 @property (nonatomic, assign) NSTimeInterval estimatedRemainingTimeThreshold;
 @property (nonatomic, strong) dispatch_queue_t callbackQueue;
@@ -164,7 +164,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
         _lowQualityBPSThreshold = 50000; // approximately edge speeds
         _shouldUpgradeLowQualityImages = NO;
         self.tasks = [[NSMutableDictionary alloc] init];
-        self.canceledTasks = [[NSMutableArray alloc] init];
+        self.canceledTasks = [[NSMutableSet alloc] init];
         self.taskQOS = [[NSMutableArray alloc] initWithCapacity:5];
     }
     return self;
@@ -886,21 +886,15 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
         typeof(self) strongSelf = weakSelf;
         //find the task associated with the UUID. This might be spead up by storing a mapping of UUIDs to tasks
         [strongSelf lock];
-            PINRemoteImageTask *taskToEvaluate = nil;
-            NSString *taskKey = nil;
-            for (NSString *key in [strongSelf.tasks allKeys]) {
-                PINRemoteImageTask *task = strongSelf.tasks[key];
-                for (NSUUID *blockUUID in [task.callbackBlocks allKeys]) {
-                    if ([blockUUID isEqual:UUID]) {
-                        taskToEvaluate = task;
-                        taskKey = key;
-                        break;
-                    }
+            __block PINRemoteImageTask *taskToEvaluate = nil;
+            __block NSString *taskKey = nil;
+            [strongSelf.tasks enumerateKeysAndObjectsUsingBlock:^(NSString *key, PINRemoteImageTask *task, BOOL *stop) {
+                if (task.callbackBlocks[UUID]) {
+                    taskToEvaluate = task;
+                    taskKey = key;
+                    *stop = YES;
                 }
-                if (taskKey) {
-                    break;
-                }
-            }
+            }];
         
             if (taskToEvaluate == nil) {
                 //maybe task hasn't been added to task list yet, add it to canceled tasks
