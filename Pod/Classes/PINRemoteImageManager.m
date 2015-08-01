@@ -546,7 +546,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
                      {
                          typeof(self) strongSelf = weakSelf;
                          
-                         BOOL saveAsJPEG = (options & PINRemoteImageManagerSaveProcessedImageAsJPEG);
+                         BOOL saveAsJPEG = (options & PINRemoteImageManagerSaveProcessedImageAsJPEG) != 0;
                          NSData *diskData = nil;
                          if (saveAsJPEG) {
                              diskData = UIImageJPEGRepresentation(image, 1.0);
@@ -659,7 +659,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
                  outImage:(UIImage **)outImage
          outAnimatedImage:(FLAnimatedImage **)outAnimatedImage
 {
-    BOOL ignoreGIF = (PINRemoteImageManagerDownloadOptionsIgnoreGIFs & options)?YES:NO;
+    BOOL ignoreGIF = (PINRemoteImageManagerDownloadOptionsIgnoreGIFs & options) != 0;
     FLAnimatedImage *animatedImage = nil;
     UIImage *image = nil;
     if ([object isKindOfClass:[UIImage class]]) {
@@ -669,7 +669,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
         if ([imageData pin_isGIF] && ignoreGIF == NO) {
             animatedImage = [[FLAnimatedImage alloc] initWithAnimatedGIFData:imageData];
         } else {
-            BOOL skipDecode = (options & PINRemoteImageManagerDownloadOptionsSkipDecode);
+            BOOL skipDecode = (options & PINRemoteImageManagerDownloadOptionsSkipDecode) != 0;
             image = [UIImage pin_decodedImageWithData:imageData skipDecodeIfPossible:skipDecode];
             //put in memory cache
             if (skipDecode == NO) {
@@ -703,7 +703,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
                                     options:(PINRemoteImageManagerDownloadOptions)options
                                    priority:(PINRemoteImageManagerPriority)priority
 {
-    BOOL ignoreGIF = (PINRemoteImageManagerDownloadOptionsIgnoreGIFs & options)?YES:NO;
+    BOOL ignoreGIF = (PINRemoteImageManagerDownloadOptionsIgnoreGIFs & options) != 0;
     __weak typeof(self) weakSelf = self;
     return [self downloadDataWithURL:URL
                                  key:key
@@ -717,7 +717,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
             NSUInteger cacheCost = 0;
             FLAnimatedImage *animatedImage = nil;
             UIImage *image = nil;
-            BOOL skipDecode = (options & PINRemoteImageManagerDownloadOptionsSkipDecode);
+            BOOL skipDecode = (options & PINRemoteImageManagerDownloadOptionsSkipDecode) != 0;
             
             if (remoteImageError == nil) {
                 if ([data pin_isGIF] && ignoreGIF == NO) {
