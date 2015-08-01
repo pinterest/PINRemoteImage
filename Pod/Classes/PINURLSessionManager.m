@@ -72,10 +72,10 @@
     [self.delegate didCompleteTask:task withError:error];
     [self lock];
         void (^completionHandler)(NSURLResponse *, NSError *) = self.completions[@(task.taskIdentifier)];
+        [self.completions removeObjectForKey:@(task.taskIdentifier)];
     [self unlock];
     if (completionHandler) {
         completionHandler(task.response, error);
-        [self.completions removeObjectForKey:@(task.taskIdentifier)];
     }
 }
 
