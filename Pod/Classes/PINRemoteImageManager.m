@@ -149,6 +149,9 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
         _concurrentOperationQueue = [[NSOperationQueue alloc] init];
         _concurrentOperationQueue.name = @"PINRemoteImageManager Concurrent Operation Queue";
         _concurrentOperationQueue.maxConcurrentOperationCount = NSOperationQueueDefaultMaxConcurrentOperationCount;
+#if defined(__IPHONE_8_0)
+        _concurrentOperationQueue.qualityOfService = NSQualityOfServiceBackground;
+#endif
         _urlSessionTaskQueue = [[NSOperationQueue alloc] init];
         _urlSessionTaskQueue.name = @"PINRemoteImageManager Concurrent URL Session Task Queue";
         _urlSessionTaskQueue.maxConcurrentOperationCount = 10;
@@ -1235,6 +1238,11 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 {
     NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:block];
     operation.queuePriority = operationPriorityWithImageManagerPriority(priority);
+#if defined(__IPHONE_8_0)
+    operation.qualityOfService = NSOperationQualityOfServiceBackground;
+#else
+    operation.threadPriority = 0.2;
+#endif
     [self addOperation:operation];
 }
 
