@@ -76,6 +76,7 @@
 - (void)dealloc
 {
     [self.lock lock];
+        self.processingContext = nil;
         if (self.imageSource) {
             CFRelease(_imageSource);
         }
