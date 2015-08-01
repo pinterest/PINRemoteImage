@@ -1244,9 +1244,8 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 {
     NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:block];
     operation.queuePriority = operationPriorityWithImageManagerPriority(priority);
-    operation.qualityOfService = NSOperationQualityOfServiceBackground;
 #if defined(__IPHONE_8_0)
-    operation.qualityOfService = NSQualityOfServiceBackground;
+    operation.qualityOfService = NSOperationQualityOfServiceBackground;
 #else
     operation.threadPriority = 0.2;
 #endif
