@@ -390,6 +390,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
          [strongSelf lock];
              //check canceled tasks first
              if ([strongSelf.canceledTasks containsObject:UUID]) {
+                 [strongSelf unlock];
                  return;
              }
              [strongSelf.canceledTasks removeAllObjects];
