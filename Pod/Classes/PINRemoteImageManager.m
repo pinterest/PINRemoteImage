@@ -149,9 +149,9 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
         _concurrentOperationQueue = [[NSOperationQueue alloc] init];
         _concurrentOperationQueue.name = @"PINRemoteImageManager Concurrent Operation Queue";
         _concurrentOperationQueue.maxConcurrentOperationCount = NSOperationQueueDefaultMaxConcurrentOperationCount;
-#if defined(__IPHONE_8_0)
-        _concurrentOperationQueue.qualityOfService = NSQualityOfServiceBackground;
-#endif
+        if ([[self class] isiOS8OrGreater]) {
+            _concurrentOperationQueue.qualityOfService = NSQualityOfServiceBackground;
+        }
         _urlSessionTaskQueue = [[NSOperationQueue alloc] init];
         _urlSessionTaskQueue.name = @"PINRemoteImageManager Concurrent URL Session Task Queue";
         _urlSessionTaskQueue.maxConcurrentOperationCount = 10;
@@ -1010,7 +1010,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
     [self unlock];
     
     [progressiveImage updateProgressiveImageWithData:data expectedNumberOfBytes:[dataTask countOfBytesExpectedToReceive]];
-    if (hasProgressBlocks && [self isiOS8OrGreater]) {
+    if (hasProgressBlocks && [[self class] isiOS8OrGreater]) {
         UIImage *progressImage = [progressiveImage currentImage];
         if (progressImage) {
             [self lock];
@@ -1209,7 +1209,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 #pragma mark - Helpers
 
 
-- (BOOL)isiOS8OrGreater
++ (BOOL)isiOS8OrGreater
 {
     static BOOL isiOS8OrGreater;
     static dispatch_once_t onceToken;
@@ -1239,11 +1239,11 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 {
     NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:block];
     operation.queuePriority = operationPriorityWithImageManagerPriority(priority);
-#if defined(__IPHONE_8_0)
-    operation.qualityOfService = NSOperationQualityOfServiceBackground;
-#else
-    operation.threadPriority = 0.2;
-#endif
+    if ([PINRemoteImageManager isiOS8OrGreater]) {
+        operation.qualityOfService = NSOperationQualityOfServiceBackground;
+    } else {
+        operation.threadPriority = 0.2;
+    }
     [self addOperation:operation];
 }
 
