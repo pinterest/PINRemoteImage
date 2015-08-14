@@ -8,7 +8,7 @@
 
 #import "PINRemoteImageManager.h"
 
-#import <FLAnimatedImage/FLAnimatedImage.h>
+#import "FLAnimatedImage.h"
 #import <PINCache/PINCache.h>
 
 #import "PINRemoteImage.h"
