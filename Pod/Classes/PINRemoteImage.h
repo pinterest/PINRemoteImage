@@ -16,7 +16,7 @@
 #define PINLog(args...)
 #endif
 
-#if __has_include(<FLAnimatedImage/FLAnimatedImage.h>)
+#if __has_include("FLAnimatedImage.h")
 #define USE_FLANIMATED_IMAGE    1
 #else
 #define USE_FLANIMATED_IMAGE    0

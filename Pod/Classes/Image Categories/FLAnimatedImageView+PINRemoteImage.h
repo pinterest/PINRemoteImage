@@ -6,7 +6,7 @@
 //
 //
 
-#import <FLAnimatedImage/FLAnimatedImageView.h>
+#import "FLAnimatedImage.h"
 
 #import "PINRemoteImageManager.h"
 #import "PINRemoteImageCategoryManager.h"

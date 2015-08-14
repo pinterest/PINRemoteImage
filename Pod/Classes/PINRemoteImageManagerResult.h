@@ -8,7 +8,7 @@
 
 @import UIKit;
 
-#import <FLAnimatedImage/FLAnimatedImage.h>
+#import "FLAnimatedImage.h"
 
 /** How the image was fetched. */
 typedef NS_ENUM(NSUInteger, PINRemoteImageResultType) {
