@@ -51,7 +51,7 @@
         CGImageRef imageRef = CGImageSourceCreateImageAtIndex(imageSourceRef, 0, (CFDictionaryRef)@{(NSString *)kCGImageSourceShouldCache : (NSNumber *)kCFBooleanFalse});
         if (imageRef) {
             
-            UIImageOrientation orientation = [self pin_UIImageOrienationFromImageSource:imageSourceRef];
+            UIImageOrientation orientation = pin_UIImageOrienationFromImageSource(imageSourceRef);
             
             decodedImage = [self pin_decodedImageWithCGImageRef:imageRef orientation:orientation];
             
@@ -108,8 +108,8 @@
     return decodedImage;
 }
 
-+(UIImageOrientation) pin_UIImageOrienationFromImageSource:(CGImageSourceRef)imageSourceRef {
-    
+
+UIImageOrientation pin_UIImageOrienationFromImageSource(CGImageSourceRef imageSourceRef) {
     UIImageOrientation orientation = UIImageOrientationUp;
     
     if (imageSourceRef != nil) {
@@ -160,8 +160,8 @@
     }
     
     return orientation;
-    
 }
+
 
 @end
 
