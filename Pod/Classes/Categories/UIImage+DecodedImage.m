@@ -53,11 +53,7 @@
             
             UIImageOrientation orientation = [self pin_UIImageOrienationFromImageSource:imageSourceRef];
             
-            
-            
             decodedImage = [self pin_decodedImageWithCGImageRef:imageRef orientation:orientation];
-            
-            
             
             CGImageRelease(imageRef);
         }
@@ -72,7 +68,6 @@
 {
     return [self pin_decodedImageWithCGImageRef:imageRef orientation:UIImageOrientationUp];
 }
-
 
 + (UIImage *)pin_decodedImageWithCGImageRef:(CGImageRef)imageRef orientation:(UIImageOrientation) orientation
 {
