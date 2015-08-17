@@ -100,6 +100,7 @@
         decodedImage = [UIImage imageWithCGImage:newImage scale:1.0 orientation:orientation];
         
         CGImageRelease(newImage);
+        CGContextRelease(ctx);
         
     } else {
         decodedImage = [UIImage imageWithCGImage:imageRef scale:1.0 orientation:orientation];
@@ -113,11 +114,11 @@ UIImageOrientation pin_UIImageOrienationFromImageSource(CGImageSourceRef imageSo
     UIImageOrientation orientation = UIImageOrientationUp;
     
     if (imageSourceRef != nil) {
-        CFDictionaryRef dict = CGImageSourceCopyPropertiesAtIndex(imageSourceRef, 0, NULL);
+        NSDictionary *dict = (NSDictionary *)CFBridgingRelease(CGImageSourceCopyPropertiesAtIndex(imageSourceRef, 0, NULL));
         
         if (dict != nil) {
             
-            NSNumber* exifOrientation = (__bridge NSNumber*) CFDictionaryGetValue(dict, kCGImagePropertyOrientation);
+            NSNumber* exifOrientation = dict[(id)kCGImagePropertyOrientation];
             if (exifOrientation != nil) {
                 
                 switch (exifOrientation.intValue) {
