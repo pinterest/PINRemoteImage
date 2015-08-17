@@ -1239,11 +1239,15 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 {
     NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:block];
     operation.queuePriority = operationPriorityWithImageManagerPriority(priority);
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_8_0
     if ([PINRemoteImageManager isiOS8OrGreater]) {
         operation.qualityOfService = NSOperationQualityOfServiceBackground;
     } else {
         operation.threadPriority = 0.2;
     }
+#else
+    operation.qualityOfService = NSOperationQualityOfServiceBackground;
+#endif
     [self addOperation:operation];
 }
 
