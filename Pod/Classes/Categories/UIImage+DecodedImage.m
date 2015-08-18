@@ -17,6 +17,8 @@
 #import "NSData+ImageDetectors.h"
 
 
+
+
 @implementation UIImage (PINDecodedImage)
 
 + (UIImage *)pin_decodedImageWithData:(NSData *)data
@@ -122,34 +124,34 @@ UIImageOrientation pin_UIImageOrienationFromImageSource(CGImageSourceRef imageSo
             if (exifOrientation != nil) {
                 
                 switch (exifOrientation.intValue) {
-                    case 1:
+                    case 1: /*kCGImagePropertyOrientationUp*/
                         orientation = UIImageOrientationUp;
                         break;
                         
-                    case 2:
+                    case 2: /*kCGImagePropertyOrientationUpMirrored*/
                         orientation = UIImageOrientationUpMirrored;
                         break;
                         
-                    case 3:
+                    case 3: /*kCGImagePropertyOrientationDown*/
                         orientation = UIImageOrientationDown;
                         break;
                         
-                    case 4:
+                    case 4: /*kCGImagePropertyOrientationDownMirrored*/
                         orientation = UIImageOrientationDownMirrored;
                         break;
-                    case 5:
+                    case 5: /*kCGImagePropertyOrientationLeftMirrored*/
                         orientation = UIImageOrientationLeftMirrored;
                         break;
                         
-                    case 6:
+                    case 6: /*kCGImagePropertyOrientationRight*/
                         orientation = UIImageOrientationRight;
                         break;
                         
-                    case 7:
+                    case 7: /*kCGImagePropertyOrientationRightMirrored*/
                         orientation = UIImageOrientationRightMirrored;
                         break;
                         
-                    case 8:
+                    case 8: /*kCGImagePropertyOrientationLeft*/
                         orientation = UIImageOrientationLeft;
                         break;
                         
