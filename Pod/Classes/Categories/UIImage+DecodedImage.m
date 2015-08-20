@@ -17,6 +17,8 @@
 #import "NSData+ImageDetectors.h"
 
 
+
+
 @implementation UIImage (PINDecodedImage)
 
 + (UIImage *)pin_decodedImageWithData:(NSData *)data
@@ -46,10 +48,14 @@
     UIImage *decodedImage = nil;
     
     CGImageSourceRef imageSourceRef = CGImageSourceCreateWithData((CFDataRef)data, NULL);
+    
     if (imageSourceRef) {
         CGImageRef imageRef = CGImageSourceCreateImageAtIndex(imageSourceRef, 0, (CFDictionaryRef)@{(NSString *)kCGImageSourceShouldCache : (NSNumber *)kCFBooleanFalse});
         if (imageRef) {
-            decodedImage = [self pin_decodedImageWithCGImageRef:imageRef];
+            
+            UIImageOrientation orientation = pin_UIImageOrienationFromImageSource(imageSourceRef);
+            
+            decodedImage = [self pin_decodedImageWithCGImageRef:imageRef orientation:orientation];
             
             CGImageRelease(imageRef);
         }
@@ -62,6 +68,11 @@
 
 + (UIImage *)pin_decodedImageWithCGImageRef:(CGImageRef)imageRef
 {
+    return [self pin_decodedImageWithCGImageRef:imageRef orientation:UIImageOrientationUp];
+}
+
++ (UIImage *)pin_decodedImageWithCGImageRef:(CGImageRef)imageRef orientation:(UIImageOrientation) orientation
+{
     BOOL opaque = YES;
     CGImageAlphaInfo alpha = CGImageGetAlphaInfo(imageRef);
     if (alpha == kCGImageAlphaFirst || alpha == kCGImageAlphaLast || alpha == kCGImageAlphaOnly || alpha == kCGImageAlphaPremultipliedFirst || alpha == kCGImageAlphaPremultipliedLast) {
@@ -69,21 +80,91 @@
     }
     
     CGSize imageSize = CGSizeMake(CGImageGetWidth(imageRef), CGImageGetHeight(imageRef));
-    UIGraphicsBeginImageContextWithOptions(imageSize, opaque, 1.0);
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    
+    CGBitmapInfo info = opaque ? (kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Host) : (kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Host);
+    CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
+    
+    //Use UIGraphicsBeginImageContext parameters from docs: https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIKitFunctionReference/#//apple_ref/c/func/UIGraphicsBeginImageContextWithOptions
+    CGContextRef ctx = CGBitmapContextCreate(NULL, imageSize.width, imageSize.height,
+                                             8,
+                                             0,
+                                             colorspace,
+                                             info);
+    
+    CGColorSpaceRelease(colorspace);
+    
     UIImage *decodedImage = nil;
     if (ctx) {
-        CGContextScaleCTM(ctx, 1.0, -1.0);
-        CGContextTranslateCTM(ctx, 0.0, -imageSize.height);
         CGContextDrawImage(ctx, CGRectMake(0, 0, imageSize.width, imageSize.height), imageRef);
-        decodedImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
+        
+        CGImageRef newImage = CGBitmapContextCreateImage(ctx);
+        
+        decodedImage = [UIImage imageWithCGImage:newImage scale:1.0 orientation:orientation];
+        
+        CGImageRelease(newImage);
+        CGContextRelease(ctx);
+        
     } else {
-        decodedImage = [UIImage imageWithCGImage:imageRef];
+        decodedImage = [UIImage imageWithCGImage:imageRef scale:1.0 orientation:orientation];
     }
     
     return decodedImage;
 }
+
+
+UIImageOrientation pin_UIImageOrienationFromImageSource(CGImageSourceRef imageSourceRef) {
+    UIImageOrientation orientation = UIImageOrientationUp;
+    
+    if (imageSourceRef != nil) {
+        NSDictionary *dict = (NSDictionary *)CFBridgingRelease(CGImageSourceCopyPropertiesAtIndex(imageSourceRef, 0, NULL));
+        
+        if (dict != nil) {
+            
+            NSNumber* exifOrientation = dict[(id)kCGImagePropertyOrientation];
+            if (exifOrientation != nil) {
+                
+                switch (exifOrientation.intValue) {
+                    case 1: /*kCGImagePropertyOrientationUp*/
+                        orientation = UIImageOrientationUp;
+                        break;
+                        
+                    case 2: /*kCGImagePropertyOrientationUpMirrored*/
+                        orientation = UIImageOrientationUpMirrored;
+                        break;
+                        
+                    case 3: /*kCGImagePropertyOrientationDown*/
+                        orientation = UIImageOrientationDown;
+                        break;
+                        
+                    case 4: /*kCGImagePropertyOrientationDownMirrored*/
+                        orientation = UIImageOrientationDownMirrored;
+                        break;
+                    case 5: /*kCGImagePropertyOrientationLeftMirrored*/
+                        orientation = UIImageOrientationLeftMirrored;
+                        break;
+                        
+                    case 6: /*kCGImagePropertyOrientationRight*/
+                        orientation = UIImageOrientationRight;
+                        break;
+                        
+                    case 7: /*kCGImagePropertyOrientationRightMirrored*/
+                        orientation = UIImageOrientationRightMirrored;
+                        break;
+                        
+                    case 8: /*kCGImagePropertyOrientationLeft*/
+                        orientation = UIImageOrientationLeft;
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+    
+    return orientation;
+}
+
 
 @end
 
