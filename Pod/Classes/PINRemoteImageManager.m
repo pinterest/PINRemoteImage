@@ -786,7 +786,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
                 [strongSelf lock];
                     typeof(self) strongSelf = weakSelf;
                     PINRemoteImageDownloadTask *task = [strongSelf.tasks objectForKey:key];
-                    [task callCompletionsWithQueue:strongSelf.callbackQueue remove:NO withImage:image animatedImage:animatedImage cached:NO error:error];
+                    [task callCompletionsWithQueue:strongSelf.callbackQueue remove:NO withImage:image animatedImage:animatedImage cached:NO error:remoteImageError];
                     [strongSelf.tasks removeObjectForKey:key];
                 [strongSelf unlock];
             }
@@ -1007,9 +1007,10 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
         }
         PINProgressiveImage *progressiveImage = task.progressImage;
         BOOL hasProgressBlocks = task.hasProgressBlocks;
-    [self unlock];
     
-    [progressiveImage updateProgressiveImageWithData:data expectedNumberOfBytes:[dataTask countOfBytesExpectedToReceive]];
+        [progressiveImage updateProgressiveImageWithData:data expectedNumberOfBytes:[dataTask countOfBytesExpectedToReceive]];
+    [self unlock];
+
     if (hasProgressBlocks && [[self class] isiOS8OrGreater]) {
         UIImage *progressImage = [progressiveImage currentImage];
         if (progressImage) {
