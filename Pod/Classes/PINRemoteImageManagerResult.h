@@ -20,6 +20,8 @@ typedef NS_ENUM(NSUInteger, PINRemoteImageResultType) {
     PINRemoteImageResultTypeCache,
     /** Image was downloaded */
     PINRemoteImageResultTypeDownload,
+    /** Image is progress */
+    PINRemoteImageResultTypeProgress,
 };
 
 @interface PINRemoteImageManagerResult : NSObject
