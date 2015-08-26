@@ -831,7 +831,10 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
                 NSData *data = task.progressImage.data;
             [strongSelf unlock];
             
-            completion(data, error);
+            //if task has been removed, no point in calling completion
+            if (task) {
+                completion(data, error);
+            }
         }
     }];
     
@@ -1010,15 +1013,24 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
     [self unlock];
     
     [progressiveImage updateProgressiveImageWithData:data expectedNumberOfBytes:[dataTask countOfBytesExpectedToReceive]];
-    if (hasProgressBlocks && [[self class] isiOS8OrGreater]) {
-        UIImage *progressImage = [progressiveImage currentImage];
-        if (progressImage) {
-            [self lock];
-                task = [self.tasks objectForKey:[self cacheKeyForURL:[[dataTask originalRequest] URL] processorKey:nil]];
-                [task callProgressWithQueue:_callbackQueue withImage:progressImage];
-            [self unlock];
+
+    __weak typeof(self) weakSelf = self;
+    [_concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityLow block:^{
+        typeof(self) strongSelf = weakSelf;
+        [strongSelf lock];
+            PINRemoteImageDownloadTask *task = [strongSelf.tasks objectForKey:[strongSelf cacheKeyForURL:[[dataTask originalRequest] URL] processorKey:nil]];
+        [strongSelf unlock];
+        
+        if (hasProgressBlocks && [[strongSelf class] isiOS8OrGreater]) {
+            UIImage *progressImage = [progressiveImage currentImage];
+            if (progressImage) {
+                [strongSelf lock];
+                    task = [strongSelf.tasks objectForKey:[strongSelf cacheKeyForURL:[[dataTask originalRequest] URL] processorKey:nil]];
+                    [task callProgressWithQueue:_callbackQueue withImage:progressImage];
+                [strongSelf unlock];
+            }
         }
-    }
+    }];
 }
 
 - (void)didCompleteTask:(NSURLSessionTask *)task withError:(NSError *)error
