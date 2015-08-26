@@ -1007,10 +1007,9 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
         }
         PINProgressiveImage *progressiveImage = task.progressImage;
         BOOL hasProgressBlocks = task.hasProgressBlocks;
-    
-        [progressiveImage updateProgressiveImageWithData:data expectedNumberOfBytes:[dataTask countOfBytesExpectedToReceive]];
     [self unlock];
-
+    
+    [progressiveImage updateProgressiveImageWithData:data expectedNumberOfBytes:[dataTask countOfBytesExpectedToReceive]];
     if (hasProgressBlocks && [[self class] isiOS8OrGreater]) {
         UIImage *progressImage = [progressiveImage currentImage];
         if (progressImage) {
