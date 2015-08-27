@@ -36,7 +36,7 @@
                                                                           animatedImage:nil
                                                                           requestLength:CACurrentMediaTime() - callback.requestTime
                                                                                   error:nil
-                                                                             resultType:PINRemoteImageResultTypeDownload UUID:UUID]);
+                                                                             resultType:PINRemoteImageResultTypeProgress UUID:UUID]);
             });
         }
     }];
