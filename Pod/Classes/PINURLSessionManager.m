@@ -48,7 +48,8 @@
         if (completionHandler) {
             [self.completions setObject:completionHandler forKey:@(dataTask.taskIdentifier)];
         }
-        [self.delegateQueues setObject:dispatch_queue_create([[NSString stringWithFormat:@"PINURLSessionManager delegate queue - %ld", (unsigned long)dataTask.taskIdentifier] UTF8String], DISPATCH_QUEUE_SERIAL) forKey:@(dataTask.taskIdentifier)];
+        dispatch_queue_t delegateQueue = dispatch_queue_create([[NSString stringWithFormat:@"PINURLSessionManager delegate queue - %ld", (unsigned long)dataTask.taskIdentifier] UTF8String], DISPATCH_QUEUE_SERIAL);
+        [self.delegateQueues setObject:delegateQueue forKey:@(dataTask.taskIdentifier)];
     [self unlock];
     return dataTask;
 }
