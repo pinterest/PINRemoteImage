@@ -93,7 +93,6 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 
 @interface PINRemoteImageManager () <PINURLSessionManagerDelegate>
 {
-    dispatch_queue_t _concurrentQueue;
     dispatch_queue_t _callbackQueue;
     NSLock *_lock;
     NSOperationQueue *_concurrentOperationQueue;
@@ -142,7 +141,6 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
         self.cache = [self defaultImageCache];
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
         
-        _concurrentQueue = dispatch_queue_create("PINRemoteImageManagerConcurrentQueue", DISPATCH_QUEUE_CONCURRENT);
         _callbackQueue = dispatch_queue_create("PINRemoteImageManagerCallbackQueue", DISPATCH_QUEUE_CONCURRENT);
         _lock = [[NSLock alloc] init];
         _lock.name = @"PINRemoteImageManager";
@@ -157,7 +155,6 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
         _urlSessionTaskQueue.maxConcurrentOperationCount = 10;
         
         self.sessionManager = [[PINURLSessionManager alloc] initWithSessionConfiguration:configuration];
-        self.sessionManager.completionQueue = _concurrentQueue;
         self.sessionManager.delegate = self;
         
         self.estimatedRemainingTimeThreshold = 0.0;

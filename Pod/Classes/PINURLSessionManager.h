@@ -24,7 +24,6 @@
 
 - (void)invalidateSessionAndCancelTasks;
 
-@property (atomic, strong) dispatch_queue_t completionQueue;
 @property (atomic, weak) id <PINURLSessionManagerDelegate> delegate;
 
 @end
