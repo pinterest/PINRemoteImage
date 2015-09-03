@@ -153,7 +153,12 @@
 {
     if (![NSThread isMainThread]) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self setImageOnView:view fromURLs:urls placeholderImage:placeholderImage completion:completion];
+            [self setImageOnView:view
+                        fromURLs:urls
+                placeholderImage:placeholderImage
+                    processorKey:processorKey
+                       processor:processor
+                      completion:completion];
         });
         return;
     }
