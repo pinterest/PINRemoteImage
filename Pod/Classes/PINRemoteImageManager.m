@@ -1015,7 +1015,8 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
             UIImage *progressImage = [progressiveImage currentImage];
             if (progressImage) {
                 [strongSelf lock];
-                    PINRemoteImageDownloadTask *task = [strongSelf.tasks objectForKey:[strongSelf cacheKeyForURL:[[dataTask originalRequest] URL] processorKey:nil]];
+                    NSString *cacheKey = [strongSelf cacheKeyForURL:[[dataTask originalRequest] URL] processorKey:nil];
+                    PINRemoteImageDownloadTask *task = strongSelf.tasks[cacheKey];
                     [task callProgressWithQueue:strongSelf.callbackQueue withImage:progressImage];
                 [strongSelf unlock];
             }

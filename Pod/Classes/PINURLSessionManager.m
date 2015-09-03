@@ -37,7 +37,7 @@
 - (void)invalidateSessionAndCancelTasks
 {
     [self lock];
-    [self.session invalidateAndCancel];
+        [self.session invalidateAndCancel];
     [self unlock];
 }
 
@@ -48,7 +48,8 @@
         if (completionHandler) {
             [self.completions setObject:completionHandler forKey:@(dataTask.taskIdentifier)];
         }
-        dispatch_queue_t delegateQueue = dispatch_queue_create([[NSString stringWithFormat:@"PINURLSessionManager delegate queue - %ld", (unsigned long)dataTask.taskIdentifier] UTF8String], DISPATCH_QUEUE_SERIAL);
+        NSString *queueName = [NSString stringWithFormat:@"PINURLSessionManager delegate queue - %ld", (unsigned long)dataTask.taskIdentifier];
+        dispatch_queue_t delegateQueue = dispatch_queue_create([queueName UTF8String], DISPATCH_QUEUE_SERIAL);
         [self.delegateQueues setObject:delegateQueue forKey:@(dataTask.taskIdentifier)];
     [self unlock];
     return dataTask;
@@ -69,7 +70,7 @@
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
 {
     [self lock];
-    dispatch_queue_t delegateQueue = self.delegateQueues[@(dataTask.taskIdentifier)];
+        dispatch_queue_t delegateQueue = self.delegateQueues[@(dataTask.taskIdentifier)];
     [self unlock];
     
     __weak typeof(self) weakSelf = self;
@@ -81,7 +82,7 @@
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {
     [self lock];
-    dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
+        dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
     [self unlock];
     
     __weak typeof(self) weakSelf = self;
