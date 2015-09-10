@@ -627,7 +627,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
     
     if (completion && ((image || animatedImage) || (url == nil))) {
         //If we're on the main thread, special case to call completion immediately
-        NSError *error;
+        NSError *error = nil;
         if (!url) {
             error = [NSError errorWithDomain:NSURLErrorDomain
                                         code:NSURLErrorUnsupportedURL
