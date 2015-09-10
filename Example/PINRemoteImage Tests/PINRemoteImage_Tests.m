@@ -151,6 +151,23 @@
     XCTAssert(outAnimatedImage == nil, @"Animated image is not nil.");
 }
 
+- (void)testErrorOnNilURLDownload
+{
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    __block NSError *outError = nil;
+    [self.imageManager downloadImageWithURL:nil
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                                 completion:^(PINRemoteImageManagerResult *result)
+     {
+         outError = result.error;
+         dispatch_semaphore_signal(semaphore);
+     }];
+    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert([outError.domain isEqualToString:NSURLErrorDomain]);
+    XCTAssert(outError.code == NSURLErrorUnsupportedURL);
+    XCTAssert([outError.userInfo[NSLocalizedDescriptionKey] isEqualToString:@"unsupported URL"]);
+}
+
 - (void)testDecoding
 {
     dispatch_group_t group = dispatch_group_create();
