@@ -50,6 +50,16 @@
     return [NSURL URLWithString:@"https://s-media-cache-ak0.pinimg.com/originals/90/f5/77/90f577fc6abcd24f9a5f9f55b2d7482b.jpg"];
 }
 
+- (NSURL *)emptyURL
+{
+    return [NSURL URLWithString:@""];
+}
+
+- (NSURL *)fourZeroFourURL
+{
+    return [NSURL URLWithString:@"https://www.pinterest.com/404/"];
+}
+
 - (NSURL *)JPEGURL_Small
 {
     return [NSURL URLWithString:@"http://media-cache-ec0.pinimg.com/345x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"];
@@ -149,6 +159,59 @@
     
     XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
     XCTAssert(outAnimatedImage == nil, @"Animated image is not nil.");
+}
+
+- (void)testErrorOnNilURLDownload
+{
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    __block NSError *outError = nil;
+    [self.imageManager downloadImageWithURL:nil
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                                 completion:^(PINRemoteImageManagerResult *result)
+     {
+         outError = result.error;
+         dispatch_semaphore_signal(semaphore);
+     }];
+    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert([outError.domain isEqualToString:NSURLErrorDomain]);
+    XCTAssert(outError.code == NSURLErrorUnsupportedURL);
+    XCTAssert([outError.localizedDescription isEqualToString:@"unsupported URL"]);
+}
+
+- (void)testErrorOnEmptyURLDownload
+{
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    __block NSError *outError = nil;
+    [self.imageManager downloadImageWithURL:[self emptyURL]
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                                 completion:^(PINRemoteImageManagerResult *result)
+     {
+         outError = result.error;
+         dispatch_semaphore_signal(semaphore);
+     }];
+    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert([outError.domain isEqualToString:NSURLErrorDomain]);
+    XCTAssert(outError.code == NSURLErrorUnsupportedURL);
+    // iOS8 (and presumably 10.10) returns NSURLErrorUnsupportedURL which means the HTTP NSURLProtocol does not accept it
+    NSArray *validErrorMessages = @[ @"unsupported URL", @"The operation couldn’t be completed. (NSURLErrorDomain error -1002.)"];
+    XCTAssert([validErrorMessages containsObject:outError.localizedDescription], @"%@", outError.localizedDescription);
+}
+
+- (void)testErrorOn404Response
+{
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    __block NSError *outError = nil;
+    [self.imageManager downloadImageWithURL:[self fourZeroFourURL]
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                                 completion:^(PINRemoteImageManagerResult *result)
+     {
+         outError = result.error;
+         dispatch_semaphore_signal(semaphore);
+     }];
+    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert([outError.domain isEqualToString:NSURLErrorDomain]);
+    XCTAssert(outError.code == NSURLErrorRedirectToNonExistentLocation);
+    XCTAssert([outError.localizedDescription isEqualToString:@"The requested URL was not found on this server."]);
 }
 
 - (void)testDecoding

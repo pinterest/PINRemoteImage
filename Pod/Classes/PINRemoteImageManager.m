@@ -627,11 +627,17 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
     
     if (completion && ((image || animatedImage) || (url == nil))) {
         //If we're on the main thread, special case to call completion immediately
+        NSError *error = nil;
+        if (!url) {
+            error = [NSError errorWithDomain:NSURLErrorDomain
+                                        code:NSURLErrorUnsupportedURL
+                                    userInfo:@{ NSLocalizedDescriptionKey : @"unsupported URL" }];
+        }
         if (allowEarlyReturn && [NSThread isMainThread]) {
             completion([PINRemoteImageManagerResult imageResultWithImage:image
                                                           animatedImage:animatedImage
                                                           requestLength:0
-                                                                  error:nil
+                                                                  error:error
                                                              resultType:resultType
                                                                    UUID:nil]);
         } else {
@@ -639,7 +645,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
                 completion([PINRemoteImageManagerResult imageResultWithImage:image
                                                               animatedImage:animatedImage
                                                               requestLength:0
-                                                                      error:nil
+                                                                      error:error
                                                                  resultType:resultType
                                                                        UUID:nil]);
             });
