@@ -73,6 +73,11 @@ UIImageView *imageView = [[UIImageView alloc] init];
  }];
 ```
 
+Hamdle Authentication
+```objc
+[[PINRemoteImageManager sharedImageManager] setAuthenticationChallenge:^(NSURLSessionTask *task, NSURLAuthenticationChallenge *challenge, PINRemoteImageManagerAuthenticationChallengeCompletionHandler aCompletion) {
+aCompletion(NSURLSessionAuthChallengePerformDefaultHandling, nil)];
+
 ## Installation
 
 ### Manually
