@@ -100,7 +100,7 @@ typedef UIImage *(^PINRemoteImageManagerImageProcessor)(PINRemoteImageManagerRes
  @param disposition One of several constants that describes how the challenge should be handled.
  @param credential The credential that should be used for authentication if disposition is NSURLSessionAuthChallengeUseCredential; otherwise, NULL.
  */
-typedef void(^PINRemoteImageManagerAuthenticationChallengeCompletionHandler)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * __nullable credential);
+typedef void(^PINRemoteImageManagerAuthenticationChallengeCompletionHandler)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential);
 
 /**
  Authentication challenge handler
