@@ -698,4 +698,24 @@
     dispatch_semaphore_wait(semaphore, [self timeout]);
 }
 
+- (void)testAuthentication {
+	dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+	__block BOOL didCallAuthenticationChallenge = NO;
+	
+	[self.imageManager setAuthenticationChallenge:^(NSURLSessionTask *task, NSURLAuthenticationChallenge *challenge, PINRemoteImageManagerAuthenticationChallengeCompletionHandler aHandler) {
+		didCallAuthenticationChallenge = YES;
+		aHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
+		dispatch_semaphore_signal(semaphore);
+		
+	}];
+	
+	[self.imageManager downloadImageWithURL: [NSURL URLWithString:@"https://media-cache-ec0.pinimg.com/600x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"]
+									options:PINRemoteImageManagerDownloadOptionsNone
+								 completion:nil];
+	
+	dispatch_semaphore_wait(semaphore, [self timeout]);
+	
+	XCTAssert(didCallAuthenticationChallenge, @"Did not call authenticationchallenge.");
+}
+
 @end

@@ -113,7 +113,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 @property (nonatomic, assign) float highQualityBPSThreshold;
 @property (nonatomic, assign) float lowQualityBPSThreshold;
 @property (nonatomic, assign) BOOL shouldUpgradeLowQualityImages;
-@property (nonatomic, strong) PINRemoteImageManagerAuthenticationChallenge authenticationChallenge;
+@property (nonatomic, copy) PINRemoteImageManagerAuthenticationChallenge authenticationChallengeHandler;
 #if DEBUG
 @property (nonatomic, assign) float currentBPS;
 @property (nonatomic, assign) BOOL overrideBPS;
@@ -200,7 +200,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 		typeof(self) strongSelf = weakSelf;
 		[strongSelf lock];
-		strongSelf.authenticationChallenge = aChallenge;
+		strongSelf.authenticationChallengeHandler = aChallenge;
 		[strongSelf unlock];
 	});
 }
@@ -1007,10 +1007,10 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 
 #pragma mark - Session Task Blocks
 
-- (void)didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge forTask:(NSURLSessionTask *)task completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * __nullable credential))completionHandler {
+- (void)didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge forTask:(NSURLSessionTask *)task completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler {
 	[self lock];
-	if (self.authenticationChallenge) {
-		self.authenticationChallenge(task, challenge, ^(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * __nullable credential){
+	if (self.authenticationChallengeHandler) {
+		self.authenticationChallengeHandler(task, challenge, ^(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential){
 			completionHandler(disposition, credential);
 		});
 	} else {
