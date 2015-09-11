@@ -1013,7 +1013,10 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 		self.authenticationChallenge(task, challenge, ^(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * __nullable credential){
 			completionHandler(disposition, credential);
 		});
+	} else {
+		completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
 	}
+	
 	[self unlock];
 }
 
