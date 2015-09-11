@@ -94,6 +94,23 @@ typedef UIImage *(^PINRemoteImageManagerImageProcessor)(PINRemoteImageManagerRes
  You can use this class to download images, postprocess downloaded images, prefetch images, download images progressively, or download one image in a set of images depending on network performance.
  */
 
+/**
+ Completion Handler block which will be forwarded to NSURLSessionTaskDelegate's completion handler
+ 
+ @param disposition One of several constants that describes how the challenge should be handled.
+ @param credential The credential that should be used for authentication if disposition is NSURLSessionAuthChallengeUseCredential; otherwise, NULL.
+ */
+typedef void(^PINRemoteImageManagerAuthenticationChallengeCompletionHandler)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * __nullable credential);
+
+/**
+ Authentication challenge handler
+ 
+ @param session The session containing the task whose request requires authentication.
+ @param task The task whose request requires authentication.
+ @param challenge An object that contains the request for authentication.
+ */
+typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSession *session, NSURLSessionTask *task, NSURLAuthenticationChallenge *challenge, PINRemoteImageManagerAuthenticationChallengeCompletionHandler aHandler);
+
 @interface PINRemoteImageManager : NSObject
 
 @property (nonatomic, readonly) PINCache *cache;
@@ -110,6 +127,14 @@ typedef UIImage *(^PINRemoteImageManagerImageProcessor)(PINRemoteImageManagerRes
  @return An instance of a PINCache object.
  */
 - (PINCache *)defaultImageCache;
+
+/**
+ Set the Authentication Challenge Block
+ @see PINRemoteImageManagerAuthenticationChallenge
+ 
+ @param challengeBlock A PINRemoteImageManagerAuthenticationChallenge block.
+ */
+- (void)setAuthenticationChallenge:(PINRemoteImageManagerAuthenticationChallenge)aChallenge;
 
 /**
  Set the minimum BPS to download the highest quality image in a set.
