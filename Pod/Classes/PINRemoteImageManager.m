@@ -1007,6 +1007,16 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 
 #pragma mark - Session Task Blocks
 
+- (void)didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge forTask:(NSURLSessionTask *)task completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * __nullable credential))completionHandler {
+	[self lock];
+	if (self.authenticationChallenge) {
+		self.authenticationChallenge(task, challenge, ^(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * __nullable credential){
+			completionHandler(disposition, credential);
+		});
+	}
+	[self unlock];
+}
+
 - (void)didReceiveData:(NSData *)data forTask:(NSURLSessionDataTask *)dataTask
 {
     [self lock];
