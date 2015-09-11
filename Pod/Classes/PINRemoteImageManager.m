@@ -113,6 +113,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 @property (nonatomic, assign) float highQualityBPSThreshold;
 @property (nonatomic, assign) float lowQualityBPSThreshold;
 @property (nonatomic, assign) BOOL shouldUpgradeLowQualityImages;
+@property (nonatomic, copy) PINRemoteImageManagerAuthenticationChallenge authenticationChallengeHandler;
 #if DEBUG
 @property (nonatomic, assign) float currentBPS;
 @property (nonatomic, assign) BOOL overrideBPS;
@@ -192,6 +193,16 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 - (void)unlock
 {
     [_lock unlock];
+}
+
+- (void)setAuthenticationChallenge:(PINRemoteImageManagerAuthenticationChallenge)aChallenge {
+	__weak typeof(self) weakSelf = self;
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+		typeof(self) strongSelf = weakSelf;
+		[strongSelf lock];
+		strongSelf.authenticationChallengeHandler = aChallenge;
+		[strongSelf unlock];
+	});
 }
 
 - (void)setMaxNumberOfConcurrentOperations:(NSInteger)maxNumberOfConcurrentOperations completion:(dispatch_block_t)completion
@@ -995,6 +1006,19 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 }
 
 #pragma mark - Session Task Blocks
+
+- (void)didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge forTask:(NSURLSessionTask *)task completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler {
+	[self lock];
+	if (self.authenticationChallengeHandler) {
+		self.authenticationChallengeHandler(task, challenge, ^(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential){
+			completionHandler(disposition, credential);
+		});
+	} else {
+		completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
+	}
+	
+	[self unlock];
+}
 
 - (void)didReceiveData:(NSData *)data forTask:(NSURLSessionDataTask *)dataTask
 {
