@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 #import <PINRemoteImage/PINRemoteImage.h>
+#import <PINRemoteImage/PINURLSessionManager.h>
 #import <PINRemoteImage/UIImageView+PINRemoteImage.h>
 #import <FLAnimatedImage/FLAnimatedImage.h>
 #import <PINCache/PINCache.h>
@@ -16,6 +17,7 @@
 #if DEBUG
 @interface PINRemoteImageManager ()
 
+@property (nonatomic, strong) PINURLSessionManager *sessionManager;
 @property (nonatomic, readonly) NSUInteger totalDownloads;
 
 - (float)currentBytesPerSecond;
@@ -23,11 +25,20 @@
 - (void)setCurrentBytesPerSecond:(float)currentBPS;
 
 @end
+
+@interface PINURLSessionManager ()
+
+@property (nonatomic, strong) NSURLSession *session;
+
+@end
 #endif
 
-@interface PINRemoteImage_Tests : XCTestCase
+@interface PINRemoteImage_Tests : XCTestCase <PINURLSessionManagerDelegate>
 
 @property (nonatomic, strong) PINRemoteImageManager *imageManager;
+@property (nonatomic, strong) NSData *data;
+@property (nonatomic, strong) NSURLSessionTask *task;
+@property (nonatomic, strong) NSError *error;
 
 @end
 
@@ -60,6 +71,11 @@
     return [NSURL URLWithString:@"https://www.pinterest.com/404/"];
 }
 
+- (NSURL *)headersURL
+{
+    return [NSURL URLWithString:@"http://httpbin.org/headers"];
+}
+
 - (NSURL *)JPEGURL_Small
 {
     return [NSURL URLWithString:@"http://media-cache-ec0.pinimg.com/345x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"];
@@ -88,6 +104,20 @@
 - (NSURL *)transparentWebPURL
 {
     return [NSURL URLWithString:@"https://www.gstatic.com/webp/gallery3/4_webp_ll.webp"];
+}
+
+#pragma mark - <PINURLSessionManagerDelegate>
+
+- (void)didReceiveData:(NSData *)data forTask:(NSURLSessionTask *)task
+{
+    self.data = data;
+    self.task = task;
+}
+
+- (void)didCompleteTask:(NSURLSessionTask *)task withError:(NSError *)error
+{
+    self.task = task;
+    self.error = error;
 }
 
 - (void)setUp
@@ -122,6 +152,38 @@
     dispatch_semaphore_wait(semaphore, [self timeout]);
     XCTAssert(outAnimatedImage && [outAnimatedImage isKindOfClass:[FLAnimatedImage class]], @"Failed downloading animatedImage or animatedImage is not an FLAnimatedImage.");
     XCTAssert(outImage == nil, @"Image is not nil.");
+}
+
+- (void)testInitWithNilConfiguration
+{
+    self.imageManager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:nil];
+    XCTAssertNotNil(self.imageManager.sessionManager.session.configuration);
+}
+
+- (void)testInitWithConfiguration
+{
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    configuration.HTTPAdditionalHeaders = @{ @"Authorization" : @"Pinterest 123456" };
+    self.imageManager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:configuration];
+    XCTAssert([self.imageManager.sessionManager.session.configuration.HTTPAdditionalHeaders isEqualToDictionary:@{ @"Authorization" : @"Pinterest 123456" }]);
+}
+
+- (void)testCustomHeaderIsAddedToImageRequests
+{
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    configuration.HTTPAdditionalHeaders = @{ @"X-Custom-Header" : @"Custom Header Value" };
+    self.imageManager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:configuration];
+    self.imageManager.sessionManager.delegate = self;
+    [self.imageManager downloadImageWithURL:[self headersURL]
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                                 completion:^(PINRemoteImageManagerResult *result)
+     {
+         dispatch_semaphore_signal(semaphore);
+     }];
+    dispatch_semaphore_wait(semaphore, [self timeout]);
+    NSDictionary *headers = [[NSJSONSerialization JSONObjectWithData:self.data options:NSJSONReadingMutableContainers error:nil] valueForKey:@"headers"];
+    XCTAssert([headers[@"X-Custom-Header"] isEqualToString:@"Custom Header Value"]);
 }
 
 - (void)testSkipFLAnimatedImageDownload

@@ -138,10 +138,16 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 
 - (instancetype)init
 {
+    return [self initWithSessionConfiguration:nil];
+}
+
+- (instancetype)initWithSessionConfiguration:(NSURLSessionConfiguration *)configuration
+{
     if (self = [super init]) {
         self.cache = [self defaultImageCache];
-        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-        
+        if (!configuration) {
+            configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        }
         _callbackQueue = dispatch_queue_create("PINRemoteImageManagerCallbackQueue", DISPATCH_QUEUE_CONCURRENT);
         _lock = [[NSLock alloc] init];
         _lock.name = @"PINRemoteImageManager";
