@@ -105,11 +105,11 @@ typedef void(^PINRemoteImageManagerAuthenticationChallengeCompletionHandler)(NSU
 /**
  Authentication challenge handler
  
- @param session The session containing the task whose request requires authentication.
  @param task The task whose request requires authentication.
  @param challenge An object that contains the request for authentication.
+ @param aHandler A PINRemoteImageManagerAuthenticationChallengeCompletionHandler, see example for further details.
  */
-typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSession *session, NSURLSessionTask *task, NSURLAuthenticationChallenge *challenge, PINRemoteImageManagerAuthenticationChallengeCompletionHandler aHandler);
+typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *task, NSURLAuthenticationChallenge *challenge, PINRemoteImageManagerAuthenticationChallengeCompletionHandler aHandler);
 
 @interface PINRemoteImageManager : NSObject
 

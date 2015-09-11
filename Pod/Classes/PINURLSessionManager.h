@@ -14,6 +14,10 @@
 - (void)didReceiveData:(NSData *)data forTask:(NSURLSessionTask *)task;
 - (void)didCompleteTask:(NSURLSessionTask *)task withError:(NSError *)error;
 
+@optional
+- (void)didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge forTask:(NSURLSessionTask *)task completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * __nullable credential))completionHandler;
+
+
 @end
 
 @interface PINURLSessionManager : NSObject
