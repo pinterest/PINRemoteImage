@@ -11,7 +11,9 @@
 #import <PINRemoteImage/PINRemoteImage.h>
 #import <PINRemoteImage/PINURLSessionManager.h>
 #import <PINRemoteImage/UIImageView+PINRemoteImage.h>
+#if USE_FLANIMATED_IMAGE
 #import <FLAnimatedImage/FLAnimatedImage.h>
+#endif
 #import <PINCache/PINCache.h>
 
 #if DEBUG
@@ -136,6 +138,7 @@
     [super tearDown];
 }
 
+#if USE_FLANIMATED_IMAGE
 - (void)testGIFDownload
 {
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
@@ -153,6 +156,7 @@
     XCTAssert(outAnimatedImage && [outAnimatedImage isKindOfClass:[FLAnimatedImage class]], @"Failed downloading animatedImage or animatedImage is not an FLAnimatedImage.");
     XCTAssert(outImage == nil, @"Image is not nil.");
 }
+#endif
 
 - (void)testInitWithNilConfiguration
 {
@@ -427,6 +431,7 @@
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
 }
 
+#if USE_FLANIMATED_IMAGE
 - (void)testFLAnimatedImageView
 {
     XCTestExpectation *imageSetExpectation = [self expectationWithDescription:@"animatedImageView did not have animated image set"];
@@ -441,6 +446,7 @@
 
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
 }
+#endif
 
 - (void)testEarlyReturn {
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
@@ -460,6 +466,7 @@
     XCTAssert(image != nil, @"image callback did not occur synchronously.");
 }
 
+#if USE_FLANIMATED_IMAGE
 - (void)testload
 {
     srand([[NSDate date] timeIntervalSince1970]);
@@ -492,6 +499,7 @@
     }
     dispatch_group_wait(group, [self timeoutWithInterval:100]);
 }
+#endif
 
 - (void)testInvalidObject
 {

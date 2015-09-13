@@ -14,17 +14,27 @@ Pod::Spec.new do |s|
   s.homepage         = "https://github.com/pinterest/PINRemoteImage"
   s.license          = 'Apache 2.0'
   s.author           = { "Garrett Moon" => "garrett@pinterest.com" }
-  s.source           = { :git => "https://github.com/pinterest/PINRemoteImage.git", :tag => "1.1.2" }
+  s.source           = { :git => "https://github.com/pinterest/PINRemoteImage.git", :tag => "1.2" }
   s.social_media_url = 'https://twitter.com/garrettmoon'
 
   s.platform     = :ios, '6.0'
   s.requires_arc = true
+  
+  # Include optional FLAnimatedImage module
+  s.default_subspec = 'FLAnimatedImage'
+  
+  ### Subspecs
+  s.subspec 'Core' do |cs|
+    cs.source_files = 'Pod/Classes/**/*.{h,m}'
+    cs.exclude_files = 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h', 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m'
+    cs.public_header_files = 'Pod/Classes/**/*.h'
+    cs.frameworks = 'UIKit', 'ImageIO', 'CoreImage'
+    cs.dependency 'PINCache', '>=2.1'
+  end
 
-  s.source_files = 'Pod/Classes/**/*.{h,m}'
-
-  s.public_header_files = 'Pod/Classes/**/*.h'
-  s.frameworks = 'UIKit', 'ImageIO', 'CoreImage'
-  s.dependency 'FLAnimatedImage', '>= 1.0'
-  s.dependency 'PINCache', '>=2.1'
-
+  s.subspec "FLAnimatedImage" do |fs|
+    fs.dependency 'PINRemoteImage/Core'
+    fs.source_files = 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h', 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m'
+    fs.dependency 'FLAnimatedImage', '>= 1.0'
+  end
 end

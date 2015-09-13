@@ -19,7 +19,7 @@ typedef void (^PINDiskCacheBlock)(PINDiskCache *cache);
  A callback block which provides the cache, key and object as arguments
  */
 
-typedef void (^PINDiskCacheObjectBlock)(PINDiskCache *cache, NSString *key, id <NSCoding>  __nullable object, NSURL *fileURL);
+typedef void (^PINDiskCacheObjectBlock)(PINDiskCache *cache, NSString *key, id <NSCoding>  __nullable object, NSURL * __nullable fileURL);
 
 /**
  `PINDiskCache` is a thread safe key/value store backed by the file system. It accepts any object conforming
@@ -147,6 +147,7 @@ typedef void (^PINDiskCacheObjectBlock)(PINDiskCache *cache, NSString *key, id <
  */
 + (void)emptyTrash;
 
+- (instancetype)init NS_UNAVAILABLE;
 
 /**
  Multiple instances with the same name are allowed and can safely access
@@ -289,7 +290,7 @@ typedef void (^PINDiskCacheObjectBlock)(PINDiskCache *cache, NSString *key, id <
  @param key The key associated with the object.
  @result The object for the specified key.
  */
-- (id <NSCoding>)objectForKey:(NSString *)key;
+- (__nullable id <NSCoding>)objectForKey:(NSString *)key;
 
 /**
  Retrieves the file URL for the specified key. This method blocks the calling thread until the

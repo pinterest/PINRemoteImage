@@ -8,9 +8,12 @@
 
 #import "PINViewController.h"
 
+#import <PINRemoteImage/PINRemoteImage.h>
 #import <PINRemoteImage/UIImageView+PINRemoteImage.h>
 #import <PINCache/PINCache.h>
+#if USE_FLANIMATED_IMAGE
 #import <FLAnimatedImage/FLAnimatedImageView.h>
+#endif
 
 @interface PINViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
 
