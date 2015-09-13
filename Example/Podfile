@@ -1,9 +1,9 @@
 target 'PINRemoteImage', :exclusive => true do
-  pod "PINRemoteImage", :path => "../"
+  pod "PINRemoteImage/FLAnimatedImage", :path => "../"
   pod "PINCache"
   pod "libwebp"
 end
 
 target 'PINRemoteImage Tests', :exclusive => true do
-  pod "PINRemoteImage", :path => "../"
+  pod "PINRemoteImage/FLAnimatedImage", :path => "../"
 end

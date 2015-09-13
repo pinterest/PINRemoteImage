@@ -7,8 +7,10 @@
 //
 
 @import UIKit;
-
+#if __has_include(<FLAnimatedImage/FLAnimatedImage.h>)
 #import <FLAnimatedImage/FLAnimatedImage.h>
+#endif
+#import "PINRemoteImage.h"
 
 /** How the image was fetched. */
 typedef NS_ENUM(NSUInteger, PINRemoteImageResultType) {
