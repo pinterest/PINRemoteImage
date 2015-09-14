@@ -19,12 +19,22 @@ Pod::Spec.new do |s|
 
   s.platform     = :ios, '6.0'
   s.requires_arc = true
+  
+  # Exclude optional FLAnimatedImage module
+  s.default_subspec = 'Core'
+  
+  ### Subspecs
+  s.subspec 'Core' do |cs|
+    cs.source_files = 'Pod/Classes/**/*.{h,m}'
+    cs.exclude_files = "Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h, Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m"
+    cs.public_header_files = 'Pod/Classes/**/*.h'
+    cs.frameworks = 'UIKit', 'ImageIO', 'CoreImage'
+    cs.dependency 'PINCache', '>=2.0'
+  end
 
-  s.source_files = 'Pod/Classes/**/*.{h,m}'
-
-  s.public_header_files = 'Pod/Classes/**/*.h'
-  s.frameworks = 'UIKit', 'ImageIO', 'CoreImage'
-  s.dependency 'FLAnimatedImage', '>= 1.0'
-  s.dependency 'PINCache', '>=2.0'
-
+  s.subspec "FLAnimatedImage" do |fs|
+    fs.dependency 'PINRemoteImage/Core'
+    fs.source_files = "Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h, Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m"
+    fs.dependency 'FLAnimatedImage', '>= 1.0'
+  end
 end
