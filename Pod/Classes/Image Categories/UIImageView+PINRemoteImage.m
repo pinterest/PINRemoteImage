@@ -98,7 +98,15 @@
 - (void)pin_updateUIWithImage:(UIImage *)image animatedImage:(FLAnimatedImage *)animatedImage
 {
     if (image) {
-        self.image = image;
+        
+        [UIView transitionWithView:self
+                          duration:0.3
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^{
+                            self.image = image;
+                        }
+                        completion:NULL];
+        
         [self setNeedsLayout];
     }
 }
