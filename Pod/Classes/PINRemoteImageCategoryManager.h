@@ -216,6 +216,7 @@
 - (void)pin_updateUIWithImage:(UIImage *)image animatedImage:(FLAnimatedImage *)animatedImage;
 - (void)pin_clearImages;
 - (BOOL)pin_ignoreGIFs;
+- (PINRemoteImageManagerDownloadOptions)pin_defaultOptions;
 
 @end
 

@@ -114,6 +114,11 @@
     return YES;
 }
 
+- (PINRemoteImageManagerDownloadOptions)pin_defaultOptions
+{
+    return PINRemoteImageManagerDownloadOptionsNone;
+}
+
 @end
 
 @implementation UIButton (PINRemoteImage_Deprecated)

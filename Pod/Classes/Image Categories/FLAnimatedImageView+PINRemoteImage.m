@@ -118,6 +118,11 @@
     return NO;
 }
 
+- (PINRemoteImageManagerDownloadOptions)pin_defaultOptions
+{
+    return PINRemoteImageManagerDownloadOptionsNone;
+}
+
 @end
 
 @implementation FLAnimatedImageView (PINRemoteImage_Deprecated)

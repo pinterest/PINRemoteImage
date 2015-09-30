@@ -172,7 +172,7 @@
     if (placeholderImage) {
         [view pin_setPlaceholderWithImage:placeholderImage];
     }
-    PINRemoteImageManagerDownloadOptions options = PINRemoteImageManagerDownloadOptionsNone;
+    PINRemoteImageManagerDownloadOptions options = [view pin_defaultOptions];
     if ([view pin_ignoreGIFs]) {
         options |= PINRemoteImageManagerDownloadOptionsIgnoreGIFs;
     }
