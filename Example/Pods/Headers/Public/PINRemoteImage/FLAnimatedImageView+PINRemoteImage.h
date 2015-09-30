@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h
+../../../../../Pod/FLAnimatedImage/Classes/FLAnimatedImageView+PINRemoteImage.h

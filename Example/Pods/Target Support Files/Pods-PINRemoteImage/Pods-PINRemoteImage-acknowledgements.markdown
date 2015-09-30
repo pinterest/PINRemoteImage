@@ -232,7 +232,7 @@ limitations under the License.
 
 ## PINRemoteImage
 
-Copyright (c) 2014 Garrett Moon <garrett@pinterest.com>
+Copyright (c) 2015 Pinterest, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

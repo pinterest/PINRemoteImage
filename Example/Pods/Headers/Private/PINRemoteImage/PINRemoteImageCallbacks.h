@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/PINRemoteImageCallbacks.h
+../../../../../Pod/Core/Classes/PINRemoteImageCallbacks.h

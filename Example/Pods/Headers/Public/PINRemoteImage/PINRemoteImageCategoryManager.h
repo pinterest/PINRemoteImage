@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/PINRemoteImageCategoryManager.h
+../../../../../Pod/Core/Classes/PINRemoteImageCategoryManager.h

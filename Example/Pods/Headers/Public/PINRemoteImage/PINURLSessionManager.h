@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/PINURLSessionManager.h
+../../../../../Pod/Core/Classes/PINURLSessionManager.h

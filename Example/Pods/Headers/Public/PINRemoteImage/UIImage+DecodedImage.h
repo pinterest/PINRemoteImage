@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Categories/UIImage+DecodedImage.h
+../../../../../Pod/Core/Classes/Categories/UIImage+DecodedImage.h
