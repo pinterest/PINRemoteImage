@@ -6,7 +6,8 @@
 //
 //
 
-@import Foundation;
+#import <Foundation/Foundation.h>
+
 #import "PINRemoteImageManager.h"
 #import "PINRemoteImage.h"
 

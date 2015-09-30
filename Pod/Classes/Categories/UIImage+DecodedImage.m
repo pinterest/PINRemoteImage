@@ -8,7 +8,7 @@
 
 #import "UIImage+DecodedImage.h"
 
-@import ImageIO;
+#import <ImageIO/ImageIO.h>
 
 #if __has_include(<webp/decode.h>)
 #import "UIImage+WebP.h"

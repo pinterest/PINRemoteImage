@@ -7,7 +7,8 @@
 //
 
 #if __has_include(<webp/decode.h>)
-@import UIKit;
+
+#import <UIKit/UIKit.h>
 
 @interface UIImage (PINWebP)
 

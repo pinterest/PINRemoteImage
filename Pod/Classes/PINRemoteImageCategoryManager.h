@@ -6,7 +6,7 @@
 //
 //
 
-@import UIKit;
+#import <UIKit/UIKit.h>
 
 #import "PINRemoteImageManager.h"
 
