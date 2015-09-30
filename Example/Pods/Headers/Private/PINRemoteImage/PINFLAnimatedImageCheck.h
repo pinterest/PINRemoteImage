@@ -1,0 +1,1 @@
+../../../../../Pod/Core/Classes/PINFLAnimatedImageCheck.h

@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Image Categories/UIButton+PINRemoteImage.h
+../../../../../Pod/Core/Classes/Image Categories/UIButton+PINRemoteImage.h

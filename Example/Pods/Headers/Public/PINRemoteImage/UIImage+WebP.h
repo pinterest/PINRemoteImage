@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Categories/UIImage+WebP.h
+../../../../../Pod/Core/Classes/Categories/UIImage+WebP.h
