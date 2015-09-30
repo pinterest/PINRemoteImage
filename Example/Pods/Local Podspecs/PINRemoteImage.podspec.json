@@ -28,7 +28,7 @@
       ],
       "dependencies": {
         "PINCache": [
-          ">=2.1"
+          ">=2.0"
         ]
       }
     },
@@ -37,6 +37,9 @@
       "source_files": "Pod/FLAnimatedImage/Classes/**/*.{h,m}",
       "public_header_files": "Pod/FLAnimatedImage/Classes/**/*.h",
       "dependencies": {
+        "PINRemoteImage/Core": [
+          "1.2"
+        ],
         "FLAnimatedImage": [
           ">= 1.0"
         ]

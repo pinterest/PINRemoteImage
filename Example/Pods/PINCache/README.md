@@ -1,8 +1,5 @@
 # PINCache
 
-[![CocoaPods](https://img.shields.io/cocoapods/v/PINCache.svg)](http://cocoadocs.org/docsets/PINCache/)
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-
 ## Fast, non-deadlocking parallel object cache for iOS and OS X.
 
 [PINCache](PINCache/PINCache.h) is a fork of [TMCache](https://github.com/tumblr/TMCache) re-architected to fix issues with deadlocking caused by heavy use. It is a key/value store designed for persisting temporary objects that are expensive to reproduce, such as downloaded data or the results of slow processing. It is comprised of two self-similar stores, one in memory ([PINMemoryCache](PINCache/PINMemoryCache.h)) and one on disk ([PINDiskCache](PINCache/PINDiskCache.h)), all backed by GCD and safe to access from multiple threads simultaneously. On iOS, `PINMemoryCache` will clear itself when the app receives a memory warning or goes into the background. Objects stored in `PINDiskCache` remain until you trim the cache yourself, either manually or by setting a byte or age limit.
@@ -50,12 +47,6 @@ Install the docs by double clicking the `.docset` file under `docs/`, or view th
 ### CocoaPods
 
 Add [PINCache](http://cocoapods.org/?q=name%3APINCache) to your `Podfile` and run `pod install`.
-
-### Carthage
-
-Add the following line to your `Cartfile` and run `carthage update --platform ios`. Then follow [this instruction of Carthage](https://github.com/carthage/carthage#adding-frameworks-to-unit-tests-or-a-framework) to embed the framework.
-
-```github "pinterest/PINCache"```
 
 ## Requirements
 

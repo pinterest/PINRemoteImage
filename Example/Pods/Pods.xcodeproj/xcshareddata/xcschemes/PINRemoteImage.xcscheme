@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "FC293A80A934E2D13E69A7ED"
+               BlueprintIdentifier = "7CCEDEF0C4D82A7C1CA87EBD"
                BuildableName = "libPINRemoteImage.a"
                BlueprintName = "PINRemoteImage"
                ReferencedContainer = "container:Pods.xcodeproj">
