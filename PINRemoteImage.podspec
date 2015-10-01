@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.homepage         = "https://github.com/pinterest/PINRemoteImage"
   s.license          = 'Apache 2.0'
   s.author           = { "Garrett Moon" => "garrett@pinterest.com" }
-  s.source           = { :git => "https://github.com/pinterest/PINRemoteImage.git", :tag => "1.1.2" }
+  s.source           = { :git => "https://github.com/pinterest/PINRemoteImage.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/garrettmoon'
 
   s.platform     = :ios, '6.0'
