@@ -114,11 +114,6 @@
     return YES;
 }
 
-- (PINRemoteImageManagerDownloadOptions)pin_defaultOptions
-{
-    return PINRemoteImageManagerDownloadOptionsNone;
-}
-
 @end
 
 @implementation UIImageView (PINRemoteImage_Deprecated)
