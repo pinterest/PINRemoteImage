@@ -24,6 +24,7 @@
 		68B3850B1B5572BF004EB26F /* ProgressiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B3850A1B5572BF004EB26F /* ProgressiveViewController.m */; };
 		68B3850E1B5577D4004EB26F /* DegradedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B3850D1B5577D4004EB26F /* DegradedViewController.m */; };
 		68B5CDF21A0BEC8C00A4BAAC /* PINRemoteImage_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B5CDF11A0BEC8C00A4BAAC /* PINRemoteImage_Tests.m */; };
+		F214B3A11BC26F1900909403 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F214B3A01BC26F1900909403 /* Launch Screen.storyboard */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,7 @@
 		DFBDA5F52A6A5B085AB182FC /* Pods-PIRemoteImage Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PIRemoteImage Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PIRemoteImage Tests/Pods-PIRemoteImage Tests.release.xcconfig"; sourceTree = "<group>"; };
 		E2B84DF860DF48B5B22537B6 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		E6B892907FA987D3EA61DCAC /* Pods-PINRemoteImage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage/Pods-PINRemoteImage.debug.xcconfig"; sourceTree = "<group>"; };
+		F214B3A01BC26F1900909403 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +160,7 @@
 				68B3850D1B5577D4004EB26F /* DegradedViewController.m */,
 				682C525F1B584DD300B3B813 /* ProcessingViewController.h */,
 				682C52601B584DD300B3B813 /* ProcessingViewController.m */,
+				F214B3A01BC26F1900909403 /* Launch Screen.storyboard */,
 			);
 			path = PINRemoteImage;
 			sourceTree = "<group>";
@@ -304,6 +307,7 @@
 				682C52671B58515D00B3B813 /* Media.xcassets in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F5A1195388D20070C39A /* Main.storyboard in Resources */,
+				F214B3A11BC26F1900909403 /* Launch Screen.storyboard in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
