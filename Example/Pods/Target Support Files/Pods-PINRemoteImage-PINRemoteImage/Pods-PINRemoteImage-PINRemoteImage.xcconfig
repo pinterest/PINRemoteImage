@@ -1,0 +1,1 @@
+PODS_PINREMOTEIMAGE_PINREMOTEIMAGE_OTHER_LDFLAGS = -framework "CoreImage" -framework "ImageIO" -framework "UIKit"

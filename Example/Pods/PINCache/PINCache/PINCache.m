@@ -27,12 +27,6 @@ NSString * const PINCacheSharedName = @"PINCacheShared";
 }
 #endif
 
-- (instancetype)init
-{
-    @throw [NSException exceptionWithName:@"Must initialize with a name" reason:@"PINCache must be initialized with a name. Call initWithName: instead." userInfo:nil];
-    return [self initWithName:@""];
-}
-
 - (instancetype)initWithName:(NSString *)name
 {
     return [self initWithName:name rootPath:[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject]];
@@ -299,7 +293,7 @@ NSString * const PINCacheSharedName = @"PINCacheShared";
     return byteCount;
 }
 
-- (__nullable id)objectForKey:(NSString *)key
+- (id)objectForKey:(NSString *)key
 {
     if (!key)
         return nil;

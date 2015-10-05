@@ -80,8 +80,6 @@ typedef void (^PINCacheObjectBlock)(PINCache *cache, NSString *key, id __nullabl
  */
 + (instancetype)sharedCache;
 
-- (instancetype)init NS_UNAVAILABLE;
-
 /**
  Multiple instances with the same name are allowed and can safely access
  the same data on disk thanks to the magic of seriality. Also used to create the <diskCache>.
@@ -162,7 +160,7 @@ typedef void (^PINCacheObjectBlock)(PINCache *cache, NSString *key, id __nullabl
  @param key The key associated with the object.
  @result The object for the specified key.
  */
-- (__nullable id)objectForKey:(NSString *)key;
+- (id)objectForKey:(NSString *)key;
 
 /**
  Stores an object in the cache for the specified key. This method blocks the calling thread until the object has been set.

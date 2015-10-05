@@ -2,3 +2,4 @@
 #import <UIKit/UIKit.h>
 #endif
 
+#import "Pods-PINRemoteImage-environment.h"
