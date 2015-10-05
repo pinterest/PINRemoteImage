@@ -4,6 +4,7 @@
 branches:
   only:
     - master
+osx_image: xcode7
 language: objective-c
 env:
     matrix:

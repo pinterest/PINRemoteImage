@@ -1,1 +1,0 @@
-PODS_PINREMOTEIMAGE_PINCACHE_OTHER_LDFLAGS = -framework "Foundation" -weak_framework "UIKit"

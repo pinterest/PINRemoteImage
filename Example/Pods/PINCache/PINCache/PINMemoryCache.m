@@ -381,7 +381,7 @@ NSString * const PINMemoryCachePrefix = @"com.pinterest.PINMemoryCache";
 
 #pragma mark - Public Synchronous Methods -
 
-- (id)objectForKey:(NSString *)key
+- (__nullable id)objectForKey:(NSString *)key
 {
     NSDate *now = [[NSDate alloc] init];
     

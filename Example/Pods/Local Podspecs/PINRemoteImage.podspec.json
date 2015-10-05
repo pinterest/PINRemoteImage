@@ -1,6 +1,6 @@
 {
   "name": "PINRemoteImage",
-  "version": "1.0",
+  "version": "1.2",
   "summary": "A thread safe, performant, feature rich image fetcher",
   "homepage": "https://github.com/pinterest/PINRemoteImage",
   "license": "Apache 2.0",
@@ -9,7 +9,7 @@
   },
   "source": {
     "git": "https://github.com/pinterest/PINRemoteImage.git",
-    "tag": 1.0
+    "tag": "1.1.2"
   },
   "social_media_url": "https://twitter.com/garrettmoon",
   "platforms": {
@@ -28,7 +28,7 @@
       ">= 1.0"
     ],
     "PINCache": [
-      ">=2.0"
+      ">=2.1"
     ]
   }
 }
