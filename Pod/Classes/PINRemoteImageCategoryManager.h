@@ -217,6 +217,10 @@
 - (void)pin_clearImages;
 - (BOOL)pin_ignoreGIFs;
 
+@optional
+
+- (PINRemoteImageManagerDownloadOptions)pin_defaultOptions;
+
 @end
 
 /**

@@ -172,7 +172,14 @@
     if (placeholderImage) {
         [view pin_setPlaceholderWithImage:placeholderImage];
     }
-    PINRemoteImageManagerDownloadOptions options = PINRemoteImageManagerDownloadOptionsNone;
+    
+    PINRemoteImageManagerDownloadOptions options;
+    if([view respondsToSelector:@selector(pin_defaultOptions)]) {
+        options = [view pin_defaultOptions];
+    } else {
+        options = PINRemoteImageManagerDownloadOptionsNone;
+    }
+    
     if ([view pin_ignoreGIFs]) {
         options |= PINRemoteImageManagerDownloadOptionsIgnoreGIFs;
     }
