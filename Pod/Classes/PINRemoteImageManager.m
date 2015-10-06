@@ -8,7 +8,9 @@
 
 #import "PINRemoteImageManager.h"
 
+#if USE_FLANIMATED_IMAGE
 #import <FLAnimatedImage/FLAnimatedImage.h>
+#endif
 #import <PINCache/PINCache.h>
 
 #import "PINRemoteImage.h"
@@ -638,7 +640,9 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
         if ([object isKindOfClass:[UIImage class]]) {
             image = (UIImage *)object;
         } else if (allowAnimated && [object isKindOfClass:[NSData class]] && [(NSData *)object pin_isGIF]) {
+#if USE_FLANIMATED_IMAGE
             animatedImage = [FLAnimatedImage animatedImageWithGIFData:object];
+#endif
         }
     }
     
@@ -691,7 +695,9 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
     } else if ([object isKindOfClass:[NSData class]]) {
         NSData *imageData = (NSData *)object;
         if ([imageData pin_isGIF] && ignoreGIF == NO) {
+#if USE_FLANIMATED_IMAGE
             animatedImage = [[FLAnimatedImage alloc] initWithAnimatedGIFData:imageData];
+#endif
         } else {
             BOOL skipDecode = (options & PINRemoteImageManagerDownloadOptionsSkipDecode) != 0;
             image = [UIImage pin_decodedImageWithData:imageData skipDecodeIfPossible:skipDecode];
@@ -745,7 +751,9 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
             
             if (remoteImageError == nil) {
                 if ([data pin_isGIF] && ignoreGIF == NO) {
+#if USE_FLANIMATED_IMAGE
                     animatedImage = [[FLAnimatedImage alloc] initWithAnimatedGIFData:data];
+#endif
                     //FLAnimatedImage handles its own caching of frames
                     cacheCost = [data length];
                 } else {
@@ -980,7 +988,9 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
         if ([object isKindOfClass:[UIImage class]]) {
             image = (UIImage *)object;
         } else if ([object isKindOfClass:[NSData class]]) {
+#if USE_FLANIMATED_IMAGE
             animatedImage = [[FLAnimatedImage alloc] initWithAnimatedGIFData:object];
+#endif
         }
     };
     
