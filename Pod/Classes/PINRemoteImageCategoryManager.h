@@ -219,6 +219,11 @@
 
 @optional
 
+/**
+ If you implement this method, it is called instead of pin_updateUIWithImage:animatedImage:
+ */
+- (void)pin_updateUIWithRemoteImageManagerResult:(PINRemoteImageManagerResult *)result;
+
 - (PINRemoteImageManagerDownloadOptions)pin_defaultOptions;
 
 @end

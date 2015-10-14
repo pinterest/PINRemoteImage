@@ -195,7 +195,13 @@
                     return;
                 }
                 if (result.image) {
-                    [view pin_updateUIWithImage:result.image animatedImage:nil];
+                    if ([view respondsToSelector:@selector(pin_updateUIWithRemoteImageManagerResult:)]) {
+                        [view pin_updateUIWithRemoteImageManagerResult:result];
+                    }
+                    else {
+                        [view pin_updateUIWithImage:result.image animatedImage:nil];                        
+                    }
+
                 }
             };
             if ([NSThread isMainThread]) {
@@ -224,7 +230,12 @@
                 return;
             }
             
-            [view pin_updateUIWithImage:result.image animatedImage:result.animatedImage];
+            if ([view respondsToSelector:@selector(pin_updateUIWithRemoteImageManagerResult:)]) {
+                [view pin_updateUIWithRemoteImageManagerResult:result];
+            }
+            else {
+                [view pin_updateUIWithImage:result.image animatedImage:result.animatedImage];
+            }
             
             if (completion) {
                 completion(result);
