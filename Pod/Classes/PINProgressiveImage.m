@@ -336,6 +336,10 @@
 //Must be called within lock
 - (UIImage *)postProcessImage:(UIImage *)inputImage withProgress:(float)progress
 {
+    if (inputImage == nil) {
+        return nil;
+    }
+    
     if (self.processingContext == nil) {
         self.processingContext = [CIContext contextWithOptions:@{kCIContextUseSoftwareRenderer : @(self.inBackground), kCIContextPriorityRequestLow: @YES}];
     }
