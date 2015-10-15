@@ -8,6 +8,7 @@
 
 #import "FLAnimatedImageView+PINRemoteImage.h"
 
+#if USE_FLANIMATED_IMAGE
 @implementation FLAnimatedImageView (PINRemoteImage)
 
 - (void)pin_setImageFromURL:(NSURL *)url
@@ -223,3 +224,5 @@
 }
 
 @end
+
+#endif
