@@ -8,7 +8,6 @@
 
 #import "PINRemoteImageTask.h"
 
-#import "PINRemoteImage.h"
 #import "PINRemoteImageCallbacks.h"
 
 @implementation PINRemoteImageTask

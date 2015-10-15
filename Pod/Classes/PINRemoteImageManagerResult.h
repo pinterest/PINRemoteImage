@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PINRemoteImage.h"
+
+#import "PINRemoteImageMacros.h"
 #if USE_FLANIMATED_IMAGE
 #import <FLAnimatedImage/FLAnimatedImage.h>
 #endif

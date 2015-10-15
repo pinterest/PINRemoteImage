@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "PINRemoteImageManager.h"
-#import "PINRemoteImage.h"
+#import "PINRemoteImageMacros.h"
 
 @interface PINRemoteImageTask : NSObject
 
