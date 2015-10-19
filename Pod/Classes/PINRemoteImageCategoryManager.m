@@ -164,13 +164,16 @@
     }
     
     [self cancelImageDownloadOnView:view];
-    if (urls == nil || urls.count == 0) {
-        [view pin_clearImages];
-        return;
-    }
-    
+  
     if (placeholderImage) {
         [view pin_setPlaceholderWithImage:placeholderImage];
+    }
+    
+    if (urls == nil || urls.count == 0) {
+        if (!placeholderImage) {
+            [view pin_clearImages];
+        }
+        return;
     }
     
     PINRemoteImageManagerDownloadOptions options;
