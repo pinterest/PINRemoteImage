@@ -383,7 +383,6 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
         return nil;
     }
     
-    NSAssert([url isKindOfClass:[NSURL class]], @"url must be of type NSURL, if it's an NSString, we'll try to correct");
     if ([url isKindOfClass:[NSString class]]) {
         url = [NSURL URLWithString:(NSString *)url];
     }
