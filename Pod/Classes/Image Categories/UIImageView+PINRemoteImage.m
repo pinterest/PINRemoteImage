@@ -62,7 +62,7 @@
 
 - (void)pin_setImageFromURLs:(NSArray *)urls placeholderImage:(UIImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion
 {
-        [PINRemoteImageCategoryManager setImageOnView:self fromURLs:urls placeholderImage:placeholderImage completion:completion];
+    [PINRemoteImageCategoryManager setImageOnView:self fromURLs:urls placeholderImage:placeholderImage completion:completion];
 }
 
 - (void)pin_cancelImageDownload
@@ -99,13 +99,19 @@
 {
     if (image) {
         
-        [UIView transitionWithView:self
-                          duration:0.3
-                           options:UIViewAnimationOptionTransitionCrossDissolve
-                        animations:^{
-                            self.image = image;
-                        }
-                        completion:NULL];
+        if ([[PINRemoteImageManager sharedImageManager] imageIsFromCache]) {
+            
+            self.image = image;
+        } else {
+            
+            [UIView transitionWithView:self
+                              duration:0.3
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{
+                                self.image = image;
+                            }
+                            completion:NULL];
+        }
         
         [self setNeedsLayout];
     }
