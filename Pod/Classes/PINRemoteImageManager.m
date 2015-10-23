@@ -834,8 +834,8 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
     
     __weak typeof(self) weakSelf = self;
     PINDataTaskOperation *dataTaskOperation = [PINDataTaskOperation dataTaskOperationWithSessionManager:self.sessionManager
-                                                                                              request:request
-                                                                                    completionHandler:^(NSURLResponse *response, NSError *error)
+                                                                                                request:request
+                                                                                      completionHandler:^(NSURLResponse *response, NSError *error)
     {
         typeof(self) strongSelf = weakSelf;
 #if DEBUG
