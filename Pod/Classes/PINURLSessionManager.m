@@ -26,6 +26,7 @@
         self.sessionManagerLock = [[NSLock alloc] init];
         self.sessionManagerLock.name = @"PINURLSessionManager";
         self.operationQueue = [[NSOperationQueue alloc] init];
+        self.operationQueue.name = @"PINURLSessionManager Operation Queue";
         
         //queue must be serial to ensure proper ordering
         [self.operationQueue setMaxConcurrentOperationCount:1];
