@@ -26,7 +26,9 @@
         self.sessionManagerLock = [[NSLock alloc] init];
         self.sessionManagerLock.name = @"PINURLSessionManager";
         self.operationQueue = [[NSOperationQueue alloc] init];
-        [self.operationQueue setMaxConcurrentOperationCount:NSOperationQueueDefaultMaxConcurrentOperationCount];
+        
+        //queue must be serial to ensure proper ordering
+        [self.operationQueue setMaxConcurrentOperationCount:1];
         self.session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:self.operationQueue];
         self.completions = [[NSMutableDictionary alloc] init];
         self.delegateQueues = [[NSMutableDictionary alloc] init];
@@ -69,14 +71,16 @@
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler {
 	[self lock];
-	dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
+        dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
 	[self unlock];
 	
 	__weak typeof(self) weakSelf = self;
 	dispatch_async(delegateQueue, ^{
 		if ([weakSelf.delegate respondsToSelector:@selector(didReceiveAuthenticationChallenge:forTask:completionHandler:)]) {
 			[weakSelf.delegate didReceiveAuthenticationChallenge:challenge forTask:task completionHandler:completionHandler];
-		}
+        } else {
+            completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
+        }
 	});
 }
 
