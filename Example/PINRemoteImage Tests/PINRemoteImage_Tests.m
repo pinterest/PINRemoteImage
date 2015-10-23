@@ -75,22 +75,22 @@
 
 - (NSURL *)headersURL
 {
-    return [NSURL URLWithString:@"http://httpbin.org/headers"];
+    return [NSURL URLWithString:@"https://httpbin.org/headers"];
 }
 
 - (NSURL *)JPEGURL_Small
 {
-    return [NSURL URLWithString:@"http://media-cache-ec0.pinimg.com/345x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"];
+    return [NSURL URLWithString:@"https://media-cache-ec0.pinimg.com/345x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"];
 }
 
 - (NSURL *)JPEGURL_Medium
 {
-    return [NSURL URLWithString:@"http://media-cache-ec0.pinimg.com/600x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"];
+    return [NSURL URLWithString:@"https://media-cache-ec0.pinimg.com/600x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"];
 }
 
 - (NSURL *)JPEGURL_Large
 {
-    return [NSURL URLWithString:@"http://media-cache-ec0.pinimg.com/750x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"];
+    return [NSURL URLWithString:@"https://media-cache-ec0.pinimg.com/750x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"];
 }
 
 - (NSURL *)JPEGURL
@@ -100,7 +100,7 @@
 
 - (NSURL *)nonTransparentWebPURL
 {
-    return [NSURL URLWithString:@"http://www.gstatic.com/webp/gallery/5.webp"];
+    return [NSURL URLWithString:@"https://www.gstatic.com/webp/gallery/5.webp"];
 }
 
 - (NSURL *)transparentWebPURL
