@@ -17,8 +17,4 @@
 #import "PINProgressiveImage.h"
 #import "PINURLSessionManager.h"
 
-#import "FLAnimatedImageView+PINRemoteImage.h"
-#import "UIButton+PINRemoteImage.h"
-#import "UIImageView+PINRemoteImage.h"
-
 #endif
