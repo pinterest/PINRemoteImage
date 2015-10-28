@@ -2,9 +2,6 @@
 //  PINRemoteImageMacros.h
 //  PINRemoteImage
 //
-//  Created by Brian Dorfman on 10/15/15.
-//  Copyright © 2015 Pinterest. All rights reserved.
-//
 
 #ifndef PINRemoteImageMacros_h
 #define PINRemoteImageMacros_h
