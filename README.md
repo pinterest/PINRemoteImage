@@ -2,6 +2,8 @@
 
 ## Fast, non-deadlocking parallel image downloader and cache for iOS
 
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+
 [PINRemoteImageManager](Pod/Classes/PINRemoteImageManager.h) is an image downloading, processing and caching manager. It uses the concept of download and processing tasks to ensure that even if multiple calls to download or process an image are made, it only occurs one time (unless an item is no longer in the cache). PINRemoteImageManager is backed by GCD and safe to access from multiple threads simultaneously. It ensures that images are decoded off the main thread so that animation performance isn't affected. None of its exposed methods allow for synchronous access. However, it is optimized to call completions on the calling thread if an item is in its memory cache.
 
 PINRemoteImage supports downloading many types of files. It, of course, supports both PNGs and JPGs. It also supports decoding WebP images if Google's library is available. It even supports returning [FLAnimatedImages](https://github.com/Flipboard/FLAnimatedImage) if it's compiled in (though this can be disabled).
@@ -81,20 +83,29 @@ aCompletion(NSURLSessionAuthChallengePerformDefaultHandling, nil)];
 
 ## Installation
 
+### CocoaPods
+
+Add [PINRemoteImage](http://cocoapods.org/?q=name%3APINRemoteImage) to your `Podfile` and run `pod install`.
+
+
+### Carthage
+
+Add `github "pinterest/PINRemoteImage"` to your Cartfile . See [Carthage's readme](https://github.com/Carthage/Carthage) for more information on integrating Carthage-built frameworks into your project.
+
 ### Manually
 
-[Download the latest tag](https://github.com/Pinterest/PINRemoteImage/tags) and drag the `PINRemoteImage` folder into your Xcode project.
+[Download the latest tag](https://github.com/Pinterest/PINRemoteImage/tags) and drag the `Pod/Classes` folder into your Xcode project. You must also manually link against [PINCache](https://github.com/pinterest/PINCache).
 
 Install the docs by double clicking the `.docset` file under `docs/`, or view them online at [cocoadocs.org](http://cocoadocs.org/docsets/PINRemoteImage/)
 
 ### Git Submodule
 
+You can set up PINRemoteImage as a submodule of your repo instead of cloning and copying all the files into your repo. Add the submodule using the commands below and then follow the manual instructions above.
+
     git submodule add https://github.com/pinterest/PINRemoteImage.git
     git submodule update --init
 
-### CocoaPods
 
-Add [PINRemoteImage](http://cocoapods.org/?q=name%3APINRemoteImage) to your `Podfile` and run `pod install`.
 
 ## Requirements
 
