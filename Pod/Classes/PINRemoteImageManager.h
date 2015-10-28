@@ -11,7 +11,6 @@
 
 #import "PINRemoteImageManagerResult.h"
 
-@class FLAnimatedImage;
 @class PINCache;
 @class PINRemoteImageManagerResult;
 
