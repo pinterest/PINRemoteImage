@@ -2,7 +2,9 @@
 
 ## Fast, non-deadlocking parallel image downloader and cache for iOS
 
+[![CocoaPods compatible](https://img.shields.io/cocoapods/v/PINRemoteImage.svg?style=flat)](https://cocoapods.org/pods/PINRemoteImage)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![Tavis CI build](https://img.shields.io/travis/pinterest/PINRemoteImage.svg?style=flat)](https://travis-ci.org/pinterest/PINRemoteImage)
 
 [PINRemoteImageManager](Pod/Classes/PINRemoteImageManager.h) is an image downloading, processing and caching manager. It uses the concept of download and processing tasks to ensure that even if multiple calls to download or process an image are made, it only occurs one time (unless an item is no longer in the cache). PINRemoteImageManager is backed by GCD and safe to access from multiple threads simultaneously. It ensures that images are decoded off the main thread so that animation performance isn't affected. None of its exposed methods allow for synchronous access. However, it is optimized to call completions on the calling thread if an item is in its memory cache.
 
