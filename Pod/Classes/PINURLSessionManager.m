@@ -102,8 +102,7 @@
     [self lock];
         dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
     [self unlock];
-    NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
-    if ([response respondsToSelector:@selector(statusCode)] && [response statusCode] == 404 && !error) {
+    if (!error && [task.response respondsToSelector:@selector(statusCode)] && [task.response statusCode] == 400) {
         error = [NSError errorWithDomain:NSURLErrorDomain
                                     code:NSURLErrorRedirectToNonExistentLocation
                                 userInfo:@{NSLocalizedDescriptionKey : @"The requested URL was not found on this server."}];
