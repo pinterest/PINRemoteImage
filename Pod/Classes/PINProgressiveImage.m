@@ -356,7 +356,13 @@ static CIContext *CPUProcessingContext = nil;
         processingContext = CPUProcessingContext;
     }
     
-    if (processingContext.inputImageMaximumSize.height < inputImage.size.height || processingContext.inputImageMaximumSize.width < inputImage.size.width || processingContext.outputImageMaximumSize.height < inputImage.size.height || processingContext.outputImageMaximumSize.width < inputImage.size.width) {
+    CGSize maxInput = processingContext.inputImageMaximumSize;
+    CGSize maxOutput = processingContext.outputImageMaximumSize;
+    CGSize inputSize = inputImage.size;
+    if (maxInput.height < inputSize.height ||
+        maxInput.width < inputSize.width ||
+        maxOutput.height < inputSize.height ||
+        maxOutput.width < inputSize.width) {
         return nil;
     }
     
