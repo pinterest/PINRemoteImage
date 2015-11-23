@@ -37,15 +37,15 @@ typedef NS_ENUM(NSUInteger, PINRemoteImageManagerError) {
  */
 typedef NS_OPTIONS(NSUInteger, PINRemoteImageManagerDownloadOptions) {
     /** Download and process with default options (no other options set) */
-    PINRemoteImageManagerDownloadOptionsNone,
+    PINRemoteImageManagerDownloadOptionsNone = 0,
     /** Regardless of the image type downloaded, return UIImages and *not* FLAnimatedImage */
-    PINRemoteImageManagerDownloadOptionsIgnoreGIFs,
+    PINRemoteImageManagerDownloadOptionsIgnoreGIFs = 1,
     /** Skip decoding the image before returning. This means smaller images returned, but images will be decoded on the main thread when set on an image view */
-    PINRemoteImageManagerDownloadOptionsSkipDecode,
+    PINRemoteImageManagerDownloadOptionsSkipDecode = 1 << 1,
     /** Skip the early check of the memory cache */
-    PINRemoteImageManagerDownloadOptionsSkipEarlyCheck,
+    PINRemoteImageManagerDownloadOptionsSkipEarlyCheck = 1 << 2,
     /** Save processed images as JPEGs in the cache. The default is PNG to support transparency */
-    PINRemoteImageManagerSaveProcessedImageAsJPEG,
+    PINRemoteImageManagerSaveProcessedImageAsJPEG = 1 << 3,
 };
 
 /**
