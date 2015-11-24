@@ -342,7 +342,8 @@ static CIContext *CPUProcessingContext = nil;
 //Must be called within lock
 - (UIImage *)postProcessImage:(UIImage *)inputImage withProgress:(float)progress
 {
-    if (inputImage.CGImage == nil) {
+    CGImageRef inputImageRef = CGImageRetain(inputImage.CGImage);
+    if (inputImageRef == nil) {
         return nil;
     }
     
@@ -367,13 +368,12 @@ static CIContext *CPUProcessingContext = nil;
     }
     
     if (processingContext && gaussianFilter) {
-        [gaussianFilter setValue:[CIImage imageWithCGImage:inputImage.CGImage]
-                               forKey:kCIInputImageKey];
+        [gaussianFilter setValue:[CIImage imageWithCGImage:inputImageRef]
+                          forKey:kCIInputImageKey];
         
-        CGFloat radius = inputImage.size.width / 50.0;
-        radius = radius * MAX(0, 1.0 - progress);
-        [gaussianFilter setValue:[NSNumber numberWithFloat:radius]
-                               forKey:kCIInputRadiusKey];
+        NSNumber *radius = @((inputImage.size.width / 50.0) * MAX(0, 1.0 - progress));
+        [gaussianFilter setValue:radius
+                          forKey:kCIInputRadiusKey];
         
         CIImage *outputImage = [gaussianFilter outputImage];
         if (outputImage) {
@@ -386,6 +386,8 @@ static CIContext *CPUProcessingContext = nil;
             }
         }
     }
+    
+    CGImageRelease(inputImageRef);
     
     return outputUIImage;
 }
