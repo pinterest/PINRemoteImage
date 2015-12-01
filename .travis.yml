@@ -5,6 +5,8 @@ branches:
   only:
     - master
 language: objective-c
+os: osx
+osx_image: xcode7
 env:
     matrix:
     - TEST_SDK=iphonesimulator7.0
