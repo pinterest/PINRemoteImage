@@ -72,7 +72,7 @@ float dataTaskPriorityWithImageManagerPriority(PINRemoteImageManagerPriority pri
  
  @param result PINRemoteImageManagerResult which contains the downloaded image.
  */
-typedef void (^PINRemoteImageManagerImageCompletion)(PINRemoteImageManagerResult *result);
+typedef void (^PINRemoteImageManagerImageCompletion)(PINRemoteImageManagerResult * __nonnull result);
 
 /**
  Processor block to post-process a downloaded image. Passed in a PINRemoteImageManagerResult and a pointer to an NSUInteger which can be updated to indicate the cost of processing the image.
@@ -82,7 +82,7 @@ typedef void (^PINRemoteImageManagerImageCompletion)(PINRemoteImageManagerResult
  
  @return return the processed UIImage
  */
-typedef UIImage *(^PINRemoteImageManagerImageProcessor)(PINRemoteImageManagerResult *result, NSUInteger *cost);
+typedef UIImage  * _Nullable(^PINRemoteImageManagerImageProcessor)(PINRemoteImageManagerResult * __nonnull result, NSUInteger * __nullable cost);
 
 /**
  PINRemoteImageManager is the main workhorse of PINRemoteImage. It is unnecessary to access directly if you simply
@@ -99,7 +99,7 @@ typedef UIImage *(^PINRemoteImageManagerImageProcessor)(PINRemoteImageManagerRes
  @param disposition One of several constants that describes how the challenge should be handled.
  @param credential The credential that should be used for authentication if disposition is NSURLSessionAuthChallengeUseCredential; otherwise, NULL.
  */
-typedef void(^PINRemoteImageManagerAuthenticationChallengeCompletionHandler)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential);
+typedef void(^PINRemoteImageManagerAuthenticationChallengeCompletionHandler)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * __nullable credential);
 
 /**
  Authentication challenge handler
@@ -108,25 +108,25 @@ typedef void(^PINRemoteImageManagerAuthenticationChallengeCompletionHandler)(NSU
  @param challenge An object that contains the request for authentication.
  @param aHandler A PINRemoteImageManagerAuthenticationChallengeCompletionHandler, see example for further details.
  */
-typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *task, NSURLAuthenticationChallenge *challenge, PINRemoteImageManagerAuthenticationChallengeCompletionHandler aHandler);
+typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask * __nonnull task, NSURLAuthenticationChallenge * __nonnull challenge, PINRemoteImageManagerAuthenticationChallengeCompletionHandler __nullable aHandler);
 
 @interface PINRemoteImageManager : NSObject
 
-@property (nonatomic, readonly) PINCache *cache;
+@property (nonatomic, readonly) PINCache * __nonnull cache;
 
 /**
  Create and return a PINRemoteImageManager created with the specified configuration. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. You specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc.
  @param configuration The configuration used to create the PINRemoteImageManager.
  @return A PINRemoteImageManager with the specified configuration.
  */
-- (instancetype)initWithSessionConfiguration:(NSURLSessionConfiguration *)configuration;
+- (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)configuration;
 
 /**
  Get the shared instance of PINRemoteImageManager
  
  @return Shared instance of PINRemoteImageManager
  */
-+ (instancetype)sharedImageManager;
++ (nonnull instancetype)sharedImageManager;
 
 /**
  Sets the shared instance of PINRemoteImageManager to an instance with the supplied configuration. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. You specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc. This method should not be used if the shared instance has already been created.
@@ -139,7 +139,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *ta
  The result of this method is assigned to self.cache in init. If you wish to provide a customized cache to the manager you can subclass PINRemoteImageManager and return a custom PINCache from this method.
  @return An instance of a PINCache object.
  */
-- (PINCache *)defaultImageCache;
+- (nonnull PINCache *)defaultImageCache;
 
 /**
  Set the Authentication Challenge Block
@@ -147,7 +147,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *ta
  
  @param challengeBlock A PINRemoteImageManagerAuthenticationChallenge block.
  */
-- (void)setAuthenticationChallenge:(PINRemoteImageManagerAuthenticationChallenge)aChallenge;
+- (void)setAuthenticationChallenge:(nonnull PINRemoteImageManagerAuthenticationChallenge)aChallenge;
 
 /**
  Set the minimum BPS to download the highest quality image in a set.
@@ -156,7 +156,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *ta
  @param highQualityBPSThreshold bytes per second minimum. Defaults to 500000.
  @param completion Completion to be called once highQualityBPSThreshold has been set.
  */
-- (void)setHighQualityBPSThreshold:(float)highQualityBPSThreshold completion:(dispatch_block_t)completion;
+- (void)setHighQualityBPSThreshold:(float)highQualityBPSThreshold completion:(nullable dispatch_block_t)completion;
 
 /**
  Set the maximum BPS to download the lowest quality image in a set.
@@ -166,7 +166,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *ta
  @param completion Completion to be called once lowQualityBPSThreshold has been set.
  */
 - (void)setLowQualityBPSThreshold:(float)lowQualityBPSThreshold
-                       completion:(dispatch_block_t)completion;
+                       completion:(nullable dispatch_block_t)completion;
 
 /**
  Set whether high quality images should be downloaded when a low quality image is cached if network connectivity has improved.
@@ -176,7 +176,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *ta
  @param completion Completion to be called once shouldUpgradeLowQualityImages has been set.
  */
 - (void)setShouldUpgradeLowQualityImages:(BOOL)shouldUpgradeLowQualityImages
-                              completion:(dispatch_block_t)completion;
+                              completion:(nullable dispatch_block_t)completion;
 
 /**
  Set the maximum number of concurrent operations (decompressing images, creating gifs, etc).
@@ -185,7 +185,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *ta
  @param completion Completion to be called once maxNumberOfConcurrentOperations is set.
  */
 - (void)setMaxNumberOfConcurrentOperations:(NSInteger)maxNumberOfConcurrentOperations
-                                completion:(dispatch_block_t)completion;
+                                completion:(nullable dispatch_block_t)completion;
 
 /**
  Set the maximum number of concurrent downloads.
@@ -194,7 +194,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *ta
  @param completion Completion to be called once maxNumberOfConcurrentDownloads is set.
  */
 - (void)setMaxNumberOfConcurrentDownloads:(NSInteger)maxNumberOfConcurrentDownloads
-                               completion:(dispatch_block_t)completion;
+                               completion:(nullable dispatch_block_t)completion;
 
 /**
  Set the estimated time remaining to download threshold at which to generate progressive images. Progressive images previews will only be generated if the estimated remaining time on a download is greater than estimatedTimeRemainingThreshold. If estimatedTimeRemainingThreshold is less than zero, this check is skipped.
@@ -203,7 +203,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *ta
  @param completion Completion to be called once estimatedTimeRemainingTimeThreshold is set.
  */
 - (void)setEstimatedRemainingTimeThresholdForProgressiveDownloads:(NSTimeInterval)estimatedRemainingTimeThreshold
-                                                       completion:(dispatch_block_t)completion;
+                                                       completion:(nullable dispatch_block_t)completion;
 
 /**
  Sets the progress at which progressive images are generated. By default this is @[@0.00, @0.35, @0.65] which generates at most, 3 progressive images. The first progressive image will only be generated when at least one scan has been completed (so you never see half an image).
@@ -211,15 +211,15 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *ta
  @param progressThresholds an array of progress thresholds at which to generate progressive images. progress thresholds should range from 0.00 - 1.00. Defaults to @[@0.00, @0.35, @0.65]
  @param completion Completion to be called once progressThresholds is set.
  */
-- (void)setProgressThresholds:(NSArray *)progressThresholds
-                   completion:(dispatch_block_t)completion;
+- (void)setProgressThresholds:(nonnull NSArray *)progressThresholds
+                   completion:(nullable dispatch_block_t)completion;
 
 /**
  Prefetch an image at the given URL.
  
  @param url NSURL where the image to prefetch resides.
  */
-- (void)prefetchImageWithURL:(NSURL *)url;
+- (void)prefetchImageWithURL:(nonnull NSURL *)url;
 
 /**
  Prefetch an image at the given URL with given options.
@@ -227,14 +227,14 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *ta
  @param url NSURL where the image to prefetch resides.
  @param options PINRemoteImageManagerDownloadOptions options with which to pefetch the image.
  */
-- (void)prefetchImageWithURL:(NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options;
+- (void)prefetchImageWithURL:(nonnull NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options;
 
 /**
  Prefetch images at the given URLs.
  
  @param urls An array of NSURLs where the images to prefetch reside.
  */
-- (void)prefetchImagesWithURLs:(NSArray *)urls;
+- (void)prefetchImagesWithURLs:(nonnull NSArray *)urls;
 
 /**
  Prefetch images at the given URLs with given options.
@@ -242,7 +242,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *ta
  @param urls An array of NSURLs where the images to prefetch reside.
  @param options PINRemoteImageManagerDownloadOptions options with which to pefetch the image.
  */
-- (void)prefetchImagesWithURLs:(NSArray *)urls options:(PINRemoteImageManagerDownloadOptions)options;;
+- (void)prefetchImagesWithURLs:(nonnull NSArray *)urls options:(PINRemoteImageManagerDownloadOptions)options;;
 
 /**
  Download or retrieve from cache the image found at the url. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).
