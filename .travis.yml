@@ -13,4 +13,8 @@ env:
     - TEST_SDK=iphonesimulator8.1
     - TEST_SDK=iphonesimulator9.1
 script:
-- xctool test -test-sdk $TEST_SDK -workspace Example/PINRemoteImage.xcworkspace -scheme PINRemoteImage ONLY_ACTIVE_ARCH=NO
+- xctool test -test-sdk $TEST_SDK 
+-workspace Example/PINRemoteImage.xcworkspace 
+-scheme PINRemoteImage 
+ONLY_ACTIVE_ARCH=NO 
+CODE_SIGNING_REQUIRED=NO
