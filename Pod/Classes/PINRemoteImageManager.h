@@ -133,7 +133,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask * _
 
  @param configuration The configuration used to create the PINRemoteImageManager.
  */
-+ (void)setSharedImageManagerWithConfiguration:(NSURLSessionConfiguration *)configuration;
++ (void)setSharedImageManagerWithConfiguration:(nullable NSURLSessionConfiguration *)configuration;
 
 /**
  The result of this method is assigned to self.cache in init. If you wish to provide a customized cache to the manager you can subclass PINRemoteImageManager and return a custom PINCache from this method.
