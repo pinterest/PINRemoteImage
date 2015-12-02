@@ -364,6 +364,7 @@ static CIContext *CPUProcessingContext = nil;
         maxInput.width < inputSize.width ||
         maxOutput.height < inputSize.height ||
         maxOutput.width < inputSize.width) {
+        CGImageRelease(inputImageRef);
         return nil;
     }
     
