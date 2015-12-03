@@ -152,7 +152,7 @@
         outAnimatedImage = result.animatedImage;
         dispatch_semaphore_signal(semaphore);
     }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     XCTAssert(outAnimatedImage && [outAnimatedImage isKindOfClass:[FLAnimatedImage class]], @"Failed downloading animatedImage or animatedImage is not an FLAnimatedImage.");
     XCTAssert(outImage == nil, @"Image is not nil.");
 }
@@ -185,7 +185,7 @@
      {
          dispatch_semaphore_signal(semaphore);
      }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     NSDictionary *headers = [[NSJSONSerialization JSONObjectWithData:self.data options:NSJSONReadingMutableContainers error:nil] valueForKey:@"headers"];
     XCTAssert([headers[@"X-Custom-Header"] isEqualToString:@"Custom Header Value"]);
 }
@@ -203,7 +203,7 @@
         outAnimatedImage = result.animatedImage;
         dispatch_semaphore_signal(semaphore);
     }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
     XCTAssert(outAnimatedImage == nil, @"Animated image is not nil.");
 }
@@ -221,7 +221,7 @@
         outAnimatedImage = result.animatedImage;
         dispatch_semaphore_signal(semaphore);
     }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     
     XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
     XCTAssert(outAnimatedImage == nil, @"Animated image is not nil.");
@@ -238,7 +238,7 @@
          outError = result.error;
          dispatch_semaphore_signal(semaphore);
      }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     XCTAssert([outError.domain isEqualToString:NSURLErrorDomain]);
     XCTAssert(outError.code == NSURLErrorUnsupportedURL);
     XCTAssert([outError.localizedDescription isEqualToString:@"unsupported URL"]);
@@ -255,7 +255,7 @@
          outError = result.error;
          dispatch_semaphore_signal(semaphore);
      }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     XCTAssert([outError.domain isEqualToString:NSURLErrorDomain]);
     XCTAssert(outError.code == NSURLErrorUnsupportedURL);
     // iOS8 (and presumably 10.10) returns NSURLErrorUnsupportedURL which means the HTTP NSURLProtocol does not accept it
@@ -274,7 +274,7 @@
          outError = result.error;
          dispatch_semaphore_signal(semaphore);
      }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     XCTAssert([outError.domain isEqualToString:NSURLErrorDomain]);
     XCTAssert(outError.code == NSURLErrorRedirectToNonExistentLocation);
     XCTAssert([outError.localizedDescription isEqualToString:@"The requested URL was not found on this server."]);
@@ -357,7 +357,7 @@
         outAnimatedImage = result.animatedImage;
         dispatch_semaphore_signal(semaphore);
     }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
     
     CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(outImage.CGImage);
@@ -379,7 +379,7 @@
         outAnimatedImage = result.animatedImage;
         dispatch_semaphore_signal(semaphore);
     }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
     
     CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(outImage.CGImage);
@@ -399,7 +399,7 @@
         dispatch_semaphore_signal(semaphore);
     }];
     [self.imageManager cancelTaskWithUUID:downloadUUID];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) != 0, @"Semaphore should time out.");
     XCTAssert(self.imageManager.totalDownloads == 0, @"image downloaded too many times");
 }
 
@@ -408,9 +408,8 @@
     id object = [[self.imageManager cache] objectForKey:[self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil]];
     XCTAssert(object == nil, @"image should not be in cache");
     
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     [self.imageManager prefetchImageWithURL:[self JPEGURL]];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    sleep([self timeoutTimeInterval]);
     
     object = [[self.imageManager cache] objectForKey:[self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil]];
     XCTAssert(object, @"image was not prefetched or was not stored in cache");
@@ -454,7 +453,7 @@
         dispatch_semaphore_signal(semaphore);
     }];
     
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     // callback can occur *before* image is stored in cache this is an optimization to avoid waiting on the cache to write.
     // So, wait until it's actually in the cache.
     [self waitForImageWithURLToBeCached:[self JPEGURL]];
@@ -513,7 +512,7 @@
         dispatch_semaphore_signal(semaphore);
     }];
     
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     XCTAssert([image isKindOfClass:[UIImage class]], @"image should be UIImage");
 }
 
@@ -592,7 +591,7 @@
      }];
 
     [self.imageManager cancelTaskWithUUID:processUUID];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) != 0, @"Semaphore should time out.");
     XCTAssert(self.imageManager.totalDownloads == 0, @"image should not have been downloaded either.");
 }
 
@@ -657,17 +656,17 @@
     [self.imageManager setHighQualityBPSThreshold:10 completion:^{
         dispatch_semaphore_signal(semaphore);
     }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     
     [self.imageManager setLowQualityBPSThreshold:5 completion:^{
         dispatch_semaphore_signal(semaphore);
     }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     
     [self.imageManager setShouldUpgradeLowQualityImages:NO completion:^{
         dispatch_semaphore_signal(semaphore);
     }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     __block UIImage *image;
     [self.imageManager downloadImageWithURLs:@[[self JPEGURL_Small], [self JPEGURL_Medium], [self JPEGURL_Large]]
                                      options:PINRemoteImageManagerDownloadOptionsNone
@@ -678,7 +677,7 @@
         XCTAssert(image.size.width == 750, @"Large image should be downloaded");
         dispatch_semaphore_signal(semaphore);
     }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     
     // callback can occur *before* image is stored in cache this is an optimization to avoid waiting on the cache to write.
     // So, wait until it's actually in the cache.
@@ -694,7 +693,7 @@
         XCTAssert(image.size.width == 750, @"Large image should be found in cache");
         dispatch_semaphore_signal(semaphore);
     }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     
     [self.imageManager.cache removeAllObjects];
     [self.imageManager downloadImageWithURLs:@[[self JPEGURL_Small], [self JPEGURL_Medium], [self JPEGURL_Large]]
@@ -706,7 +705,7 @@
         XCTAssert(image.size.width == 345, @"Small image should be downloaded at low bps");
         dispatch_semaphore_signal(semaphore);
     }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     
     [self waitForImageWithURLToBeCached:[self JPEGURL_Small]];
     
@@ -720,12 +719,12 @@
         XCTAssert(image.size.width == 345, @"Small image should be found in cache");
         dispatch_semaphore_signal(semaphore);
     }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     
     [self.imageManager setShouldUpgradeLowQualityImages:YES completion:^{
         dispatch_semaphore_signal(semaphore);
     }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     
     [self.imageManager setCurrentBytesPerSecond:7];
     [self.imageManager downloadImageWithURLs:@[[self JPEGURL_Small], [self JPEGURL_Medium], [self JPEGURL_Large]]
@@ -737,7 +736,7 @@
          XCTAssert(image.size.width == 600, @"Medium image should be now downloaded");
          dispatch_semaphore_signal(semaphore);
      }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     
     //small image should have been removed from cache
     NSString *key = [self.imageManager cacheKeyForURL:[self JPEGURL_Small] processorKey:nil];
@@ -753,7 +752,7 @@
     [self.imageManager setShouldUpgradeLowQualityImages:NO completion:^{
         dispatch_semaphore_signal(semaphore);
     }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     
     [self.imageManager setCurrentBytesPerSecond:7];
     [self.imageManager downloadImageWithURLs:@[[self JPEGURL_Small], [self JPEGURL_Large]]
@@ -765,7 +764,7 @@
          XCTAssert(image.size.width == 345, @"Small image should be now downloaded");
          dispatch_semaphore_signal(semaphore);
      }];
-    dispatch_semaphore_wait(semaphore, [self timeout]);
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
 }
 
 - (void)testAuthentication {
@@ -783,7 +782,7 @@
 									options:PINRemoteImageManagerDownloadOptionsNone
 								 completion:nil];
 	
-	dispatch_semaphore_wait(semaphore, [self timeout]);
+	XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
 	
 	XCTAssert(didCallAuthenticationChallenge, @"Did not call authenticationchallenge.");
 }
