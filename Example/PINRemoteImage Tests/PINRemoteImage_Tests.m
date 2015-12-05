@@ -353,6 +353,7 @@
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
     {
+        XCTAssert(result.error == nil, @"error is non-nil: %@", result.error);
         outImage = result.image;
         outAnimatedImage = result.animatedImage;
         dispatch_semaphore_signal(semaphore);
