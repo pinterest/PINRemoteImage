@@ -381,8 +381,7 @@ static CIContext *CPUProcessingContext = nil;
             CGImageRef outputImageRef = [processingContext createCGImage:outputImage fromRect:CGRectMake(0, 0, inputImage.size.width, inputImage.size.height)];
             
             if (outputImageRef) {
-                //"decoding" the image here copies it to CPU memory?
-                outputUIImage = [UIImage pin_decodedImageWithCGImageRef:outputImageRef];
+                outputUIImage = [UIImage imageWithCGImage:outputImageRef];
                 CGImageRelease(outputImageRef);
             }
         }
