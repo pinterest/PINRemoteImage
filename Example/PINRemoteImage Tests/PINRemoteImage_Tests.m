@@ -47,7 +47,7 @@
 @implementation PINRemoteImage_Tests
 
 - (NSTimeInterval)timeoutTimeInterval {
-    return 5.0;
+    return 10.0;
 }
 
 - (dispatch_time_t)timeoutWithInterval:(NSTimeInterval)interval {
@@ -497,7 +497,7 @@
             dispatch_group_leave(group);
         }];
     }
-    dispatch_group_wait(group, [self timeoutWithInterval:100]);
+    XCTAssert(dispatch_group_wait(group, [self timeoutWithInterval:100]) == 0, @"Group timed out.");
 }
 #endif
 
@@ -569,7 +569,7 @@
          }];
     }
     
-    dispatch_group_wait(group, [self timeout]);
+    XCTAssert(dispatch_group_wait(group, [self timeout]) == 0, @"Group timed out.");
     
     XCTAssert(processCount <= 1, @"image processed too many times");
     XCTAssert([image isKindOfClass:[UIImage class]], @"result image is not a UIImage");
@@ -612,7 +612,7 @@
         }];
     }
     
-    dispatch_group_wait(group, [self timeout]);
+    XCTAssert(dispatch_group_wait(group, [self timeout]) == 0, @"Group timed out.");
     
     XCTAssert(self.imageManager.totalDownloads <= 1, @"image downloaded too many times");
     XCTAssert([image isKindOfClass:[UIImage class]], @"result image is not a UIImage");
