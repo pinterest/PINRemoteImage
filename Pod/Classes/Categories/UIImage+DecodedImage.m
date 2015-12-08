@@ -10,7 +10,7 @@
 
 #import <ImageIO/ImageIO.h>
 
-#if __has_include(<webp/decode.h>)
+#ifdef PIN_WEBP
 #import "UIImage+WebP.h"
 #endif
 
@@ -35,7 +35,7 @@
     if ([data pin_isGIF]) {
         return [UIImage imageWithData:data];
     }
-#if __has_include(<webp/decode.h>)
+#ifdef PIN_WEBP
     if ([data pin_isWebP]) {
         return [UIImage pin_imageWithWebPData:data];
     }

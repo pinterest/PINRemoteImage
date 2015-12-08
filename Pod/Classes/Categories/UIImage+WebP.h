@@ -6,7 +6,7 @@
 //
 //
 
-#if __has_include(<webp/decode.h>)
+#ifdef PIN_WEBP
 
 #import <UIKit/UIKit.h>
 

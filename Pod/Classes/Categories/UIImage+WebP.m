@@ -8,9 +8,13 @@
 
 #import "UIImage+WebP.h"
 
-#if __has_include(<webp/decode.h>)
-#import <webp/decode.h>
+#ifdef PIN_WEBP
 
+#if !COCOAPODS
+#import "webp/decode.h"
+#else
+#import "libwebp/webp/decode.h"
+#endif
 static void releaseData(void *info, const void *data, size_t size)
 {
     free((void *)data);
