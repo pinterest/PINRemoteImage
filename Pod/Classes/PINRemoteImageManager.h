@@ -112,7 +112,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask * _
 
 @interface PINRemoteImageManager : NSObject
 
-@property (nonatomic, readonly) PINCache * __nonnull cache;
+@property (nonatomic, readonly, nullable) PINCache * cache;
 
 /**
  Create and return a PINRemoteImageManager created with the specified configuration. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. You specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc.
