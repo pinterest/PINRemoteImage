@@ -70,15 +70,26 @@
 
 #pragma mark NSURLSessionDataDelegate
 
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler {
+- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler 
+{
+    if ([self.delegate respondsToSelector:@selector(didReceiveAuthenticationChallenge:forTask:completionHandler:)]) {
+        [self.delegate didReceiveAuthenticationChallenge:challenge forTask:nil completionHandler:completionHandler];
+    } else {
+        completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
+    }
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler 
+{
 	[self lock];
         dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
 	[self unlock];
 	
 	__weak typeof(self) weakSelf = self;
 	dispatch_async(delegateQueue, ^{
-		if ([weakSelf.delegate respondsToSelector:@selector(didReceiveAuthenticationChallenge:forTask:completionHandler:)]) {
-			[weakSelf.delegate didReceiveAuthenticationChallenge:challenge forTask:task completionHandler:completionHandler];
+        typeof(self) strongSelf = weakSelf;
+		if ([strongSelf.delegate respondsToSelector:@selector(didReceiveAuthenticationChallenge:forTask:completionHandler:)]) {
+			[strongSelf.delegate didReceiveAuthenticationChallenge:challenge forTask:task completionHandler:completionHandler];
         } else {
             completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
         }
@@ -93,7 +104,8 @@
     
     __weak typeof(self) weakSelf = self;
     dispatch_async(delegateQueue, ^{
-        [weakSelf.delegate didReceiveData:data forTask:dataTask];
+        typeof(self) strongSelf = weakSelf;
+        [strongSelf.delegate didReceiveData:data forTask:dataTask];
     });
 }
 
