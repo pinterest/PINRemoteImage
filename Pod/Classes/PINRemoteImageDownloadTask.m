@@ -42,6 +42,7 @@
     }];
 }
 
+#warning The manager is not used in here, just dropped by a warning to make sure the problem is tackled in the future
 - (BOOL)cancelWithUUID:(NSUUID *)UUID manager:(PINRemoteImageManager *)manager
 {
     BOOL noMoreCompletions = [super cancelWithUUID:UUID manager:manager];
