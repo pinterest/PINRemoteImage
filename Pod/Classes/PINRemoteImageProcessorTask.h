@@ -10,6 +10,6 @@
 
 @interface PINRemoteImageProcessorTask : PINRemoteImageTask
 
-@property (nonatomic, strong) NSUUID *downloadTaskUUID;
+@property (nonatomic, strong, nullable) NSUUID *downloadTaskUUID;
 
 @end
