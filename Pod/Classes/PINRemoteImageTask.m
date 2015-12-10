@@ -84,6 +84,7 @@
     return noMoreCompletions;
 }
 
+#warning setPriority is not implemented :/
 - (void)setPriority:(PINRemoteImageManagerPriority)priority
 {
     
