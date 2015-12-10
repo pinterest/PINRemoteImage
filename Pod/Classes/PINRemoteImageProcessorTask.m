@@ -10,6 +10,7 @@
 
 @implementation PINRemoteImageProcessorTask
 
+#warning It's the same problem like in PINRemoteImageTask, the manager is not used
 - (BOOL)cancelWithUUID:(NSUUID *)UUID manager:(PINRemoteImageManager *)manager
 {
     BOOL noMoreCompletions = [super cancelWithUUID:UUID manager:manager];
