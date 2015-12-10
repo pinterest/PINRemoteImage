@@ -73,6 +73,7 @@
     }];
 }
 
+#warning manager is not used, maybe we don't need this?
 - (BOOL)cancelWithUUID:(NSUUID *)UUID manager:(PINRemoteImageManager *)manager
 {
     BOOL noMoreCompletions = NO;
