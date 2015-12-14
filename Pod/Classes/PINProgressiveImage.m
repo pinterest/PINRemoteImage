@@ -70,7 +70,7 @@ static CIContext *CPUProcessingContext = nil;
         self.scanTime = 0;
 #endif
         
-#if NS_EXTENSION_UNAVAILABLE_IOS
+#if PIN_APP_EXTENSIONS
         self.inBackground = YES;
 #else
         self.inBackground = [[UIApplication sharedApplication] applicationState] != UIApplicationStateActive;
@@ -88,7 +88,7 @@ static CIContext *CPUProcessingContext = nil;
             CFRelease(_imageSource);
         }
     [self.lock unlock];
-#if !NS_EXTENSION_UNAVAILABLE_IOS
+#if !PIN_APP_EXTENSIONS
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 #endif
 }

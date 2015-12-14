@@ -14,6 +14,9 @@
 @class PINCache;
 @class PINRemoteImageManagerResult;
 
+/*
+ @warning when using in extension or watch extension, define PIN_APP_EXTENSIONS=1
+ */
 
 extern NSString * const PINRemoteImageManagerErrorDomain;
 
