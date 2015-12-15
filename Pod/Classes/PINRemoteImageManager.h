@@ -129,6 +129,13 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *ta
 + (instancetype)sharedImageManager;
 
 /**
+ Sets the shared instance of PINRemoteImageManager to an instance with the supplied configuration. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. You specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc. This method should not be used if the shared instance has already been created.
+
+ @param configuration The configuration used to create the PINRemoteImageManager.
+ */
++ (void)setSharedImageManagerWithConfiguration:(NSURLSessionConfiguration *)configuration;
+
+/**
  The result of this method is assigned to self.cache in init. If you wish to provide a customized cache to the manager you can subclass PINRemoteImageManager and return a custom PINCache from this method.
  @return An instance of a PINCache object.
  */
