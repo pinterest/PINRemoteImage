@@ -82,7 +82,7 @@ typedef void (^PINRemoteImageManagerImageCompletion)(PINRemoteImageManagerResult
  
  @return return the processed UIImage
  */
-typedef UIImage  * _Nullable(^PINRemoteImageManagerImageProcessor)(PINRemoteImageManagerResult * __nonnull result, NSUInteger * __nullable cost);
+typedef UIImage  * _Nullable(^PINRemoteImageManagerImageProcessor)(PINRemoteImageManagerResult * __nonnull result, NSUInteger * __nonnull cost);
 
 /**
  PINRemoteImageManager is the main workhorse of PINRemoteImage. It is unnecessary to access directly if you simply
@@ -108,11 +108,11 @@ typedef void(^PINRemoteImageManagerAuthenticationChallengeCompletionHandler)(NSU
  @param challenge An object that contains the request for authentication.
  @param aHandler A PINRemoteImageManagerAuthenticationChallengeCompletionHandler, see example for further details.
  */
-typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask * __nonnull task, NSURLAuthenticationChallenge * __nonnull challenge, PINRemoteImageManagerAuthenticationChallengeCompletionHandler __nullable aHandler);
+typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask * __nullable task, NSURLAuthenticationChallenge * __nonnull challenge, PINRemoteImageManagerAuthenticationChallengeCompletionHandler __nullable aHandler);
 
 @interface PINRemoteImageManager : NSObject
 
-@property (nonatomic, readonly, nullable) PINCache * cache;
+@property (nonatomic, readonly, nonnull) PINCache * cache;
 
 /**
  Create and return a PINRemoteImageManager created with the specified configuration. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. You specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc.
@@ -147,7 +147,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask * _
  
  @param challengeBlock A PINRemoteImageManagerAuthenticationChallenge block.
  */
-- (void)setAuthenticationChallenge:(nonnull PINRemoteImageManagerAuthenticationChallenge)aChallenge;
+- (void)setAuthenticationChallenge:(nullable PINRemoteImageManagerAuthenticationChallenge)aChallenge;
 
 /**
  Set the minimum BPS to download the highest quality image in a set.

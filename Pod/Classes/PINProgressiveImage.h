@@ -19,6 +19,6 @@
 //Returns the latest image based on thresholds, returns nil if no new image is generated
 - (nullable UIImage *)currentImage;
 
-- (nonnull NSData *)data;
+- (nullable NSData *)data;
 
 @end

@@ -74,7 +74,7 @@
 
 + (nullable NSUUID *)downloadImageOperationUUIDOnView:(nonnull id <PINRemoteImageCategory>)view;
 
-+ (void)setDownloadImageOperationUUID:(nonnull NSUUID *)downloadImageOperationUUID onView:(nonnull id <PINRemoteImageCategory>)view;
++ (void)setDownloadImageOperationUUID:(nullable NSUUID *)downloadImageOperationUUID onView:(nonnull id <PINRemoteImageCategory>)view;
 
 + (BOOL)updateWithProgressOnView:(nonnull id <PINRemoteImageCategory>)view;
 

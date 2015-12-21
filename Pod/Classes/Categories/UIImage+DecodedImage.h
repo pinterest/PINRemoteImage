@@ -19,8 +19,8 @@
 
 @interface UIImage (PINDecodedImage_Deprecated)
 
-+ (nullable UIImage *)decodedImageWithData:(nonnull NSData *)data __attribute((deprecated("use pin_decodedImageWithData:")));
-+ (nullable UIImage *)decodedImageWithData:(nonnull NSData *)data skipDecodeIfPossible:(BOOL)skipDecodeIfPossible __attribute((deprecated("use pin_decodedImageWithData:skipDecodeIfPossible:")));
++ (nullable UIImage *)decodedImageWithData:(nullable NSData *)data __attribute((deprecated("use pin_decodedImageWithData:")));
++ (nullable UIImage *)decodedImageWithData:(nullable NSData *)data skipDecodeIfPossible:(BOOL)skipDecodeIfPossible __attribute((deprecated("use pin_decodedImageWithData:skipDecodeIfPossible:")));
 + (nullable UIImage *)decodedImageWithCGImageRef:(nonnull CGImageRef)imageRef __attribute((deprecated("use pin_decodedImageWithCGImageRef:")));
 
 @end

@@ -12,7 +12,7 @@
 
 @interface PINRemoteImageDownloadTask : PINRemoteImageTask
 
-@property (nonatomic, strong, nonnull) PINDataTaskOperation *urlSessionTaskOperation;
+@property (nonatomic, strong, nullable) PINDataTaskOperation *urlSessionTaskOperation;
 @property (nonatomic, assign) CFTimeInterval sessionTaskStartTime;
 @property (nonatomic, assign) CFTimeInterval sessionTaskEndTime;
 @property (nonatomic, assign) BOOL hasProgressBlocks;
