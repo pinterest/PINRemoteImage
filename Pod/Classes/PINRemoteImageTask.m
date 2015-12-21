@@ -73,7 +73,6 @@
     }];
 }
 
-#warning manager is not used, maybe we don't need this?
 - (BOOL)cancelWithUUID:(NSUUID *)UUID manager:(PINRemoteImageManager *)manager
 {
     BOOL noMoreCompletions = NO;
@@ -84,7 +83,6 @@
     return noMoreCompletions;
 }
 
-#warning setPriority is not implemented :/
 - (void)setPriority:(PINRemoteImageManagerPriority)priority
 {
     
