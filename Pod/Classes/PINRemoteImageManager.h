@@ -110,6 +110,14 @@ typedef void(^PINRemoteImageManagerAuthenticationChallengeCompletionHandler)(NSU
  */
 typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *task, NSURLAuthenticationChallenge *challenge, PINRemoteImageManagerAuthenticationChallengeCompletionHandler aHandler);
 
+/**
+ Handler called for many PINRemoteImage tasks providing the progress of the download.
+ 
+ @param completedBytes Amount of bytes that have been downloaded so far.
+ @param totalBytes Total amount of bytes in the image being downloaded.
+ */
+typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, NSInteger totalBytes);
+
 @interface PINRemoteImageManager : NSObject
 
 @property (nonatomic, readonly) PINCache *cache;
@@ -281,6 +289,38 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *ta
                       completion:(PINRemoteImageManagerImageCompletion)completion;
 
 /**
+ Download or retrieve from cache the image found at the url. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).
+ 
+ @param url NSURL where the image to download resides.
+ @param options PINRemoteImageManagerDownloadOptions options with which to fetch the image.
+ @param downloadProgress PINRemoteImageManagerDownloadProgress block which will be called to update progress in bytes of the image download.
+ @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.
+ 
+ @return An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).
+ */
+- (NSUUID *)downloadImageWithURL:(NSURL *)url
+                         options:(PINRemoteImageManagerDownloadOptions)options
+                downloadProgress:(PINRemoteImageManagerDownloadProgress)downloadProgress
+                      completion:(PINRemoteImageManagerImageCompletion)completion;
+
+/**
+ Download or retrieve from cache the image found at the url. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).
+ 
+ @param url NSURL where the image to download resides.
+ @param options PINRemoteImageManagerDownloadOptions options with which to fetch the image.
+ @param progress PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.
+ @param downloadProgress PINRemoteImageManagerDownloadProgress block which will be called to update progress in bytes of the image download.
+ @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.
+ 
+ @return An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).
+ */
+- (NSUUID *)downloadImageWithURL:(NSURL *)url
+                         options:(PINRemoteImageManagerDownloadOptions)options
+                        progress:(PINRemoteImageManagerImageCompletion)progress
+                downloadProgress:(PINRemoteImageManagerDownloadProgress)downloadProgress
+                      completion:(PINRemoteImageManagerImageCompletion)completion;
+
+/**
  Download or retrieve from cache the image found at the url and process it before calling completion. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).
  
  @param url NSURL where the image to download resides.
@@ -295,6 +335,25 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *ta
                          options:(PINRemoteImageManagerDownloadOptions)options
                     processorKey:(NSString *)processorKey
                        processor:(PINRemoteImageManagerImageProcessor)processor
+                      completion:(PINRemoteImageManagerImageCompletion)completion;
+
+/**
+ Download or retrieve from cache the image found at the url and process it before calling completion. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).
+ 
+ @param url NSURL where the image to download resides.
+ @param options PINRemoteImageManagerDownloadOptions options with which to fetch the image.
+ @param processorKey NSString key to uniquely identify processor and process. Will be used for caching processed images.
+ @param processor PINRemoteImageManagerImageProcessor block which will be called to post-process downloaded image.
+ @param downloadProgress PINRemoteImageManagerDownloadProgress block which will be called to update progress in bytes of the image download.
+ @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.
+ 
+ @return An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).
+ */
+- (NSUUID *)downloadImageWithURL:(NSURL *)url
+                         options:(PINRemoteImageManagerDownloadOptions)options
+                    processorKey:(NSString *)processorKey
+                       processor:(PINRemoteImageManagerImageProcessor)processor
+                downloadProgress:(PINRemoteImageManagerDownloadProgress)downloadProgress
                       completion:(PINRemoteImageManagerImageCompletion)completion;
 
 /**
