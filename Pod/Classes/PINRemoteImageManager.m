@@ -1119,9 +1119,8 @@ static dispatch_once_t sharedDispatchToken;
             PINRemoteImageManagerDownloadProgress downloadProgressBlock = completion.downloadProgressBlock;
             
             if (downloadProgressBlock) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    downloadProgressBlock(dataTask.countOfBytesReceived, dataTask.countOfBytesExpectedToReceive);
-                });
+                // For performance reasons don't call on main thread every time (leave it up to the user)
+                downloadProgressBlock(dataTask.countOfBytesReceived, dataTask.countOfBytesExpectedToReceive);
             }
         }
     
