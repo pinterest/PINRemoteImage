@@ -6,7 +6,7 @@
 //
 //
 
-#import "UIImage+WebP.h"
+#import "PINImage+WebP.h"
 
 #if __has_include(<webp/decode.h>)
 #import <webp/decode.h>
@@ -16,9 +16,9 @@ static void releaseData(void *info, const void *data, size_t size)
     free((void *)data);
 }
 
-@implementation UIImage (PINWebP)
+@implementation PINImage (PINWebP)
 
-+ (UIImage *)pin_imageWithWebPData:(NSData *)webPData
++ (PINImage *)pin_imageWithWebPData:(NSData *)webPData
 {
     WebPBitstreamFeatures features;
     if (WebPGetFeatures([webPData bytes], [webPData length], &features) == VP8_STATUS_OK) {
@@ -60,7 +60,12 @@ static void releaseData(void *info, const void *data, size_t size)
                                                 NO,
                                                 renderingIntent);
             
-            UIImage *image = [UIImage imageWithCGImage:imageRef];
+            PINImage *image = nil;
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+            image = [UIImage imageWithCGImage:imageRef];
+#else
+            image = [[self alloc] initWithCGImage:imageRef size:CGSizeZero];
+#endif
             
             CGImageRelease(imageRef);
             CGColorSpaceRelease(colorSpaceRef);
@@ -74,9 +79,9 @@ static void releaseData(void *info, const void *data, size_t size)
 
 @end
 
-@implementation UIImage (PINWebP_Deprecated)
+@implementation PINImage (PINWebP_Deprecated)
 
-+ (UIImage *)imageWithWebPData:(NSData *)webPData
++ (PINImage *)imageWithWebPData:(NSData *)webPData
 {
     return [self pin_imageWithWebPData:webPData];
 }

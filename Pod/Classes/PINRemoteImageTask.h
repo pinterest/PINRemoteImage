@@ -20,7 +20,7 @@
 
 - (void)addCallbacksWithCompletionBlock:(PINRemoteImageManagerImageCompletion)completionBlock progressBlock:(PINRemoteImageManagerImageCompletion)progressBlock withUUID:(NSUUID *)UUID;
 - (void)removeCallbackWithUUID:(NSUUID *)UUID;
-- (void)callCompletionsWithQueue:(dispatch_queue_t)queue remove:(BOOL)remove withImage:(UIImage *)image animatedImage:(FLAnimatedImage *)animatedImage cached:(BOOL)cached error:(NSError *)error;
+- (void)callCompletionsWithQueue:(dispatch_queue_t)queue remove:(BOOL)remove withImage:(PINImage *)image animatedImage:(FLAnimatedImage *)animatedImage cached:(BOOL)cached error:(NSError *)error;
 //returns YES if no more attached completionBlocks
 - (BOOL)cancelWithUUID:(NSUUID *)UUID manager:(PINRemoteImageManager *)manager;
 - (void)setPriority:(PINRemoteImageManagerPriority)priority;

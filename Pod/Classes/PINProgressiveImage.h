@@ -6,7 +6,13 @@
 //
 //
 
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 #import <UIKit/UIKit.h>
+#else
+#import <Cocoa/Cocoa.h>
+#endif
+
+#import "PINRemoteImageMacros.h"
 
 @interface PINProgressiveImage : NSObject
 
@@ -17,7 +23,7 @@
 - (void)updateProgressiveImageWithData:(NSData *)data expectedNumberOfBytes:(int64_t)expectedNumberOfBytes;
 
 //Returns the latest image based on thresholds, returns nil if no new image is generated
-- (UIImage *)currentImage;
+- (PINImage *)currentImage;
 
 - (NSData *)data;
 

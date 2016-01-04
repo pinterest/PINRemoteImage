@@ -6,16 +6,16 @@
 //
 //
 
-#import "UIButton+PINRemoteImage.h"
+#import "PINButton+PINRemoteImage.h"
 
-@implementation UIButton (PINRemoteImage)
+@implementation PINButton (PINRemoteImage)
 
 - (void)pin_setImageFromURL:(NSURL *)url
 {
     [PINRemoteImageCategoryManager setImageOnView:self fromURL:url];
 }
 
-- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage
+- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(PINImage *)placeholderImage
 {
     [PINRemoteImageCategoryManager setImageOnView:self fromURL:url placeholderImage:placeholderImage];
 }
@@ -25,7 +25,7 @@
     [PINRemoteImageCategoryManager setImageOnView:self fromURL:url completion:completion];
 }
 
-- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion
+- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(PINImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion
 {
     [PINRemoteImageCategoryManager setImageOnView:self fromURL:url placeholderImage:placeholderImage completion:completion];
 }
@@ -35,7 +35,7 @@
     [PINRemoteImageCategoryManager setImageOnView:self fromURL:url processorKey:processorKey processor:processor];
 }
 
-- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor
+- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(PINImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor
 {
     [PINRemoteImageCategoryManager setImageOnView:self fromURL:url placeholderImage:placeholderImage processorKey:processorKey processor:processor];
 }
@@ -45,7 +45,7 @@
     [PINRemoteImageCategoryManager setImageOnView:self fromURL:url processorKey:processorKey processor:processor completion:completion];
 }
 
-- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor completion:(PINRemoteImageManagerImageCompletion)completion
+- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(PINImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor completion:(PINRemoteImageManagerImageCompletion)completion
 {
     [PINRemoteImageCategoryManager setImageOnView:self fromURLs:url?@[url]:nil placeholderImage:placeholderImage processorKey:processorKey processor:processor completion:completion];
 }
@@ -55,12 +55,12 @@
     [PINRemoteImageCategoryManager setImageOnView:self fromURLs:urls];
 }
 
-- (void)pin_setImageFromURLs:(NSArray *)urls placeholderImage:(UIImage *)placeholderImage
+- (void)pin_setImageFromURLs:(NSArray *)urls placeholderImage:(PINImage *)placeholderImage
 {
     [PINRemoteImageCategoryManager setImageOnView:self fromURLs:urls placeholderImage:placeholderImage];
 }
 
-- (void)pin_setImageFromURLs:(NSArray *)urls placeholderImage:(UIImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion
+- (void)pin_setImageFromURLs:(NSArray *)urls placeholderImage:(PINImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion
 {
     [PINRemoteImageCategoryManager setImageOnView:self fromURLs:urls placeholderImage:placeholderImage completion:completion];
 }
@@ -90,23 +90,37 @@
     [PINRemoteImageCategoryManager setUpdateWithProgressOnView:updateWithProgress onView:self];
 }
 
-- (void)pin_setPlaceholderWithImage:(UIImage *)image
+- (void)pin_setPlaceholderWithImage:(PINImage *)image
 {
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
     [self setImage:image forState:UIControlStateNormal];
+#else
+    [self setImage:image];
+#endif
 }
 
-- (void)pin_updateUIWithImage:(UIImage *)image animatedImage:(FLAnimatedImage *)animatedImage
+- (void)pin_updateUIWithImage:(PINImage *)image animatedImage:(FLAnimatedImage *)animatedImage
 {
     if (image) {
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
         [self setImage:image forState:UIControlStateNormal];
         [self setNeedsLayout];
+#else
+        [self setImage:image];
+        [self setNeedsLayout:YES];
+#endif
     }
 }
 
 - (void)pin_clearImages
 {
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
     [self setImage:nil forState:UIControlStateNormal];
     [self setNeedsLayout];
+#else
+    [self setImage:nil];
+    [self setNeedsLayout:YES];
+#endif
 }
 
 - (BOOL)pin_ignoreGIFs
@@ -116,14 +130,14 @@
 
 @end
 
-@implementation UIButton (PINRemoteImage_Deprecated)
+@implementation PINButton (PINRemoteImage_Deprecated)
 
 - (void)setImageFromURL:(NSURL *)url
 {
     [self pin_setImageFromURL:url];
 }
 
-- (void)setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage
+- (void)setImageFromURL:(NSURL *)url placeholderImage:(PINImage *)placeholderImage
 {
     [self pin_setImageFromURL:url placeholderImage:placeholderImage];
 }
@@ -133,7 +147,7 @@
     [self pin_setImageFromURL:url completion:completion];
 }
 
-- (void)setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion
+- (void)setImageFromURL:(NSURL *)url placeholderImage:(PINImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion
 {
     [self pin_setImageFromURL:url placeholderImage:placeholderImage completion:completion];
 }
@@ -143,7 +157,7 @@
     [self pin_setImageFromURL:url processorKey:processorKey processor:processor];
 }
 
-- (void)setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor
+- (void)setImageFromURL:(NSURL *)url placeholderImage:(PINImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor
 {
     [self pin_setImageFromURL:url placeholderImage:placeholderImage processorKey:processorKey processor:processor];
 }
@@ -153,7 +167,7 @@
     [self pin_setImageFromURL:url processorKey:processorKey processor:processor completion: completion];
 }
 
-- (void)setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor completion:(PINRemoteImageManagerImageCompletion)completion
+- (void)setImageFromURL:(NSURL *)url placeholderImage:(PINImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor completion:(PINRemoteImageManagerImageCompletion)completion
 {
     [self pin_setImageFromURL:url placeholderImage:placeholderImage processorKey:processorKey processor:processor completion:completion];
 }
@@ -163,12 +177,12 @@
     [self pin_setImageFromURLs:urls];
 }
 
-- (void)setImageFromURLs:(NSArray *)urls placeholderImage:(UIImage *)placeholderImage
+- (void)setImageFromURLs:(NSArray *)urls placeholderImage:(PINImage *)placeholderImage
 {
     [self pin_setImageFromURLs:urls placeholderImage:placeholderImage];
 }
 
-- (void)setImageFromURLs:(NSArray *)urls placeholderImage:(UIImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion
+- (void)setImageFromURLs:(NSArray *)urls placeholderImage:(PINImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion
 {
     [self pin_setImageFromURLs:urls placeholderImage:placeholderImage completion:completion];
 }
@@ -198,12 +212,12 @@
     self.pin_updateWithProgress = updateWithProgress;
 }
 
-- (void)setPlaceholderWithImage:(UIImage *)image
+- (void)setPlaceholderWithImage:(PINImage *)image
 {
     [self pin_setPlaceholderWithImage:image];
 }
 
-- (void)updateUIWithImage:(UIImage *)image animatedImage:(FLAnimatedImage *)animatedImage
+- (void)updateUIWithImage:(PINImage *)image animatedImage:(FLAnimatedImage *)animatedImage
 {
     [self pin_updateUIWithImage:image animatedImage:animatedImage];
 }

@@ -12,7 +12,7 @@
 #import <CoreImage/CoreImage.h>
 
 #import "PINRemoteImage.h"
-#import "UIImage+DecodedImage.h"
+#import "PINImage+DecodedImage.h"
 
 @interface PINProgressiveImage ()
 
@@ -21,7 +21,7 @@
 @property (nonatomic, assign) CGImageSourceRef imageSource;
 @property (nonatomic, assign) CGSize size;
 @property (nonatomic, assign) BOOL isProgressiveJPEG;
-@property (nonatomic, strong) UIImage *cachedImage;
+@property (nonatomic, strong) PINImage *cachedImage;
 @property (nonatomic, assign) NSUInteger currentThreshold;
 @property (nonatomic, assign) float bytesPerSecond;
 @property (nonatomic, assign) NSUInteger scannedByte;
@@ -54,7 +54,9 @@ static CIContext *CPUProcessingContext = nil;
         dispatch_once(&onceToken, ^{
             //CIContexts are immutable and threadsafe
             CPUProcessingContext = [CIContext contextWithOptions:@{kCIContextUseSoftwareRenderer : @YES}];
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
             GPUProcessingContext = [CIContext contextWithOptions:@{kCIContextUseSoftwareRenderer : @NO, kCIContextPriorityRequestLow: @YES}];
+#endif
         });
         
         _imageSource = CGImageSourceCreateIncremental(NULL);;
@@ -73,9 +75,17 @@ static CIContext *CPUProcessingContext = nil;
 #if PIN_APP_EXTENSIONS
         self.inBackground = YES;
 #else
-        self.inBackground = [[UIApplication sharedApplication] applicationState] != UIApplicationStateActive;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+        
+    #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+            self.inBackground = [[UIApplication sharedApplication] applicationState] != UIApplicationStateActive;
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+    #else
+            self.inBackground = ![[NSApplication sharedApplication] isActive];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willResignActive:) name:NSApplicationWillResignActiveNotification object:nil];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willEnterForeground:) name:NSApplicationWillBecomeActiveNotification object:nil];
+    #endif
+        
 #endif
     }
     return self;
@@ -192,7 +202,7 @@ static CIContext *CPUProcessingContext = nil;
     [self.lock unlock];
 }
 
-- (UIImage *)currentImage
+- (PINImage *)currentImage
 {
     [self.lock lock];
         if (self.imageSource == nil) {
@@ -222,7 +232,7 @@ static CIContext *CPUProcessingContext = nil;
         }
     #endif
         
-        UIImage *currentImage = nil;
+        PINImage *currentImage = nil;
         
         //Size information comes after JFIF so jpeg properties should be available at or before size?
         if (self.size.width <= 0 || self.size.height <= 0) {
@@ -262,7 +272,7 @@ static CIContext *CPUProcessingContext = nil;
             PINLog(@"Generating preview image");
             CGImageRef image = CGImageSourceCreateImageAtIndex(self.imageSource, 0, NULL);
             if (image) {
-                currentImage = [self postProcessImage:[UIImage imageWithCGImage:image] withProgress:progress];
+                currentImage = [self postProcessImage:[PINImage imageWithCGImage:image] withProgress:progress];
                 CGImageRelease(image);
             }
         }
@@ -340,7 +350,7 @@ static CIContext *CPUProcessingContext = nil;
 }
 
 //Must be called within lock
-- (UIImage *)postProcessImage:(UIImage *)inputImage withProgress:(float)progress
+- (PINImage *)postProcessImage:(PINImage *)inputImage withProgress:(float)progress
 {
     CGImageRef inputImageRef = CGImageRetain(inputImage.CGImage);
     if (inputImageRef == nil) {
@@ -350,13 +360,15 @@ static CIContext *CPUProcessingContext = nil;
     CIFilter *gaussianFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
     [gaussianFilter setDefaults];
     
-    UIImage *outputUIImage = nil;
+    PINImage *outputUIImage = nil;
     
     CIContext *processingContext = GPUProcessingContext;
     if (self.inBackground) {
         processingContext = CPUProcessingContext;
     }
-    
+
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+    // Don't need to check on OSX as it's reasonable fast
     CGSize maxInput = processingContext.inputImageMaximumSize;
     CGSize maxOutput = processingContext.outputImageMaximumSize;
     CGSize inputSize = inputImage.size;
@@ -367,6 +379,7 @@ static CIContext *CPUProcessingContext = nil;
         CGImageRelease(inputImageRef);
         return nil;
     }
+#endif
     
     if (processingContext && gaussianFilter) {
         [gaussianFilter setValue:[CIImage imageWithCGImage:inputImageRef]
@@ -381,7 +394,7 @@ static CIContext *CPUProcessingContext = nil;
             CGImageRef outputImageRef = [processingContext createCGImage:outputImage fromRect:CGRectMake(0, 0, inputImage.size.width, inputImage.size.height)];
             
             if (outputImageRef) {
-                outputUIImage = [UIImage imageWithCGImage:outputImageRef];
+                outputUIImage = [PINImage imageWithCGImage:outputImageRef];
                 CGImageRelease(outputImageRef);
             }
         }

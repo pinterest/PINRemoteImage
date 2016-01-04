@@ -20,7 +20,7 @@
 
 + (void)setImageOnView:(id <PINRemoteImageCategory>)view
                fromURL:(NSURL *)url
-      placeholderImage:(UIImage *)placeholderImage
+      placeholderImage:(PINImage *)placeholderImage
 {
     [self setImageOnView:view fromURL:url placeholderImage:placeholderImage completion:nil];
 }
@@ -34,7 +34,7 @@
 
 + (void)setImageOnView:(id <PINRemoteImageCategory>)view
                fromURL:(NSURL *)url
-      placeholderImage:(UIImage *)placeholderImage
+      placeholderImage:(PINImage *)placeholderImage
             completion:(PINRemoteImageManagerImageCompletion)completion
 {
     [self setImageOnView:view
@@ -59,7 +59,7 @@
 
 + (void)setImageOnView:(id <PINRemoteImageCategory>)view
                fromURL:(NSURL *)url
-      placeholderImage:(UIImage *)placeholderImage
+      placeholderImage:(PINImage *)placeholderImage
           processorKey:(NSString *)processorKey
              processor:(PINRemoteImageManagerImageProcessor)processor
 {
@@ -95,7 +95,7 @@
 
 + (void)setImageOnView:(id <PINRemoteImageCategory>)view
               fromURLs:(NSArray *)urls
-      placeholderImage:(UIImage *)placeholderImage
+      placeholderImage:(PINImage *)placeholderImage
 {
     [self setImageOnView:view
                 fromURLs:urls
@@ -105,7 +105,7 @@
 
 + (void)setImageOnView:(id <PINRemoteImageCategory>)view
               fromURLs:(NSArray *)urls
-      placeholderImage:(UIImage *)placeholderImage
+      placeholderImage:(PINImage *)placeholderImage
             completion:(PINRemoteImageManagerImageCompletion)completion
 {
     return [self setImageOnView:view
@@ -146,7 +146,7 @@
 
 + (void)setImageOnView:(id <PINRemoteImageCategory>)view
               fromURLs:(NSArray *)urls
-      placeholderImage:(UIImage *)placeholderImage
+      placeholderImage:(PINImage *)placeholderImage
           processorKey:(NSString *)processorKey
              processor:(PINRemoteImageManagerImageProcessor)processor
             completion:(PINRemoteImageManagerImageCompletion)completion

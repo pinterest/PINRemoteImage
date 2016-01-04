@@ -23,7 +23,7 @@
 #import "PINURLSessionManager.h"
 
 #import "NSData+ImageDetectors.h"
-#import "UIImage+DecodedImage.h"
+#import "PINImage+DecodedImage.h"
 
 #define PINRemoteImageManagerDefaultTimeout  60.0
 
@@ -166,7 +166,7 @@ static dispatch_once_t sharedDispatchToken;
         _concurrentOperationQueue = [[NSOperationQueue alloc] init];
         _concurrentOperationQueue.name = @"PINRemoteImageManager Concurrent Operation Queue";
         _concurrentOperationQueue.maxConcurrentOperationCount = NSOperationQueueDefaultMaxConcurrentOperationCount;
-        if ([[self class] isiOS8OrGreater]) {
+        if ([_concurrentOperationQueue respondsToSelector:@selector(qualityOfService)]) {
             _concurrentOperationQueue.qualityOfService = NSQualityOfServiceBackground;
         }
         _urlSessionTaskQueue = [[NSOperationQueue alloc] init];
@@ -453,7 +453,7 @@ static dispatch_once_t sharedDispatchToken;
                         {
                             typeof(self) strongSelf = weakSelf;
                             if (object) {
-                                UIImage *image = nil;
+                                PINImage *image = nil;
                                 FLAnimatedImage *animatedImage = nil;
                                 BOOL valid = [strongSelf handleCacheObject:cache
                                                                     object:object
@@ -554,7 +554,7 @@ static dispatch_once_t sharedDispatchToken;
             }
             if (result.image && error == nil) {
                 //If completionBlocks.count == 0, we've canceled before we were even able to start.
-                UIImage *image = processor(result, &processCost);
+                PINImage *image = processor(result, &processCost);
                 
                 if (image == nil) {
                     error = [NSError errorWithDomain:PINRemoteImageManagerErrorDomain
@@ -579,9 +579,9 @@ static dispatch_once_t sharedDispatchToken;
                          BOOL saveAsJPEG = (options & PINRemoteImageManagerSaveProcessedImageAsJPEG) != 0;
                          NSData *diskData = nil;
                          if (saveAsJPEG) {
-                             diskData = UIImageJPEGRepresentation(image, 1.0);
+                             diskData = PINImageJPEGRepresentation(image, 1.0);
                          } else {
-                             diskData = UIImagePNGRepresentation(image);
+                             diskData = PINImagePNGRepresentation(image);
                          }
                          
                          [strongSelf.cache.diskCache setObject:diskData
@@ -638,7 +638,7 @@ static dispatch_once_t sharedDispatchToken;
 
 - (BOOL)earlyReturnWithOptions:(PINRemoteImageManagerDownloadOptions)options url:(NSURL *)url object:(id)object completion:(PINRemoteImageManagerImageCompletion)completion
 {
-    UIImage *image = nil;
+    PINImage *image = nil;
     FLAnimatedImage *animatedImage = nil;
     PINRemoteImageResultType resultType = PINRemoteImageResultTypeNone;
 
@@ -647,8 +647,8 @@ static dispatch_once_t sharedDispatchToken;
 
     if (url != nil) {
         resultType = PINRemoteImageResultTypeMemoryCache;
-        if ([object isKindOfClass:[UIImage class]]) {
-            image = (UIImage *)object;
+        if ([object isKindOfClass:[PINImage class]]) {
+            image = (PINImage *)object;
         } else if (allowAnimated && [object isKindOfClass:[NSData class]] && [(NSData *)object pin_isGIF]) {
 #if USE_FLANIMATED_IMAGE
             animatedImage = [FLAnimatedImage animatedImageWithGIFData:object];
@@ -694,14 +694,14 @@ static dispatch_once_t sharedDispatchToken;
                       key:(NSString *)key
                   options:(PINRemoteImageManagerDownloadOptions)options
                  priority:(PINRemoteImageManagerPriority)priority
-                 outImage:(UIImage **)outImage
+                 outImage:(PINImage **)outImage
          outAnimatedImage:(FLAnimatedImage **)outAnimatedImage
 {
     BOOL ignoreGIF = (PINRemoteImageManagerDownloadOptionsIgnoreGIFs & options) != 0;
     FLAnimatedImage *animatedImage = nil;
-    UIImage *image = nil;
-    if ([object isKindOfClass:[UIImage class]]) {
-        image = (UIImage *)object;
+    PINImage *image = nil;
+    if ([object isKindOfClass:[PINImage class]]) {
+        image = (PINImage *)object;
     } else if ([object isKindOfClass:[NSData class]]) {
         NSData *imageData = (NSData *)object;
         if ([imageData pin_isGIF] && ignoreGIF == NO) {
@@ -710,7 +710,7 @@ static dispatch_once_t sharedDispatchToken;
 #endif
         } else {
             BOOL skipDecode = (options & PINRemoteImageManagerDownloadOptionsSkipDecode) != 0;
-            image = [UIImage pin_decodedImageWithData:imageData skipDecodeIfPossible:skipDecode];
+            image = [PINImage pin_decodedImageWithData:imageData skipDecodeIfPossible:skipDecode];
             //put in memory cache
             if (skipDecode == NO) {
                 NSUInteger cacheCost = [image size].width * [image size].height;
@@ -756,7 +756,7 @@ static dispatch_once_t sharedDispatchToken;
             NSError *remoteImageError = error;
             NSUInteger cacheCost = 0;
             FLAnimatedImage *animatedImage = nil;
-            UIImage *image = nil;
+            PINImage *image = nil;
             BOOL skipDecode = (options & PINRemoteImageManagerDownloadOptionsSkipDecode) != 0;
             
             if (remoteImageError == nil) {
@@ -767,7 +767,7 @@ static dispatch_once_t sharedDispatchToken;
                     //FLAnimatedImage handles its own caching of frames
                     cacheCost = [data length];
                 } else {
-                    image = [UIImage pin_decodedImageWithData:data skipDecodeIfPossible:skipDecode];
+                    image = [PINImage pin_decodedImageWithData:data skipDecodeIfPossible:skipDecode];
                     cacheCost = [image size].width * [image size].height;
                 }
             }
@@ -987,7 +987,7 @@ static dispatch_once_t sharedDispatchToken;
     CFTimeInterval requestTime = CACurrentMediaTime();
     
     __weak typeof(self) weakSelf = self;
-    __block UIImage *image = nil;
+    __block PINImage *image = nil;
     __block FLAnimatedImage *animatedImage = nil;
     
     void (^handleObject)(id object) = ^(id object)
@@ -995,8 +995,8 @@ static dispatch_once_t sharedDispatchToken;
         image = nil;
         animatedImage = nil;
         
-        if ([object isKindOfClass:[UIImage class]]) {
-            image = (UIImage *)object;
+        if ([object isKindOfClass:[PINImage class]]) {
+            image = (PINImage *)object;
         } else if ([object isKindOfClass:[NSData class]]) {
 #if USE_FLANIMATED_IMAGE
             animatedImage = [[FLAnimatedImage alloc] initWithAnimatedGIFData:object];
@@ -1064,11 +1064,11 @@ static dispatch_once_t sharedDispatchToken;
     
     [progressiveImage updateProgressiveImageWithData:data expectedNumberOfBytes:[dataTask countOfBytesExpectedToReceive]];
 
-    if (hasProgressBlocks && [[self class] isiOS8OrGreater]) {
+    if (hasProgressBlocks && [NSOperation instancesRespondToSelector:@selector(qualityOfService)]) {
         __weak typeof(self) weakSelf = self;
         [_concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityLow block:^{
             typeof(self) strongSelf = weakSelf;
-            UIImage *progressImage = [progressiveImage currentImage];
+            PINImage *progressImage = [progressiveImage currentImage];
             if (progressImage) {
                 [strongSelf lock];
                     NSString *cacheKey = [strongSelf cacheKeyForURL:[[dataTask originalRequest] URL] processorKey:nil];
@@ -1267,20 +1267,6 @@ static dispatch_once_t sharedDispatchToken;
 
 #pragma mark - Helpers
 
-
-+ (BOOL)isiOS8OrGreater
-{
-    static BOOL isiOS8OrGreater;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSString *reqSysVer = @"8";
-        NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
-        if ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending)
-            isiOS8OrGreater = YES;
-    });
-    return isiOS8OrGreater;
-}
-
 - (NSString *)cacheKeyForURL:(NSURL *)url processorKey:(NSString *)processorKey
 {
     NSString *cacheKey = [url absoluteString];
@@ -1298,15 +1284,14 @@ static dispatch_once_t sharedDispatchToken;
 {
     NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:block];
     operation.queuePriority = operationPriorityWithImageManagerPriority(priority);
-#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_8_0
-    if ([PINRemoteImageManager isiOS8OrGreater]) {
+    if ([operation respondsToSelector:@selector(qualityOfService)]) {
         operation.qualityOfService = NSOperationQualityOfServiceBackground;
     } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
         operation.threadPriority = 0.2;
+#pragma clang diagnostic pop
     }
-#else
-    operation.qualityOfService = NSOperationQualityOfServiceBackground;
-#endif
     [self addOperation:operation];
 }
 

@@ -6,56 +6,107 @@
 //
 //
 
-#import "UIImage+DecodedImage.h"
+#import "PINImage+DecodedImage.h"
 
 #import <ImageIO/ImageIO.h>
 
 #if __has_include(<webp/decode.h>)
-#import "UIImage+WebP.h"
+#import "PINImage+WebP.h"
 #endif
 
 #import "NSData+ImageDetectors.h"
 
+#ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
+@implementation NSImage (PINiOSMapping)
+
+- (CGImageRef)CGImage
+{
+    NSGraphicsContext *context = [[NSGraphicsContext currentContext] graphicsPort];
+    NSRect rect = NSMakeRect(0.0, 0.0, self.size.width, self.size.height);
+    return [self CGImageForProposedRect:&rect context:context hints:NULL];
+}
+
++ (NSImage *)imageWithData:(NSData *)imageData;
+{
+    return [[self alloc] initWithData:imageData];
+}
+
++ (NSImage *)imageWithContentsOfFile:(NSString *)path
+{
+    return path ? [[self alloc] initWithContentsOfFile:path] : nil;
+}
+
++ (NSImage *)imageWithCGImage:(CGImageRef)imageRef
+{
+    return [[self alloc] initWithCGImage:imageRef size:CGSizeZero];
+}
+
+@end
+#endif
+
+NSData *PINImageJPEGRepresentation(PINImage *image, CGFloat compressionQuality)
+{
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+    return UIImageJPEGRepresentation(image, compressionQuality);
+#else
+    NSBitmapImageRep *imageRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
+    NSDictionary *imageProperties = @{NSImageCompressionFactor : @(compressionQuality)};
+    return [imageRep representationUsingType:NSJPEGFileType properties:imageProperties];
+#endif
+}
+
+NSData *PINImagePNGRepresentation(PINImage *image) {
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+    return UIImagePNGRepresentation(image);
+#else
+    NSBitmapImageRep *imageRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
+    NSDictionary *imageProperties = @{NSImageCompressionFactor : @1};
+    return [imageRep representationUsingType:NSPNGFileType properties:imageProperties];
+#endif
+}
 
 
+@implementation PINImage (PINDecodedImage)
 
-@implementation UIImage (PINDecodedImage)
-
-+ (UIImage *)pin_decodedImageWithData:(NSData *)data
++ (PINImage *)pin_decodedImageWithData:(NSData *)data
 {
     return [self pin_decodedImageWithData:data skipDecodeIfPossible:NO];
 }
 
-+ (UIImage *)pin_decodedImageWithData:(NSData *)data skipDecodeIfPossible:(BOOL)skipDecodeIfPossible
++ (PINImage *)pin_decodedImageWithData:(NSData *)data skipDecodeIfPossible:(BOOL)skipDecodeIfPossible
 {
     if (data == nil) {
         return nil;
     }
     
     if ([data pin_isGIF]) {
-        return [UIImage imageWithData:data];
+        return [PINImage imageWithData:data];
     }
 #if __has_include(<webp/decode.h>)
     if ([data pin_isWebP]) {
-        return [UIImage pin_imageWithWebPData:data];
+        return [PINImage pin_imageWithWebPData:data];
     }
 #endif
     
     if (skipDecodeIfPossible) {
-        return [UIImage imageWithData:data];
+        return [PINImage imageWithData:data];
     }
     
-    UIImage *decodedImage = nil;
+    PINImage *decodedImage = nil;
     
     CGImageSourceRef imageSourceRef = CGImageSourceCreateWithData((CFDataRef)data, NULL);
     
     if (imageSourceRef) {
         CGImageRef imageRef = CGImageSourceCreateImageAtIndex(imageSourceRef, 0, (CFDictionaryRef)@{(NSString *)kCGImageSourceShouldCache : (NSNumber *)kCFBooleanFalse});
         if (imageRef) {
-            
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
             UIImageOrientation orientation = pin_UIImageOrienationFromImageSource(imageSourceRef);
             
             decodedImage = [self pin_decodedImageWithCGImageRef:imageRef orientation:orientation];
+            
+#else
+            decodedImage = [self pin_decodedImageWithCGImageRef:imageRef];
+#endif
             
             CGImageRelease(imageRef);
         }
@@ -66,13 +117,15 @@
     return decodedImage;
 }
 
-+ (UIImage *)pin_decodedImageWithCGImageRef:(CGImageRef)imageRef
++ (PINImage *)pin_decodedImageWithCGImageRef:(CGImageRef)imageRef
 {
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
     return [self pin_decodedImageWithCGImageRef:imageRef orientation:UIImageOrientationUp];
 }
 
-+ (UIImage *)pin_decodedImageWithCGImageRef:(CGImageRef)imageRef orientation:(UIImageOrientation) orientation
++ (PINImage *)pin_decodedImageWithCGImageRef:(CGImageRef)imageRef orientation:(UIImageOrientation)orientation
 {
+#endif
     BOOL opaque = YES;
     CGImageAlphaInfo alpha = CGImageGetAlphaInfo(imageRef);
     if (alpha == kCGImageAlphaFirst || alpha == kCGImageAlphaLast || alpha == kCGImageAlphaOnly || alpha == kCGImageAlphaPremultipliedFirst || alpha == kCGImageAlphaPremultipliedLast) {
@@ -93,25 +146,32 @@
     
     CGColorSpaceRelease(colorspace);
     
-    UIImage *decodedImage = nil;
+    PINImage *decodedImage = nil;
     if (ctx) {
         CGContextDrawImage(ctx, CGRectMake(0, 0, imageSize.width, imageSize.height), imageRef);
         
         CGImageRef newImage = CGBitmapContextCreateImage(ctx);
         
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
         decodedImage = [UIImage imageWithCGImage:newImage scale:1.0 orientation:orientation];
-        
+#else
+        decodedImage = [[NSImage alloc] initWithCGImage:newImage size:imageSize];
+#endif
         CGImageRelease(newImage);
         CGContextRelease(ctx);
         
     } else {
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
         decodedImage = [UIImage imageWithCGImage:imageRef scale:1.0 orientation:orientation];
+#else
+        decodedImage = [[NSImage alloc] initWithCGImage:imageRef size:imageSize];
+#endif
     }
     
     return decodedImage;
 }
 
-
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 UIImageOrientation pin_UIImageOrienationFromImageSource(CGImageSourceRef imageSourceRef) {
     UIImageOrientation orientation = UIImageOrientationUp;
     
@@ -165,22 +225,23 @@ UIImageOrientation pin_UIImageOrienationFromImageSource(CGImageSourceRef imageSo
     return orientation;
 }
 
+#endif
 
 @end
 
-@implementation UIImage (PINDecodedImage_Deprecated)
+@implementation PINImage (PINDecodedImage_Deprecated)
 
-+ (UIImage *)decodedImageWithData:(NSData *)data
++ (PINImage *)decodedImageWithData:(NSData *)data
 {
     return [self pin_decodedImageWithData:data];
 }
 
-+ (UIImage *)decodedImageWithData:(NSData *)data skipDecodeIfPossible:(BOOL)skipDecodeIfPossible
++ (PINImage *)decodedImageWithData:(NSData *)data skipDecodeIfPossible:(BOOL)skipDecodeIfPossible
 {
     return [self pin_decodedImageWithData:data skipDecodeIfPossible:skipDecodeIfPossible];
 }
 
-+ (UIImage *)decodedImageWithCGImageRef:(CGImageRef)imageRef
++ (PINImage *)decodedImageWithCGImageRef:(CGImageRef)imageRef
 {
     return [self pin_decodedImageWithCGImageRef:imageRef];
 }
