@@ -195,7 +195,7 @@
 
 - (void)setUpdateWithProgress:(BOOL)updateWithProgress
 {
-    [self setUpdateWithProgress:updateWithProgress];
+    self.pin_updateWithProgress = updateWithProgress;
 }
 
 - (void)setPlaceholderWithImage:(UIImage *)image
