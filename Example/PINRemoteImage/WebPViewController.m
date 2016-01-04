@@ -8,7 +8,7 @@
 
 #import "WebPViewController.h"
 
-#import <PINRemoteImage/UIImageView+PINRemoteImage.h>
+#import <PINRemoteImage/PINImageView+PINRemoteImage.h>
 
 @interface WebPViewController ()
 

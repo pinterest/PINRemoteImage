@@ -8,7 +8,7 @@
 
 #import "ProgressiveViewController.h"
 
-#import <PINRemoteImage/UIImageView+PINRemoteImage.h>
+#import <PINRemoteImage/PINImageView+PINRemoteImage.h>
 #import <PINCache/PINCache.h>
 
 @interface ProgressiveViewController ()

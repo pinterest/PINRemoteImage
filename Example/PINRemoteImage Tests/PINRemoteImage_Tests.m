@@ -10,7 +10,7 @@
 #import <XCTest/XCTest.h>
 #import <PINRemoteImage/PINRemoteImage.h>
 #import <PINRemoteImage/PINURLSessionManager.h>
-#import <PINRemoteImage/UIImageView+PINRemoteImage.h>
+#import <PINRemoteImage/PINImageView+PINRemoteImage.h>
 #if USE_FLANIMATED_IMAGE
 #import <FLAnimatedImage/FLAnimatedImage.h>
 #endif

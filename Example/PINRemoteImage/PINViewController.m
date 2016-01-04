@@ -9,7 +9,7 @@
 #import "PINViewController.h"
 
 #import <PINRemoteImage/PINRemoteImage.h>
-#import <PINRemoteImage/UIImageView+PINRemoteImage.h>
+#import <PINRemoteImage/PINImageView+PINRemoteImage.h>
 #import <PINCache/PINCache.h>
 #if USE_FLANIMATED_IMAGE
 #import <FLAnimatedImage/FLAnimatedImageView.h>

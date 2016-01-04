@@ -8,7 +8,7 @@
 
 #import "DegradedViewController.h"
 
-#import <PINRemoteImage/UIImageView+PINRemoteImage.h>
+#import <PINRemoteImage/PINImageView+PINRemoteImage.h>
 
 @interface DegradedViewController ()
 
