@@ -21,7 +21,7 @@
 
 - (CGImageRef)CGImage
 {
-    NSGraphicsContext *context = [[NSGraphicsContext currentContext] graphicsPort];
+    NSGraphicsContext *context = [NSGraphicsContext currentContext];
     NSRect rect = NSMakeRect(0.0, 0.0, self.size.width, self.size.height);
     return [self CGImageForProposedRect:&rect context:context hints:NULL];
 }
