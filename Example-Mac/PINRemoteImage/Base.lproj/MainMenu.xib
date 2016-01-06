@@ -14,7 +14,7 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
             <connections>
-                <outlet property="imageView" destination="8gg-pX-qsH" id="lOM-EA-FN2"/>
+                <outlet property="segmentedControl" destination="RO4-iv-KcU" id="3m9-j1-OdP"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -669,21 +669,54 @@
             </items>
         </menu>
         <window title="PINRemoteImage" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" unifiedTitleAndToolbar="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="335" y="390" width="480" height="360"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="800"/>
             <view key="contentView" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="480" height="360"/>
                 <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8gg-pX-qsH">
-                        <rect key="frame" x="20" y="181" width="203" height="159"/>
-                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="fvV-gK-nH1"/>
-                    </imageView>
-                </subviews>
             </view>
-            <point key="canvasLocation" x="306" y="347"/>
+            <toolbar key="toolbar" implicitIdentifier="ECE89FB8-3803-4EC1-80FA-A3A31DB0B167" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="uDT-d9-ekb">
+                <allowedToolbarItems>
+                    <toolbarItem implicitItemIdentifier="NSToolbarShowColorsItem" id="aif-PT-Dq9"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarShowFontsItem" id="K2B-bl-MIL"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarPrintItem" id="M0s-cg-TFk"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="tTN-Ln-qcZ"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="yrG-z8-rb5"/>
+                    <toolbarItem implicitItemIdentifier="94242F95-D4DC-435D-858C-7820289981E0" label="Switch Views" paletteLabel="Switch Views" id="hxg-fF-Cdm">
+                        <nil key="toolTip"/>
+                        <size key="minSize" width="104" height="24"/>
+                        <size key="maxSize" width="300" height="26"/>
+                        <segmentedControl key="view" verticalHuggingPriority="750" id="RO4-iv-KcU">
+                            <rect key="frame" x="0.0" y="14" width="300" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="selectOne" id="jqk-9E-gyT">
+                                <font key="font" metaFont="system"/>
+                                <segments>
+                                    <segment label="Scroll"/>
+                                    <segment label="WebP" selected="YES" tag="1"/>
+                                    <segment label="Progressive"/>
+                                    <segment label="Degraded"/>
+                                    <segment label="Processing"/>
+                                </segments>
+                            </segmentedCell>
+                            <connections>
+                                <action selector="segmentedControlChanged:" target="Voe-Tx-rLC" id="3Bi-fi-jgj"/>
+                            </connections>
+                        </segmentedControl>
+                    </toolbarItem>
+                </allowedToolbarItems>
+                <defaultToolbarItems>
+                    <toolbarItem reference="yrG-z8-rb5"/>
+                    <toolbarItem reference="hxg-fF-Cdm"/>
+                    <toolbarItem reference="yrG-z8-rb5"/>
+                </defaultToolbarItems>
+            </toolbar>
+            <connections>
+                <outlet property="delegate" destination="Voe-Tx-rLC" id="f1w-qE-xB0"/>
+            </connections>
+            <point key="canvasLocation" x="248" y="320"/>
         </window>
     </objects>
 </document>

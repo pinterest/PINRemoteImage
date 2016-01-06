@@ -8,6 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		42796FDA2C0B59B150630DA3 /* libPods-PINRemoteImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0141C54D0963FCEA0DB0381A /* libPods-PINRemoteImage.a */; };
+		9D9328C51C3C60E700E1F1D3 /* PINViewWithBackgroundColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D9328C41C3C60E700E1F1D3 /* PINViewWithBackgroundColor.m */; };
+		9D9328C91C3D09BB00E1F1D3 /* WebPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D9328C71C3D09BB00E1F1D3 /* WebPViewController.m */; };
+		9D9328CA1C3D09BB00E1F1D3 /* WebPViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9D9328C81C3D09BB00E1F1D3 /* WebPViewController.xib */; };
+		9D9328CF1C3D0C0D00E1F1D3 /* ScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D9328CD1C3D0C0D00E1F1D3 /* ScrollViewController.m */; };
+		9D9328D01C3D0C0D00E1F1D3 /* ScrollViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9D9328CE1C3D0C0D00E1F1D3 /* ScrollViewController.xib */; };
+		9D9328D41C3D131900E1F1D3 /* ProcessingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D9328D21C3D131900E1F1D3 /* ProcessingViewController.m */; };
+		9D9328D51C3D131900E1F1D3 /* ProcessingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9D9328D31C3D131900E1F1D3 /* ProcessingViewController.xib */; };
+		9D9328D91C3D243A00E1F1D3 /* ProgressiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D9328D71C3D243A00E1F1D3 /* ProgressiveViewController.m */; };
+		9D9328DA1C3D243A00E1F1D3 /* ProgressiveViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9D9328D81C3D243A00E1F1D3 /* ProgressiveViewController.xib */; };
+		9D9328DE1C3D275D00E1F1D3 /* DegradedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D9328DC1C3D275D00E1F1D3 /* DegradedViewController.m */; };
+		9D9328DF1C3D275D00E1F1D3 /* DegradedViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9D9328DD1C3D275D00E1F1D3 /* DegradedViewController.xib */; };
+		9D9328E21C3D489400E1F1D3 /* Kitten.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D9328E11C3D489400E1F1D3 /* Kitten.m */; };
+		9D97D09D1C3C4D960006C115 /* PINImageCollectionViewItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9D97D09B1C3C4D960006C115 /* PINImageCollectionViewItemView.xib */; };
 		9DC09DB81C39AB0D00C6451E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DC09DB71C39AB0D00C6451E /* AppDelegate.m */; };
 		9DC09DBB1C39AB0D00C6451E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DC09DBA1C39AB0D00C6451E /* main.m */; };
 		9DC09DBD1C39AB0D00C6451E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9DC09DBC1C39AB0D00C6451E /* Assets.xcassets */; };
@@ -28,6 +41,26 @@
 /* Begin PBXFileReference section */
 		0141C54D0963FCEA0DB0381A /* libPods-PINRemoteImage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PINRemoteImage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C7B3B480ECE116693899B73 /* Pods-PINRemoteImage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage/Pods-PINRemoteImage.debug.xcconfig"; sourceTree = "<group>"; };
+		9D9328C31C3C60E700E1F1D3 /* PINViewWithBackgroundColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINViewWithBackgroundColor.h; sourceTree = "<group>"; };
+		9D9328C41C3C60E700E1F1D3 /* PINViewWithBackgroundColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINViewWithBackgroundColor.m; sourceTree = "<group>"; };
+		9D9328C61C3D09BB00E1F1D3 /* WebPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebPViewController.h; sourceTree = "<group>"; };
+		9D9328C71C3D09BB00E1F1D3 /* WebPViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebPViewController.m; sourceTree = "<group>"; };
+		9D9328C81C3D09BB00E1F1D3 /* WebPViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WebPViewController.xib; sourceTree = "<group>"; };
+		9D9328CC1C3D0C0D00E1F1D3 /* ScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollViewController.h; sourceTree = "<group>"; };
+		9D9328CD1C3D0C0D00E1F1D3 /* ScrollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollViewController.m; sourceTree = "<group>"; };
+		9D9328CE1C3D0C0D00E1F1D3 /* ScrollViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScrollViewController.xib; sourceTree = "<group>"; };
+		9D9328D11C3D131900E1F1D3 /* ProcessingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProcessingViewController.h; sourceTree = "<group>"; };
+		9D9328D21C3D131900E1F1D3 /* ProcessingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProcessingViewController.m; sourceTree = "<group>"; };
+		9D9328D31C3D131900E1F1D3 /* ProcessingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProcessingViewController.xib; sourceTree = "<group>"; };
+		9D9328D61C3D243A00E1F1D3 /* ProgressiveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressiveViewController.h; sourceTree = "<group>"; };
+		9D9328D71C3D243A00E1F1D3 /* ProgressiveViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressiveViewController.m; sourceTree = "<group>"; };
+		9D9328D81C3D243A00E1F1D3 /* ProgressiveViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProgressiveViewController.xib; sourceTree = "<group>"; };
+		9D9328DB1C3D275D00E1F1D3 /* DegradedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DegradedViewController.h; sourceTree = "<group>"; };
+		9D9328DC1C3D275D00E1F1D3 /* DegradedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DegradedViewController.m; sourceTree = "<group>"; };
+		9D9328DD1C3D275D00E1F1D3 /* DegradedViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DegradedViewController.xib; sourceTree = "<group>"; };
+		9D9328E01C3D489400E1F1D3 /* Kitten.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Kitten.h; path = "../../Example-Shared/Kitten.h"; sourceTree = "<group>"; };
+		9D9328E11C3D489400E1F1D3 /* Kitten.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Kitten.m; path = "../../Example-Shared/Kitten.m"; sourceTree = "<group>"; };
+		9D97D09C1C3C4D960006C115 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/PINImageCollectionViewItemView.xib; sourceTree = "<group>"; };
 		9DC09DB31C39AB0D00C6451E /* PINRemoteImage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PINRemoteImage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9DC09DB61C39AB0D00C6451E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9DC09DB71C39AB0D00C6451E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -68,6 +101,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9D9328CB1C3D09BE00E1F1D3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9D97D09B1C3C4D960006C115 /* PINImageCollectionViewItemView.xib */,
+				9D9328C31C3C60E700E1F1D3 /* PINViewWithBackgroundColor.h */,
+				9D9328C41C3C60E700E1F1D3 /* PINViewWithBackgroundColor.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		9DC09DAA1C39AB0D00C6451E = {
 			isa = PBXGroup;
 			children = (
@@ -91,12 +134,29 @@
 		9DC09DB51C39AB0D00C6451E /* PINRemoteImage */ = {
 			isa = PBXGroup;
 			children = (
+				9DC09DB91C39AB0D00C6451E /* Supporting Files */,
+				9D9328CB1C3D09BE00E1F1D3 /* Views */,
+				9D9328E01C3D489400E1F1D3 /* Kitten.h */,
+				9D9328E11C3D489400E1F1D3 /* Kitten.m */,
 				9DC09DB61C39AB0D00C6451E /* AppDelegate.h */,
 				9DC09DB71C39AB0D00C6451E /* AppDelegate.m */,
-				9DC09DBC1C39AB0D00C6451E /* Assets.xcassets */,
 				9DC09DBE1C39AB0D00C6451E /* MainMenu.xib */,
 				9DC09DC11C39AB0D00C6451E /* Info.plist */,
-				9DC09DB91C39AB0D00C6451E /* Supporting Files */,
+				9D9328CC1C3D0C0D00E1F1D3 /* ScrollViewController.h */,
+				9D9328CD1C3D0C0D00E1F1D3 /* ScrollViewController.m */,
+				9D9328CE1C3D0C0D00E1F1D3 /* ScrollViewController.xib */,
+				9D9328C61C3D09BB00E1F1D3 /* WebPViewController.h */,
+				9D9328C71C3D09BB00E1F1D3 /* WebPViewController.m */,
+				9D9328C81C3D09BB00E1F1D3 /* WebPViewController.xib */,
+				9D9328D61C3D243A00E1F1D3 /* ProgressiveViewController.h */,
+				9D9328D71C3D243A00E1F1D3 /* ProgressiveViewController.m */,
+				9D9328D81C3D243A00E1F1D3 /* ProgressiveViewController.xib */,
+				9D9328DB1C3D275D00E1F1D3 /* DegradedViewController.h */,
+				9D9328DC1C3D275D00E1F1D3 /* DegradedViewController.m */,
+				9D9328DD1C3D275D00E1F1D3 /* DegradedViewController.xib */,
+				9D9328D11C3D131900E1F1D3 /* ProcessingViewController.h */,
+				9D9328D21C3D131900E1F1D3 /* ProcessingViewController.m */,
+				9D9328D31C3D131900E1F1D3 /* ProcessingViewController.xib */,
 			);
 			path = PINRemoteImage;
 			sourceTree = "<group>";
@@ -104,6 +164,7 @@
 		9DC09DB91C39AB0D00C6451E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				9DC09DBC1C39AB0D00C6451E /* Assets.xcassets */,
 				9DC09DBA1C39AB0D00C6451E /* main.m */,
 			);
 			name = "Supporting Files";
@@ -211,7 +272,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				9DC09DBD1C39AB0D00C6451E /* Assets.xcassets in Resources */,
+				9D9328DA1C3D243A00E1F1D3 /* ProgressiveViewController.xib in Resources */,
+				9D9328DF1C3D275D00E1F1D3 /* DegradedViewController.xib in Resources */,
+				9D9328CA1C3D09BB00E1F1D3 /* WebPViewController.xib in Resources */,
+				9D9328D01C3D0C0D00E1F1D3 /* ScrollViewController.xib in Resources */,
+				9D97D09D1C3C4D960006C115 /* PINImageCollectionViewItemView.xib in Resources */,
 				9DC09DC01C39AB0D00C6451E /* MainMenu.xib in Resources */,
+				9D9328D51C3D131900E1F1D3 /* ProcessingViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,8 +344,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9D9328CF1C3D0C0D00E1F1D3 /* ScrollViewController.m in Sources */,
+				9D9328C91C3D09BB00E1F1D3 /* WebPViewController.m in Sources */,
+				9D9328E21C3D489400E1F1D3 /* Kitten.m in Sources */,
+				9D9328DE1C3D275D00E1F1D3 /* DegradedViewController.m in Sources */,
 				9DC09DBB1C39AB0D00C6451E /* main.m in Sources */,
+				9D9328D41C3D131900E1F1D3 /* ProcessingViewController.m in Sources */,
+				9D9328D91C3D243A00E1F1D3 /* ProgressiveViewController.m in Sources */,
 				9DC09DB81C39AB0D00C6451E /* AppDelegate.m in Sources */,
+				9D9328C51C3C60E700E1F1D3 /* PINViewWithBackgroundColor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,6 +375,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		9D97D09B1C3C4D960006C115 /* PINImageCollectionViewItemView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9D97D09C1C3C4D960006C115 /* Base */,
+			);
+			name = PINImageCollectionViewItemView.xib;
+			sourceTree = "<group>";
+		};
 		9DC09DBE1C39AB0D00C6451E /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
