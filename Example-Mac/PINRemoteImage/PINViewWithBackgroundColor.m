@@ -21,6 +21,7 @@
     return self;
 }
 
+
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
     self = [super initWithCoder:coder];
@@ -31,20 +32,29 @@
 
 - (void)initPINViewWithBackgroundColor
 {
-    
+    self.wantsLayer = YES;
 }
 
 
-#pragma mark - Drawing
+#pragma mark - NSView
 
-- (void)drawRect:(NSRect)dirtyRect
+- (BOOL)wantsUpdateLayer
 {
-    [super drawRect:dirtyRect];
-    
-    if (self.backgroundColor != nil) {
-        [self.backgroundColor setFill];
-        NSRectFill(dirtyRect);
-    }
+    return YES;
+}
+
+- (void)updateLayer
+{
+    self.layer.backgroundColor = self.backgroundColor.CGColor;
+}
+
+
+#pragma mark - Setter
+
+- (void)setBackgroundColor:(NSColor *)backgroundColor
+{
+    _backgroundColor = backgroundColor;
+    [self setNeedsDisplay:YES];
 }
 
 @end
