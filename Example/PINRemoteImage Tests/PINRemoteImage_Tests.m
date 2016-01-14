@@ -671,7 +671,7 @@
     __block UIImage *image;
     [self.imageManager downloadImageWithURLs:@[[self JPEGURL_Small], [self JPEGURL_Medium], [self JPEGURL_Large]]
                                      options:PINRemoteImageManagerDownloadOptionsNone
-                                    progress:nil
+                               progressImage:nil
                                   completion:^(PINRemoteImageManagerResult *result)
     {
         image = result.image;
@@ -687,7 +687,7 @@
     [self.imageManager setCurrentBytesPerSecond:5];
     [self.imageManager downloadImageWithURLs:@[[self JPEGURL_Small], [self JPEGURL_Medium], [self JPEGURL_Large]]
                                      options:PINRemoteImageManagerDownloadOptionsNone
-                                    progress:nil
+                               progressImage:nil
                                   completion:^(PINRemoteImageManagerResult *result)
     {
         image = result.image;
@@ -699,7 +699,7 @@
     [self.imageManager.cache removeAllObjects];
     [self.imageManager downloadImageWithURLs:@[[self JPEGURL_Small], [self JPEGURL_Medium], [self JPEGURL_Large]]
                                      options:PINRemoteImageManagerDownloadOptionsNone
-                                    progress:nil
+                               progressImage:nil
                                   completion:^(PINRemoteImageManagerResult *result)
     {
         image = result.image;
@@ -713,7 +713,7 @@
     [self.imageManager setCurrentBytesPerSecond:100];
     [self.imageManager downloadImageWithURLs:@[[self JPEGURL_Small], [self JPEGURL_Medium], [self JPEGURL_Large]]
                                      options:PINRemoteImageManagerDownloadOptionsNone
-                                    progress:nil
+                               progressImage:nil
                                   completion:^(PINRemoteImageManagerResult *result)
     {
         image = result.image;
@@ -730,7 +730,7 @@
     [self.imageManager setCurrentBytesPerSecond:7];
     [self.imageManager downloadImageWithURLs:@[[self JPEGURL_Small], [self JPEGURL_Medium], [self JPEGURL_Large]]
                                      options:PINRemoteImageManagerDownloadOptionsNone
-                                    progress:nil
+                               progressImage:nil
                                   completion:^(PINRemoteImageManagerResult *result)
      {
          image = result.image;
@@ -758,7 +758,7 @@
     [self.imageManager setCurrentBytesPerSecond:7];
     [self.imageManager downloadImageWithURLs:@[[self JPEGURL_Small], [self JPEGURL_Large]]
                                      options:PINRemoteImageManagerDownloadOptionsNone
-                                    progress:nil
+                               progressImage:nil
                                   completion:^(PINRemoteImageManagerResult *result)
      {
          image = result.image;

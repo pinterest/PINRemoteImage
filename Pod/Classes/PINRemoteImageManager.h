@@ -159,7 +159,7 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
 
 /**
  Set the minimum BPS to download the highest quality image in a set.
- @see downloadImageWithURLs:options:progress:completion:
+ @see downloadImageWithURLs:options:progressImage:completion:
  
  @param highQualityBPSThreshold bytes per second minimum. Defaults to 500000.
  @param completion Completion to be called once highQualityBPSThreshold has been set.
@@ -168,7 +168,7 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
 
 /**
  Set the maximum BPS to download the lowest quality image in a set.
- @see downloadImageWithURLs:options:progress:completion:
+ @see downloadImageWithURLs:options:progressImage:completion:
 
  @param lowQualityBPSThreshold bytes per second maximum. Defaults to 50000.
  @param completion Completion to be called once lowQualityBPSThreshold has been set.
@@ -178,7 +178,7 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
 
 /**
  Set whether high quality images should be downloaded when a low quality image is cached if network connectivity has improved.
- @see downloadImageWithURLs:options:progress:completion:
+ @see downloadImageWithURLs:options:progressImage:completion:
  
  @param shouldUpgradeLowQualityImages if YES, low quality images will be 'upgraded'.
  @param completion Completion to be called once shouldUpgradeLowQualityImages has been set.
@@ -219,7 +219,7 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
  @param progressThresholds an array of progress thresholds at which to generate progressive images. progress thresholds should range from 0.00 - 1.00. Defaults to @[@0.00, @0.35, @0.65]
  @param completion Completion to be called once progressThresholds is set.
  */
-- (void)setProgressThresholds:(NSArray *)progressThresholds
+- (void)setProgressImageThresholds:(NSArray *)progressImageThresholds
                    completion:(dispatch_block_t)completion;
 
 /**
@@ -278,14 +278,14 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
  
  @param url NSURL where the image to download resides.
  @param options PINRemoteImageManagerDownloadOptions options with which to fetch the image.
- @param progress PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.
+ @param progressImage PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.
  
  @return An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).
  */
 - (NSUUID *)downloadImageWithURL:(NSURL *)url
                          options:(PINRemoteImageManagerDownloadOptions)options
-                        progress:(PINRemoteImageManagerImageCompletion)progress
+                   progressImage:(PINRemoteImageManagerImageCompletion)progressImage
                       completion:(PINRemoteImageManagerImageCompletion)completion;
 
 /**
@@ -316,7 +316,7 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
  */
 - (NSUUID *)downloadImageWithURL:(NSURL *)url
                          options:(PINRemoteImageManagerDownloadOptions)options
-                        progress:(PINRemoteImageManagerImageCompletion)progress
+                   progressImage:(PINRemoteImageManagerImageCompletion)progressImage
                 downloadProgress:(PINRemoteImageManagerDownloadProgress)downloadProgress
                       completion:(PINRemoteImageManagerImageCompletion)completion;
 
@@ -363,14 +363,14 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
  
  @param urls An array of NSURLs of increasing size.
  @param options PINRemoteImageManagerDownloadOptions options with which to fetch the image.
- @param progress PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.
+ @param progressImage PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.
  
  @return An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).
  */
 - (NSUUID *)downloadImageWithURLs:(NSArray *)urls
                           options:(PINRemoteImageManagerDownloadOptions)options
-                         progress:(PINRemoteImageManagerImageCompletion)progress
+                    progressImage:(PINRemoteImageManagerImageCompletion)progressImage
                        completion:(PINRemoteImageManagerImageCompletion)completion;
 
 /**

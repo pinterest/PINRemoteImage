@@ -18,7 +18,7 @@
 @property (nonatomic, copy) NSString *key;
 #endif
 
-- (void)addCallbacksWithCompletionBlock:(PINRemoteImageManagerImageCompletion)completionBlock progressBlock:(PINRemoteImageManagerImageCompletion)progressBlock downloadProgressBlock:(PINRemoteImageManagerDownloadProgress)downloadProgressBlock withUUID:(NSUUID *)UUID;
+- (void)addCallbacksWithCompletionBlock:(PINRemoteImageManagerImageCompletion)completionBlock progressImageBlock:(PINRemoteImageManagerImageCompletion)progressImageBlock downloadProgressBlock:(PINRemoteImageManagerDownloadProgress)downloadProgressBlock withUUID:(NSUUID *)UUID;
 - (void)removeCallbackWithUUID:(NSUUID *)UUID;
 - (void)callCompletionsWithQueue:(dispatch_queue_t)queue remove:(BOOL)remove withImage:(UIImage *)image animatedImage:(FLAnimatedImage *)animatedImage cached:(BOOL)cached error:(NSError *)error;
 //returns YES if no more attached completionBlocks

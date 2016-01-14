@@ -13,7 +13,7 @@
 @interface PINRemoteImageCallbacks : NSObject
 
 @property (nonatomic, strong) PINRemoteImageManagerImageCompletion completionBlock;
-@property (nonatomic, strong) PINRemoteImageManagerImageCompletion progressBlock;
+@property (nonatomic, strong) PINRemoteImageManagerImageCompletion progressImageBlock;
 @property (nonatomic, strong) PINRemoteImageManagerDownloadProgress downloadProgressBlock;
 @property (nonatomic, assign) CFTimeInterval requestTime;
 

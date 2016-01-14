@@ -29,7 +29,7 @@ Download a progressive jpeg and get attractive blurred updates:
 
 ```objc
 UIImageView *imageView = [[UIImageView alloc] init];
-[imageView setPin_updateWithProgress:YES];
+[imageView setPin_updateWithProgressImage:YES];
 [imageView pin_setImageFromURL:[NSURL URLWithString:@"http://pinterest.com/progressiveKitten.jpg"]];
 ```
 
