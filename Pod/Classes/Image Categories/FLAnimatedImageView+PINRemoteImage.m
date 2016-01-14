@@ -81,14 +81,14 @@
     [PINRemoteImageCategoryManager setDownloadImageOperationUUID:downloadImageOperationUUID onView:self];
 }
 
-- (BOOL)pin_updateWithProgress
+- (BOOL)pin_updateWithProgressImage
 {
-    return [PINRemoteImageCategoryManager updateWithProgressOnView:self];
+    return [PINRemoteImageCategoryManager updateWithProgressImageOnView:self];
 }
 
-- (void)setPin_updateWithProgress:(BOOL)updateWithProgress
+- (void)setPin_updateWithProgressImage:(BOOL)updateWithProgressImage
 {
-    [PINRemoteImageCategoryManager setUpdateWithProgressOnView:updateWithProgress onView:self];
+    [PINRemoteImageCategoryManager setUpdateWithProgressImageOnView:updateWithProgressImage onView:self];
 }
 
 - (void)pin_setPlaceholderWithImage:(UIImage *)image
@@ -193,14 +193,14 @@
     [self pin_setDownloadImageOperationUUID:downloadImageOperationUUID];
 }
 
-- (BOOL)updateWithProgress
+- (BOOL)updateWithProgressImage
 {
-    return [self pin_updateWithProgress];
+    return [self pin_updateWithProgressImage];
 }
 
-- (void)setUpdateWithProgress:(BOOL)updateWithProgress
+- (void)setUpdateWithProgressImage:(BOOL)updateWithProgressImage
 {
-    self.pin_updateWithProgress = updateWithProgress;
+    self.pin_updateWithProgressImage = updateWithProgressImage;
 }
 
 - (void)setPlaceholderWithImage:(UIImage *)image

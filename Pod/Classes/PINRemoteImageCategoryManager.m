@@ -126,14 +126,14 @@
     objc_setAssociatedObject(view, @selector(downloadImageOperationUUIDOnView:), downloadImageOperationUUID, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-+ (BOOL)updateWithProgressOnView:(id <PINRemoteImageCategory>)view
++ (BOOL)updateWithProgressImageOnView:(id <PINRemoteImageCategory>)view
 {
-    return [(NSNumber *)objc_getAssociatedObject(view, @selector(updateWithProgressOnView:)) boolValue];
+    return [(NSNumber *)objc_getAssociatedObject(view, @selector(updateWithProgressImageOnView:)) boolValue];
 }
 
-+ (void)setUpdateWithProgressOnView:(BOOL)updateWithProgress onView:(id <PINRemoteImageCategory>)view
++ (void)setUpdateWithProgressImageOnView:(BOOL)updateWithProgressImage onView:(id <PINRemoteImageCategory>)view
 {
-    objc_setAssociatedObject(view, @selector(updateWithProgressOnView:), [NSNumber numberWithBool:updateWithProgress], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(view, @selector(updateWithProgressImageOnView:), [NSNumber numberWithBool:updateWithProgressImage], OBJC_ASSOCIATION_RETAIN);
 }
 
 + (void)cancelImageDownloadOnView:(id <PINRemoteImageCategory>)view
@@ -190,7 +190,7 @@
     BOOL updateWithFullResult = [view respondsToSelector:@selector(pin_updateUIWithRemoteImageManagerResult:)];
     
     PINRemoteImageManagerImageCompletion internalProgress = nil;
-    if ([self updateWithProgressOnView:view] && processorKey.length <= 0 && processor == nil) {
+    if ([self updateWithProgressImageOnView:view] && processorKey.length <= 0 && processor == nil) {
         internalProgress = ^(PINRemoteImageManagerResult *result)
         {
             void (^mainQueue)() = ^{
@@ -259,7 +259,7 @@
     if (urls.count > 1) {
         downloadImageOperationUUID = [[PINRemoteImageManager sharedImageManager] downloadImageWithURLs:urls
                                                                                                options:options
-                                                                                              progress:internalProgress
+                                                                                         progressImage:internalProgress
                                                                                             completion:internalCompletion];
     } else if (processorKey.length > 0 && processor) {
         downloadImageOperationUUID = [[PINRemoteImageManager sharedImageManager] downloadImageWithURL:urls[0]
@@ -270,7 +270,7 @@
     } else {
         downloadImageOperationUUID = [[PINRemoteImageManager sharedImageManager] downloadImageWithURL:urls[0]
                                                                                               options:options
-                                                                                             progress:internalProgress
+                                                                                        progressImage:internalProgress
                                                                                            completion:internalCompletion];
     }
     

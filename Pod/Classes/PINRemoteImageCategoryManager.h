@@ -76,9 +76,9 @@
 
 + (void)setDownloadImageOperationUUID:(NSUUID *)downloadImageOperationUUID onView:(id <PINRemoteImageCategory>)view;
 
-+ (BOOL)updateWithProgressOnView:(id <PINRemoteImageCategory>)view;
++ (BOOL)updateWithProgressImageOnView:(id <PINRemoteImageCategory>)view;
 
-+ (void)setUpdateWithProgressOnView:(BOOL)updateWithProgress onView:(id <PINRemoteImageCategory>)view;
++ (void)setUpdateWithProgressImageOnView:(BOOL)updateWithProgressImage onView:(id <PINRemoteImageCategory>)view;
 
 @end
 
@@ -209,7 +209,7 @@
  
  @return BOOL value indicating whether the view should update with progress images
  */
-@property (nonatomic, assign) BOOL pin_updateWithProgress;
+@property (nonatomic, assign) BOOL pin_updateWithProgressImage;
 
 //Handle
 - (void)pin_setPlaceholderWithImage:(UIImage *)image;
@@ -355,7 +355,7 @@
 
  @return BOOL value indicating whether the view should update with progress images
  */
-@property (nonatomic, assign) BOOL updateWithProgress __attribute((deprecated("use pin_@property (nonatomic, assign) BOOL updateWithProgress")));
+@property (nonatomic, assign) BOOL updateWithProgressImage __attribute((deprecated("use pin_@property (nonatomic, assign) BOOL updateWithProgress")));
 
 //Handle
 - (void)setPlaceholderWithImage:(UIImage *)image __attribute((deprecated("use pin_setPlaceholderWithImage:")));

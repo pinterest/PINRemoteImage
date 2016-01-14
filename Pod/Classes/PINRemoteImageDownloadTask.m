@@ -15,24 +15,24 @@
 
 - (BOOL)hasProgressBlocks
 {
-    __block BOOL hasProgressBlocks = NO;
+    __block BOOL hasProgressImageBlocks = NO;
     [self.callbackBlocks enumerateKeysAndObjectsUsingBlock:^(NSUUID *UUID, PINRemoteImageCallbacks *callback, BOOL *stop) {
-        if (callback.progressBlock) {
-            hasProgressBlocks = YES;
+        if (callback.progressImageBlock) {
+            hasProgressImageBlocks = YES;
             *stop = YES;
         }
     }];
-    return hasProgressBlocks;
+    return hasProgressImageBlocks;
 }
 
 - (void)callProgressWithQueue:(dispatch_queue_t)queue withImage:(UIImage *)image
 {
     [self.callbackBlocks enumerateKeysAndObjectsUsingBlock:^(NSUUID *UUID, PINRemoteImageCallbacks *callback, BOOL *stop) {
-        if (callback.progressBlock != nil) {
+        if (callback.progressImageBlock != nil) {
             PINLog(@"calling progress for UUID: %@ key: %@", UUID, self.key);
             dispatch_async(queue, ^
             {
-                callback.progressBlock([PINRemoteImageManagerResult imageResultWithImage:image
+                callback.progressImageBlock([PINRemoteImageManagerResult imageResultWithImage:image
                                                                           animatedImage:nil
                                                                           requestLength:CACurrentMediaTime() - callback.requestTime
                                                                                   error:nil
