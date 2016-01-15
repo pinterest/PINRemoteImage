@@ -202,7 +202,7 @@
  
  @param downloadImageOperationUUID NSUUID associated with a PINRemoteImage task.
  */
-- (void)pin_setDownloadImageOperationUUID:(nonnull NSUUID *)downloadImageOperationUUID;
+- (void)pin_setDownloadImageOperationUUID:(nullable NSUUID *)downloadImageOperationUUID;
 
 /**
  Whether the view should update with progress images (such as those provided by progressive JPEG images).
@@ -348,7 +348,7 @@
 
  @param downloadImageOperationUUID NSUUID associated with a PINRemoteImage task.
  */
-- (void)setDownloadImageOperationUUID:(nonnull NSUUID *)downloadImageOperationUUID __attribute((deprecated("use pin_setDownloadImageOperationUUID:")));
+- (void)setDownloadImageOperationUUID:(nullable NSUUID *)downloadImageOperationUUID __attribute((deprecated("use pin_setDownloadImageOperationUUID:")));
 
 /**
  Whether the view should update with progress images (such as those provided by progressive JPEG images).
