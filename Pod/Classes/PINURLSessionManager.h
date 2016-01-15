@@ -11,20 +11,20 @@
 @protocol PINURLSessionManagerDelegate <NSObject>
 
 @required
-- (void)didReceiveData:(NSData *)data forTask:(NSURLSessionTask *)task;
-- (void)didCompleteTask:(NSURLSessionTask *)task withError:(NSError *)error;
+- (void)didReceiveData:(nonnull NSData *)data forTask:(nonnull NSURLSessionTask *)task;
+- (void)didCompleteTask:(nonnull NSURLSessionTask *)task withError:(nullable NSError *)error;
 
 @optional
-- (void)didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge forTask:(NSURLSessionTask *)task completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler;
+- (void)didReceiveAuthenticationChallenge:(nonnull NSURLAuthenticationChallenge *)challenge forTask:(nullable NSURLSessionTask *)task completionHandler:(nonnull void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential  * _Nullable credential))completionHandler;
 
 
 @end
 
 @interface PINURLSessionManager : NSObject
 
-- (instancetype)initWithSessionConfiguration:(NSURLSessionConfiguration *)configuration;
+- (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)configuration;
 
-- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request completionHandler:(void (^)(NSURLResponse *response, NSError *error))completionHandler;
+- (nonnull NSURLSessionDataTask *)dataTaskWithRequest:(nonnull NSURLRequest *)request completionHandler:(nullable void (^)(NSURLResponse * _Nonnull response, NSError * _Nullable error))completionHandler;
 
 - (void)invalidateSessionAndCancelTasks;
 

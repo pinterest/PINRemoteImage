@@ -12,12 +12,12 @@
 
 @interface PINRemoteImageDownloadTask : PINRemoteImageTask
 
-@property (nonatomic, strong) PINDataTaskOperation *urlSessionTaskOperation;
+@property (nonatomic, strong, nullable) PINDataTaskOperation *urlSessionTaskOperation;
 @property (nonatomic, assign) CFTimeInterval sessionTaskStartTime;
 @property (nonatomic, assign) CFTimeInterval sessionTaskEndTime;
 @property (nonatomic, assign) BOOL hasProgressBlocks;
-@property (nonatomic, strong) PINProgressiveImage *progressImage;
+@property (nonatomic, strong, nullable) PINProgressiveImage *progressImage;
 
-- (void)callProgressWithQueue:(dispatch_queue_t)queue withImage:(UIImage *)image;
+- (void)callProgressWithQueue:(nonnull dispatch_queue_t)queue withImage:(nonnull UIImage *)image;
 
 @end
