@@ -95,6 +95,16 @@ static CIContext *CPUProcessingContext = nil;
 
 #pragma mark - NSNotifications
 
++ (dispatch_queue_t)processingQueue
+{
+    static dispatch_queue_t processingQueue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        processingQueue = dispatch_queue_create("PINProgressiveImage Serial Processing Queue", DISPATCH_QUEUE_SERIAL);
+    });
+    return processingQueue;
+}
+
 - (void)willResignActive:(NSNotification *)notification
 {
     [self.lock lock];
@@ -378,7 +388,10 @@ static CIContext *CPUProcessingContext = nil;
         
         CIImage *outputImage = [gaussianFilter outputImage];
         if (outputImage) {
-            CGImageRef outputImageRef = [processingContext createCGImage:outputImage fromRect:CGRectMake(0, 0, inputImage.size.width, inputImage.size.height)];
+            __block CGImageRef outputImageRef = nil;
+            dispatch_sync([[self class] processingQueue], ^{
+                outputImageRef = [processingContext createCGImage:outputImage fromRect:CGRectMake(0, 0, inputImage.size.width, inputImage.size.height)];
+            });
             
             if (outputImageRef) {
                 outputUIImage = [UIImage imageWithCGImage:outputImageRef];
