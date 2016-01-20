@@ -34,24 +34,46 @@ imageView.pin_setImageFromURL(NSURL(string: "https://pinterest.com/kitten.jpg")!
     
 Download a progressive jpeg and get attractive blurred updates:
 
+**Objective-C**
 ```objc
 UIImageView *imageView = [[UIImageView alloc] init];
 [imageView setPin_updateWithProgress:YES];
 [imageView pin_setImageFromURL:[NSURL URLWithString:@"http://pinterest.com/progressiveKitten.jpg"]];
 ```
 
+**Swift**
+```swift
+let imageView = UIImageView()
+imageView.pin_updateWithProgress = true
+imageView.pin_setImageFromURL(NSURL(string: "https://pinterest.com/progressiveKitten.jpg")!)
+```
+
 Download a WebP file
 
+**Objective-C**
 ```objc
 UIImageView *imageView = [[UIImageView alloc] init];
 [imageView pin_setImageFromURL:[NSURL URLWithString:@"http://pinterest.com/googleKitten.webp"]];
 ```
 
+**Swift**
+```swift
+let imageView = UIImageView()
+imageView.pin_setImageFromURL(NSURL(string: "https://pinterest.com/googleKitten.webp")!)
+```
+
 Download a GIF and display with FLAnimatedImageView
 
+**Objective-C**
 ```objc
 FLAnimatedImageView *animatedImageView = [[FLAnimatedImageView alloc] init];
 [animatedImageView pin_setImageFromURL:[NSURL URLWithString:@"http://pinterest.com/flyingKitten.gif"]];
+```
+
+**Swift**
+```swift
+let animatedImageView = FLAnimatedImageView()
+animatedImageView.pin_setImageFromURL(NSURL(string: "http://pinterest.com/flyingKitten.gif")!)
 ```
 
 Download and process an image
