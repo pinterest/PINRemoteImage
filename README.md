@@ -20,9 +20,16 @@ PINRemoteImageManager's methods. There are built-in categories on UIImageView, F
 
 Download an image and set it on an image view:
 
+**Objective-C**
 ```objc
 UIImageView *imageView = [[UIImageView alloc] init];
 [imageView pin_setImageFromURL:[NSURL URLWithString:@"http://pinterest.com/kitten.jpg"]];
+```
+
+**Swift**
+```swift
+let imageView = UIImageView()
+imageView.pin_setImageFromURL(NSURL(string: "https://pinterest.com/kitten.jpg")!)
 ```
     
 Download a progressive jpeg and get attractive blurred updates:
