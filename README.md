@@ -78,6 +78,7 @@ animatedImageView.pin_setImageFromURL(NSURL(string: "http://pinterest.com/flying
 
 Download and process an image
 
+**Objective-C**
 ```objc
 UIImageView *imageView = [[UIImageView alloc] init];
 [self.imageView pin_setImageFromURL:[NSURL URLWithString:@"https://s-media-cache-ak0.pinimg.com/736x/5b/c6/c5/5bc6c5387ff6f104fd642f2b375efba3.jpg"] processorKey:@"rounded" processor:^UIImage *(PINRemoteImageManagerResult *result, NSUInteger *cost)
@@ -104,6 +105,39 @@ UIImageView *imageView = [[UIImageView alloc] init];
      UIGraphicsEndImageContext();
      return processedImage;
  }];
+```
+
+**Swift**
+```swift
+let imageView = FLAnimatedImageView()
+imageView.pin_setImageFromURL(NSURL(string: "https://s-media-cache-ak0.pinimg.com/736x/5b/c6/c5/5bc6c5387ff6f104fd642f2b375efba3.jpg")!, processorKey: "rounded") { (result :PINRemoteImageManagerResult!, cost : UnsafeMutablePointer<UInt>) -> UIImage! in
+
+    let targetSize = CGSize(width: 200, height: 300)
+    let imageRect = CGRectMake(0, 0, targetSize.width, targetSize.height)
+    
+    UIGraphicsBeginImageContext(imageRect.size)
+    let bezierPath = UIBezierPath(roundedRect: imageRect, cornerRadius: 7.0)
+    bezierPath.addClip()
+    
+    let sizeMultiplier = max(targetSize.width / result.image.size.width, targetSize.height / result.image.size.height)
+    
+    var drawRect = CGRect(x: 0, y: 0, width: result.image.size.width * sizeMultiplier, height: result.image.size.height * sizeMultiplier)
+    
+    if CGRectGetMaxX(drawRect) > CGRectGetMaxX(imageRect) {
+        drawRect.origin.x -= (CGRectGetMaxX(drawRect) - CGRectGetMaxX(imageRect)) / 2
+    }
+    
+    if CGRectGetMaxY(drawRect) > CGRectGetMaxY(imageRect) {
+        drawRect.origin.y -= (CGRectGetMaxY(drawRect) - CGRectGetMaxY(imageRect)) / 2
+    }
+    
+    result.image.drawInRect(drawRect)
+    
+    let processedImage = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    
+    return processedImage
+}
 ```
 
 Handle Authentication
