@@ -9,7 +9,7 @@
 #import "PINProgressiveImage.h"
 
 #import <ImageIO/ImageIO.h>
-#import <CoreImage/CoreImage.h>
+#import <Accelerate/Accelerate.h>
 
 #import "PINRemoteImage.h"
 #import "UIImage+DecodedImage.h"
@@ -31,8 +31,6 @@
 @property (nonatomic, assign) CFTimeInterval scanTime;
 #endif
 
-@property (nonatomic, assign) BOOL inBackground;
-
 @end
 
 @implementation PINProgressiveImage
@@ -41,21 +39,11 @@
 @synthesize estimatedRemainingTimeThreshold = _estimatedRemainingTimeThreshold;
 @synthesize startTime = _startTime;
 
-static CIContext *GPUProcessingContext = nil;
-static CIContext *CPUProcessingContext = nil;
-
 - (instancetype)init
 {
     if (self = [super init]) {
         self.lock = [[NSLock alloc] init];
         self.lock.name = @"PINProgressiveImage";
-        
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            //CIContexts are immutable and threadsafe
-            CPUProcessingContext = [CIContext contextWithOptions:@{kCIContextUseSoftwareRenderer : @YES}];
-            GPUProcessingContext = [CIContext contextWithOptions:@{kCIContextUseSoftwareRenderer : @NO, kCIContextPriorityRequestLow: @YES}];
-        });
         
         _imageSource = CGImageSourceCreateIncremental(NULL);;
         self.size = CGSizeZero;
@@ -68,14 +56,6 @@ static CIContext *CPUProcessingContext = nil;
         self.scannedByte = 0;
 #if DEBUG
         self.scanTime = 0;
-#endif
-        
-#if PIN_APP_EXTENSIONS
-        self.inBackground = YES;
-#else
-        self.inBackground = [[UIApplication sharedApplication] applicationState] != UIApplicationStateActive;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
 #endif
     }
     return self;
@@ -91,32 +71,6 @@ static CIContext *CPUProcessingContext = nil;
 #if !PIN_APP_EXTENSIONS
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 #endif
-}
-
-#pragma mark - NSNotifications
-
-+ (dispatch_queue_t)processingQueue
-{
-    static dispatch_queue_t processingQueue;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        processingQueue = dispatch_queue_create("PINProgressiveImage Serial Processing Queue", DISPATCH_QUEUE_SERIAL);
-    });
-    return processingQueue;
-}
-
-- (void)willResignActive:(NSNotification *)notification
-{
-    [self.lock lock];
-        self.inBackground = YES;
-    [self.lock unlock];
-}
-
-- (void)willEnterForeground:(NSNotification *)notification
-{
-    [self.lock lock];
-        self.inBackground = NO;
-    [self.lock unlock];
 }
 
 #pragma mark - public
@@ -354,59 +308,137 @@ static CIContext *CPUProcessingContext = nil;
 }
 
 //Must be called within lock
+//Heavily cribbed from https://developer.apple.com/library/ios/samplecode/UIImageEffects/Listings/UIImageEffects_UIImageEffects_m.html#//apple_ref/doc/uid/DTS40013396-UIImageEffects_UIImageEffects_m-DontLinkElementID_9
 - (UIImage *)postProcessImage:(UIImage *)inputImage withProgress:(float)progress
 {
+    UIImage *outputUIImage = nil;
     CGImageRef inputImageRef = CGImageRetain(inputImage.CGImage);
     if (inputImageRef == nil) {
         return nil;
     }
     
-    CIFilter *gaussianFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
-    [gaussianFilter setDefaults];
-    
-    UIImage *outputUIImage = nil;
-    
-    CIContext *processingContext = GPUProcessingContext;
-    if (self.inBackground) {
-        processingContext = CPUProcessingContext;
-    }
-    
-    CGSize maxInput = processingContext.inputImageMaximumSize;
-    CGSize maxOutput = processingContext.outputImageMaximumSize;
+    CGSize maxSize = CGSizeMake(1024, 1024);
     CGSize inputSize = inputImage.size;
-    if (maxInput.height < inputSize.height ||
-        maxInput.width < inputSize.width ||
-        maxOutput.height < inputSize.height ||
-        maxOutput.width < inputSize.width) {
+    if (inputSize.width < 1 ||
+        inputSize.height < 1 ||
+        maxSize.height < inputSize.height ||
+        maxSize.width < inputSize.width) {
         CGImageRelease(inputImageRef);
         return nil;
     }
     
-    if (processingContext && gaussianFilter) {
-        [gaussianFilter setValue:[CIImage imageWithCGImage:inputImageRef]
-                          forKey:kCIInputImageKey];
+    CGFloat radius = MAX(__FLT_EPSILON__, (inputImage.size.width / 25.0) * MAX(0, 1.0 - progress));
+    radius *= inputImage.scale;
+    
+    UIGraphicsBeginImageContextWithOptions(inputSize, YES, inputImage.scale);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    
+    if (ctx) {
+        CGContextScaleCTM(ctx, 1.0, -1.0);
+        CGContextTranslateCTM(ctx, 0, -inputSize.height);
         
-        NSNumber *radius = @((inputImage.size.width / 50.0) * MAX(0, 1.0 - progress));
-        [gaussianFilter setValue:radius
-                          forKey:kCIInputRadiusKey];
+        vImage_Buffer effectInBuffer;
+        vImage_Buffer scratchBuffer;
         
-        CIImage *outputImage = [gaussianFilter outputImage];
-        if (outputImage) {
-            __block CGImageRef outputImageRef = nil;
-            dispatch_sync([[self class] processingQueue], ^{
-                outputImageRef = [processingContext createCGImage:outputImage fromRect:CGRectMake(0, 0, inputImage.size.width, inputImage.size.height)];
-            });
-            
-            if (outputImageRef) {
-                outputUIImage = [UIImage imageWithCGImage:outputImageRef];
-                CGImageRelease(outputImageRef);
+        vImage_Buffer *inputBuffer;
+        vImage_Buffer *outputBuffer;
+        
+        vImage_CGImageFormat format = {
+            .bitsPerComponent = 8,
+            .bitsPerPixel = 32,
+            .colorSpace = NULL,
+            // (kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little)
+            // requests a BGRA buffer.
+            .bitmapInfo = kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little,
+            .version = 0,
+            .decode = NULL,
+            .renderingIntent = kCGRenderingIntentDefault
+        };
+        
+        vImage_Error e = vImageBuffer_InitWithCGImage(&effectInBuffer, &format, NULL, inputImage.CGImage, kvImagePrintDiagnosticsToConsole);
+        if (e == kvImageNoError)
+        {
+            e = vImageBuffer_Init(&scratchBuffer, effectInBuffer.height, effectInBuffer.width, format.bitsPerPixel, kvImageNoFlags);
+            if (e == kvImageNoError) {
+                inputBuffer = &effectInBuffer;
+                outputBuffer = &scratchBuffer;
+                
+                // A description of how to compute the box kernel width from the Gaussian
+                // radius (aka standard deviation) appears in the SVG spec:
+                // http://www.w3.org/TR/SVG/filters.html#feGaussianBlurElement
+                //
+                // For larger values of 's' (s >= 2.0), an approximation can be used: Three
+                // successive box-blurs build a piece-wise quadratic convolution kernel, which
+                // approximates the Gaussian kernel to within roughly 3%.
+                //
+                // let d = floor(s * 3*sqrt(2*pi)/4 + 0.5)
+                //
+                // ... if d is odd, use three box-blurs of size 'd', centered on the output pixel.
+                //
+                if (radius - 2. < __FLT_EPSILON__)
+                    radius = 2.;
+                uint32_t wholeRadius = floor((radius * 3. * sqrt(2 * M_PI) / 4 + 0.5) / 2);
+                
+                wholeRadius |= 1; // force wholeRadius to be odd so that the three box-blur methodology works.
+                
+                NSInteger tempBufferSize = vImageBoxConvolve_ARGB8888(inputBuffer, outputBuffer, NULL, 0, 0, wholeRadius, wholeRadius, NULL, kvImageGetTempBufferSize | kvImageEdgeExtend);
+                void *tempBuffer = malloc(tempBufferSize);
+                
+                if (tempBuffer) {
+                    //errors can be ignored because we've passed in allocated memory
+                    vImageBoxConvolve_ARGB8888(inputBuffer, outputBuffer, tempBuffer, 0, 0, wholeRadius, wholeRadius, NULL, kvImageEdgeExtend);
+                    vImageBoxConvolve_ARGB8888(outputBuffer, inputBuffer, tempBuffer, 0, 0, wholeRadius, wholeRadius, NULL, kvImageEdgeExtend);
+                    vImageBoxConvolve_ARGB8888(inputBuffer, outputBuffer, tempBuffer, 0, 0, wholeRadius, wholeRadius, NULL, kvImageEdgeExtend);
+                    
+                    free(tempBuffer);
+                    
+                    //switch input and output
+                    vImage_Buffer *temp = inputBuffer;
+                    inputBuffer = outputBuffer;
+                    outputBuffer = temp;
+                    
+                    CGImageRef effectCGImage = vImageCreateCGImageFromBuffer(inputBuffer, &format, &cleanupBuffer, NULL, kvImageNoAllocate, NULL);
+                    if (effectCGImage == NULL) {
+                        //if creating the cgimage failed, the cleanup buffer on input buffer will not be called, we must dealloc ourselves
+                        free(inputBuffer->data);
+                    } else {
+                        // draw effect image
+                        CGContextSaveGState(ctx);
+                        CGContextDrawImage(ctx, CGRectMake(0, 0, inputSize.width, inputSize.height), effectCGImage);
+                        CGContextRestoreGState(ctx);
+                        CGImageRelease(effectCGImage);
+                    }
+                    
+                    // Cleanup
+                    free(outputBuffer->data);
+                    
+                    outputUIImage = UIGraphicsGetImageFromCurrentImageContext();
+                }
+            } else {
+                if (scratchBuffer.data) {
+                    free(scratchBuffer.data);
+                }
+                free(effectInBuffer.data);
+            }
+        } else {
+            if (effectInBuffer.data) {
+                free(effectInBuffer.data);
             }
         }
     }
     
+    UIGraphicsEndImageContext();
     CGImageRelease(inputImageRef);
     
     return outputUIImage;
+}
+
+//| ----------------------------------------------------------------------------
+//  Helper function to handle deferred cleanup of a buffer.
+//
+static void cleanupBuffer(void *userData, void *buf_data)
+{
+    free(buf_data);
 }
 
 @end
