@@ -6,16 +6,16 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Build status](https://badge.buildkite.com/556f751bb6455e96687a5f8fb05a65f2df9db8b033121b8c3d.svg?branch=master&style=flat)](https://buildkite.com/pinterest/pinremoteimage)
 
-[PINRemoteImageManager](Pod/Classes/PINRemoteImageManager.h) is an image downloading, processing and caching manager. It uses the concept of download and processing tasks to ensure that even if multiple calls to download or process an image are made, it only occurs one time (unless an item is no longer in the cache). PINRemoteImageManager is backed by GCD and safe to access from multiple threads simultaneously. It ensures that images are decoded off the main thread so that animation performance isn't affected. None of its exposed methods allow for synchronous access. However, it is optimized to call completions on the calling thread if an item is in its memory cache.
+[PINRemoteImageManager](Pod/Classes/PINRemoteImageManager.h) is an image downloading, processing and caching manager. It uses the concept of download and processing tasks to ensure that even if multiple calls to download or process an image are made, it only occurs one time (unless an item is no longer in the cache). PINRemoteImageManager is backed by **GCD** and safe to **access** from **multiple threads** simultaneously. It ensures that images are decoded off the main thread so that animation performance isn't affected. None of its exposed methods allow for synchronous access. However, it is optimized to call completions on the calling thread if an item is in its memory cache.
 
-PINRemoteImage supports downloading many types of files. It, of course, supports both PNGs and JPGs. It also supports decoding WebP images if Google's library is available. It even supports returning [FLAnimatedImages](https://github.com/Flipboard/FLAnimatedImage) if it's compiled in (though this can be disabled).
+PINRemoteImage supports downloading many types of files. It, of course, **supports** both **PNGs** and **JPGs**. It also supports decoding **WebP** images if Google's library is available. It even supports **GIFs** via returning [FLAnimatedImages](https://github.com/Flipboard/FLAnimatedImage) if it's compiled in (though this can be disabled).
 
-PINRemoteImage also has two methods to improve the experience of downloading images on slow network connections. The first is support for progressive JPGs. This isn't any old support for progressive JPGs though: PINRemoteImage adds an attractive blur to progressive scans before returning them.
+PINRemoteImage also has two methods to improve the experience of downloading images on slow network connections. The first is support for **progressive JPGs**. This isn't any old support for progressive JPGs though: PINRemoteImage adds an attractive blur to progressive scans before returning them.
 
 ![Progressive JPG with Blur](/progressive.gif "Looks better on device.")
 
 [PINRemoteImageCategoryManager](Pod/Classes/PINRemoteImageCategoryManager.h) defines a protocol which UIView subclasses can implement and provide easy access to 
-PINRemoteImageManager's methods. There are built-in categories on UIImageView, FLAnimatedImageView and UIButton, and it's very easy to implement a new category. See [PINImageView+PINRemoteImage](/Pod/Classes/Image Categories/PINImageView+PINRemoteImage.h) of the existing categories for reference.
+PINRemoteImageManager's methods. There are **built-in categories** on **UIImageView**, **FLAnimatedImageView** and **UIButton**, and it's very easy to implement a new category. See [UIImageView+PINRemoteImage](/Pod/Classes/Image Categories/UIImageView+PINRemoteImage.h) of the existing categories for reference.
 
 
 ###Download an image and set it on an image view:
