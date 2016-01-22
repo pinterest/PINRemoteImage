@@ -430,9 +430,7 @@
     return outputUIImage;
 }
 
-//| ----------------------------------------------------------------------------
 //  Helper function to handle deferred cleanup of a buffer.
-//
 static void cleanupBuffer(void *userData, void *buf_data)
 {
     free(buf_data);
