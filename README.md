@@ -18,7 +18,7 @@ PINRemoteImage also has two methods to improve the experience of downloading ima
 PINRemoteImageManager's methods. There are built-in categories on UIImageView, FLAnimatedImageView and UIButton, and it's very easy to implement a new category. See [PINImageView+PINRemoteImage](/Pod/Classes/Image Categories/PINImageView+PINRemoteImage.h) of the existing categories for reference.
 
 
-Download an image and set it on an image view:
+###Download an image and set it on an image view:
 
 **Objective-C**
 ```objc
@@ -32,7 +32,7 @@ let imageView = UIImageView()
 imageView.pin_setImageFromURL(NSURL(string: "https://pinterest.com/kitten.jpg")!)
 ```
     
-Download a progressive jpeg and get attractive blurred updates:
+###Download a progressive jpeg and get attractive blurred updates:
 
 **Objective-C**
 ```objc
@@ -48,7 +48,7 @@ imageView.pin_updateWithProgress = true
 imageView.pin_setImageFromURL(NSURL(string: "https://pinterest.com/progressiveKitten.jpg")!)
 ```
 
-Download a WebP file
+###Download a WebP file
 
 **Objective-C**
 ```objc
@@ -62,7 +62,7 @@ let imageView = UIImageView()
 imageView.pin_setImageFromURL(NSURL(string: "https://pinterest.com/googleKitten.webp")!)
 ```
 
-Download a GIF and display with FLAnimatedImageView
+###Download a GIF and display with FLAnimatedImageView
 
 **Objective-C**
 ```objc
@@ -76,7 +76,7 @@ let animatedImageView = FLAnimatedImageView()
 animatedImageView.pin_setImageFromURL(NSURL(string: "http://pinterest.com/flyingKitten.gif")!)
 ```
 
-Download and process an image
+###Download and process an image
 
 **Objective-C**
 ```objc
@@ -140,10 +140,19 @@ imageView.pin_setImageFromURL(NSURL(string: "https://s-media-cache-ak0.pinimg.co
 }
 ```
 
-Handle Authentication
+###Handle Authentication
+
+**Objective-C**
 ```objc
 [[PINRemoteImageManager sharedImageManager] setAuthenticationChallenge:^(NSURLSessionTask *task, NSURLAuthenticationChallenge *challenge, PINRemoteImageManagerAuthenticationChallengeCompletionHandler aCompletion) {
 aCompletion(NSURLSessionAuthChallengePerformDefaultHandling, nil)];
+```
+
+**Swift**
+```swift
+PINRemoteImageManager.sharedImageManager().setAuthenticationChallenge { (task : NSURLSessionTask!, challange : NSURLAuthenticationChallenge!, aCompletion : PINRemoteImageManagerAuthenticationChallengeCompletionHandler!) -> Void in
+    aCompletion(NSURLSessionAuthChallengeDisposition.PerformDefaultHandling, nil)
+}
 ```
 
 ## Installation
