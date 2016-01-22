@@ -68,9 +68,6 @@
             CFRelease(_imageSource);
         }
     [self.lock unlock];
-#if !PIN_APP_EXTENSIONS
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-#endif
 }
 
 #pragma mark - public
