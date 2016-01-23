@@ -7,8 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8E0F3C501C542A25006C0777 /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0F3C4F1C542A25006C0777 /* ScrollViewController.swift */; };
+		8E0F3C521C542A31006C0777 /* WebPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0F3C511C542A31006C0777 /* WebPViewController.swift */; };
+		8E0F3C541C542A55006C0777 /* ProgressiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0F3C531C542A55006C0777 /* ProgressiveViewController.swift */; };
+		8E0F3C561C542A63006C0777 /* DegradedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0F3C551C542A63006C0777 /* DegradedViewController.swift */; };
+		8E0F3C581C542A6F006C0777 /* ProcessingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0F3C571C542A6F006C0777 /* ProcessingViewController.swift */; };
 		8E50054A1C4F62EB0095AD0F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5005491C4F62EB0095AD0F /* AppDelegate.swift */; };
-		8E50054C1C4F62EB0095AD0F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E50054B1C4F62EB0095AD0F /* ViewController.swift */; };
 		8E50054F1C4F62EB0095AD0F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E50054D1C4F62EB0095AD0F /* Main.storyboard */; };
 		8E5005511C4F62EB0095AD0F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E5005501C4F62EB0095AD0F /* Assets.xcassets */; };
 		8E5005541C4F62EB0095AD0F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E5005521C4F62EB0095AD0F /* LaunchScreen.storyboard */; };
@@ -19,9 +23,13 @@
 		3498E59FF2DC090C0259B157 /* Pods_Swift_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Swift_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		39E0C8A2598DAAD2294FF9F4 /* Pods-Swift-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swift-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Swift-Example/Pods-Swift-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		7184321E1DE18C231C8323FF /* Pods-Swift-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swift-Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Swift-Example/Pods-Swift-Example.release.xcconfig"; sourceTree = "<group>"; };
+		8E0F3C4F1C542A25006C0777 /* ScrollViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewController.swift; sourceTree = "<group>"; };
+		8E0F3C511C542A31006C0777 /* WebPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebPViewController.swift; sourceTree = "<group>"; };
+		8E0F3C531C542A55006C0777 /* ProgressiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressiveViewController.swift; sourceTree = "<group>"; };
+		8E0F3C551C542A63006C0777 /* DegradedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DegradedViewController.swift; sourceTree = "<group>"; };
+		8E0F3C571C542A6F006C0777 /* ProcessingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProcessingViewController.swift; sourceTree = "<group>"; };
 		8E5005461C4F62EB0095AD0F /* Swift-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Swift-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E5005491C4F62EB0095AD0F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		8E50054B1C4F62EB0095AD0F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		8E50054E1C4F62EB0095AD0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8E5005501C4F62EB0095AD0F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8E5005531C4F62EB0095AD0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -57,6 +65,18 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		8E0F3C5A1C542A84006C0777 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				8E0F3C4F1C542A25006C0777 /* ScrollViewController.swift */,
+				8E0F3C531C542A55006C0777 /* ProgressiveViewController.swift */,
+				8E0F3C511C542A31006C0777 /* WebPViewController.swift */,
+				8E0F3C571C542A6F006C0777 /* ProcessingViewController.swift */,
+				8E0F3C551C542A63006C0777 /* DegradedViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
 		8E50053D1C4F62EB0095AD0F = {
 			isa = PBXGroup;
 			children = (
@@ -79,7 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				8E5005491C4F62EB0095AD0F /* AppDelegate.swift */,
-				8E50054B1C4F62EB0095AD0F /* ViewController.swift */,
+				8E0F3C5A1C542A84006C0777 /* Controllers */,
 				8E50054D1C4F62EB0095AD0F /* Main.storyboard */,
 				8E5005501C4F62EB0095AD0F /* Assets.xcassets */,
 				8E5005521C4F62EB0095AD0F /* LaunchScreen.storyboard */,
@@ -210,8 +230,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8E50054C1C4F62EB0095AD0F /* ViewController.swift in Sources */,
 				8E50054A1C4F62EB0095AD0F /* AppDelegate.swift in Sources */,
+				8E0F3C501C542A25006C0777 /* ScrollViewController.swift in Sources */,
+				8E0F3C541C542A55006C0777 /* ProgressiveViewController.swift in Sources */,
+				8E0F3C581C542A6F006C0777 /* ProcessingViewController.swift in Sources */,
+				8E0F3C521C542A31006C0777 /* WebPViewController.swift in Sources */,
+				8E0F3C561C542A63006C0777 /* DegradedViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
