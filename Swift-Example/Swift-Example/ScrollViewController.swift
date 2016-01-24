@@ -21,7 +21,41 @@ struct Kitten {
         self.size = size
     }
 }
-class ScrollViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+
+class PinImageCell : UICollectionViewCell {
+    
+    let imageView : UIImageView
+    
+    override init(frame: CGRect) {
+        imageView = UIImageView()
+        
+        super.init(frame: frame)
+        
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(imageView)
+        
+        let view = ["imageView" : imageView]
+        
+        let constraintsH = NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[imageView]-0-|", options: [], metrics: nil, views: view)
+        let constraintsV = NSLayoutConstraint.constraintsWithVisualFormat("V:|-0-[imageView]-0-|", options: [], metrics: nil, views: view)
+        contentView.addConstraints(constraintsH)
+        contentView.addConstraints(constraintsV)
+        
+        layer.cornerRadius = 7
+        layer.masksToBounds = true
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+    }
+}
+
+class ScrollViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     let kittens = [
         Kitten(urlString: "https://s-media-cache-ak0.pinimg.com/736x/92/5d/5a/925d5ac74db0dcfabc238e1686e31d16.jpg", size: CGSize(width: 503, height: 992)),
@@ -63,13 +97,16 @@ class ScrollViewController: UIViewController, UICollectionViewDataSource, UIColl
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView?.registerClass(PinImageCell.self, forCellWithReuseIdentifier: String(PinImageCell))
         collectionView?.delegate = self
         collectionView?.dataSource = self
         
         if let cView = collectionView {
             view.addSubview(cView)
         }
+        
+        createRandomKittens()
     }
     
     func createRandomKittens() {
@@ -92,9 +129,9 @@ class ScrollViewController: UIViewController, UICollectionViewDataSource, UIColl
                     var width = randKitten.size.width
                     var height = randKitten.size.height
                     
-                    if width > bounds.size.height * scale {
-                        height = bounds.size.height * scale / width * height
-                        width = bounds.size.width * scale
+                    if width > (bounds.size.width) {
+                        height = bounds.size.height / scale / width * height
+                        width = bounds.size.width / scale / height * width
                     }
                     
                     var newKitten = Kitten(urlString: randKitten.imageUrl.absoluteString, size: CGSize(width: width, height: height))
@@ -111,5 +148,42 @@ class ScrollViewController: UIViewController, UICollectionViewDataSource, UIColl
                 self.collectionView?.reloadData()
             })
         }
+    }
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        let kitten = collectionKittens[indexPath.row]
+        return kitten.size
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(String(PinImageCell), forIndexPath: indexPath)
+        
+        if let pinCell = cell as? PinImageCell {
+            
+            let kitten = collectionKittens[indexPath.row]
+            pinCell.backgroundColor = kitten.dominantColor
+            pinCell.alpha = 0
+            
+            weak var weakPinCell = pinCell
+            pinCell.imageView.pin_setImageFromURL(kitten.imageUrl, completion: { (result : PINRemoteImageManagerResult!) -> Void in
+                if result.requestDuration > 0.25 {
+                    UIView.animateWithDuration(0.3, animations: { () -> Void in
+                        weakPinCell?.alpha = 1
+                    })
+                } else {
+                    weakPinCell?.alpha = 1
+                }
+            })
+        }
+        
+        return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return collectionKittens.count
+    }
+    
+    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+        return 1
     }
 }
