@@ -28,7 +28,7 @@
         <!--Scroll-->
         <scene sceneID="aMg-q1-oIG">
             <objects>
-                <viewController title="Scroll" id="RzL-nA-Cos" sceneMemberID="viewController">
+                <viewController title="Scroll" id="RzL-nA-Cos" customClass="ScrollViewController" customModule="Swift_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="wBP-Jh-hgg"/>
                         <viewControllerLayoutGuide type="bottom" id="SZf-HV-f8n"/>
