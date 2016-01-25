@@ -108,6 +108,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 @property (nonatomic, strong) NSMutableSet *canceledTasks;
 @property (nonatomic, strong) NSArray *progressThresholds;
 @property (nonatomic, assign) BOOL shouldBlurProgressive;
+@property (nonatomic, assign) CGSize maxProgressiveRenderSize;
 @property (nonatomic, assign) NSTimeInterval estimatedRemainingTimeThreshold;
 @property (nonatomic, strong) dispatch_queue_t callbackQueue;
 @property (nonatomic, strong) NSOperationQueue *concurrentOperationQueue;
@@ -184,6 +185,7 @@ static dispatch_once_t sharedDispatchToken;
         _lowQualityBPSThreshold = 50000; // approximately edge speeds
         _shouldUpgradeLowQualityImages = NO;
         _shouldBlurProgressive = YES;
+        _maxProgressiveRenderSize = CGSizeMake(1024, 1024);
         self.tasks = [[NSMutableDictionary alloc] init];
         self.canceledTasks = [[NSMutableSet alloc] init];
         self.taskQOS = [[NSMutableArray alloc] initWithCapacity:5];
@@ -288,6 +290,20 @@ static dispatch_once_t sharedDispatchToken;
         typeof(self) strongSelf = weakSelf;
         [strongSelf lock];
             strongSelf.shouldBlurProgressive = shouldBlur;
+        [strongSelf unlock];
+        if (completion) {
+            completion();
+        }
+    });
+}
+
+- (void)setProgressiveRendersMaxProgressiveRenderSize:(CGSize)maxProgressiveRenderSize completion:(nullable dispatch_block_t)completion
+{
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        typeof(self) strongSelf = weakSelf;
+        [strongSelf lock];
+            strongSelf.maxProgressiveRenderSize = maxProgressiveRenderSize;
         [strongSelf unlock];
         if (completion) {
             completion();
@@ -1077,6 +1093,7 @@ static dispatch_once_t sharedDispatchToken;
         PINProgressiveImage *progressiveImage = task.progressImage;
         BOOL hasProgressBlocks = task.hasProgressBlocks;
         BOOL shouldBlur = self.shouldBlurProgressive;
+        CGSize maxProgressiveRenderSize = self.maxProgressiveRenderSize;
     [self unlock];
     
     [progressiveImage updateProgressiveImageWithData:data expectedNumberOfBytes:[dataTask countOfBytesExpectedToReceive]];
@@ -1085,7 +1102,7 @@ static dispatch_once_t sharedDispatchToken;
         __weak typeof(self) weakSelf = self;
         [_concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityLow block:^{
             typeof(self) strongSelf = weakSelf;
-            UIImage *progressImage = [progressiveImage currentImageBlurred:shouldBlur];
+            UIImage *progressImage = [progressiveImage currentImageBlurred:shouldBlur maxProgressiveRenderSize:maxProgressiveRenderSize];
             if (progressImage) {
                 [strongSelf lock];
                     NSString *cacheKey = [strongSelf cacheKeyForURL:[[dataTask originalRequest] URL] processorKey:nil];

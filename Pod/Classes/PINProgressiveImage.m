@@ -153,7 +153,7 @@
     [self.lock unlock];
 }
 
-- (UIImage *)currentImageBlurred:(BOOL)blurred
+- (UIImage *)currentImageBlurred:(BOOL)blurred maxProgressiveRenderSize:(CGSize)maxProgressiveRenderSize
 {
     [self.lock lock];
         if (self.imageSource == nil) {
@@ -203,6 +203,11 @@
             NSDictionary *jpegProperties = imageProperties[(NSString *)kCGImagePropertyJFIFDictionary];
             NSNumber *isProgressive = jpegProperties[(NSString *)kCGImagePropertyJFIFIsProgressive];
             self.isProgressiveJPEG = jpegProperties && [isProgressive boolValue];
+        }
+    
+        if (self.size.width > maxProgressiveRenderSize.width || self.size.height > maxProgressiveRenderSize.height) {
+            [self.lock unlock];
+            return nil;
         }
         
         float progress = 0;
@@ -314,12 +319,9 @@
         return nil;
     }
     
-    CGSize maxSize = CGSizeMake(1024, 1024);
     CGSize inputSize = inputImage.size;
     if (inputSize.width < 1 ||
-        inputSize.height < 1 ||
-        maxSize.height < inputSize.height ||
-        maxSize.width < inputSize.width) {
+        inputSize.height < 1) {
         CGImageRelease(inputImageRef);
         return nil;
     }

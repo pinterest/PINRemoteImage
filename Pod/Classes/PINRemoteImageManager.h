@@ -224,6 +224,15 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask * _
                              completion:(nullable dispatch_block_t)completion;
 
 /**
+ Sets the maximum size of an image that PINRemoteImage will blur. If the image is too large, blurring is skipped
+ 
+ @param maxProgressiveRenderSize A CGSize which indicates the max size PINRemoteImage will render a progressive image. If an image is larger in either dimension, progressive rendering will be skipped
+ @param completion Completion to be called once maxProgressiveRenderSize is set.
+ */
+- (void)setProgressiveRendersMaxProgressiveRenderSize:(CGSize)maxProgressiveRenderSize
+                              completion:(nullable dispatch_block_t)completion;
+
+/**
  Prefetch an image at the given URL.
  
  @param url NSURL where the image to prefetch resides.
