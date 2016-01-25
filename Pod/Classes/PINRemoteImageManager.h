@@ -215,6 +215,15 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask * _
                    completion:(nullable dispatch_block_t)completion;
 
 /**
+ Sets whether PINRemoteImage should blur progressive render results
+ 
+ @param shouldBlur A bool value indicating whether PINRemoteImage should blur progressive render results
+ @param completion Completion to be called once progressThresholds is set.
+ */
+- (void)setProgressiveRendersShouldBlur:(BOOL)shouldBlur
+                             completion:(nullable dispatch_block_t)completion;
+
+/**
  Prefetch an image at the given URL.
  
  @param url NSURL where the image to prefetch resides.

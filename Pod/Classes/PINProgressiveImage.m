@@ -202,7 +202,7 @@ static CIContext *CPUProcessingContext = nil;
     [self.lock unlock];
 }
 
-- (UIImage *)currentImage
+- (UIImage *)currentImageBlurred:(BOOL)blurred
 {
     [self.lock lock];
         if (self.imageSource == nil) {
@@ -272,7 +272,11 @@ static CIContext *CPUProcessingContext = nil;
             PINLog(@"Generating preview image");
             CGImageRef image = CGImageSourceCreateImageAtIndex(self.imageSource, 0, NULL);
             if (image) {
-                currentImage = [self postProcessImage:[UIImage imageWithCGImage:image] withProgress:progress];
+                if (blurred) {
+                    currentImage = [self postProcessImage:[UIImage imageWithCGImage:image] withProgress:progress];
+                } else {
+                    currentImage = [UIImage imageWithCGImage:image];
+                }
                 CGImageRelease(image);
             }
         }
