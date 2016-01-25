@@ -324,8 +324,14 @@
         return nil;
     }
     
-    CGFloat radius = MAX(__FLT_EPSILON__, (inputImage.size.width / 25.0) * MAX(0, 1.0 - progress));
+    CGFloat radius = (inputImage.size.width / 25.0) * MAX(0, 1.0 - progress);
     radius *= inputImage.scale;
+    
+    //we'll round the radius to a whole number below anyway,
+    if (radius < FLT_EPSILON) {
+        CGImageRelease(inputImageRef);
+        return inputImage;
+    }
     
     UIGraphicsBeginImageContextWithOptions(inputSize, YES, inputImage.scale);
     CGContextRef ctx = UIGraphicsGetCurrentContext();
@@ -378,6 +384,7 @@
                 
                 wholeRadius |= 1; // force wholeRadius to be odd so that the three box-blur methodology works.
                 
+                //calculate the size necessary for vImageBoxConvolve_ARGB8888, this does not actually do any operations.
                 NSInteger tempBufferSize = vImageBoxConvolve_ARGB8888(inputBuffer, outputBuffer, NULL, 0, 0, wholeRadius, wholeRadius, NULL, kvImageGetTempBufferSize | kvImageEdgeExtend);
                 void *tempBuffer = malloc(tempBufferSize);
                 
