@@ -17,7 +17,7 @@
 - (void)updateProgressiveImageWithData:(nonnull NSData *)data expectedNumberOfBytes:(int64_t)expectedNumberOfBytes;
 
 //Returns the latest image based on thresholds, returns nil if no new image is generated
-- (UIImage *)currentImageBlurred:(BOOL)blurred maxProgressiveRenderSize:(CGSize)maxBlurSize;
+- (nullable UIImage *)currentImageBlurred:(BOOL)blurred maxProgressiveRenderSize:(CGSize)maxBlurSize;
 
 - (nullable NSData *)data;
 
