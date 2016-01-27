@@ -7,7 +7,15 @@
 //
 
 import UIKit
+import PINRemoteImage
 
 class WebPViewController: UIViewController {
 
+    @IBOutlet weak var imageView: UIImageView!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        imageView.pin_setImageFromURL(NSURL(string: "http://pinterest.com/googleKitten.webp")!)
+    }
 }
