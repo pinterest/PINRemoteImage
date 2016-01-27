@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ISb-aI-c0R">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ISb-aI-c0R">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--WebP-->
         <scene sceneID="5dI-NP-vgw">
             <objects>
-                <viewController title="WebP" id="Wmo-YQ-k2e" sceneMemberID="viewController">
+                <viewController title="WebP" id="Wmo-YQ-k2e" customClass="WebPViewController" customModule="Swift_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="CTa-Kj-a7t"/>
                         <viewControllerLayoutGuide type="bottom" id="V7u-6J-gg5"/>
@@ -16,14 +17,29 @@
                     <view key="view" contentMode="scaleToFill" id="fAd-jN-Rmg">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2no-6v-rVz">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                                <animations/>
+                            </imageView>
+                        </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="V7u-6J-gg5" firstAttribute="top" secondItem="2no-6v-rVz" secondAttribute="bottom" id="3OJ-wK-0yw"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="2no-6v-rVz" secondAttribute="trailing" constant="-20" id="AOU-cU-7IG"/>
+                            <constraint firstItem="2no-6v-rVz" firstAttribute="leading" secondItem="fAd-jN-Rmg" secondAttribute="leadingMargin" constant="-20" id="VhO-kd-YZY"/>
+                            <constraint firstItem="2no-6v-rVz" firstAttribute="top" secondItem="CTa-Kj-a7t" secondAttribute="bottom" constant="-20" id="kqm-uV-2eA"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="WebP" id="JTB-pd-vA2"/>
+                    <connections>
+                        <outlet property="imageView" destination="2no-6v-rVz" id="odO-4s-dA7"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hF5-Jw-dc4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="176" y="365"/>
+            <point key="canvasLocation" x="150" y="353"/>
         </scene>
         <!--Scroll-->
         <scene sceneID="aMg-q1-oIG">
@@ -78,8 +94,20 @@
                     <view key="view" contentMode="scaleToFill" id="876-ZK-gTh">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="V0J-QS-yT3">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                                <animations/>
+                            </imageView>
+                        </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="wUF-9I-c05" firstAttribute="top" secondItem="V0J-QS-yT3" secondAttribute="bottom" id="3Ba-aO-cBY"/>
+                            <constraint firstItem="V0J-QS-yT3" firstAttribute="top" secondItem="oh1-fg-8zy" secondAttribute="bottom" constant="-20" id="6zG-ru-vDO"/>
+                            <constraint firstItem="V0J-QS-yT3" firstAttribute="leading" secondItem="876-ZK-gTh" secondAttribute="leadingMargin" constant="-20" id="Ddc-y5-lrS"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="V0J-QS-yT3" secondAttribute="trailing" constant="-20" id="xjB-pl-piS"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Progressive" id="689-9I-ueb"/>
                 </viewController>
@@ -118,8 +146,20 @@
                     <view key="view" contentMode="scaleToFill" id="W7s-zC-793">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XLR-IB-JV2">
+                                <rect key="frame" x="0.0" y="25" width="600" height="551"/>
+                                <animations/>
+                            </imageView>
+                        </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ZjW-kh-F2j" firstAttribute="top" secondItem="XLR-IB-JV2" secondAttribute="bottom" constant="-25" id="Asp-ko-ZEz"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="XLR-IB-JV2" secondAttribute="trailing" constant="-20" id="O76-Gs-lWd"/>
+                            <constraint firstItem="XLR-IB-JV2" firstAttribute="top" secondItem="JQ8-1O-S79" secondAttribute="bottom" constant="5" id="tC6-g4-vHv"/>
+                            <constraint firstItem="XLR-IB-JV2" firstAttribute="leading" secondItem="W7s-zC-793" secondAttribute="leadingMargin" constant="-20" id="y37-Jj-bef"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Processing" id="ose-6S-ct9"/>
                 </viewController>
