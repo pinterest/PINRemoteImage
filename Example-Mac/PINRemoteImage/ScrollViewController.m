@@ -89,6 +89,7 @@
     PINImageCollectionViewItem *item = [collectionView makeItemWithIdentifier:@"PINImageCollectionViewItemView" forIndexPath:indexPath];
     Kitten *kitten = [self.kittens objectAtIndex:indexPath.item];
     item.imageView.alphaValue = 0.0f;
+    [((PINViewWithBackgroundColor *)item.view) setBackgroundColor:kitten.dominantColor];
     __weak NSCollectionViewItem *weakItem = item;
 
     [item.imageView pin_setImageFromURL:kitten.imageURL
