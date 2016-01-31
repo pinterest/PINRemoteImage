@@ -12,10 +12,10 @@
 
 @interface PINDataTaskOperation : NSOperation
 
-@property (nonatomic, readonly) NSURLSessionDataTask *dataTask;
+@property (nonatomic, readonly, nullable) NSURLSessionDataTask *dataTask;
 
-+ (instancetype)dataTaskOperationWithSessionManager:(PINURLSessionManager *)sessionManager
-                                            request:(NSURLRequest *)request
-                                  completionHandler:(void (^)(NSURLResponse *response, NSError *error))completionHandler;
++ (nonnull instancetype)dataTaskOperationWithSessionManager:(nonnull PINURLSessionManager *)sessionManager
+                                                    request:(nonnull NSURLRequest *)request
+                                          completionHandler:(nonnull void (^)(NSURLResponse * _Nonnull response, NSError * _Nullable error))completionHandler;
 
 @end

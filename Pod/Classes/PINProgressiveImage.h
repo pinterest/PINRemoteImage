@@ -16,15 +16,15 @@
 
 @interface PINProgressiveImage : NSObject
 
-@property (atomic, copy) NSArray *progressThresholds;
+@property (atomic, copy, nonnull) NSArray *progressThresholds;
 @property (atomic, assign) CFTimeInterval estimatedRemainingTimeThreshold;
 @property (atomic, assign) CFTimeInterval startTime;
 
-- (void)updateProgressiveImageWithData:(NSData *)data expectedNumberOfBytes:(int64_t)expectedNumberOfBytes;
+- (void)updateProgressiveImageWithData:(nonnull NSData *)data expectedNumberOfBytes:(int64_t)expectedNumberOfBytes;
 
-//Returns the latest image based on thresholds, returns nil if no new image is generated
-- (PINImage *)currentImage;
+/// Returns the latest image based on thresholds, returns nil if no new image is generated
+- (nullable PINImage *)currentImageBlurred:(BOOL)blurred maxProgressiveRenderSize:(CGSize)maxBlurSize;
 
-- (NSData *)data;
+- (nullable NSData *)data;
 
 @end

@@ -44,7 +44,7 @@
 @end
 #endif
 
-NSData *PINImageJPEGRepresentation(PINImage *image, CGFloat compressionQuality)
+NSData * __nullable PINImageJPEGRepresentation(PINImage * __nonnull image, CGFloat compressionQuality)
 {
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
     return UIImageJPEGRepresentation(image, compressionQuality);
@@ -55,7 +55,7 @@ NSData *PINImageJPEGRepresentation(PINImage *image, CGFloat compressionQuality)
 #endif
 }
 
-NSData *PINImagePNGRepresentation(PINImage *image) {
+NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
     return UIImagePNGRepresentation(image);
 #else
