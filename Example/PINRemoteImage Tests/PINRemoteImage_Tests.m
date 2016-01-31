@@ -229,11 +229,15 @@
 
 - (void)testErrorOnNilURLDownload
 {
+
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     __block NSError *outError = nil;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
     [self.imageManager downloadImageWithURL:nil
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
+#pragma clang diagnostic pop
      {
          outError = result.error;
          dispatch_semaphore_signal(semaphore);
