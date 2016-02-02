@@ -232,9 +232,12 @@
 - (void)testErrorOnNilURLDownload
 {
     XCTestExpectation *expectation = [self expectationWithDescription:@""];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
     [self.imageManager downloadImageWithURL:nil
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
+#pragma clang diagnostic pop
      {
          NSError *outError = result.error;
          
