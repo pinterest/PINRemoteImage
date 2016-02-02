@@ -13,7 +13,7 @@
 @property (nonatomic, strong) NSLock *sessionManagerLock;
 @property (nonatomic, strong) NSURLSession *session;
 @property (nonatomic, strong) NSOperationQueue *operationQueue;
-@property (nonatomic, strong) NSMutableDictionary *delegateQueues;
+@property (nonatomic, strong) NSMutableDictionary <NSNumber *, dispatch_queue_t> *delegateQueues;
 @property (nonatomic, strong) NSMutableDictionary *completions;
 
 @end

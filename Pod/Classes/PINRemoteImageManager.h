@@ -211,7 +211,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask * _
  @param progressThresholds an array of progress thresholds at which to generate progressive images. progress thresholds should range from 0.00 - 1.00. Defaults to @[@0.00, @0.35, @0.65]
  @param completion Completion to be called once progressThresholds is set.
  */
-- (void)setProgressThresholds:(nonnull NSArray *)progressThresholds
+- (void)setProgressThresholds:(nonnull NSArray <NSNumber *> *)progressThresholds
                    completion:(nullable dispatch_block_t)completion;
 
 /**
@@ -252,7 +252,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask * _
  
  @param urls An array of NSURLs where the images to prefetch reside.
  */
-- (void)prefetchImagesWithURLs:(nonnull NSArray *)urls;
+- (void)prefetchImagesWithURLs:(nonnull NSArray <NSURL *> *)urls;
 
 /**
  Prefetch images at the given URLs with given options.
@@ -260,7 +260,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask * _
  @param urls An array of NSURLs where the images to prefetch reside.
  @param options PINRemoteImageManagerDownloadOptions options with which to pefetch the image.
  */
-- (void)prefetchImagesWithURLs:(nonnull NSArray *)urls options:(PINRemoteImageManagerDownloadOptions)options;;
+- (void)prefetchImagesWithURLs:(nonnull NSArray <NSURL *> *)urls options:(PINRemoteImageManagerDownloadOptions)options;;
 
 /**
  Download or retrieve from cache the image found at the url. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).
@@ -327,7 +327,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask * _
  
  @return An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).
  */
-- (nullable NSUUID *)downloadImageWithURLs:(nonnull NSArray *)urls
+- (nullable NSUUID *)downloadImageWithURLs:(nonnull NSArray <NSURL *> *)urls
                                    options:(PINRemoteImageManagerDownloadOptions)options
                                   progress:(nullable PINRemoteImageManagerImageCompletion)progress
                                 completion:(nullable PINRemoteImageManagerImageCompletion)completion;

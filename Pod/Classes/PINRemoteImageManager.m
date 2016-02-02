@@ -104,16 +104,16 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 @property (nonatomic, strong) PINCache *cache;
 @property (nonatomic, strong) PINURLSessionManager *sessionManager;
 @property (nonatomic, assign) NSTimeInterval timeout;
-@property (nonatomic, strong) NSMutableDictionary *tasks;
-@property (nonatomic, strong) NSMutableSet *canceledTasks;
-@property (nonatomic, strong) NSArray *progressThresholds;
+@property (nonatomic, strong) NSMutableDictionary <NSString *, __kindof PINRemoteImageTask *> *tasks;
+@property (nonatomic, strong) NSMutableSet <NSUUID *> *canceledTasks;
+@property (nonatomic, strong) NSArray <NSNumber *> *progressThresholds;
 @property (nonatomic, assign) BOOL shouldBlurProgressive;
 @property (nonatomic, assign) CGSize maxProgressiveRenderSize;
 @property (nonatomic, assign) NSTimeInterval estimatedRemainingTimeThreshold;
 @property (nonatomic, strong) dispatch_queue_t callbackQueue;
 @property (nonatomic, strong) NSOperationQueue *concurrentOperationQueue;
 @property (nonatomic, strong) NSOperationQueue *urlSessionTaskQueue;
-@property (nonatomic, strong) NSMutableArray *taskQOS;
+@property (nonatomic, strong) NSMutableArray <PINTaskQOS *> *taskQOS;
 @property (nonatomic, assign) float highQualityBPSThreshold;
 @property (nonatomic, assign) float lowQualityBPSThreshold;
 @property (nonatomic, assign) BOOL shouldUpgradeLowQualityImages;
@@ -917,12 +917,12 @@ static dispatch_once_t sharedDispatchToken;
 
 #pragma mark - Prefetching
 
-- (void)prefetchImagesWithURLs:(NSArray *)urls
+- (void)prefetchImagesWithURLs:(NSArray <NSURL *> *)urls
 {
     [self prefetchImagesWithURLs:urls options:PINRemoteImageManagerDownloadOptionsNone | PINRemoteImageManagerDownloadOptionsSkipEarlyCheck];
 }
 
-- (void)prefetchImagesWithURLs:(NSArray *)urls options:(PINRemoteImageManagerDownloadOptions)options
+- (void)prefetchImagesWithURLs:(NSArray <NSURL *> *)urls options:(PINRemoteImageManagerDownloadOptions)options
 {
     for (NSURL *url in urls) {
         [self prefetchImageWithURL:url options:options];
@@ -1199,7 +1199,7 @@ static dispatch_once_t sharedDispatchToken;
 }
 #endif
 
-- (NSUUID *)downloadImageWithURLs:(NSArray *)urls
+- (NSUUID *)downloadImageWithURLs:(NSArray <NSURL *> *)urls
                           options:(PINRemoteImageManagerDownloadOptions)options
                          progress:(PINRemoteImageManagerImageCompletion)progress
                        completion:(PINRemoteImageManagerImageCompletion)completion
