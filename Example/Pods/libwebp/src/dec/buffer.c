@@ -33,6 +33,11 @@ static int IsValidColorspace(int webp_csp_mode) {
   return (webp_csp_mode >= MODE_RGB && webp_csp_mode < MODE_LAST);
 }
 
+// strictly speaking, the very last (or first, if flipped) row
+// doesn't require padding.
+#define MIN_BUFFER_SIZE(WIDTH, HEIGHT, STRIDE)       \
+    (uint64_t)(STRIDE) * ((HEIGHT) - 1) + (WIDTH)
+
 static VP8StatusCode CheckDecBuffer(const WebPDecBuffer* const buffer) {
   int ok = 1;
   const WEBP_CSP_MODE mode = buffer->colorspace;
@@ -42,20 +47,22 @@ static VP8StatusCode CheckDecBuffer(const WebPDecBuffer* const buffer) {
     ok = 0;
   } else if (!WebPIsRGBMode(mode)) {   // YUV checks
     const WebPYUVABuffer* const buf = &buffer->u.YUVA;
+    const int uv_width  = (width  + 1) / 2;
+    const int uv_height = (height + 1) / 2;
     const int y_stride = abs(buf->y_stride);
     const int u_stride = abs(buf->u_stride);
     const int v_stride = abs(buf->v_stride);
     const int a_stride = abs(buf->a_stride);
-    const uint64_t y_size = (uint64_t)y_stride * height;
-    const uint64_t u_size = (uint64_t)u_stride * ((height + 1) / 2);
-    const uint64_t v_size = (uint64_t)v_stride * ((height + 1) / 2);
-    const uint64_t a_size = (uint64_t)a_stride * height;
+    const uint64_t y_size = MIN_BUFFER_SIZE(width, height, y_stride);
+    const uint64_t u_size = MIN_BUFFER_SIZE(uv_width, uv_height, u_stride);
+    const uint64_t v_size = MIN_BUFFER_SIZE(uv_width, uv_height, v_stride);
+    const uint64_t a_size = MIN_BUFFER_SIZE(width, height, a_stride);
     ok &= (y_size <= buf->y_size);
     ok &= (u_size <= buf->u_size);
     ok &= (v_size <= buf->v_size);
     ok &= (y_stride >= width);
-    ok &= (u_stride >= (width + 1) / 2);
-    ok &= (v_stride >= (width + 1) / 2);
+    ok &= (u_stride >= uv_width);
+    ok &= (v_stride >= uv_width);
     ok &= (buf->y != NULL);
     ok &= (buf->u != NULL);
     ok &= (buf->v != NULL);
@@ -67,13 +74,14 @@ static VP8StatusCode CheckDecBuffer(const WebPDecBuffer* const buffer) {
   } else {    // RGB checks
     const WebPRGBABuffer* const buf = &buffer->u.RGBA;
     const int stride = abs(buf->stride);
-    const uint64_t size = (uint64_t)stride * height;
+    const uint64_t size = MIN_BUFFER_SIZE(width, height, stride);
     ok &= (size <= buf->size);
     ok &= (stride >= width * kModeBpp[mode]);
     ok &= (buf->rgba != NULL);
   }
   return ok ? VP8_STATUS_OK : VP8_STATUS_INVALID_PARAM;
 }
+#undef MIN_BUFFER_SIZE
 
 static VP8StatusCode AllocateBuffer(WebPDecBuffer* const buffer) {
   const int w = buffer->width;
@@ -181,11 +189,14 @@ VP8StatusCode WebPAllocateDecBuffer(int w, int h,
       h = ch;
     }
     if (options->use_scaling) {
-      if (options->scaled_width <= 0 || options->scaled_height <= 0) {
+      int scaled_width = options->scaled_width;
+      int scaled_height = options->scaled_height;
+      if (!WebPRescalerGetScaledDimensions(
+              w, h, &scaled_width, &scaled_height)) {
         return VP8_STATUS_INVALID_PARAM;
       }
-      w = options->scaled_width;
-      h = options->scaled_height;
+      w = scaled_width;
+      h = scaled_height;
     }
   }
   out->width = w;
@@ -195,12 +206,10 @@ VP8StatusCode WebPAllocateDecBuffer(int w, int h,
   status = AllocateBuffer(out);
   if (status != VP8_STATUS_OK) return status;
 
-#if WEBP_DECODER_ABI_VERSION > 0x0203
   // Use the stride trick if vertical flip is needed.
   if (options != NULL && options->flip) {
     status = WebPFlipBuffer(out);
   }
-#endif
   return status;
 }
 

@@ -344,7 +344,7 @@ const int8_t* const VP8ksclip2 = &sclip2[112];
 const uint8_t* const VP8kclip1 = &clip1[255];
 const uint8_t* const VP8kabs0 = &abs0[255];
 
-void VP8InitClipTables(void) {
+WEBP_TSAN_IGNORE_FUNCTION void VP8InitClipTables(void) {
 #if !defined(USE_STATIC_TABLES)
   int i;
   if (!tables_ok) {

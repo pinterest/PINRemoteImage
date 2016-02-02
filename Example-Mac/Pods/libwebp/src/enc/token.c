@@ -30,15 +30,15 @@
 #define MIN_PAGE_SIZE 8192          // minimum number of token per page
 #define FIXED_PROBA_BIT (1u << 14)
 
-typedef uint16_t token_t;  // bit#15: bit
-                           // bit #14: constant proba or idx
-                           // bits 0..13: slot or constant proba
+typedef uint16_t token_t;  // bit #15: bit value
+                           // bit #14: flags for constant proba or idx
+                           // bits #0..13: slot or constant proba
 struct VP8Tokens {
   VP8Tokens* next_;        // pointer to next page
 };
 // Token data is located in memory just after the next_ field.
 // This macro is used to return their address and hide the trick.
-#define TOKEN_DATA(p) ((token_t*)&(p)[1])
+#define TOKEN_DATA(p) ((const token_t*)&(p)[1])
 
 //------------------------------------------------------------------------------
 
@@ -53,10 +53,10 @@ void VP8TBufferInit(VP8TBuffer* const b, int page_size) {
 
 void VP8TBufferClear(VP8TBuffer* const b) {
   if (b != NULL) {
-    const VP8Tokens* p = b->pages_;
+    VP8Tokens* p = b->pages_;
     while (p != NULL) {
-      const VP8Tokens* const next = p->next_;
-      WebPSafeFree((void*)p);
+      VP8Tokens* const next = p->next_;
+      WebPSafeFree(p);
       p = next;
     }
     VP8TBufferInit(b, b->page_size_);
@@ -65,8 +65,8 @@ void VP8TBufferClear(VP8TBuffer* const b) {
 
 static int TBufferNewPage(VP8TBuffer* const b) {
   VP8Tokens* page = NULL;
-  const size_t size = sizeof(*page) + b->page_size_ * sizeof(token_t);
   if (!b->error_) {
+    const size_t size = sizeof(*page) + b->page_size_ * sizeof(token_t);
     page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
   }
   if (page == NULL) {
@@ -78,19 +78,19 @@ static int TBufferNewPage(VP8TBuffer* const b) {
   *b->last_page_ = page;
   b->last_page_ = &page->next_;
   b->left_ = b->page_size_;
-  b->tokens_ = TOKEN_DATA(page);
+  b->tokens_ = (token_t*)TOKEN_DATA(page);
   return 1;
 }
 
 //------------------------------------------------------------------------------
 
-#define TOKEN_ID(t, b, ctx, p) \
-    ((p) + NUM_PROBAS * ((ctx) + NUM_CTX * ((b) + NUM_BANDS * (t))))
+#define TOKEN_ID(t, b, ctx) \
+    (NUM_PROBAS * ((ctx) + NUM_CTX * ((b) + NUM_BANDS * (t))))
 
-static WEBP_INLINE int AddToken(VP8TBuffer* const b,
-                                int bit, uint32_t proba_idx) {
+static WEBP_INLINE uint32_t AddToken(VP8TBuffer* const b,
+                                     uint32_t bit, uint32_t proba_idx) {
   assert(proba_idx < FIXED_PROBA_BIT);
-  assert(bit == 0 || bit == 1);
+  assert(bit <= 1);
   if (b->left_ > 0 || TBufferNewPage(b)) {
     const int slot = --b->left_;
     b->tokens_[slot] = (bit << 15) | proba_idx;
@@ -99,20 +99,21 @@ static WEBP_INLINE int AddToken(VP8TBuffer* const b,
 }
 
 static WEBP_INLINE void AddConstantToken(VP8TBuffer* const b,
-                                         int bit, int proba) {
+                                         uint32_t bit, uint32_t proba) {
   assert(proba < 256);
-  assert(bit == 0 || bit == 1);
+  assert(bit <= 1);
   if (b->left_ > 0 || TBufferNewPage(b)) {
     const int slot = --b->left_;
     b->tokens_[slot] = (bit << 15) | FIXED_PROBA_BIT | proba;
   }
 }
 
-int VP8RecordCoeffTokens(int ctx, int coeff_type, int first, int last,
+int VP8RecordCoeffTokens(const int ctx, const int coeff_type,
+                         int first, int last,
                          const int16_t* const coeffs,
                          VP8TBuffer* const tokens) {
   int n = first;
-  uint32_t base_id = TOKEN_ID(coeff_type, n, ctx, 0);
+  uint32_t base_id = TOKEN_ID(coeff_type, n, ctx);
   if (!AddToken(tokens, last >= 0, base_id + 0)) {
     return 0;
   }
@@ -120,14 +121,13 @@ int VP8RecordCoeffTokens(int ctx, int coeff_type, int first, int last,
   while (n < 16) {
     const int c = coeffs[n++];
     const int sign = c < 0;
-    int v = sign ? -c : c;
+    const uint32_t v = sign ? -c : c;
     if (!AddToken(tokens, v != 0, base_id + 1)) {
-      ctx = 0;
-      base_id = TOKEN_ID(coeff_type, VP8EncBands[n], ctx, 0);
+      base_id = TOKEN_ID(coeff_type, VP8EncBands[n], 0);  // ctx=0
       continue;
     }
     if (!AddToken(tokens, v > 1, base_id + 2)) {
-      ctx = 1;
+      base_id = TOKEN_ID(coeff_type, VP8EncBands[n], 1);  // ctx=1
     } else {
       if (!AddToken(tokens, v > 4, base_id + 3)) {
         if (AddToken(tokens, v != 2, base_id + 4))
@@ -142,40 +142,40 @@ int VP8RecordCoeffTokens(int ctx, int coeff_type, int first, int last,
       } else {
         int mask;
         const uint8_t* tab;
-        if (v < 3 + (8 << 1)) {          // VP8Cat3  (3b)
+        uint32_t residue = v - 3;
+        if (residue < (8 << 1)) {          // VP8Cat3  (3b)
           AddToken(tokens, 0, base_id + 8);
           AddToken(tokens, 0, base_id + 9);
-          v -= 3 + (8 << 0);
+          residue -= (8 << 0);
           mask = 1 << 2;
           tab = VP8Cat3;
-        } else if (v < 3 + (8 << 2)) {   // VP8Cat4  (4b)
+        } else if (residue < (8 << 2)) {   // VP8Cat4  (4b)
           AddToken(tokens, 0, base_id + 8);
           AddToken(tokens, 1, base_id + 9);
-          v -= 3 + (8 << 1);
+          residue -= (8 << 1);
           mask = 1 << 3;
           tab = VP8Cat4;
-        } else if (v < 3 + (8 << 3)) {   // VP8Cat5  (5b)
+        } else if (residue < (8 << 3)) {   // VP8Cat5  (5b)
           AddToken(tokens, 1, base_id + 8);
           AddToken(tokens, 0, base_id + 10);
-          v -= 3 + (8 << 2);
+          residue -= (8 << 2);
           mask = 1 << 4;
           tab = VP8Cat5;
         } else {                         // VP8Cat6 (11b)
           AddToken(tokens, 1, base_id + 8);
           AddToken(tokens, 1, base_id + 10);
-          v -= 3 + (8 << 3);
+          residue -= (8 << 3);
           mask = 1 << 10;
           tab = VP8Cat6;
         }
         while (mask) {
-          AddConstantToken(tokens, !!(v & mask), *tab++);
+          AddConstantToken(tokens, !!(residue & mask), *tab++);
           mask >>= 1;
         }
       }
-      ctx = 2;
+      base_id = TOKEN_ID(coeff_type, VP8EncBands[n], 2);  // ctx=2
     }
     AddConstantToken(tokens, sign, 128);
-    base_id = TOKEN_ID(coeff_type, VP8EncBands[n], ctx, 0);
     if (n == 16 || !AddToken(tokens, n <= last, base_id + 0)) {
       return 1;   // EOB
     }
@@ -224,7 +224,6 @@ void VP8TokenToStats(const VP8TBuffer* const b, proba_t* const stats) {
 int VP8EmitTokens(VP8TBuffer* const b, VP8BitWriter* const bw,
                   const uint8_t* const probas, int final_pass) {
   const VP8Tokens* p = b->pages_;
-  (void)final_pass;
   assert(!b->error_);
   while (p != NULL) {
     const VP8Tokens* const next = p->next_;

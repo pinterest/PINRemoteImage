@@ -32,9 +32,9 @@ static const int16_t kC2 = 17734;  // half of kC2, actually. See comment above.
 
 // This code works but is *slower* than the inlined-asm version below
 // (with gcc-4.6). So we disable it for now. Later, it'll be conditional to
-// USE_INTRINSICS define.
+// WEBP_USE_INTRINSICS define.
 // With gcc-4.8, it's a little faster speed than inlined-assembly.
-#if defined(USE_INTRINSICS)
+#if defined(WEBP_USE_INTRINSICS)
 
 // Treats 'v' as an uint8x8_t and zero extends to an int16x8_t.
 static WEBP_INLINE int16x8_t ConvertU8ToS16(uint32x2_t v) {
@@ -241,7 +241,7 @@ static void ITransformOne(const uint8_t* ref,
   );
 }
 
-#endif    // USE_INTRINSICS
+#endif    // WEBP_USE_INTRINSICS
 
 static void ITransform(const uint8_t* ref,
                        const int16_t* in, uint8_t* dst, int do_two) {
@@ -263,7 +263,7 @@ static uint8x16_t Load4x4(const uint8_t* src) {
 
 // Forward transform.
 
-#if defined(USE_INTRINSICS)
+#if defined(WEBP_USE_INTRINSICS)
 
 static WEBP_INLINE void Transpose4x4_S16(const int16x4_t A, const int16x4_t B,
                                          const int16x4_t C, const int16x4_t D,
@@ -548,323 +548,165 @@ static void FTransformWHT(const int16_t* src, int16_t* out) {
 // We try to match the spectral content (weighted) between source and
 // reconstructed samples.
 
-// This code works but is *slower* than the inlined-asm version below
-// (with gcc-4.6). So we disable it for now. Later, it'll be conditional to
-// USE_INTRINSICS define.
-// With gcc-4.8, it's only slightly slower than the inlined.
-#if defined(USE_INTRINSICS)
+// a 0123, b 0123
+// a 4567, b 4567
+// a 89ab, b 89ab
+// a cdef, b cdef
+//
+// transpose
+//
+// a 048c, b 048c
+// a 159d, b 159d
+// a 26ae, b 26ae
+// a 37bf, b 37bf
+//
+static WEBP_INLINE uint8x8x4_t DistoTranspose4x4U8(uint8x8x4_t d4_in) {
+  const uint8x8x2_t d2_tmp0 = vtrn_u8(d4_in.val[0], d4_in.val[1]);
+  const uint8x8x2_t d2_tmp1 = vtrn_u8(d4_in.val[2], d4_in.val[3]);
+  const uint16x4x2_t d2_tmp2 = vtrn_u16(vreinterpret_u16_u8(d2_tmp0.val[0]),
+                                        vreinterpret_u16_u8(d2_tmp1.val[0]));
+  const uint16x4x2_t d2_tmp3 = vtrn_u16(vreinterpret_u16_u8(d2_tmp0.val[1]),
+                                        vreinterpret_u16_u8(d2_tmp1.val[1]));
 
-// Zero extend an uint16x4_t 'v' to an int32x4_t.
-static WEBP_INLINE int32x4_t ConvertU16ToS32(uint16x4_t v) {
-  return vreinterpretq_s32_u32(vmovl_u16(v));
+  d4_in.val[0] = vreinterpret_u8_u16(d2_tmp2.val[0]);
+  d4_in.val[2] = vreinterpret_u8_u16(d2_tmp2.val[1]);
+  d4_in.val[1] = vreinterpret_u8_u16(d2_tmp3.val[0]);
+  d4_in.val[3] = vreinterpret_u8_u16(d2_tmp3.val[1]);
+  return d4_in;
 }
 
-// Does a regular 4x4 transpose followed by an adjustment of the upper columns
-// in the inner rows to restore the source order of differences,
-// i.e., a0 - a1 | a3 - a2.
-static WEBP_INLINE int32x4x4_t DistoTranspose4x4(const int32x4x4_t rows) {
-  int32x4x4_t out = Transpose4x4(rows);
-  // restore source order in the columns containing differences.
-  const int32x2_t r1h = vget_high_s32(out.val[1]);
-  const int32x2_t r2h = vget_high_s32(out.val[2]);
-  out.val[1] = vcombine_s32(vget_low_s32(out.val[1]), r2h);
-  out.val[2] = vcombine_s32(vget_low_s32(out.val[2]), r1h);
-  return out;
+static WEBP_INLINE int16x8x4_t DistoTranspose4x4S16(int16x8x4_t q4_in) {
+  const int16x8x2_t q2_tmp0 = vtrnq_s16(q4_in.val[0], q4_in.val[1]);
+  const int16x8x2_t q2_tmp1 = vtrnq_s16(q4_in.val[2], q4_in.val[3]);
+  const int32x4x2_t q2_tmp2 = vtrnq_s32(vreinterpretq_s32_s16(q2_tmp0.val[0]),
+                                        vreinterpretq_s32_s16(q2_tmp1.val[0]));
+  const int32x4x2_t q2_tmp3 = vtrnq_s32(vreinterpretq_s32_s16(q2_tmp0.val[1]),
+                                        vreinterpretq_s32_s16(q2_tmp1.val[1]));
+  q4_in.val[0] = vreinterpretq_s16_s32(q2_tmp2.val[0]);
+  q4_in.val[2] = vreinterpretq_s16_s32(q2_tmp2.val[1]);
+  q4_in.val[1] = vreinterpretq_s16_s32(q2_tmp3.val[0]);
+  q4_in.val[3] = vreinterpretq_s16_s32(q2_tmp3.val[1]);
+  return q4_in;
 }
 
-static WEBP_INLINE int32x4x4_t DistoHorizontalPass(const uint8x8_t r0r1,
-                                                   const uint8x8_t r2r3) {
-  // a0 = in[0] + in[2] | a1 = in[1] + in[3]
-  const uint16x8_t a0a1 = vaddl_u8(r0r1, r2r3);
-  // a3 = in[0] - in[2] | a2 = in[1] - in[3]
-  const uint16x8_t a3a2 = vsubl_u8(r0r1, r2r3);
-  const int32x4_t tmp0 = vpaddlq_s16(vreinterpretq_s16_u16(a0a1));  // a0 + a1
-  const int32x4_t tmp1 = vpaddlq_s16(vreinterpretq_s16_u16(a3a2));  // a3 + a2
-  // no pairwise subtraction; reorder to perform tmp[2]/tmp[3] calculations.
-  // a0a0 a3a3 a0a0 a3a3 a0a0 a3a3 a0a0 a3a3
-  // a1a1 a2a2 a1a1 a2a2 a1a1 a2a2 a1a1 a2a2
-  const int16x8x2_t transpose =
-      vtrnq_s16(vreinterpretq_s16_u16(a0a1), vreinterpretq_s16_u16(a3a2));
-  // tmp[3] = a0 - a1 | tmp[2] = a3 - a2
-  const int32x4_t tmp32_1 = vsubl_s16(vget_low_s16(transpose.val[0]),
-                                      vget_low_s16(transpose.val[1]));
-  const int32x4_t tmp32_2 = vsubl_s16(vget_high_s16(transpose.val[0]),
-                                      vget_high_s16(transpose.val[1]));
-  // [0]: tmp[3] [1]: tmp[2]
-  const int32x4x2_t split = vtrnq_s32(tmp32_1, tmp32_2);
-  const int32x4x4_t res = { { tmp0, tmp1, split.val[1], split.val[0] } };
-  return res;
+static WEBP_INLINE int16x8x4_t DistoHorizontalPass(const uint8x8x4_t d4_in) {
+  // {a0, a1} = {in[0] + in[2], in[1] + in[3]}
+  // {a3, a2} = {in[0] - in[2], in[1] - in[3]}
+  const int16x8_t q_a0 = vreinterpretq_s16_u16(vaddl_u8(d4_in.val[0],
+                                                        d4_in.val[2]));
+  const int16x8_t q_a1 = vreinterpretq_s16_u16(vaddl_u8(d4_in.val[1],
+                                                        d4_in.val[3]));
+  const int16x8_t q_a3 = vreinterpretq_s16_u16(vsubl_u8(d4_in.val[0],
+                                                        d4_in.val[2]));
+  const int16x8_t q_a2 = vreinterpretq_s16_u16(vsubl_u8(d4_in.val[1],
+                                                        d4_in.val[3]));
+  int16x8x4_t q4_out;
+  // tmp[0] = a0 + a1
+  // tmp[1] = a3 + a2
+  // tmp[2] = a3 - a2
+  // tmp[3] = a0 - a1
+  INIT_VECTOR4(q4_out,
+               vaddq_s16(q_a0, q_a1), vaddq_s16(q_a3, q_a2),
+               vsubq_s16(q_a3, q_a2), vsubq_s16(q_a0, q_a1));
+  return q4_out;
 }
 
-static WEBP_INLINE int32x4x4_t DistoVerticalPass(const int32x4x4_t rows) {
-  // a0 = tmp[0 + i] + tmp[8 + i];
-  const int32x4_t a0 = vaddq_s32(rows.val[0], rows.val[1]);
-  // a1 = tmp[4 + i] + tmp[12+ i];
-  const int32x4_t a1 = vaddq_s32(rows.val[2], rows.val[3]);
-  // a2 = tmp[4 + i] - tmp[12+ i];
-  const int32x4_t a2 = vsubq_s32(rows.val[2], rows.val[3]);
-  // a3 = tmp[0 + i] - tmp[8 + i];
-  const int32x4_t a3 = vsubq_s32(rows.val[0], rows.val[1]);
-  const int32x4_t b0 = vqabsq_s32(vaddq_s32(a0, a1));  // abs(a0 + a1)
-  const int32x4_t b1 = vqabsq_s32(vaddq_s32(a3, a2));  // abs(a3 + a2)
-  const int32x4_t b2 = vabdq_s32(a3, a2);              // abs(a3 - a2)
-  const int32x4_t b3 = vabdq_s32(a0, a1);              // abs(a0 - a1)
-  const int32x4x4_t res = { { b0, b1, b2, b3 } };
-  return res;
+static WEBP_INLINE int16x8x4_t DistoVerticalPass(int16x8x4_t q4_in) {
+  const int16x8_t q_a0 = vaddq_s16(q4_in.val[0], q4_in.val[2]);
+  const int16x8_t q_a1 = vaddq_s16(q4_in.val[1], q4_in.val[3]);
+  const int16x8_t q_a2 = vsubq_s16(q4_in.val[1], q4_in.val[3]);
+  const int16x8_t q_a3 = vsubq_s16(q4_in.val[0], q4_in.val[2]);
+
+  q4_in.val[0] = vaddq_s16(q_a0, q_a1);
+  q4_in.val[1] = vaddq_s16(q_a3, q_a2);
+  q4_in.val[2] = vabdq_s16(q_a3, q_a2);
+  q4_in.val[3] = vabdq_s16(q_a0, q_a1);
+  q4_in.val[0] = vabsq_s16(q4_in.val[0]);
+  q4_in.val[1] = vabsq_s16(q4_in.val[1]);
+  return q4_in;
 }
 
-// Calculate the weighted sum of the rows in 'b'.
-static WEBP_INLINE int64x1_t DistoSum(const int32x4x4_t b,
-                                      const int32x4_t w0, const int32x4_t w1,
-                                      const int32x4_t w2, const int32x4_t w3) {
-  const int32x4_t s0 = vmulq_s32(w0, b.val[0]);
-  const int32x4_t s1 = vmlaq_s32(s0, w1, b.val[1]);
-  const int32x4_t s2 = vmlaq_s32(s1, w2, b.val[2]);
-  const int32x4_t s3 = vmlaq_s32(s2, w3, b.val[3]);
-  const int64x2_t sum1 = vpaddlq_s32(s3);
-  const int64x1_t sum2 = vadd_s64(vget_low_s64(sum1), vget_high_s64(sum1));
-  return sum2;
+static WEBP_INLINE int16x4x4_t DistoLoadW(const uint16_t* w) {
+  const uint16x8_t q_w07 = vld1q_u16(&w[0]);
+  const uint16x8_t q_w8f = vld1q_u16(&w[8]);
+  int16x4x4_t d4_w;
+  INIT_VECTOR4(d4_w,
+               vget_low_s16(vreinterpretq_s16_u16(q_w07)),
+               vget_high_s16(vreinterpretq_s16_u16(q_w07)),
+               vget_low_s16(vreinterpretq_s16_u16(q_w8f)),
+               vget_high_s16(vreinterpretq_s16_u16(q_w8f)));
+  return d4_w;
+}
+
+static WEBP_INLINE int32x2_t DistoSum(const int16x8x4_t q4_in,
+                                      const int16x4x4_t d4_w) {
+  int32x2_t d_sum;
+  // sum += w[ 0] * abs(b0);
+  // sum += w[ 4] * abs(b1);
+  // sum += w[ 8] * abs(b2);
+  // sum += w[12] * abs(b3);
+  int32x4_t q_sum0 = vmull_s16(d4_w.val[0], vget_low_s16(q4_in.val[0]));
+  int32x4_t q_sum1 = vmull_s16(d4_w.val[1], vget_low_s16(q4_in.val[1]));
+  int32x4_t q_sum2 = vmull_s16(d4_w.val[2], vget_low_s16(q4_in.val[2]));
+  int32x4_t q_sum3 = vmull_s16(d4_w.val[3], vget_low_s16(q4_in.val[3]));
+  q_sum0 = vmlsl_s16(q_sum0, d4_w.val[0], vget_high_s16(q4_in.val[0]));
+  q_sum1 = vmlsl_s16(q_sum1, d4_w.val[1], vget_high_s16(q4_in.val[1]));
+  q_sum2 = vmlsl_s16(q_sum2, d4_w.val[2], vget_high_s16(q4_in.val[2]));
+  q_sum3 = vmlsl_s16(q_sum3, d4_w.val[3], vget_high_s16(q4_in.val[3]));
+
+  q_sum0 = vaddq_s32(q_sum0, q_sum1);
+  q_sum2 = vaddq_s32(q_sum2, q_sum3);
+  q_sum2 = vaddq_s32(q_sum0, q_sum2);
+  d_sum = vpadd_s32(vget_low_s32(q_sum2), vget_high_s32(q_sum2));
+  d_sum = vpadd_s32(d_sum, d_sum);
+  return d_sum;
 }
 
 #define LOAD_LANE_32b(src, VALUE, LANE) \
-    (VALUE) = vld1q_lane_u32((const uint32_t*)(src), (VALUE), (LANE))
+    (VALUE) = vld1_lane_u32((const uint32_t*)(src), (VALUE), (LANE))
 
 // Hadamard transform
 // Returns the weighted sum of the absolute value of transformed coefficients.
 static int Disto4x4(const uint8_t* const a, const uint8_t* const b,
                     const uint16_t* const w) {
-  uint32x4_t d0d1 = { 0, 0, 0, 0 };
-  uint32x4_t d2d3 = { 0, 0, 0, 0 };
-  LOAD_LANE_32b(a + 0 * BPS, d0d1, 0);  // a00 a01 a02 a03
-  LOAD_LANE_32b(a + 1 * BPS, d0d1, 1);  // a10 a11 a12 a13
-  LOAD_LANE_32b(b + 0 * BPS, d0d1, 2);  // b00 b01 b02 b03
-  LOAD_LANE_32b(b + 1 * BPS, d0d1, 3);  // b10 b11 b12 b13
-  LOAD_LANE_32b(a + 2 * BPS, d2d3, 0);  // a20 a21 a22 a23
-  LOAD_LANE_32b(a + 3 * BPS, d2d3, 1);  // a30 a31 a32 a33
-  LOAD_LANE_32b(b + 2 * BPS, d2d3, 2);  // b20 b21 b22 b23
-  LOAD_LANE_32b(b + 3 * BPS, d2d3, 3);  // b30 b31 b32 b33
+  uint32x2_t d_in_ab_0123 = vdup_n_u32(0);
+  uint32x2_t d_in_ab_4567 = vdup_n_u32(0);
+  uint32x2_t d_in_ab_89ab = vdup_n_u32(0);
+  uint32x2_t d_in_ab_cdef = vdup_n_u32(0);
+  uint8x8x4_t d4_in;
+
+  // load data a, b
+  LOAD_LANE_32b(a + 0 * BPS, d_in_ab_0123, 0);
+  LOAD_LANE_32b(a + 1 * BPS, d_in_ab_4567, 0);
+  LOAD_LANE_32b(a + 2 * BPS, d_in_ab_89ab, 0);
+  LOAD_LANE_32b(a + 3 * BPS, d_in_ab_cdef, 0);
+  LOAD_LANE_32b(b + 0 * BPS, d_in_ab_0123, 1);
+  LOAD_LANE_32b(b + 1 * BPS, d_in_ab_4567, 1);
+  LOAD_LANE_32b(b + 2 * BPS, d_in_ab_89ab, 1);
+  LOAD_LANE_32b(b + 3 * BPS, d_in_ab_cdef, 1);
+  INIT_VECTOR4(d4_in,
+               vreinterpret_u8_u32(d_in_ab_0123),
+               vreinterpret_u8_u32(d_in_ab_4567),
+               vreinterpret_u8_u32(d_in_ab_89ab),
+               vreinterpret_u8_u32(d_in_ab_cdef));
 
   {
-    // a00 a01 a20 a21 a10 a11 a30 a31 b00 b01 b20 b21 b10 b11 b30 b31
-    // a02 a03 a22 a23 a12 a13 a32 a33 b02 b03 b22 b23 b12 b13 b32 b33
-    const uint16x8x2_t tmp =
-        vtrnq_u16(vreinterpretq_u16_u32(d0d1), vreinterpretq_u16_u32(d2d3));
-    const uint8x16_t d0d1u8 = vreinterpretq_u8_u16(tmp.val[0]);
-    const uint8x16_t d2d3u8 = vreinterpretq_u8_u16(tmp.val[1]);
-    const int32x4x4_t hpass_a = DistoHorizontalPass(vget_low_u8(d0d1u8),
-                                                    vget_low_u8(d2d3u8));
-    const int32x4x4_t hpass_b = DistoHorizontalPass(vget_high_u8(d0d1u8),
-                                                    vget_high_u8(d2d3u8));
-    const int32x4x4_t tmp_a = DistoTranspose4x4(hpass_a);
-    const int32x4x4_t tmp_b = DistoTranspose4x4(hpass_b);
-    const int32x4x4_t vpass_a = DistoVerticalPass(tmp_a);
-    const int32x4x4_t vpass_b = DistoVerticalPass(tmp_b);
-    const int32x4_t w0 = ConvertU16ToS32(vld1_u16(w + 0));
-    const int32x4_t w1 = ConvertU16ToS32(vld1_u16(w + 4));
-    const int32x4_t w2 = ConvertU16ToS32(vld1_u16(w + 8));
-    const int32x4_t w3 = ConvertU16ToS32(vld1_u16(w + 12));
-    const int64x1_t sum1 = DistoSum(vpass_a, w0, w1, w2, w3);
-    const int64x1_t sum2 = DistoSum(vpass_b, w0, w1, w2, w3);
-    const int32x2_t diff = vabd_s32(vreinterpret_s32_s64(sum1),
-                                    vreinterpret_s32_s64(sum2));
-    const int32x2_t res = vshr_n_s32(diff, 5);
-    return vget_lane_s32(res, 0);
+    // horizontal pass
+    const uint8x8x4_t d4_t = DistoTranspose4x4U8(d4_in);
+    const int16x8x4_t q4_h = DistoHorizontalPass(d4_t);
+    const int16x4x4_t d4_w = DistoLoadW(w);
+    // vertical pass
+    const int16x8x4_t q4_t = DistoTranspose4x4S16(q4_h);
+    const int16x8x4_t q4_v = DistoVerticalPass(q4_t);
+    int32x2_t d_sum = DistoSum(q4_v, d4_w);
+
+    // abs(sum2 - sum1) >> 5
+    d_sum = vabs_s32(d_sum);
+    d_sum  = vshr_n_s32(d_sum, 5);
+    return vget_lane_s32(d_sum, 0);
   }
 }
-
 #undef LOAD_LANE_32b
-
-#else
-
-// Hadamard transform
-// Returns the weighted sum of the absolute value of transformed coefficients.
-static int Disto4x4(const uint8_t* const a, const uint8_t* const b,
-                    const uint16_t* const w) {
-  const int kBPS = BPS;
-  const uint8_t* A = a;
-  const uint8_t* B = b;
-  const uint16_t* W = w;
-  int sum;
-  __asm__ volatile (
-    "vld1.32         d0[0], [%[a]], %[kBPS]   \n"
-    "vld1.32         d0[1], [%[a]], %[kBPS]   \n"
-    "vld1.32         d2[0], [%[a]], %[kBPS]   \n"
-    "vld1.32         d2[1], [%[a]]            \n"
-
-    "vld1.32         d1[0], [%[b]], %[kBPS]   \n"
-    "vld1.32         d1[1], [%[b]], %[kBPS]   \n"
-    "vld1.32         d3[0], [%[b]], %[kBPS]   \n"
-    "vld1.32         d3[1], [%[b]]            \n"
-
-    // a d0/d2, b d1/d3
-    // d0/d1: 01 01 01 01
-    // d2/d3: 23 23 23 23
-    // But: it goes 01 45 23 67
-    // Notice the middle values are transposed
-    "vtrn.16         q0, q1                   \n"
-
-    // {a0, a1} = {in[0] + in[2], in[1] + in[3]}
-    "vaddl.u8        q2, d0, d2               \n"
-    "vaddl.u8        q10, d1, d3              \n"
-    // {a3, a2} = {in[0] - in[2], in[1] - in[3]}
-    "vsubl.u8        q3, d0, d2               \n"
-    "vsubl.u8        q11, d1, d3              \n"
-
-    // tmp[0] = a0 + a1
-    "vpaddl.s16      q0, q2                   \n"
-    "vpaddl.s16      q8, q10                  \n"
-
-    // tmp[1] = a3 + a2
-    "vpaddl.s16      q1, q3                   \n"
-    "vpaddl.s16      q9, q11                  \n"
-
-    // No pair subtract
-    // q2 = {a0, a3}
-    // q3 = {a1, a2}
-    "vtrn.16         q2, q3                   \n"
-    "vtrn.16         q10, q11                 \n"
-
-    // {tmp[3], tmp[2]} = {a0 - a1, a3 - a2}
-    "vsubl.s16       q12, d4, d6              \n"
-    "vsubl.s16       q13, d5, d7              \n"
-    "vsubl.s16       q14, d20, d22            \n"
-    "vsubl.s16       q15, d21, d23            \n"
-
-    // separate tmp[3] and tmp[2]
-    // q12 = tmp[3]
-    // q13 = tmp[2]
-    "vtrn.32         q12, q13                 \n"
-    "vtrn.32         q14, q15                 \n"
-
-    // Transpose tmp for a
-    "vswp            d1, d26                  \n" // vtrn.64
-    "vswp            d3, d24                  \n" // vtrn.64
-    "vtrn.32         q0, q1                   \n"
-    "vtrn.32         q13, q12                 \n"
-
-    // Transpose tmp for b
-    "vswp            d17, d30                 \n" // vtrn.64
-    "vswp            d19, d28                 \n" // vtrn.64
-    "vtrn.32         q8, q9                   \n"
-    "vtrn.32         q15, q14                 \n"
-
-    // The first Q register is a, the second b.
-    // q0/8 tmp[0-3]
-    // q13/15 tmp[4-7]
-    // q1/9 tmp[8-11]
-    // q12/14 tmp[12-15]
-
-    // These are still in 01 45 23 67 order. We fix it easily in the addition
-    // case but the subtraction propagates them.
-    "vswp            d3, d27                  \n"
-    "vswp            d19, d31                 \n"
-
-    // a0 = tmp[0] + tmp[8]
-    "vadd.s32        q2, q0, q1               \n"
-    "vadd.s32        q3, q8, q9               \n"
-
-    // a1 = tmp[4] + tmp[12]
-    "vadd.s32        q10, q13, q12            \n"
-    "vadd.s32        q11, q15, q14            \n"
-
-    // a2 = tmp[4] - tmp[12]
-    "vsub.s32        q13, q13, q12            \n"
-    "vsub.s32        q15, q15, q14            \n"
-
-    // a3 = tmp[0] - tmp[8]
-    "vsub.s32        q0, q0, q1               \n"
-    "vsub.s32        q8, q8, q9               \n"
-
-    // b0 = a0 + a1
-    "vadd.s32        q1, q2, q10              \n"
-    "vadd.s32        q9, q3, q11              \n"
-
-    // b1 = a3 + a2
-    "vadd.s32        q12, q0, q13             \n"
-    "vadd.s32        q14, q8, q15             \n"
-
-    // b2 = a3 - a2
-    "vsub.s32        q0, q0, q13              \n"
-    "vsub.s32        q8, q8, q15              \n"
-
-    // b3 = a0 - a1
-    "vsub.s32        q2, q2, q10              \n"
-    "vsub.s32        q3, q3, q11              \n"
-
-    "vld1.64         {q10, q11}, [%[w]]       \n"
-
-    // abs(b0)
-    "vabs.s32        q1, q1                   \n"
-    "vabs.s32        q9, q9                   \n"
-    // abs(b1)
-    "vabs.s32        q12, q12                 \n"
-    "vabs.s32        q14, q14                 \n"
-    // abs(b2)
-    "vabs.s32        q0, q0                   \n"
-    "vabs.s32        q8, q8                   \n"
-    // abs(b3)
-    "vabs.s32        q2, q2                   \n"
-    "vabs.s32        q3, q3                   \n"
-
-    // expand w before using.
-    "vmovl.u16       q13, d20                 \n"
-    "vmovl.u16       q15, d21                 \n"
-
-    // w[0] * abs(b0)
-    "vmul.u32        q1, q1, q13              \n"
-    "vmul.u32        q9, q9, q13              \n"
-
-    // w[4] * abs(b1)
-    "vmla.u32        q1, q12, q15             \n"
-    "vmla.u32        q9, q14, q15             \n"
-
-    // expand w before using.
-    "vmovl.u16       q13, d22                 \n"
-    "vmovl.u16       q15, d23                 \n"
-
-    // w[8] * abs(b1)
-    "vmla.u32        q1, q0, q13              \n"
-    "vmla.u32        q9, q8, q13              \n"
-
-    // w[12] * abs(b1)
-    "vmla.u32        q1, q2, q15              \n"
-    "vmla.u32        q9, q3, q15              \n"
-
-    // Sum the arrays
-    "vpaddl.u32      q1, q1                   \n"
-    "vpaddl.u32      q9, q9                   \n"
-    "vadd.u64        d2, d3                   \n"
-    "vadd.u64        d18, d19                 \n"
-
-    // Hadamard transform needs 4 bits of extra precision (2 bits in each
-    // direction) for dynamic raw. Weights w[] are 16bits at max, so the maximum
-    // precision for coeff is 8bit of input + 4bits of Hadamard transform +
-    // 16bits for w[] + 2 bits of abs() summation.
-    //
-    // This uses a maximum of 31 bits (signed). Discarding the top 32 bits is
-    // A-OK.
-
-    // sum2 - sum1
-    "vsub.u32        d0, d2, d18              \n"
-    // abs(sum2 - sum1)
-    "vabs.s32        d0, d0                   \n"
-    // abs(sum2 - sum1) >> 5
-    "vshr.u32        d0, #5                   \n"
-
-    // It would be better to move the value straight into r0 but I'm not
-    // entirely sure how this works with inline assembly.
-    "vmov.32         %[sum], d0[0]            \n"
-
-    : [sum] "=r"(sum), [a] "+r"(A), [b] "+r"(B), [w] "+r"(W)
-    : [kBPS] "r"(kBPS)
-    : "memory", "q0", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9",
-      "q10", "q11", "q12", "q13", "q14", "q15"  // clobbered
-  ) ;
-
-  return sum;
-}
-
-#endif  // USE_INTRINSICS
 
 static int Disto16x16(const uint8_t* const a, const uint8_t* const b,
                       const uint16_t* const w) {
@@ -885,6 +727,7 @@ static void CollectHistogram(const uint8_t* ref, const uint8_t* pred,
                              VP8Histogram* const histo) {
   const uint16x8_t max_coeff_thresh = vdupq_n_u16(MAX_COEFF_THRESH);
   int j;
+  int distribution[MAX_COEFF_THRESH + 1] = { 0 };
   for (j = start_block; j < end_block; ++j) {
     int16_t out[16];
     FTransform(ref + VP8DspScan[j], pred + VP8DspScan[j], out);
@@ -902,10 +745,11 @@ static void CollectHistogram(const uint8_t* ref, const uint8_t* pred,
       vst1q_s16(out + 8, vreinterpretq_s16_u16(b3));
       // Convert coefficients to bin.
       for (k = 0; k < 16; ++k) {
-        histo->distribution[out[k]]++;
+        ++distribution[out[k]];
       }
     }
   }
+  VP8SetHistogramData(distribution, histo);
 }
 
 //------------------------------------------------------------------------------
@@ -1049,17 +893,22 @@ static int QuantizeBlock(int16_t in[16], int16_t out[16],
   return 0;
 }
 
-#endif   // !WORK_AROUND_GCC
+static int Quantize2Blocks(int16_t in[32], int16_t out[32],
+                           const VP8Matrix* const mtx) {
+  int nz;
+  nz  = QuantizeBlock(in + 0 * 16, out + 0 * 16, mtx) << 0;
+  nz |= QuantizeBlock(in + 1 * 16, out + 1 * 16, mtx) << 1;
+  return nz;
+}
 
-#endif   // WEBP_USE_NEON
+#endif   // !WORK_AROUND_GCC
 
 //------------------------------------------------------------------------------
 // Entry point
 
 extern void VP8EncDspInitNEON(void);
 
-void VP8EncDspInitNEON(void) {
-#if defined(WEBP_USE_NEON)
+WEBP_TSAN_IGNORE_FUNCTION void VP8EncDspInitNEON(void) {
   VP8ITransform = ITransform;
   VP8FTransform = FTransform;
 
@@ -1074,6 +923,12 @@ void VP8EncDspInitNEON(void) {
   VP8SSE4x4 = SSE4x4;
 #if !defined(WORK_AROUND_GCC)
   VP8EncQuantizeBlock = QuantizeBlock;
+  VP8EncQuantize2Blocks = Quantize2Blocks;
 #endif
-#endif   // WEBP_USE_NEON
 }
+
+#else  // !WEBP_USE_NEON
+
+WEBP_DSP_INIT_STUB(VP8EncDspInitNEON)
+
+#endif  // WEBP_USE_NEON

@@ -15,6 +15,10 @@
 #ifndef WEBP_UTILS_UTILS_H_
 #define WEBP_UTILS_UTILS_H_
 
+#ifdef HAVE_CONFIG_H
+#include "../webp/config.h"
+#endif
+
 #include <assert.h>
 
 #include "../webp/types.h"
@@ -44,6 +48,32 @@ WEBP_EXTERN(void*) WebPSafeCalloc(uint64_t nmemb, size_t size);
 WEBP_EXTERN(void) WebPSafeFree(void* const ptr);
 
 //------------------------------------------------------------------------------
+// Alignment
+
+#define WEBP_ALIGN_CST 31
+#define WEBP_ALIGN(PTR) ((uintptr_t)((PTR) + WEBP_ALIGN_CST) & ~WEBP_ALIGN_CST)
+
+#if defined(WEBP_FORCE_ALIGNED)
+#include <string.h>
+// memcpy() is the safe way of moving potentially unaligned 32b memory.
+static WEBP_INLINE uint32_t WebPMemToUint32(const uint8_t* const ptr) {
+  uint32_t A;
+  memcpy(&A, (const int*)ptr, sizeof(A));
+  return A;
+}
+static WEBP_INLINE void WebPUint32ToMem(uint8_t* const ptr, uint32_t val) {
+  memcpy(ptr, &val, sizeof(val));
+}
+#else
+static WEBP_INLINE uint32_t WebPMemToUint32(const uint8_t* const ptr) {
+  return *(const uint32_t*)ptr;
+}
+static WEBP_INLINE void WebPUint32ToMem(uint8_t* const ptr, uint32_t val) {
+  *(uint32_t*)ptr = val;
+}
+#endif
+
+//------------------------------------------------------------------------------
 // Reading/writing data.
 
 // Read 16, 24 or 32 bits stored in little-endian order.
@@ -56,7 +86,7 @@ static WEBP_INLINE int GetLE24(const uint8_t* const data) {
 }
 
 static WEBP_INLINE uint32_t GetLE32(const uint8_t* const data) {
-  return (uint32_t)GetLE16(data) | (GetLE16(data + 2) << 16);
+  return GetLE16(data) | ((uint32_t)GetLE16(data + 2) << 16);
 }
 
 // Store 16, 24 or 32 bits in little-endian order.
@@ -90,7 +120,7 @@ static WEBP_INLINE int BitsLog2Floor(uint32_t n) {
 #pragma intrinsic(_BitScanReverse)
 
 static WEBP_INLINE int BitsLog2Floor(uint32_t n) {
-  uint32_t first_set_bit;
+  unsigned long first_set_bit;
   _BitScanReverse(&first_set_bit, n);
   return first_set_bit;
 }
@@ -111,6 +141,21 @@ static WEBP_INLINE int BitsLog2Floor(uint32_t n) {
   return log;
 }
 #endif
+
+//------------------------------------------------------------------------------
+// Pixel copying.
+
+struct WebPPicture;
+
+// Copy width x height pixels from 'src' to 'dst' honoring the strides.
+WEBP_EXTERN(void) WebPCopyPlane(const uint8_t* src, int src_stride,
+                                uint8_t* dst, int dst_stride,
+                                int width, int height);
+
+// Copy ARGB pixels from 'src' to 'dst' honoring strides. 'src' and 'dst' are
+// assumed to be already allocated and using ARGB data.
+WEBP_EXTERN(void) WebPCopyPixels(const struct WebPPicture* const src,
+                                 struct WebPPicture* const dst);
 
 //------------------------------------------------------------------------------
 

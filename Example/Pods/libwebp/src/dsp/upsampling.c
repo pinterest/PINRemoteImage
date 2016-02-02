@@ -153,46 +153,73 @@ WebPUpsampleLinePairFunc WebPGetLinePairConverter(int alpha_is_last) {
 // YUV444 converter
 
 #define YUV444_FUNC(FUNC_NAME, FUNC, XSTEP)                                    \
-static void FUNC_NAME(const uint8_t* y, const uint8_t* u, const uint8_t* v,    \
-                      uint8_t* dst, int len) {                                 \
+extern void FUNC_NAME(const uint8_t* y, const uint8_t* u, const uint8_t* v,    \
+                      uint8_t* dst, int len);                                  \
+void FUNC_NAME(const uint8_t* y, const uint8_t* u, const uint8_t* v,           \
+               uint8_t* dst, int len) {                                        \
   int i;                                                                       \
   for (i = 0; i < len; ++i) FUNC(y[i], u[i], v[i], &dst[i * XSTEP]);           \
 }
 
-YUV444_FUNC(Yuv444ToRgb,      VP8YuvToRgb,  3)
-YUV444_FUNC(Yuv444ToBgr,      VP8YuvToBgr,  3)
-YUV444_FUNC(Yuv444ToRgba,     VP8YuvToRgba, 4)
-YUV444_FUNC(Yuv444ToBgra,     VP8YuvToBgra, 4)
-YUV444_FUNC(Yuv444ToArgb,     VP8YuvToArgb, 4)
-YUV444_FUNC(Yuv444ToRgba4444, VP8YuvToRgba4444, 2)
-YUV444_FUNC(Yuv444ToRgb565,   VP8YuvToRgb565, 2)
+YUV444_FUNC(WebPYuv444ToRgbC,      VP8YuvToRgb,  3)
+YUV444_FUNC(WebPYuv444ToBgrC,      VP8YuvToBgr,  3)
+YUV444_FUNC(WebPYuv444ToRgbaC,     VP8YuvToRgba, 4)
+YUV444_FUNC(WebPYuv444ToBgraC,     VP8YuvToBgra, 4)
+YUV444_FUNC(WebPYuv444ToArgbC,     VP8YuvToArgb, 4)
+YUV444_FUNC(WebPYuv444ToRgba4444C, VP8YuvToRgba4444, 2)
+YUV444_FUNC(WebPYuv444ToRgb565C,   VP8YuvToRgb565, 2)
 
 #undef YUV444_FUNC
 
-const WebPYUV444Converter WebPYUV444Converters[MODE_LAST] = {
-  Yuv444ToRgb,       // MODE_RGB
-  Yuv444ToRgba,      // MODE_RGBA
-  Yuv444ToBgr,       // MODE_BGR
-  Yuv444ToBgra,      // MODE_BGRA
-  Yuv444ToArgb,      // MODE_ARGB
-  Yuv444ToRgba4444,  // MODE_RGBA_4444
-  Yuv444ToRgb565,    // MODE_RGB_565
-  Yuv444ToRgba,      // MODE_rgbA
-  Yuv444ToBgra,      // MODE_bgrA
-  Yuv444ToArgb,      // MODE_Argb
-  Yuv444ToRgba4444   // MODE_rgbA_4444
-};
+WebPYUV444Converter WebPYUV444Converters[MODE_LAST];
+
+extern void WebPInitYUV444ConvertersMIPSdspR2(void);
+extern void WebPInitYUV444ConvertersSSE2(void);
+
+static volatile VP8CPUInfo upsampling_last_cpuinfo_used1 =
+    (VP8CPUInfo)&upsampling_last_cpuinfo_used1;
+
+WEBP_TSAN_IGNORE_FUNCTION void WebPInitYUV444Converters(void) {
+  if (upsampling_last_cpuinfo_used1 == VP8GetCPUInfo) return;
+
+  WebPYUV444Converters[MODE_RGB]       = WebPYuv444ToRgbC;
+  WebPYUV444Converters[MODE_RGBA]      = WebPYuv444ToRgbaC;
+  WebPYUV444Converters[MODE_BGR]       = WebPYuv444ToBgrC;
+  WebPYUV444Converters[MODE_BGRA]      = WebPYuv444ToBgraC;
+  WebPYUV444Converters[MODE_ARGB]      = WebPYuv444ToArgbC;
+  WebPYUV444Converters[MODE_RGBA_4444] = WebPYuv444ToRgba4444C;
+  WebPYUV444Converters[MODE_RGB_565]   = WebPYuv444ToRgb565C;
+  WebPYUV444Converters[MODE_rgbA]      = WebPYuv444ToRgbaC;
+  WebPYUV444Converters[MODE_bgrA]      = WebPYuv444ToBgraC;
+  WebPYUV444Converters[MODE_Argb]      = WebPYuv444ToArgbC;
+  WebPYUV444Converters[MODE_rgbA_4444] = WebPYuv444ToRgba4444C;
+
+  if (VP8GetCPUInfo != NULL) {
+#if defined(WEBP_USE_SSE2)
+    if (VP8GetCPUInfo(kSSE2)) {
+      WebPInitYUV444ConvertersSSE2();
+    }
+#endif
+#if defined(WEBP_USE_MIPS_DSP_R2)
+    if (VP8GetCPUInfo(kMIPSdspR2)) {
+      WebPInitYUV444ConvertersMIPSdspR2();
+    }
+#endif
+  }
+  upsampling_last_cpuinfo_used1 = VP8GetCPUInfo;
+}
 
 //------------------------------------------------------------------------------
 // Main calls
 
 extern void WebPInitUpsamplersSSE2(void);
 extern void WebPInitUpsamplersNEON(void);
+extern void WebPInitUpsamplersMIPSdspR2(void);
 
 static volatile VP8CPUInfo upsampling_last_cpuinfo_used2 =
     (VP8CPUInfo)&upsampling_last_cpuinfo_used2;
 
-void WebPInitUpsamplers(void) {
+WEBP_TSAN_IGNORE_FUNCTION void WebPInitUpsamplers(void) {
   if (upsampling_last_cpuinfo_used2 == VP8GetCPUInfo) return;
 
 #ifdef FANCY_UPSAMPLING
@@ -218,6 +245,11 @@ void WebPInitUpsamplers(void) {
 #if defined(WEBP_USE_NEON)
     if (VP8GetCPUInfo(kNEON)) {
       WebPInitUpsamplersNEON();
+    }
+#endif
+#if defined(WEBP_USE_MIPS_DSP_R2)
+    if (VP8GetCPUInfo(kMIPSdspR2)) {
+      WebPInitUpsamplersMIPSdspR2();
     }
 #endif
   }

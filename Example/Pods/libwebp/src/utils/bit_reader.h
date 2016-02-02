@@ -43,10 +43,12 @@ extern "C" {
 #define BITS 56
 #elif defined(__arm__) || defined(_M_ARM)      // ARM
 #define BITS 24
+#elif defined(__aarch64__)                     // ARM 64bit
+#define BITS 56
 #elif defined(__mips__)                        // MIPS
 #define BITS 24
 #else                                          // reasonable default
-#define BITS 24  // TODO(skal): test aarch64 and find the proper BITS value.
+#define BITS 24
 #endif
 
 //------------------------------------------------------------------------------
@@ -74,12 +76,16 @@ struct VP8BitReader {
   // read buffer
   const uint8_t* buf_;        // next byte to be read
   const uint8_t* buf_end_;    // end of read buffer
+  const uint8_t* buf_max_;    // max packed-read position on buffer
   int eof_;                   // true if input is exhausted
 };
 
 // Initialize the bit reader and the boolean decoder.
 void VP8InitBitReader(VP8BitReader* const br,
-                      const uint8_t* const start, const uint8_t* const end);
+                      const uint8_t* const start, size_t size);
+// Sets the working read buffer.
+void VP8BitReaderSetBuffer(VP8BitReader* const br,
+                           const uint8_t* const start, size_t size);
 
 // Update internal pointers to displace the byte buffer by the
 // relative offset 'offset'.
@@ -107,7 +113,7 @@ int32_t VP8GetSignedValue(VP8BitReader* const br, int num_bits);
 // maximum number of bits (inclusive) the bit-reader can handle:
 #define VP8L_MAX_NUM_BIT_READ 24
 
-#define VP8L_LBITS 64  // Number of bits prefetched.
+#define VP8L_LBITS 64  // Number of bits prefetched (= bit-size of vp8l_val_t).
 #define VP8L_WBITS 32  // Minimum number of bytes ready after VP8LFillBitWindow.
 
 typedef uint64_t vp8l_val_t;  // right now, this bit-reader can only use 64bit.
@@ -118,8 +124,7 @@ typedef struct {
   size_t         len_;        // buffer length
   size_t         pos_;        // byte position in buf_
   int            bit_pos_;    // current bit-reading position in val_
-  int            eos_;        // bitstream is finished
-  int            error_;      // an error occurred (buffer overflow attempt...)
+  int            eos_;        // true if a bit was read past the end of buffer
 } VP8LBitReader;
 
 void VP8LInitBitReader(VP8LBitReader* const br,
@@ -138,14 +143,14 @@ uint32_t VP8LReadBits(VP8LBitReader* const br, int n_bits);
 
 // Return the prefetched bits, so they can be looked up.
 static WEBP_INLINE uint32_t VP8LPrefetchBits(VP8LBitReader* const br) {
-  return (uint32_t)(br->val_ >> br->bit_pos_);
+  return (uint32_t)(br->val_ >> (br->bit_pos_ & (VP8L_LBITS - 1)));
 }
 
 // Returns true if there was an attempt at reading bit past the end of
 // the buffer. Doesn't set br->eos_ flag.
 static WEBP_INLINE int VP8LIsEndOfStream(const VP8LBitReader* const br) {
   assert(br->pos_ <= br->len_);
-  return (br->pos_ == br->len_) && (br->bit_pos_ > VP8L_LBITS);
+  return br->eos_ || ((br->pos_ == br->len_) && (br->bit_pos_ > VP8L_LBITS));
 }
 
 // For jumping over a number of bits in the bit stream when accessed with

@@ -111,28 +111,28 @@ static int FinalAlphaValue(int alpha) {
 }
 
 static int GetAlpha(const VP8Histogram* const histo) {
-  int max_value = 0, last_non_zero = 1;
-  int k;
-  int alpha;
-  for (k = 0; k <= MAX_COEFF_THRESH; ++k) {
-    const int value = histo->distribution[k];
-    if (value > 0) {
-      if (value > max_value) max_value = value;
-      last_non_zero = k;
-    }
-  }
   // 'alpha' will later be clipped to [0..MAX_ALPHA] range, clamping outer
   // values which happen to be mostly noise. This leaves the maximum precision
   // for handling the useful small values which contribute most.
-  alpha = (max_value > 1) ? ALPHA_SCALE * last_non_zero / max_value : 0;
+  const int max_value = histo->max_value;
+  const int last_non_zero = histo->last_non_zero;
+  const int alpha =
+      (max_value > 1) ? ALPHA_SCALE * last_non_zero / max_value : 0;
   return alpha;
+}
+
+static void InitHistogram(VP8Histogram* const histo) {
+  histo->max_value = 0;
+  histo->last_non_zero = 1;
 }
 
 static void MergeHistograms(const VP8Histogram* const in,
                             VP8Histogram* const out) {
-  int i;
-  for (i = 0; i <= MAX_COEFF_THRESH; ++i) {
-    out->distribution[i] += in->distribution[i];
+  if (in->max_value > out->max_value) {
+    out->max_value = in->max_value;
+  }
+  if (in->last_non_zero > out->last_non_zero) {
+    out->last_non_zero = in->last_non_zero;
   }
 }
 
@@ -245,10 +245,11 @@ static int MBAnalyzeBestIntra16Mode(VP8EncIterator* const it) {
 
   VP8MakeLuma16Preds(it);
   for (mode = 0; mode < max_mode; ++mode) {
-    VP8Histogram histo = { { 0 } };
+    VP8Histogram histo;
     int alpha;
 
-    VP8CollectHistogram(it->yuv_in_ + Y_OFF,
+    InitHistogram(&histo);
+    VP8CollectHistogram(it->yuv_in_ + Y_OFF_ENC,
                         it->yuv_p_ + VP8I16ModeOffsets[mode],
                         0, 16, &histo);
     alpha = GetAlpha(&histo);
@@ -266,21 +267,22 @@ static int MBAnalyzeBestIntra4Mode(VP8EncIterator* const it,
   uint8_t modes[16];
   const int max_mode = MAX_INTRA4_MODE;
   int i4_alpha;
-  VP8Histogram total_histo = { { 0 } };
+  VP8Histogram total_histo;
   int cur_histo = 0;
+  InitHistogram(&total_histo);
 
   VP8IteratorStartI4(it);
   do {
     int mode;
     int best_mode_alpha = DEFAULT_ALPHA;
     VP8Histogram histos[2];
-    const uint8_t* const src = it->yuv_in_ + Y_OFF + VP8Scan[it->i4_];
+    const uint8_t* const src = it->yuv_in_ + Y_OFF_ENC + VP8Scan[it->i4_];
 
     VP8MakeIntra4Preds(it);
     for (mode = 0; mode < max_mode; ++mode) {
       int alpha;
 
-      memset(&histos[cur_histo], 0, sizeof(histos[cur_histo]));
+      InitHistogram(&histos[cur_histo]);
       VP8CollectHistogram(src, it->yuv_p_ + VP8I4ModeOffsets[mode],
                           0, 1, &histos[cur_histo]);
       alpha = GetAlpha(&histos[cur_histo]);
@@ -293,7 +295,7 @@ static int MBAnalyzeBestIntra4Mode(VP8EncIterator* const it,
     // accumulate best histogram
     MergeHistograms(&histos[cur_histo ^ 1], &total_histo);
     // Note: we reuse the original samples for predictors
-  } while (VP8IteratorRotateI4(it, it->yuv_in_ + Y_OFF));
+  } while (VP8IteratorRotateI4(it, it->yuv_in_ + Y_OFF_ENC));
 
   i4_alpha = GetAlpha(&total_histo);
   if (IS_BETTER_ALPHA(i4_alpha, best_alpha)) {
@@ -311,9 +313,10 @@ static int MBAnalyzeBestUVMode(VP8EncIterator* const it) {
 
   VP8MakeChroma8Preds(it);
   for (mode = 0; mode < max_mode; ++mode) {
-    VP8Histogram histo = { { 0 } };
+    VP8Histogram histo;
     int alpha;
-    VP8CollectHistogram(it->yuv_in_ + U_OFF,
+    InitHistogram(&histo);
+    VP8CollectHistogram(it->yuv_in_ + U_OFF_ENC,
                         it->yuv_p_ + VP8UVModeOffsets[mode],
                         16, 16 + 4 + 4, &histo);
     alpha = GetAlpha(&histo);
@@ -402,8 +405,8 @@ typedef struct {
 static int DoSegmentsJob(SegmentJob* const job, VP8EncIterator* const it) {
   int ok = 1;
   if (!VP8IteratorIsDone(it)) {
-    uint8_t tmp[32 + ALIGN_CST];
-    uint8_t* const scratch = (uint8_t*)DO_ALIGN(tmp);
+    uint8_t tmp[32 + WEBP_ALIGN_CST];
+    uint8_t* const scratch = (uint8_t*)WEBP_ALIGN(tmp);
     do {
       // Let's pretend we have perfect lossless reconstruction.
       VP8IteratorImport(it, scratch);

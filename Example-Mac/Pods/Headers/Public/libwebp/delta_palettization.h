@@ -1,0 +1,1 @@
+../../../libwebp/src/enc/delta_palettization.h

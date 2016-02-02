@@ -143,26 +143,14 @@ NSString * const PINDiskCacheSharedName = @"PINDiskCacheShared";
 {
     if (![string length])
         return @"";
-    
-    CFStringRef static const charsToEscape = CFSTR(".:/");
-    CFStringRef escapedString = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                        (__bridge CFStringRef)string,
-                                                                        NULL,
-                                                                        charsToEscape,
-                                                                        kCFStringEncodingUTF8);
-    return (__bridge_transfer NSString *)escapedString;
+   return [string stringByAddingPercentEncodingWithAllowedCharacters:[[NSCharacterSet characterSetWithCharactersInString:@".:/"] invertedSet]];
 }
 
 - (NSString *)decodedString:(NSString *)string
 {
     if (![string length])
         return @"";
-    
-    CFStringRef unescapedString = CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
-                                                                                          (__bridge CFStringRef)string,
-                                                                                          CFSTR(""),
-                                                                                          kCFStringEncodingUTF8);
-    return (__bridge_transfer NSString *)unescapedString;
+   return [string stringByRemovingPercentEncoding];
 }
 
 #pragma mark - Private Trash Methods -
@@ -675,6 +663,10 @@ NSString * const PINDiskCacheSharedName = @"PINDiskCacheShared";
             
             NSNumber *diskFileSize = [values objectForKey:NSURLTotalFileAllocatedSizeKey];
             if (diskFileSize) {
+                NSNumber *prevDiskFileSize = [self->_sizes objectForKey:key];
+                if (prevDiskFileSize) {
+                    self.byteCount = self->_byteCount - [prevDiskFileSize unsignedIntegerValue];
+                }
                 [self->_sizes setObject:diskFileSize forKey:key];
                 self.byteCount = self->_byteCount + [diskFileSize unsignedIntegerValue]; // atomic
             }

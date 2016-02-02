@@ -12,6 +12,9 @@
 // Author: Skal (pascal.massimino@gmail.com)
 
 #include <stdlib.h>
+#include <string.h>  // for memcpy()
+#include "../webp/decode.h"
+#include "../webp/encode.h"
 #include "./utils.h"
 
 // If PRINT_MEM_INFO is defined, extra info (like total memory used, number of
@@ -47,7 +50,6 @@
 #if defined(PRINT_MEM_INFO)
 
 #include <stdio.h>
-#include <stdlib.h>  // for abort()
 
 static int num_malloc_calls = 0;
 static int num_calloc_calls = 0;
@@ -206,6 +208,32 @@ void WebPSafeFree(void* const ptr) {
     SubMem(ptr);
   }
   free(ptr);
+}
+
+// Public API function.
+void WebPFree(void* ptr) {
+  free(ptr);
+}
+
+//------------------------------------------------------------------------------
+
+void WebPCopyPlane(const uint8_t* src, int src_stride,
+                   uint8_t* dst, int dst_stride, int width, int height) {
+  assert(src != NULL && dst != NULL);
+  assert(src_stride >= width && dst_stride >= width);
+  while (height-- > 0) {
+    memcpy(dst, src, width);
+    src += src_stride;
+    dst += dst_stride;
+  }
+}
+
+void WebPCopyPixels(const WebPPicture* const src, WebPPicture* const dst) {
+  assert(src != NULL && dst != NULL);
+  assert(src->width == dst->width && src->height == dst->height);
+  assert(src->use_argb && dst->use_argb);
+  WebPCopyPlane((uint8_t*)src->argb, 4 * src->argb_stride, (uint8_t*)dst->argb,
+                4 * dst->argb_stride, 4 * src->width, src->height);
 }
 
 //------------------------------------------------------------------------------

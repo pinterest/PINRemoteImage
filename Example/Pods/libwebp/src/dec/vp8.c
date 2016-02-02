@@ -75,10 +75,7 @@ void VP8Delete(VP8Decoder* const dec) {
 
 int VP8SetError(VP8Decoder* const dec,
                 VP8StatusCode error, const char* const msg) {
-  // TODO This check would be unnecessary if alpha decompression was separated
-  // from VP8ProcessRow/FinishRow. This avoids setting 'dec->status_' to
-  // something other than VP8_STATUS_BITSTREAM_ERROR on alpha decompression
-  // failure.
+  // The oldest error reported takes precedence over the new one.
   if (dec->status_ == VP8_STATUS_OK) {
     dec->status_ = error;
     dec->error_msg_ = msg;
@@ -193,25 +190,27 @@ static VP8StatusCode ParsePartitions(VP8Decoder* const dec,
   const uint8_t* sz = buf;
   const uint8_t* buf_end = buf + size;
   const uint8_t* part_start;
-  int last_part;
-  int p;
+  size_t size_left = size;
+  size_t last_part;
+  size_t p;
 
   dec->num_parts_ = 1 << VP8GetValue(br, 2);
   last_part = dec->num_parts_ - 1;
-  part_start = buf + last_part * 3;
-  if (buf_end < part_start) {
+  if (size < 3 * last_part) {
     // we can't even read the sizes with sz[]! That's a failure.
     return VP8_STATUS_NOT_ENOUGH_DATA;
   }
+  part_start = buf + last_part * 3;
+  size_left -= last_part * 3;
   for (p = 0; p < last_part; ++p) {
-    const uint32_t psize = sz[0] | (sz[1] << 8) | (sz[2] << 16);
-    const uint8_t* part_end = part_start + psize;
-    if (part_end > buf_end) part_end = buf_end;
-    VP8InitBitReader(dec->parts_ + p, part_start, part_end);
-    part_start = part_end;
+    size_t psize = sz[0] | (sz[1] << 8) | (sz[2] << 16);
+    if (psize > size_left) psize = size_left;
+    VP8InitBitReader(dec->parts_ + p, part_start, psize);
+    part_start += psize;
+    size_left -= psize;
     sz += 3;
   }
-  VP8InitBitReader(dec->parts_ + last_part, part_start, buf_end);
+  VP8InitBitReader(dec->parts_ + last_part, part_start, size_left);
   return (part_start < buf_end) ? VP8_STATUS_OK :
            VP8_STATUS_SUSPENDED;   // Init is ok, but there's not enough data
 }
@@ -328,7 +327,7 @@ int VP8GetHeaders(VP8Decoder* const dec, VP8Io* const io) {
   }
 
   br = &dec->br_;
-  VP8InitBitReader(br, buf, buf + frm_hdr->partition_length_);
+  VP8InitBitReader(br, buf, frm_hdr->partition_length_);
   buf += frm_hdr->partition_length_;
   buf_size -= frm_hdr->partition_length_;
 
@@ -370,11 +369,6 @@ int VP8GetHeaders(VP8Decoder* const dec, VP8Io* const io) {
 
 //------------------------------------------------------------------------------
 // Residual decoding (Paragraph 13.2 / 13.3)
-
-static const int kBands[16 + 1] = {
-  0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7,
-  0  // extra entry as sentinel
-};
 
 static const uint8_t kCat3[] = { 173, 148, 140, 0 };
 static const uint8_t kCat4[] = { 176, 155, 140, 135, 0 };
@@ -419,20 +413,19 @@ static int GetLargeValue(VP8BitReader* const br, const uint8_t* const p) {
 }
 
 // Returns the position of the last non-zero coeff plus one
-static int GetCoeffs(VP8BitReader* const br, const VP8BandProbas* const prob,
+static int GetCoeffs(VP8BitReader* const br, const VP8BandProbas* const prob[],
                      int ctx, const quant_t dq, int n, int16_t* out) {
-  // n is either 0 or 1 here. kBands[n] is not necessary for extracting '*p'.
-  const uint8_t* p = prob[n].probas_[ctx];
+  const uint8_t* p = prob[n]->probas_[ctx];
   for (; n < 16; ++n) {
     if (!VP8GetBit(br, p[0])) {
       return n;  // previous coeff was last non-zero coeff
     }
     while (!VP8GetBit(br, p[1])) {       // sequence of zero coeffs
-      p = prob[kBands[++n]].probas_[0];
+      p = prob[++n]->probas_[0];
       if (n == 16) return 16;
     }
     {        // non zero coeff
-      const VP8ProbaArray* const p_ctx = &prob[kBands[n + 1]].probas_[0];
+      const VP8ProbaArray* const p_ctx = &prob[n + 1]->probas_[0];
       int v;
       if (!VP8GetBit(br, p[2])) {
         v = 1;
@@ -455,8 +448,8 @@ static WEBP_INLINE uint32_t NzCodeBits(uint32_t nz_coeffs, int nz, int dc_nz) {
 
 static int ParseResiduals(VP8Decoder* const dec,
                           VP8MB* const mb, VP8BitReader* const token_br) {
-  VP8BandProbas (* const bands)[NUM_BANDS] = dec->proba_.bands_;
-  const VP8BandProbas* ac_proba;
+  const VP8BandProbas* (* const bands)[16 + 1] = dec->proba_.bands_ptr_;
+  const VP8BandProbas* const * ac_proba;
   VP8MBData* const block = dec->mb_data_ + dec->mb_x_;
   const VP8QuantMatrix* const q = &dec->dqm_[block->segment_];
   int16_t* dst = block->coeffs_;

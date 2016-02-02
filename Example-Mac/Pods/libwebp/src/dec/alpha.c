@@ -15,6 +15,7 @@
 #include "./alphai.h"
 #include "./vp8i.h"
 #include "./vp8li.h"
+#include "../dsp/dsp.h"
 #include "../utils/quant_levels_dec.h"
 #include "../utils/utils.h"
 #include "../webp/format_constants.h"
@@ -78,6 +79,7 @@ static int ALPHInit(ALPHDecoder* const dec, const uint8_t* data,
     assert(dec->method_ == ALPHA_LOSSLESS_COMPRESSION);
     ok = VP8LDecodeAlphaHeader(dec, alpha_data, alpha_data_size, output);
   }
+  VP8FiltersInit();
   return ok;
 }
 

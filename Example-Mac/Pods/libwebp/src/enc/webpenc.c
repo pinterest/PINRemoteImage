@@ -16,9 +16,9 @@
 #include <string.h>
 #include <math.h>
 
+#include "./cost.h"
 #include "./vp8enci.h"
 #include "./vp8li.h"
-#include "./cost.h"
 #include "../utils/utils.h"
 
 // #define PRINT_MEMORY_INFO
@@ -38,14 +38,14 @@ int WebPGetEncoderVersion(void) {
 //------------------------------------------------------------------------------
 
 static void ResetSegmentHeader(VP8Encoder* const enc) {
-  VP8SegmentHeader* const hdr = &enc->segment_hdr_;
+  VP8EncSegmentHeader* const hdr = &enc->segment_hdr_;
   hdr->num_segments_ = enc->config_->segments;
   hdr->update_map_  = (hdr->num_segments_ > 1);
   hdr->size_ = 0;
 }
 
 static void ResetFilterHeader(VP8Encoder* const enc) {
-  VP8FilterHeader* const hdr = &enc->filter_hdr_;
+  VP8EncFilterHeader* const hdr = &enc->filter_hdr_;
   hdr->simple_ = 1;
   hdr->level_ = 0;
   hdr->sharpness_ = 0;
@@ -79,7 +79,9 @@ static void ResetBoundaryPredictions(VP8Encoder* const enc) {
 //-------------------+---+---+---+---+---+---+---+
 // basic rd-opt      |   |   |   | x | x | x | x |
 //-------------------+---+---+---+---+---+---+---+
-// disto-score i4/16 |   |   | x |   |   |   |   |
+// disto-refine i4/16| x | x | x |   |   |   |   |
+//-------------------+---+---+---+---+---+---+---+
+// disto-refine uv   |   | x | x |   |   |   |   |
 //-------------------+---+---+---+---+---+---+---+
 // rd-opt i4/16      |   |   | ~ | x | x | x | x |
 //-------------------+---+---+---+---+---+---+---+
@@ -131,35 +133,36 @@ static void MapConfigToTools(VP8Encoder* const enc) {
 //       VP8EncIterator: 3360
 //         VP8ModeScore: 872
 //       VP8SegmentInfo: 732
-//             VP8Proba: 18352
+//          VP8EncProba: 18352
 //              LFStats: 2048
 // Picture size (yuv): 419328
 
 static VP8Encoder* InitVP8Encoder(const WebPConfig* const config,
                                   WebPPicture* const picture) {
+  VP8Encoder* enc;
   const int use_filter =
       (config->filter_strength > 0) || (config->autofilter > 0);
   const int mb_w = (picture->width + 15) >> 4;
   const int mb_h = (picture->height + 15) >> 4;
   const int preds_w = 4 * mb_w + 1;
   const int preds_h = 4 * mb_h + 1;
-  const size_t preds_size = preds_w * preds_h * sizeof(uint8_t);
+  const size_t preds_size = preds_w * preds_h * sizeof(*enc->preds_);
   const int top_stride = mb_w * 16;
-  const size_t nz_size = (mb_w + 1) * sizeof(uint32_t) + ALIGN_CST;
-  const size_t info_size = mb_w * mb_h * sizeof(VP8MBInfo);
-  const size_t samples_size = 2 * top_stride * sizeof(uint8_t)  // top-luma/u/v
-                            + ALIGN_CST;                        // align all
+  const size_t nz_size = (mb_w + 1) * sizeof(*enc->nz_) + WEBP_ALIGN_CST;
+  const size_t info_size = mb_w * mb_h * sizeof(*enc->mb_info_);
+  const size_t samples_size =
+      2 * top_stride * sizeof(*enc->y_top_)  // top-luma/u/v
+      + WEBP_ALIGN_CST;                      // align all
   const size_t lf_stats_size =
-      config->autofilter ? sizeof(LFStats) + ALIGN_CST : 0;
-  VP8Encoder* enc;
+      config->autofilter ? sizeof(*enc->lf_stats_) + WEBP_ALIGN_CST : 0;
   uint8_t* mem;
-  const uint64_t size = (uint64_t)sizeof(VP8Encoder)   // main struct
-                      + ALIGN_CST                      // cache alignment
-                      + info_size                      // modes info
-                      + preds_size                     // prediction modes
-                      + samples_size                   // top/left samples
-                      + nz_size                        // coeff context bits
-                      + lf_stats_size;                 // autofilter stats
+  const uint64_t size = (uint64_t)sizeof(*enc)   // main struct
+                      + WEBP_ALIGN_CST           // cache alignment
+                      + info_size                // modes info
+                      + preds_size               // prediction modes
+                      + samples_size             // top/left samples
+                      + nz_size                  // coeff context bits
+                      + lf_stats_size;           // autofilter stats
 
 #ifdef PRINT_MEMORY_INFO
   printf("===================================\n");
@@ -171,16 +174,16 @@ static VP8Encoder* InitVP8Encoder(const WebPConfig* const config,
          "            non-zero: %ld\n"
          "            lf-stats: %ld\n"
          "               total: %ld\n",
-         sizeof(VP8Encoder) + ALIGN_CST, info_size,
+         sizeof(*enc) + WEBP_ALIGN_CST, info_size,
          preds_size, samples_size, nz_size, lf_stats_size, size);
   printf("Transient object sizes:\n"
          "      VP8EncIterator: %ld\n"
          "        VP8ModeScore: %ld\n"
          "      VP8SegmentInfo: %ld\n"
-         "            VP8Proba: %ld\n"
+         "         VP8EncProba: %ld\n"
          "             LFStats: %ld\n",
          sizeof(VP8EncIterator), sizeof(VP8ModeScore),
-         sizeof(VP8SegmentInfo), sizeof(VP8Proba),
+         sizeof(VP8SegmentInfo), sizeof(VP8EncProba),
          sizeof(LFStats));
   printf("Picture size (yuv): %ld\n",
          mb_w * mb_h * 384 * sizeof(uint8_t));
@@ -192,7 +195,7 @@ static VP8Encoder* InitVP8Encoder(const WebPConfig* const config,
     return NULL;
   }
   enc = (VP8Encoder*)mem;
-  mem = (uint8_t*)DO_ALIGN(mem + sizeof(*enc));
+  mem = (uint8_t*)WEBP_ALIGN(mem + sizeof(*enc));
   memset(enc, 0, sizeof(*enc));
   enc->num_parts_ = 1 << config->partitions;
   enc->mb_w_ = mb_w;
@@ -201,14 +204,14 @@ static VP8Encoder* InitVP8Encoder(const WebPConfig* const config,
   enc->mb_info_ = (VP8MBInfo*)mem;
   mem += info_size;
   enc->preds_ = ((uint8_t*)mem) + 1 + enc->preds_w_;
-  mem += preds_w * preds_h * sizeof(uint8_t);
-  enc->nz_ = 1 + (uint32_t*)DO_ALIGN(mem);
+  mem += preds_size;
+  enc->nz_ = 1 + (uint32_t*)WEBP_ALIGN(mem);
   mem += nz_size;
-  enc->lf_stats_ = lf_stats_size ? (LFStats*)DO_ALIGN(mem) : NULL;
+  enc->lf_stats_ = lf_stats_size ? (LFStats*)WEBP_ALIGN(mem) : NULL;
   mem += lf_stats_size;
 
   // top samples (all 16-aligned)
-  mem = (uint8_t*)DO_ALIGN(mem);
+  mem = (uint8_t*)WEBP_ALIGN(mem);
   enc->y_top_ = (uint8_t*)mem;
   enc->uv_top_ = enc->y_top_ + top_stride;
   mem += 2 * top_stride;
@@ -225,8 +228,7 @@ static VP8Encoder* InitVP8Encoder(const WebPConfig* const config,
   ResetSegmentHeader(enc);
   ResetFilterHeader(enc);
   ResetBoundaryPredictions(enc);
-  VP8GetResidualCostInit();
-  VP8SetResidualCoeffsInit();
+  VP8EncDspCostInit();
   VP8EncInitAlpha(enc);
 
   // lower quality means smaller output -> we modulate a little the page
@@ -326,14 +328,17 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
 
   if (!config->lossless) {
     VP8Encoder* enc = NULL;
+
+    if (!config->exact) {
+      WebPCleanupTransparentArea(pic);
+    }
+
     if (pic->use_argb || pic->y == NULL || pic->u == NULL || pic->v == NULL) {
       // Make sure we have YUVA samples.
       if (config->preprocessing & 4) {
-#if WEBP_ENCODER_ABI_VERSION > 0x0204
         if (!WebPPictureSmartARGBToYUVA(pic)) {
           return 0;
         }
-#endif
       } else {
         float dithering = 0.f;
         if (config->preprocessing & 2) {
@@ -373,6 +378,10 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
     // Make sure we have ARGB samples.
     if (pic->argb == NULL && !WebPPictureYUVAToARGB(pic)) {
       return 0;
+    }
+
+    if (!config->exact) {
+      WebPCleanupTransparentAreaLossless(pic);
     }
 
     ok = VP8LEncodeImage(config, pic);  // Sets pic->error in case of problem.

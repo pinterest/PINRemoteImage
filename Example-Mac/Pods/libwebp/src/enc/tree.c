@@ -154,7 +154,7 @@ const uint8_t
 };
 
 void VP8DefaultProbas(VP8Encoder* const enc) {
-  VP8Proba* const probas = &enc->proba_;
+  VP8EncProba* const probas = &enc->proba_;
   probas->use_skip_proba_ = 0;
   memset(probas->segments_, 255u, sizeof(probas->segments_));
   memcpy(probas->coeffs_, VP8CoeffsProba0, sizeof(VP8CoeffsProba0));
@@ -482,7 +482,7 @@ const uint8_t
   }
 };
 
-void VP8WriteProbas(VP8BitWriter* const bw, const VP8Proba* const probas) {
+void VP8WriteProbas(VP8BitWriter* const bw, const VP8EncProba* const probas) {
   int t, b, c, p;
   for (t = 0; t < NUM_TYPES; ++t) {
     for (b = 0; b < NUM_BANDS; ++b) {
@@ -491,14 +491,14 @@ void VP8WriteProbas(VP8BitWriter* const bw, const VP8Proba* const probas) {
           const uint8_t p0 = probas->coeffs_[t][b][c][p];
           const int update = (p0 != VP8CoeffsProba0[t][b][c][p]);
           if (VP8PutBit(bw, update, VP8CoeffsUpdateProba[t][b][c][p])) {
-            VP8PutValue(bw, p0, 8);
+            VP8PutBits(bw, p0, 8);
           }
         }
       }
     }
   }
   if (VP8PutBitUniform(bw, probas->use_skip_proba_)) {
-    VP8PutValue(bw, probas->skip_proba_, 8);
+    VP8PutBits(bw, probas->skip_proba_, 8);
   }
 }
 

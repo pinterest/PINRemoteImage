@@ -30,16 +30,6 @@ static void PictureGrabSpecs(const WebPPicture* const src,
 }
 
 //------------------------------------------------------------------------------
-// Picture copying
-
-static void CopyPlane(const uint8_t* src, int src_stride,
-                      uint8_t* dst, int dst_stride, int width, int height) {
-  while (height-- > 0) {
-    memcpy(dst, src, width);
-    src += src_stride;
-    dst += dst_stride;
-  }
-}
 
 // Adjust top-left corner to chroma sample position.
 static void SnapTopLeftPosition(const WebPPicture* const pic,
@@ -70,20 +60,20 @@ int WebPPictureCopy(const WebPPicture* src, WebPPicture* dst) {
   if (!WebPPictureAlloc(dst)) return 0;
 
   if (!src->use_argb) {
-    CopyPlane(src->y, src->y_stride,
-              dst->y, dst->y_stride, dst->width, dst->height);
-    CopyPlane(src->u, src->uv_stride,
-              dst->u, dst->uv_stride, HALVE(dst->width), HALVE(dst->height));
-    CopyPlane(src->v, src->uv_stride,
-              dst->v, dst->uv_stride, HALVE(dst->width), HALVE(dst->height));
+    WebPCopyPlane(src->y, src->y_stride,
+                  dst->y, dst->y_stride, dst->width, dst->height);
+    WebPCopyPlane(src->u, src->uv_stride, dst->u, dst->uv_stride,
+                  HALVE(dst->width), HALVE(dst->height));
+    WebPCopyPlane(src->v, src->uv_stride, dst->v, dst->uv_stride,
+                  HALVE(dst->width), HALVE(dst->height));
     if (dst->a != NULL)  {
-      CopyPlane(src->a, src->a_stride,
-                dst->a, dst->a_stride, dst->width, dst->height);
+      WebPCopyPlane(src->a, src->a_stride,
+                    dst->a, dst->a_stride, dst->width, dst->height);
     }
   } else {
-    CopyPlane((const uint8_t*)src->argb, 4 * src->argb_stride,
-              (uint8_t*)dst->argb, 4 * dst->argb_stride,
-              4 * dst->width, dst->height);
+    WebPCopyPlane((const uint8_t*)src->argb, 4 * src->argb_stride,
+                  (uint8_t*)dst->argb, 4 * dst->argb_stride,
+                  4 * dst->width, dst->height);
   }
   return 1;
 }
@@ -144,24 +134,23 @@ int WebPPictureCrop(WebPPicture* pic,
   if (!pic->use_argb) {
     const int y_offset = top * pic->y_stride + left;
     const int uv_offset = (top / 2) * pic->uv_stride + left / 2;
-    CopyPlane(pic->y + y_offset, pic->y_stride,
-              tmp.y, tmp.y_stride, width, height);
-    CopyPlane(pic->u + uv_offset, pic->uv_stride,
-              tmp.u, tmp.uv_stride, HALVE(width), HALVE(height));
-    CopyPlane(pic->v + uv_offset, pic->uv_stride,
-              tmp.v, tmp.uv_stride, HALVE(width), HALVE(height));
+    WebPCopyPlane(pic->y + y_offset, pic->y_stride,
+                  tmp.y, tmp.y_stride, width, height);
+    WebPCopyPlane(pic->u + uv_offset, pic->uv_stride,
+                  tmp.u, tmp.uv_stride, HALVE(width), HALVE(height));
+    WebPCopyPlane(pic->v + uv_offset, pic->uv_stride,
+                  tmp.v, tmp.uv_stride, HALVE(width), HALVE(height));
 
     if (tmp.a != NULL) {
       const int a_offset = top * pic->a_stride + left;
-      CopyPlane(pic->a + a_offset, pic->a_stride,
-                tmp.a, tmp.a_stride, width, height);
+      WebPCopyPlane(pic->a + a_offset, pic->a_stride,
+                    tmp.a, tmp.a_stride, width, height);
     }
   } else {
     const uint8_t* const src =
         (const uint8_t*)(pic->argb + top * pic->argb_stride + left);
-    CopyPlane(src, pic->argb_stride * 4,
-              (uint8_t*)tmp.argb, tmp.argb_stride * 4,
-              width * 4, height);
+    WebPCopyPlane(src, pic->argb_stride * 4, (uint8_t*)tmp.argb,
+                  tmp.argb_stride * 4, width * 4, height);
   }
   WebPPictureFree(pic);
   *pic = tmp;
@@ -175,17 +164,13 @@ static void RescalePlane(const uint8_t* src,
                          int src_width, int src_height, int src_stride,
                          uint8_t* dst,
                          int dst_width, int dst_height, int dst_stride,
-                         int32_t* const work,
+                         rescaler_t* const work,
                          int num_channels) {
   WebPRescaler rescaler;
   int y = 0;
   WebPRescalerInit(&rescaler, src_width, src_height,
                    dst, dst_width, dst_height, dst_stride,
-                   num_channels,
-                   src_width, dst_width,
-                   src_height, dst_height,
-                   work);
-  memset(work, 0, 2 * dst_width * num_channels * sizeof(*work));
+                   num_channels, work);
   while (y < src_height) {
     y += WebPRescalerImport(&rescaler, src_height - y,
                             src + y * src_stride, src_stride);
@@ -209,21 +194,15 @@ static void AlphaMultiplyY(WebPPicture* const pic, int inverse) {
 int WebPPictureRescale(WebPPicture* pic, int width, int height) {
   WebPPicture tmp;
   int prev_width, prev_height;
-  int32_t* work;
+  rescaler_t* work;
 
   if (pic == NULL) return 0;
   prev_width = pic->width;
   prev_height = pic->height;
-  // if width is unspecified, scale original proportionally to height ratio.
-  if (width == 0) {
-    width = (prev_width * height + prev_height / 2) / prev_height;
+  if (!WebPRescalerGetScaledDimensions(
+          prev_width, prev_height, &width, &height)) {
+    return 0;
   }
-  // if height is unspecified, scale original proportionally to width ratio.
-  if (height == 0) {
-    height = (prev_height * width + prev_width / 2) / prev_width;
-  }
-  // Check if the overall dimensions still make sense.
-  if (width <= 0 || height <= 0) return 0;
 
   PictureGrabSpecs(pic, &tmp);
   tmp.width = width;
@@ -231,7 +210,7 @@ int WebPPictureRescale(WebPPicture* pic, int width, int height) {
   if (!WebPPictureAlloc(&tmp)) return 0;
 
   if (!pic->use_argb) {
-    work = (int32_t*)WebPSafeMalloc(2ULL * width, sizeof(*work));
+    work = (rescaler_t*)WebPSafeMalloc(2ULL * width, sizeof(*work));
     if (work == NULL) {
       WebPPictureFree(&tmp);
       return 0;
@@ -259,7 +238,7 @@ int WebPPictureRescale(WebPPicture* pic, int width, int height) {
                  tmp.v,
                  HALVE(width), HALVE(height), tmp.uv_stride, work, 1);
   } else {
-    work = (int32_t*)WebPSafeMalloc(2ULL * width * 4, sizeof(*work));
+    work = (rescaler_t*)WebPSafeMalloc(2ULL * width * 4, sizeof(*work));
     if (work == NULL) {
       WebPPictureFree(&tmp);
       return 0;

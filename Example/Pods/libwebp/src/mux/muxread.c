@@ -251,9 +251,6 @@ WebPMux* WebPMuxCreateInternal(const WebPData* bitstream, int copy_data,
         MuxImageInit(wpi);  // Reset for reading next image.
         break;
       case WEBP_CHUNK_ANMF:
-#ifdef WEBP_EXPERIMENTAL_FEATURES
-      case WEBP_CHUNK_FRGM:
-#endif
         if (wpi->is_partial_) goto Err;  // Previous wpi is still incomplete.
         if (!MuxImageParse(&chunk, copy_data, wpi)) goto Err;
         ChunkRelease(&chunk);
@@ -444,9 +441,7 @@ static WebPMuxError MuxGetFrameFragmentInternal(const WebPMuxImage* const wpi,
   const int is_frame = (wpi->header_->tag_ == kChunks[IDX_ANMF].tag);
   const CHUNK_INDEX idx = is_frame ? IDX_ANMF : IDX_FRGM;
   const WebPData* frame_frgm_data;
-#ifndef WEBP_EXPERIMENTAL_FEATURES
   if (!is_frame) return WEBP_MUX_INVALID_ARGUMENT;
-#endif
   assert(wpi->header_ != NULL);  // Already checked by WebPMuxGetFrame().
   // Get frame/fragment chunk.
   frame_frgm_data = &wpi->header_->data_;

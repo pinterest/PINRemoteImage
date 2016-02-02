@@ -85,12 +85,12 @@ static void DoFilter(const VP8EncIterator* const it, int level) {
   const int ilevel = GetILevel(enc->config_->filter_sharpness, level);
   const int limit = 2 * level + ilevel;
 
-  uint8_t* const y_dst = it->yuv_out2_ + Y_OFF;
-  uint8_t* const u_dst = it->yuv_out2_ + U_OFF;
-  uint8_t* const v_dst = it->yuv_out2_ + V_OFF;
+  uint8_t* const y_dst = it->yuv_out2_ + Y_OFF_ENC;
+  uint8_t* const u_dst = it->yuv_out2_ + U_OFF_ENC;
+  uint8_t* const v_dst = it->yuv_out2_ + V_OFF_ENC;
 
   // copy current block to yuv_out2_
-  memcpy(y_dst, it->yuv_out_, YUV_SIZE * sizeof(uint8_t));
+  memcpy(y_dst, it->yuv_out_, YUV_SIZE_ENC * sizeof(uint8_t));
 
   if (enc->filter_hdr_.simple_ == 1) {   // simple
     VP8SimpleHFilter16i(y_dst, BPS, limit);
@@ -195,13 +195,16 @@ static double GetMBSSIM(const uint8_t* yuv1, const uint8_t* yuv2) {
   // compute SSIM in a 10 x 10 window
   for (x = 3; x < 13; x++) {
     for (y = 3; y < 13; y++) {
-      VP8SSIMAccumulate(yuv1 + Y_OFF, BPS, yuv2 + Y_OFF, BPS, x, y, 16, 16, &s);
+      VP8SSIMAccumulate(yuv1 + Y_OFF_ENC, BPS, yuv2 + Y_OFF_ENC, BPS,
+                        x, y, 16, 16, &s);
     }
   }
   for (x = 1; x < 7; x++) {
     for (y = 1; y < 7; y++) {
-      VP8SSIMAccumulate(yuv1 + U_OFF, BPS, yuv2 + U_OFF, BPS, x, y, 8, 8, &s);
-      VP8SSIMAccumulate(yuv1 + V_OFF, BPS, yuv2 + V_OFF, BPS, x, y, 8, 8, &s);
+      VP8SSIMAccumulate(yuv1 + U_OFF_ENC, BPS, yuv2 + U_OFF_ENC, BPS,
+                        x, y, 8, 8, &s);
+      VP8SSIMAccumulate(yuv1 + V_OFF_ENC, BPS, yuv2 + V_OFF_ENC, BPS,
+                        x, y, 8, 8, &s);
     }
   }
   return VP8SSIMGet(&s);
@@ -226,7 +229,7 @@ void VP8StoreFilterStats(VP8EncIterator* const it) {
   int d;
   VP8Encoder* const enc = it->enc_;
   const int s = it->mb_->segment_;
-  const int level0 = enc->dqm_[s].fstrength_;  // TODO: ref_lf_delta[]
+  const int level0 = enc->dqm_[s].fstrength_;
 
   // explore +/-quant range of values around level0
   const int delta_min = -enc->dqm_[s].quant_;

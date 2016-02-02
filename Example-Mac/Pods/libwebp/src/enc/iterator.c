@@ -70,13 +70,13 @@ void VP8IteratorInit(VP8Encoder* const enc, VP8EncIterator* const it) {
   it->enc_ = enc;
   it->y_stride_  = enc->pic_->y_stride;
   it->uv_stride_ = enc->pic_->uv_stride;
-  it->yuv_in_   = (uint8_t*)DO_ALIGN(it->yuv_mem_);
-  it->yuv_out_  = it->yuv_in_ + YUV_SIZE;
-  it->yuv_out2_ = it->yuv_out_ + YUV_SIZE;
-  it->yuv_p_    = it->yuv_out2_ + YUV_SIZE;
+  it->yuv_in_   = (uint8_t*)WEBP_ALIGN(it->yuv_mem_);
+  it->yuv_out_  = it->yuv_in_ + YUV_SIZE_ENC;
+  it->yuv_out2_ = it->yuv_out_ + YUV_SIZE_ENC;
+  it->yuv_p_    = it->yuv_out2_ + YUV_SIZE_ENC;
   it->lf_stats_ = enc->lf_stats_;
   it->percent0_ = enc->percent_;
-  it->y_left_ = (uint8_t*)DO_ALIGN(it->yuv_left_mem_ + 1);
+  it->y_left_ = (uint8_t*)WEBP_ALIGN(it->yuv_left_mem_ + 1);
   it->u_left_ = it->y_left_ + 16 + 16;
   it->v_left_ = it->u_left_ + 16;
   VP8IteratorReset(it);
@@ -136,9 +136,9 @@ void VP8IteratorImport(VP8EncIterator* const it, uint8_t* tmp_32) {
   const int uv_w = (w + 1) >> 1;
   const int uv_h = (h + 1) >> 1;
 
-  ImportBlock(ysrc, pic->y_stride,  it->yuv_in_ + Y_OFF, w, h, 16);
-  ImportBlock(usrc, pic->uv_stride, it->yuv_in_ + U_OFF, uv_w, uv_h, 8);
-  ImportBlock(vsrc, pic->uv_stride, it->yuv_in_ + V_OFF, uv_w, uv_h, 8);
+  ImportBlock(ysrc, pic->y_stride,  it->yuv_in_ + Y_OFF_ENC, w, h, 16);
+  ImportBlock(usrc, pic->uv_stride, it->yuv_in_ + U_OFF_ENC, uv_w, uv_h, 8);
+  ImportBlock(vsrc, pic->uv_stride, it->yuv_in_ + V_OFF_ENC, uv_w, uv_h, 8);
 
   if (tmp_32 == NULL) return;
 
@@ -185,9 +185,9 @@ void VP8IteratorExport(const VP8EncIterator* const it) {
   const VP8Encoder* const enc = it->enc_;
   if (enc->config_->show_compressed) {
     const int x = it->x_, y = it->y_;
-    const uint8_t* const ysrc = it->yuv_out_ + Y_OFF;
-    const uint8_t* const usrc = it->yuv_out_ + U_OFF;
-    const uint8_t* const vsrc = it->yuv_out_ + V_OFF;
+    const uint8_t* const ysrc = it->yuv_out_ + Y_OFF_ENC;
+    const uint8_t* const usrc = it->yuv_out_ + U_OFF_ENC;
+    const uint8_t* const vsrc = it->yuv_out_ + V_OFF_ENC;
     const WebPPicture* const pic = enc->pic_;
     uint8_t* const ydst = pic->y + (y * pic->y_stride + x) * 16;
     uint8_t* const udst = pic->u + (y * pic->uv_stride + x) * 8;
@@ -286,8 +286,8 @@ void VP8IteratorBytesToNz(VP8EncIterator* const it) {
 void VP8IteratorSaveBoundary(VP8EncIterator* const it) {
   VP8Encoder* const enc = it->enc_;
   const int x = it->x_, y = it->y_;
-  const uint8_t* const ysrc = it->yuv_out_ + Y_OFF;
-  const uint8_t* const uvsrc = it->yuv_out_ + U_OFF;
+  const uint8_t* const ysrc = it->yuv_out_ + Y_OFF_ENC;
+  const uint8_t* const uvsrc = it->yuv_out_ + U_OFF_ENC;
   if (x < enc->mb_w_ - 1) {   // left
     int i;
     for (i = 0; i < 16; ++i) {

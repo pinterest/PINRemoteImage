@@ -16,6 +16,8 @@
 
 #if defined(WEBP_USE_MIPS32)
 
+#include "./mips_macro.h"
+
 static const int kC1 = 20091 + (1 << 16);
 static const int kC2 = 35468;
 
@@ -52,6 +54,7 @@ static WEBP_INLINE void do_filter6(uint8_t* p, int step) {
   const int p2 = p[-3 * step], p1 = p[-2 * step], p0 = p[-step];
   const int q0 = p[0], q1 = p[step], q2 = p[2 * step];
   const int a = VP8ksclip1[3 * (q0 - p0) + VP8ksclip1[p1 - q1]];
+  // a is in [-128,127], a1 in [-27,27], a2 in [-18,18] and a3 in [-9,9]
   const int a1 = (27 * a + 63) >> 7;  // eq. to ((3 * a + 7) * 9) >> 7
   const int a2 = (18 * a + 63) >> 7;  // eq. to ((2 * a + 7) * 9) >> 7
   const int a3 = (9  * a + 63) >> 7;  // eq. to ((1 * a + 7) * 9) >> 7
@@ -68,9 +71,9 @@ static WEBP_INLINE int hev(const uint8_t* p, int step, int thresh) {
   return (abs_mips32(p1 - p0) > thresh) || (abs_mips32(q1 - q0) > thresh);
 }
 
-static WEBP_INLINE int needs_filter(const uint8_t* p, int step, int thresh) {
+static WEBP_INLINE int needs_filter(const uint8_t* p, int step, int t) {
   const int p1 = p[-2 * step], p0 = p[-step], q0 = p[0], q1 = p[step];
-  return ((2 * abs_mips32(p0 - q0) + (abs_mips32(p1 - q1) >> 1)) <= thresh);
+  return ((4 * abs_mips32(p0 - q0) + abs_mips32(p1 - q1)) <= t);
 }
 
 static WEBP_INLINE int needs_filter2(const uint8_t* p,
@@ -78,7 +81,7 @@ static WEBP_INLINE int needs_filter2(const uint8_t* p,
   const int p3 = p[-4 * step], p2 = p[-3 * step];
   const int p1 = p[-2 * step], p0 = p[-step];
   const int q0 = p[0], q1 = p[step], q2 = p[2 * step], q3 = p[3 * step];
-  if ((2 * abs_mips32(p0 - q0) + (abs_mips32(p1 - q1) >> 1)) > t) {
+  if ((4 * abs_mips32(p0 - q0) + abs_mips32(p1 - q1)) > t) {
     return 0;
   }
   return abs_mips32(p3 - p2) <= it && abs_mips32(p2 - p1) <= it &&
@@ -89,8 +92,9 @@ static WEBP_INLINE int needs_filter2(const uint8_t* p,
 static WEBP_INLINE void FilterLoop26(uint8_t* p,
                                      int hstride, int vstride, int size,
                                      int thresh, int ithresh, int hev_thresh) {
+  const int thresh2 = 2 * thresh + 1;
   while (size-- > 0) {
-    if (needs_filter2(p, hstride, thresh, ithresh)) {
+    if (needs_filter2(p, hstride, thresh2, ithresh)) {
       if (hev(p, hstride, hev_thresh)) {
         do_filter2(p, hstride);
       } else {
@@ -104,8 +108,9 @@ static WEBP_INLINE void FilterLoop26(uint8_t* p,
 static WEBP_INLINE void FilterLoop24(uint8_t* p,
                                      int hstride, int vstride, int size,
                                      int thresh, int ithresh, int hev_thresh) {
+  const int thresh2 = 2 * thresh + 1;
   while (size-- > 0) {
-    if (needs_filter2(p, hstride, thresh, ithresh)) {
+    if (needs_filter2(p, hstride, thresh2, ithresh)) {
       if (hev(p, hstride, hev_thresh)) {
         do_filter2(p, hstride);
       } else {
@@ -176,8 +181,9 @@ static void HFilter16i(uint8_t* p, int stride,
 
 static void SimpleVFilter16(uint8_t* p, int stride, int thresh) {
   int i;
+  const int thresh2 = 2 * thresh + 1;
   for (i = 0; i < 16; ++i) {
-    if (needs_filter(p + i, stride, thresh)) {
+    if (needs_filter(p + i, stride, thresh2)) {
       do_filter2(p + i, stride);
     }
   }
@@ -185,8 +191,9 @@ static void SimpleVFilter16(uint8_t* p, int stride, int thresh) {
 
 static void SimpleHFilter16(uint8_t* p, int stride, int thresh) {
   int i;
+  const int thresh2 = 2 * thresh + 1;
   for (i = 0; i < 16; ++i) {
-    if (needs_filter(p + i * stride, 1, thresh)) {
+    if (needs_filter(p + i * stride, 1, thresh2)) {
       do_filter2(p + i * stride, 1);
     }
   }
@@ -384,7 +391,7 @@ static void TransformOne(const int16_t* in, uint8_t* dst) {
     "sra      %[temp7],  %[temp7],  3                  \n\t"
     "sra      %[temp4],  %[temp4],  3                  \n\t"
     "addiu    %[temp6],  $zero,     255                \n\t"
-    "lbu      %[temp1],  0(%[dst])                     \n\t"
+    "lbu      %[temp1],  0+0*" XSTR(BPS) "(%[dst])     \n\t"
     "addu     %[temp1],  %[temp1],  %[temp5]           \n\t"
     "sra      %[temp5],  %[temp1],  8                  \n\t"
     "sra      %[temp18], %[temp1],  31                 \n\t"
@@ -392,8 +399,8 @@ static void TransformOne(const int16_t* in, uint8_t* dst) {
     "xor      %[temp1],  %[temp1],  %[temp1]           \n\t"
     "movz     %[temp1],  %[temp6],  %[temp18]          \n\t"
   "1:                                                  \n\t"
-    "lbu      %[temp18], 1(%[dst])                     \n\t"
-    "sb       %[temp1],  0(%[dst])                     \n\t"
+    "lbu      %[temp18], 1+0*" XSTR(BPS) "(%[dst])     \n\t"
+    "sb       %[temp1],  0+0*" XSTR(BPS) "(%[dst])     \n\t"
     "addu     %[temp18], %[temp18], %[temp11]          \n\t"
     "sra      %[temp11], %[temp18], 8                  \n\t"
     "sra      %[temp1],  %[temp18], 31                 \n\t"
@@ -401,8 +408,8 @@ static void TransformOne(const int16_t* in, uint8_t* dst) {
     "xor      %[temp18], %[temp18], %[temp18]          \n\t"
     "movz     %[temp18], %[temp6],  %[temp1]           \n\t"
   "2:                                                  \n\t"
-    "lbu      %[temp1],  2(%[dst])                     \n\t"
-    "sb       %[temp18], 1(%[dst])                     \n\t"
+    "lbu      %[temp1],  2+0*" XSTR(BPS) "(%[dst])     \n\t"
+    "sb       %[temp18], 1+0*" XSTR(BPS) "(%[dst])     \n\t"
     "addu     %[temp1],  %[temp1],  %[temp8]           \n\t"
     "sra      %[temp8],  %[temp1],  8                  \n\t"
     "sra      %[temp18], %[temp1],  31                 \n\t"
@@ -410,8 +417,8 @@ static void TransformOne(const int16_t* in, uint8_t* dst) {
     "xor      %[temp1],  %[temp1],  %[temp1]           \n\t"
     "movz     %[temp1],  %[temp6],  %[temp18]          \n\t"
   "3:                                                  \n\t"
-    "lbu      %[temp18], 3(%[dst])                     \n\t"
-    "sb       %[temp1],  2(%[dst])                     \n\t"
+    "lbu      %[temp18], 3+0*" XSTR(BPS) "(%[dst])     \n\t"
+    "sb       %[temp1],  2+0*" XSTR(BPS) "(%[dst])     \n\t"
     "addu     %[temp18], %[temp18], %[temp16]          \n\t"
     "sra      %[temp16], %[temp18], 8                  \n\t"
     "sra      %[temp1],  %[temp18], 31                 \n\t"
@@ -419,11 +426,11 @@ static void TransformOne(const int16_t* in, uint8_t* dst) {
     "xor      %[temp18], %[temp18], %[temp18]          \n\t"
     "movz     %[temp18], %[temp6],  %[temp1]           \n\t"
   "4:                                                  \n\t"
-    "sb       %[temp18], 3(%[dst])                     \n\t"
-    "lbu      %[temp5],  32(%[dst])                    \n\t"
-    "lbu      %[temp8],  33(%[dst])                    \n\t"
-    "lbu      %[temp11], 34(%[dst])                    \n\t"
-    "lbu      %[temp16], 35(%[dst])                    \n\t"
+    "sb       %[temp18], 3+0*" XSTR(BPS) "(%[dst])     \n\t"
+    "lbu      %[temp5],  0+1*" XSTR(BPS) "(%[dst])     \n\t"
+    "lbu      %[temp8],  1+1*" XSTR(BPS) "(%[dst])     \n\t"
+    "lbu      %[temp11], 2+1*" XSTR(BPS) "(%[dst])     \n\t"
+    "lbu      %[temp16], 3+1*" XSTR(BPS) "(%[dst])     \n\t"
     "addu     %[temp5],  %[temp5],  %[temp17]          \n\t"
     "addu     %[temp8],  %[temp8],  %[temp15]          \n\t"
     "addu     %[temp11], %[temp11], %[temp12]          \n\t"
@@ -452,14 +459,14 @@ static void TransformOne(const int16_t* in, uint8_t* dst) {
     "xor      %[temp16], %[temp16], %[temp16]          \n\t"
     "movz     %[temp16], %[temp6],  %[temp15]          \n\t"
   "8:                                                  \n\t"
-    "sb       %[temp5],  32(%[dst])                    \n\t"
-    "sb       %[temp8],  33(%[dst])                    \n\t"
-    "sb       %[temp11], 34(%[dst])                    \n\t"
-    "sb       %[temp16], 35(%[dst])                    \n\t"
-    "lbu      %[temp5],  64(%[dst])                    \n\t"
-    "lbu      %[temp8],  65(%[dst])                    \n\t"
-    "lbu      %[temp11], 66(%[dst])                    \n\t"
-    "lbu      %[temp16], 67(%[dst])                    \n\t"
+    "sb       %[temp5],  0+1*" XSTR(BPS) "(%[dst])     \n\t"
+    "sb       %[temp8],  1+1*" XSTR(BPS) "(%[dst])     \n\t"
+    "sb       %[temp11], 2+1*" XSTR(BPS) "(%[dst])     \n\t"
+    "sb       %[temp16], 3+1*" XSTR(BPS) "(%[dst])     \n\t"
+    "lbu      %[temp5],  0+2*" XSTR(BPS) "(%[dst])     \n\t"
+    "lbu      %[temp8],  1+2*" XSTR(BPS) "(%[dst])     \n\t"
+    "lbu      %[temp11], 2+2*" XSTR(BPS) "(%[dst])     \n\t"
+    "lbu      %[temp16], 3+2*" XSTR(BPS) "(%[dst])     \n\t"
     "addu     %[temp5],  %[temp5],  %[temp9]           \n\t"
     "addu     %[temp8],  %[temp8],  %[temp3]           \n\t"
     "addu     %[temp11], %[temp11], %[temp0]           \n\t"
@@ -488,14 +495,14 @@ static void TransformOne(const int16_t* in, uint8_t* dst) {
     "xor      %[temp16], %[temp16], %[temp16]          \n\t"
     "movz     %[temp16], %[temp6],  %[temp3]           \n\t"
   "12:                                                 \n\t"
-    "sb       %[temp5],  64(%[dst])                    \n\t"
-    "sb       %[temp8],  65(%[dst])                    \n\t"
-    "sb       %[temp11], 66(%[dst])                    \n\t"
-    "sb       %[temp16], 67(%[dst])                    \n\t"
-    "lbu      %[temp5],  96(%[dst])                    \n\t"
-    "lbu      %[temp8],  97(%[dst])                    \n\t"
-    "lbu      %[temp11], 98(%[dst])                    \n\t"
-    "lbu      %[temp16], 99(%[dst])                    \n\t"
+    "sb       %[temp5],  0+2*" XSTR(BPS) "(%[dst])     \n\t"
+    "sb       %[temp8],  1+2*" XSTR(BPS) "(%[dst])     \n\t"
+    "sb       %[temp11], 2+2*" XSTR(BPS) "(%[dst])     \n\t"
+    "sb       %[temp16], 3+2*" XSTR(BPS) "(%[dst])     \n\t"
+    "lbu      %[temp5],  0+3*" XSTR(BPS) "(%[dst])     \n\t"
+    "lbu      %[temp8],  1+3*" XSTR(BPS) "(%[dst])     \n\t"
+    "lbu      %[temp11], 2+3*" XSTR(BPS) "(%[dst])     \n\t"
+    "lbu      %[temp16], 3+3*" XSTR(BPS) "(%[dst])     \n\t"
     "addu     %[temp5],  %[temp5],  %[temp13]          \n\t"
     "addu     %[temp8],  %[temp8],  %[temp7]           \n\t"
     "addu     %[temp11], %[temp11], %[temp4]           \n\t"
@@ -524,10 +531,10 @@ static void TransformOne(const int16_t* in, uint8_t* dst) {
     "xor      %[temp16], %[temp16], %[temp16]          \n\t"
     "movz     %[temp16], %[temp6],  %[temp3]           \n\t"
   "16:                                                 \n\t"
-    "sb       %[temp5],  96(%[dst])                    \n\t"
-    "sb       %[temp8],  97(%[dst])                    \n\t"
-    "sb       %[temp11], 98(%[dst])                    \n\t"
-    "sb       %[temp16], 99(%[dst])                    \n\t"
+    "sb       %[temp5],  0+3*" XSTR(BPS) "(%[dst])     \n\t"
+    "sb       %[temp8],  1+3*" XSTR(BPS) "(%[dst])     \n\t"
+    "sb       %[temp11], 2+3*" XSTR(BPS) "(%[dst])     \n\t"
+    "sb       %[temp16], 3+3*" XSTR(BPS) "(%[dst])     \n\t"
 
     : [temp0]"=&r"(temp0), [temp1]"=&r"(temp1), [temp2]"=&r"(temp2),
       [temp3]"=&r"(temp3), [temp4]"=&r"(temp4), [temp5]"=&r"(temp5),
@@ -548,15 +555,12 @@ static void TransformTwo(const int16_t* in, uint8_t* dst, int do_two) {
   }
 }
 
-#endif  // WEBP_USE_MIPS32
-
 //------------------------------------------------------------------------------
 // Entry point
 
 extern void VP8DspInitMIPS32(void);
 
-void VP8DspInitMIPS32(void) {
-#if defined(WEBP_USE_MIPS32)
+WEBP_TSAN_IGNORE_FUNCTION void VP8DspInitMIPS32(void) {
   VP8InitClipTables();
 
   VP8Transform = TransformTwo;
@@ -574,5 +578,10 @@ void VP8DspInitMIPS32(void) {
   VP8SimpleHFilter16 = SimpleHFilter16;
   VP8SimpleVFilter16i = SimpleVFilter16i;
   VP8SimpleHFilter16i = SimpleHFilter16i;
-#endif  // WEBP_USE_MIPS32
 }
+
+#else  // !WEBP_USE_MIPS32
+
+WEBP_DSP_INIT_STUB(VP8DspInitMIPS32)
+
+#endif  // WEBP_USE_MIPS32

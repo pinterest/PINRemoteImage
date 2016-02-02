@@ -18,302 +18,188 @@
 #include "../utils/utils.h"
 #include "../webp/format_constants.h"
 
-// Uncomment the following to use look-up table for ReverseBits()
-// (might be faster on some platform)
-// #define USE_LUT_REVERSE_BITS
-
 // Huffman data read via DecodeImageStream is represented in two (red and green)
 // bytes.
 #define MAX_HTREE_GROUPS    0x10000
-#define NON_EXISTENT_SYMBOL (-1)
-
-static void TreeNodeInit(HuffmanTreeNode* const node) {
-  node->children_ = -1;   // means: 'unassigned so far'
-}
-
-static int NodeIsEmpty(const HuffmanTreeNode* const node) {
-  return (node->children_ < 0);
-}
-
-static int IsFull(const HuffmanTree* const tree) {
-  return (tree->num_nodes_ == tree->max_nodes_);
-}
-
-static void AssignChildren(HuffmanTree* const tree,
-                           HuffmanTreeNode* const node) {
-  HuffmanTreeNode* const children = tree->root_ + tree->num_nodes_;
-  node->children_ = (int)(children - node);
-  assert(children - node == (int)(children - node));
-  tree->num_nodes_ += 2;
-  TreeNodeInit(children + 0);
-  TreeNodeInit(children + 1);
-}
-
-// A Huffman tree is a full binary tree; and in a full binary tree with L
-// leaves, the total number of nodes N = 2 * L - 1.
-static int HuffmanTreeMaxNodes(int num_leaves) {
-  return (2 * num_leaves - 1);
-}
-
-static int HuffmanTreeAllocate(HuffmanTree* const tree, int num_nodes) {
-  assert(tree != NULL);
-  tree->root_ =
-      (HuffmanTreeNode*)WebPSafeMalloc(num_nodes, sizeof(*tree->root_));
-  return (tree->root_ != NULL);
-}
-
-static int TreeInit(HuffmanTree* const tree, int num_leaves) {
-  assert(tree != NULL);
-  if (num_leaves == 0) return 0;
-  tree->max_nodes_ = HuffmanTreeMaxNodes(num_leaves);
-  assert(tree->max_nodes_ < (1 << 16));   // limit for the lut_jump_ table
-  if (!HuffmanTreeAllocate(tree, tree->max_nodes_)) return 0;
-  TreeNodeInit(tree->root_);  // Initialize root.
-  tree->num_nodes_ = 1;
-  memset(tree->lut_bits_, 255, sizeof(tree->lut_bits_));
-  memset(tree->lut_jump_, 0, sizeof(tree->lut_jump_));
-  return 1;
-}
-
-void VP8LHuffmanTreeFree(HuffmanTree* const tree) {
-  if (tree != NULL) {
-    WebPSafeFree(tree->root_);
-    tree->root_ = NULL;
-    tree->max_nodes_ = 0;
-    tree->num_nodes_ = 0;
-  }
-}
 
 HTreeGroup* VP8LHtreeGroupsNew(int num_htree_groups) {
   HTreeGroup* const htree_groups =
-      (HTreeGroup*)WebPSafeCalloc(num_htree_groups, sizeof(*htree_groups));
-  assert(num_htree_groups <= MAX_HTREE_GROUPS);
+      (HTreeGroup*)WebPSafeMalloc(num_htree_groups, sizeof(*htree_groups));
   if (htree_groups == NULL) {
     return NULL;
   }
+  assert(num_htree_groups <= MAX_HTREE_GROUPS);
   return htree_groups;
 }
 
-void VP8LHtreeGroupsFree(HTreeGroup* htree_groups, int num_htree_groups) {
+void VP8LHtreeGroupsFree(HTreeGroup* const htree_groups) {
   if (htree_groups != NULL) {
-    int i, j;
-    for (i = 0; i < num_htree_groups; ++i) {
-      HuffmanTree* const htrees = htree_groups[i].htrees_;
-      for (j = 0; j < HUFFMAN_CODES_PER_META_CODE; ++j) {
-        VP8LHuffmanTreeFree(&htrees[j]);
-      }
-    }
     WebPSafeFree(htree_groups);
   }
 }
 
-int VP8LHuffmanCodeLengthsToCodes(
-    const int* const code_lengths, int code_lengths_size,
-    int* const huff_codes) {
-  int symbol;
-  int code_len;
-  int code_length_hist[MAX_ALLOWED_CODE_LENGTH + 1] = { 0 };
-  int curr_code;
-  int next_codes[MAX_ALLOWED_CODE_LENGTH + 1] = { 0 };
-  int max_code_length = 0;
+// Returns reverse(reverse(key, len) + 1, len), where reverse(key, len) is the
+// bit-wise reversal of the len least significant bits of key.
+static WEBP_INLINE uint32_t GetNextKey(uint32_t key, int len) {
+  uint32_t step = 1 << (len - 1);
+  while (key & step) {
+    step >>= 1;
+  }
+  return (key & (step - 1)) + step;
+}
 
+// Stores code in table[0], table[step], table[2*step], ..., table[end].
+// Assumes that end is an integer multiple of step.
+static WEBP_INLINE void ReplicateValue(HuffmanCode* table,
+                                       int step, int end,
+                                       HuffmanCode code) {
+  assert(end % step == 0);
+  do {
+    end -= step;
+    table[end] = code;
+  } while (end > 0);
+}
+
+// Returns the table width of the next 2nd level table. count is the histogram
+// of bit lengths for the remaining symbols, len is the code length of the next
+// processed symbol
+static WEBP_INLINE int NextTableBitSize(const int* const count,
+                                        int len, int root_bits) {
+  int left = 1 << (len - root_bits);
+  while (len < MAX_ALLOWED_CODE_LENGTH) {
+    left -= count[len];
+    if (left <= 0) break;
+    ++len;
+    left <<= 1;
+  }
+  return len - root_bits;
+}
+
+int VP8LBuildHuffmanTable(HuffmanCode* const root_table, int root_bits,
+                          const int code_lengths[], int code_lengths_size) {
+  HuffmanCode* table = root_table;  // next available space in table
+  int total_size = 1 << root_bits;  // total size root table + 2nd level table
+  int* sorted = NULL;               // symbols sorted by code length
+  int len;                          // current code length
+  int symbol;                       // symbol index in original or sorted table
+  // number of codes of each length:
+  int count[MAX_ALLOWED_CODE_LENGTH + 1] = { 0 };
+  // offsets in sorted table for each length:
+  int offset[MAX_ALLOWED_CODE_LENGTH + 1];
+
+  assert(code_lengths_size != 0);
   assert(code_lengths != NULL);
-  assert(code_lengths_size > 0);
-  assert(huff_codes != NULL);
+  assert(root_table != NULL);
+  assert(root_bits > 0);
 
-  // Calculate max code length.
+  // Build histogram of code lengths.
   for (symbol = 0; symbol < code_lengths_size; ++symbol) {
-    if (code_lengths[symbol] > max_code_length) {
-      max_code_length = code_lengths[symbol];
-    }
-  }
-  if (max_code_length > MAX_ALLOWED_CODE_LENGTH) return 0;
-
-  // Calculate code length histogram.
-  for (symbol = 0; symbol < code_lengths_size; ++symbol) {
-    ++code_length_hist[code_lengths[symbol]];
-  }
-  code_length_hist[0] = 0;
-
-  // Calculate the initial values of 'next_codes' for each code length.
-  // next_codes[code_len] denotes the code to be assigned to the next symbol
-  // of code length 'code_len'.
-  curr_code = 0;
-  next_codes[0] = -1;  // Unused, as code length = 0 implies code doesn't exist.
-  for (code_len = 1; code_len <= max_code_length; ++code_len) {
-    curr_code = (curr_code + code_length_hist[code_len - 1]) << 1;
-    next_codes[code_len] = curr_code;
-  }
-
-  // Get symbols.
-  for (symbol = 0; symbol < code_lengths_size; ++symbol) {
-    if (code_lengths[symbol] > 0) {
-      huff_codes[symbol] = next_codes[code_lengths[symbol]]++;
-    } else {
-      huff_codes[symbol] = NON_EXISTENT_SYMBOL;
-    }
-  }
-  return 1;
-}
-
-#ifndef USE_LUT_REVERSE_BITS
-
-static int ReverseBitsShort(int bits, int num_bits) {
-  int retval = 0;
-  int i;
-  assert(num_bits <= 8);   // Not a hard requirement, just for coherency.
-  for (i = 0; i < num_bits; ++i) {
-    retval <<= 1;
-    retval |= bits & 1;
-    bits >>= 1;
-  }
-  return retval;
-}
-
-#else
-
-static const uint8_t kReversedBits[16] = {  // Pre-reversed 4-bit values.
-  0x0, 0x8, 0x4, 0xc, 0x2, 0xa, 0x6, 0xe,
-  0x1, 0x9, 0x5, 0xd, 0x3, 0xb, 0x7, 0xf
-};
-
-static int ReverseBitsShort(int bits, int num_bits) {
-  const uint8_t v = (kReversedBits[bits & 0xf] << 4) | kReversedBits[bits >> 4];
-  assert(num_bits <= 8);
-  return v >> (8 - num_bits);
-}
-
-#endif
-
-static int TreeAddSymbol(HuffmanTree* const tree,
-                         int symbol, int code, int code_length) {
-  int step = HUFF_LUT_BITS;
-  int base_code;
-  HuffmanTreeNode* node = tree->root_;
-  const HuffmanTreeNode* const max_node = tree->root_ + tree->max_nodes_;
-  assert(symbol == (int16_t)symbol);
-  if (code_length <= HUFF_LUT_BITS) {
-    int i;
-    base_code = ReverseBitsShort(code, code_length);
-    for (i = 0; i < (1 << (HUFF_LUT_BITS - code_length)); ++i) {
-      const int idx = base_code | (i << code_length);
-      tree->lut_symbol_[idx] = (int16_t)symbol;
-      tree->lut_bits_[idx] = code_length;
-    }
-  } else {
-    base_code = ReverseBitsShort((code >> (code_length - HUFF_LUT_BITS)),
-                                 HUFF_LUT_BITS);
-  }
-  while (code_length-- > 0) {
-    if (node >= max_node) {
+    if (code_lengths[symbol] > MAX_ALLOWED_CODE_LENGTH) {
       return 0;
     }
-    if (NodeIsEmpty(node)) {
-      if (IsFull(tree)) return 0;    // error: too many symbols.
-      AssignChildren(tree, node);
-    } else if (!HuffmanTreeNodeIsNotLeaf(node)) {
-      return 0;  // leaf is already occupied.
-    }
-    node += node->children_ + ((code >> code_length) & 1);
-    if (--step == 0) {
-      tree->lut_jump_[base_code] = (int16_t)(node - tree->root_);
-    }
-  }
-  if (NodeIsEmpty(node)) {
-    node->children_ = 0;      // turn newly created node into a leaf.
-  } else if (HuffmanTreeNodeIsNotLeaf(node)) {
-    return 0;   // trying to assign a symbol to already used code.
-  }
-  node->symbol_ = symbol;  // Add symbol in this node.
-  return 1;
-}
-
-int VP8LHuffmanTreeBuildImplicit(HuffmanTree* const tree,
-                                 const int* const code_lengths,
-                                 int* const codes,
-                                 int code_lengths_size) {
-  int symbol;
-  int num_symbols = 0;
-  int root_symbol = 0;
-
-  assert(tree != NULL);
-  assert(code_lengths != NULL);
-
-  // Find out number of symbols and the root symbol.
-  for (symbol = 0; symbol < code_lengths_size; ++symbol) {
-    if (code_lengths[symbol] > 0) {
-      // Note: code length = 0 indicates non-existent symbol.
-      ++num_symbols;
-      root_symbol = symbol;
-    }
+    ++count[code_lengths[symbol]];
   }
 
-  // Initialize the tree. Will fail for num_symbols = 0
-  if (!TreeInit(tree, num_symbols)) return 0;
+  // Error, all code lengths are zeros.
+  if (count[0] == code_lengths_size) {
+    return 0;
+  }
 
-  // Build tree.
-  if (num_symbols == 1) {  // Trivial case.
-    const int max_symbol = code_lengths_size;
-    if (root_symbol < 0 || root_symbol >= max_symbol) {
-      VP8LHuffmanTreeFree(tree);
+  // Generate offsets into sorted symbol table by code length.
+  offset[1] = 0;
+  for (len = 1; len < MAX_ALLOWED_CODE_LENGTH; ++len) {
+    if (count[len] > (1 << len)) {
       return 0;
     }
-    return TreeAddSymbol(tree, root_symbol, 0, 0);
-  } else {  // Normal case.
-    int ok = 0;
-    memset(codes, 0, code_lengths_size * sizeof(*codes));
+    offset[len + 1] = offset[len] + count[len];
+  }
 
-    if (!VP8LHuffmanCodeLengthsToCodes(code_lengths, code_lengths_size,
-                                       codes)) {
-      goto End;
+  sorted = (int*)WebPSafeMalloc(code_lengths_size, sizeof(*sorted));
+  if (sorted == NULL) {
+    return 0;
+  }
+
+  // Sort symbols by length, by symbol order within each length.
+  for (symbol = 0; symbol < code_lengths_size; ++symbol) {
+    const int symbol_code_length = code_lengths[symbol];
+    if (code_lengths[symbol] > 0) {
+      sorted[offset[symbol_code_length]++] = symbol;
+    }
+  }
+
+  // Special case code with only one value.
+  if (offset[MAX_ALLOWED_CODE_LENGTH] == 1) {
+    HuffmanCode code;
+    code.bits = 0;
+    code.value = (uint16_t)sorted[0];
+    ReplicateValue(table, 1, total_size, code);
+    WebPSafeFree(sorted);
+    return total_size;
+  }
+
+  {
+    int step;              // step size to replicate values in current table
+    uint32_t low = -1;     // low bits for current root entry
+    uint32_t mask = total_size - 1;    // mask for low bits
+    uint32_t key = 0;      // reversed prefix code
+    int num_nodes = 1;     // number of Huffman tree nodes
+    int num_open = 1;      // number of open branches in current tree level
+    int table_bits = root_bits;        // key length of current table
+    int table_size = 1 << table_bits;  // size of current table
+    symbol = 0;
+    // Fill in root table.
+    for (len = 1, step = 2; len <= root_bits; ++len, step <<= 1) {
+      num_open <<= 1;
+      num_nodes += num_open;
+      num_open -= count[len];
+      if (num_open < 0) {
+        WebPSafeFree(sorted);
+        return 0;
+      }
+      for (; count[len] > 0; --count[len]) {
+        HuffmanCode code;
+        code.bits = (uint8_t)len;
+        code.value = (uint16_t)sorted[symbol++];
+        ReplicateValue(&table[key], step, table_size, code);
+        key = GetNextKey(key, len);
+      }
     }
 
-    // Add symbols one-by-one.
-    for (symbol = 0; symbol < code_lengths_size; ++symbol) {
-      if (code_lengths[symbol] > 0) {
-        if (!TreeAddSymbol(tree, symbol, codes[symbol],
-                           code_lengths[symbol])) {
-          goto End;
+    // Fill in 2nd level tables and add pointers to root table.
+    for (len = root_bits + 1, step = 2; len <= MAX_ALLOWED_CODE_LENGTH;
+         ++len, step <<= 1) {
+      num_open <<= 1;
+      num_nodes += num_open;
+      num_open -= count[len];
+      if (num_open < 0) {
+        WebPSafeFree(sorted);
+        return 0;
+      }
+      for (; count[len] > 0; --count[len]) {
+        HuffmanCode code;
+        if ((key & mask) != low) {
+          table += table_size;
+          table_bits = NextTableBitSize(count, len, root_bits);
+          table_size = 1 << table_bits;
+          total_size += table_size;
+          low = key & mask;
+          root_table[low].bits = (uint8_t)(table_bits + root_bits);
+          root_table[low].value = (uint16_t)((table - root_table) - low);
         }
+        code.bits = (uint8_t)(len - root_bits);
+        code.value = (uint16_t)sorted[symbol++];
+        ReplicateValue(&table[key >> root_bits], step, table_size, code);
+        key = GetNextKey(key, len);
       }
     }
-    ok = 1;
- End:
-    ok = ok && IsFull(tree);
-    if (!ok) VP8LHuffmanTreeFree(tree);
-    return ok;
-  }
-}
 
-int VP8LHuffmanTreeBuildExplicit(HuffmanTree* const tree,
-                                 const int* const code_lengths,
-                                 const int* const codes,
-                                 const int* const symbols, int max_symbol,
-                                 int num_symbols) {
-  int ok = 0;
-  int i;
-  assert(tree != NULL);
-  assert(code_lengths != NULL);
-  assert(codes != NULL);
-  assert(symbols != NULL);
-
-  // Initialize the tree. Will fail if num_symbols = 0.
-  if (!TreeInit(tree, num_symbols)) return 0;
-
-  // Add symbols one-by-one.
-  for (i = 0; i < num_symbols; ++i) {
-    if (codes[i] != NON_EXISTENT_SYMBOL) {
-      if (symbols[i] < 0 || symbols[i] >= max_symbol) {
-        goto End;
-      }
-      if (!TreeAddSymbol(tree, symbols[i], codes[i], code_lengths[i])) {
-        goto End;
-      }
+    // Check if tree is full.
+    if (num_nodes != 2 * offset[MAX_ALLOWED_CODE_LENGTH] - 1) {
+      WebPSafeFree(sorted);
+      return 0;
     }
   }
-  ok = 1;
- End:
-  ok = ok && IsFull(tree);
-  if (!ok) VP8LHuffmanTreeFree(tree);
-  return ok;
+
+  WebPSafeFree(sorted);
+  return total_size;
 }

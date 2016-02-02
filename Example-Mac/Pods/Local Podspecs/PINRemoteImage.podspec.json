@@ -30,7 +30,7 @@
       "frameworks": [
         "UIKit",
         "ImageIO",
-        "CoreImage"
+        "Accelerate"
       ],
       "dependencies": {
         "PINCache": [
@@ -39,7 +39,7 @@
       }
     },
     {
-      "name": "Mac",
+      "name": "OSX",
       "source_files": "Pod/Classes/**/*.{h,m}",
       "exclude_files": [
         "Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h",

@@ -19,7 +19,7 @@
 // Right now, some intrinsics functions seem slower, so we disable them
 // everywhere except aarch64 where the inline assembly is incompatible.
 #if defined(__aarch64__)
-#define USE_INTRINSICS   // use intrinsics when possible
+#define WEBP_USE_INTRINSICS   // use intrinsics when possible
 #endif
 
 #define INIT_VECTOR2(v, a, b) do {  \

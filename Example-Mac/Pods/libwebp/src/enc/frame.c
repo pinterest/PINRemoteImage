@@ -14,8 +14,9 @@
 #include <string.h>
 #include <math.h>
 
-#include "./vp8enci.h"
 #include "./cost.h"
+#include "./vp8enci.h"
+#include "../dsp/dsp.h"
 #include "../webp/format_constants.h"  // RIFF constants
 
 #define SEGMENT_VISU 0
@@ -81,11 +82,6 @@ static float ComputeNextQ(PassStats* const s) {
 //------------------------------------------------------------------------------
 // Tables for level coding
 
-const uint8_t VP8EncBands[16 + 1] = {
-  0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7,
-  0  // sentinel
-};
-
 const uint8_t VP8Cat3[] = { 173, 148, 140 };
 const uint8_t VP8Cat4[] = { 176, 155, 140, 135 };
 const uint8_t VP8Cat5[] = { 180, 157, 141, 134, 130 };
@@ -96,7 +92,7 @@ const uint8_t VP8Cat6[] =
 // Reset the statistics about: number of skips, token proba, level cost,...
 
 static void ResetStats(VP8Encoder* const enc) {
-  VP8Proba* const proba = &enc->proba_;
+  VP8EncProba* const proba = &enc->proba_;
   VP8CalculateLevelCosts(proba);
   proba->nb_skip_ = 0;
 }
@@ -112,7 +108,7 @@ static int CalcSkipProba(uint64_t nb, uint64_t total) {
 
 // Returns the bit-cost for coding the skip probability.
 static int FinalizeSkipProba(VP8Encoder* const enc) {
-  VP8Proba* const proba = &enc->proba_;
+  VP8EncProba* const proba = &enc->proba_;
   const int nb_mbs = enc->mb_w_ * enc->mb_h_;
   const int nb_events = proba->nb_skip_;
   int size;
@@ -140,11 +136,11 @@ static int BranchCost(int nb, int total, int proba) {
 }
 
 static void ResetTokenStats(VP8Encoder* const enc) {
-  VP8Proba* const proba = &enc->proba_;
+  VP8EncProba* const proba = &enc->proba_;
   memset(proba->stats_, 0, sizeof(proba->stats_));
 }
 
-static int FinalizeTokenProbas(VP8Proba* const proba) {
+static int FinalizeTokenProbas(VP8EncProba* const proba) {
   int has_changed = 0;
   int size = 0;
   int t, b, c, p;
@@ -476,9 +472,9 @@ static void StoreSSE(const VP8EncIterator* const it) {
   const uint8_t* const in = it->yuv_in_;
   const uint8_t* const out = it->yuv_out_;
   // Note: not totally accurate at boundary. And doesn't include in-loop filter.
-  enc->sse_[0] += VP8SSE16x16(in + Y_OFF, out + Y_OFF);
-  enc->sse_[1] += VP8SSE8x8(in + U_OFF, out + U_OFF);
-  enc->sse_[2] += VP8SSE8x8(in + V_OFF, out + V_OFF);
+  enc->sse_[0] += VP8SSE16x16(in + Y_OFF_ENC, out + Y_OFF_ENC);
+  enc->sse_[1] += VP8SSE8x8(in + U_OFF_ENC, out + U_OFF_ENC);
+  enc->sse_[2] += VP8SSE8x8(in + V_OFF_ENC, out + V_OFF_ENC);
   enc->sse_count_ += 16 * 16;
 }
 
@@ -511,9 +507,9 @@ static void StoreSideInfo(const VP8EncIterator* const it) {
     }
   }
 #if SEGMENT_VISU  // visualize segments and prediction modes
-  SetBlock(it->yuv_out_ + Y_OFF, mb->segment_ * 64, 16);
-  SetBlock(it->yuv_out_ + U_OFF, it->preds_[0] * 64, 8);
-  SetBlock(it->yuv_out_ + V_OFF, mb->uv_mode_ * 64, 8);
+  SetBlock(it->yuv_out_ + Y_OFF_ENC, mb->segment_ * 64, 16);
+  SetBlock(it->yuv_out_ + U_OFF_ENC, it->preds_[0] * 64, 8);
+  SetBlock(it->yuv_out_ + V_OFF_ENC, mb->uv_mode_ * 64, 8);
 #endif
 }
 
@@ -743,7 +739,7 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
   int num_pass_left = enc->config_->pass;
   const int do_search = enc->do_search_;
   VP8EncIterator it;
-  VP8Proba* const proba = &enc->proba_;
+  VP8EncProba* const proba = &enc->proba_;
   const VP8RDLevel rd_opt = enc->rd_opt_level_;
   const uint64_t pixel_count = enc->mb_w_ * enc->mb_h_ * 384;
   PassStats stats;

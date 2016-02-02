@@ -140,19 +140,20 @@ int VP8PutBitUniform(VP8BitWriter* const bw, int bit) {
   return bit;
 }
 
-void VP8PutValue(VP8BitWriter* const bw, int value, int nb_bits) {
-  int mask;
-  for (mask = 1 << (nb_bits - 1); mask; mask >>= 1)
+void VP8PutBits(VP8BitWriter* const bw, uint32_t value, int nb_bits) {
+  uint32_t mask;
+  assert(nb_bits > 0 && nb_bits < 32);
+  for (mask = 1u << (nb_bits - 1); mask; mask >>= 1)
     VP8PutBitUniform(bw, value & mask);
 }
 
-void VP8PutSignedValue(VP8BitWriter* const bw, int value, int nb_bits) {
+void VP8PutSignedBits(VP8BitWriter* const bw, int value, int nb_bits) {
   if (!VP8PutBitUniform(bw, value != 0))
     return;
   if (value < 0) {
-    VP8PutValue(bw, ((-value) << 1) | 1, nb_bits + 1);
+    VP8PutBits(bw, ((-value) << 1) | 1, nb_bits + 1);
   } else {
-    VP8PutValue(bw, value << 1, nb_bits + 1);
+    VP8PutBits(bw, value << 1, nb_bits + 1);
   }
 }
 
@@ -171,7 +172,7 @@ int VP8BitWriterInit(VP8BitWriter* const bw, size_t expected_size) {
 }
 
 uint8_t* VP8BitWriterFinish(VP8BitWriter* const bw) {
-  VP8PutValue(bw, 0, 9 - bw->nb_bits_);
+  VP8PutBits(bw, 0, 9 - bw->nb_bits_);
   bw->nb_bits_ = 0;   // pad with zeroes
   Flush(bw);
   return bw->buf_;
@@ -200,10 +201,6 @@ void VP8BitWriterWipeOut(VP8BitWriter* const bw) {
 // This is the minimum amount of size the memory buffer is guaranteed to grow
 // when extra space is needed.
 #define MIN_EXTRA_SIZE  (32768ULL)
-
-#define VP8L_WRITER_BYTES ((int)sizeof(vp8l_wtype_t))
-#define VP8L_WRITER_BITS (VP8L_WRITER_BYTES * 8)
-#define VP8L_WRITER_MAX_BITS (8 * (int)sizeof(vp8l_atype_t))
 
 // Returns 1 on success.
 static int VP8LBitWriterResize(VP8LBitWriter* const bw, size_t extra_size) {
@@ -242,33 +239,49 @@ int VP8LBitWriterInit(VP8LBitWriter* const bw, size_t expected_size) {
   return VP8LBitWriterResize(bw, expected_size);
 }
 
-void VP8LBitWriterDestroy(VP8LBitWriter* const bw) {
+void VP8LBitWriterWipeOut(VP8LBitWriter* const bw) {
   if (bw != NULL) {
     WebPSafeFree(bw->buf_);
     memset(bw, 0, sizeof(*bw));
   }
 }
 
-void VP8LWriteBits(VP8LBitWriter* const bw, int n_bits, uint32_t bits) {
+void VP8LPutBitsFlushBits(VP8LBitWriter* const bw) {
+  // If needed, make some room by flushing some bits out.
+  if (bw->cur_ + VP8L_WRITER_BYTES > bw->end_) {
+    const uint64_t extra_size = (bw->end_ - bw->buf_) + MIN_EXTRA_SIZE;
+    if (extra_size != (size_t)extra_size ||
+        !VP8LBitWriterResize(bw, (size_t)extra_size)) {
+      bw->cur_ = bw->buf_;
+      bw->error_ = 1;
+      return;
+    }
+  }
+  *(vp8l_wtype_t*)bw->cur_ = (vp8l_wtype_t)WSWAP((vp8l_wtype_t)bw->bits_);
+  bw->cur_ += VP8L_WRITER_BYTES;
+  bw->bits_ >>= VP8L_WRITER_BITS;
+  bw->used_ -= VP8L_WRITER_BITS;
+}
+
+void VP8LPutBitsInternal(VP8LBitWriter* const bw, uint32_t bits, int n_bits) {
   assert(n_bits <= 32);
   // That's the max we can handle:
-  assert(bw->used_ + n_bits <= 2 * VP8L_WRITER_MAX_BITS);
+  assert(sizeof(vp8l_wtype_t) == 2);
   if (n_bits > 0) {
-    // Local field copy.
     vp8l_atype_t lbits = bw->bits_;
     int used = bw->used_;
     // Special case of overflow handling for 32bit accumulator (2-steps flush).
-    if (VP8L_WRITER_BITS == 16) {
-      if (used + n_bits >= VP8L_WRITER_MAX_BITS) {
-        // Fill up all the VP8L_WRITER_MAX_BITS so it can be flushed out below.
-        const int shift = VP8L_WRITER_MAX_BITS - used;
-        lbits |= (vp8l_atype_t)bits << used;
-        used = VP8L_WRITER_MAX_BITS;
-        n_bits -= shift;
-        bits >>= shift;
-        assert(n_bits <= VP8L_WRITER_MAX_BITS);
-      }
+#if VP8L_WRITER_BITS == 16
+    if (used + n_bits >= VP8L_WRITER_MAX_BITS) {
+      // Fill up all the VP8L_WRITER_MAX_BITS so it can be flushed out below.
+      const int shift = VP8L_WRITER_MAX_BITS - used;
+      lbits |= (vp8l_atype_t)bits << used;
+      used = VP8L_WRITER_MAX_BITS;
+      n_bits -= shift;
+      bits >>= shift;
+      assert(n_bits <= VP8L_WRITER_MAX_BITS);
     }
+#endif
     // If needed, make some room by flushing some bits out.
     while (used >= VP8L_WRITER_BITS) {
       if (bw->cur_ + VP8L_WRITER_BYTES > bw->end_) {
@@ -285,7 +298,6 @@ void VP8LWriteBits(VP8LBitWriter* const bw, int n_bits, uint32_t bits) {
       lbits >>= VP8L_WRITER_BITS;
       used -= VP8L_WRITER_BITS;
     }
-    // Eventually, insert new bits.
     bw->bits_ = lbits | ((vp8l_atype_t)bits << used);
     bw->used_ = used + n_bits;
   }

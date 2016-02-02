@@ -4,7 +4,7 @@
           \__\__/\____/\_____/__/ ____  ___
                 / _/ /    \    \ /  _ \/ _/
                /  \_/   / /   \ \   __/  \__
-               \____/____/\_____/_____/____/v0.4.3
+               \____/____/\_____/_____/____/v0.5.0
 
 Description:
 ============
@@ -15,7 +15,8 @@ as well as the command line tools 'cwebp' and 'dwebp'.
 
 See http://developers.google.com/speed/webp
 
-Latest sources are available from http://www.webmproject.org/code/
+The latest source tree is available at
+https://chromium.googlesource.com/webm/libwebp
 
 It is released under the same license as the WebM project.
 See http://www.webmproject.org/license/software/ or the
@@ -53,6 +54,12 @@ Please refer to makefile.unix for additional details and customizations.
 
 Using autoconf tools:
 ---------------------
+Prerequisites:
+A compiler (e.g., gcc), make, autoconf, automake, libtool.
+On a Debian-like system the following should install everything you need for a
+minimal build:
+$ sudo apt-get install gcc make autoconf automake libtool
+
 When building from git sources, you will need to run autogen.sh to generate the
 configure script.
 
@@ -152,6 +159,8 @@ Options:
                             default, photo, picture,
                             drawing, icon, text
      -preset must come first, as it overwrites other parameters
+  -z <int> ............... activates lossless preset with given
+                           level in [0:fast, ..., 9:slowest]
 
   -m <int> ............... compression method (0=fast, 6=slowest)
   -segments <int> ........ number of segments to use (1..4)
@@ -179,13 +188,15 @@ Options:
   -alpha_method <int> .... transparency-compression method (0..1)
   -alpha_filter <string> . predictive filtering for alpha plane,
                            one of: none, fast (default) or best
-  -alpha_cleanup ......... clean RGB values in transparent area
+  -exact ................. preserve RGB values in transparent area
   -blend_alpha <hex> ..... blend colors against background color
                            expressed as RGB values written in
                            hexadecimal, e.g. 0xc0e0d0 for red=0xc0
                            green=0xe0 and blue=0xd0
   -noalpha ............... discard any transparency information
   -lossless .............. encode image losslessly
+  -near_lossless <int> ... use near-lossless image
+                           preprocessing (0..100=off)
   -hint <string> ......... specify image characteristics hint,
                            one of: photo, picture or graph
 
@@ -268,13 +279,16 @@ Use following options to convert into alternate image formats:
   -nofilter .... disable in-loop filtering
   -nodither .... disable dithering
   -dither <d> .. dithering strength (in 0..100)
+  -alpha_dither  use alpha-plane dithering if needed
   -mt .......... use multi-threading
   -crop <x> <y> <w> <h> ... crop output with the given rectangle
-  -scale <w> <h> .......... scale the output (*after* any cropping)
+  -resize <w> <h> ......... scale the output (*after* any cropping)
+  -flip ........ flip the output vertically
   -alpha ....... only save the alpha plane
   -incremental . use incremental decoding (useful for tests)
   -h     ....... this help message
   -v     ....... verbose (e.g. print encoding/decoding times)
+  -quiet ....... quiet mode, don't print anything
   -noasm ....... disable all assembly optimizations
 
 Visualization tool:
@@ -294,6 +308,7 @@ Options are:
   -nofancy ..... don't use the fancy YUV420 upscaler
   -nofilter .... disable in-loop filtering
   -dither <int>  dithering strength (0..100), default=50
+  -noalphadither disable alpha plane dithering
   -mt .......... use multi-threading
   -info ........ print info
   -h     ....... this help message
@@ -344,6 +359,10 @@ Options:
                            or lossless compression heuristically
   -q <float> ............. quality factor (0:small..100:big)
   -m <int> ............... compression method (0=fast, 6=slowest)
+  -min_size .............. minimize output size (default:off)
+                           lossless compression by default; can be
+                           combined with -q, -m, -lossy or -mixed
+                           options
   -kmin <int> ............ min distance between key frames
   -kmax <int> ............ max distance between key frames
   -f <int> ............... filter strength (0=off..100)
@@ -361,6 +380,29 @@ Building:
 With the libgif development files installed, gif2webp can be built using
 makefile.unix:
 $ make -f makefile.unix examples/gif2webp
+
+or using autoconf:
+$ ./configure --enable-everything
+$ make
+
+Comparison of animated images:
+==============================
+Test utility anim_diff under examples/ can be used to compare two animated
+images (each can be GIF or WebP).
+
+Usage: anim_diff <image1> <image2> [options]
+
+Options:
+  -dump_frames <folder> dump decoded frames in PAM format
+  -min_psnr <float> ... minimum per-frame PSNR
+  -raw_comparison ..... if this flag is not used, RGB is
+                        premultiplied before comparison
+
+Building:
+---------
+With the libgif development files and a C++ compiler installed, anim_diff can
+be built using makefile.unix:
+$ make -f makefile.unix examples/anim_diff
 
 or using autoconf:
 $ ./configure --enable-everything
@@ -596,7 +638,7 @@ Bugs:
 =====
 
 Please report all bugs to our issue tracker:
-    http://code.google.com/p/webp/issues
+    https://bugs.chromium.org/p/webp
 Patches welcome! See this page to get started:
     http://www.webmproject.org/code/contribute/submitting-patches/
 

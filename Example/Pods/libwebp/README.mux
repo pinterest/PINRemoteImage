@@ -1,7 +1,7 @@
 ﻿          __   __  ____  ____  ____  __ __  _     __ __
          /  \\/  \/  _ \/  _ \/  _ \/  \  \/ \___/_ / _\
          \       /   __/  _  \   __/      /  /  (_/  /__
-          \__\__/\_____/_____/__/  \__//_/\_____/__/___/v0.2.2
+          \__\__/\_____/_____/__/  \__//_/\_____/__/___/v0.3.0
 
 
 Description:
@@ -133,7 +133,7 @@ WebP files. This API currently supports reading of XMP/EXIF metadata, ICC
 profile and animated images. Other features may be added in subsequent
 releases.
 
-Code Example: Demuxing WebP data to extract all the frames, ICC profile
+Code example: Demuxing WebP data to extract all the frames, ICC profile
 and EXIF/XMP metadata.
 
   WebPDemuxer* demux = WebPDemux(&webp_data);
@@ -170,12 +170,36 @@ and EXIF/XMP metadata.
 For a detailed Demux API reference, please refer to the header file
 (src/webp/demux.h).
 
+AnimEncoder API:
+================
+The AnimEncoder API can be used to create animated WebP images.
+
+Code example:
+
+  WebPAnimEncoderOptions enc_options;
+  WebPAnimEncoderOptionsInit(&enc_options);
+  // ... (Tune 'enc_options' as needed).
+  WebPAnimEncoder* enc = WebPAnimEncoderNew(width, height, &enc_options);
+  while(<there are more frames>) {
+    WebPConfig config;
+    WebPConfigInit(&config);
+    // ... (Tune 'config' as needed).
+    WebPAnimEncoderAdd(enc, frame, duration, &config);
+  }
+  WebPAnimEncoderAssemble(enc, webp_data);
+  WebPAnimEncoderDelete(enc);
+  // ... (Write the 'webp_data' to a file, or re-mux it further).
+
+
+For a detailed AnimEncoder API reference, please refer to the header file
+(src/webp/mux.h).
+
 
 Bugs:
 =====
 
 Please report all bugs to our issue tracker:
-    http://code.google.com/p/webp/issues
+    https://bugs.chromium.org/p/webp
 Patches welcome! See this page to get started:
     http://www.webmproject.org/code/contribute/submitting-patches/
 
