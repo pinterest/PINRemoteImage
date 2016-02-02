@@ -141,7 +141,7 @@
 #if USE_FLANIMATED_IMAGE
 - (void)testGIFDownload
 {
-    XCTestExpectation *expectation = [self expectationWithDescription:@"Failed downloading animatedImage or animatedImage is not an FLAnimatedImage."];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Download animatedImage"];
     [self.imageManager downloadImageWithURL:[self GIFURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
@@ -155,7 +155,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 #endif
 
@@ -175,7 +175,7 @@
 
 - (void)testCustomHeaderIsAddedToImageRequests
 {
-    XCTestExpectation *expectation = [self expectationWithDescription:@"Custom header was not added to image request"];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Custom header was added to image request"];
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     configuration.HTTPAdditionalHeaders = @{ @"X-Custom-Header" : @"Custom Header Value" };
     self.imageManager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:configuration];
@@ -190,12 +190,12 @@
          
          [expectation fulfill];
      }];
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
 - (void)testSkipFLAnimatedImageDownload
 {
-    XCTestExpectation *expectation = [self expectationWithDescription:@"Failed downloading animated image or image is not a UIImage."];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Download animated image"];
     [self.imageManager downloadImageWithURL:[self GIFURL]
                                     options:PINRemoteImageManagerDownloadOptionsIgnoreGIFs
                                  completion:^(PINRemoteImageManagerResult *result)
@@ -208,12 +208,12 @@
         
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
 - (void)testJPEGDownload
 {
-    XCTestExpectation *expectation = [self expectationWithDescription:@"Failed downloading JPEG image or image is not a UIImage."];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Downloading JPEG image"];
     [self.imageManager downloadImageWithURL:[self JPEGURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
@@ -226,14 +226,14 @@
         
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
 - (void)testErrorOnNilURLDownload
 {
-    XCTestExpectation *expectation = [self expectationWithDescription:@""];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnonnull"
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Error on nil image url download"];
     [self.imageManager downloadImageWithURL:nil
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
@@ -247,12 +247,12 @@
          
          [expectation fulfill];
      }];
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
 - (void)testErrorOnEmptyURLDownload
 {
-    XCTestExpectation *expectation = [self expectationWithDescription:@""];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Error on empty image url download"];
     [self.imageManager downloadImageWithURL:[self emptyURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
@@ -267,12 +267,12 @@
          
          [expectation fulfill];
      }];
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
 - (void)testErrorOn404Response
 {
-    XCTestExpectation *expectation = [self expectationWithDescription:@""];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Error on 404 response"];
     [self.imageManager downloadImageWithURL:[self fourZeroFourURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
@@ -285,7 +285,7 @@
          
          [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
 - (void)testDecoding
@@ -354,7 +354,7 @@
 
 - (void)testTransparentWebPDownload
 {
-    XCTestExpectation *expectation = [self expectationWithDescription:@""];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Download transparent WebP image"];
     [self.imageManager downloadImageWithURL:[self transparentWebPURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
@@ -374,12 +374,12 @@
         
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
 - (void)testNonTransparentWebPDownload
 {
-    XCTestExpectation *expectation = [self expectationWithDescription:@""];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Download non transparent WebP image"];
     [self.imageManager downloadImageWithURL:[self nonTransparentWebPURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
@@ -397,7 +397,7 @@
         
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
 - (void)testCancelDownload
@@ -439,7 +439,7 @@
              [imageSetExpectation fulfill];
      }];
 
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
 #if USE_FLANIMATED_IMAGE
@@ -455,17 +455,17 @@
              [imageSetExpectation fulfill];
      }];
 
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 #endif
 
 - (void)testEarlyReturn
 {
-    XCTestExpectation *expectation = [self expectationWithDescription:@""];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Download JPEG image"];
     [self.imageManager downloadImageWithURL:[self JPEGURL] completion:^(PINRemoteImageManagerResult *result) {
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
     
     // callback can occur *before* image is stored in cache this is an optimization to avoid waiting on the cache to write.
     // So, wait until it's actually in the cache.
@@ -517,7 +517,7 @@
 {
     [self.imageManager.cache setObject:@"invalid" forKey:[self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil]];
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@""];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Download JPEG image"];
     [self.imageManager downloadImageWithURL:[self JPEGURL] completion:^(PINRemoteImageManagerResult *result) {
         UIImage *image = result.image;
         
@@ -525,7 +525,7 @@
         
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
     
 }
 
@@ -782,23 +782,18 @@
 
 - (void)testAuthentication
 {
-	XCTestExpectation *expectation = [self expectationWithDescription:@""];
-	__block BOOL didCallAuthenticationChallenge = NO;
+	XCTestExpectation *expectation = [self expectationWithDescription:@"Authentification challenge was called"];
 	
 	[self.imageManager setAuthenticationChallenge:^(NSURLSessionTask *task, NSURLAuthenticationChallenge *challenge, PINRemoteImageManagerAuthenticationChallengeCompletionHandler aHandler) {
-		didCallAuthenticationChallenge = YES;
 		aHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
 		[expectation fulfill];
-		
 	}];
 	
 	[self.imageManager downloadImageWithURL: [NSURL URLWithString:@"https://media-cache-ec0.pinimg.com/600x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"]
 									options:PINRemoteImageManagerDownloadOptionsNone
 								 completion:nil];
 	
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
-
-    XCTAssert(didCallAuthenticationChallenge, @"Did not call authenticationchallenge.");
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
 @end
