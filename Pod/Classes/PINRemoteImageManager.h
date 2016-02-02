@@ -7,7 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 #import <UIKit/UIKit.h>
+#else
+#import <Cocoa/Cocoa.h>
+#endif
 
 #import "PINRemoteImageManagerResult.h"
 
@@ -82,7 +86,7 @@ typedef void (^PINRemoteImageManagerImageCompletion)(PINRemoteImageManagerResult
  
  @return return the processed UIImage
  */
-typedef UIImage  * _Nullable(^PINRemoteImageManagerImageProcessor)(PINRemoteImageManagerResult * __nonnull result, NSUInteger * __nonnull cost);
+typedef PINImage  * _Nullable(^PINRemoteImageManagerImageProcessor)(PINRemoteImageManagerResult * __nonnull result, NSUInteger * __nonnull cost);
 
 /**
  PINRemoteImageManager is the main workhorse of PINRemoteImage. It is unnecessary to access directly if you simply

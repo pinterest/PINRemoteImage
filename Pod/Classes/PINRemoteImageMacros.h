@@ -20,6 +20,16 @@
 #define FLAnimatedImage NSObject
 #endif
 
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#define PINImage     UIImage
+#define PINImageView UIImageView
+#define PINButton    UIButton
+#else
+#define PINImage     NSImage
+#define PINImageView NSImageView
+#define PINButton    NSButton
+#endif
+
 #define BlockAssert(condition, desc, ...)	\
 do {				\
 __PRAGMA_PUSH_NO_EXTRA_ARG_WARNINGS \

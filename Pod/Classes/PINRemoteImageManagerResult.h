@@ -6,7 +6,11 @@
 //
 //
 
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 #import <UIKit/UIKit.h>
+#else
+#import <Cocoa/Cocoa.h>
+#endif
 
 #import "PINRemoteImageMacros.h"
 #if USE_FLANIMATED_IMAGE
@@ -29,14 +33,14 @@ typedef NS_ENUM(NSUInteger, PINRemoteImageResultType) {
 
 @interface PINRemoteImageManagerResult : NSObject
 
-@property (nonatomic, readonly, strong, nullable) UIImage *image;
+@property (nonatomic, readonly, strong, nullable) PINImage *image;
 @property (nonatomic, readonly, strong, nullable) FLAnimatedImage *animatedImage;
 @property (nonatomic, readonly, assign) NSTimeInterval requestDuration;
 @property (nonatomic, readonly, strong, nullable) NSError *error;
 @property (nonatomic, readonly, assign) PINRemoteImageResultType resultType;
 @property (nonatomic, readonly, strong, nullable) NSUUID *UUID;
 
-+ (nonnull instancetype)imageResultWithImage:(nullable UIImage *)image
++ (nonnull instancetype)imageResultWithImage:(nullable PINImage *)image
                                animatedImage:(nullable FLAnimatedImage *)animatedImage
                                requestLength:(NSTimeInterval)requestLength
                                        error:(nullable NSError *)error

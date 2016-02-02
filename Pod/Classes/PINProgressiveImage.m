@@ -12,7 +12,7 @@
 #import <Accelerate/Accelerate.h>
 
 #import "PINRemoteImage.h"
-#import "UIImage+DecodedImage.h"
+#import "PINImage+DecodedImage.h"
 
 @interface PINProgressiveImage ()
 
@@ -21,7 +21,7 @@
 @property (nonatomic, assign) CGImageSourceRef imageSource;
 @property (nonatomic, assign) CGSize size;
 @property (nonatomic, assign) BOOL isProgressiveJPEG;
-@property (nonatomic, strong) UIImage *cachedImage;
+@property (nonatomic, strong) PINImage *cachedImage;
 @property (nonatomic, assign) NSUInteger currentThreshold;
 @property (nonatomic, assign) float bytesPerSecond;
 @property (nonatomic, assign) NSUInteger scannedByte;
@@ -153,7 +153,7 @@
     [self.lock unlock];
 }
 
-- (UIImage *)currentImageBlurred:(BOOL)blurred maxProgressiveRenderSize:(CGSize)maxProgressiveRenderSize
+- (PINImage *)currentImageBlurred:(BOOL)blurred maxProgressiveRenderSize:(CGSize)maxProgressiveRenderSize
 {
     [self.lock lock];
         if (self.imageSource == nil) {
@@ -183,7 +183,7 @@
         }
     #endif
         
-        UIImage *currentImage = nil;
+        PINImage *currentImage = nil;
         
         //Size information comes after JFIF so jpeg properties should be available at or before size?
         if (self.size.width <= 0 || self.size.height <= 0) {
@@ -229,9 +229,9 @@
             CGImageRef image = CGImageSourceCreateImageAtIndex(self.imageSource, 0, NULL);
             if (image) {
                 if (blurred) {
-                    currentImage = [self postProcessImage:[UIImage imageWithCGImage:image] withProgress:progress];
+                    currentImage = [self postProcessImage:[PINImage imageWithCGImage:image] withProgress:progress];
                 } else {
-                    currentImage = [UIImage imageWithCGImage:image];
+                    currentImage = [PINImage imageWithCGImage:image];
                 }
                 CGImageRelease(image);
             }
@@ -311,9 +311,9 @@
 
 //Must be called within lock
 //Heavily cribbed from https://developer.apple.com/library/ios/samplecode/UIImageEffects/Listings/UIImageEffects_UIImageEffects_m.html#//apple_ref/doc/uid/DTS40013396-UIImageEffects_UIImageEffects_m-DontLinkElementID_9
-- (UIImage *)postProcessImage:(UIImage *)inputImage withProgress:(float)progress
+- (PINImage *)postProcessImage:(PINImage *)inputImage withProgress:(float)progress
 {
-    UIImage *outputUIImage = nil;
+    PINImage *outputImage = nil;
     CGImageRef inputImageRef = CGImageRetain(inputImage.CGImage);
     if (inputImageRef == nil) {
         return nil;
@@ -325,9 +325,16 @@
         CGImageRelease(inputImageRef);
         return nil;
     }
+
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+    CGFloat imageScale = inputImage.scale;
+#else
+    // TODO: What scale factor should be used here?
+    CGFloat imageScale = [[NSScreen mainScreen] backingScaleFactor];
+#endif
     
     CGFloat radius = (inputImage.size.width / 25.0) * MAX(0, 1.0 - progress);
-    radius *= inputImage.scale;
+    radius *= imageScale;
     
     //we'll round the radius to a whole number below anyway,
     if (radius < FLT_EPSILON) {
@@ -335,12 +342,19 @@
         return inputImage;
     }
     
-    UIGraphicsBeginImageContextWithOptions(inputSize, YES, inputImage.scale);
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextRef ctx;
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+    UIGraphicsBeginImageContextWithOptions(inputSize, YES, imageScale);
+    ctx = UIGraphicsGetCurrentContext();
+#else
+    ctx = CGBitmapContextCreate(0, inputSize.width, inputSize.height, 8, 0, [NSColorSpace genericRGBColorSpace].CGColorSpace, kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little);
+#endif
     
     if (ctx) {
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
         CGContextScaleCTM(ctx, 1.0, -1.0);
         CGContextTranslateCTM(ctx, 0, -inputSize.height);
+#endif
         
         vImage_Buffer effectInBuffer;
         vImage_Buffer scratchBuffer;
@@ -417,8 +431,14 @@
                     
                     // Cleanup
                     free(outputBuffer->data);
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+                    outputImage = UIGraphicsGetImageFromCurrentImageContext();
+#else
+                    CGImageRef outputImageRef = CGBitmapContextCreateImage(ctx);
+                    outputImage = [[NSImage alloc] initWithCGImage:outputImageRef size:inputSize];
+                    CFRelease(outputImageRef);
+#endif
                     
-                    outputUIImage = UIGraphicsGetImageFromCurrentImageContext();
                 }
             } else {
                 if (scratchBuffer.data) {
@@ -433,10 +453,13 @@
         }
     }
     
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
     UIGraphicsEndImageContext();
+#endif
+
     CGImageRelease(inputImageRef);
     
-    return outputUIImage;
+    return outputImage;
 }
 
 //  Helper function to handle deferred cleanup of a buffer.

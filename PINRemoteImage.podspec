@@ -17,7 +17,8 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/pinterest/PINRemoteImage.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/garrettmoon'
 
-  s.platform     = :ios, '6.0'
+  s.ios.deployment_target = "6.0"
+  s.osx.deployment_target = "10.8"
   s.requires_arc = true
   
   # Include optional FLAnimatedImage module
@@ -29,6 +30,14 @@ Pod::Spec.new do |s|
     cs.exclude_files = 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h', 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m'
     cs.public_header_files = 'Pod/Classes/**/*.h'
     cs.frameworks = 'UIKit', 'ImageIO', 'Accelerate'
+    cs.dependency 'PINCache', '>=2.1'
+  end
+
+  s.subspec 'OSX' do |cs|
+    cs.source_files = 'Pod/Classes/**/*.{h,m}'
+    cs.exclude_files = 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h', 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m'
+    cs.public_header_files = 'Pod/Classes/**/*.h'
+    cs.frameworks = 'Cocoa', 'ImageIO', 'CoreImage'
     cs.dependency 'PINCache', '>=2.1'
   end
 

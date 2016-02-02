@@ -1,1 +1,0 @@
-../../../libwebp/src/dsp/yuv_tables_sse2.h

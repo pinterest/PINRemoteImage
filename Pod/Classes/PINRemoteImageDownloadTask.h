@@ -18,6 +18,6 @@
 @property (nonatomic, assign) BOOL hasProgressBlocks;
 @property (nonatomic, strong, nullable) PINProgressiveImage *progressImage;
 
-- (void)callProgressWithQueue:(nonnull dispatch_queue_t)queue withImage:(nonnull UIImage *)image;
+- (void)callProgressWithQueue:(nonnull dispatch_queue_t)queue withImage:(nonnull PINImage *)image;
 
 @end

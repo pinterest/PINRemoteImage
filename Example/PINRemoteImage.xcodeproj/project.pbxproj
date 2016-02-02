@@ -24,6 +24,7 @@
 		68B3850B1B5572BF004EB26F /* ProgressiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B3850A1B5572BF004EB26F /* ProgressiveViewController.m */; };
 		68B3850E1B5577D4004EB26F /* DegradedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B3850D1B5577D4004EB26F /* DegradedViewController.m */; };
 		68B5CDF21A0BEC8C00A4BAAC /* PINRemoteImage_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B5CDF11A0BEC8C00A4BAAC /* PINRemoteImage_Tests.m */; };
+		9D9328E51C3D4CC200E1F1D3 /* Kitten.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D9328E41C3D4CC200E1F1D3 /* Kitten.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,8 @@
 		804862496DA4D87612F805CC /* Pods-PINRemoteImage Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage Tests/Pods-PINRemoteImage Tests.release.xcconfig"; sourceTree = "<group>"; };
 		855F72A0CF3949DB873DBBC8 /* libPods-PIRemoteImage Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PIRemoteImage Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FEF8351C6C35A80F5E99B0E /* Pods-PINRemoteImage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage.release.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage/Pods-PINRemoteImage.release.xcconfig"; sourceTree = "<group>"; };
+		9D9328E31C3D4CC200E1F1D3 /* Kitten.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Kitten.h; path = "../../Example-Shared/Kitten.h"; sourceTree = "<group>"; };
+		9D9328E41C3D4CC200E1F1D3 /* Kitten.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Kitten.m; path = "../../Example-Shared/Kitten.m"; sourceTree = "<group>"; };
 		A5DEC9B706184109844D57E2 /* PINRemoteImage.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = PINRemoteImage.podspec; path = ../PINRemoteImage.podspec; sourceTree = "<group>"; };
 		BA758DBC0C76C8C8804BFDEA /* Pods-PINRemoteImage Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage Tests/Pods-PINRemoteImage Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		CF9B14D6B6E747C0BEB340CF /* libPods-PIRemoteImage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PIRemoteImage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -143,6 +146,8 @@
 		6003F593195388D20070C39A /* PINRemoteImage */ = {
 			isa = PBXGroup;
 			children = (
+				9D9328E31C3D4CC200E1F1D3 /* Kitten.h */,
+				9D9328E41C3D4CC200E1F1D3 /* Kitten.m */,
 				6003F59C195388D20070C39A /* PINAppDelegate.h */,
 				6003F59D195388D20070C39A /* PINAppDelegate.m */,
 				6003F59F195388D20070C39A /* Main.storyboard */,
@@ -384,6 +389,7 @@
 			files = (
 				68B385081B557116004EB26F /* WebPViewController.m in Sources */,
 				68B3850B1B5572BF004EB26F /* ProgressiveViewController.m in Sources */,
+				9D9328E51C3D4CC200E1F1D3 /* Kitten.m in Sources */,
 				6003F59E195388D20070C39A /* PINAppDelegate.m in Sources */,
 				682C52611B584DD300B3B813 /* ProcessingViewController.m in Sources */,
 				6003F5A7195388D20070C39A /* PINViewController.m in Sources */,

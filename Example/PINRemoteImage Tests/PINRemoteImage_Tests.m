@@ -10,7 +10,7 @@
 #import <XCTest/XCTest.h>
 #import <PINRemoteImage/PINRemoteImage.h>
 #import <PINRemoteImage/PINURLSessionManager.h>
-#import <PINRemoteImage/UIImageView+PINRemoteImage.h>
+#import <PINRemoteImage/PINImageView+PINRemoteImage.h>
 #if USE_FLANIMATED_IMAGE
 #import <FLAnimatedImage/FLAnimatedImage.h>
 #endif
@@ -141,20 +141,21 @@
 #if USE_FLANIMATED_IMAGE
 - (void)testGIFDownload
 {
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    __block FLAnimatedImage *outAnimatedImage = nil;
-    __block UIImage *outImage = nil;
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Failed downloading animatedImage or animatedImage is not an FLAnimatedImage."];
     [self.imageManager downloadImageWithURL:[self GIFURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
     {
-        outImage = result.image;
-        outAnimatedImage = result.animatedImage;
-        dispatch_semaphore_signal(semaphore);
+        UIImage *outImage = result.image;
+        FLAnimatedImage *outAnimatedImage = result.animatedImage;
+        
+        XCTAssert(outAnimatedImage && [outAnimatedImage isKindOfClass:[FLAnimatedImage class]], @"Failed downloading animatedImage or animatedImage is not an FLAnimatedImage.");
+        XCTAssert(outImage == nil, @"Image is not nil.");
+        
+        [expectation fulfill];
     }];
-    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
-    XCTAssert(outAnimatedImage && [outAnimatedImage isKindOfClass:[FLAnimatedImage class]], @"Failed downloading animatedImage or animatedImage is not an FLAnimatedImage.");
-    XCTAssert(outImage == nil, @"Image is not nil.");
+    
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
 }
 #endif
 
@@ -174,7 +175,7 @@
 
 - (void)testCustomHeaderIsAddedToImageRequests
 {
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Custom header was not added to image request"];
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     configuration.HTTPAdditionalHeaders = @{ @"X-Custom-Header" : @"Custom Header Value" };
     self.imageManager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:configuration];
@@ -183,101 +184,105 @@
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
      {
-         dispatch_semaphore_signal(semaphore);
+         NSDictionary *headers = [[NSJSONSerialization JSONObjectWithData:self.data options:NSJSONReadingMutableContainers error:nil] valueForKey:@"headers"];
+         
+         XCTAssert([headers[@"X-Custom-Header"] isEqualToString:@"Custom Header Value"]);
+         
+         [expectation fulfill];
      }];
-    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
-    NSDictionary *headers = [[NSJSONSerialization JSONObjectWithData:self.data options:NSJSONReadingMutableContainers error:nil] valueForKey:@"headers"];
-    XCTAssert([headers[@"X-Custom-Header"] isEqualToString:@"Custom Header Value"]);
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
 }
 
 - (void)testSkipFLAnimatedImageDownload
 {
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    __block FLAnimatedImage *outAnimatedImage = nil;
-    __block UIImage *outImage = nil;
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Failed downloading animated image or image is not a UIImage."];
     [self.imageManager downloadImageWithURL:[self GIFURL]
                                     options:PINRemoteImageManagerDownloadOptionsIgnoreGIFs
                                  completion:^(PINRemoteImageManagerResult *result)
     {
-        outImage = result.image;
-        outAnimatedImage = result.animatedImage;
-        dispatch_semaphore_signal(semaphore);
+        UIImage *outImage = result.image;
+        FLAnimatedImage *outAnimatedImage = result.animatedImage;
+        
+        XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
+        XCTAssert(outAnimatedImage == nil, @"Animated image is not nil.");
+        
+        [expectation fulfill];
     }];
-    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
-    XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
-    XCTAssert(outAnimatedImage == nil, @"Animated image is not nil.");
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
 }
 
 - (void)testJPEGDownload
 {
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    __block FLAnimatedImage *outAnimatedImage = nil;
-    __block UIImage *outImage = nil;
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Failed downloading JPEG image or image is not a UIImage."];
     [self.imageManager downloadImageWithURL:[self JPEGURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
     {
-        outImage = result.image;
-        outAnimatedImage = result.animatedImage;
-        dispatch_semaphore_signal(semaphore);
+        UIImage *outImage = result.image;
+        FLAnimatedImage *outAnimatedImage = result.animatedImage;
+        
+        XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
+        XCTAssert(outAnimatedImage == nil, @"Animated image is not nil.");
+        
+        [expectation fulfill];
     }];
-    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
-    
-    XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
-    XCTAssert(outAnimatedImage == nil, @"Animated image is not nil.");
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
 }
 
 - (void)testErrorOnNilURLDownload
 {
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    __block NSError *outError = nil;
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
     [self.imageManager downloadImageWithURL:nil
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
      {
-         outError = result.error;
-         dispatch_semaphore_signal(semaphore);
+         NSError *outError = result.error;
+         
+         XCTAssert([outError.domain isEqualToString:NSURLErrorDomain]);
+         XCTAssert(outError.code == NSURLErrorUnsupportedURL);
+         XCTAssert([outError.localizedDescription isEqualToString:@"unsupported URL"]);
+         
+         [expectation fulfill];
      }];
-    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
-    XCTAssert([outError.domain isEqualToString:NSURLErrorDomain]);
-    XCTAssert(outError.code == NSURLErrorUnsupportedURL);
-    XCTAssert([outError.localizedDescription isEqualToString:@"unsupported URL"]);
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
 }
 
 - (void)testErrorOnEmptyURLDownload
 {
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    __block NSError *outError = nil;
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
     [self.imageManager downloadImageWithURL:[self emptyURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
      {
-         outError = result.error;
-         dispatch_semaphore_signal(semaphore);
+         NSError *outError = result.error;
+         
+         XCTAssert([outError.domain isEqualToString:NSURLErrorDomain]);
+         XCTAssert(outError.code == NSURLErrorUnsupportedURL);
+         // iOS8 (and presumably 10.10) returns NSURLErrorUnsupportedURL which means the HTTP NSURLProtocol does not accept it
+         NSArray *validErrorMessages = @[ @"unsupported URL", @"The operation couldn’t be completed. (NSURLErrorDomain error -1002.)"];
+         XCTAssert([validErrorMessages containsObject:outError.localizedDescription], @"%@", outError.localizedDescription);
+         
+         [expectation fulfill];
      }];
-    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
-    XCTAssert([outError.domain isEqualToString:NSURLErrorDomain]);
-    XCTAssert(outError.code == NSURLErrorUnsupportedURL);
-    // iOS8 (and presumably 10.10) returns NSURLErrorUnsupportedURL which means the HTTP NSURLProtocol does not accept it
-    NSArray *validErrorMessages = @[ @"unsupported URL", @"The operation couldn’t be completed. (NSURLErrorDomain error -1002.)"];
-    XCTAssert([validErrorMessages containsObject:outError.localizedDescription], @"%@", outError.localizedDescription);
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
 }
 
 - (void)testErrorOn404Response
 {
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    __block NSError *outError = nil;
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
     [self.imageManager downloadImageWithURL:[self fourZeroFourURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
      {
-         outError = result.error;
-         dispatch_semaphore_signal(semaphore);
-     }];
-    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
-    XCTAssert([outError.domain isEqualToString:NSURLErrorDomain]);
-    XCTAssert(outError.code == NSURLErrorRedirectToNonExistentLocation);
-    XCTAssert([outError.localizedDescription isEqualToString:@"The requested URL was not found on this server."]);
+         NSError *outError = result.error;
+         
+         XCTAssert([outError.domain isEqualToString:NSURLErrorDomain]);
+         XCTAssert(outError.code == NSURLErrorRedirectToNonExistentLocation);
+         XCTAssert([outError.localizedDescription isEqualToString:@"The requested URL was not found on this server."]);
+         
+         [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
 }
 
 - (void)testDecoding
@@ -346,47 +351,50 @@
 
 - (void)testTransparentWebPDownload
 {
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    __block FLAnimatedImage *outAnimatedImage = nil;
-    __block UIImage *outImage = nil;
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
     [self.imageManager downloadImageWithURL:[self transparentWebPURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
     {
         XCTAssert(result.error == nil, @"error is non-nil: %@", result.error);
-        outImage = result.image;
-        outAnimatedImage = result.animatedImage;
-        dispatch_semaphore_signal(semaphore);
+        
+        UIImage *outImage = result.image;
+        FLAnimatedImage *outAnimatedImage = result.animatedImage;
+        
+        XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
+        
+        CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(outImage.CGImage);
+        BOOL opaque = alphaInfo == kCGImageAlphaNone || alphaInfo == kCGImageAlphaNoneSkipFirst || alphaInfo == kCGImageAlphaNoneSkipLast;
+        
+        XCTAssert(opaque == NO, @"transparent WebP image is opaque.");
+        XCTAssert(outAnimatedImage == nil, @"Animated image is not nil.");
+        
+        [expectation fulfill];
     }];
-    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
-    XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
-    
-    CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(outImage.CGImage);
-    BOOL opaque = alphaInfo == kCGImageAlphaNone || alphaInfo == kCGImageAlphaNoneSkipFirst || alphaInfo == kCGImageAlphaNoneSkipLast;
-    XCTAssert(opaque == NO, @"transparent WebP image is opaque.");
-    XCTAssert(outAnimatedImage == nil, @"Animated image is not nil.");
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
 }
 
 - (void)testNonTransparentWebPDownload
 {
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    __block FLAnimatedImage *outAnimatedImage = nil;
-    __block UIImage *outImage = nil;
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
     [self.imageManager downloadImageWithURL:[self nonTransparentWebPURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
     {
-        outImage = result.image;
-        outAnimatedImage = result.animatedImage;
-        dispatch_semaphore_signal(semaphore);
+        UIImage *outImage = result.image;
+        FLAnimatedImage *outAnimatedImage = result.animatedImage;
+        
+        XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
+        
+        CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(outImage.CGImage);
+        BOOL opaque = alphaInfo == kCGImageAlphaNone || alphaInfo == kCGImageAlphaNoneSkipFirst || alphaInfo == kCGImageAlphaNoneSkipLast;
+        
+        XCTAssert(opaque == YES, @"non transparent WebP image is not opaque.");
+        XCTAssert(outAnimatedImage == nil, @"Animated image is not nil.");
+        
+        [expectation fulfill];
     }];
-    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
-    XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
-    
-    CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(outImage.CGImage);
-    BOOL opaque = alphaInfo == kCGImageAlphaNone || alphaInfo == kCGImageAlphaNoneSkipFirst || alphaInfo == kCGImageAlphaNoneSkipLast;
-    XCTAssert(opaque == YES, @"non transparent WebP image is not opaque.");
-    XCTAssert(outAnimatedImage == nil, @"Animated image is not nil.");
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
 }
 
 - (void)testCancelDownload
@@ -448,13 +456,14 @@
 }
 #endif
 
-- (void)testEarlyReturn {
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+- (void)testEarlyReturn
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
     [self.imageManager downloadImageWithURL:[self JPEGURL] completion:^(PINRemoteImageManagerResult *result) {
-        dispatch_semaphore_signal(semaphore);
+        [expectation fulfill];
     }];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
     
-    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     // callback can occur *before* image is stored in cache this is an optimization to avoid waiting on the cache to write.
     // So, wait until it's actually in the cache.
     [self waitForImageWithURLToBeCached:[self JPEGURL]];
@@ -505,16 +514,16 @@
 {
     [self.imageManager.cache setObject:@"invalid" forKey:[self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil]];
     
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    
-    __block UIImage *image = nil;
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
     [self.imageManager downloadImageWithURL:[self JPEGURL] completion:^(PINRemoteImageManagerResult *result) {
-        image = result.image;
-        dispatch_semaphore_signal(semaphore);
+        UIImage *image = result.image;
+        
+        XCTAssert([image isKindOfClass:[UIImage class]], @"image should be UIImage");
+        
+        [expectation fulfill];
     }];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
     
-    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
-    XCTAssert([image isKindOfClass:[UIImage class]], @"image should be UIImage");
 }
 
 - (void)testProcessingLoad
@@ -585,7 +594,7 @@
          XCTAssert(NO, @"Process should have been canceled and callback should not have been called.");
          return nil;
      }
-                                 completion:^(PINRemoteImageManagerResult *result)
+                                                       completion:^(PINRemoteImageManagerResult *result)
      {
          XCTAssert(NO, @"Process should have been canceled and callback should not have been called.");
          dispatch_semaphore_signal(semaphore);
@@ -768,14 +777,15 @@
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
 }
 
-- (void)testAuthentication {
-	dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+- (void)testAuthentication
+{
+	XCTestExpectation *expectation = [self expectationWithDescription:@""];
 	__block BOOL didCallAuthenticationChallenge = NO;
 	
 	[self.imageManager setAuthenticationChallenge:^(NSURLSessionTask *task, NSURLAuthenticationChallenge *challenge, PINRemoteImageManagerAuthenticationChallengeCompletionHandler aHandler) {
 		didCallAuthenticationChallenge = YES;
 		aHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
-		dispatch_semaphore_signal(semaphore);
+		[expectation fulfill];
 		
 	}];
 	
@@ -783,9 +793,9 @@
 									options:PINRemoteImageManagerDownloadOptionsNone
 								 completion:nil];
 	
-	XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
-	
-	XCTAssert(didCallAuthenticationChallenge, @"Did not call authenticationchallenge.");
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:NULL];
+
+    XCTAssert(didCallAuthenticationChallenge, @"Did not call authenticationchallenge.");
 }
 
 @end
