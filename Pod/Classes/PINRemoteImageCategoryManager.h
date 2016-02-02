@@ -56,21 +56,21 @@
             completion:(nullable PINRemoteImageManagerImageCompletion)completion;
 
 + (void)setImageOnView:(nonnull id <PINRemoteImageCategory>)view
-              fromURLs:(nullable NSArray *)urls
+              fromURLs:(nullable NSArray <NSURL *> *)urls
       placeholderImage:(nullable PINImage *)placeholderImage
           processorKey:(nullable NSString *)processorKey
              processor:(nullable PINRemoteImageManagerImageProcessor)processor
             completion:(nullable PINRemoteImageManagerImageCompletion)completion;
 
 + (void)setImageOnView:(nonnull id <PINRemoteImageCategory>)view
-              fromURLs:(nullable NSArray *)urls;
+              fromURLs:(nullable NSArray <NSURL *> *)urls;
 
 + (void)setImageOnView:(nonnull id <PINRemoteImageCategory>)view
-              fromURLs:(nullable NSArray *)urls
+              fromURLs:(nullable NSArray <NSURL *> *)urls
       placeholderImage:(nullable PINImage *)placeholderImage;
 
 + (void)setImageOnView:(nonnull id <PINRemoteImageCategory>)view
-              fromURLs:(nullable NSArray *)urls
+              fromURLs:(nullable NSArray <NSURL *> *)urls
       placeholderImage:(nullable PINImage *)placeholderImage
             completion:(nullable PINRemoteImageManagerImageCompletion)completion;
 
@@ -170,7 +170,7 @@
  
  @param urls NSArray of NSURLs sorted in increasing quality
  */
-- (void)pin_setImageFromURLs:(nullable NSArray *)urls;
+- (void)pin_setImageFromURLs:(nullable NSArray <NSURL *> *)urls;
 
 /**
  Set placeholder on view and retrieve one of the images at the passed in URLs depending on previous network performance and set result on view.
@@ -178,7 +178,7 @@
  @param urls NSArray of NSURLs sorted in increasing quality
  @param placeholderImage PINImage to set on the view while the image at URL is being retrieved.
  */
-- (void)pin_setImageFromURLs:(nullable NSArray *)urls placeholderImage:(nullable PINImage *)placeholderImage;
+- (void)pin_setImageFromURLs:(nullable NSArray <NSURL *> *)urls placeholderImage:(nullable PINImage *)placeholderImage;
 
 /**
  Set placeholder on view and retrieve one of the images at the passed in URLs depending on previous network performance and set result on view. Call completion after image has been fetched and set on view.
@@ -187,7 +187,7 @@
  @param placeholderImage PINImage to set on the view while the image at URL is being retrieved.
  @param completion Called when url has been retrieved and set on view.
  */
-- (void)pin_setImageFromURLs:(nullable NSArray *)urls placeholderImage:(nullable PINImage *)placeholderImage completion:(nullable PINRemoteImageManagerImageCompletion)completion;
+- (void)pin_setImageFromURLs:(nullable NSArray <NSURL *> *)urls placeholderImage:(nullable PINImage *)placeholderImage completion:(nullable PINRemoteImageManagerImageCompletion)completion;
 
 /**
  Cancels the image download. Guarantees that previous setImage calls will *not* have their results set on the image view after calling this (as opposed to PINRemoteImageManager which does not guarantee cancellation).
@@ -316,7 +316,7 @@
 
  @param urls NSArray of NSURLs sorted in increasing quality
  */
-- (void)setImageFromURLs:(nullable NSArray *)urls __attribute((deprecated("use pin_setImageFromURLs:")));
+- (void)setImageFromURLs:(nullable NSArray <NSURL *> *)urls __attribute((deprecated("use pin_setImageFromURLs:")));
 
 /**
  Set placeholder on view and retrieve one of the images at the passed in URLs depending on previous network performance and set result on view.
@@ -324,7 +324,7 @@
  @param urls NSArray of NSURLs sorted in increasing quality
  @param placeholderImage PINImage to set on the view while the image at URL is being retrieved.
  */
-- (void)setImageFromURLs:(nullable NSArray *)urls placeholderImage:(nullable PINImage *)placeholderImage __attribute((deprecated("use pin_setImageFromURLs:placeholderImage:")));
+- (void)setImageFromURLs:(nullable NSArray <NSURL *> *)urls placeholderImage:(nullable PINImage *)placeholderImage __attribute((deprecated("use pin_setImageFromURLs:placeholderImage:")));
 
 /**
  Set placeholder on view and retrieve one of the images at the passed in URLs depending on previous network performance and set result on view. Call completion after image has been fetched and set on view.
@@ -333,7 +333,7 @@
  @param placeholderImage PINImage to set on the view while the image at URL is being retrieved.
  @param completion Called when url has been retrieved and set on view.
  */
-- (void)setImageFromURLs:(nullable NSArray *)urls placeholderImage:(nullable PINImage *)placeholderImage completion:(nullable PINRemoteImageManagerImageCompletion)completion __attribute((deprecated("use pin_setImageFromURLs:(NSArray *)urls placeholderImage:completion:")));
+- (void)setImageFromURLs:(nullable NSArray <NSURL *> *)urls placeholderImage:(nullable PINImage *)placeholderImage completion:(nullable PINRemoteImageManagerImageCompletion)completion __attribute((deprecated("use pin_setImageFromURLs:(NSArray *)urls placeholderImage:completion:")));
 
 /**
  Cancels the image download. Guarantees that previous setImage calls will *not* have their results set on the image view after calling this (as opposed to PINRemoteImageManager which does not guarantee cancellation).

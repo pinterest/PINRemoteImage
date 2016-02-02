@@ -50,17 +50,17 @@
     [PINRemoteImageCategoryManager setImageOnView:self fromURLs:url?@[url]:nil placeholderImage:placeholderImage processorKey:processorKey processor:processor completion:completion];
 }
 
-- (void)pin_setImageFromURLs:(NSArray *)urls
+- (void)pin_setImageFromURLs:(NSArray <NSURL *> *)urls
 {
     [PINRemoteImageCategoryManager setImageOnView:self fromURLs:urls];
 }
 
-- (void)pin_setImageFromURLs:(NSArray *)urls placeholderImage:(PINImage *)placeholderImage
+- (void)pin_setImageFromURLs:(NSArray <NSURL *> *)urls placeholderImage:(PINImage *)placeholderImage
 {
     [PINRemoteImageCategoryManager setImageOnView:self fromURLs:urls placeholderImage:placeholderImage];
 }
 
-- (void)pin_setImageFromURLs:(NSArray *)urls placeholderImage:(PINImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion
+- (void)pin_setImageFromURLs:(NSArray <NSURL *> *)urls placeholderImage:(PINImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion
 {
     [PINRemoteImageCategoryManager setImageOnView:self fromURLs:urls placeholderImage:placeholderImage completion:completion];
 }
@@ -168,17 +168,17 @@
     [self pin_setImageFromURL:url placeholderImage:placeholderImage processorKey:processorKey processor:processor completion:completion];
 }
 
-- (void)setImageFromURLs:(NSArray *)urls
+- (void)setImageFromURLs:(NSArray <NSURL *> *)urls
 {
     [self pin_setImageFromURLs:urls];
 }
 
-- (void)setImageFromURLs:(NSArray *)urls placeholderImage:(PINImage *)placeholderImage
+- (void)setImageFromURLs:(NSArray <NSURL *> *)urls placeholderImage:(PINImage *)placeholderImage
 {
     [self pin_setImageFromURLs:urls placeholderImage:placeholderImage];
 }
 
-- (void)setImageFromURLs:(NSArray *)urls placeholderImage:(PINImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion
+- (void)setImageFromURLs:(NSArray <NSURL *> *)urls placeholderImage:(PINImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion
 {
     [self pin_setImageFromURLs:urls placeholderImage:placeholderImage completion:completion];
 }

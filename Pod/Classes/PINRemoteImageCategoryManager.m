@@ -86,7 +86,7 @@
 }
 
 + (void)setImageOnView:(id <PINRemoteImageCategory>)view
-              fromURLs:(NSArray *)urls
+              fromURLs:(NSArray <NSURL *> *)urls
 {
     [self setImageOnView:view
                 fromURLs:urls
@@ -94,7 +94,7 @@
 }
 
 + (void)setImageOnView:(id <PINRemoteImageCategory>)view
-              fromURLs:(NSArray *)urls
+              fromURLs:(NSArray <NSURL *> *)urls
       placeholderImage:(PINImage *)placeholderImage
 {
     [self setImageOnView:view
@@ -104,7 +104,7 @@
 }
 
 + (void)setImageOnView:(id <PINRemoteImageCategory>)view
-              fromURLs:(NSArray *)urls
+              fromURLs:(NSArray <NSURL *> *)urls
       placeholderImage:(PINImage *)placeholderImage
             completion:(PINRemoteImageManagerImageCompletion)completion
 {
@@ -145,7 +145,7 @@
 }
 
 + (void)setImageOnView:(id <PINRemoteImageCategory>)view
-              fromURLs:(NSArray *)urls
+              fromURLs:(NSArray <NSURL *> *)urls
       placeholderImage:(PINImage *)placeholderImage
           processorKey:(NSString *)processorKey
              processor:(PINRemoteImageManagerImageProcessor)processor
