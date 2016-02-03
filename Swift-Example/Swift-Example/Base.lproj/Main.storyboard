@@ -86,7 +86,7 @@
         <!--Progressive-->
         <scene sceneID="dHn-Dz-gw0">
             <objects>
-                <viewController title="Progressive" id="bWQ-h6-6qu" sceneMemberID="viewController">
+                <viewController title="Progressive" id="bWQ-h6-6qu" customClass="ProgressiveViewController" customModule="Swift_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="oh1-fg-8zy"/>
                         <viewControllerLayoutGuide type="bottom" id="wUF-9I-c05"/>
@@ -110,6 +110,9 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Progressive" id="689-9I-ueb"/>
+                    <connections>
+                        <outlet property="imageView" destination="V0J-QS-yT3" id="Ljz-Fb-m6r"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OsL-5w-txT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
