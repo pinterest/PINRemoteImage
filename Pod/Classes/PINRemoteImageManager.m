@@ -988,20 +988,51 @@ static dispatch_once_t sharedDispatchToken;
         return;
     }
     PINLog(@"Setting priority of UUID: %@ priority: %lu", UUID, (unsigned long)priority);
-    [self lock];
-        PINRemoteImageTask *taskToEvaluate = nil;
-        for (NSString *key in [self.tasks allKeys]) {
-            PINRemoteImageTask *task = [self.tasks objectForKey:key];
+    __weak typeof(self) weakSelf = self;
+    [_concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityHigh block:^{
+        typeof(self) strongSelf = weakSelf;
+        [strongSelf lock];
+            PINRemoteImageTask *taskToEvaluate = nil;
+            for (NSString *key in [strongSelf.tasks allKeys]) {
+                PINRemoteImageTask *task = [strongSelf.tasks objectForKey:key];
+                for (NSUUID *blockUUID in [task.callbackBlocks allKeys]) {
+                    if ([blockUUID isEqual:UUID]) {
+                        taskToEvaluate = task;
+                        break;
+                    }
+                }
+            }
+        
+            [taskToEvaluate setPriority:priority];
+        [strongSelf unlock];
+    }];
+}
+
+- (void)setProgressCallback:(nullable PINRemoteImageManagerImageCompletion)progress ofTaskWithUUID:(nonnull NSUUID *)UUID
+{
+    if (UUID == nil) {
+        return;
+    }
+    
+    PINLog(@"setting progress block of UUID: %@ progressBlock: %@", UUID, progress);
+    __weak typeof(self) weakSelf = self;
+    [_concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityHigh block:^{
+        typeof(self) strongSelf = weakSelf;
+        [strongSelf lock];
+        for (NSString *key in [strongSelf.tasks allKeys]) {
+            PINRemoteImageTask *task = [strongSelf.tasks objectForKey:key];
             for (NSUUID *blockUUID in [task.callbackBlocks allKeys]) {
                 if ([blockUUID isEqual:UUID]) {
-                    taskToEvaluate = task;
+                    if ([task isKindOfClass:[PINRemoteImageDownloadTask class]]) {
+                        PINRemoteImageCallbacks *callbacks = task.callbackBlocks[blockUUID];
+                        callbacks.progressBlock = progress;
+                    }
                     break;
                 }
             }
         }
-    
-        [taskToEvaluate setPriority:priority];
-    [self unlock];
+        [strongSelf unlock];
+    }];
 }
 
 #pragma mark - Caching
