@@ -372,4 +372,12 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask * _
  */
 - (void)setPriority:(PINRemoteImageManagerPriority)priority ofTaskWithUUID:(nonnull NSUUID *)UUID;
 
+/**
+ * @abstract set the progress callback on a download task. You can use this to add progress callbacks or remove them for in flight downloads
+ *
+ * @param progressCallback a PINRemoteImageManagerImageCompletion block to be called with a progress update
+ * @param UUID NSUUID of the task to set the priority on.
+ */
+- (void)setProgressCallback:(nullable PINRemoteImageManagerImageCompletion)progress ofTaskWithUUID:(nonnull NSUUID *)UUID;
+
 @end
