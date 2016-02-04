@@ -46,4 +46,10 @@ Pod::Spec.new do |s|
     fs.source_files = 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h', 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m'
     fs.dependency 'FLAnimatedImage', '>= 1.0'
   end
+
+  s.subspec 'WebP' do |webp|
+    webp.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) PIN_WEBP=1' }
+    webp.dependency 'PINRemoteImage/Core'
+    webp.dependency 'libwebp'
+  end
 end

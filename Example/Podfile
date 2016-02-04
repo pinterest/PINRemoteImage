@@ -1,3 +1,5 @@
+xcodeproj 'PINRemoteImage.xcodeproj'
+
 target 'PINRemoteImage', :exclusive => true do
   pod "PINRemoteImage", :path => "../"
   pod "PINCache"
@@ -5,5 +7,5 @@ target 'PINRemoteImage', :exclusive => true do
 end
 
 target 'PINRemoteImage Tests', :exclusive => true do
-  pod "PINRemoteImage", :path => "../"
+  pod "PINRemoteImage/WebP", :path => "../"
 end
