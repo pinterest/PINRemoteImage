@@ -25,7 +25,7 @@
     return hasProgressBlocks;
 }
 
-- (void)callProgressWithQueue:(dispatch_queue_t)queue withImage:(UIImage *)image
+- (void)callProgressWithQueue:(dispatch_queue_t)queue withImage:(PINImage *)image
 {
     [self.callbackBlocks enumerateKeysAndObjectsUsingBlock:^(NSUUID *UUID, PINRemoteImageCallbacks *callback, BOOL *stop) {
         if (callback.progressBlock != nil) {

@@ -10,7 +10,7 @@
 
 @implementation PINRemoteImageManagerResult
 
-+ (instancetype)imageResultWithImage:(UIImage *)image
++ (instancetype)imageResultWithImage:(PINImage *)image
                        animatedImage:(FLAnimatedImage *)animatedImage
                        requestLength:(NSTimeInterval)requestLength
                                error:(NSError *)error
@@ -25,7 +25,7 @@
                                   UUID:uuid];
 }
 
-- (instancetype)initWithImage:(UIImage *)image
+- (instancetype)initWithImage:(PINImage *)image
                 animatedImage:(FLAnimatedImage *)animatedImage
                 requestLength:(NSTimeInterval)requestLength
                         error:(NSError *)error
