@@ -11,7 +11,7 @@
 @interface NSData (PINImageDetectors)
 
 - (BOOL)pin_isGIF;
-#if __has_include(<webp/decode.h>)
+#ifdef PIN_WEBP
 - (BOOL)pin_isWebP;
 #endif
 
@@ -20,7 +20,7 @@
 @interface NSData (PINImageDetectors_Deprecated)
 
 - (BOOL)isGIF __attribute((deprecated("use pin_isGIF")));
-#if __has_include(<webp/decode.h>)
+#ifdef PIN_WEBP
 - (BOOL)isWebP __attribute((deprecated("use pin_isWebP")));
 #endif
 
