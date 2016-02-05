@@ -37,7 +37,7 @@ Pod::Spec.new do |s|
     cs.source_files = 'Pod/Classes/**/*.{h,m}'
     cs.exclude_files = 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h', 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m'
     cs.public_header_files = 'Pod/Classes/**/*.h'
-    cs.frameworks = 'Cocoa', 'ImageIO', 'CoreImage'
+    cs.frameworks = 'Cocoa', 'ImageIO', 'Accelerate'
     cs.dependency 'PINCache', '>=2.1'
   end
 
