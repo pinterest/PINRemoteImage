@@ -24,7 +24,7 @@
     return NO;
 }
 
-#if __has_include(<webp/decode.h>)
+#ifdef PIN_WEBP
 - (BOOL)pin_isWebP
 {
     const NSInteger length = 12;
@@ -49,7 +49,7 @@
     return [self pin_isGIF];
 }
 
-#if __has_include(<webp/decode.h>)
+#ifdef PIN_WEBP
 - (BOOL)isWebP
 {
     return [self pin_isWebP];

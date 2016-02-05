@@ -71,6 +71,20 @@
         "Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h",
         "Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m"
       ]
+    },
+    {
+      "name": "WebP",
+      "xcconfig": {
+        "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) PIN_WEBP=1"
+      },
+      "dependencies": {
+        "PINRemoteImage/Core": [
+
+        ],
+        "libwebp": [
+
+        ]
+      }
     }
   ]
 }

@@ -6,7 +6,7 @@
 //
 //
 
-#if __has_include(<webp/decode.h>)
+#ifdef PIN_WEBP
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 #import <UIKit/UIKit.h>
