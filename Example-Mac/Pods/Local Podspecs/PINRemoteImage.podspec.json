@@ -28,7 +28,6 @@
       ],
       "public_header_files": "Pod/Classes/**/*.h",
       "frameworks": [
-        "UIKit",
         "ImageIO",
         "Accelerate"
       ],
@@ -39,23 +38,22 @@
       }
     },
     {
-      "name": "OSX",
-      "source_files": "Pod/Classes/**/*.{h,m}",
-      "exclude_files": [
-        "Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h",
-        "Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m"
-      ],
-      "public_header_files": "Pod/Classes/**/*.h",
-      "frameworks": [
-        "Cocoa",
-        "ImageIO",
-        "CoreImage"
-      ],
+      "name": "iOS",
       "dependencies": {
-        "PINCache": [
-          ">=2.1"
+        "PINRemoteImage/Core": [
+
         ]
-      }
+      },
+      "frameworks": "UIKit"
+    },
+    {
+      "name": "OSX",
+      "dependencies": {
+        "PINRemoteImage/Core": [
+
+        ]
+      },
+      "frameworks": "Cocoa"
     },
     {
       "name": "FLAnimatedImage",
@@ -71,6 +69,20 @@
         "Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h",
         "Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m"
       ]
+    },
+    {
+      "name": "WebP",
+      "xcconfig": {
+        "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) PIN_WEBP=1"
+      },
+      "dependencies": {
+        "PINRemoteImage/Core": [
+
+        ],
+        "libwebp": [
+
+        ]
+      }
     }
   ]
 }
