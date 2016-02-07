@@ -1,0 +1,54 @@
+PODS:
+  - FLAnimatedImage (1.0.10)
+  - libwebp (0.5.0):
+    - libwebp/core (= 0.5.0)
+    - libwebp/dec (= 0.5.0)
+    - libwebp/demux (= 0.5.0)
+    - libwebp/dsp (= 0.5.0)
+    - libwebp/enc (= 0.5.0)
+    - libwebp/mux (= 0.5.0)
+    - libwebp/utils (= 0.5.0)
+    - libwebp/webp (= 0.5.0)
+  - libwebp/core (0.5.0):
+    - libwebp/webp
+  - libwebp/dec (0.5.0):
+    - libwebp/core
+  - libwebp/demux (0.5.0):
+    - libwebp/core
+  - libwebp/dsp (0.5.0):
+    - libwebp/core
+  - libwebp/enc (0.5.0):
+    - libwebp/core
+  - libwebp/mux (0.5.0):
+    - libwebp/core
+  - libwebp/utils (0.5.0):
+    - libwebp/core
+  - libwebp/webp (0.5.0)
+  - PINCache (2.1.2)
+  - PINRemoteImage (1.2.3):
+    - PINRemoteImage/FLAnimatedImage (= 1.2.3)
+  - PINRemoteImage/Core (1.2.3):
+    - PINCache (>= 2.1)
+  - PINRemoteImage/FLAnimatedImage (1.2.3):
+    - FLAnimatedImage (>= 1.0)
+    - PINRemoteImage/Core
+
+DEPENDENCIES:
+  - FLAnimatedImage (from `../../FLAnimatedImage`)
+  - libwebp
+  - PINCache
+  - PINRemoteImage (from `../`)
+
+EXTERNAL SOURCES:
+  FLAnimatedImage:
+    :path: "../../FLAnimatedImage"
+  PINRemoteImage:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  FLAnimatedImage: d843599c5bbbe8cf92644e2391ec0d9e72ce4563
+  libwebp: 68ba2001ba6806ee52837ebd77a551a0b6567e4e
+  PINCache: 9e70271f1bdd60c0465b7208adcc4b6acc1fc376
+  PINRemoteImage: 9ed2ed5e69c82513348bdcb296455d9598f52aa3
+
+COCOAPODS: 0.39.0
