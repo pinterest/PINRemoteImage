@@ -228,22 +228,3 @@ UIImageOrientation pin_UIImageOrienationFromImageSource(CGImageSourceRef imageSo
 #endif
 
 @end
-
-@implementation PINImage (PINDecodedImage_Deprecated)
-
-+ (PINImage *)decodedImageWithData:(NSData *)data
-{
-    return [self pin_decodedImageWithData:data];
-}
-
-+ (PINImage *)decodedImageWithData:(NSData *)data skipDecodeIfPossible:(BOOL)skipDecodeIfPossible
-{
-    return [self pin_decodedImageWithData:data skipDecodeIfPossible:skipDecodeIfPossible];
-}
-
-+ (PINImage *)decodedImageWithCGImageRef:(CGImageRef)imageRef
-{
-    return [self pin_decodedImageWithCGImageRef:imageRef];
-}
-
-@end

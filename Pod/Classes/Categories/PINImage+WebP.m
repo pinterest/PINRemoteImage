@@ -83,12 +83,4 @@ static void releaseData(void *info, const void *data, size_t size)
 
 @end
 
-@implementation PINImage (PINWebP_Deprecated)
-
-+ (PINImage *)imageWithWebPData:(NSData *)webPData
-{
-    return [self pin_imageWithWebPData:webPData];
-}
-
-@end
 #endif

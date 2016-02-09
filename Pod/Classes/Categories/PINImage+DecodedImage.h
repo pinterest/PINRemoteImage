@@ -39,11 +39,3 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image);
 #endif
 
 @end
-
-@interface PINImage (PINDecodedImage_Deprecated)
-
-+ (nullable PINImage *)decodedImageWithData:(nullable NSData *)data __attribute((deprecated("use pin_decodedImageWithData:")));
-+ (nullable PINImage *)decodedImageWithData:(nullable NSData *)data skipDecodeIfPossible:(BOOL)skipDecodeIfPossible __attribute((deprecated("use pin_decodedImageWithData:skipDecodeIfPossible:")));
-+ (nullable PINImage *)decodedImageWithCGImageRef:(nullable CGImageRef)imageRef __attribute((deprecated("use pin_decodedImageWithCGImageRef:")));
-
-@end

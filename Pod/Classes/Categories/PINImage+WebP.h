@@ -22,9 +22,4 @@
 
 @end
 
-@interface PINImage (PINWebP_Deprecated)
-
-+ (PINImage *)imageWithWebPData:(NSData *)webPData __attribute((deprecated("use pin_imageWithWebPData:")));
-
-@end
 #endif
