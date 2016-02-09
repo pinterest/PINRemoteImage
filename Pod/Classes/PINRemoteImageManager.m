@@ -382,6 +382,40 @@ static dispatch_once_t sharedDispatchToken;
                          processorKey:nil
                             processor:nil
                              progress:progress
+                     downloadProgress:nil
+                           completion:completion
+                            inputUUID:nil];
+}
+
+- (NSUUID *)downloadImageWithURL:(NSURL *)url
+                         options:(PINRemoteImageManagerDownloadOptions)options
+                downloadProgress:(PINRemoteImageManagerDownloadProgress)downloadProgress
+                      completion:(PINRemoteImageManagerImageCompletion)completion
+{
+    return [self downloadImageWithURL:url
+                              options:options
+                             priority:PINRemoteImageManagerPriorityMedium
+                         processorKey:nil
+                            processor:nil
+                             progress:nil
+                     downloadProgress:downloadProgress
+                           completion:completion
+                            inputUUID:nil];
+}
+
+- (NSUUID *)downloadImageWithURL:(NSURL *)url
+                         options:(PINRemoteImageManagerDownloadOptions)options
+                        progress:(PINRemoteImageManagerImageCompletion)progress
+                downloadProgress:(PINRemoteImageManagerDownloadProgress)downloadProgress
+                      completion:(PINRemoteImageManagerImageCompletion)completion
+{
+    return [self downloadImageWithURL:url
+                              options:options
+                             priority:PINRemoteImageManagerPriorityMedium
+                         processorKey:nil
+                            processor:nil
+                             progress:progress
+                     downloadProgress:downloadProgress
                            completion:completion
                             inputUUID:nil];
 }
@@ -398,8 +432,27 @@ static dispatch_once_t sharedDispatchToken;
                          processorKey:processorKey
                             processor:processor
                              progress:nil
+                     downloadProgress:nil
                            completion:completion
                             inputUUID:nil];
+}
+
+- (NSUUID *)downloadImageWithURL:(NSURL *)url
+                         options:(PINRemoteImageManagerDownloadOptions)options
+                    processorKey:(NSString *)processorKey
+                       processor:(PINRemoteImageManagerImageProcessor)processor
+                downloadProgress:(PINRemoteImageManagerDownloadProgress)downloadProgress
+                      completion:(PINRemoteImageManagerImageCompletion)completion
+{
+    return [self downloadImageWithURL:url
+                          options:options
+                         priority:PINRemoteImageManagerPriorityMedium
+                     processorKey:processorKey
+                        processor:processor
+                         progress:nil
+                 downloadProgress:downloadProgress
+                       completion:completion
+                        inputUUID:nil];
 }
 
 - (NSUUID *)downloadImageWithURL:(NSURL *)url
@@ -408,6 +461,7 @@ static dispatch_once_t sharedDispatchToken;
                     processorKey:(NSString *)processorKey
                        processor:(PINRemoteImageManagerImageProcessor)processor
                         progress:(PINRemoteImageManagerImageCompletion)progress
+                downloadProgress:(PINRemoteImageManagerDownloadProgress)downloadProgress
                       completion:(PINRemoteImageManagerImageCompletion)completion
                        inputUUID:(NSUUID *)UUID
 {
@@ -468,7 +522,7 @@ static dispatch_once_t sharedDispatchToken;
                  taskExisted = YES;
                  PINLog(@"Task exists, attaching with key: %@, URL: %@, UUID: %@, task: %@", key, url, UUID, task);
              }
-             [task addCallbacksWithCompletionBlock:completion progressBlock:progress withUUID:UUID];
+             [task addCallbacksWithCompletionBlock:completion progressBlock:progress downloadProgressBlock:downloadProgress withUUID:UUID];
              [strongSelf.tasks setObject:task forKey:key];
              
              BlockAssert(taskClass == [task class], @"Task class should be the same!");
@@ -521,6 +575,7 @@ static dispatch_once_t sharedDispatchToken;
                                                         processorKey:processorKey
                                                            processor:processor
                                                             progress:(PINRemoteImageManagerImageCompletion)progress
+                                                    downloadProgress:nil
                                                           completion:completion
                                                            inputUUID:UUID];
                                 }
@@ -941,7 +996,8 @@ static dispatch_once_t sharedDispatchToken;
                       priority:PINRemoteImageManagerPriorityVeryLow
                   processorKey:nil
                      processor:nil
-                       progress:nil
+                      progress:nil
+              downloadProgress:nil
                     completion:nil
                      inputUUID:nil];
 }
@@ -1121,6 +1177,15 @@ static dispatch_once_t sharedDispatchToken;
                 task.progressImage.progressThresholds = self.progressThresholds;
             }
         }
+    
+        for (PINRemoteImageCallbacks *completion in task.callbackBlocks.allValues) {
+            PINRemoteImageManagerDownloadProgress downloadProgressBlock = completion.downloadProgressBlock;
+            if (downloadProgressBlock) {
+                // For performance reasons don't call on main thread every time (leave it up to the user)
+                downloadProgressBlock(dataTask.countOfBytesReceived, dataTask.countOfBytesExpectedToReceive);
+            }
+        }
+
         PINProgressiveImage *progressiveImage = task.progressImage;
         BOOL hasProgressBlocks = task.hasProgressBlocks;
         BOOL shouldBlur = self.shouldBlurProgressive;
@@ -1244,6 +1309,7 @@ static dispatch_once_t sharedDispatchToken;
                       processorKey:nil
                          processor:nil
                           progress:progress
+                  downloadProgress:nil
                         completion:completion
                          inputUUID:UUID];
         return UUID;
@@ -1314,6 +1380,7 @@ static dispatch_once_t sharedDispatchToken;
                             processorKey:nil
                                processor:nil
                                 progress:progress
+                        downloadProgress:nil
                               completion:^(PINRemoteImageManagerResult *result) {
                                   typeof(self) strongSelf = weakSelf;
                                   //clean out any lower quality images from the cache
