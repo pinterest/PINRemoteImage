@@ -18,7 +18,3 @@
 @interface PINImageView (PINRemoteImage) <PINRemoteImageCategory>
 
 @end
-
-@interface PINImageView (PINRemoteImage_Deprecated) <PINRemoteImageCategory_Deprecated>
-
-@end

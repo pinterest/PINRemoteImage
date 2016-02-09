@@ -16,7 +16,4 @@
 
 @end
 
-@interface FLAnimatedImageView (PINRemoteImage_Deprecated) <PINRemoteImageCategory_Deprecated>
-
-@end
 #endif

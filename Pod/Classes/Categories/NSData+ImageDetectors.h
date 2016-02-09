@@ -16,12 +16,3 @@
 #endif
 
 @end
-
-@interface NSData (PINImageDetectors_Deprecated)
-
-- (BOOL)isGIF __attribute((deprecated("use pin_isGIF")));
-#ifdef PIN_WEBP
-- (BOOL)isWebP __attribute((deprecated("use pin_isWebP")));
-#endif
-
-@end

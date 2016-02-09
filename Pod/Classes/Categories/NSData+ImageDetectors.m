@@ -41,19 +41,3 @@
 #endif
 
 @end
-
-@implementation NSData (PINImageDetectors_Deprecated)
-
-- (BOOL)isGIF
-{
-    return [self pin_isGIF];
-}
-
-#ifdef PIN_WEBP
-- (BOOL)isWebP
-{
-    return [self pin_isWebP];
-}
-#endif
-
-@end
