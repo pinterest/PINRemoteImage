@@ -34,16 +34,19 @@ Pod::Spec.new do |s|
   end
   
   s.subspec 'iOS' do |ios|
+    ios.platforms = "ios"
     ios.dependency 'PINRemoteImage/Core'
     ios.frameworks = 'UIKit'
   end
 
   s.subspec 'OSX' do |cs|
+    cs.platforms = "osx"
     cs.dependency 'PINRemoteImage/Core'
     cs.frameworks = 'Cocoa'
   end
 
   s.subspec "FLAnimatedImage" do |fs|
+    fs.platforms = "ios"
     fs.dependency 'PINRemoteImage/Core'
     fs.source_files = 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h', 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m'
     fs.dependency 'FLAnimatedImage', '>= 1.0'
