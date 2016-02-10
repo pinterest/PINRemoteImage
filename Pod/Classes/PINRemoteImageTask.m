@@ -27,13 +27,13 @@
 
 - (void)addCallbacksWithCompletionBlock:(PINRemoteImageManagerImageCompletion)completionBlock
                      progressImageBlock:(PINRemoteImageManagerImageCompletion)progressImageBlock
-                  downloadProgressBlock:(PINRemoteImageManagerDownloadProgress)downloadProgressBlock
+                  progressDownloadBlock:(PINRemoteImageManagerDownloadProgress)progressDownloadBlock
                                withUUID:(NSUUID *)UUID
 {
     PINRemoteImageCallbacks *completion = [[PINRemoteImageCallbacks alloc] init];
     completion.completionBlock = completionBlock;
     completion.progressImageBlock = progressImageBlock;
-    completion.downloadProgressBlock = downloadProgressBlock;
+    completion.progressDownloadBlock = progressDownloadBlock;
     
     [self.callbackBlocks setObject:completion forKey:UUID];
 }

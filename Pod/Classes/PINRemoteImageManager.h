@@ -315,14 +315,14 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
  
  @param url NSURL where the image to download resides.
  @param options PINRemoteImageManagerDownloadOptions options with which to fetch the image.
- @param downloadProgress PINRemoteImageManagerDownloadProgress block which will be called to update progress in bytes of the image download. NOTE: For performance reasons, this block is not called on the main thread every time, if you need to update your UI ensure that you dispatch to the main thread first.
+ @param progressDownload PINRemoteImageManagerDownloadProgress block which will be called to update progress in bytes of the image download. NOTE: For performance reasons, this block is not called on the main thread every time, if you need to update your UI ensure that you dispatch to the main thread first.
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.
  
  @return An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).
  */
 - (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)url
                                   options:(PINRemoteImageManagerDownloadOptions)options
-                         downloadProgress:(nullable PINRemoteImageManagerDownloadProgress)downloadProgress
+                         progressDownload:(nullable PINRemoteImageManagerDownloadProgress)progressDownload
                                completion:(nullable PINRemoteImageManagerImageCompletion)completion;
 
 /**
@@ -331,7 +331,7 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
  @param url NSURL where the image to download resides.
  @param options PINRemoteImageManagerDownloadOptions options with which to fetch the image.
  @param progressImage PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.
- @param downloadProgress PINRemoteImageManagerDownloadProgress block which will be called to update progress in bytes of the image download. NOTE: For performance reasons, this block is not called on the main thread every time, if you need to update your UI ensure that you dispatch to the main thread first.
+ @param progressDownload PINRemoteImageManagerDownloadProgress block which will be called to update progress in bytes of the image download. NOTE: For performance reasons, this block is not called on the main thread every time, if you need to update your UI ensure that you dispatch to the main thread first.
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.
  
  @return An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).
@@ -339,7 +339,7 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
 - (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)url
                                   options:(PINRemoteImageManagerDownloadOptions)options
                             progressImage:(nullable PINRemoteImageManagerImageCompletion)progressImage
-                         downloadProgress:(nullable PINRemoteImageManagerDownloadProgress)downloadProgress
+                         progressDownload:(nullable PINRemoteImageManagerDownloadProgress)progressDownload
                                completion:(nullable PINRemoteImageManagerImageCompletion)completion;
 
 /**
@@ -365,7 +365,7 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
  @param url NSURL where the image to download resides.
  @param options PINRemoteImageManagerDownloadOptions options with which to fetch the image.
  @param processorKey NSString key to uniquely identify processor and process. Will be used for caching processed images.
- @param downloadProgress PINRemoteImageManagerDownloadProgress block which will be called to update progress in bytes of the image download. NOTE: For performance reasons, this block is not called on the main thread every time, if you need to update your UI ensure that you dispatch to the main thread first.
+ @param progressDownload PINRemoteImageManagerDownloadProgress block which will be called to update progress in bytes of the image download. NOTE: For performance reasons, this block is not called on the main thread every time, if you need to update your UI ensure that you dispatch to the main thread first.
  @param processor PINRemoteImageManagerImageProcessor block which will be called to post-process downloaded image.
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.
  
@@ -375,7 +375,7 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
                                   options:(PINRemoteImageManagerDownloadOptions)options
                              processorKey:(nullable NSString *)processorKey
                                 processor:(nullable PINRemoteImageManagerImageProcessor)processor
-                         downloadProgress:(nullable PINRemoteImageManagerDownloadProgress)downloadProgress
+                         progressDownload:(nullable PINRemoteImageManagerDownloadProgress)progressDownload
                                completion:(nullable PINRemoteImageManagerImageCompletion)completion;
 
 /**
