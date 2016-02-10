@@ -120,7 +120,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask * _
  @param completedBytes Amount of bytes that have been downloaded so far.
  @param totalBytes Total amount of bytes in the image being downloaded.
  */
-typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, NSInteger totalBytes);
+typedef void(^PINRemoteImageManagerProgressDownload)(NSInteger completedBytes, NSInteger totalBytes);
 
 @interface PINRemoteImageManager : NSObject
 
@@ -322,7 +322,7 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
  */
 - (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)url
                                   options:(PINRemoteImageManagerDownloadOptions)options
-                         progressDownload:(nullable PINRemoteImageManagerDownloadProgress)progressDownload
+                         progressDownload:(nullable PINRemoteImageManagerProgressDownload)progressDownload
                                completion:(nullable PINRemoteImageManagerImageCompletion)completion;
 
 /**
@@ -339,7 +339,7 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
 - (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)url
                                   options:(PINRemoteImageManagerDownloadOptions)options
                             progressImage:(nullable PINRemoteImageManagerImageCompletion)progressImage
-                         progressDownload:(nullable PINRemoteImageManagerDownloadProgress)progressDownload
+                         progressDownload:(nullable PINRemoteImageManagerProgressDownload)progressDownload
                                completion:(nullable PINRemoteImageManagerImageCompletion)completion;
 
 /**
@@ -375,7 +375,7 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
                                   options:(PINRemoteImageManagerDownloadOptions)options
                              processorKey:(nullable NSString *)processorKey
                                 processor:(nullable PINRemoteImageManagerImageProcessor)processor
-                         progressDownload:(nullable PINRemoteImageManagerDownloadProgress)progressDownload
+                         progressDownload:(nullable PINRemoteImageManagerProgressDownload)progressDownload
                                completion:(nullable PINRemoteImageManagerImageCompletion)completion;
 
 /**

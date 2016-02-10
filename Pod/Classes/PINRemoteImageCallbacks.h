@@ -14,7 +14,7 @@
 
 @property (nonatomic, strong, nullable) PINRemoteImageManagerImageCompletion completionBlock;
 @property (nonatomic, strong, nullable) PINRemoteImageManagerImageCompletion progressImageBlock;
-@property (nonatomic, strong, nullable) PINRemoteImageManagerDownloadProgress progressDownloadBlock;
+@property (nonatomic, strong, nullable) PINRemoteImageManagerProgressDownload progressDownloadBlock;
 @property (nonatomic, assign) CFTimeInterval requestTime;
 
 @end

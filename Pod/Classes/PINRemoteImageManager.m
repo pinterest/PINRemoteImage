@@ -389,7 +389,7 @@ static dispatch_once_t sharedDispatchToken;
 
 - (NSUUID *)downloadImageWithURL:(NSURL *)url
                          options:(PINRemoteImageManagerDownloadOptions)options
-                progressDownload:(PINRemoteImageManagerDownloadProgress)progressDownload
+                progressDownload:(PINRemoteImageManagerProgressDownload)progressDownload
                       completion:(PINRemoteImageManagerImageCompletion)completion
 {
     return [self downloadImageWithURL:url
@@ -406,7 +406,7 @@ static dispatch_once_t sharedDispatchToken;
 - (NSUUID *)downloadImageWithURL:(NSURL *)url
                          options:(PINRemoteImageManagerDownloadOptions)options
                    progressImage:(PINRemoteImageManagerImageCompletion)progressImage
-                progressDownload:(PINRemoteImageManagerDownloadProgress)progressDownload
+                progressDownload:(PINRemoteImageManagerProgressDownload)progressDownload
                       completion:(PINRemoteImageManagerImageCompletion)completion
 {
     return [self downloadImageWithURL:url
@@ -441,7 +441,7 @@ static dispatch_once_t sharedDispatchToken;
                          options:(PINRemoteImageManagerDownloadOptions)options
                     processorKey:(NSString *)processorKey
                        processor:(PINRemoteImageManagerImageProcessor)processor
-                progressDownload:(PINRemoteImageManagerDownloadProgress)progressDownload
+                progressDownload:(PINRemoteImageManagerProgressDownload)progressDownload
                       completion:(PINRemoteImageManagerImageCompletion)completion
 {
     return [self downloadImageWithURL:url
@@ -461,7 +461,7 @@ static dispatch_once_t sharedDispatchToken;
                     processorKey:(NSString *)processorKey
                        processor:(PINRemoteImageManagerImageProcessor)processor
                    progressImage:(PINRemoteImageManagerImageCompletion)progressImage
-                progressDownload:(PINRemoteImageManagerDownloadProgress)progressDownload
+                progressDownload:(PINRemoteImageManagerProgressDownload)progressDownload
                       completion:(PINRemoteImageManagerImageCompletion)completion
                        inputUUID:(NSUUID *)UUID
 {

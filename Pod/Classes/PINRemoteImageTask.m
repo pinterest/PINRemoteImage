@@ -27,7 +27,7 @@
 
 - (void)addCallbacksWithCompletionBlock:(PINRemoteImageManagerImageCompletion)completionBlock
                      progressImageBlock:(PINRemoteImageManagerImageCompletion)progressImageBlock
-                  progressDownloadBlock:(PINRemoteImageManagerDownloadProgress)progressDownloadBlock
+                  progressDownloadBlock:(PINRemoteImageManagerProgressDownload)progressDownloadBlock
                                withUUID:(NSUUID *)UUID
 {
     PINRemoteImageCallbacks *completion = [[PINRemoteImageCallbacks alloc] init];
