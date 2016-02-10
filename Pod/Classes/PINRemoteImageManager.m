@@ -1178,19 +1178,22 @@ static dispatch_once_t sharedDispatchToken;
             }
         }
     
-        for (PINRemoteImageCallbacks *completion in task.callbackBlocks.allValues) {
-            PINRemoteImageManagerDownloadProgress downloadProgressBlock = completion.downloadProgressBlock;
-            if (downloadProgressBlock) {
-                // For performance reasons don't call on main thread every time (leave it up to the user)
-                downloadProgressBlock(dataTask.countOfBytesReceived, dataTask.countOfBytesExpectedToReceive);
-            }
-        }
+        // Store callback blocks and call them after, that way blocking the callback won't lock up PINRemoteImageManager
+        NSArray *callbackBlocks = task.callbackBlocks.allValues;
 
         PINProgressiveImage *progressiveImage = task.progressImage;
         BOOL hasProgressBlocks = task.hasProgressBlocks;
         BOOL shouldBlur = self.shouldBlurProgressive;
         CGSize maxProgressiveRenderSize = self.maxProgressiveRenderSize;
     [self unlock];
+    
+    for (PINRemoteImageCallbacks *imageCallback in callbackBlocks) {
+        PINRemoteImageManagerProgressDownload progressDownloadBlock = imageCallback.progressDownloadBlock;
+        if (progressDownloadBlock) {
+            // For performance reasons we don't call on main thread (leave it up to the user)
+            progressDownloadBlock(dataTask.countOfBytesReceived, dataTask.countOfBytesExpectedToReceive);
+        }
+    }
     
     [progressiveImage updateProgressiveImageWithData:data expectedNumberOfBytes:[dataTask countOfBytesExpectedToReceive]];
 
