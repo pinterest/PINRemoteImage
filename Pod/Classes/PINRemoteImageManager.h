@@ -163,7 +163,7 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
 
 /**
  Set the minimum BPS to download the highest quality image in a set.
- @see downloadImageWithURLs:options:progress:completion:
+ @see downloadImageWithURLs:options:progressImage:completion:
  
  @param highQualityBPSThreshold bytes per second minimum. Defaults to 500000.
  @param completion Completion to be called once highQualityBPSThreshold has been set.
@@ -172,7 +172,7 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
 
 /**
  Set the maximum BPS to download the lowest quality image in a set.
- @see downloadImageWithURLs:options:progress:completion:
+ @see downloadImageWithURLs:options:progressImage:completion:
 
  @param lowQualityBPSThreshold bytes per second maximum. Defaults to 50000.
  @param completion Completion to be called once lowQualityBPSThreshold has been set.
@@ -182,7 +182,7 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
 
 /**
  Set whether high quality images should be downloaded when a low quality image is cached if network connectivity has improved.
- @see downloadImageWithURLs:options:progress:completion:
+ @see downloadImageWithURLs:options:progressImage:completion:
  
  @param shouldUpgradeLowQualityImages if YES, low quality images will be 'upgraded'.
  @param completion Completion to be called once shouldUpgradeLowQualityImages has been set.
@@ -300,14 +300,14 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
  
  @param url NSURL where the image to download resides.
  @param options PINRemoteImageManagerDownloadOptions options with which to fetch the image.
- @param progress PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.
+ @param progressImage PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.
  
  @return An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).
  */
 - (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)url
                                   options:(PINRemoteImageManagerDownloadOptions)options
-                                 progress:(nullable PINRemoteImageManagerImageCompletion)progress
+                            progressImage:(nullable PINRemoteImageManagerImageCompletion)progressImage
                                completion:(nullable PINRemoteImageManagerImageCompletion)completion;
 
 /**
@@ -330,7 +330,7 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
  
  @param url NSURL where the image to download resides.
  @param options PINRemoteImageManagerDownloadOptions options with which to fetch the image.
- @param progress PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.
+ @param progressImage PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.
  @param downloadProgress PINRemoteImageManagerDownloadProgress block which will be called to update progress in bytes of the image download. NOTE: For performance reasons, this block is not called on the main thread every time, if you need to update your UI ensure that you dispatch to the main thread first.
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.
  
@@ -338,7 +338,7 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
  */
 - (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)url
                                   options:(PINRemoteImageManagerDownloadOptions)options
-                                 progress:(nullable PINRemoteImageManagerImageCompletion)progress
+                            progressImage:(nullable PINRemoteImageManagerImageCompletion)progressImage
                          downloadProgress:(nullable PINRemoteImageManagerDownloadProgress)downloadProgress
                                completion:(nullable PINRemoteImageManagerImageCompletion)completion;
 
@@ -385,14 +385,14 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
  
  @param urls An array of NSURLs of increasing size.
  @param options PINRemoteImageManagerDownloadOptions options with which to fetch the image.
- @param progress PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.
+ @param progressImage PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.
  
  @return An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).
  */
 - (nullable NSUUID *)downloadImageWithURLs:(nonnull NSArray <NSURL *> *)urls
                                    options:(PINRemoteImageManagerDownloadOptions)options
-                                  progress:(nullable PINRemoteImageManagerImageCompletion)progress
+                             progressImage:(nullable PINRemoteImageManagerImageCompletion)progressImage
                                 completion:(nullable PINRemoteImageManagerImageCompletion)completion;
 
 /**
@@ -434,9 +434,9 @@ typedef void(^PINRemoteImageManagerDownloadProgress)(NSInteger completedBytes, N
 /**
  * @abstract set the progress callback on a download task. You can use this to add progress callbacks or remove them for in flight downloads
  *
- * @param progressCallback a PINRemoteImageManagerImageCompletion block to be called with a progress update
+ * @param progressImageCallback a PINRemoteImageManagerImageCompletion block to be called with a progress update
  * @param UUID NSUUID of the task to set the priority on.
  */
-- (void)setProgressCallback:(nullable PINRemoteImageManagerImageCompletion)progress ofTaskWithUUID:(nonnull NSUUID *)UUID;
+- (void)setProgressImageCallback:(nullable PINRemoteImageManagerImageCompletion)progressImageBlock ofTaskWithUUID:(nonnull NSUUID *)UUID;
 
 @end

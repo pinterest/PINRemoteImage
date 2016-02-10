@@ -259,7 +259,7 @@
     if (urls.count > 1) {
         downloadImageOperationUUID = [[PINRemoteImageManager sharedImageManager] downloadImageWithURLs:urls
                                                                                                options:options
-                                                                                              progress:internalProgress
+                                                                                         progressImage:internalProgress
                                                                                             completion:internalCompletion];
     } else if (processorKey.length > 0 && processor) {
         downloadImageOperationUUID = [[PINRemoteImageManager sharedImageManager] downloadImageWithURL:urls[0]
@@ -270,7 +270,7 @@
     } else {
         downloadImageOperationUUID = [[PINRemoteImageManager sharedImageManager] downloadImageWithURL:urls[0]
                                                                                               options:options
-                                                                                             progress:internalProgress
+                                                                                        progressImage:internalProgress
                                                                                            completion:internalCompletion];
     }
     

@@ -17,7 +17,7 @@
 {
     __block BOOL hasProgressBlocks = NO;
     [self.callbackBlocks enumerateKeysAndObjectsUsingBlock:^(NSUUID *UUID, PINRemoteImageCallbacks *callback, BOOL *stop) {
-        if (callback.progressBlock) {
+        if (callback.progressImageBlock) {
             hasProgressBlocks = YES;
             *stop = YES;
         }
@@ -28,15 +28,16 @@
 - (void)callProgressWithQueue:(dispatch_queue_t)queue withImage:(PINImage *)image
 {
     [self.callbackBlocks enumerateKeysAndObjectsUsingBlock:^(NSUUID *UUID, PINRemoteImageCallbacks *callback, BOOL *stop) {
-        if (callback.progressBlock != nil) {
+        if (callback.progressImageBlock != nil) {
             PINLog(@"calling progress for UUID: %@ key: %@", UUID, self.key);
             dispatch_async(queue, ^
             {
-                callback.progressBlock([PINRemoteImageManagerResult imageResultWithImage:image
-                                                                          animatedImage:nil
-                                                                          requestLength:CACurrentMediaTime() - callback.requestTime
-                                                                                  error:nil
-                                                                             resultType:PINRemoteImageResultTypeProgress UUID:UUID]);
+                callback.progressImageBlock([PINRemoteImageManagerResult imageResultWithImage:image
+                                                                                animatedImage:nil
+                                                                                requestLength:CACurrentMediaTime() - callback.requestTime
+                                                                                        error:nil
+                                                                                   resultType:PINRemoteImageResultTypeProgress
+                                                                                         UUID:UUID]);
             });
         }
     }];
