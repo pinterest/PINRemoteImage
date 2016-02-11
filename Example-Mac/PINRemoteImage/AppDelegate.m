@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 
+#import <PINRemoteImage/PINRemoteImageManager.h>
+
 #import "ScrollViewController.h"
 #import "WebPViewController.h"
 #import "DegradedViewController.h"
@@ -51,6 +53,7 @@ enum : NSUInteger {
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+    [[PINRemoteImageManager sharedImageManager] setProgressiveRendersMaxProgressiveRenderSize:CGSizeMake(2048, 2048) completion:nil];
     [self segmentedControlChanged:self.segmentedControl];
 }
 
