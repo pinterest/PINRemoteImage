@@ -48,7 +48,7 @@
     NSMutableArray *progress = [[NSMutableArray alloc] init];
     [[PINRemoteImageManager sharedImageManager]
      downloadImageWithURL:progressiveURL
-     options:PINRemoteImageManagerDownloadOptionsNone progress:^(PINRemoteImageManagerResult *result) {
+     options:PINRemoteImageManagerDownloadOptionsNone progressImage:^(PINRemoteImageManagerResult *result) {
          [progress addObject:result.image];
      } completion:^(PINRemoteImageManagerResult *result) {
          [progress addObject:result.image];
