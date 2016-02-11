@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9DD47F9C1C699F4B00F12CA0 /* PINButton+PINRemoteImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DD47F981C699F4B00F12CA0 /* PINButton+PINRemoteImage.h */; };
+		9DD47F9C1C699F4B00F12CA0 /* PINButton+PINRemoteImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DD47F981C699F4B00F12CA0 /* PINButton+PINRemoteImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9DD47F9D1C699F4B00F12CA0 /* PINButton+PINRemoteImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DD47F991C699F4B00F12CA0 /* PINButton+PINRemoteImage.m */; };
-		9DD47F9E1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DD47F9A1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h */; };
+		9DD47F9E1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DD47F9A1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9DD47F9F1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DD47F9B1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.m */; };
 		9DD47FA41C699FDC00F12CA0 /* PINImage+DecodedImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DD47FA01C699FDC00F12CA0 /* PINImage+DecodedImage.h */; };
 		9DD47FA51C699FDC00F12CA0 /* PINImage+DecodedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DD47FA11C699FDC00F12CA0 /* PINImage+DecodedImage.m */; };
