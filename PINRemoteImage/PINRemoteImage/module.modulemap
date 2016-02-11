@@ -3,8 +3,8 @@ framework module PINRemoteImage {
 
     textual header "PINRemoteImageMacros.h"
     header "FLAnimatedImageView+PINRemoteImage.h"
-    header "UIButton+PINRemoteImage.h"
-    header "UIImageView+PINRemoteImage.h"
+    header "PINButton+PINRemoteImage.h"
+    header "PINImageView+PINRemoteImage.h"
 
     export *
 }
