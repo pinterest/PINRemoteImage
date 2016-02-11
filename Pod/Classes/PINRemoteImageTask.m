@@ -25,11 +25,15 @@
     return [NSString stringWithFormat:@"<%@: %p> completionBlocks: %lu", NSStringFromClass([self class]), self, (unsigned long)self.callbackBlocks.count];
 }
 
-- (void)addCallbacksWithCompletionBlock:(PINRemoteImageManagerImageCompletion)completionBlock progressBlock:(PINRemoteImageManagerImageCompletion)progressBlock withUUID:(NSUUID *)UUID
+- (void)addCallbacksWithCompletionBlock:(PINRemoteImageManagerImageCompletion)completionBlock
+                     progressImageBlock:(PINRemoteImageManagerImageCompletion)progressImageBlock
+                  progressDownloadBlock:(PINRemoteImageManagerProgressDownload)progressDownloadBlock
+                               withUUID:(NSUUID *)UUID
 {
     PINRemoteImageCallbacks *completion = [[PINRemoteImageCallbacks alloc] init];
     completion.completionBlock = completionBlock;
-    completion.progressBlock = progressBlock;
+    completion.progressImageBlock = progressImageBlock;
+    completion.progressDownloadBlock = progressDownloadBlock;
     
     [self.callbackBlocks setObject:completion forKey:UUID];
 }
