@@ -8,11 +8,14 @@
 
 #import "PINAppDelegate.h"
 
+#import <PINRemoteImage/PINRemoteImageManager.h>
+
 @implementation PINAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    [[PINRemoteImageManager sharedImageManager] setProgressiveRendersMaxProgressiveRenderSize:CGSizeMake(2048, 2048) completion:nil];
     return YES;
 }
 							
