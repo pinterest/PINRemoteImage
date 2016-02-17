@@ -1431,7 +1431,7 @@ static dispatch_once_t sharedDispatchToken;
 {
     NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:block];
     operation.queuePriority = operationPriorityWithImageManagerPriority(priority);
-    if ([[self class] supportsQOS] == NO) {
+    if ([PINRemoteImageManager supportsQOS] == NO) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
         operation.threadPriority = 0.2;
