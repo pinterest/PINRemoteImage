@@ -132,14 +132,15 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 
 static PINRemoteImageManager *sharedImageManager = nil;
 static dispatch_once_t sharedDispatchToken;
-static BOOL supportsQOS = NO;
 
-+ (void)load
++ (BOOL)supportsQOS
 {
     static dispatch_once_t onceToken;
+    static BOOL supportsQOS;
     dispatch_once(&onceToken, ^{
         supportsQOS = [NSOperation instancesRespondToSelector:@selector(setQualityOfService:)];
     });
+    return supportsQOS;
 }
 
 + (instancetype)sharedImageManager
@@ -177,7 +178,7 @@ static BOOL supportsQOS = NO;
         _concurrentOperationQueue = [[NSOperationQueue alloc] init];
         _concurrentOperationQueue.name = @"PINRemoteImageManager Concurrent Operation Queue";
         _concurrentOperationQueue.maxConcurrentOperationCount = NSOperationQueueDefaultMaxConcurrentOperationCount;
-        if (supportsQOS) {
+        if ([[self class] supportsQOS]) {
             _concurrentOperationQueue.qualityOfService = NSQualityOfServiceUtility;
         }
         _urlSessionTaskQueue = [[NSOperationQueue alloc] init];
@@ -1430,7 +1431,7 @@ static BOOL supportsQOS = NO;
 {
     NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:block];
     operation.queuePriority = operationPriorityWithImageManagerPriority(priority);
-    if (supportsQOS == NO) {
+    if ([[self class] supportsQOS] == NO) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
         operation.threadPriority = 0.2;
