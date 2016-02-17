@@ -348,7 +348,10 @@
         if ([[self.imageManager cache] objectForKey:key] != nil) {
             break;
         }
-        sleep(50);
+        if (idx == 99) {
+            XCTAssert(NO, @"image never set to cache.");
+        }
+        usleep(50000);
     }
 }
 
