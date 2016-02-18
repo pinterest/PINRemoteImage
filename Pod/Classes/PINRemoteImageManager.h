@@ -120,7 +120,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask * _
  @param completedBytes Amount of bytes that have been downloaded so far.
  @param totalBytes Total amount of bytes in the image being downloaded.
  */
-typedef void(^PINRemoteImageManagerProgressDownload)(NSInteger completedBytes, NSInteger totalBytes);
+typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int64_t    totalBytes);
 
 @interface PINRemoteImageManager : NSObject
 
