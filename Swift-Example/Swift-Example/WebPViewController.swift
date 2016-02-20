@@ -13,9 +13,9 @@ class WebPViewController: UIViewController {
 
     @IBOutlet weak var imageView: UIImageView!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         
-        imageView.pin_setImageFromURL(NSURL(string: "http://pinterest.com/googleKitten.webp")!)
+        imageView.pin_setImageFromURL(NSURL(string: "https://github.com/samdutton/simpl/blob/master/picturetype/kittens.webp?raw=true")!)
     }
 }
