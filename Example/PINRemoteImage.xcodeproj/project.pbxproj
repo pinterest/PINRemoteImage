@@ -158,6 +158,7 @@
 				68B385061B557116004EB26F /* WebPViewController.h */,
 				68B385071B557116004EB26F /* WebPViewController.m */,
 				68B385091B5572BF004EB26F /* ProgressiveViewController.h */,
+				682C52661B58515D00B3B813 /* Media.xcassets */,
 				68B3850A1B5572BF004EB26F /* ProgressiveViewController.m */,
 				68B3850C1B5577D4004EB26F /* DegradedViewController.h */,
 				68B3850D1B5577D4004EB26F /* DegradedViewController.m */,
@@ -170,7 +171,6 @@
 		6003F594195388D20070C39A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				682C52661B58515D00B3B813 /* Media.xcassets */,
 				6003F595195388D20070C39A /* PINRemoteImage-Info.plist */,
 				6003F596195388D20070C39A /* InfoPlist.strings */,
 				6003F599195388D20070C39A /* main.m */,
