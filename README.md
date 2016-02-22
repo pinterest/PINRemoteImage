@@ -15,7 +15,7 @@ PINRemoteImage also has two methods to improve the experience of downloading ima
 ![Progressive JPG with Blur](/progressive.gif "Looks better on device.")
 
 [PINRemoteImageCategoryManager](Pod/Classes/PINRemoteImageCategoryManager.h) defines a protocol which UIView subclasses can implement and provide easy access to 
-PINRemoteImageManager's methods. There are built-in categories on UIImageView, FLAnimatedImageView and UIButton, and it's very easy to implement a new category. See [UIImageView+PINRemoteImage](/Pod/Classes/Image Categories/UIImageView+PINRemoteImage.h) of the existing categories for reference.
+PINRemoteImageManager's methods. There are built-in categories on UIImageView, FLAnimatedImageView and UIButton, and it's very easy to implement a new category. See [PINImageView+PINRemoteImage](/Pod/Classes/Image Categories/PINImageView+PINRemoteImage.h) of the existing categories for reference.
 
 
 Download an image and set it on an image view:
