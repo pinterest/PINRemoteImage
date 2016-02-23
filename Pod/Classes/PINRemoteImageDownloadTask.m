@@ -45,6 +45,8 @@
         if (callback.progressDownloadBlock != nil) {
             PINLog(@"calling progress for UUID: %@ key: %@", UUID, self.key);
             PINRemoteImageManagerProgressDownload progressDownloadBlock = callback.progressDownloadBlock;
+            //The code run asynchronously below is *not* guaranteed to be run in the manager's lock!
+            //All access to the callbacks and self should be done outside the block below!
             dispatch_async(queue, ^
             {
                 progressDownloadBlock(completedBytes, totalBytes);
@@ -60,6 +62,8 @@
             PINLog(@"calling progress for UUID: %@ key: %@", UUID, self.key);
             PINRemoteImageManagerImageCompletion progressImageBlock = callback.progressImageBlock;
             CFTimeInterval requestTime = callback.requestTime;
+            //The code run asynchronously below is *not* guaranteed to be run in the manager's lock!
+            //All access to the callbacks and self should be done outside the block below!
             dispatch_async(queue, ^
             {
                 progressImageBlock([PINRemoteImageManagerResult imageResultWithImage:image
