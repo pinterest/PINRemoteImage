@@ -56,6 +56,7 @@
         if (callback.completionBlock != nil) {
             PINLog(@"calling completion for UUID: %@ key: %@", UUID, strongSelf.key);
             PINRemoteImageManagerImageCompletion completionBlock = callback.completionBlock;
+            CFTimeInterval requestTime = callback.requestTime;
             dispatch_async(queue, ^
             {
                 PINRemoteImageResultType result;
@@ -66,7 +67,7 @@
                 }
                 completionBlock([PINRemoteImageManagerResult imageResultWithImage:image
                                                                     animatedImage:animatedImage
-                                                                    requestLength:CACurrentMediaTime() - callback.requestTime
+                                                                    requestLength:CACurrentMediaTime() - requestTime
                                                                             error:error
                                                                        resultType:result
                                                                              UUID:UUID]);

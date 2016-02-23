@@ -59,11 +59,12 @@
         if (callback.progressImageBlock != nil) {
             PINLog(@"calling progress for UUID: %@ key: %@", UUID, self.key);
             PINRemoteImageManagerImageCompletion progressImageBlock = callback.progressImageBlock;
+            CFTimeInterval requestTime = callback.requestTime;
             dispatch_async(queue, ^
             {
                 progressImageBlock([PINRemoteImageManagerResult imageResultWithImage:image
                                                                        animatedImage:nil
-                                                                       requestLength:CACurrentMediaTime() - callback.requestTime
+                                                                       requestLength:CACurrentMediaTime() - requestTime
                                                                                error:nil
                                                                           resultType:PINRemoteImageResultTypeProgress
                                                                                 UUID:UUID]);
