@@ -1187,25 +1187,14 @@ static dispatch_once_t sharedDispatchToken;
                 task.progressImage.progressThresholds = self.progressThresholds;
             }
         }
-    
-        // Store callback blocks and call them after, that way blocking the callback won't lock up PINRemoteImageManager
-        NSArray *callbackBlocks = task.callbackBlocks.allValues;
 
         PINProgressiveImage *progressiveImage = task.progressImage;
         BOOL hasProgressBlocks = task.hasProgressBlocks;
         BOOL shouldBlur = self.shouldBlurProgressive;
         CGSize maxProgressiveRenderSize = self.maxProgressiveRenderSize;
-    [self unlock];
     
-    for (PINRemoteImageCallbacks *imageCallback in callbackBlocks) {
-        PINRemoteImageManagerProgressDownload progressDownloadBlock = imageCallback.progressDownloadBlock;
-        if (progressDownloadBlock) {
-            // For performance reasons we don't call on main thread (leave it up to the user)
-            dispatch_async(self.callbackQueue, ^{
-                progressDownloadBlock(dataTask.countOfBytesReceived, dataTask.countOfBytesExpectedToReceive);
-            });
-        }
-    }
+        [task callProgressDownloadWithQueue:self.callbackQueue completedBytes:dataTask.countOfBytesReceived totalBytes:dataTask.countOfBytesExpectedToReceive];
+    [self unlock];
     
     [progressiveImage updateProgressiveImageWithData:data expectedNumberOfBytes:[dataTask countOfBytesExpectedToReceive]];
 
@@ -1218,7 +1207,7 @@ static dispatch_once_t sharedDispatchToken;
                 [strongSelf lock];
                     NSString *cacheKey = [strongSelf cacheKeyForURL:[[dataTask originalRequest] URL] processorKey:nil];
                     PINRemoteImageDownloadTask *task = strongSelf.tasks[cacheKey];
-                    [task callProgressWithQueue:strongSelf.callbackQueue withImage:progressImage];
+                    [task callProgressImageWithQueue:strongSelf.callbackQueue withImage:progressImage];
                 [strongSelf unlock];
             }
         }];

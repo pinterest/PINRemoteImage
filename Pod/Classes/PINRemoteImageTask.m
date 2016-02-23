@@ -55,6 +55,11 @@
         typeof(self) strongSelf = weakSelf;
         if (callback.completionBlock != nil) {
             PINLog(@"calling completion for UUID: %@ key: %@", UUID, strongSelf.key);
+            PINRemoteImageManagerImageCompletion completionBlock = callback.completionBlock;
+            CFTimeInterval requestTime = callback.requestTime;
+            
+            //The code run asynchronously below is *not* guaranteed to be run in the manager's lock!
+            //All access to the callbacks and self should be done outside the block below!
             dispatch_async(queue, ^
             {
                 PINRemoteImageResultType result;
@@ -63,12 +68,12 @@
                 } else {
                     result = PINRemoteImageResultTypeNone;
                 }
-                callback.completionBlock([PINRemoteImageManagerResult imageResultWithImage:image
-                                                                            animatedImage:animatedImage
-                                                                            requestLength:CACurrentMediaTime() - callback.requestTime
-                                                                                    error:error
-                                                                               resultType:result
-                                                                                     UUID:UUID]);
+                completionBlock([PINRemoteImageManagerResult imageResultWithImage:image
+                                                                    animatedImage:animatedImage
+                                                                    requestLength:CACurrentMediaTime() - requestTime
+                                                                            error:error
+                                                                       resultType:result
+                                                                             UUID:UUID]);
             });
         }
         if (remove) {
