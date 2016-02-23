@@ -55,6 +55,7 @@
         typeof(self) strongSelf = weakSelf;
         if (callback.completionBlock != nil) {
             PINLog(@"calling completion for UUID: %@ key: %@", UUID, strongSelf.key);
+            PINRemoteImageManagerImageCompletion completionBlock = callback.completionBlock;
             dispatch_async(queue, ^
             {
                 PINRemoteImageResultType result;
@@ -63,12 +64,12 @@
                 } else {
                     result = PINRemoteImageResultTypeNone;
                 }
-                callback.completionBlock([PINRemoteImageManagerResult imageResultWithImage:image
-                                                                            animatedImage:animatedImage
-                                                                            requestLength:CACurrentMediaTime() - callback.requestTime
-                                                                                    error:error
-                                                                               resultType:result
-                                                                                     UUID:UUID]);
+                completionBlock([PINRemoteImageManagerResult imageResultWithImage:image
+                                                                    animatedImage:animatedImage
+                                                                    requestLength:CACurrentMediaTime() - callback.requestTime
+                                                                            error:error
+                                                                       resultType:result
+                                                                             UUID:UUID]);
             });
         }
         if (remove) {

@@ -39,19 +39,34 @@
     return hasProgressBlocks;
 }
 
-- (void)callProgressWithQueue:(dispatch_queue_t)queue withImage:(PINImage *)image
+- (void)callProgressDownloadWithQueue:(nonnull dispatch_queue_t)queue completedBytes:(int64_t)completedBytes totalBytes:(int64_t)totalBytes
+{
+    [self.callbackBlocks enumerateKeysAndObjectsUsingBlock:^(NSUUID *UUID, PINRemoteImageCallbacks *callback, BOOL *stop) {
+        if (callback.progressDownloadBlock != nil) {
+            PINLog(@"calling progress for UUID: %@ key: %@", UUID, self.key);
+            PINRemoteImageManagerProgressDownload progressDownloadBlock = callback.progressDownloadBlock;
+            dispatch_async(queue, ^
+            {
+                progressDownloadBlock(completedBytes, totalBytes);
+            });
+        }
+    }];
+}
+
+- (void)callProgressImageWithQueue:(dispatch_queue_t)queue withImage:(PINImage *)image
 {
     [self.callbackBlocks enumerateKeysAndObjectsUsingBlock:^(NSUUID *UUID, PINRemoteImageCallbacks *callback, BOOL *stop) {
         if (callback.progressImageBlock != nil) {
             PINLog(@"calling progress for UUID: %@ key: %@", UUID, self.key);
+            PINRemoteImageManagerImageCompletion progressImageBlock = callback.progressImageBlock;
             dispatch_async(queue, ^
             {
-                callback.progressImageBlock([PINRemoteImageManagerResult imageResultWithImage:image
-                                                                                animatedImage:nil
-                                                                                requestLength:CACurrentMediaTime() - callback.requestTime
-                                                                                        error:nil
-                                                                                   resultType:PINRemoteImageResultTypeProgress
-                                                                                         UUID:UUID]);
+                progressImageBlock([PINRemoteImageManagerResult imageResultWithImage:image
+                                                                       animatedImage:nil
+                                                                       requestLength:CACurrentMediaTime() - callback.requestTime
+                                                                               error:nil
+                                                                          resultType:PINRemoteImageResultTypeProgress
+                                                                                UUID:UUID]);
             });
         }
     }];
