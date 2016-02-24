@@ -12,6 +12,6 @@ env:
     - TEST_SDK=iphonesimulator9.1 OS=9.1
     
 before_install: gem install cocoapods -v '0.39.0'
-before_script: pod lib lint --verbose
+before_script: pod lib lint --verbose --allow-warnings
 script:
 - xctool test -test-sdk $TEST_SDK -destination "name=iPhone 6,OS=$OS" -sdk iphonesimulator -workspace Example/PINRemoteImage.xcworkspace -scheme PINRemoteImage ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO
