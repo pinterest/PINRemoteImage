@@ -20,11 +20,11 @@
 #define FLAnimatedImage NSObject
 #endif
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if TARGET_OS_IPHONE || TARGET_OS_TV
 #define PINImage     UIImage
 #define PINImageView UIImageView
 #define PINButton    UIButton
-#else
+#elif TARGET_OS_MAC
 #define PINImage     NSImage
 #define PINImageView NSImageView
 #define PINButton    NSButton
