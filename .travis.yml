@@ -5,13 +5,15 @@ branches:
   only:
     - master
 language: objective-c
-osx_image: xcode7.1
+osx_image: xcode7.2
 env:
     matrix:
-    - TEST_SDK=iphonesimulator9.1 OS=8.4
-    - TEST_SDK=iphonesimulator9.1 OS=9.1
+    - OS='8.4' name='iPhone 6'
+    - OS='9.2' name='iPhone 6'
     
-before_install: gem install cocoapods -v '0.39.0'
+before_install:
+    - gem install cocoapods -v '0.39.0'
+    - gem install xcpretty
 before_script: pod lib lint --verbose --allow-warnings
 script:
-- xctool test -test-sdk $TEST_SDK -destination "name=iPhone 6,OS=$OS" -sdk iphonesimulator -workspace Example/PINRemoteImage.xcworkspace -scheme PINRemoteImage ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO
+- xcodebuild clean test -destination "platform=iOS Simulator,OS=$OS,name=$name" -workspace Example/PINRemoteImage.xcworkspace -scheme PINRemoteImage ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO | xcpretty

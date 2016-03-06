@@ -690,7 +690,7 @@
                                   completion:^(PINRemoteImageManagerResult *result)
     {
         image = result.image;
-        XCTAssert(image.size.width == 750, @"Large image should be downloaded");
+        XCTAssert(image.size.width == 750, @"Large image should be downloaded. result.image: %@, result.error: %@", result.image, result.error);
         dispatch_semaphore_signal(semaphore);
     }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
