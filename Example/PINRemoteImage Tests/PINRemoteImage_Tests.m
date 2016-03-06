@@ -403,21 +403,6 @@
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
-- (void)testCancelDownload
-{
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    NSUUID *downloadUUID = [self.imageManager downloadImageWithURL:[self JPEGURL]
-                                                           options:PINRemoteImageManagerDownloadOptionsNone
-                                                        completion:^(PINRemoteImageManagerResult *result)
-    {
-        XCTAssert(NO, @"Download should have been canceled and callback should not have been called.");
-        dispatch_semaphore_signal(semaphore);
-    }];
-    [self.imageManager cancelTaskWithUUID:downloadUUID];
-    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) != 0, @"Semaphore should time out.");
-    XCTAssert(self.imageManager.totalDownloads == 0, @"image downloaded too many times");
-}
-
 - (void)testPrefetchImage
 {
     id object = [[self.imageManager cache] objectForKey:[self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil]];
