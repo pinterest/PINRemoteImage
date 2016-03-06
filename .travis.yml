@@ -16,4 +16,4 @@ before_install:
     - gem install xcpretty
 before_script: pod lib lint --verbose --allow-warnings
 script:
-    - xcodebuild clean test -destination "platform=iOS Simulator,OS=$OS,name=$name" -workspace Example/PINRemoteImage.xcworkspace -scheme PINRemoteImage ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO | xcpretty
+    - xcodebuild clean test -destination "platform=iOS Simulator,OS=$OS,name=$name" -workspace Example/PINRemoteImage.xcworkspace -scheme PINRemoteImage ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO | xcpretty -t; test ${PIPESTATUS[0]} -eq 0
