@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		78699F481C668C8E0044C9E9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78699F471C668C8E0044C9E9 /* AppDelegate.swift */; };
-		78699F4A1C668C8E0044C9E9 /* WebPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78699F491C668C8E0044C9E9 /* WebPViewController.swift */; };
 		78699F4C1C668C8E0044C9E9 /* ProgressiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78699F4B1C668C8E0044C9E9 /* ProgressiveViewController.swift */; };
 		78699F4F1C668C8E0044C9E9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 78699F4D1C668C8E0044C9E9 /* Main.storyboard */; };
 		78699F511C668C8E0044C9E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 78699F501C668C8E0044C9E9 /* Assets.xcassets */; };
@@ -16,7 +15,6 @@
 		78699F5B1C66A5A90044C9E9 /* DegradedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78699F5A1C66A5A90044C9E9 /* DegradedViewController.swift */; };
 		78699F5D1C66A7E20044C9E9 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78699F5C1C66A7E20044C9E9 /* CollectionViewController.swift */; };
 		78699F5F1C66A8610044C9E9 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78699F5E1C66A8610044C9E9 /* CollectionViewCell.swift */; };
-		78699F611C66BE660044C9E9 /* GIFViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78699F601C66BE660044C9E9 /* GIFViewController.swift */; };
 		8711EE2CA5977BA3B86E1B62 /* Pods_PINRemoteImage_tvOSExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C82D54FC041E5BDD75901E15 /* Pods_PINRemoteImage_tvOSExample.framework */; };
 /* End PBXBuildFile section */
 
@@ -24,7 +22,6 @@
 		093C3E4AE850337BCD0D2FE6 /* Pods-PINRemoteImage.tvOSExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage.tvOSExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage.tvOSExample/Pods-PINRemoteImage.tvOSExample.debug.xcconfig"; sourceTree = "<group>"; };
 		78699F441C668C8E0044C9E9 /* PINRemoteImage.tvOSExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PINRemoteImage.tvOSExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		78699F471C668C8E0044C9E9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		78699F491C668C8E0044C9E9 /* WebPViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebPViewController.swift; sourceTree = "<group>"; };
 		78699F4B1C668C8E0044C9E9 /* ProgressiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressiveViewController.swift; sourceTree = "<group>"; };
 		78699F4E1C668C8E0044C9E9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		78699F501C668C8E0044C9E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -33,7 +30,6 @@
 		78699F5A1C66A5A90044C9E9 /* DegradedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DegradedViewController.swift; sourceTree = "<group>"; };
 		78699F5C1C66A7E20044C9E9 /* CollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
 		78699F5E1C66A8610044C9E9 /* CollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
-		78699F601C66BE660044C9E9 /* GIFViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GIFViewController.swift; sourceTree = "<group>"; };
 		AAF1AB8C026DF61369E568CC /* Pods-PINRemoteImage.tvOSExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage.tvOSExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage.tvOSExample/Pods-PINRemoteImage.tvOSExample.release.xcconfig"; sourceTree = "<group>"; };
 		C82D54FC041E5BDD75901E15 /* Pods_PINRemoteImage_tvOSExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PINRemoteImage_tvOSExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -83,13 +79,11 @@
 				78699F521C668C8E0044C9E9 /* Info.plist */,
 				78699F471C668C8E0044C9E9 /* AppDelegate.swift */,
 				78699F4D1C668C8E0044C9E9 /* Main.storyboard */,
-				78699F491C668C8E0044C9E9 /* WebPViewController.swift */,
 				78699F4B1C668C8E0044C9E9 /* ProgressiveViewController.swift */,
 				78699F581C669AC70044C9E9 /* ProcessingViewController.swift */,
 				78699F5A1C66A5A90044C9E9 /* DegradedViewController.swift */,
 				78699F5C1C66A7E20044C9E9 /* CollectionViewController.swift */,
 				78699F5E1C66A8610044C9E9 /* CollectionViewCell.swift */,
-				78699F601C66BE660044C9E9 /* GIFViewController.swift */,
 			);
 			path = PINRemoteImage.tvOSExample;
 			sourceTree = "<group>";
@@ -228,9 +222,7 @@
 				78699F591C669AC70044C9E9 /* ProcessingViewController.swift in Sources */,
 				78699F5F1C66A8610044C9E9 /* CollectionViewCell.swift in Sources */,
 				78699F481C668C8E0044C9E9 /* AppDelegate.swift in Sources */,
-				78699F4A1C668C8E0044C9E9 /* WebPViewController.swift in Sources */,
 				78699F5B1C66A5A90044C9E9 /* DegradedViewController.swift in Sources */,
-				78699F611C66BE660044C9E9 /* GIFViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -46,6 +46,12 @@ Pod::Spec.new do |s|
     cs.frameworks = 'Cocoa'
   end
 
+  s.subspec 'tvOS' do |tvos|
+    tvos.platforms = "tvos"
+    tvos.dependency 'PINRemoteImage/Core'
+    tvos.frameworks = 'UIKit'
+  end
+
   s.subspec "FLAnimatedImage" do |fs|
     fs.platforms = "ios"
     fs.dependency 'PINRemoteImage/Core'

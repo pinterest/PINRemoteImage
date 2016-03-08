@@ -1,7 +1,5 @@
 use_frameworks!
 
 target 'PINRemoteImage.tvOSExample', :exclusive => true do
-  pod "PINRemoteImage", :path => "../"
-  pod "PINCache"
-  pod "libwebp"
+  pod "PINRemoteImage/tvOS", :path => "../"
 end

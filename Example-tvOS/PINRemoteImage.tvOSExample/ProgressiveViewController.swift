@@ -34,7 +34,7 @@ class ProgressiveViewController: UIViewController {
             var progress = [UIImage]()
             PINRemoteImageManager.sharedImageManager().downloadImageWithURL(url,
                 options: .DownloadOptionsNone,
-                progress: { result in
+                progressImage: { result in
                     if let image = result.image {
                         progress.append(image)
                     }
