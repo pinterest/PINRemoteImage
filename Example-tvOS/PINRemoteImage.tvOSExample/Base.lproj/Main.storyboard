@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder.AppleTV.Storyboard" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="AppleTV" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--Progressive-->
+        <scene sceneID="wg7-f3-ORb">
+            <objects>
+                <viewController id="8rJ-Kc-sve" customClass="ProgressiveViewController" customModule="PINRemoteImage_tvOSExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="L7p-HK-0SC"/>
+                        <viewControllerLayoutGuide type="bottom" id="Djb-ko-YwX"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="QS5-Rx-YEW">
+                        <rect key="frame" x="0.0" y="0.0" width="1920" height="1080"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jKD-su-KpY">
+                                <rect key="frame" x="20" y="0.0" width="1880" height="1080"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Djb-ko-YwX" firstAttribute="top" secondItem="jKD-su-KpY" secondAttribute="bottom" id="Ehc-dh-8AV"/>
+                            <constraint firstItem="jKD-su-KpY" firstAttribute="top" secondItem="L7p-HK-0SC" secondAttribute="bottom" id="H9a-Md-Fqf"/>
+                            <constraint firstItem="jKD-su-KpY" firstAttribute="leading" secondItem="QS5-Rx-YEW" secondAttribute="leadingMargin" id="nA3-Fb-vaH"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="jKD-su-KpY" secondAttribute="trailing" id="y2q-wd-1pa"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Progressive" id="cPa-gy-q4n"/>
+                    <connections>
+                        <outlet property="imageView" destination="jKD-su-KpY" id="vT0-bQ-ePi"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2246" y="624"/>
+        </scene>
+        <!--Processing-->
+        <scene sceneID="00S-Bh-Ln3">
+            <objects>
+                <viewController id="p0y-1w-OIp" customClass="ProcessingViewController" customModule="PINRemoteImage_tvOSExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="UvO-gc-aaa"/>
+                        <viewControllerLayoutGuide type="bottom" id="gHB-yh-03b"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="7kj-Gb-y7V">
+                        <rect key="frame" x="0.0" y="0.0" width="1920" height="1080"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cjj-0G-D8f">
+                                <rect key="frame" x="860" y="390" width="200" height="300"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="D3U-lY-gNu"/>
+                                    <constraint firstAttribute="height" constant="300" id="W9z-AN-hXr"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="cjj-0G-D8f" firstAttribute="centerY" secondItem="7kj-Gb-y7V" secondAttribute="centerY" id="5ad-71-X77"/>
+                            <constraint firstItem="cjj-0G-D8f" firstAttribute="centerX" secondItem="7kj-Gb-y7V" secondAttribute="centerX" id="zvw-o2-dgr"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Processing" id="AHI-11-4NI"/>
+                    <connections>
+                        <outlet property="imageView" destination="cjj-0G-D8f" id="Dnq-T7-a9N"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="t1k-u4-CuB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2246" y="1812"/>
+        </scene>
+        <!--Degraded-->
+        <scene sceneID="hPb-Wi-Vud">
+            <objects>
+                <viewController id="jVL-yP-ZE6" customClass="DegradedViewController" customModule="PINRemoteImage_tvOSExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="k0o-8j-1QQ"/>
+                        <viewControllerLayoutGuide type="bottom" id="iHy-ln-CfP"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="MWg-Fv-za0">
+                        <rect key="frame" x="0.0" y="0.0" width="1920" height="1080"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zov-jb-gbf">
+                                <rect key="frame" x="20" y="0.0" width="1880" height="1080"/>
+                            </imageView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="zov-jb-gbf" secondAttribute="trailing" id="CIX-FL-MKZ"/>
+                            <constraint firstItem="zov-jb-gbf" firstAttribute="top" secondItem="k0o-8j-1QQ" secondAttribute="bottom" id="jWP-yZ-vtS"/>
+                            <constraint firstItem="zov-jb-gbf" firstAttribute="leading" secondItem="MWg-Fv-za0" secondAttribute="leadingMargin" id="tqj-4c-oTk"/>
+                            <constraint firstItem="iHy-ln-CfP" firstAttribute="top" secondItem="zov-jb-gbf" secondAttribute="bottom" id="vSV-Qj-urs"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Degraded" id="YYV-Ex-0cV"/>
+                    <connections>
+                        <outlet property="imageView" destination="zov-jb-gbf" id="X89-25-Tfs"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dZT-bH-OGg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2246" y="2972"/>
+        </scene>
+        <!--Collection-->
+        <scene sceneID="syr-6P-Mxj">
+            <objects>
+                <collectionViewController id="YZW-JZ-Khs" customClass="CollectionViewController" customModule="PINRemoteImage_tvOSExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="gy0-2B-Oyn">
+                        <rect key="frame" x="0.0" y="0.0" width="1920" height="1080"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="r1D-cL-AFs">
+                            <size key="itemSize" width="600" height="600"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="GhF-Kg-vfX" customClass="CollectionViewCell" customModule="PINRemoteImage_tvOSExample" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="240" width="600" height="600"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ste-pS-Dez" userLabel="ImageView">
+                                            <rect key="frame" x="8" y="8" width="584" height="584"/>
+                                        </imageView>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="Ste-pS-Dez" firstAttribute="leading" secondItem="GhF-Kg-vfX" secondAttribute="leadingMargin" id="8ax-ku-EyF"/>
+                                    <constraint firstAttribute="trailingMargin" secondItem="Ste-pS-Dez" secondAttribute="trailing" id="Tf1-zd-VHL"/>
+                                    <constraint firstAttribute="bottomMargin" secondItem="Ste-pS-Dez" secondAttribute="bottom" id="UJT-bg-54a"/>
+                                    <constraint firstItem="Ste-pS-Dez" firstAttribute="top" secondItem="GhF-Kg-vfX" secondAttribute="topMargin" id="vsu-LI-UdH"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="imageView" destination="Ste-pS-Dez" id="T4r-Rq-b8N"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="YZW-JZ-Khs" id="mAG-9k-kMc"/>
+                            <outlet property="delegate" destination="YZW-JZ-Khs" id="4lY-Gw-UaX"/>
+                        </connections>
+                    </collectionView>
+                    <tabBarItem key="tabBarItem" title="Collection" id="7Vr-Ja-dGW"/>
+                    <connections>
+                        <outlet property="collectionView" destination="gy0-2B-Oyn" id="sxp-Ag-uMe"/>
+                    </connections>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lP3-DU-iqB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2246" y="4151"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="yl2-sM-qoP">
+            <objects>
+                <tabBarController id="49e-Tb-3d3" sceneMemberID="viewController">
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="W28-zg-YXA">
+                        <rect key="frame" x="0.0" y="0.0" width="1920" height="120"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="8rJ-Kc-sve" kind="relationship" relationship="viewControllers" id="lzU-1b-eKA"/>
+                        <segue destination="p0y-1w-OIp" kind="relationship" relationship="viewControllers" id="viv-6a-uMT"/>
+                        <segue destination="jVL-yP-ZE6" kind="relationship" relationship="viewControllers" id="RVd-en-LvT"/>
+                        <segue destination="YZW-JZ-Khs" kind="relationship" relationship="viewControllers" id="mL1-l4-3CC"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="0.0" y="0.0"/>
+        </scene>
+    </scenes>
+</document>
