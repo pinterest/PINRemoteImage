@@ -6,9 +6,9 @@
 //
 //
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if TARGET_OS_IPHONE || TARGET_OS_TV
 #import <UIKit/UIKit.h>
-#else
+#elif TARGET_OS_MAC
 #import <Cocoa/Cocoa.h>
 #endif
 
@@ -34,7 +34,7 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image);
 + (nullable PINImage *)pin_decodedImageWithData:(nonnull NSData *)data;
 + (nullable PINImage *)pin_decodedImageWithData:(nonnull NSData *)data skipDecodeIfPossible:(BOOL)skipDecodeIfPossible;
 + (nullable PINImage *)pin_decodedImageWithCGImageRef:(nonnull CGImageRef)imageRef;
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if TARGET_OS_IPHONE || TARGET_OS_TV
 + (nullable PINImage *)pin_decodedImageWithCGImageRef:(nonnull CGImageRef)imageRef orientation:(UIImageOrientation) orientation;
 #endif
 

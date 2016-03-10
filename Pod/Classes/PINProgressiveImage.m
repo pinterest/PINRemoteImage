@@ -326,9 +326,9 @@
         return nil;
     }
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if TARGET_OS_IPHONE || TARGET_OS_TV
     CGFloat imageScale = inputImage.scale;
-#else
+#elif TARGET_OS_MAC
     // TODO: What scale factor should be used here?
     CGFloat imageScale = [[NSScreen mainScreen] backingScaleFactor];
 #endif
@@ -343,15 +343,15 @@
     }
     
     CGContextRef ctx;
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if TARGET_OS_IPHONE || TARGET_OS_TV
     UIGraphicsBeginImageContextWithOptions(inputSize, YES, imageScale);
     ctx = UIGraphicsGetCurrentContext();
-#else
+#elif TARGET_OS_MAC
     ctx = CGBitmapContextCreate(0, inputSize.width, inputSize.height, 8, 0, [NSColorSpace genericRGBColorSpace].CGColorSpace, kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little);
 #endif
     
     if (ctx) {
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if TARGET_OS_IPHONE || TARGET_OS_TV
         CGContextScaleCTM(ctx, 1.0, -1.0);
         CGContextTranslateCTM(ctx, 0, -inputSize.height);
 #endif
@@ -431,9 +431,9 @@
                     
                     // Cleanup
                     free(outputBuffer->data);
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if TARGET_OS_IPHONE || TARGET_OS_TV
                     outputImage = UIGraphicsGetImageFromCurrentImageContext();
-#else
+#elif TARGET_OS_MAC
                     CGImageRef outputImageRef = CGBitmapContextCreateImage(ctx);
                     outputImage = [[NSImage alloc] initWithCGImage:outputImageRef size:inputSize];
                     CFRelease(outputImageRef);
@@ -453,7 +453,7 @@
         }
     }
     
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if TARGET_OS_IPHONE || TARGET_OS_TV
     UIGraphicsEndImageContext();
 #endif
 

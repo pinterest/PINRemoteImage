@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if TARGET_OS_IPHONE || TARGET_OS_TV
 #import <UIKit/UIKit.h>
-#else
+#elif TARGET_OS_MAC
 #import <Cocoa/Cocoa.h>
 #endif
 
