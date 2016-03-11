@@ -105,7 +105,7 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
 #else
             if (skipDecodeIfPossible) {
                 CGSize imageSize = CGSizeMake(CGImageGetWidth(imageRef), CGImageGetHeight(imageRef));
-                decodedImage = [[NSImage alloc] initWithCGImage:newImage size:imageSize];
+                decodedImage = [[NSImage alloc] initWithCGImage:imageRef size:imageSize];
             } else {
                 decodedImage = [self pin_decodedImageWithCGImageRef:imageRef];
             }
