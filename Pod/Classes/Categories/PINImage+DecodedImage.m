@@ -88,10 +88,6 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
     }
 #endif
     
-    if (skipDecodeIfPossible) {
-        return [PINImage imageWithData:data];
-    }
-    
     PINImage *decodedImage = nil;
     
     CGImageSourceRef imageSourceRef = CGImageSourceCreateWithData((CFDataRef)data, NULL);
@@ -101,13 +97,19 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
         if (imageRef) {
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
             UIImageOrientation orientation = pin_UIImageOrienationFromImageSource(imageSourceRef);
-            
-            decodedImage = [self pin_decodedImageWithCGImageRef:imageRef orientation:orientation];
-            
+            if (skipDecodeIfPossible) {
+                decodedImage = [PINImage imageWithCGImage:imageRef scale:1.0 orientation:orientation];
+            } else {
+                decodedImage = [self pin_decodedImageWithCGImageRef:imageRef orientation:orientation];
+            }
 #else
-            decodedImage = [self pin_decodedImageWithCGImageRef:imageRef];
+            if (skipDecodeIfPossible) {
+                CGSize imageSize = CGSizeMake(CGImageGetWidth(imageRef), CGImageGetHeight(imageRef));
+                decodedImage = [[NSImage alloc] initWithCGImage:imageRef size:imageSize];
+            } else {
+                decodedImage = [self pin_decodedImageWithCGImageRef:imageRef];
+            }
 #endif
-            
             CGImageRelease(imageRef);
         }
         
