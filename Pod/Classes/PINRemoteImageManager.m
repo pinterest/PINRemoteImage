@@ -893,7 +893,7 @@ static dispatch_once_t sharedDispatchToken;
                     [strongSelf unlock];
                 };
                 
-                //store the UIImage in the memory cache and the NSData in the disk cache
+                //store the PINImage in the memory cache and the NSData in the disk cache
                 [strongSelf.cache.memoryCache setObject:memoryCacheObject
                                                  forKey:key
                                                withCost:cacheCost
@@ -1116,7 +1116,7 @@ static dispatch_once_t sharedDispatchToken;
     [self.cache objectForKey:cacheKey block:^(PINCache *cache, NSString *key, id object)
     {
         typeof(self) strongSelf = weakSelf;
-        UIImage *image;
+        PINImage *image;
         FLAnimatedImage *animatedImage;
         NSError *error = nil;
         if ([strongSelf handleCacheObject:strongSelf.cache object:object key:cacheKey options:options outImage:&image outAnimatedImage:&animatedImage] == NO) {
@@ -1141,7 +1141,7 @@ static dispatch_once_t sharedDispatchToken;
     CFTimeInterval requestTime = CACurrentMediaTime();
     
     id object = [self.cache.memoryCache objectForKey:cacheKey];
-    UIImage *image;
+    PINImage *image;
     FLAnimatedImage *animatedImage;
     NSError *error = nil;
     if ([self handleCacheObject:self.cache object:object key:cacheKey options:options outImage:&image outAnimatedImage:&animatedImage] == NO) {
