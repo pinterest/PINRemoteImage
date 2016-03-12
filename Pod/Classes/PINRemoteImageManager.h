@@ -30,6 +30,8 @@ typedef NS_ENUM(NSUInteger, PINRemoteImageManagerError) {
     PINRemoteImageManagerErrorFailedToFetchImageForProcessing = 2,
     /** The image returned by the processor block was nil */
     PINRemoteImageManagerErrorFailedToProcessImage = 3,
+    /** The image in the cache was invalid */
+    PINRemoteImageManagerErrorInvalidItemInCache = 4,
 };
 
 /**
@@ -403,13 +405,30 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
 - (nonnull NSString *)cacheKeyForURL:(nonnull NSURL *)url processorKey:(nullable NSString *)processorKey;
 
 /**
+ @see imageFromCacheWithCacheKey:options:completion: instead
+ */
+- (void)imageFromCacheWithCacheKey:(nonnull NSString *)cacheKey completion:(nonnull PINRemoteImageManagerImageCompletion)completion __attribute__((deprecated));
+
+/**
  Directly get an image from the underlying cache.
  @see cacheKeyForURL:processorKey:
  
  @param cacheKey NSString key to look up image in the cache.
+ @param options optoins will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache.
  */
-- (void)imageFromCacheWithCacheKey:(nonnull NSString *)cacheKey completion:(nonnull PINRemoteImageManagerImageCompletion)completion;
+- (void)imageFromCacheWithCacheKey:(nonnull NSString *)cacheKey options:(PINRemoteImageManagerDownloadOptions)options completion:(nonnull PINRemoteImageManagerImageCompletion)completion;
+
+/**
+ Directly get an image from the underlying memory cache synchronously.
+ @see cacheKeyForURL:processorKey:
+ 
+ @param cacheKey NSString key to look up image in the cache.
+ @param options optoins will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.
+ 
+ @return A PINRemoteImageManagerResult
+ */
+- (nonnull PINRemoteImageManagerResult *)synchronousImageFromCacheWithCacheKey:(nonnull NSString *)cacheKey options:(PINRemoteImageManagerDownloadOptions)options;
 
 /**
  Cancel a download. Canceling will only cancel the download if all other downloads are also canceled with their associated UUIDs. Canceling *does not* guarantee that your completion will not be called. You can use the UUID provided on the result object verify the completion you want called is being called.

@@ -553,10 +553,8 @@ static dispatch_once_t sharedDispatchToken;
                                 FLAnimatedImage *animatedImage = nil;
                                 BOOL valid = [strongSelf handleCacheObject:cache
                                                                     object:object
-                                                                      uuid:UUID
                                                                        key:key
                                                                    options:options
-                                                                  priority:(PINRemoteImageManagerPriority)priority
                                                                   outImage:&image
                                                           outAnimatedImage:&animatedImage];
                                 
@@ -787,10 +785,8 @@ static dispatch_once_t sharedDispatchToken;
 //if it's a non-gif and skipDecode is not set it also decompresses the image.
 - (BOOL)handleCacheObject:(PINCache *)cache
                    object:(id)object
-                     uuid:(NSUUID *)UUID
                       key:(NSString *)key
                   options:(PINRemoteImageManagerDownloadOptions)options
-                 priority:(PINRemoteImageManagerPriority)priority
                  outImage:(PINImage **)outImage
          outAnimatedImage:(FLAnimatedImage **)outAnimatedImage
 {
@@ -809,13 +805,11 @@ static dispatch_once_t sharedDispatchToken;
             BOOL skipDecode = (options & PINRemoteImageManagerDownloadOptionsSkipDecode) != 0;
             image = [PINImage pin_decodedImageWithData:imageData skipDecodeIfPossible:skipDecode];
             //put in memory cache
-            if (skipDecode == NO) {
-                NSUInteger cacheCost = [image size].width * [image size].height;
-                [cache.memoryCache setObject:image
-                                      forKey:key
-                                    withCost:cacheCost
-                                       block:NULL];
-            }
+            NSUInteger cacheCost = [image size].width * [image size].height;
+            [cache.memoryCache setObject:image
+                                  forKey:key
+                                withCost:cacheCost
+                                   block:NULL];
         }
     }
     
@@ -899,23 +893,17 @@ static dispatch_once_t sharedDispatchToken;
                     [strongSelf unlock];
                 };
                 
-                //store the UIImage in the memory cache and the NSData in the disk cache
-                if (skipDecode) {
+                //store the PINImage in the memory cache and the NSData in the disk cache
+                [strongSelf.cache.memoryCache setObject:memoryCacheObject
+                                                 forKey:key
+                                               withCost:cacheCost
+                                                  block:^(PINMemoryCache *cache, NSString *key, id object)
+                {
+                    typeof(self) strongSelf = weakSelf;
                     [strongSelf.cache.diskCache setObject:data
                                                    forKey:key
                                                     block:diskCacheCompletion];
-                } else {
-                    [strongSelf.cache.memoryCache setObject:memoryCacheObject
-                                                     forKey:key
-                                                   withCost:cacheCost
-                                                      block:^(PINMemoryCache *cache, NSString *key, id object)
-                    {
-                        typeof(self) strongSelf = weakSelf;
-                        [strongSelf.cache.diskCache setObject:data
-                                                       forKey:key
-                                                        block:diskCacheCompletion];
-                    }];
-                }
+                }];
             } else {
                 //call all of the completion blocks and remove the session task
                 [strongSelf lock];
@@ -1106,58 +1094,68 @@ static dispatch_once_t sharedDispatchToken;
 - (void)imageFromCacheWithCacheKey:(NSString *)cacheKey
                         completion:(PINRemoteImageManagerImageCompletion)completion
 {
-    [self imageFromCacheWithCacheKey:cacheKey earlyCheck:YES completion:completion];
+    [self imageFromCacheWithCacheKey:cacheKey options:PINRemoteImageManagerDownloadOptionsNone completion:completion];
 }
 
 - (void)imageFromCacheWithCacheKey:(NSString *)cacheKey
-                        earlyCheck:(BOOL)earlyCheck
+                           options:(PINRemoteImageManagerDownloadOptions)options
                         completion:(PINRemoteImageManagerImageCompletion)completion
 {
     CFTimeInterval requestTime = CACurrentMediaTime();
     
     __weak typeof(self) weakSelf = self;
-    __block PINImage *image = nil;
-    __block FLAnimatedImage *animatedImage = nil;
     
-    void (^handleObject)(id object) = ^(id object)
-    {
-        image = nil;
-        animatedImage = nil;
-        
-        if ([object isKindOfClass:[PINImage class]]) {
-            image = (PINImage *)object;
-        } else if ([object isKindOfClass:[NSData class]]) {
-#if USE_FLANIMATED_IMAGE
-            animatedImage = [[FLAnimatedImage alloc] initWithAnimatedGIFData:object];
-#endif
+    if ((PINRemoteImageManagerDownloadOptionsSkipEarlyCheck & options) == NO && [NSThread isMainThread]) {
+        PINRemoteImageManagerResult *result = [self synchronousImageFromCacheWithCacheKey:cacheKey options:options];
+        if (result.image && result.error) {
+            completion((result));
+            return;
         }
-    };
-    
-    if (earlyCheck && [NSThread isMainThread]) {
-        id object = [self.cache.memoryCache objectForKey:cacheKey];
-        handleObject(object);
-        completion([PINRemoteImageManagerResult imageResultWithImage:image
-                                                      animatedImage:animatedImage
-                                                      requestLength:CACurrentMediaTime() - requestTime
-                                                              error:nil
-                                                         resultType:PINRemoteImageResultTypeMemoryCache
-                                                               UUID:nil]);
-        return;
     }
     
     [self.cache objectForKey:cacheKey block:^(PINCache *cache, NSString *key, id object)
     {
-        handleObject(object);
         typeof(self) strongSelf = weakSelf;
+        PINImage *image;
+        FLAnimatedImage *animatedImage;
+        NSError *error = nil;
+        if ([strongSelf handleCacheObject:strongSelf.cache object:object key:cacheKey options:options outImage:&image outAnimatedImage:&animatedImage] == NO) {
+            error = [NSError errorWithDomain:PINRemoteImageManagerErrorDomain
+                                        code:PINRemoteImageManagerErrorInvalidItemInCache
+                                    userInfo:nil];
+        }
+        
         dispatch_async(strongSelf.callbackQueue, ^{
             completion([PINRemoteImageManagerResult imageResultWithImage:image
-                                                          animatedImage:animatedImage
-                                                          requestLength:CACurrentMediaTime() - requestTime
-                                                                  error:nil
-                                                             resultType:PINRemoteImageResultTypeCache
-                                                                   UUID:nil]);
+                                                           animatedImage:animatedImage
+                                                           requestLength:CACurrentMediaTime() - requestTime
+                                                                   error:error
+                                                              resultType:PINRemoteImageResultTypeCache
+                                                                    UUID:nil]);
         });
     }];
+}
+
+- (PINRemoteImageManagerResult *)synchronousImageFromCacheWithCacheKey:(NSString *)cacheKey options:(PINRemoteImageManagerDownloadOptions)options
+{
+    CFTimeInterval requestTime = CACurrentMediaTime();
+    
+    id object = [self.cache.memoryCache objectForKey:cacheKey];
+    PINImage *image;
+    FLAnimatedImage *animatedImage;
+    NSError *error = nil;
+    if ([self handleCacheObject:self.cache object:object key:cacheKey options:options outImage:&image outAnimatedImage:&animatedImage] == NO) {
+        error = [NSError errorWithDomain:PINRemoteImageManagerErrorDomain
+                                    code:PINRemoteImageManagerErrorInvalidItemInCache
+                                userInfo:nil];
+    }
+    
+    return [PINRemoteImageManagerResult imageResultWithImage:image
+                                               animatedImage:animatedImage
+                                               requestLength:CACurrentMediaTime() - requestTime
+                                                       error:error
+                                                  resultType:PINRemoteImageResultTypeMemoryCache
+                                                        UUID:nil];
 }
 
 #pragma mark - Session Task Blocks
