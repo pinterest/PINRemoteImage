@@ -8,10 +8,10 @@
 
 #ifdef PIN_WEBP
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-#import <UIKit/UIKit.h>
-#else
-#import <Cocoa/Cocoa.h>
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_TV)
+@import UIKit;
+#elif TARGET_OS_MAC
+@import Cocoa;
 #endif
 
 #import "PINRemoteImageMacros.h"

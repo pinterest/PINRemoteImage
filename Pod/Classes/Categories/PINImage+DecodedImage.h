@@ -6,15 +6,16 @@
 //
 //
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-#import <UIKit/UIKit.h>
-#else
-#import <Cocoa/Cocoa.h>
+@import Foundation;
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_TV)
+@import UIKit;
+#elif TARGET_OS_MAC
+@import Cocoa;
 #endif
 
 #import "PINRemoteImageMacros.h"
 
-#ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
+#if !(TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_TV)
 @interface NSImage (PINiOSMapping)
 
 @property(nonatomic, readonly, nullable) CGImageRef CGImage;
@@ -34,7 +35,7 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image);
 + (nullable PINImage *)pin_decodedImageWithData:(nonnull NSData *)data;
 + (nullable PINImage *)pin_decodedImageWithData:(nonnull NSData *)data skipDecodeIfPossible:(BOOL)skipDecodeIfPossible;
 + (nullable PINImage *)pin_decodedImageWithCGImageRef:(nonnull CGImageRef)imageRef;
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_TV)
 + (nullable PINImage *)pin_decodedImageWithCGImageRef:(nonnull CGImageRef)imageRef orientation:(UIImageOrientation) orientation;
 #endif
 

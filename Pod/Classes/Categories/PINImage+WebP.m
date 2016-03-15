@@ -65,9 +65,9 @@ static void releaseData(void *info, const void *data, size_t size)
                                                 renderingIntent);
             
             PINImage *image = nil;
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_TV)
             image = [UIImage imageWithCGImage:imageRef];
-#else
+#elif TARGET_OS_MAC
             image = [[self alloc] initWithCGImage:imageRef size:CGSizeZero];
 #endif
             

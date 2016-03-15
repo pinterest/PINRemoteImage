@@ -6,11 +6,11 @@
 //
 //
 
-#import <Foundation/Foundation.h>
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-#import <UIKit/UIKit.h>
-#else
-#import <Cocoa/Cocoa.h>
+@import Foundation;
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_TV)
+@import UIKit;
+#elif TARGET_OS_MAC
+@import Cocoa;
 #endif
 
 #import "PINRemoteImageManagerResult.h"
