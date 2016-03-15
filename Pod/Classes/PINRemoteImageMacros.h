@@ -3,6 +3,8 @@
 //  PINRemoteImage
 //
 
+#import <TargetConditionals.h>
+
 #ifndef PINRemoteImageMacros_h
 #define PINRemoteImageMacros_h
 
