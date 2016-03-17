@@ -184,7 +184,7 @@
     }
     
     if ([view pin_ignoreGIFs]) {
-        options |= PINRemoteImageManagerDownloadOptionsIgnoreGIFs;
+        options |= PINRemoteImageManagerDisallowAlternateRepresentations;
     }
     
     BOOL updateWithFullResult = [view respondsToSelector:@selector(pin_updateUIWithRemoteImageManagerResult:)];
