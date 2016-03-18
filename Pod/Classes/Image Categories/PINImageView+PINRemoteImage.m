@@ -100,9 +100,9 @@
     if (image) {
         self.image = image;
 
-#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_TV)
+#if PIN_TARGET_IOS
         [self setNeedsLayout];
-#elif TARGET_OS_MAC
+#elif PIN_TARGET_MAC
         [self setNeedsLayout:YES];
 #endif
     }
@@ -112,9 +112,9 @@
 {
     self.image = nil;
     
-#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_TV)
+#if PIN_TARGET_IOS
     [self setNeedsLayout];
-#elif TARGET_OS_MAC
+#elif PIN_TARGET_MAC
     [self setNeedsLayout:YES];
 #endif
 }

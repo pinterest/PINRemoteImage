@@ -6,9 +6,9 @@
 //
 //
 
-#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_TV)
+#if PIN_TARGET_IOS
 @import UIKit;
-#elif TARGET_OS_MAC
+#elif PIN_TARGET_MAC
 @import Cocoa;
 #endif
 

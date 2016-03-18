@@ -92,9 +92,9 @@
 
 - (void)pin_setPlaceholderWithImage:(PINImage *)image
 {
-#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_TV)
+#if PIN_TARGET_IOS
     [self setImage:image forState:UIControlStateNormal];
-#elif TARGET_OS_MAC
+#elif PIN_TARGET_MAC
     [self setImage:image];
 #endif
 }
@@ -102,10 +102,10 @@
 - (void)pin_updateUIWithImage:(PINImage *)image animatedImage:(FLAnimatedImage *)animatedImage
 {
     if (image) {
-#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_TV)
+#if PIN_TARGET_IOS
         [self setImage:image forState:UIControlStateNormal];
         [self setNeedsLayout];
-#elif TARGET_OS_MAC
+#elif PIN_TARGET_MAC
         [self setImage:image];
         [self setNeedsLayout:YES];
 #endif
@@ -114,10 +114,10 @@
 
 - (void)pin_clearImages
 {
-#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_TV)
+#if PIN_TARGET_IOS
     [self setImage:nil forState:UIControlStateNormal];
     [self setNeedsLayout];
-#elif TARGET_OS_MAC
+#elif PIN_TARGET_MAC
     [self setImage:nil];
     [self setNeedsLayout:YES];
 #endif
