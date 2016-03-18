@@ -6,10 +6,12 @@
 //
 //
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#import <Foundation/Foundation.h>
+
+#if PIN_TARGET_IOS
 #import <UIKit/UIKit.h>
-#else
-#import <Cocoa/Cocoa.h>
+#elif PIN_TARGET_MAC
+#import <Cocoa/Cocoa.h>;
 #endif
 
 #import "PINRemoteImageMacros.h"

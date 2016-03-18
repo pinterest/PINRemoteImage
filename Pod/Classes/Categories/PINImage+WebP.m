@@ -65,9 +65,9 @@ static void releaseData(void *info, const void *data, size_t size)
                                                 renderingIntent);
             
             PINImage *image = nil;
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if PIN_TARGET_IOS
             image = [UIImage imageWithCGImage:imageRef];
-#else
+#elif PIN_TARGET_MAC
             image = [[self alloc] initWithCGImage:imageRef size:CGSizeZero];
 #endif
             
