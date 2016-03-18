@@ -187,8 +187,6 @@
         options |= PINRemoteImageManagerDisallowAlternateRepresentations;
     }
     
-    BOOL updateWithFullResult = [view respondsToSelector:@selector(pin_updateUIWithRemoteImageManagerResult:)];
-    
     PINRemoteImageManagerImageCompletion internalProgress = nil;
     if ([self updateWithProgressOnView:view] && processorKey.length <= 0 && processor == nil) {
         internalProgress = ^(PINRemoteImageManagerResult *result)
@@ -200,12 +198,7 @@
                     return;
                 }
                 if (result.image) {
-                    if (updateWithFullResult) {
-                        [view pin_updateUIWithRemoteImageManagerResult:result];
-                    }
-                    else {
-                        [view pin_updateUIWithImage:result.image animatedImage:nil];                        
-                    }
+                    [view pin_updateUIWithRemoteImageManagerResult:result];
 
                 }
             };
@@ -235,12 +228,7 @@
                 return;
             }
             
-            if (updateWithFullResult) {
-                [view pin_updateUIWithRemoteImageManagerResult:result];
-            }
-            else {
-                [view pin_updateUIWithImage:result.image animatedImage:result.animatedImage];
-            }
+            [view pin_updateUIWithRemoteImageManagerResult:result];
             
             if (completion) {
                 completion(result);

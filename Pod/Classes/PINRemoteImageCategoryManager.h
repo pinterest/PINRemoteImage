@@ -217,18 +217,11 @@
 
 //Handle
 - (void)pin_setPlaceholderWithImage:(nullable PINImage *)image;
-- (void)pin_updateUIWithImage:(nullable PINImage *)image animatedImage:(nullable FLAnimatedImage *)animatedImage;
+- (void)pin_updateUIWithRemoteImageManagerResult:(nonnull PINRemoteImageManagerResult *)result;
 - (void)pin_clearImages;
 - (BOOL)pin_ignoreGIFs;
 
 @optional
-
-/**
- If you implement this method, it is called instead of pin_updateUIWithImage:animatedImage:
- 
- @param result A PINRemoteImageManagerResult
- */
-- (void)pin_updateUIWithRemoteImageManagerResult:(nonnull PINRemoteImageManagerResult *)result;
 
 - (PINRemoteImageManagerDownloadOptions)pin_defaultOptions;
 

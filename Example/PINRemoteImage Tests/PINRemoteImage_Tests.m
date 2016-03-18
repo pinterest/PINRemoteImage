@@ -147,7 +147,7 @@
                                  completion:^(PINRemoteImageManagerResult *result)
     {
         UIImage *outImage = result.image;
-        FLAnimatedImage *outAnimatedImage = result.animatedImage;
+        id outAnimatedImage = result.alternativeRepresentation;
         
         XCTAssert(outAnimatedImage && [outAnimatedImage isKindOfClass:[FLAnimatedImage class]], @"Failed downloading animatedImage or animatedImage is not an FLAnimatedImage.");
         XCTAssert(outImage == nil, @"Image is not nil.");
@@ -197,11 +197,11 @@
 {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Download animated image"];
     [self.imageManager downloadImageWithURL:[self GIFURL]
-                                    options:PINRemoteImageManagerDownloadOptionsIgnoreGIFs
+                                    options:PINRemoteImageManagerDisallowAlternateRepresentations
                                  completion:^(PINRemoteImageManagerResult *result)
     {
         UIImage *outImage = result.image;
-        FLAnimatedImage *outAnimatedImage = result.animatedImage;
+        id outAnimatedImage = result.alternativeRepresentation;
         
         XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
         XCTAssert(outAnimatedImage == nil, @"Animated image is not nil.");
@@ -219,7 +219,7 @@
                                  completion:^(PINRemoteImageManagerResult *result)
     {
         UIImage *outImage = result.image;
-        FLAnimatedImage *outAnimatedImage = result.animatedImage;
+        id outAnimatedImage = result.alternativeRepresentation;
         
         XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
         XCTAssert(outAnimatedImage == nil, @"Animated image is not nil.");
@@ -365,7 +365,7 @@
         XCTAssert(result.error == nil, @"error is non-nil: %@", result.error);
         
         UIImage *outImage = result.image;
-        FLAnimatedImage *outAnimatedImage = result.animatedImage;
+        id outAnimatedImage = result.alternativeRepresentation;
         
         XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
         
@@ -388,7 +388,7 @@
                                  completion:^(PINRemoteImageManagerResult *result)
     {
         UIImage *outImage = result.image;
-        FLAnimatedImage *outAnimatedImage = result.animatedImage;
+        id outAnimatedImage = result.alternativeRepresentation;
         
         XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
         
@@ -490,7 +490,7 @@
             count++;
             XCTAssert(count <= numIntervals, @"callback called too many times");
             [countLock unlock];
-            XCTAssert((result.image && !result.animatedImage) || (result.animatedImage && !result.image), @"image or animatedImage not downloaded");
+            XCTAssert((result.image && !result.alternativeRepresentation) || (result.alternativeRepresentation && !result.image), @"image or alternativeRepresentation not downloaded");
             if (rand() % 2) {
                 [[self.imageManager cache] removeObjectForKey:[self.imageManager cacheKeyForURL:url processorKey:nil]];
             }
@@ -564,8 +564,8 @@
                                      completion:^(PINRemoteImageManagerResult *result)
          {
              image = result.image;
-             dispatch_group_leave(group);
              XCTAssert([image isKindOfClass:[UIImage class]] && image == processedImage, @"result image is not a UIImage");
+             dispatch_group_leave(group);
          }];
     }
     
@@ -575,40 +575,21 @@
     XCTAssert([image isKindOfClass:[UIImage class]], @"result image is not a UIImage");
 }
 
-- (void)testProcessingCancel
-{
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    NSUUID *processUUID = [self.imageManager downloadImageWithURL:[self JPEGURL] options:PINRemoteImageManagerDownloadOptionsNone
-                                                     processorKey:@"process"
-                                                        processor:^UIImage *(PINRemoteImageManagerResult *result, NSUInteger *cost)
-     {
-         XCTAssert(NO, @"Process should have been canceled and callback should not have been called.");
-         return nil;
-     }
-                                                       completion:^(PINRemoteImageManagerResult *result)
-     {
-         XCTAssert(NO, @"Process should have been canceled and callback should not have been called.");
-         dispatch_semaphore_signal(semaphore);
-     }];
-
-    [self.imageManager cancelTaskWithUUID:processUUID];
-    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) != 0, @"Semaphore should time out.");
-    XCTAssert(self.imageManager.totalDownloads == 0, @"image should not have been downloaded either.");
-}
-
 - (void)testNumberDownloads
 {
     dispatch_group_t group = dispatch_group_create();
     
     __block UIImage *image = nil;
     const NSUInteger numIntervals = 1000;
+    __block NSUInteger count = 0;
 
     for (NSUInteger idx = 0; idx < numIntervals; idx++) {
         dispatch_group_enter(group);
         [self.imageManager downloadImageWithURL:[self JPEGURL] completion:^(PINRemoteImageManagerResult *result) {
-            dispatch_group_leave(group);
+            count++;
             XCTAssert([result.image isKindOfClass:[UIImage class]], @"result image is not a UIImage");
             image = result.image;
+            dispatch_group_leave(group);
         }];
     }
     

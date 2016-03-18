@@ -99,14 +99,14 @@
 #endif
 }
 
-- (void)pin_updateUIWithImage:(PINImage *)image animatedImage:(FLAnimatedImage *)animatedImage
+- (void)pin_updateUIWithRemoteImageManagerResult:(PINRemoteImageManagerResult *)result
 {
-    if (image) {
+    if (result.image) {
 #if PIN_TARGET_IOS
-        [self setImage:image forState:UIControlStateNormal];
+        [self setImage:result.image forState:UIControlStateNormal];
         [self setNeedsLayout];
 #elif PIN_TARGET_MAC
-        [self setImage:image];
+        [self setImage:result.image];
         [self setNeedsLayout:YES];
 #endif
     }

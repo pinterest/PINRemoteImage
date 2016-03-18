@@ -14,6 +14,8 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
+@protocol PINRemoteImageManagerAlternateRepresentationDelegate;
+
 #import "PINRemoteImageManagerResult.h"
 
 @class PINCache;
@@ -127,11 +129,19 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
 @property (nonatomic, readonly, nonnull) PINCache * cache;
 
 /**
- Create and return a PINRemoteImageManager created with the specified configuration. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. You specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc.
+ Create and return a PINRemoteImageManager created with the specified configuration. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. Specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc.
  @param configuration The configuration used to create the PINRemoteImageManager.
  @return A PINRemoteImageManager with the specified configuration.
  */
 - (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)configuration;
+
+/**
+ Create and return a PINRemoteImageManager with the specified configuration and alternative representation delegate. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. Specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc. If alternativeRepresentationDelegate is nil, the default is used (and supports FLAnimatedImage).
+ @param configuration The configuration used to create the PINRemoteImageManager.
+ @param alternativeRepDelegate a delegate which conforms to the PINRemoteImageManagerAlternateRepresentationDelegate protocol. Provide a delegate if you want to have non image results. @see PINAlternativeRepresentationDelaget for an example.
+ @return A PINRemoteImageManager with the specified configuration.
+ */
+- (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)configuration alternativeRepresentationDelegate:(nullable id <PINRemoteImageManagerAlternateRepresentationDelegate>)alternateRepDelegate;
 
 /**
  Get the shared instance of PINRemoteImageManager
