@@ -823,7 +823,7 @@ static dispatch_once_t sharedDispatchToken;
     
     if (image == nil && animatedImage == nil) {
         PINLog(@"Invalid item in cache");
-        [cache removeObjectForKey:key];
+        [cache removeObjectForKey:key block:nil];
         return NO;
     }
     return YES;
