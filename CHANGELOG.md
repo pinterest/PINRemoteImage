@@ -1,8 +1,14 @@
+### 2.1.1 -- 2016 Mar 20 ###
+- [new] Slightly more performant locking [#165](https://github.com/pinterest/PINRemoteImage/pull/165)
+- [new] Added support for pulling images synchronously from the cache [#162](https://github.com/pinterest/PINRemoteImage/pull/162)
+- [fixed] Non-decoded images no longer cached by OS [#161](https://github.com/pinterest/PINRemoteImage/pull/161)
+- [fixed] OS X and Carthage support [#164](https://github.com/pinterest/PINRemoteImage/pull/164)
+
 ### 2.1 -- 2016 Mar 11 ###
 - [new] tvOS support: [#131](https://github.com/pinterest/PINRemoteImage/pull/131)
-- [new] added method to get image out of cache synchronously: [#162](https://github.com/pinterest/PINRemoteImage/pull/162)
-- [fixed] undecoded images are no longer cached by OS: [#161](https://github.com/pinterest/PINRemoteImage/pull/161)
-- [fixed] carthage support and OS X example: [#160](https://github.com/pinterest/PINRemoteImage/pull/160)
+- [new] Added method to get image out of cache synchronously: [#162](https://github.com/pinterest/PINRemoteImage/pull/162)
+- [fixed] Undecoded images are no longer cached by OS: [#161](https://github.com/pinterest/PINRemoteImage/pull/161)
+- [fixed] Carthage support and OS X example: [#160](https://github.com/pinterest/PINRemoteImage/pull/160)
 
 ### 2.0.1 -- 2016 Feb 23 ###
 - [new] Removed explicit disabling of bitcode: [#136](https://github.com/pinterest/PINRemoteImage/pull/136)
