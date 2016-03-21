@@ -16,6 +16,7 @@
 
 #import "PINRemoteImageMacros.h"
 
+/** An object which store the data of a downloading image and vends progressive scans **/
 @interface PINProgressiveImage : NSObject
 
 @property (atomic, copy, nonnull) NSArray *progressThresholds;
@@ -24,9 +25,21 @@
 
 - (void)updateProgressiveImageWithData:(nonnull NSData *)data expectedNumberOfBytes:(int64_t)expectedNumberOfBytes;
 
-/// Returns the latest image based on thresholds, returns nil if no new image is generated
-- (nullable PINImage *)currentImageBlurred:(BOOL)blurred maxProgressiveRenderSize:(CGSize)maxBlurSize;
+/**
+ Returns the latest image based on thresholds, returns nil if no new image is generated
+ 
+ @param blurred A boolean to indicate if the image should be blurred
+ @param maxProgressiveRenderSize the maximum dimensions at which to apply a blur. If an image exceeds either the height
+ or width of this dimension, the image will *not* be blurred regardless of the blurred parameter.
+ @return PINImage a progressive scan of the image or nil if a new one has not been generated
+ */
+- (nullable PINImage *)currentImageBlurred:(BOOL)blurred maxProgressiveRenderSize:(CGSize)maxProgressiveRenderSize;
 
+/**
+ Returns the current data for the image.
+ 
+ @return NSData the current data for the image
+ */
 - (nullable NSData *)data;
 
 @end

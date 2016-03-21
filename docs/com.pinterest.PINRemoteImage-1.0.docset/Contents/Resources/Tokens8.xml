@@ -53,6 +53,16 @@
             <NodeRef refid="8"/>
         </Token>
         
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageResultTypeProgress</TokenIdentifier>
+            <Abstract type="html">Image is progress</Abstract>
+            <Declaration>PINRemoteImageResultTypeProgress</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManagerResult.h</DeclaredIn>
+            
+            <NodeRef refid="8"/>
+        </Token>
+        
         
 	</File>
 </Tokens>

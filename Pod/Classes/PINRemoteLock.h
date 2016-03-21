@@ -8,8 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+/** The type of lock, either recursive or non-recursive */
 typedef NS_ENUM(NSUInteger, PINRemoteLockType) {
+    /** A non-recursive version of the lock. The default. */
     PINRemoteLockTypeNonRecursive = 0,
+    /** A recursive version of the lock. More expensive. */
     PINRemoteLockTypeRecursive,
 };
 

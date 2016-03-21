@@ -8,16 +8,14 @@ appledoc \
     --docset-bundle-id %COMPANYID.%PROJECTID \
     --docset-bundle-name "%PROJECT %VERSION" \
     --docset-bundle-filename %COMPANYID.%PROJECTID-%VERSIONID.docset \
-    --ignore "tests" \
-    --ignore "docs" \
     --ignore "*.m" \
-    --ignore "Example" \
+    --ignore "Assets" \
     --no-repeat-first-par \
     --explicit-crossref \
     --clean-output \
     --keep-intermediate-files \
     --output ./docs \
-    .
+    Pod
     
 mv docs/docset docs/com.pinterest.PINRemoteImage-1.0.docset
 rm docs/docset-installed.txt

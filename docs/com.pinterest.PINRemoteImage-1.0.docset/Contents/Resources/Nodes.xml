@@ -13,6 +13,7 @@
 					<Subnodes>
 						<NodeRef refid="1"/>
 						<NodeRef refid="2"/>
+						<NodeRef refid="3"/>
 						
 					</Subnodes>
 				</Node>
@@ -23,7 +24,6 @@
 					<Name>Protocols</Name>
 					<Path>index.html</Path>
 					<Subnodes>
-						<NodeRef refid="3"/>
 						<NodeRef refid="4"/>
 						
 					</Subnodes>
@@ -38,6 +38,7 @@
 						<NodeRef refid="6"/>
 						<NodeRef refid="7"/>
 						<NodeRef refid="8"/>
+						<NodeRef refid="9"/>
 						
 					</Subnodes>
 				</Node>
@@ -47,7 +48,6 @@
                     <Name>Blocks</Name>
                     <Path>index.html</Path>
                     <Subnodes>
-                        <NodeRef refid="9"/>
                         <NodeRef refid="10"/>
                         
                     </Subnodes>
@@ -59,11 +59,38 @@
 	<Library>
 		
 		<Node id="1" type="file" documentType="reference">
+            <Name>PINProgressiveImage</Name>
+            <Path>Classes/PINProgressiveImage.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/PINProgressiveImage.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/PINProgressiveImage.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/PINProgressiveImage.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="2" type="file" documentType="reference">
             <Name>PINRemoteImageCategoryManager</Name>
             <Path>Classes/PINRemoteImageCategoryManager.html</Path>
             
         </Node>
-		<Node id="2" type="file" documentType="reference">
+		<Node id="3" type="file" documentType="reference">
             <Name>PINRemoteImageManager</Name>
             <Path>Classes/PINRemoteImageManager.html</Path>
             
@@ -98,7 +125,7 @@
         </Node>
 		
 		
-        <Node id="3" type="file" documentType="reference">
+        <Node id="4" type="file" documentType="reference">
             <Name>PINRemoteImageCategory</Name>
             <Path>Protocols/PINRemoteImageCategory.html</Path>
             
@@ -131,39 +158,6 @@
             </Subnodes>
             
         </Node>
-		<Node id="4" type="file" documentType="reference">
-            <Name>PINRemoteImageCategory_Deprecated</Name>
-            <Path>Protocols/PINRemoteImageCategory_Deprecated.html</Path>
-            
-                <Subnodes>
-                <Node type="section">
-                    <Path>Protocols/PINRemoteImageCategory_Deprecated.html</Path>
-                    <Name>Overview</Name>
-                    <Anchor>overview</Anchor>
-                </Node>
-                <Node type="section">
-                    <Path>Protocols/PINRemoteImageCategory_Deprecated.html</Path>
-                    <Name>Tasks</Name>
-                    <Anchor>tasks</Anchor>
-                </Node>
-                
-                <Node type="section">
-                    <Path>Protocols/PINRemoteImageCategory_Deprecated.html</Path>
-                    <Name>Properties</Name>
-                    <Anchor>properties</Anchor>
-                </Node>
-                
-                
-                
-                <Node type="section">
-                    <Path>Protocols/PINRemoteImageCategory_Deprecated.html</Path>
-                    <Name>Instance Methods</Name>
-                    <Anchor>instance_methods</Anchor>
-                </Node>
-                
-            </Subnodes>
-            
-        </Node>
 		
         <Node id="5" type="file" documentType="reference">
             <Name>PINRemoteImageManagerDownloadOptions</Name>
@@ -185,15 +179,15 @@
             <Path>Constants/PINRemoteImageResultType.html</Path>
             
         </Node>
-		
-        <Node id="9" type="file" documentType="reference">
-            <Name>PINRemoteImageManagerImageCompletion</Name>
-            <Path>Blocks/PINRemoteImageManagerImageCompletion.html</Path>
+		<Node id="9" type="file" documentType="reference">
+            <Name>PINRemoteLockType</Name>
+            <Path>Constants/PINRemoteLockType.html</Path>
             
         </Node>
+		
         <Node id="10" type="file" documentType="reference">
-            <Name>PINRemoteImageManagerImageProcessor</Name>
-            <Path>Blocks/PINRemoteImageManagerImageProcessor.html</Path>
+            <Name>PINRemoteImageManagerImageCompletion</Name>
+            <Path>Blocks/PINRemoteImageManagerImageCompletion.html</Path>
             
         </Node>
         

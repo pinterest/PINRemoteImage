@@ -121,6 +121,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask * _
  */
 typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int64_t totalBytes);
 
+/** An image downloading, processing and caching manager. It uses the concept of download and processing tasks to ensure that even if multiple calls to download or process an image are made, it only occurs one time (unless an item is no longer in the cache). PINRemoteImageManager is backed by GCD and safe to access from multiple threads simultaneously. It ensures that images are decoded off the main thread so that animation performance isn't affected. None of its exposed methods allow for synchronous access. However, it is optimized to call completions on the calling thread if an item is in its memory cache. **/
 @interface PINRemoteImageManager : NSObject
 
 @property (nonatomic, readonly, nonnull) PINCache * cache;
@@ -153,12 +154,11 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
 - (nonnull PINCache *)defaultImageCache;
 
 /**
- Set the Authentication Challenge Block
- @see PINRemoteImageManagerAuthenticationChallenge
+ Set the Authentication Challenge Block.
  
  @param challengeBlock A PINRemoteImageManagerAuthenticationChallenge block.
  */
-- (void)setAuthenticationChallenge:(nullable PINRemoteImageManagerAuthenticationChallenge)aChallenge;
+- (void)setAuthenticationChallenge:(nullable PINRemoteImageManagerAuthenticationChallenge)challengeBlock;
 
 /**
  Set the minimum BPS to download the highest quality image in a set.
@@ -407,6 +407,10 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
 
 /**
  @see imageFromCacheWithCacheKey:options:completion: instead
+ @deprecated
+ 
+ @param cacheKey NSString key to look up image in the cache.
+ @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache.
  */
 - (void)imageFromCacheWithCacheKey:(nonnull NSString *)cacheKey completion:(nonnull PINRemoteImageManagerImageCompletion)completion __attribute__((deprecated));
 
@@ -415,7 +419,7 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  @see cacheKeyForURL:processorKey:
  
  @param cacheKey NSString key to look up image in the cache.
- @param options optoins will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.
+ @param options options will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache.
  */
 - (void)imageFromCacheWithCacheKey:(nonnull NSString *)cacheKey options:(PINRemoteImageManagerDownloadOptions)options completion:(nonnull PINRemoteImageManagerImageCompletion)completion;
@@ -453,6 +457,6 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  * @param progressImageCallback a PINRemoteImageManagerImageCompletion block to be called with a progress update
  * @param UUID NSUUID of the task to set the priority on.
  */
-- (void)setProgressImageCallback:(nullable PINRemoteImageManagerImageCompletion)progressImageBlock ofTaskWithUUID:(nonnull NSUUID *)UUID;
+- (void)setProgressImageCallback:(nullable PINRemoteImageManagerImageCompletion)progressImageCallback ofTaskWithUUID:(nonnull NSUUID *)UUID;
 
 @end

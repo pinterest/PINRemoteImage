@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>PINRemoteImageResultType Constants Reference</title>
+	<title>PINRemoteLockType Constants Reference</title>
 
 	<link rel="stylesheet" href="../css/style.css">
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
@@ -59,13 +59,13 @@
 		<div id="overview_contents" class="container">
 			<div id="content">
 				<main role="main">
-					<h1 class="title">PINRemoteImageResultType Constants Reference</h1>
+					<h1 class="title">PINRemoteLockType Constants Reference</h1>
 
 					
 					<div class="section section-specification"><table cellspacing="0"><tbody>
 						<tr>
 	<th>Declared in</th>
-	<td>PINRemoteImageManagerResult.h</td>
+	<td>PINRemoteLock.h</td>
 </tr>
 						</tbody></table></div>
 					
@@ -75,11 +75,11 @@
 					
 
                     
-                    <h3 class="subsubtitle method-title">PINRemoteImageResultType</h3>
+                    <h3 class="subsubtitle method-title">PINRemoteLockType</h3>
                     
 					
 					<div class="section section-overview">
-                        <p>How the image was fetched.</p>
+                        <p>The type of lock, either recursive or non-recursive</p>
 					</div>
 					
 					
@@ -87,17 +87,11 @@
                         <!-- display enum values -->
                         
                         <h4 class="method-subtitle">Definition</h4>
-                        <code>typedef NS_ENUM(NSUInteger, PINRemoteImageResultType ) {<br>
+                        <code>typedef NS_ENUM(NSUInteger, PINRemoteLockType ) {<br>
                             
-                            &nbsp;&nbsp; <a href="">PINRemoteImageResultTypeNone</a> = 0,<br>
+                            &nbsp;&nbsp; <a href="">PINRemoteLockTypeNonRecursive</a> = 0,<br>
                             
-                            &nbsp;&nbsp; <a href="">PINRemoteImageResultTypeMemoryCache</a>,<br>
-                            
-                            &nbsp;&nbsp; <a href="">PINRemoteImageResultTypeCache</a>,<br>
-                            
-                            &nbsp;&nbsp; <a href="">PINRemoteImageResultTypeDownload</a>,<br>
-                            
-                            &nbsp;&nbsp; <a href="">PINRemoteImageResultTypeProgress</a>,<br>
+                            &nbsp;&nbsp; <a href="">PINRemoteLockTypeRecursive</a>,<br>
                             
                             };</code>
                     
@@ -107,11 +101,11 @@
                         <h4 class="method-subtitle">Constants</h4>
                         <dl class="termdef">
                             
-                            <dt><a name="" title="PINRemoteImageResultTypeNone"></a><code>PINRemoteImageResultTypeNone</code></dt>
+                            <dt><a name="" title="PINRemoteLockTypeNonRecursive"></a><code>PINRemoteLockTypeNonRecursive</code></dt>
 <dd>
 
 
-<p>Returned if no image is returned</p>
+<p>A non-recursive version of the lock. The default.</p>
 
 
 
@@ -119,16 +113,16 @@
 
     
 	<p>
-		Declared In <code class="declared-in-ref">PINRemoteImageManagerResult.h</code>.
+		Declared In <code class="declared-in-ref">PINRemoteLock.h</code>.
 	</p>
 	
 </dd>
                             
-                            <dt><a name="" title="PINRemoteImageResultTypeMemoryCache"></a><code>PINRemoteImageResultTypeMemoryCache</code></dt>
+                            <dt><a name="" title="PINRemoteLockTypeRecursive"></a><code>PINRemoteLockTypeRecursive</code></dt>
 <dd>
 
 
-<p>Image was fetched from the memory cache</p>
+<p>A recursive version of the lock. More expensive.</p>
 
 
 
@@ -136,58 +130,7 @@
 
     
 	<p>
-		Declared In <code class="declared-in-ref">PINRemoteImageManagerResult.h</code>.
-	</p>
-	
-</dd>
-                            
-                            <dt><a name="" title="PINRemoteImageResultTypeCache"></a><code>PINRemoteImageResultTypeCache</code></dt>
-<dd>
-
-
-<p>Image was fetched from the disk cache</p>
-
-
-
-
-
-    
-	<p>
-		Declared In <code class="declared-in-ref">PINRemoteImageManagerResult.h</code>.
-	</p>
-	
-</dd>
-                            
-                            <dt><a name="" title="PINRemoteImageResultTypeDownload"></a><code>PINRemoteImageResultTypeDownload</code></dt>
-<dd>
-
-
-<p>Image was downloaded</p>
-
-
-
-
-
-    
-	<p>
-		Declared In <code class="declared-in-ref">PINRemoteImageManagerResult.h</code>.
-	</p>
-	
-</dd>
-                            
-                            <dt><a name="" title="PINRemoteImageResultTypeProgress"></a><code>PINRemoteImageResultTypeProgress</code></dt>
-<dd>
-
-
-<p>Image is progress</p>
-
-
-
-
-
-    
-	<p>
-		Declared In <code class="declared-in-ref">PINRemoteImageManagerResult.h</code>.
+		Declared In <code class="declared-in-ref">PINRemoteLock.h</code>.
 	</p>
 	
 </dd>
@@ -204,7 +147,7 @@
                     
                     <div class="method-subsection declared-in-section">
                         <h4 class="method-subtitle">Declared In</h4>
-                        <p><code class="declared-in-ref">PINRemoteImageManagerResult.h</code></p>
+                        <p><code class="declared-in-ref">PINRemoteLock.h</code></p>
                     </div>
                     
                     
