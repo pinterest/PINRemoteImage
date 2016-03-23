@@ -429,7 +429,7 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  @see cacheKeyForURL:processorKey:
  
  @param cacheKey NSString key to look up image in the cache.
- @param options optoins will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.
+ @param options options will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.
  
  @return A PINRemoteImageManagerResult
  */

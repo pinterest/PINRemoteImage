@@ -1329,7 +1329,7 @@ static dispatch_once_t sharedDispatchToken;
         // -    If network conditions dictate that the same quality image should be downloaded as the one being cached, no
         //      new image will be downloaded as either the caching will have finished by the time we actually request it or
         //      the task will still exist and our callback will be attached. In this case, no detrimental behavior will have
-        //      occured.
+        //      occurred.
         [urls enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSURL *url, NSUInteger idx, BOOL *stop) {
             typeof(self) strongSelf = weakSelf;
             BlockAssert([url isKindOfClass:[NSURL class]], @"url must be of type URL");
