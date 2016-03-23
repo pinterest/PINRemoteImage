@@ -228,13 +228,13 @@ static dispatch_once_t sharedDispatchToken;
 }
 
 - (void)setAuthenticationChallenge:(PINRemoteImageManagerAuthenticationChallenge)challengeBlock {
-	__weak typeof(self) weakSelf = self;
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-		typeof(self) strongSelf = weakSelf;
-		[strongSelf lock];
-		strongSelf.authenticationChallengeHandler = challengeBlock;
-		[strongSelf unlock];
-	});
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        typeof(self) strongSelf = weakSelf;
+        [strongSelf lock];
+        strongSelf.authenticationChallengeHandler = challengeBlock;
+        [strongSelf unlock];
+    });
 }
 
 - (void)setMaxNumberOfConcurrentOperations:(NSInteger)maxNumberOfConcurrentOperations completion:(dispatch_block_t)completion
@@ -1161,16 +1161,16 @@ static dispatch_once_t sharedDispatchToken;
 #pragma mark - Session Task Blocks
 
 - (void)didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge forTask:(NSURLSessionTask *)task completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler {
-	[self lock];
-	if (self.authenticationChallengeHandler) {
-		self.authenticationChallengeHandler(task, challenge, ^(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential){
-			completionHandler(disposition, credential);
-		});
-	} else {
-		completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
-	}
-	
-	[self unlock];
+    [self lock];
+    if (self.authenticationChallengeHandler) {
+        self.authenticationChallengeHandler(task, challenge, ^(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential){
+            completionHandler(disposition, credential);
+        });
+    } else {
+        completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
+    }
+
+    [self unlock];
 }
 
 - (void)didReceiveData:(NSData *)data forTask:(NSURLSessionDataTask *)dataTask
