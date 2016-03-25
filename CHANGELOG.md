@@ -1,3 +1,8 @@
+### 2.1.2 -- 2016 Mar 25 ###
+- [fixed] Remove disk cache call potentially on main thread [#167](https://github.com/pinterest/PINRemoteImage/pull/167)
+- [fixed] Nullability specifiers [#170](https://github.com/pinterest/PINRemoteImage/pull/170)
+- [fixed] Speling errorrs, unused properties and spacing [#172](https://github.com/pinterest/PINRemoteImage/pull/172)
+
 ### 2.1.1 -- 2016 Mar 20 ###
 - [new] Slightly more performant locking [#165](https://github.com/pinterest/PINRemoteImage/pull/165)
 - [new] Added support for pulling images synchronously from the cache [#162](https://github.com/pinterest/PINRemoteImage/pull/162)
