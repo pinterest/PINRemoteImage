@@ -228,13 +228,13 @@ static dispatch_once_t sharedDispatchToken;
 }
 
 - (void)setAuthenticationChallenge:(PINRemoteImageManagerAuthenticationChallenge)challengeBlock {
-	__weak typeof(self) weakSelf = self;
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-		typeof(self) strongSelf = weakSelf;
-		[strongSelf lock];
-		strongSelf.authenticationChallengeHandler = challengeBlock;
-		[strongSelf unlock];
-	});
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        typeof(self) strongSelf = weakSelf;
+        [strongSelf lock];
+        strongSelf.authenticationChallengeHandler = challengeBlock;
+        [strongSelf unlock];
+    });
 }
 
 - (void)setMaxNumberOfConcurrentOperations:(NSInteger)maxNumberOfConcurrentOperations completion:(dispatch_block_t)completion
@@ -1161,16 +1161,16 @@ static dispatch_once_t sharedDispatchToken;
 #pragma mark - Session Task Blocks
 
 - (void)didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge forTask:(NSURLSessionTask *)task completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler {
-	[self lock];
-	if (self.authenticationChallengeHandler) {
-		self.authenticationChallengeHandler(task, challenge, ^(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential){
-			completionHandler(disposition, credential);
-		});
-	} else {
-		completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
-	}
-	
-	[self unlock];
+    [self lock];
+    if (self.authenticationChallengeHandler) {
+        self.authenticationChallengeHandler(task, challenge, ^(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential){
+            completionHandler(disposition, credential);
+        });
+    } else {
+        completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
+    }
+
+    [self unlock];
 }
 
 - (void)didReceiveData:(NSData *)data forTask:(NSURLSessionDataTask *)dataTask
@@ -1329,7 +1329,7 @@ static dispatch_once_t sharedDispatchToken;
         // -    If network conditions dictate that the same quality image should be downloaded as the one being cached, no
         //      new image will be downloaded as either the caching will have finished by the time we actually request it or
         //      the task will still exist and our callback will be attached. In this case, no detrimental behavior will have
-        //      occured.
+        //      occurred.
         [urls enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSURL *url, NSUInteger idx, BOOL *stop) {
             typeof(self) strongSelf = weakSelf;
             BlockAssert([url isKindOfClass:[NSURL class]], @"url must be of type URL");

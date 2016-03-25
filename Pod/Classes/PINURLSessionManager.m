@@ -81,19 +81,19 @@
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler 
 {
-	[self lock];
+    [self lock];
         dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
-	[self unlock];
-	
-	__weak typeof(self) weakSelf = self;
-	dispatch_async(delegateQueue, ^{
+    [self unlock];
+
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(delegateQueue, ^{
         typeof(self) strongSelf = weakSelf;
-		if ([strongSelf.delegate respondsToSelector:@selector(didReceiveAuthenticationChallenge:forTask:completionHandler:)]) {
-			[strongSelf.delegate didReceiveAuthenticationChallenge:challenge forTask:task completionHandler:completionHandler];
+        if ([strongSelf.delegate respondsToSelector:@selector(didReceiveAuthenticationChallenge:forTask:completionHandler:)]) {
+            [strongSelf.delegate didReceiveAuthenticationChallenge:challenge forTask:task completionHandler:completionHandler];
         } else {
             completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
         }
-	});
+    });
 }
 
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data

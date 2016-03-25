@@ -21,7 +21,6 @@
 @property (nonatomic, assign) CGImageSourceRef imageSource;
 @property (nonatomic, assign) CGSize size;
 @property (nonatomic, assign) BOOL isProgressiveJPEG;
-@property (nonatomic, strong) PINImage *cachedImage;
 @property (nonatomic, assign) NSUInteger currentThreshold;
 @property (nonatomic, assign) float bytesPerSecond;
 @property (nonatomic, assign) NSUInteger scannedByte;

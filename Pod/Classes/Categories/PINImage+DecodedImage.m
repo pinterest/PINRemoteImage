@@ -96,7 +96,7 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
         CGImageRef imageRef = CGImageSourceCreateImageAtIndex(imageSourceRef, 0, (CFDictionaryRef)@{(NSString *)kCGImageSourceShouldCache : (NSNumber *)kCFBooleanFalse});
         if (imageRef) {
 #if PIN_TARGET_IOS
-            UIImageOrientation orientation = pin_UIImageOrienationFromImageSource(imageSourceRef);
+            UIImageOrientation orientation = pin_UIImageOrientationFromImageSource(imageSourceRef);
             if (skipDecodeIfPossible) {
                 decodedImage = [PINImage imageWithCGImage:imageRef scale:1.0 orientation:orientation];
             } else {
@@ -174,7 +174,7 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
 }
 
 #if PIN_TARGET_IOS
-UIImageOrientation pin_UIImageOrienationFromImageSource(CGImageSourceRef imageSourceRef) {
+UIImageOrientation pin_UIImageOrientationFromImageSource(CGImageSourceRef imageSourceRef) {
     UIImageOrientation orientation = UIImageOrientationUp;
     
     if (imageSourceRef != nil) {
