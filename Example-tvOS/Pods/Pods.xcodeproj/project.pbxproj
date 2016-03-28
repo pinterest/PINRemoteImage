@@ -46,6 +46,8 @@
 		A298D1FB9D743F0E70B1D0EA8F2523D1 /* PINRemoteImage-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F25810A52C69621B3D661F89EE87F20B /* PINRemoteImage-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AAFF05A4CC3E4DFBB7E41B98EA30FB84 /* PINRemoteImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 6BF71EE9F05CA5A8949C1EEA4E76F68E /* PINRemoteImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AB973F5515FA8617F9BF850FA22E136B /* PINCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A34171F622CFB41A9D2950ABEA155CC /* PINCache.m */; };
+		B14CAE761CA8B82B00F552E0 /* PINRemoteLock.m in Sources */ = {isa = PBXBuildFile; fileRef = B14CAE741CA8B82B00F552E0 /* PINRemoteLock.m */; };
+		B14CAE771CA8B82B00F552E0 /* PINRemoteLock.h in Headers */ = {isa = PBXBuildFile; fileRef = B14CAE751CA8B82B00F552E0 /* PINRemoteLock.h */; };
 		B41BFEDA7A0294BE7E7F8560BC0FABF2 /* PINCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB6A961AE322AD9C22D2248A11231A61 /* PINCache.framework */; };
 		C054BAC272D17B1F3A735C944290C36F /* PINURLSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FF909FAA8A0E755F621973E5FDB33C5C /* PINURLSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C836A89DD02F65CEEA4495544569F8DD /* PINRemoteImageCallbacks.h in Headers */ = {isa = PBXBuildFile; fileRef = 667180C5294B3A28BB98F2FEF0596B35 /* PINRemoteImageCallbacks.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -136,6 +138,8 @@
 		A61E49E43B089E8D2B951A4A9717A0CE /* PINCache-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "PINCache-dummy.m"; sourceTree = "<group>"; };
 		AE807D4E0267B44EFBD262551F35164B /* Pods-PINRemoteImage.tvOSExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-PINRemoteImage.tvOSExample.debug.xcconfig"; sourceTree = "<group>"; };
 		AE86A4FDAC84AD2A3D5C7973855757D7 /* PINRemoteImage-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PINRemoteImage-prefix.pch"; sourceTree = "<group>"; };
+		B14CAE741CA8B82B00F552E0 /* PINRemoteLock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINRemoteLock.m; sourceTree = "<group>"; };
+		B14CAE751CA8B82B00F552E0 /* PINRemoteLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteLock.h; sourceTree = "<group>"; };
 		B94669977B3DA1EAD88B894046C3E843 /* PINCache.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = PINCache.xcconfig; sourceTree = "<group>"; };
 		BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		BB10E988EAF480BCA76CD9825B2E8084 /* PINProgressiveImage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = PINProgressiveImage.m; sourceTree = "<group>"; };
@@ -298,6 +302,8 @@
 				0E3FD8A1E81DCFE7FF328E74F1CABB22 /* PINRemoteImageProcessorTask.m */,
 				5720495D7E2DA562C10BA3E7DB8EA317 /* PINRemoteImageTask.h */,
 				1A5FE2AB4CE7827322F5DF1CDEF109E2 /* PINRemoteImageTask.m */,
+				B14CAE741CA8B82B00F552E0 /* PINRemoteLock.m */,
+				B14CAE751CA8B82B00F552E0 /* PINRemoteLock.h */,
 				FF909FAA8A0E755F621973E5FDB33C5C /* PINURLSessionManager.h */,
 				6B1542F0304076BB754466069208B89B /* PINURLSessionManager.m */,
 				0F8563C6DD4551A7911F22DE1546076D /* Categories */,
@@ -443,6 +449,7 @@
 				8A81955A184E25A4478DF2B3D3107BAB /* PINCache.h in Headers */,
 				9A2C4A839BC1B0DF4D9FC9F78795162D /* PINDiskCache.h in Headers */,
 				7045F8A209126D4B84BCC82015F6A700 /* PINMemoryCache.h in Headers */,
+				B14CAE771CA8B82B00F552E0 /* PINRemoteLock.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -568,6 +575,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E802CD9F5161D201F03DCA6FA3E031E /* PINCache-dummy.m in Sources */,
+				B14CAE761CA8B82B00F552E0 /* PINRemoteLock.m in Sources */,
 				AB973F5515FA8617F9BF850FA22E136B /* PINCache.m in Sources */,
 				73C6D174C988BF72774F16C0EB72A78F /* PINDiskCache.m in Sources */,
 				87D1003CDB8A08587A0CAFD40BF26251 /* PINMemoryCache.m in Sources */,
