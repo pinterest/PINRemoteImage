@@ -555,7 +555,7 @@ static dispatch_once_t sharedDispatchToken;
              [strongSelf.concurrentOperationQueue pin_addOperationWithQueuePriority:priority block:^
               {
                   typeof(self) strongSelf = weakSelf;
-                  [strongSelf objectForKey:key options:options completion:^(BOOL found, BOOL valid, UIImage *image, id alternativeRepresentation) {
+                  [strongSelf objectForKey:key options:options completion:^(BOOL found, BOOL valid, PINImage *image, id alternativeRepresentation) {
                       if (found) {
                           if (valid) {
                               typeof(self) strongSelf = weakSelf;
@@ -980,7 +980,7 @@ static dispatch_once_t sharedDispatchToken;
         }
     }
     
-    [self objectForKey:cacheKey options:options completion:^(BOOL found, BOOL valid, UIImage *image, id alternativeRepresentation) {
+    [self objectForKey:cacheKey options:options completion:^(BOOL found, BOOL valid, PINImage *image, id alternativeRepresentation) {
         NSError *error = nil;
         if (valid == NO) {
             error = [NSError errorWithDomain:PINRemoteImageManagerErrorDomain
