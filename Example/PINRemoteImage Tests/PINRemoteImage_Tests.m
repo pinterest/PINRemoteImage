@@ -581,12 +581,10 @@
     
     __block UIImage *image = nil;
     const NSUInteger numIntervals = 1000;
-    __block NSUInteger count = 0;
 
     for (NSUInteger idx = 0; idx < numIntervals; idx++) {
         dispatch_group_enter(group);
         [self.imageManager downloadImageWithURL:[self JPEGURL] completion:^(PINRemoteImageManagerResult *result) {
-            count++;
             XCTAssert([result.image isKindOfClass:[UIImage class]], @"result image is not a UIImage");
             image = result.image;
             dispatch_group_leave(group);

@@ -1316,19 +1316,6 @@ static dispatch_once_t sharedDispatchToken;
         }
         
         container.data = data;
-//
-//        if (alternateRepresentationsAllowed) {
-//            <#statements#>
-//        }
-//        
-//        image = [PINImage pin_decodedImageWithData:imageData skipDecodeIfPossible:skipDecode];
-//        if (skipDecode == NO) {
-//            // cache decompressed image
-//            container.image = image;
-//        }
-//        
-//        // store in memory cache
-//        [self.cache.memoryCache setObject:container forKey:key];
     }
     
     if (alternateRepresentationsAllowed) {
@@ -1360,24 +1347,6 @@ static dispatch_once_t sharedDispatchToken;
     if (diskData) {
         [self.cache.diskCache setObject:diskData forKey:key];
     }
-    
-    
-//    if ([object isKindOfClass:[PINImage class]]) {
-//        image = (PINImage *)object;
-//    } else if ([object isKindOfClass:[NSData class]]) {
-//        NSData *imageData = (NSData *)object;
-//        if ([imageData pin_isGIF] && ignoreGIF == NO) {
-//#if USE_FLANIMATED_IMAGE
-//            animatedImage = [[FLAnimatedImage alloc] initWithAnimatedGIFData:imageData];
-//#endif
-//        } else {
-//            BOOL skipDecode = (options & PINRemoteImageManagerDownloadOptionsSkipDecode) != 0;
-//            image = [PINImage pin_decodedImageWithData:imageData skipDecodeIfPossible:skipDecode];
-//            //put in memory cache
-//            NSUInteger cacheCost = [image size].width * [image size].height;
-//            [self setObject:image key:key cost:cacheCost data:nil options:options completion:nil];
-//        }
-//    }
     
     if (outImage) {
         *outImage = image;
