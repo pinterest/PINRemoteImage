@@ -124,7 +124,7 @@
                                      }
                                  }];
         
-        [cell.button setTitle:@"I'm a UIButton! Try pressing me!" forState:UIControlStateNormal];
+        [cell.button setTitle:@"I'm a button! Try pressing me!" forState:UIControlStateNormal];
         
         
         return cell;
@@ -198,12 +198,12 @@
 
 -(void)buttonPressed:(id)sender
 {
-    [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
+    [UIView animateWithDuration:0.35 delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
         CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI);
         self.button.transform = transform;
     } completion:^(BOOL finished) {
         
-        [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
+        [UIView animateWithDuration:0.35 delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
             CGAffineTransform transform = CGAffineTransformMakeRotation(2*M_PI);
             self.button.transform = transform;
         } completion:nil];

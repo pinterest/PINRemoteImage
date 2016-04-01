@@ -195,7 +195,8 @@
 #if PIN_TARGET_IOS
     [self setBackgroundImage:image forState:UIControlStateNormal];
 #elif PIN_TARGET_MAC
-    [self setBackgroundImage:image];
+    [self setImage:image];
+    [self sizeToFit];
 #endif
 }
 
@@ -206,7 +207,7 @@
         [self setBackgroundImage:image forState:UIControlStateNormal];
         [self setNeedsLayout];
 #elif PIN_TARGET_MAC
-        [self setBackgroundImage:image];
+        [self setImage:image];
         [self setNeedsLayout:YES];
 #endif
     }
