@@ -15,6 +15,6 @@
 #import "PINRemoteImageManager.h"
 #import "PINRemoteImageCategoryManager.h"
 
-@interface PINButton (PINRemoteImage) <PINRemoteImageCategory>
+@interface PINButton (PINRemoteImage) <PINRemoteBackgroundImageCategory>
 
 @end

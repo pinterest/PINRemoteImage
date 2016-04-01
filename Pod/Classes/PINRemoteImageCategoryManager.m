@@ -116,6 +116,8 @@
                      completion:completion];
 }
 
+
+
 + (NSUUID *)downloadImageOperationUUIDOnView:(id <PINRemoteImageCategory>)view
 {
     return (NSUUID *)objc_getAssociatedObject(view, @selector(downloadImageOperationUUIDOnView:));
@@ -240,6 +242,246 @@
             }
             else {
                 [view pin_updateUIWithImage:result.image animatedImage:result.animatedImage];
+            }
+            
+            if (completion) {
+                completion(result);
+            }
+        };
+        if ([NSThread isMainThread]) {
+            mainQueue();
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                mainQueue();
+            });
+        }
+    };
+    
+    NSUUID *downloadImageOperationUUID = nil;
+    if (urls.count > 1) {
+        downloadImageOperationUUID = [[PINRemoteImageManager sharedImageManager] downloadImageWithURLs:urls
+                                                                                               options:options
+                                                                                         progressImage:internalProgress
+                                                                                            completion:internalCompletion];
+    } else if (processorKey.length > 0 && processor) {
+        downloadImageOperationUUID = [[PINRemoteImageManager sharedImageManager] downloadImageWithURL:urls[0]
+                                                                                              options:options
+                                                                                         processorKey:processorKey
+                                                                                            processor:processor
+                                                                                           completion:internalCompletion];
+    } else {
+        downloadImageOperationUUID = [[PINRemoteImageManager sharedImageManager] downloadImageWithURL:urls[0]
+                                                                                              options:options
+                                                                                        progressImage:internalProgress
+                                                                                           completion:internalCompletion];
+    }
+    
+    [self setDownloadImageOperationUUID:downloadImageOperationUUID onView:view];
+}
+
+#pragma mark - Background Images
+
++ (void)setBackgroundImageOnView:(id <PINRemoteBackgroundImageCategory>)view
+                         fromURL:(NSURL *)url
+{
+    [self setBackgroundImageOnView:view fromURL:url placeholderImage:nil];
+}
+
++ (void)setBackgroundImageOnView:(id <PINRemoteBackgroundImageCategory>)view
+                         fromURL:(NSURL *)url
+                placeholderImage:(PINImage *)placeholderImage
+{
+    [self setBackgroundImageOnView:view fromURL:url placeholderImage:placeholderImage completion:nil];
+}
+
++ (void)setBackgroundImageOnView:(id <PINRemoteBackgroundImageCategory>)view
+                         fromURL:(NSURL *)url
+                      completion:(PINRemoteImageManagerImageCompletion)completion
+{
+    [self setBackgroundImageOnView:view fromURL:url placeholderImage:nil completion:completion];
+}
+
++ (void)setBackgroundImageOnView:(id <PINRemoteBackgroundImageCategory>)view
+                         fromURL:(NSURL *)url
+                placeholderImage:(PINImage *)placeholderImage
+                      completion:(PINRemoteImageManagerImageCompletion)completion
+{
+    [self setBackgroundImageOnView:view
+                          fromURLs:url?@[url]:nil
+                  placeholderImage:placeholderImage
+                      processorKey:nil
+                         processor:nil
+                        completion:completion];
+}
+
++ (void)setBackgroundImageOnView:(id <PINRemoteBackgroundImageCategory>)view
+                         fromURL:(NSURL *)url
+                    processorKey:(NSString *)processorKey
+                       processor:(PINRemoteImageManagerImageProcessor)processor
+{
+    [self setBackgroundImageOnView:view
+                           fromURL:url
+                      processorKey:processorKey
+                         processor:processor
+                        completion:nil];
+}
+
++ (void)setBackgroundImageOnView:(id <PINRemoteBackgroundImageCategory>)view
+                         fromURL:(NSURL *)url
+                placeholderImage:(PINImage *)placeholderImage
+                    processorKey:(NSString *)processorKey
+                       processor:(PINRemoteImageManagerImageProcessor)processor
+{
+    [self setBackgroundImageOnView:view
+                          fromURLs:url?@[url]:nil
+                  placeholderImage:placeholderImage
+                      processorKey:processorKey
+                         processor:processor
+                        completion:nil];
+}
+
++ (void)setBackgroundImageOnView:(id <PINRemoteBackgroundImageCategory>)view
+                         fromURL:(NSURL *)url
+                    processorKey:(NSString *)processorKey
+                       processor:(PINRemoteImageManagerImageProcessor)processor
+                      completion:(PINRemoteImageManagerImageCompletion)completion
+{
+    [self setBackgroundImageOnView:view
+                          fromURLs:url?@[url]:nil
+                  placeholderImage:nil
+                      processorKey:processorKey
+                         processor:processor
+                        completion:completion];
+}
+
++ (void)setBackgroundImageOnView:(id <PINRemoteBackgroundImageCategory>)view
+                        fromURLs:(NSArray <NSURL *> *)urls
+{
+    [self setBackgroundImageOnView:view
+                          fromURLs:urls
+                  placeholderImage:nil];
+}
+
++ (void)setBackgroundImageOnView:(id <PINRemoteBackgroundImageCategory>)view
+                        fromURLs:(NSArray <NSURL *> *)urls
+                placeholderImage:(PINImage *)placeholderImage
+{
+    [self setBackgroundImageOnView:view
+                          fromURLs:urls
+                  placeholderImage:placeholderImage
+                        completion:nil];
+}
+
++ (void)setBackgroundImageOnView:(id <PINRemoteBackgroundImageCategory>)view
+                        fromURLs:(NSArray <NSURL *> *)urls
+                placeholderImage:(PINImage *)placeholderImage
+                      completion:(PINRemoteImageManagerImageCompletion)completion
+{
+    return [self setBackgroundImageOnView:view
+                                 fromURLs:urls
+                         placeholderImage:placeholderImage
+                             processorKey:nil
+                                processor:nil
+                               completion:completion];
+}
+
+
++ (void)setBackgroundImageOnView:(id <PINRemoteBackgroundImageCategory>)view
+                        fromURLs:(NSArray <NSURL *> *)urls
+                placeholderImage:(PINImage *)placeholderImage
+                    processorKey:(NSString *)processorKey
+                       processor:(PINRemoteImageManagerImageProcessor)processor
+                      completion:(PINRemoteImageManagerImageCompletion)completion
+{
+    if (![NSThread isMainThread]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setBackgroundImageOnView:view
+                                  fromURLs:urls
+                          placeholderImage:placeholderImage
+                              processorKey:processorKey
+                                 processor:processor
+                                completion:completion];
+        });
+        return;
+    }
+    
+    [self cancelImageDownloadOnView:view];
+    
+    if (placeholderImage) {
+        [view pin_setBackgroundPlaceholderWithImage:placeholderImage];
+    }
+    
+    if (urls == nil || urls.count == 0) {
+        if (!placeholderImage) {
+            [view pin_clearImages];
+        }
+        return;
+    }
+    
+    PINRemoteImageManagerDownloadOptions options;
+    if([view respondsToSelector:@selector(pin_defaultOptions)]) {
+        options = [view pin_defaultOptions];
+    } else {
+        options = PINRemoteImageManagerDownloadOptionsNone;
+    }
+    
+    if ([view pin_ignoreGIFs]) {
+        options |= PINRemoteImageManagerDownloadOptionsIgnoreGIFs;
+    }
+    
+    BOOL updateWithFullResult = [view respondsToSelector:@selector(pin_updateUIWithRemoteImageManagerResult:)];
+    
+    PINRemoteImageManagerImageCompletion internalProgress = nil;
+    if ([self updateWithProgressOnView:view] && processorKey.length <= 0 && processor == nil) {
+        internalProgress = ^(PINRemoteImageManagerResult *result)
+        {
+            void (^mainQueue)() = ^{
+                //if result.UUID is nil, we returned immediately and want this result
+                NSUUID *currentUUID = [self downloadImageOperationUUIDOnView:view];
+                if (![currentUUID isEqual:result.UUID] && result.UUID != nil) {
+                    return;
+                }
+                if (result.image) {
+                    if (updateWithFullResult) {
+                        [view pin_updateUIWithRemoteImageManagerResult:result];
+                    }
+                    else {
+                        [view pin_updateUIWithImage:result.image animatedImage:nil];
+                    }
+                    
+                }
+            };
+            if ([NSThread isMainThread]) {
+                mainQueue();
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    mainQueue();
+                });
+            }
+        };
+    }
+    
+    PINRemoteImageManagerImageCompletion internalCompletion = ^(PINRemoteImageManagerResult *result)
+    {
+        void (^mainQueue)() = ^{
+            //if result.UUID is nil, we returned immediately and want this result
+            NSUUID *currentUUID = [self downloadImageOperationUUIDOnView:view];
+            if (![currentUUID isEqual:result.UUID] && result.UUID != nil) {
+                return;
+            }
+            [self setDownloadImageOperationUUID:nil onView:view];
+            if (result.error) {
+                if (completion) {
+                    completion(result);
+                }
+                return;
+            }
+            
+            if (updateWithFullResult) {
+                [view pin_updateUIWithRemoteImageManagerResult:result];
+            }
+            else {
+                [view pin_updateUIWithBackgroundImage:result.image animatedImage:result.animatedImage];
             }
             
             if (completion) {
