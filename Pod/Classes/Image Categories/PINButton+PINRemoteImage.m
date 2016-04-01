@@ -122,7 +122,6 @@
     [self setNeedsLayout];
 #elif PIN_TARGET_MAC
     [self setImage:nil];
-    [self setBackgroundImage:nil]
     [self setNeedsLayout:YES];
 #endif
 }
