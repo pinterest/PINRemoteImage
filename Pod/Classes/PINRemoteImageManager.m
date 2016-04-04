@@ -10,7 +10,7 @@
 
 #import <PINCache/PINCache.h>
 
-#import "PINAlternateRepresentationDelegate.h"
+#import "PINAlternateRepresentationProvider.h"
 #import "PINRemoteImage.h"
 #import "PINRemoteLock.h"
 #import "PINProgressiveImage.h"
@@ -95,12 +95,14 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 
 @interface PINRemoteImageManager () <PINURLSessionManagerDelegate>
 {
-    dispatch_queue_t _callbackQueue;
-    PINRemoteLock *_lock;
-    NSOperationQueue *_concurrentOperationQueue;
-    NSOperationQueue *_urlSessionTaskQueue;
-    PINAlternateRepresentationDelegate *_defaultAlternateRepresentationDelegate;
-    __weak PINAlternateRepresentationDelegate *_alternateRepDelegate;
+  dispatch_queue_t _callbackQueue;
+  PINRemoteLock *_lock;
+  NSOperationQueue *_concurrentOperationQueue;
+  NSOperationQueue *_urlSessionTaskQueue;
+  
+  // Necesarry to have a strong reference to _defaultAlternateRepresentationProvider because _alternateRepProvider is __weak
+  PINAlternateRepresentationProvider *_defaultAlternateRepresentationProvider;
+  __weak PINAlternateRepresentationProvider *_alternateRepProvider;
 }
 
 @property (nonatomic, strong) PINCache *cache;
@@ -169,10 +171,10 @@ static dispatch_once_t sharedDispatchToken;
 
 - (instancetype)initWithSessionConfiguration:(NSURLSessionConfiguration *)configuration
 {
-    return [self initWithSessionConfiguration:configuration alternativeRepresentationDelegate:nil];
+    return [self initWithSessionConfiguration:configuration alternativeRepresentationProvider:nil];
 }
 
-- (instancetype)initWithSessionConfiguration:(NSURLSessionConfiguration *)configuration alternativeRepresentationDelegate:(id <PINRemoteImageManagerAlternateRepresentationDelegate>)alternateRepDelegate
+- (instancetype)initWithSessionConfiguration:(NSURLSessionConfiguration *)configuration alternativeRepresentationProvider:(id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepProvider
 {
     if (self = [super init]) {
         self.cache = [self defaultImageCache];
@@ -206,11 +208,11 @@ static dispatch_once_t sharedDispatchToken;
         self.canceledTasks = [[NSMutableSet alloc] init];
         self.taskQOS = [[NSMutableArray alloc] initWithCapacity:5];
         
-        if (alternateRepDelegate == nil) {
-            _defaultAlternateRepresentationDelegate = [[PINAlternateRepresentationDelegate alloc] init];
-            alternateRepDelegate = _defaultAlternateRepresentationDelegate;
+        if (alternateRepProvider == nil) {
+            _defaultAlternateRepresentationProvider = [[PINAlternateRepresentationProvider alloc] init];
+            alternateRepProvider = _defaultAlternateRepresentationProvider;
         }
-        _alternateRepDelegate = alternateRepDelegate;
+        _alternateRepProvider = alternateRepProvider;
     }
     return self;
 }
@@ -1319,10 +1321,10 @@ static dispatch_once_t sharedDispatchToken;
     }
     
     if (alternateRepresentationsAllowed) {
-        alternateRepresentation = [_alternateRepDelegate alternateRepresentationWithData:data options:options];
+        alternateRepresentation = [_alternateRepProvider alternateRepresentationWithData:data options:options];
     }
     
-    if (alternateRepresentation == NO) {
+    if (alternateRepresentation == nil) {
         //we need the image
         [container.lock lockWithBlock:^{
             image = container.image;

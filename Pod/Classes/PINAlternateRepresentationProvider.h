@@ -1,5 +1,5 @@
 //
-//  PINAlternateRepresentationDelegate.h
+//  PINAlternateRepresentationProvider.h
 //  Pods
 //
 //  Created by Garrett Moon on 3/17/16.
@@ -10,7 +10,7 @@
 
 #import "PINRemoteImageManager.h"
 
-@protocol PINRemoteImageManagerAlternateRepresentationDelegate <NSObject>
+@protocol PINRemoteImageManagerAlternateRepresentationProvider <NSObject>
 @required
 
 /**
@@ -20,6 +20,6 @@
 
 @end
 
-@interface PINAlternateRepresentationDelegate : NSObject <PINRemoteImageManagerAlternateRepresentationDelegate>
+@interface PINAlternateRepresentationProvider : NSObject <PINRemoteImageManagerAlternateRepresentationProvider>
 
 @end

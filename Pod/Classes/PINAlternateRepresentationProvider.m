@@ -1,19 +1,19 @@
 //
-//  PINAlternateRepresentationDelegate.m
+//  PINAlternateRepresentationProvider.m
 //  Pods
 //
 //  Created by Garrett Moon on 3/17/16.
 //
 //
 
-#import "PINAlternateRepresentationDelegate.h"
+#import "PINAlternateRepresentationProvider.h"
 
 #import "NSData+ImageDetectors.h"
 #if USE_FLANIMATED_IMAGE
 #import <FLAnimatedImage/FLAnimatedImage.h>
 #endif
 
-@implementation PINAlternateRepresentationDelegate
+@implementation PINAlternateRepresentationProvider
 
 - (id)alternateRepresentationWithData:(NSData *)data options:(PINRemoteImageManagerDownloadOptions)options
 {
