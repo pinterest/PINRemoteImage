@@ -36,14 +36,14 @@ typedef NS_ENUM(NSUInteger, PINRemoteImageResultType) {
 @interface PINRemoteImageManagerResult : NSObject
 
 @property (nonatomic, readonly, strong, nullable) PINImage *image;
-@property (nonatomic, readonly, strong, nullable) FLAnimatedImage *animatedImage;
+@property (nonatomic, readonly, strong, nullable) id alternativeRepresentation;
 @property (nonatomic, readonly, assign) NSTimeInterval requestDuration;
 @property (nonatomic, readonly, strong, nullable) NSError *error;
 @property (nonatomic, readonly, assign) PINRemoteImageResultType resultType;
 @property (nonatomic, readonly, strong, nullable) NSUUID *UUID;
 
 + (nonnull instancetype)imageResultWithImage:(nullable PINImage *)image
-                               animatedImage:(nullable FLAnimatedImage *)animatedImage
+                   alternativeRepresentation:(nullable id)alternativeRepresentation
                                requestLength:(NSTimeInterval)requestLength
                                        error:(nullable NSError *)error
                                   resultType:(PINRemoteImageResultType)resultType

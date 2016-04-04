@@ -24,11 +24,11 @@ PODS:
     - libwebp/core
   - libwebp/webp (0.5.0)
   - PINCache (2.2.2)
-  - PINRemoteImage/Core (2.1):
+  - PINRemoteImage/Core (2.1.2):
     - PINCache (>= 2.1)
-  - PINRemoteImage/iOS (2.1):
+  - PINRemoteImage/iOS (2.1.2):
     - PINRemoteImage/Core
-  - PINRemoteImage/WebP (2.1):
+  - PINRemoteImage/WebP (2.1.2):
     - libwebp
     - PINRemoteImage/Core
 
@@ -44,6 +44,6 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   libwebp: 68ba2001ba6806ee52837ebd77a551a0b6567e4e
   PINCache: 078426d356ab95ef875e9e62e5c35a2ea3333c28
-  PINRemoteImage: 49cfb689cf7af1227ee563e921a1f7e4ce215a8d
+  PINRemoteImage: 49c514f94a8a51ce871aebba2ea7e5a10598af3b
 
 COCOAPODS: 0.39.0

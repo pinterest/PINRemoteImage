@@ -46,7 +46,7 @@
 - (void)callCompletionsWithQueue:(dispatch_queue_t)queue
                           remove:(BOOL)remove
                        withImage:(PINImage *)image
-                   animatedImage:(FLAnimatedImage *)animatedImage
+       alternativeRepresentation:(id)alternativeRepresentation
                           cached:(BOOL)cached
                            error:(NSError *)error
 {
@@ -63,13 +63,13 @@
             dispatch_async(queue, ^
             {
                 PINRemoteImageResultType result;
-                if (image || animatedImage) {
+                if (image || alternativeRepresentation) {
                     result = cached ? PINRemoteImageResultTypeCache : PINRemoteImageResultTypeDownload;
                 } else {
                     result = PINRemoteImageResultTypeNone;
                 }
                 completionBlock([PINRemoteImageManagerResult imageResultWithImage:image
-                                                                    animatedImage:animatedImage
+                                                        alternativeRepresentation:alternativeRepresentation
                                                                     requestLength:CACurrentMediaTime() - requestTime
                                                                             error:error
                                                                        resultType:result
