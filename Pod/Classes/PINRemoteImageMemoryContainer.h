@@ -11,6 +11,8 @@
 #import "PINRemoteImageMacros.h"
 #import "PINRemoteLock.h"
 
+@class PINImage;
+
 @interface PINRemoteImageMemoryContainer : NSObject
 
 @property (nonatomic, strong) PINImage *image;

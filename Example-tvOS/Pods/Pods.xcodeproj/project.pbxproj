@@ -1,866 +1,2773 @@
-// !$*UTF8*$!
-{
-	archiveVersion = 1;
-	classes = {
-	};
-	objectVersion = 46;
-	objects = {
-
-/* Begin PBXBuildFile section */
-		0277A7049EA1F3FDFC751EA893270766 /* Pods-PINRemoteImage.tvOSExample-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E9EA84A849BD2DCE6B6372A7209B76E /* Pods-PINRemoteImage.tvOSExample-dummy.m */; };
-		0FE1BDE6D5D6A9DFE1ABA0AFB6F125C0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 711D52235B0BC670BE93BBC6EDF6DBD6 /* UIKit.framework */; };
-		191A54E627734D084D3643D87FFE86CC /* PINButton+PINRemoteImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CF9C8E23E98679EE46360A3FD23627 /* PINButton+PINRemoteImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1EB37D328EAA4A9B24136856B6AA3AF9 /* PINRemoteImageCategoryManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D653302E1F39AFCECE2A2833DF3C34C3 /* PINRemoteImageCategoryManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1FF26B170EC1CC032BA24204E68B8DA6 /* PINRemoteImage-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBCE140C169AD15FF697DB54C0587AD /* PINRemoteImage-dummy.m */; };
-		20CA936174A022676B9C46FD4C3318B2 /* PINImage+DecodedImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 6A6D2344F930F0D730F67BF689AED045 /* PINImage+DecodedImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2508C8B410B2F717C4FFEDDDA5235874 /* PINRemoteImageManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 12A6F438E1DC52BDAE8F24A56A47EA8C /* PINRemoteImageManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D05B12F8C1B32920EA6899B894C9E79 /* PINRemoteImageDownloadTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 518B51B306E04B2D1140AD9E58F4FF94 /* PINRemoteImageDownloadTask.m */; };
-		325D2FE9CAFAD31961B1024B834A2A03 /* PINRemoteImageMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = EF57BF5B1EDCC9593C89F52CE23B72D5 /* PINRemoteImageMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		32BBA57929884A6B18BC036A9E5C9C8D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 346F53C38695BBB2F87EE155141F9D96 /* Foundation.framework */; };
-		361AA2BA542011D72C45AA39CF10FABD /* PINRemoteImageProcessorTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E3FD8A1E81DCFE7FF328E74F1CABB22 /* PINRemoteImageProcessorTask.m */; };
-		3A243204F759840CB5FE11CAECE2802B /* PINImage+DecodedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B919F62D59A4146B63FB1AE0959936 /* PINImage+DecodedImage.m */; };
-		3AEFB576CE0E6308D2FADC9249AAA417 /* PINCache-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = D294641696AAC266DDAB962002E98776 /* PINCache-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3CA519A1826675F772B5E78B3753AE50 /* Pods-PINRemoteImage.tvOSExample-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 9720749F9C88E2E81B1AEE11AF25D76E /* Pods-PINRemoteImage.tvOSExample-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		423719FCEC3B9EC85AE7E04FE155B59B /* PINImageView+PINRemoteImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F8A82286B15145041643BA18344F5FFC /* PINImageView+PINRemoteImage.m */; };
-		5A3BE54B0E85FD8DDF0D29CB55555C0A /* PINRemoteImageCallbacks.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2744F44725C03B269DE6CAF55B6618 /* PINRemoteImageCallbacks.m */; };
-		5A6336CAFC5EE1F9DD3B7A1859FC50F7 /* PINDataTaskOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EDAB4134A704C2F95DFB147C2CA76B8 /* PINDataTaskOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5B67F62D7E6D94FBFB41A91BE2EFE74C /* NSData+ImageDetectors.m in Sources */ = {isa = PBXBuildFile; fileRef = 6438A8469D06BC0474CC64C353DAC4A8 /* NSData+ImageDetectors.m */; };
-		62250D5ADE9A6B00AC05E5953AB2BCB2 /* PINImage+WebP.m in Sources */ = {isa = PBXBuildFile; fileRef = 8831D1F0C7FCA42D4A59633E78327028 /* PINImage+WebP.m */; };
-		6B03BB042F88AC32FDACAFA4561F9215 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83497A28502289FBCA5F4064F09288A1 /* Accelerate.framework */; };
-		6E802CD9F5161D201F03DCA6FA3E031E /* PINCache-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A61E49E43B089E8D2B951A4A9717A0CE /* PINCache-dummy.m */; };
-		7045F8A209126D4B84BCC82015F6A700 /* PINMemoryCache.h in Headers */ = {isa = PBXBuildFile; fileRef = D227D8D821ABD4C27C563F3B8A9CE933 /* PINMemoryCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		73C6D174C988BF72774F16C0EB72A78F /* PINDiskCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C4872A5D88065AE0EBC023FC5E4CFA51 /* PINDiskCache.m */; };
-		77C3D68643E4D0D97A0698CB98B4ACF3 /* Nullability.h in Headers */ = {isa = PBXBuildFile; fileRef = 6BE6BBDE2A23EF5DC97CA365456DF7C2 /* Nullability.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7E1DFE1A79BB6BE370C9670ADCE94EB5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 346F53C38695BBB2F87EE155141F9D96 /* Foundation.framework */; };
-		7E5FACB5A8193F2D538DFF1770590BD5 /* PINDataTaskOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = CF6C6EC7605A4699639E6AE49D189D04 /* PINDataTaskOperation.m */; };
-		804DA675330673181EE0DA3631BC5F10 /* PINRemoteImageCategoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BE252682E3A4451D851E8BABE5A2CEC /* PINRemoteImageCategoryManager.m */; };
-		813151DE3F5A274C0A59535C945285E6 /* PINRemoteImageTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A5FE2AB4CE7827322F5DF1CDEF109E2 /* PINRemoteImageTask.m */; };
-		85B91DBA8E215708264AB086E622D985 /* PINURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B1542F0304076BB754466069208B89B /* PINURLSessionManager.m */; };
-		87D1003CDB8A08587A0CAFD40BF26251 /* PINMemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = CC023911C81E65C1DCEF9FB1A558F2FF /* PINMemoryCache.m */; };
-		884B527ECEBBFCC3D3066C93DF3D7935 /* PINRemoteImageManagerResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4943E7C3A15FFC7C4FC9EF7267003831 /* PINRemoteImageManagerResult.m */; };
-		8A81955A184E25A4478DF2B3D3107BAB /* PINCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CE27C8AB040D9D5B7532F41F490111 /* PINCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8B4D3FF76FAD29E6258819BEE4B91ACF /* PINRemoteImageManagerResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F117BB7185EEA312C922BA418E46E66 /* PINRemoteImageManagerResult.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		959442BB29E7609D600374A6BF10C2D8 /* PINProgressiveImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 94AB6C10AF8134EFDC9A76015E231E41 /* PINProgressiveImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9A2C4A839BC1B0DF4D9FC9F78795162D /* PINDiskCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 76F90317D2C56800D2C8939C99397737 /* PINDiskCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9FCC792D548F845781D610F95C912B6C /* PINImage+WebP.h in Headers */ = {isa = PBXBuildFile; fileRef = 77D00171C162CC60BA17FF5B2CC9E303 /* PINImage+WebP.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A298D1FB9D743F0E70B1D0EA8F2523D1 /* PINRemoteImage-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F25810A52C69621B3D661F89EE87F20B /* PINRemoteImage-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		AAFF05A4CC3E4DFBB7E41B98EA30FB84 /* PINRemoteImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 6BF71EE9F05CA5A8949C1EEA4E76F68E /* PINRemoteImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		AB973F5515FA8617F9BF850FA22E136B /* PINCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A34171F622CFB41A9D2950ABEA155CC /* PINCache.m */; };
-		B41BFEDA7A0294BE7E7F8560BC0FABF2 /* PINCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB6A961AE322AD9C22D2248A11231A61 /* PINCache.framework */; };
-		C054BAC272D17B1F3A735C944290C36F /* PINURLSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FF909FAA8A0E755F621973E5FDB33C5C /* PINURLSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C836A89DD02F65CEEA4495544569F8DD /* PINRemoteImageCallbacks.h in Headers */ = {isa = PBXBuildFile; fileRef = 667180C5294B3A28BB98F2FEF0596B35 /* PINRemoteImageCallbacks.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		CCEB0A7A5D1E225A7071CAEF5019F173 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 346F53C38695BBB2F87EE155141F9D96 /* Foundation.framework */; };
-		CE282EE9EE809551B27EEC17C4B9C885 /* PINRemoteImageTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 5720495D7E2DA562C10BA3E7DB8EA317 /* PINRemoteImageTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D9580E4C4F93F077DF03B96E047637CA /* PINRemoteImageDownloadTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 38DE11F2FC736A18051556350EBFDFE2 /* PINRemoteImageDownloadTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DEBD1563DA3B07F61B0EDB89E7322330 /* PINProgressiveImage.m in Sources */ = {isa = PBXBuildFile; fileRef = BB10E988EAF480BCA76CD9825B2E8084 /* PINProgressiveImage.m */; };
-		E7BDD1D2AA1181A0B7699FA4FF6445F8 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 366A9C137237118C71B9615F2A8CDA28 /* ImageIO.framework */; };
-		ED0899A0818E796934058064698FFCDD /* PINImageView+PINRemoteImage.h in Headers */ = {isa = PBXBuildFile; fileRef = EA695608A5A75FE3F81DD017A7D72752 /* PINImageView+PINRemoteImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F0D0A16F376E01EB7593CAD41988A5C2 /* PINRemoteImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EBBC981617764F2D753926138DC72B4 /* PINRemoteImageManager.m */; };
-		F6E15C0345350C970FD6AB2A8E394A3D /* NSData+ImageDetectors.h in Headers */ = {isa = PBXBuildFile; fileRef = 1D42D314336FB0229AFE4CE5C6822852 /* NSData+ImageDetectors.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F8A277F051A32B087F7C9EE77E19DB89 /* PINButton+PINRemoteImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FCE17A102947CBC518D48113EEA7508 /* PINButton+PINRemoteImage.m */; };
-		FEB7E1775F4A7CBA4E61A1614E81A864 /* PINRemoteImageProcessorTask.h in Headers */ = {isa = PBXBuildFile; fileRef = C06E214B135FFA7BC7000CA2C264AAFB /* PINRemoteImageProcessorTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
-/* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		99B2461A9C4669412E5D44A129C36420 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9AB92A2AE7314091D107EAC8561B8977;
-			remoteInfo = PINCache;
-		};
-		9F972016FCC0B6D04ED2FFE9129BAF1B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9AB92A2AE7314091D107EAC8561B8977;
-			remoteInfo = PINCache;
-		};
-		ADDD132774DFCCDA2F3CF2F8B58830A4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C5E03293270BDB15418FDBB002EF8974;
-			remoteInfo = PINRemoteImage;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXFileReference section */
-		0C8E36CBE8E5106F618C090EA4C37794 /* PINRemoteImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PINRemoteImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		0E3FD8A1E81DCFE7FF328E74F1CABB22 /* PINRemoteImageProcessorTask.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageProcessorTask.m; sourceTree = "<group>"; };
-		1178C76713EE167389861F46BD78DCB2 /* Pods_PINRemoteImage_tvOSExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PINRemoteImage_tvOSExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		12A6F438E1DC52BDAE8F24A56A47EA8C /* PINRemoteImageManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageManager.h; sourceTree = "<group>"; };
-		14CF9C8E23E98679EE46360A3FD23627 /* PINButton+PINRemoteImage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PINButton+PINRemoteImage.h"; sourceTree = "<group>"; };
-		1A5FE2AB4CE7827322F5DF1CDEF109E2 /* PINRemoteImageTask.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageTask.m; sourceTree = "<group>"; };
-		1D42D314336FB0229AFE4CE5C6822852 /* NSData+ImageDetectors.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "NSData+ImageDetectors.h"; sourceTree = "<group>"; };
-		1EBCE140C169AD15FF697DB54C0587AD /* PINRemoteImage-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "PINRemoteImage-dummy.m"; sourceTree = "<group>"; };
-		1EDAB4134A704C2F95DFB147C2CA76B8 /* PINDataTaskOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = PINDataTaskOperation.h; sourceTree = "<group>"; };
-		28EC2B1F7D43AB584839810CD1FA5707 /* PINCache.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = PINCache.modulemap; sourceTree = "<group>"; };
-		346F53C38695BBB2F87EE155141F9D96 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS9.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		366A9C137237118C71B9615F2A8CDA28 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS9.0.sdk/System/Library/Frameworks/ImageIO.framework; sourceTree = DEVELOPER_DIR; };
-		38DE11F2FC736A18051556350EBFDFE2 /* PINRemoteImageDownloadTask.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageDownloadTask.h; sourceTree = "<group>"; };
-		3BE252682E3A4451D851E8BABE5A2CEC /* PINRemoteImageCategoryManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageCategoryManager.m; sourceTree = "<group>"; };
-		3E9EA84A849BD2DCE6B6372A7209B76E /* Pods-PINRemoteImage.tvOSExample-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-PINRemoteImage.tvOSExample-dummy.m"; sourceTree = "<group>"; };
-		4943E7C3A15FFC7C4FC9EF7267003831 /* PINRemoteImageManagerResult.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageManagerResult.m; sourceTree = "<group>"; };
-		518B51B306E04B2D1140AD9E58F4FF94 /* PINRemoteImageDownloadTask.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageDownloadTask.m; sourceTree = "<group>"; };
-		5494200DC3AAB386529CE8F470E9E21D /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5720495D7E2DA562C10BA3E7DB8EA317 /* PINRemoteImageTask.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageTask.h; sourceTree = "<group>"; };
-		5F2D5E87B882076993986791F6F82246 /* Pods-PINRemoteImage.tvOSExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-PINRemoteImage.tvOSExample.release.xcconfig"; sourceTree = "<group>"; };
-		6438A8469D06BC0474CC64C353DAC4A8 /* NSData+ImageDetectors.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "NSData+ImageDetectors.m"; sourceTree = "<group>"; };
-		64E99DFA319DEB1F288A86069FAC35D3 /* PINCache-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PINCache-prefix.pch"; sourceTree = "<group>"; };
-		667180C5294B3A28BB98F2FEF0596B35 /* PINRemoteImageCallbacks.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageCallbacks.h; sourceTree = "<group>"; };
-		68B919F62D59A4146B63FB1AE0959936 /* PINImage+DecodedImage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "PINImage+DecodedImage.m"; sourceTree = "<group>"; };
-		69F0E81375A7B90A6352B0991CCDADEB /* PINRemoteImage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = PINRemoteImage.xcconfig; sourceTree = "<group>"; };
-		6A6D2344F930F0D730F67BF689AED045 /* PINImage+DecodedImage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PINImage+DecodedImage.h"; sourceTree = "<group>"; };
-		6B1542F0304076BB754466069208B89B /* PINURLSessionManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = PINURLSessionManager.m; sourceTree = "<group>"; };
-		6B2C3B18326AFCA937340FD7A91687E5 /* Pods-PINRemoteImage.tvOSExample-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-PINRemoteImage.tvOSExample-frameworks.sh"; sourceTree = "<group>"; };
-		6BE6BBDE2A23EF5DC97CA365456DF7C2 /* Nullability.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Nullability.h; path = PINCache/Nullability.h; sourceTree = "<group>"; };
-		6BF71EE9F05CA5A8949C1EEA4E76F68E /* PINRemoteImage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = PINRemoteImage.h; sourceTree = "<group>"; };
-		711D52235B0BC670BE93BBC6EDF6DBD6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS9.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		731808392D565A181022AA384BE07B8A /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		75CE27C8AB040D9D5B7532F41F490111 /* PINCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = PINCache.h; path = PINCache/PINCache.h; sourceTree = "<group>"; };
-		76F90317D2C56800D2C8939C99397737 /* PINDiskCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = PINDiskCache.h; path = PINCache/PINDiskCache.h; sourceTree = "<group>"; };
-		77D00171C162CC60BA17FF5B2CC9E303 /* PINImage+WebP.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PINImage+WebP.h"; sourceTree = "<group>"; };
-		7EBBC981617764F2D753926138DC72B4 /* PINRemoteImageManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageManager.m; sourceTree = "<group>"; };
-		82870562396946A4422BC2377DEA55E5 /* PINRemoteImage.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = PINRemoteImage.modulemap; sourceTree = "<group>"; };
-		83497A28502289FBCA5F4064F09288A1 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS9.0.sdk/System/Library/Frameworks/Accelerate.framework; sourceTree = DEVELOPER_DIR; };
-		8831D1F0C7FCA42D4A59633E78327028 /* PINImage+WebP.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "PINImage+WebP.m"; sourceTree = "<group>"; };
-		8A34171F622CFB41A9D2950ABEA155CC /* PINCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = PINCache.m; path = PINCache/PINCache.m; sourceTree = "<group>"; };
-		8C2744F44725C03B269DE6CAF55B6618 /* PINRemoteImageCallbacks.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageCallbacks.m; sourceTree = "<group>"; };
-		90554EAEB5A49F2B4507524353FE96F8 /* Pods-PINRemoteImage.tvOSExample-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-PINRemoteImage.tvOSExample-resources.sh"; sourceTree = "<group>"; };
-		94AB6C10AF8134EFDC9A76015E231E41 /* PINProgressiveImage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = PINProgressiveImage.h; sourceTree = "<group>"; };
-		9720749F9C88E2E81B1AEE11AF25D76E /* Pods-PINRemoteImage.tvOSExample-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-PINRemoteImage.tvOSExample-umbrella.h"; sourceTree = "<group>"; };
-		9B71428B31BD826E391AB6F7278306F4 /* PINCache.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PINCache.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9F117BB7185EEA312C922BA418E46E66 /* PINRemoteImageManagerResult.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageManagerResult.h; sourceTree = "<group>"; };
-		9FCE17A102947CBC518D48113EEA7508 /* PINButton+PINRemoteImage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "PINButton+PINRemoteImage.m"; sourceTree = "<group>"; };
-		A61E49E43B089E8D2B951A4A9717A0CE /* PINCache-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "PINCache-dummy.m"; sourceTree = "<group>"; };
-		AE807D4E0267B44EFBD262551F35164B /* Pods-PINRemoteImage.tvOSExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-PINRemoteImage.tvOSExample.debug.xcconfig"; sourceTree = "<group>"; };
-		AE86A4FDAC84AD2A3D5C7973855757D7 /* PINRemoteImage-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PINRemoteImage-prefix.pch"; sourceTree = "<group>"; };
-		B94669977B3DA1EAD88B894046C3E843 /* PINCache.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = PINCache.xcconfig; sourceTree = "<group>"; };
-		BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		BB10E988EAF480BCA76CD9825B2E8084 /* PINProgressiveImage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = PINProgressiveImage.m; sourceTree = "<group>"; };
-		C06E214B135FFA7BC7000CA2C264AAFB /* PINRemoteImageProcessorTask.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageProcessorTask.h; sourceTree = "<group>"; };
-		C4872A5D88065AE0EBC023FC5E4CFA51 /* PINDiskCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = PINDiskCache.m; path = PINCache/PINDiskCache.m; sourceTree = "<group>"; };
-		CC023911C81E65C1DCEF9FB1A558F2FF /* PINMemoryCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = PINMemoryCache.m; path = PINCache/PINMemoryCache.m; sourceTree = "<group>"; };
-		CD505C62A3AF96F6F4E931B669B930D5 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CF6C6EC7605A4699639E6AE49D189D04 /* PINDataTaskOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = PINDataTaskOperation.m; sourceTree = "<group>"; };
-		D227D8D821ABD4C27C563F3B8A9CE933 /* PINMemoryCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = PINMemoryCache.h; path = PINCache/PINMemoryCache.h; sourceTree = "<group>"; };
-		D294641696AAC266DDAB962002E98776 /* PINCache-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PINCache-umbrella.h"; sourceTree = "<group>"; };
-		D653302E1F39AFCECE2A2833DF3C34C3 /* PINRemoteImageCategoryManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageCategoryManager.h; sourceTree = "<group>"; };
-		DB6A961AE322AD9C22D2248A11231A61 /* PINCache.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PINCache.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		EA695608A5A75FE3F81DD017A7D72752 /* PINImageView+PINRemoteImage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PINImageView+PINRemoteImage.h"; sourceTree = "<group>"; };
-		EF57BF5B1EDCC9593C89F52CE23B72D5 /* PINRemoteImageMacros.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageMacros.h; sourceTree = "<group>"; };
-		F25810A52C69621B3D661F89EE87F20B /* PINRemoteImage-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PINRemoteImage-umbrella.h"; sourceTree = "<group>"; };
-		F31EC5948759058807C5B0298D21A6DC /* Pods-PINRemoteImage.tvOSExample.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-PINRemoteImage.tvOSExample.modulemap"; sourceTree = "<group>"; };
-		F4DBD6B7FC84ADB109BD7E87A9B3B3B1 /* Pods-PINRemoteImage.tvOSExample-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-PINRemoteImage.tvOSExample-acknowledgements.plist"; sourceTree = "<group>"; };
-		F4F85C3A97C5DA45547C0F195192BD7E /* Pods-PINRemoteImage.tvOSExample-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-PINRemoteImage.tvOSExample-acknowledgements.markdown"; sourceTree = "<group>"; };
-		F8A82286B15145041643BA18344F5FFC /* PINImageView+PINRemoteImage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "PINImageView+PINRemoteImage.m"; sourceTree = "<group>"; };
-		FF909FAA8A0E755F621973E5FDB33C5C /* PINURLSessionManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = PINURLSessionManager.h; sourceTree = "<group>"; };
-/* End PBXFileReference section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		01FA70BE7651A7A3390950BC09342010 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				CCEB0A7A5D1E225A7071CAEF5019F173 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		07E4C4BC2D2C73E31DD7AD42E0AEAEAC /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7E1DFE1A79BB6BE370C9670ADCE94EB5 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		58415D8476CD351063D3A7F752BCEDCA /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6B03BB042F88AC32FDACAFA4561F9215 /* Accelerate.framework in Frameworks */,
-				32BBA57929884A6B18BC036A9E5C9C8D /* Foundation.framework in Frameworks */,
-				E7BDD1D2AA1181A0B7699FA4FF6445F8 /* ImageIO.framework in Frameworks */,
-				B41BFEDA7A0294BE7E7F8560BC0FABF2 /* PINCache.framework in Frameworks */,
-				0FE1BDE6D5D6A9DFE1ABA0AFB6F125C0 /* UIKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
-
-/* Begin PBXGroup section */
-		033B289B8FF890D8275DC4AB9F09DB1A /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				CD505C62A3AF96F6F4E931B669B930D5 /* Info.plist */,
-				28EC2B1F7D43AB584839810CD1FA5707 /* PINCache.modulemap */,
-				B94669977B3DA1EAD88B894046C3E843 /* PINCache.xcconfig */,
-				A61E49E43B089E8D2B951A4A9717A0CE /* PINCache-dummy.m */,
-				64E99DFA319DEB1F288A86069FAC35D3 /* PINCache-prefix.pch */,
-				D294641696AAC266DDAB962002E98776 /* PINCache-umbrella.h */,
-			);
-			name = "Support Files";
-			path = "../Target Support Files/PINCache";
-			sourceTree = "<group>";
-		};
-		043AD280C63E09FB0DC1C7035667541E /* PINRemoteImage */ = {
-			isa = PBXGroup;
-			children = (
-				7E7C46F6C0239C84A6BBCF7C0B5B3DBD /* Core */,
-				5B4377E92C931047E4BBC945A700B0B3 /* Support Files */,
-			);
-			name = PINRemoteImage;
-			path = ../..;
-			sourceTree = "<group>";
-		};
-		0F8563C6DD4551A7911F22DE1546076D /* Categories */ = {
-			isa = PBXGroup;
-			children = (
-				1D42D314336FB0229AFE4CE5C6822852 /* NSData+ImageDetectors.h */,
-				6438A8469D06BC0474CC64C353DAC4A8 /* NSData+ImageDetectors.m */,
-				6A6D2344F930F0D730F67BF689AED045 /* PINImage+DecodedImage.h */,
-				68B919F62D59A4146B63FB1AE0959936 /* PINImage+DecodedImage.m */,
-				77D00171C162CC60BA17FF5B2CC9E303 /* PINImage+WebP.h */,
-				8831D1F0C7FCA42D4A59633E78327028 /* PINImage+WebP.m */,
-			);
-			path = Categories;
-			sourceTree = "<group>";
-		};
-		262A18BA16BE02C385FD92EF89E59FF2 /* Pod */ = {
-			isa = PBXGroup;
-			children = (
-				710BE4960708C1F31FCF3E61A01D22F3 /* Classes */,
-			);
-			path = Pod;
-			sourceTree = "<group>";
-		};
-		378CB9C04F32ACE5AEFF45752FFD439A /* Pods-PINRemoteImage.tvOSExample */ = {
-			isa = PBXGroup;
-			children = (
-				5494200DC3AAB386529CE8F470E9E21D /* Info.plist */,
-				F31EC5948759058807C5B0298D21A6DC /* Pods-PINRemoteImage.tvOSExample.modulemap */,
-				F4F85C3A97C5DA45547C0F195192BD7E /* Pods-PINRemoteImage.tvOSExample-acknowledgements.markdown */,
-				F4DBD6B7FC84ADB109BD7E87A9B3B3B1 /* Pods-PINRemoteImage.tvOSExample-acknowledgements.plist */,
-				3E9EA84A849BD2DCE6B6372A7209B76E /* Pods-PINRemoteImage.tvOSExample-dummy.m */,
-				6B2C3B18326AFCA937340FD7A91687E5 /* Pods-PINRemoteImage.tvOSExample-frameworks.sh */,
-				90554EAEB5A49F2B4507524353FE96F8 /* Pods-PINRemoteImage.tvOSExample-resources.sh */,
-				9720749F9C88E2E81B1AEE11AF25D76E /* Pods-PINRemoteImage.tvOSExample-umbrella.h */,
-				AE807D4E0267B44EFBD262551F35164B /* Pods-PINRemoteImage.tvOSExample.debug.xcconfig */,
-				5F2D5E87B882076993986791F6F82246 /* Pods-PINRemoteImage.tvOSExample.release.xcconfig */,
-			);
-			name = "Pods-PINRemoteImage.tvOSExample";
-			path = "Target Support Files/Pods-PINRemoteImage.tvOSExample";
-			sourceTree = "<group>";
-		};
-		51DAA8DDAB0D8413B4EF7ED602F6F3BB /* Targets Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				378CB9C04F32ACE5AEFF45752FFD439A /* Pods-PINRemoteImage.tvOSExample */,
-			);
-			name = "Targets Support Files";
-			sourceTree = "<group>";
-		};
-		5B4377E92C931047E4BBC945A700B0B3 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				731808392D565A181022AA384BE07B8A /* Info.plist */,
-				82870562396946A4422BC2377DEA55E5 /* PINRemoteImage.modulemap */,
-				69F0E81375A7B90A6352B0991CCDADEB /* PINRemoteImage.xcconfig */,
-				1EBCE140C169AD15FF697DB54C0587AD /* PINRemoteImage-dummy.m */,
-				AE86A4FDAC84AD2A3D5C7973855757D7 /* PINRemoteImage-prefix.pch */,
-				F25810A52C69621B3D661F89EE87F20B /* PINRemoteImage-umbrella.h */,
-			);
-			name = "Support Files";
-			path = "Example-tvOS/Pods/Target Support Files/PINRemoteImage";
-			sourceTree = "<group>";
-		};
-		710BE4960708C1F31FCF3E61A01D22F3 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				1EDAB4134A704C2F95DFB147C2CA76B8 /* PINDataTaskOperation.h */,
-				CF6C6EC7605A4699639E6AE49D189D04 /* PINDataTaskOperation.m */,
-				94AB6C10AF8134EFDC9A76015E231E41 /* PINProgressiveImage.h */,
-				BB10E988EAF480BCA76CD9825B2E8084 /* PINProgressiveImage.m */,
-				6BF71EE9F05CA5A8949C1EEA4E76F68E /* PINRemoteImage.h */,
-				667180C5294B3A28BB98F2FEF0596B35 /* PINRemoteImageCallbacks.h */,
-				8C2744F44725C03B269DE6CAF55B6618 /* PINRemoteImageCallbacks.m */,
-				D653302E1F39AFCECE2A2833DF3C34C3 /* PINRemoteImageCategoryManager.h */,
-				3BE252682E3A4451D851E8BABE5A2CEC /* PINRemoteImageCategoryManager.m */,
-				38DE11F2FC736A18051556350EBFDFE2 /* PINRemoteImageDownloadTask.h */,
-				518B51B306E04B2D1140AD9E58F4FF94 /* PINRemoteImageDownloadTask.m */,
-				EF57BF5B1EDCC9593C89F52CE23B72D5 /* PINRemoteImageMacros.h */,
-				12A6F438E1DC52BDAE8F24A56A47EA8C /* PINRemoteImageManager.h */,
-				7EBBC981617764F2D753926138DC72B4 /* PINRemoteImageManager.m */,
-				9F117BB7185EEA312C922BA418E46E66 /* PINRemoteImageManagerResult.h */,
-				4943E7C3A15FFC7C4FC9EF7267003831 /* PINRemoteImageManagerResult.m */,
-				C06E214B135FFA7BC7000CA2C264AAFB /* PINRemoteImageProcessorTask.h */,
-				0E3FD8A1E81DCFE7FF328E74F1CABB22 /* PINRemoteImageProcessorTask.m */,
-				5720495D7E2DA562C10BA3E7DB8EA317 /* PINRemoteImageTask.h */,
-				1A5FE2AB4CE7827322F5DF1CDEF109E2 /* PINRemoteImageTask.m */,
-				FF909FAA8A0E755F621973E5FDB33C5C /* PINURLSessionManager.h */,
-				6B1542F0304076BB754466069208B89B /* PINURLSessionManager.m */,
-				0F8563C6DD4551A7911F22DE1546076D /* Categories */,
-				B34AEF0F658841234E39C04D2EE10FB6 /* Image Categories */,
-			);
-			path = Classes;
-			sourceTree = "<group>";
-		};
-		7DB346D0F39D3F0E887471402A8071AB = {
-			isa = PBXGroup;
-			children = (
-				BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */,
-				B1A11A7DE699B711ECE8F5987072C1D1 /* Development Pods */,
-				B4C1B817EFFB094B26E198EF7B35892E /* Frameworks */,
-				E07713D6BECC3D3DF7750BC32A6D3A01 /* Pods */,
-				8AE0A6730B7EAB6872C87B0594ABC3A5 /* Products */,
-				51DAA8DDAB0D8413B4EF7ED602F6F3BB /* Targets Support Files */,
-			);
-			sourceTree = "<group>";
-		};
-		7E7C46F6C0239C84A6BBCF7C0B5B3DBD /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				262A18BA16BE02C385FD92EF89E59FF2 /* Pod */,
-			);
-			name = Core;
-			sourceTree = "<group>";
-		};
-		8AE0A6730B7EAB6872C87B0594ABC3A5 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				9B71428B31BD826E391AB6F7278306F4 /* PINCache.framework */,
-				0C8E36CBE8E5106F618C090EA4C37794 /* PINRemoteImage.framework */,
-				1178C76713EE167389861F46BD78DCB2 /* Pods_PINRemoteImage_tvOSExample.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		B1A11A7DE699B711ECE8F5987072C1D1 /* Development Pods */ = {
-			isa = PBXGroup;
-			children = (
-				043AD280C63E09FB0DC1C7035667541E /* PINRemoteImage */,
-			);
-			name = "Development Pods";
-			sourceTree = "<group>";
-		};
-		B34AEF0F658841234E39C04D2EE10FB6 /* Image Categories */ = {
-			isa = PBXGroup;
-			children = (
-				14CF9C8E23E98679EE46360A3FD23627 /* PINButton+PINRemoteImage.h */,
-				9FCE17A102947CBC518D48113EEA7508 /* PINButton+PINRemoteImage.m */,
-				EA695608A5A75FE3F81DD017A7D72752 /* PINImageView+PINRemoteImage.h */,
-				F8A82286B15145041643BA18344F5FFC /* PINImageView+PINRemoteImage.m */,
-			);
-			path = "Image Categories";
-			sourceTree = "<group>";
-		};
-		B4C1B817EFFB094B26E198EF7B35892E /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				DB6A961AE322AD9C22D2248A11231A61 /* PINCache.framework */,
-				D7DC5CC930AA686F52A1468564725997 /* tvOS */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		D01400756738DD0B2895DABCD82274CD /* PINCache */ = {
-			isa = PBXGroup;
-			children = (
-				6BE6BBDE2A23EF5DC97CA365456DF7C2 /* Nullability.h */,
-				75CE27C8AB040D9D5B7532F41F490111 /* PINCache.h */,
-				8A34171F622CFB41A9D2950ABEA155CC /* PINCache.m */,
-				76F90317D2C56800D2C8939C99397737 /* PINDiskCache.h */,
-				C4872A5D88065AE0EBC023FC5E4CFA51 /* PINDiskCache.m */,
-				D227D8D821ABD4C27C563F3B8A9CE933 /* PINMemoryCache.h */,
-				CC023911C81E65C1DCEF9FB1A558F2FF /* PINMemoryCache.m */,
-				033B289B8FF890D8275DC4AB9F09DB1A /* Support Files */,
-			);
-			path = PINCache;
-			sourceTree = "<group>";
-		};
-		D7DC5CC930AA686F52A1468564725997 /* tvOS */ = {
-			isa = PBXGroup;
-			children = (
-				83497A28502289FBCA5F4064F09288A1 /* Accelerate.framework */,
-				346F53C38695BBB2F87EE155141F9D96 /* Foundation.framework */,
-				366A9C137237118C71B9615F2A8CDA28 /* ImageIO.framework */,
-				711D52235B0BC670BE93BBC6EDF6DBD6 /* UIKit.framework */,
-			);
-			name = tvOS;
-			sourceTree = "<group>";
-		};
-		E07713D6BECC3D3DF7750BC32A6D3A01 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				D01400756738DD0B2895DABCD82274CD /* PINCache */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-/* End PBXGroup section */
-
-/* Begin PBXHeadersBuildPhase section */
-		03FB2BFAA1F553D89D2D1B2BA84B5939 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3CA519A1826675F772B5E78B3753AE50 /* Pods-PINRemoteImage.tvOSExample-umbrella.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		06F52F702DE28B62CE7284E26FE19F45 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F6E15C0345350C970FD6AB2A8E394A3D /* NSData+ImageDetectors.h in Headers */,
-				191A54E627734D084D3643D87FFE86CC /* PINButton+PINRemoteImage.h in Headers */,
-				5A6336CAFC5EE1F9DD3B7A1859FC50F7 /* PINDataTaskOperation.h in Headers */,
-				20CA936174A022676B9C46FD4C3318B2 /* PINImage+DecodedImage.h in Headers */,
-				9FCC792D548F845781D610F95C912B6C /* PINImage+WebP.h in Headers */,
-				ED0899A0818E796934058064698FFCDD /* PINImageView+PINRemoteImage.h in Headers */,
-				959442BB29E7609D600374A6BF10C2D8 /* PINProgressiveImage.h in Headers */,
-				A298D1FB9D743F0E70B1D0EA8F2523D1 /* PINRemoteImage-umbrella.h in Headers */,
-				AAFF05A4CC3E4DFBB7E41B98EA30FB84 /* PINRemoteImage.h in Headers */,
-				C836A89DD02F65CEEA4495544569F8DD /* PINRemoteImageCallbacks.h in Headers */,
-				1EB37D328EAA4A9B24136856B6AA3AF9 /* PINRemoteImageCategoryManager.h in Headers */,
-				D9580E4C4F93F077DF03B96E047637CA /* PINRemoteImageDownloadTask.h in Headers */,
-				325D2FE9CAFAD31961B1024B834A2A03 /* PINRemoteImageMacros.h in Headers */,
-				2508C8B410B2F717C4FFEDDDA5235874 /* PINRemoteImageManager.h in Headers */,
-				8B4D3FF76FAD29E6258819BEE4B91ACF /* PINRemoteImageManagerResult.h in Headers */,
-				FEB7E1775F4A7CBA4E61A1614E81A864 /* PINRemoteImageProcessorTask.h in Headers */,
-				CE282EE9EE809551B27EEC17C4B9C885 /* PINRemoteImageTask.h in Headers */,
-				C054BAC272D17B1F3A735C944290C36F /* PINURLSessionManager.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3F3F83DCE3F4420B3D62F1BAD9BFAB65 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				77C3D68643E4D0D97A0698CB98B4ACF3 /* Nullability.h in Headers */,
-				3AEFB576CE0E6308D2FADC9249AAA417 /* PINCache-umbrella.h in Headers */,
-				8A81955A184E25A4478DF2B3D3107BAB /* PINCache.h in Headers */,
-				9A2C4A839BC1B0DF4D9FC9F78795162D /* PINDiskCache.h in Headers */,
-				7045F8A209126D4B84BCC82015F6A700 /* PINMemoryCache.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
-/* Begin PBXNativeTarget section */
-		42688CD03A02221721AD72738A655BA9 /* Pods-PINRemoteImage.tvOSExample */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 6541F6623B6445D08A0C0B751C1E4A0F /* Build configuration list for PBXNativeTarget "Pods-PINRemoteImage.tvOSExample" */;
-			buildPhases = (
-				C58F9E7414A48F0D29D3A4AD1E7EA945 /* Sources */,
-				01FA70BE7651A7A3390950BC09342010 /* Frameworks */,
-				03FB2BFAA1F553D89D2D1B2BA84B5939 /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				2C8264C7284CAE0EBE5E499A71F7E847 /* PBXTargetDependency */,
-				FFA12F05101B061D1EB4E47B557CBD15 /* PBXTargetDependency */,
-			);
-			name = "Pods-PINRemoteImage.tvOSExample";
-			productName = "Pods-PINRemoteImage.tvOSExample";
-			productReference = 1178C76713EE167389861F46BD78DCB2 /* Pods_PINRemoteImage_tvOSExample.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		9AB92A2AE7314091D107EAC8561B8977 /* PINCache */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FF497A22C21368DD9C91A3DAD14610CF /* Build configuration list for PBXNativeTarget "PINCache" */;
-			buildPhases = (
-				DB127F1B2305534ECC37265DDF40688F /* Sources */,
-				07E4C4BC2D2C73E31DD7AD42E0AEAEAC /* Frameworks */,
-				3F3F83DCE3F4420B3D62F1BAD9BFAB65 /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = PINCache;
-			productName = PINCache;
-			productReference = 9B71428B31BD826E391AB6F7278306F4 /* PINCache.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		C5E03293270BDB15418FDBB002EF8974 /* PINRemoteImage */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 38EB782EDBDAD312BDDBDADE8B0A0FCE /* Build configuration list for PBXNativeTarget "PINRemoteImage" */;
-			buildPhases = (
-				B8B1F0817F52E7B607A3DD5EBF713CF8 /* Sources */,
-				58415D8476CD351063D3A7F752BCEDCA /* Frameworks */,
-				06F52F702DE28B62CE7284E26FE19F45 /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				BCABB1A40EFE88D41F8DE2FE4D790D6F /* PBXTargetDependency */,
-			);
-			name = PINRemoteImage;
-			productName = PINRemoteImage;
-			productReference = 0C8E36CBE8E5106F618C090EA4C37794 /* PINRemoteImage.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-/* End PBXNativeTarget section */
-
-/* Begin PBXProject section */
-		D41D8CD98F00B204E9800998ECF8427E /* Project object */ = {
-			isa = PBXProject;
-			attributes = {
-				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0700;
-			};
-			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
-			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
-			hasScannedForEncodings = 0;
-			knownRegions = (
-				en,
-			);
-			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
-			productRefGroup = 8AE0A6730B7EAB6872C87B0594ABC3A5 /* Products */;
-			projectDirPath = "";
-			projectRoot = "";
-			targets = (
-				9AB92A2AE7314091D107EAC8561B8977 /* PINCache */,
-				C5E03293270BDB15418FDBB002EF8974 /* PINRemoteImage */,
-				42688CD03A02221721AD72738A655BA9 /* Pods-PINRemoteImage.tvOSExample */,
-			);
-		};
-/* End PBXProject section */
-
-/* Begin PBXSourcesBuildPhase section */
-		B8B1F0817F52E7B607A3DD5EBF713CF8 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5B67F62D7E6D94FBFB41A91BE2EFE74C /* NSData+ImageDetectors.m in Sources */,
-				F8A277F051A32B087F7C9EE77E19DB89 /* PINButton+PINRemoteImage.m in Sources */,
-				7E5FACB5A8193F2D538DFF1770590BD5 /* PINDataTaskOperation.m in Sources */,
-				3A243204F759840CB5FE11CAECE2802B /* PINImage+DecodedImage.m in Sources */,
-				62250D5ADE9A6B00AC05E5953AB2BCB2 /* PINImage+WebP.m in Sources */,
-				423719FCEC3B9EC85AE7E04FE155B59B /* PINImageView+PINRemoteImage.m in Sources */,
-				DEBD1563DA3B07F61B0EDB89E7322330 /* PINProgressiveImage.m in Sources */,
-				1FF26B170EC1CC032BA24204E68B8DA6 /* PINRemoteImage-dummy.m in Sources */,
-				5A3BE54B0E85FD8DDF0D29CB55555C0A /* PINRemoteImageCallbacks.m in Sources */,
-				804DA675330673181EE0DA3631BC5F10 /* PINRemoteImageCategoryManager.m in Sources */,
-				2D05B12F8C1B32920EA6899B894C9E79 /* PINRemoteImageDownloadTask.m in Sources */,
-				F0D0A16F376E01EB7593CAD41988A5C2 /* PINRemoteImageManager.m in Sources */,
-				884B527ECEBBFCC3D3066C93DF3D7935 /* PINRemoteImageManagerResult.m in Sources */,
-				361AA2BA542011D72C45AA39CF10FABD /* PINRemoteImageProcessorTask.m in Sources */,
-				813151DE3F5A274C0A59535C945285E6 /* PINRemoteImageTask.m in Sources */,
-				85B91DBA8E215708264AB086E622D985 /* PINURLSessionManager.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C58F9E7414A48F0D29D3A4AD1E7EA945 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0277A7049EA1F3FDFC751EA893270766 /* Pods-PINRemoteImage.tvOSExample-dummy.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DB127F1B2305534ECC37265DDF40688F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6E802CD9F5161D201F03DCA6FA3E031E /* PINCache-dummy.m in Sources */,
-				AB973F5515FA8617F9BF850FA22E136B /* PINCache.m in Sources */,
-				73C6D174C988BF72774F16C0EB72A78F /* PINDiskCache.m in Sources */,
-				87D1003CDB8A08587A0CAFD40BF26251 /* PINMemoryCache.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		2C8264C7284CAE0EBE5E499A71F7E847 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = PINCache;
-			target = 9AB92A2AE7314091D107EAC8561B8977 /* PINCache */;
-			targetProxy = 99B2461A9C4669412E5D44A129C36420 /* PBXContainerItemProxy */;
-		};
-		BCABB1A40EFE88D41F8DE2FE4D790D6F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = PINCache;
-			target = 9AB92A2AE7314091D107EAC8561B8977 /* PINCache */;
-			targetProxy = 9F972016FCC0B6D04ED2FFE9129BAF1B /* PBXContainerItemProxy */;
-		};
-		FFA12F05101B061D1EB4E47B557CBD15 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = PINRemoteImage;
-			target = C5E03293270BDB15418FDBB002EF8974 /* PINRemoteImage */;
-			targetProxy = ADDD132774DFCCDA2F3CF2F8B58830A4 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
-/* Begin XCBuildConfiguration section */
-		61E9C960176A58563D21517D299990A4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				STRIP_INSTALLED_PRODUCT = NO;
-				SYMROOT = "${SRCROOT}/../build";
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-			};
-			name = Debug;
-		};
-		89E5CB7A6AD52AD3E2D85FE75A32EC70 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B94669977B3DA1EAD88B894046C3E843 /* PINCache.xcconfig */;
-			buildSettings = {
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/PINCache/PINCache-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/PINCache/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/PINCache/PINCache.modulemap";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = PINCache;
-				SDKROOT = appletvos;
-				SKIP_INSTALL = YES;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		A03CF990983C17BF42B22BEB48CB2EB1 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 69F0E81375A7B90A6352B0991CCDADEB /* PINRemoteImage.xcconfig */;
-			buildSettings = {
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/PINRemoteImage/PINRemoteImage-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/PINRemoteImage/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/PINRemoteImage/PINRemoteImage.modulemap";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = PINRemoteImage;
-				SDKROOT = appletvos;
-				SKIP_INSTALL = YES;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		A2E9C85BEBB9E76E6C0CF04B94A6618B /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5F2D5E87B882076993986791F6F82246 /* Pods-PINRemoteImage.tvOSExample.release.xcconfig */;
-			buildSettings = {
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				INFOPLIST_FILE = "Target Support Files/Pods-PINRemoteImage.tvOSExample/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-PINRemoteImage.tvOSExample/Pods-PINRemoteImage.tvOSExample.modulemap";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_NAME = Pods_PINRemoteImage_tvOSExample;
-				SDKROOT = appletvos;
-				SKIP_INSTALL = YES;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		A3A9518EB05F2F44BC4CA4E537E142BE /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 69F0E81375A7B90A6352B0991CCDADEB /* PINRemoteImage.xcconfig */;
-			buildSettings = {
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/PINRemoteImage/PINRemoteImage-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/PINRemoteImage/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/PINRemoteImage/PINRemoteImage.modulemap";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = PINRemoteImage;
-				SDKROOT = appletvos;
-				SKIP_INSTALL = YES;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		C332B185519D08E2641ECF2E00474E29 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = YES;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				STRIP_INSTALLED_PRODUCT = NO;
-				SYMROOT = "${SRCROOT}/../build";
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		D71B4E44D01D873509D7DC06380AECD5 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = AE807D4E0267B44EFBD262551F35164B /* Pods-PINRemoteImage.tvOSExample.debug.xcconfig */;
-			buildSettings = {
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				INFOPLIST_FILE = "Target Support Files/Pods-PINRemoteImage.tvOSExample/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-PINRemoteImage.tvOSExample/Pods-PINRemoteImage.tvOSExample.modulemap";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_NAME = Pods_PINRemoteImage_tvOSExample;
-				SDKROOT = appletvos;
-				SKIP_INSTALL = YES;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		F83713F743A533068A71BADF739262D6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B94669977B3DA1EAD88B894046C3E843 /* PINCache.xcconfig */;
-			buildSettings = {
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/PINCache/PINCache-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/PINCache/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/PINCache/PINCache.modulemap";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = PINCache;
-				SDKROOT = appletvos;
-				SKIP_INSTALL = YES;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-/* End XCBuildConfiguration section */
-
-/* Begin XCConfigurationList section */
-		2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				61E9C960176A58563D21517D299990A4 /* Debug */,
-				C332B185519D08E2641ECF2E00474E29 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		38EB782EDBDAD312BDDBDADE8B0A0FCE /* Build configuration list for PBXNativeTarget "PINRemoteImage" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A3A9518EB05F2F44BC4CA4E537E142BE /* Debug */,
-				A03CF990983C17BF42B22BEB48CB2EB1 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		6541F6623B6445D08A0C0B751C1E4A0F /* Build configuration list for PBXNativeTarget "Pods-PINRemoteImage.tvOSExample" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D71B4E44D01D873509D7DC06380AECD5 /* Debug */,
-				A2E9C85BEBB9E76E6C0CF04B94A6618B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FF497A22C21368DD9C91A3DAD14610CF /* Build configuration list for PBXNativeTarget "PINCache" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F83713F743A533068A71BADF739262D6 /* Debug */,
-				89E5CB7A6AD52AD3E2D85FE75A32EC70 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-/* End XCConfigurationList section */
-	};
-	rootObject = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>archiveVersion</key>
+	<string>1</string>
+	<key>classes</key>
+	<dict/>
+	<key>objectVersion</key>
+	<string>46</string>
+	<key>objects</key>
+	<dict>
+		<key>04F2AB062FA9A6A7DFBE0E80CF04F643</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINRemoteImageDownloadTask.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>06DF600D26A69C104B62356BBBAA1AB7</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINAlternateRepresentationProvider.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>0AF58E0E33EE5A8DBA60452D7814EC83</key>
+		<dict>
+			<key>fileRef</key>
+			<string>EA420579FAB9AC17343639D1A27613F2</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>0BBEB7022039F54EC4DBF7D0C4223002</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>name</key>
+			<string>PINDiskCache.m</string>
+			<key>path</key>
+			<string>PINCache/PINDiskCache.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>0C8E36CBE8E5106F618C090EA4C37794</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>wrapper.framework</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>PINRemoteImage.framework</string>
+			<key>path</key>
+			<string>PINRemoteImage.framework</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>10BCB7F6C6B620CAD24CF5366901D73C</key>
+		<dict>
+			<key>fileRef</key>
+			<string>155B8DDCA4FF78AA4A757B2336D7E3C4</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>11473D54E0AF2947A06F7ACF84177201</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>D751AF7639FAED47E8FD5F4BDB95BF75</string>
+				<string>D03443500F34525BB38F3389AA9028CE</string>
+				<string>243A8C71306E002289D5A0587B5B7C87</string>
+				<string>1942EC70E21E09C188714F234758D17F</string>
+				<string>9B90870ACE1FD27E26DC497F2962BE91</string>
+				<string>2DD8F3B937FA6737C1BE5748F70B33A3</string>
+				<string>E2256C77948F4EA994FBE30F6DBE7337</string>
+				<string>6F0C0BA097E00AE1F3CBB4272B8A51FE</string>
+				<string>B86E50521010735633ADEBD3FE834023</string>
+				<string>2084B279956C797F01AC94B9B67E974D</string>
+				<string>62BA60FD5F9E8857992E4A2FC050EFA9</string>
+				<string>AF2F6DD4F01B2FE053FE83FE469E3578</string>
+				<string>C871BCBF306DCC0F6D55EDBAC9E1A450</string>
+				<string>30FA49F4EC4310ABC018BCAB1F7723E1</string>
+				<string>D1FE7949A7008AC1541C642C981FD730</string>
+				<string>F4DF8A0337AD15CBA4409403715B97E3</string>
+				<string>5092734069FF4B082800687A653CDB39</string>
+				<string>3705DD176DD2DD44F5C47087D55B01E5</string>
+				<string>7EA86068C4B5A86EFF8F2B44D17947FD</string>
+				<string>FEFDD108C6A774521A3006C7CFF7C1F8</string>
+				<string>0AF58E0E33EE5A8DBA60452D7814EC83</string>
+			</array>
+			<key>isa</key>
+			<string>PBXHeadersBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>1178C76713EE167389861F46BD78DCB2</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>wrapper.framework</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>Pods_PINRemoteImage_tvOSExample.framework</string>
+			<key>path</key>
+			<string>Pods_PINRemoteImage_tvOSExample.framework</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>155B8DDCA4FF78AA4A757B2336D7E3C4</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINRemoteImageMemoryContainer.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>1738D2A40C06932E6883BBC4C967A767</key>
+		<dict>
+			<key>fileRef</key>
+			<string>850B820D750CB19927F88B96D3CF659A</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>1942EC70E21E09C188714F234758D17F</key>
+		<dict>
+			<key>fileRef</key>
+			<string>1C33FA65302E368A7B57DE2337D377AC</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>1C33FA65302E368A7B57DE2337D377AC</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINDataTaskOperation.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>1E466E748220A0BE2FB7A2D5953CAF2C</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.plist.xml</string>
+			<key>path</key>
+			<string>Info.plist</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>1E9FDEB0B1FE0C56C92BED71616C87C2</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>60D5ABB57EADD9CF1D377BE23AA95949</string>
+				<string>4A4727FC421C430355FABD10CED454F4</string>
+				<string>FDA38E88879464DEF6831AAE57B7698D</string>
+				<string>9A1A61631E6AD9D35E39EC002039E76B</string>
+				<string>A7BB93915A1CA11909AB21A9C7A9CF68</string>
+				<string>353BA4B2BECC67835B7F88610F310CE2</string>
+				<string>FDCA32E17F1B744831555C06308FA3ED</string>
+				<string>C92FF86DBF4E6E28CE6D7F1413C1D9D5</string>
+				<string>AC8758DE7CD1430B63A6B3CAD76B7BBF</string>
+				<string>1738D2A40C06932E6883BBC4C967A767</string>
+				<string>8A75C8574BF013871ED8F4CC54322B2D</string>
+				<string>4910C7A88337E574F6F0879BE4A81A60</string>
+				<string>7264DFE6AF76BAF4186BC7F579A735FF</string>
+				<string>10BCB7F6C6B620CAD24CF5366901D73C</string>
+				<string>5E465ADEF647795030B34F9E776282BD</string>
+				<string>512C47F3FD5788627127344160F705FF</string>
+				<string>79B8C8CF6D5B041F4990B052428E439B</string>
+				<string>F5374B54826F44CBB8C7CC4C38667795</string>
+				<string>39F66C089389B38F14DFA134E68BE855</string>
+			</array>
+			<key>isa</key>
+			<string>PBXSourcesBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>2084B279956C797F01AC94B9B67E974D</key>
+		<dict>
+			<key>fileRef</key>
+			<string>70DCFE9E4E331D752C269EDFBFED4FAE</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>243A8C71306E002289D5A0587B5B7C87</key>
+		<dict>
+			<key>fileRef</key>
+			<string>C882A460D1922D2BDDE214DCB6B3131F</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>2C29CE313795DE4CFF398C1D71394C7D</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>EB1579102405BDD7C1574308EC467AA1</string>
+			</array>
+			<key>isa</key>
+			<string>PBXFrameworksBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>2D8E8EC45A3A1A1D94AE762CB5028504</key>
+		<dict>
+			<key>buildConfigurations</key>
+			<array>
+				<string>61E9C960176A58563D21517D299990A4</string>
+				<string>C332B185519D08E2641ECF2E00474E29</string>
+			</array>
+			<key>defaultConfigurationIsVisible</key>
+			<string>0</string>
+			<key>defaultConfigurationName</key>
+			<string>Release</string>
+			<key>isa</key>
+			<string>XCConfigurationList</string>
+		</dict>
+		<key>2DD8F3B937FA6737C1BE5748F70B33A3</key>
+		<dict>
+			<key>fileRef</key>
+			<string>B88388262721BF812A2ED0DFC0D82201</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>30FA49F4EC4310ABC018BCAB1F7723E1</key>
+		<dict>
+			<key>fileRef</key>
+			<string>A3AAB352D1E7F55DBDF66DF1EF614A66</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>31761D7D4756260666C1444A39EA491C</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINCache-dummy.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>3437B95AA2CBE7490149EEFA83978A7B</key>
+		<dict>
+			<key>buildConfigurations</key>
+			<array>
+				<string>47DCACFE9EA08FFC1086F3F5D8082B50</string>
+				<string>896F6415029D158822134FEC217A3EEC</string>
+			</array>
+			<key>defaultConfigurationIsVisible</key>
+			<string>0</string>
+			<key>defaultConfigurationName</key>
+			<string>Release</string>
+			<key>isa</key>
+			<string>XCConfigurationList</string>
+		</dict>
+		<key>346F53C38695BBB2F87EE155141F9D96</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>wrapper.framework</string>
+			<key>name</key>
+			<string>Foundation.framework</string>
+			<key>path</key>
+			<string>Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS9.0.sdk/System/Library/Frameworks/Foundation.framework</string>
+			<key>sourceTree</key>
+			<string>DEVELOPER_DIR</string>
+		</dict>
+		<key>353BA4B2BECC67835B7F88610F310CE2</key>
+		<dict>
+			<key>fileRef</key>
+			<string>3DB488DA948A5B33C3CA78FF57DB7E3E</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>366A9C137237118C71B9615F2A8CDA28</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>wrapper.framework</string>
+			<key>name</key>
+			<string>ImageIO.framework</string>
+			<key>path</key>
+			<string>Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS9.0.sdk/System/Library/Frameworks/ImageIO.framework</string>
+			<key>sourceTree</key>
+			<string>DEVELOPER_DIR</string>
+		</dict>
+		<key>36AE58D4844DFD26151C6A1803C91C55</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>ED38D82EF154E02E73484E0DE01C9DE6</string>
+				<string>6E4B34927F601D8E1138FDAA17909E5F</string>
+				<string>BAC33ACD79895192DBE3CFC2E8FE044E</string>
+				<string>31761D7D4756260666C1444A39EA491C</string>
+				<string>7B2FF995DE107406E1B42A2EACC61AB7</string>
+				<string>5A002565FAB8E473E1D62EF38FBEF8E9</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Support Files</string>
+			<key>path</key>
+			<string>../Target Support Files/Pods-PINRemoteImage.tvOSExample-PINCache</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>3705DD176DD2DD44F5C47087D55B01E5</key>
+		<dict>
+			<key>fileRef</key>
+			<string>DF90A5B20B3299BD235D40DB84C3034C</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>378CB9C04F32ACE5AEFF45752FFD439A</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>5494200DC3AAB386529CE8F470E9E21D</string>
+				<string>F31EC5948759058807C5B0298D21A6DC</string>
+				<string>F4F85C3A97C5DA45547C0F195192BD7E</string>
+				<string>F4DBD6B7FC84ADB109BD7E87A9B3B3B1</string>
+				<string>3E9EA84A849BD2DCE6B6372A7209B76E</string>
+				<string>6B2C3B18326AFCA937340FD7A91687E5</string>
+				<string>90554EAEB5A49F2B4507524353FE96F8</string>
+				<string>9720749F9C88E2E81B1AEE11AF25D76E</string>
+				<string>AE807D4E0267B44EFBD262551F35164B</string>
+				<string>5F2D5E87B882076993986791F6F82246</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Pods-PINRemoteImage.tvOSExample</string>
+			<key>path</key>
+			<string>Target Support Files/Pods-PINRemoteImage.tvOSExample</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>3818FFD59B9280FAAE8521513DC6C260</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>8AA404D33E867092DC602FDBE54A1F1F</string>
+			</array>
+			<key>isa</key>
+			<string>PBXHeadersBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>383BAF5A24DB14AA6FC63E1835BE8E6E</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteImage.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>39DB59E27FDC5F90BF2320C296E579DA</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteImageProcessorTask.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>39F66C089389B38F14DFA134E68BE855</key>
+		<dict>
+			<key>fileRef</key>
+			<string>9A36FE6EEC065E0AAAA97654BF17C86F</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>3AEE47E37DDBCCA0A8637B64B45A0709</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>5906762DF0D976C30134CC0D6FFEC84A</string>
+				<string>06DF600D26A69C104B62356BBBAA1AB7</string>
+				<string>1C33FA65302E368A7B57DE2337D377AC</string>
+				<string>F10FE054454442DBEB1891FDE3701A79</string>
+				<string>FE640665B9A81A36DCAFBA0839F34752</string>
+				<string>E7B039FBC8C7D023DC2B6CB6932BA302</string>
+				<string>383BAF5A24DB14AA6FC63E1835BE8E6E</string>
+				<string>70DCFE9E4E331D752C269EDFBFED4FAE</string>
+				<string>542F131095FDB3897AE194B8622836EC</string>
+				<string>65F5E8E4F4DA11CA91DDD14A3E737A12</string>
+				<string>850B820D750CB19927F88B96D3CF659A</string>
+				<string>9FCFF604178089B97C33B127465DF147</string>
+				<string>04F2AB062FA9A6A7DFBE0E80CF04F643</string>
+				<string>73A4A9D58C6E6E33453CDEB22490019F</string>
+				<string>A3AAB352D1E7F55DBDF66DF1EF614A66</string>
+				<string>A52A2BDE6FB61821C892B6C647C3C4A9</string>
+				<string>A2E0B8887F8B1B6EB39FA70ECA3B9CA2</string>
+				<string>95CBFFAE81B4B38EFCBD8D1A00A1050C</string>
+				<string>E07687FA3C93C4B992C6A1AE1646A03A</string>
+				<string>155B8DDCA4FF78AA4A757B2336D7E3C4</string>
+				<string>39DB59E27FDC5F90BF2320C296E579DA</string>
+				<string>9C0749D63BED517FCFADC8AA2B4F259B</string>
+				<string>DF90A5B20B3299BD235D40DB84C3034C</string>
+				<string>3B611BDDAD801C98748519080E8D12EF</string>
+				<string>DFE1B9AC881D0D19F76F2CB947F08C09</string>
+				<string>BFEA358546512593FD1354A8DD094545</string>
+				<string>C4ED19873054E6FEEB95F8188272E918</string>
+				<string>FBCF761B6C65AF87C324279281960D83</string>
+				<string>C7F905F40A32E917D8411FF2BF9C2109</string>
+				<string>CBB1EE859FD29C8490ACB545D4DC6ED7</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Classes</string>
+			<key>path</key>
+			<string>Classes</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>3B611BDDAD801C98748519080E8D12EF</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINRemoteImageTask.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>3D8A1536DF1F57D95589FE810B7A58DD</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXTargetDependency</string>
+			<key>name</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINCache</string>
+			<key>target</key>
+			<string>F89BEFD0A7CC0797936BF229DC2BD11E</string>
+			<key>targetProxy</key>
+			<string>644283B8A312162A25737CF6AD946A0E</string>
+		</dict>
+		<key>3DB488DA948A5B33C3CA78FF57DB7E3E</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINImage+WebP.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>3E9EA84A849BD2DCE6B6372A7209B76E</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>Pods-PINRemoteImage.tvOSExample-dummy.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>4408507DE1BB5DE033001EFB3826AEF7</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>3AEE47E37DDBCCA0A8637B64B45A0709</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Pod</string>
+			<key>path</key>
+			<string>Pod</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>46389BE87B3F40F6233B39E15FC0AE33</key>
+		<dict>
+			<key>fileRef</key>
+			<string>3E9EA84A849BD2DCE6B6372A7209B76E</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>47DCACFE9EA08FFC1086F3F5D8082B50</key>
+		<dict>
+			<key>baseConfigurationReference</key>
+			<string>AE807D4E0267B44EFBD262551F35164B</string>
+			<key>buildSettings</key>
+			<dict>
+				<key>CURRENT_PROJECT_VERSION</key>
+				<string>1</string>
+				<key>DEFINES_MODULE</key>
+				<string>YES</string>
+				<key>DYLIB_COMPATIBILITY_VERSION</key>
+				<string>1</string>
+				<key>DYLIB_CURRENT_VERSION</key>
+				<string>1</string>
+				<key>DYLIB_INSTALL_NAME_BASE</key>
+				<string>@rpath</string>
+				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
+				<string>YES</string>
+				<key>INFOPLIST_FILE</key>
+				<string>Target Support Files/Pods-PINRemoteImage.tvOSExample/Info.plist</string>
+				<key>INSTALL_PATH</key>
+				<string>$(LOCAL_LIBRARY_DIR)/Frameworks</string>
+				<key>MACH_O_TYPE</key>
+				<string>staticlib</string>
+				<key>MODULEMAP_FILE</key>
+				<string>Target Support Files/Pods-PINRemoteImage.tvOSExample/Pods-PINRemoteImage.tvOSExample.modulemap</string>
+				<key>MTL_ENABLE_DEBUG_INFO</key>
+				<string>YES</string>
+				<key>OTHER_LDFLAGS</key>
+				<string></string>
+				<key>OTHER_LIBTOOLFLAGS</key>
+				<string></string>
+				<key>PODS_ROOT</key>
+				<string>$(SRCROOT)</string>
+				<key>PRODUCT_NAME</key>
+				<string>Pods_PINRemoteImage_tvOSExample</string>
+				<key>SDKROOT</key>
+				<string>appletvos</string>
+				<key>SKIP_INSTALL</key>
+				<string>YES</string>
+				<key>TVOS_DEPLOYMENT_TARGET</key>
+				<string>9.0</string>
+				<key>VERSIONING_SYSTEM</key>
+				<string>apple-generic</string>
+				<key>VERSION_INFO_PREFIX</key>
+				<string></string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Debug</string>
+		</dict>
+		<key>47E2BC4ACCA00A13437C0C0368FFBE6A</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>NSData+ImageDetectors.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>4910C7A88337E574F6F0879BE4A81A60</key>
+		<dict>
+			<key>fileRef</key>
+			<string>A52A2BDE6FB61821C892B6C647C3C4A9</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>4A4727FC421C430355FABD10CED454F4</key>
+		<dict>
+			<key>fileRef</key>
+			<string>06DF600D26A69C104B62356BBBAA1AB7</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>4F3090D1A95E67E0CB96FD93F97C948C</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXTargetDependency</string>
+			<key>name</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINRemoteImage</string>
+			<key>target</key>
+			<string>C7507E3FAB7C1052089CA5564CF81E70</string>
+			<key>targetProxy</key>
+			<string>E12660042648FB5A145EF4DA2A6D7EB0</string>
+		</dict>
+		<key>5092734069FF4B082800687A653CDB39</key>
+		<dict>
+			<key>fileRef</key>
+			<string>39DB59E27FDC5F90BF2320C296E579DA</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>512C47F3FD5788627127344160F705FF</key>
+		<dict>
+			<key>fileRef</key>
+			<string>3B611BDDAD801C98748519080E8D12EF</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>51A52926B51BFCD8546D8C98E3ECFC76</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINRemoteImage.modulemap</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>51DAA8DDAB0D8413B4EF7ED602F6F3BB</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>378CB9C04F32ACE5AEFF45752FFD439A</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Targets Support Files</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>542F131095FDB3897AE194B8622836EC</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINRemoteImageCallbacks.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>547C46A697CBBA6BF9D73E6ADC44F788</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>F760DCF9BE83B2E335AFE09E85AD8AB5</string>
+				<string>65B2A4295D29FF4ED45CA5E584EC121D</string>
+				<string>ADB3285C96A8EBAD74ED646751A7B80A</string>
+				<string>CD8ED95DDF988E5FBA349E3AF62D0322</string>
+			</array>
+			<key>isa</key>
+			<string>PBXSourcesBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>5494200DC3AAB386529CE8F470E9E21D</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.plist.xml</string>
+			<key>path</key>
+			<string>Info.plist</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>563CC0BC0B909C5DA1022DA92420BAF0</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>NSData+ImageDetectors.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>5808499DF2CC1B545E029A99AD1904D3</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>PINCache.h</string>
+			<key>path</key>
+			<string>PINCache/PINCache.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>5906762DF0D976C30134CC0D6FFEC84A</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINAlternateRepresentationProvider.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>5A002565FAB8E473E1D62EF38FBEF8E9</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINCache-umbrella.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>5DC2658D3440262A60A15BB24827915C</key>
+		<dict>
+			<key>fileRef</key>
+			<string>5808499DF2CC1B545E029A99AD1904D3</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>5E465ADEF647795030B34F9E776282BD</key>
+		<dict>
+			<key>fileRef</key>
+			<string>9C0749D63BED517FCFADC8AA2B4F259B</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>5EBE1397EB2A8EE606852B58D88396C1</key>
+		<dict>
+			<key>baseConfigurationReference</key>
+			<string>D080E63FD8ADB53B3D48D443AE972630</string>
+			<key>buildSettings</key>
+			<dict>
+				<key>CURRENT_PROJECT_VERSION</key>
+				<string>1</string>
+				<key>DEFINES_MODULE</key>
+				<string>YES</string>
+				<key>DYLIB_COMPATIBILITY_VERSION</key>
+				<string>1</string>
+				<key>DYLIB_CURRENT_VERSION</key>
+				<string>1</string>
+				<key>DYLIB_INSTALL_NAME_BASE</key>
+				<string>@rpath</string>
+				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
+				<string>YES</string>
+				<key>GCC_PREFIX_HEADER</key>
+				<string>Target Support Files/Pods-PINRemoteImage.tvOSExample-PINRemoteImage/Pods-PINRemoteImage.tvOSExample-PINRemoteImage-prefix.pch</string>
+				<key>INFOPLIST_FILE</key>
+				<string>Target Support Files/Pods-PINRemoteImage.tvOSExample-PINRemoteImage/Info.plist</string>
+				<key>INSTALL_PATH</key>
+				<string>$(LOCAL_LIBRARY_DIR)/Frameworks</string>
+				<key>MODULEMAP_FILE</key>
+				<string>Target Support Files/Pods-PINRemoteImage.tvOSExample-PINRemoteImage/Pods-PINRemoteImage.tvOSExample-PINRemoteImage.modulemap</string>
+				<key>MTL_ENABLE_DEBUG_INFO</key>
+				<string>YES</string>
+				<key>PRODUCT_NAME</key>
+				<string>PINRemoteImage</string>
+				<key>SDKROOT</key>
+				<string>appletvos</string>
+				<key>SKIP_INSTALL</key>
+				<string>YES</string>
+				<key>TVOS_DEPLOYMENT_TARGET</key>
+				<string>9.0</string>
+				<key>VERSIONING_SYSTEM</key>
+				<string>apple-generic</string>
+				<key>VERSION_INFO_PREFIX</key>
+				<string></string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Debug</string>
+		</dict>
+		<key>5F0D33FAFA4106D8E53CBBF1C3C5FA62</key>
+		<dict>
+			<key>fileRef</key>
+			<string>8B329BA18F22952E6640CA35AF511745</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>5F2D5E87B882076993986791F6F82246</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>path</key>
+			<string>Pods-PINRemoteImage.tvOSExample.release.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>608C4A215B8CB9193748366E074C95EF</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>BF5F40786E5253179ECE505B730A39F9</string>
+				<string>A00C17E2E2F5AD6FB731C2307218BD0F</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>PINRemoteImage</string>
+			<key>path</key>
+			<string>../..</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>60D5ABB57EADD9CF1D377BE23AA95949</key>
+		<dict>
+			<key>fileRef</key>
+			<string>47E2BC4ACCA00A13437C0C0368FFBE6A</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>61E9C960176A58563D21517D299990A4</key>
+		<dict>
+			<key>buildSettings</key>
+			<dict>
+				<key>ALWAYS_SEARCH_USER_PATHS</key>
+				<string>NO</string>
+				<key>CLANG_CXX_LANGUAGE_STANDARD</key>
+				<string>gnu++0x</string>
+				<key>CLANG_CXX_LIBRARY</key>
+				<string>libc++</string>
+				<key>CLANG_ENABLE_MODULES</key>
+				<string>YES</string>
+				<key>CLANG_ENABLE_OBJC_ARC</key>
+				<string>YES</string>
+				<key>CLANG_WARN_BOOL_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_CONSTANT_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_DIRECT_OBJC_ISA_USAGE</key>
+				<string>YES</string>
+				<key>CLANG_WARN_EMPTY_BODY</key>
+				<string>YES</string>
+				<key>CLANG_WARN_ENUM_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_INT_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_OBJC_ROOT_CLASS</key>
+				<string>YES</string>
+				<key>CLANG_WARN_UNREACHABLE_CODE</key>
+				<string>YES</string>
+				<key>CLANG_WARN__DUPLICATE_METHOD_MATCH</key>
+				<string>YES</string>
+				<key>COPY_PHASE_STRIP</key>
+				<string>NO</string>
+				<key>GCC_C_LANGUAGE_STANDARD</key>
+				<string>gnu99</string>
+				<key>GCC_DYNAMIC_NO_PIC</key>
+				<string>NO</string>
+				<key>GCC_OPTIMIZATION_LEVEL</key>
+				<string>0</string>
+				<key>GCC_PREPROCESSOR_DEFINITIONS</key>
+				<array>
+					<string>DEBUG=1</string>
+					<string>$(inherited)</string>
+				</array>
+				<key>GCC_SYMBOLS_PRIVATE_EXTERN</key>
+				<string>NO</string>
+				<key>GCC_WARN_64_TO_32_BIT_CONVERSION</key>
+				<string>YES</string>
+				<key>GCC_WARN_ABOUT_RETURN_TYPE</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNDECLARED_SELECTOR</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNINITIALIZED_AUTOS</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNUSED_FUNCTION</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNUSED_VARIABLE</key>
+				<string>YES</string>
+				<key>ONLY_ACTIVE_ARCH</key>
+				<string>YES</string>
+				<key>STRIP_INSTALLED_PRODUCT</key>
+				<string>NO</string>
+				<key>SYMROOT</key>
+				<string>${SRCROOT}/../build</string>
+				<key>TVOS_DEPLOYMENT_TARGET</key>
+				<string>9.0</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Debug</string>
+		</dict>
+		<key>62BA60FD5F9E8857992E4A2FC050EFA9</key>
+		<dict>
+			<key>fileRef</key>
+			<string>65F5E8E4F4DA11CA91DDD14A3E737A12</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>644283B8A312162A25737CF6AD946A0E</key>
+		<dict>
+			<key>containerPortal</key>
+			<string>D41D8CD98F00B204E9800998ECF8427E</string>
+			<key>isa</key>
+			<string>PBXContainerItemProxy</string>
+			<key>proxyType</key>
+			<string>1</string>
+			<key>remoteGlobalIDString</key>
+			<string>F89BEFD0A7CC0797936BF229DC2BD11E</string>
+			<key>remoteInfo</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINCache</string>
+		</dict>
+		<key>65B2A4295D29FF4ED45CA5E584EC121D</key>
+		<dict>
+			<key>fileRef</key>
+			<string>0BBEB7022039F54EC4DBF7D0C4223002</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>65F5E8E4F4DA11CA91DDD14A3E737A12</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteImageCategoryManager.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>688E4DCFB0E1FBEC8C8C73126305AA1C</key>
+		<dict>
+			<key>fileRef</key>
+			<string>83497A28502289FBCA5F4064F09288A1</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>6B2C3B18326AFCA937340FD7A91687E5</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.script.sh</string>
+			<key>path</key>
+			<string>Pods-PINRemoteImage.tvOSExample-frameworks.sh</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>6B762A2439C03034D53DBE2FAC1E3E5A</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINImageView+PINRemoteImage.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>6E4B34927F601D8E1138FDAA17909E5F</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINCache.modulemap</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>6ED8D732E24A899406122627347B0FBE</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>688E4DCFB0E1FBEC8C8C73126305AA1C</string>
+				<string>7AA70721CA1DB7C21C541D5820B91C6D</string>
+				<string>CC5300DDBAFE181F696E5CCC2BA5AC48</string>
+				<string>BCF184031BE6B519E8F9CBBBFC3C7801</string>
+				<string>76E1340731E93FF556CF8FF370337F3A</string>
+			</array>
+			<key>isa</key>
+			<string>PBXFrameworksBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>6F0C0BA097E00AE1F3CBB4272B8A51FE</key>
+		<dict>
+			<key>fileRef</key>
+			<string>FE640665B9A81A36DCAFBA0839F34752</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>70DCFE9E4E331D752C269EDFBFED4FAE</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteImageCallbacks.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>711D52235B0BC670BE93BBC6EDF6DBD6</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>wrapper.framework</string>
+			<key>name</key>
+			<string>UIKit.framework</string>
+			<key>path</key>
+			<string>Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS9.0.sdk/System/Library/Frameworks/UIKit.framework</string>
+			<key>sourceTree</key>
+			<string>DEVELOPER_DIR</string>
+		</dict>
+		<key>7264DFE6AF76BAF4186BC7F579A735FF</key>
+		<dict>
+			<key>fileRef</key>
+			<string>95CBFFAE81B4B38EFCBD8D1A00A1050C</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>73A4A9D58C6E6E33453CDEB22490019F</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteImageMacros.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>76E1340731E93FF556CF8FF370337F3A</key>
+		<dict>
+			<key>fileRef</key>
+			<string>711D52235B0BC670BE93BBC6EDF6DBD6</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>79B8C8CF6D5B041F4990B052428E439B</key>
+		<dict>
+			<key>fileRef</key>
+			<string>BFEA358546512593FD1354A8DD094545</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>7A0B379E1F4CA0B5215A71D71E307C51</key>
+		<dict>
+			<key>fileRef</key>
+			<string>D091968E2C5439A8A6D9A229875CE9D3</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>7AA70721CA1DB7C21C541D5820B91C6D</key>
+		<dict>
+			<key>fileRef</key>
+			<string>346F53C38695BBB2F87EE155141F9D96</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>7B2FF995DE107406E1B42A2EACC61AB7</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINCache-prefix.pch</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>7DB346D0F39D3F0E887471402A8071AB</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>BA6428E9F66FD5A23C0A2E06ED26CD2F</string>
+				<string>B1A11A7DE699B711ECE8F5987072C1D1</string>
+				<string>B4C1B817EFFB094B26E198EF7B35892E</string>
+				<string>E07713D6BECC3D3DF7750BC32A6D3A01</string>
+				<string>8AE0A6730B7EAB6872C87B0594ABC3A5</string>
+				<string>51DAA8DDAB0D8413B4EF7ED602F6F3BB</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>7EA86068C4B5A86EFF8F2B44D17947FD</key>
+		<dict>
+			<key>fileRef</key>
+			<string>DFE1B9AC881D0D19F76F2CB947F08C09</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>7F762BC83B1C5131ACFA008AB85652DE</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>46389BE87B3F40F6233B39E15FC0AE33</string>
+			</array>
+			<key>isa</key>
+			<string>PBXSourcesBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>83497A28502289FBCA5F4064F09288A1</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>wrapper.framework</string>
+			<key>name</key>
+			<string>Accelerate.framework</string>
+			<key>path</key>
+			<string>Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS9.0.sdk/System/Library/Frameworks/Accelerate.framework</string>
+			<key>sourceTree</key>
+			<string>DEVELOPER_DIR</string>
+		</dict>
+		<key>850B820D750CB19927F88B96D3CF659A</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINRemoteImageCategoryManager.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>896F6415029D158822134FEC217A3EEC</key>
+		<dict>
+			<key>baseConfigurationReference</key>
+			<string>5F2D5E87B882076993986791F6F82246</string>
+			<key>buildSettings</key>
+			<dict>
+				<key>CURRENT_PROJECT_VERSION</key>
+				<string>1</string>
+				<key>DEFINES_MODULE</key>
+				<string>YES</string>
+				<key>DYLIB_COMPATIBILITY_VERSION</key>
+				<string>1</string>
+				<key>DYLIB_CURRENT_VERSION</key>
+				<string>1</string>
+				<key>DYLIB_INSTALL_NAME_BASE</key>
+				<string>@rpath</string>
+				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
+				<string>YES</string>
+				<key>INFOPLIST_FILE</key>
+				<string>Target Support Files/Pods-PINRemoteImage.tvOSExample/Info.plist</string>
+				<key>INSTALL_PATH</key>
+				<string>$(LOCAL_LIBRARY_DIR)/Frameworks</string>
+				<key>MACH_O_TYPE</key>
+				<string>staticlib</string>
+				<key>MODULEMAP_FILE</key>
+				<string>Target Support Files/Pods-PINRemoteImage.tvOSExample/Pods-PINRemoteImage.tvOSExample.modulemap</string>
+				<key>MTL_ENABLE_DEBUG_INFO</key>
+				<string>NO</string>
+				<key>OTHER_LDFLAGS</key>
+				<string></string>
+				<key>OTHER_LIBTOOLFLAGS</key>
+				<string></string>
+				<key>PODS_ROOT</key>
+				<string>$(SRCROOT)</string>
+				<key>PRODUCT_NAME</key>
+				<string>Pods_PINRemoteImage_tvOSExample</string>
+				<key>SDKROOT</key>
+				<string>appletvos</string>
+				<key>SKIP_INSTALL</key>
+				<string>YES</string>
+				<key>TVOS_DEPLOYMENT_TARGET</key>
+				<string>9.0</string>
+				<key>VERSIONING_SYSTEM</key>
+				<string>apple-generic</string>
+				<key>VERSION_INFO_PREFIX</key>
+				<string></string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Release</string>
+		</dict>
+		<key>8A75C8574BF013871ED8F4CC54322B2D</key>
+		<dict>
+			<key>fileRef</key>
+			<string>04F2AB062FA9A6A7DFBE0E80CF04F643</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>8AA404D33E867092DC602FDBE54A1F1F</key>
+		<dict>
+			<key>fileRef</key>
+			<string>9720749F9C88E2E81B1AEE11AF25D76E</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>8AE0A6730B7EAB6872C87B0594ABC3A5</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>9B71428B31BD826E391AB6F7278306F4</string>
+				<string>0C8E36CBE8E5106F618C090EA4C37794</string>
+				<string>1178C76713EE167389861F46BD78DCB2</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Products</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>8AFDBC0DF3E6109D63FA1DA4705ADE63</key>
+		<dict>
+			<key>baseConfigurationReference</key>
+			<string>BAC33ACD79895192DBE3CFC2E8FE044E</string>
+			<key>buildSettings</key>
+			<dict>
+				<key>CURRENT_PROJECT_VERSION</key>
+				<string>1</string>
+				<key>DEFINES_MODULE</key>
+				<string>YES</string>
+				<key>DYLIB_COMPATIBILITY_VERSION</key>
+				<string>1</string>
+				<key>DYLIB_CURRENT_VERSION</key>
+				<string>1</string>
+				<key>DYLIB_INSTALL_NAME_BASE</key>
+				<string>@rpath</string>
+				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
+				<string>YES</string>
+				<key>GCC_PREFIX_HEADER</key>
+				<string>Target Support Files/Pods-PINRemoteImage.tvOSExample-PINCache/Pods-PINRemoteImage.tvOSExample-PINCache-prefix.pch</string>
+				<key>INFOPLIST_FILE</key>
+				<string>Target Support Files/Pods-PINRemoteImage.tvOSExample-PINCache/Info.plist</string>
+				<key>INSTALL_PATH</key>
+				<string>$(LOCAL_LIBRARY_DIR)/Frameworks</string>
+				<key>MODULEMAP_FILE</key>
+				<string>Target Support Files/Pods-PINRemoteImage.tvOSExample-PINCache/Pods-PINRemoteImage.tvOSExample-PINCache.modulemap</string>
+				<key>MTL_ENABLE_DEBUG_INFO</key>
+				<string>NO</string>
+				<key>PRODUCT_NAME</key>
+				<string>PINCache</string>
+				<key>SDKROOT</key>
+				<string>appletvos</string>
+				<key>SKIP_INSTALL</key>
+				<string>YES</string>
+				<key>TVOS_DEPLOYMENT_TARGET</key>
+				<string>9.0</string>
+				<key>VERSIONING_SYSTEM</key>
+				<string>apple-generic</string>
+				<key>VERSION_INFO_PREFIX</key>
+				<string></string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Release</string>
+		</dict>
+		<key>8B329BA18F22952E6640CA35AF511745</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>PINDiskCache.h</string>
+			<key>path</key>
+			<string>PINCache/PINDiskCache.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>90554EAEB5A49F2B4507524353FE96F8</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.script.sh</string>
+			<key>path</key>
+			<string>Pods-PINRemoteImage.tvOSExample-resources.sh</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>95CBFFAE81B4B38EFCBD8D1A00A1050C</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINRemoteImageManagerResult.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9720749F9C88E2E81B1AEE11AF25D76E</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>Pods-PINRemoteImage.tvOSExample-umbrella.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9A1A61631E6AD9D35E39EC002039E76B</key>
+		<dict>
+			<key>fileRef</key>
+			<string>F10FE054454442DBEB1891FDE3701A79</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>9A36FE6EEC065E0AAAA97654BF17C86F</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINRemoteImage-dummy.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9AE3724762891369254F21276752FBBC</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>name</key>
+			<string>PINMemoryCache.m</string>
+			<key>path</key>
+			<string>PINCache/PINMemoryCache.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9B71428B31BD826E391AB6F7278306F4</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>wrapper.framework</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>PINCache.framework</string>
+			<key>path</key>
+			<string>PINCache.framework</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>9B90870ACE1FD27E26DC497F2962BE91</key>
+		<dict>
+			<key>fileRef</key>
+			<string>F563F7B563B8C771E5718A020F2F4630</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>9C0749D63BED517FCFADC8AA2B4F259B</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINRemoteImageProcessorTask.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9FCFF604178089B97C33B127465DF147</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteImageDownloadTask.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>A00C17E2E2F5AD6FB731C2307218BD0F</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>1E466E748220A0BE2FB7A2D5953CAF2C</string>
+				<string>51A52926B51BFCD8546D8C98E3ECFC76</string>
+				<string>D080E63FD8ADB53B3D48D443AE972630</string>
+				<string>9A36FE6EEC065E0AAAA97654BF17C86F</string>
+				<string>EC6F7D27F854F4B0C0A88A29F8DC0733</string>
+				<string>EA420579FAB9AC17343639D1A27613F2</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Support Files</string>
+			<key>path</key>
+			<string>Example-tvOS/Pods/Target Support Files/Pods-PINRemoteImage.tvOSExample-PINRemoteImage</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>A0573F47DB4300556D47D5323FDEAB8E</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINButton+PINRemoteImage.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>A2E0B8887F8B1B6EB39FA70ECA3B9CA2</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteImageManagerResult.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>A3AAB352D1E7F55DBDF66DF1EF614A66</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteImageManager.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>A52A2BDE6FB61821C892B6C647C3C4A9</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINRemoteImageManager.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>A7BB93915A1CA11909AB21A9C7A9CF68</key>
+		<dict>
+			<key>fileRef</key>
+			<string>CBA1D6BCEF91B115A48D93403C98E15B</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>AB8E2873E6E57D6D9850230DD0AEEAB8</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>ECEEA30C3816B8CBE8F2F1AA33EE4F93</string>
+			</array>
+			<key>isa</key>
+			<string>PBXFrameworksBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>ABC5760AB3D111384234E5071464BC51</key>
+		<dict>
+			<key>containerPortal</key>
+			<string>D41D8CD98F00B204E9800998ECF8427E</string>
+			<key>isa</key>
+			<string>PBXContainerItemProxy</string>
+			<key>proxyType</key>
+			<string>1</string>
+			<key>remoteGlobalIDString</key>
+			<string>F89BEFD0A7CC0797936BF229DC2BD11E</string>
+			<key>remoteInfo</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINCache</string>
+		</dict>
+		<key>AC8758DE7CD1430B63A6B3CAD76B7BBF</key>
+		<dict>
+			<key>fileRef</key>
+			<string>542F131095FDB3897AE194B8622836EC</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>ADB3285C96A8EBAD74ED646751A7B80A</key>
+		<dict>
+			<key>fileRef</key>
+			<string>9AE3724762891369254F21276752FBBC</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>AE807D4E0267B44EFBD262551F35164B</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>path</key>
+			<string>Pods-PINRemoteImage.tvOSExample.debug.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>AF2F6DD4F01B2FE053FE83FE469E3578</key>
+		<dict>
+			<key>fileRef</key>
+			<string>9FCFF604178089B97C33B127465DF147</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>B1A11A7DE699B711ECE8F5987072C1D1</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>608C4A215B8CB9193748366E074C95EF</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Development Pods</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>B4C1B817EFFB094B26E198EF7B35892E</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>DB6A961AE322AD9C22D2248A11231A61</string>
+				<string>D7DC5CC930AA686F52A1468564725997</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Frameworks</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>B86E50521010735633ADEBD3FE834023</key>
+		<dict>
+			<key>fileRef</key>
+			<string>383BAF5A24DB14AA6FC63E1835BE8E6E</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>B88388262721BF812A2ED0DFC0D82201</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINImage+WebP.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>BA6428E9F66FD5A23C0A2E06ED26CD2F</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text</string>
+			<key>name</key>
+			<string>Podfile</string>
+			<key>path</key>
+			<string>../Podfile</string>
+			<key>sourceTree</key>
+			<string>SOURCE_ROOT</string>
+			<key>xcLanguageSpecificationIdentifier</key>
+			<string>xcode.lang.ruby</string>
+		</dict>
+		<key>BAC33ACD79895192DBE3CFC2E8FE044E</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>path</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINCache.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>BC3756BCBD0E953A1C8BDAFCBF34514F</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXTargetDependency</string>
+			<key>name</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINCache</string>
+			<key>target</key>
+			<string>F89BEFD0A7CC0797936BF229DC2BD11E</string>
+			<key>targetProxy</key>
+			<string>ABC5760AB3D111384234E5071464BC51</string>
+		</dict>
+		<key>BCF184031BE6B519E8F9CBBBFC3C7801</key>
+		<dict>
+			<key>fileRef</key>
+			<string>DB6A961AE322AD9C22D2248A11231A61</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>BF5F40786E5253179ECE505B730A39F9</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>4408507DE1BB5DE033001EFB3826AEF7</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Core</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>BFEA358546512593FD1354A8DD094545</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINRemoteLock.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>C332B185519D08E2641ECF2E00474E29</key>
+		<dict>
+			<key>buildSettings</key>
+			<dict>
+				<key>ALWAYS_SEARCH_USER_PATHS</key>
+				<string>NO</string>
+				<key>CLANG_CXX_LANGUAGE_STANDARD</key>
+				<string>gnu++0x</string>
+				<key>CLANG_CXX_LIBRARY</key>
+				<string>libc++</string>
+				<key>CLANG_ENABLE_MODULES</key>
+				<string>YES</string>
+				<key>CLANG_ENABLE_OBJC_ARC</key>
+				<string>YES</string>
+				<key>CLANG_WARN_BOOL_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_CONSTANT_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_DIRECT_OBJC_ISA_USAGE</key>
+				<string>YES</string>
+				<key>CLANG_WARN_EMPTY_BODY</key>
+				<string>YES</string>
+				<key>CLANG_WARN_ENUM_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_INT_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_OBJC_ROOT_CLASS</key>
+				<string>YES</string>
+				<key>CLANG_WARN_UNREACHABLE_CODE</key>
+				<string>YES</string>
+				<key>CLANG_WARN__DUPLICATE_METHOD_MATCH</key>
+				<string>YES</string>
+				<key>COPY_PHASE_STRIP</key>
+				<string>YES</string>
+				<key>ENABLE_NS_ASSERTIONS</key>
+				<string>NO</string>
+				<key>GCC_C_LANGUAGE_STANDARD</key>
+				<string>gnu99</string>
+				<key>GCC_PREPROCESSOR_DEFINITIONS</key>
+				<array>
+					<string>RELEASE=1</string>
+				</array>
+				<key>GCC_WARN_64_TO_32_BIT_CONVERSION</key>
+				<string>YES</string>
+				<key>GCC_WARN_ABOUT_RETURN_TYPE</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNDECLARED_SELECTOR</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNINITIALIZED_AUTOS</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNUSED_FUNCTION</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNUSED_VARIABLE</key>
+				<string>YES</string>
+				<key>STRIP_INSTALLED_PRODUCT</key>
+				<string>NO</string>
+				<key>SYMROOT</key>
+				<string>${SRCROOT}/../build</string>
+				<key>TVOS_DEPLOYMENT_TARGET</key>
+				<string>9.0</string>
+				<key>VALIDATE_PRODUCT</key>
+				<string>YES</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Release</string>
+		</dict>
+		<key>C4ED19873054E6FEEB95F8188272E918</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINURLSessionManager.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>C5E5C0425DC9294D0FD3E17FE51AF611</key>
+		<dict>
+			<key>fileRef</key>
+			<string>5A002565FAB8E473E1D62EF38FBEF8E9</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>C7507E3FAB7C1052089CA5564CF81E70</key>
+		<dict>
+			<key>buildConfigurationList</key>
+			<string>D7F4169D190690FAB44FE2B1FE464B0C</string>
+			<key>buildPhases</key>
+			<array>
+				<string>1E9FDEB0B1FE0C56C92BED71616C87C2</string>
+				<string>6ED8D732E24A899406122627347B0FBE</string>
+				<string>11473D54E0AF2947A06F7ACF84177201</string>
+			</array>
+			<key>buildRules</key>
+			<array/>
+			<key>dependencies</key>
+			<array>
+				<string>3D8A1536DF1F57D95589FE810B7A58DD</string>
+			</array>
+			<key>isa</key>
+			<string>PBXNativeTarget</string>
+			<key>name</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINRemoteImage</string>
+			<key>productName</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINRemoteImage</string>
+			<key>productReference</key>
+			<string>0C8E36CBE8E5106F618C090EA4C37794</string>
+			<key>productType</key>
+			<string>com.apple.product-type.framework</string>
+		</dict>
+		<key>C7F905F40A32E917D8411FF2BF9C2109</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>563CC0BC0B909C5DA1022DA92420BAF0</string>
+				<string>47E2BC4ACCA00A13437C0C0368FFBE6A</string>
+				<string>F563F7B563B8C771E5718A020F2F4630</string>
+				<string>CBA1D6BCEF91B115A48D93403C98E15B</string>
+				<string>B88388262721BF812A2ED0DFC0D82201</string>
+				<string>3DB488DA948A5B33C3CA78FF57DB7E3E</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Categories</string>
+			<key>path</key>
+			<string>Categories</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>C871BCBF306DCC0F6D55EDBAC9E1A450</key>
+		<dict>
+			<key>fileRef</key>
+			<string>73A4A9D58C6E6E33453CDEB22490019F</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>C882A460D1922D2BDDE214DCB6B3131F</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINButton+PINRemoteImage.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>C92FF86DBF4E6E28CE6D7F1413C1D9D5</key>
+		<dict>
+			<key>fileRef</key>
+			<string>E7B039FBC8C7D023DC2B6CB6932BA302</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>CBA1D6BCEF91B115A48D93403C98E15B</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINImage+DecodedImage.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>CBB1EE859FD29C8490ACB545D4DC6ED7</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>C882A460D1922D2BDDE214DCB6B3131F</string>
+				<string>A0573F47DB4300556D47D5323FDEAB8E</string>
+				<string>EDE13AE7B2F605630F9A8CEF685FF954</string>
+				<string>6B762A2439C03034D53DBE2FAC1E3E5A</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Image Categories</string>
+			<key>path</key>
+			<string>Image Categories</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>CC5300DDBAFE181F696E5CCC2BA5AC48</key>
+		<dict>
+			<key>fileRef</key>
+			<string>366A9C137237118C71B9615F2A8CDA28</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>CD8ED95DDF988E5FBA349E3AF62D0322</key>
+		<dict>
+			<key>fileRef</key>
+			<string>31761D7D4756260666C1444A39EA491C</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>D03443500F34525BB38F3389AA9028CE</key>
+		<dict>
+			<key>fileRef</key>
+			<string>5906762DF0D976C30134CC0D6FFEC84A</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>D080E63FD8ADB53B3D48D443AE972630</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>path</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINRemoteImage.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>D091968E2C5439A8A6D9A229875CE9D3</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>PINMemoryCache.h</string>
+			<key>path</key>
+			<string>PINCache/PINMemoryCache.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>D1FE7949A7008AC1541C642C981FD730</key>
+		<dict>
+			<key>fileRef</key>
+			<string>A2E0B8887F8B1B6EB39FA70ECA3B9CA2</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>D41D8CD98F00B204E9800998ECF8427E</key>
+		<dict>
+			<key>attributes</key>
+			<dict>
+				<key>LastSwiftUpdateCheck</key>
+				<string>0700</string>
+				<key>LastUpgradeCheck</key>
+				<string>0700</string>
+			</dict>
+			<key>buildConfigurationList</key>
+			<string>2D8E8EC45A3A1A1D94AE762CB5028504</string>
+			<key>compatibilityVersion</key>
+			<string>Xcode 3.2</string>
+			<key>developmentRegion</key>
+			<string>English</string>
+			<key>hasScannedForEncodings</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXProject</string>
+			<key>knownRegions</key>
+			<array>
+				<string>en</string>
+			</array>
+			<key>mainGroup</key>
+			<string>7DB346D0F39D3F0E887471402A8071AB</string>
+			<key>productRefGroup</key>
+			<string>8AE0A6730B7EAB6872C87B0594ABC3A5</string>
+			<key>projectDirPath</key>
+			<string></string>
+			<key>projectReferences</key>
+			<array/>
+			<key>projectRoot</key>
+			<string></string>
+			<key>targets</key>
+			<array>
+				<string>F5EE8E8AEECACB6458F5B67E4D5F309B</string>
+				<string>F89BEFD0A7CC0797936BF229DC2BD11E</string>
+				<string>C7507E3FAB7C1052089CA5564CF81E70</string>
+			</array>
+		</dict>
+		<key>D751AF7639FAED47E8FD5F4BDB95BF75</key>
+		<dict>
+			<key>fileRef</key>
+			<string>563CC0BC0B909C5DA1022DA92420BAF0</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>D7DC5CC930AA686F52A1468564725997</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>83497A28502289FBCA5F4064F09288A1</string>
+				<string>346F53C38695BBB2F87EE155141F9D96</string>
+				<string>366A9C137237118C71B9615F2A8CDA28</string>
+				<string>711D52235B0BC670BE93BBC6EDF6DBD6</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>tvOS</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>D7F4169D190690FAB44FE2B1FE464B0C</key>
+		<dict>
+			<key>buildConfigurations</key>
+			<array>
+				<string>5EBE1397EB2A8EE606852B58D88396C1</string>
+				<string>EBBEACFAAD48ED6D1120D0C90F08E916</string>
+			</array>
+			<key>defaultConfigurationIsVisible</key>
+			<string>0</string>
+			<key>defaultConfigurationName</key>
+			<string>Release</string>
+			<key>isa</key>
+			<string>XCConfigurationList</string>
+		</dict>
+		<key>D887531676F31D8E99401003F41BD541</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>Nullability.h</string>
+			<key>path</key>
+			<string>PINCache/Nullability.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>D8BBA19A80E9E07E57ED0A9305810A6A</key>
+		<dict>
+			<key>baseConfigurationReference</key>
+			<string>BAC33ACD79895192DBE3CFC2E8FE044E</string>
+			<key>buildSettings</key>
+			<dict>
+				<key>CURRENT_PROJECT_VERSION</key>
+				<string>1</string>
+				<key>DEFINES_MODULE</key>
+				<string>YES</string>
+				<key>DYLIB_COMPATIBILITY_VERSION</key>
+				<string>1</string>
+				<key>DYLIB_CURRENT_VERSION</key>
+				<string>1</string>
+				<key>DYLIB_INSTALL_NAME_BASE</key>
+				<string>@rpath</string>
+				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
+				<string>YES</string>
+				<key>GCC_PREFIX_HEADER</key>
+				<string>Target Support Files/Pods-PINRemoteImage.tvOSExample-PINCache/Pods-PINRemoteImage.tvOSExample-PINCache-prefix.pch</string>
+				<key>INFOPLIST_FILE</key>
+				<string>Target Support Files/Pods-PINRemoteImage.tvOSExample-PINCache/Info.plist</string>
+				<key>INSTALL_PATH</key>
+				<string>$(LOCAL_LIBRARY_DIR)/Frameworks</string>
+				<key>MODULEMAP_FILE</key>
+				<string>Target Support Files/Pods-PINRemoteImage.tvOSExample-PINCache/Pods-PINRemoteImage.tvOSExample-PINCache.modulemap</string>
+				<key>MTL_ENABLE_DEBUG_INFO</key>
+				<string>YES</string>
+				<key>PRODUCT_NAME</key>
+				<string>PINCache</string>
+				<key>SDKROOT</key>
+				<string>appletvos</string>
+				<key>SKIP_INSTALL</key>
+				<string>YES</string>
+				<key>TVOS_DEPLOYMENT_TARGET</key>
+				<string>9.0</string>
+				<key>VERSIONING_SYSTEM</key>
+				<string>apple-generic</string>
+				<key>VERSION_INFO_PREFIX</key>
+				<string></string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Debug</string>
+		</dict>
+		<key>DB6A961AE322AD9C22D2248A11231A61</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>wrapper.framework</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>PINCache.framework</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>DCB7C9EC537AB3427EDDE8F278C6A767</key>
+		<dict>
+			<key>fileRef</key>
+			<string>D887531676F31D8E99401003F41BD541</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>DF90A5B20B3299BD235D40DB84C3034C</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteImageTask.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>DFE1B9AC881D0D19F76F2CB947F08C09</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteLock.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>E07687FA3C93C4B992C6A1AE1646A03A</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteImageMemoryContainer.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>E07713D6BECC3D3DF7750BC32A6D3A01</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>EDF0F514284F9C89DDD2308CFA152269</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Pods</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>E12660042648FB5A145EF4DA2A6D7EB0</key>
+		<dict>
+			<key>containerPortal</key>
+			<string>D41D8CD98F00B204E9800998ECF8427E</string>
+			<key>isa</key>
+			<string>PBXContainerItemProxy</string>
+			<key>proxyType</key>
+			<string>1</string>
+			<key>remoteGlobalIDString</key>
+			<string>C7507E3FAB7C1052089CA5564CF81E70</string>
+			<key>remoteInfo</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINRemoteImage</string>
+		</dict>
+		<key>E2256C77948F4EA994FBE30F6DBE7337</key>
+		<dict>
+			<key>fileRef</key>
+			<string>EDE13AE7B2F605630F9A8CEF685FF954</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>E2B9114EACB748E5D082C54669916963</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>DCB7C9EC537AB3427EDDE8F278C6A767</string>
+				<string>5DC2658D3440262A60A15BB24827915C</string>
+				<string>5F0D33FAFA4106D8E53CBBF1C3C5FA62</string>
+				<string>7A0B379E1F4CA0B5215A71D71E307C51</string>
+				<string>C5E5C0425DC9294D0FD3E17FE51AF611</string>
+			</array>
+			<key>isa</key>
+			<string>PBXHeadersBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>E7B039FBC8C7D023DC2B6CB6932BA302</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINProgressiveImage.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>EA420579FAB9AC17343639D1A27613F2</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINRemoteImage-umbrella.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>EB1579102405BDD7C1574308EC467AA1</key>
+		<dict>
+			<key>fileRef</key>
+			<string>346F53C38695BBB2F87EE155141F9D96</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>EBBEACFAAD48ED6D1120D0C90F08E916</key>
+		<dict>
+			<key>baseConfigurationReference</key>
+			<string>D080E63FD8ADB53B3D48D443AE972630</string>
+			<key>buildSettings</key>
+			<dict>
+				<key>CURRENT_PROJECT_VERSION</key>
+				<string>1</string>
+				<key>DEFINES_MODULE</key>
+				<string>YES</string>
+				<key>DYLIB_COMPATIBILITY_VERSION</key>
+				<string>1</string>
+				<key>DYLIB_CURRENT_VERSION</key>
+				<string>1</string>
+				<key>DYLIB_INSTALL_NAME_BASE</key>
+				<string>@rpath</string>
+				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
+				<string>YES</string>
+				<key>GCC_PREFIX_HEADER</key>
+				<string>Target Support Files/Pods-PINRemoteImage.tvOSExample-PINRemoteImage/Pods-PINRemoteImage.tvOSExample-PINRemoteImage-prefix.pch</string>
+				<key>INFOPLIST_FILE</key>
+				<string>Target Support Files/Pods-PINRemoteImage.tvOSExample-PINRemoteImage/Info.plist</string>
+				<key>INSTALL_PATH</key>
+				<string>$(LOCAL_LIBRARY_DIR)/Frameworks</string>
+				<key>MODULEMAP_FILE</key>
+				<string>Target Support Files/Pods-PINRemoteImage.tvOSExample-PINRemoteImage/Pods-PINRemoteImage.tvOSExample-PINRemoteImage.modulemap</string>
+				<key>MTL_ENABLE_DEBUG_INFO</key>
+				<string>NO</string>
+				<key>PRODUCT_NAME</key>
+				<string>PINRemoteImage</string>
+				<key>SDKROOT</key>
+				<string>appletvos</string>
+				<key>SKIP_INSTALL</key>
+				<string>YES</string>
+				<key>TVOS_DEPLOYMENT_TARGET</key>
+				<string>9.0</string>
+				<key>VERSIONING_SYSTEM</key>
+				<string>apple-generic</string>
+				<key>VERSION_INFO_PREFIX</key>
+				<string></string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Release</string>
+		</dict>
+		<key>EC6F7D27F854F4B0C0A88A29F8DC0733</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINRemoteImage-prefix.pch</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>ECEEA30C3816B8CBE8F2F1AA33EE4F93</key>
+		<dict>
+			<key>fileRef</key>
+			<string>346F53C38695BBB2F87EE155141F9D96</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>ED38D82EF154E02E73484E0DE01C9DE6</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.plist.xml</string>
+			<key>path</key>
+			<string>Info.plist</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>EDE13AE7B2F605630F9A8CEF685FF954</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINImageView+PINRemoteImage.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>EDF0F514284F9C89DDD2308CFA152269</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>D887531676F31D8E99401003F41BD541</string>
+				<string>5808499DF2CC1B545E029A99AD1904D3</string>
+				<string>F638725E08D320BFEEE38B493278338B</string>
+				<string>8B329BA18F22952E6640CA35AF511745</string>
+				<string>0BBEB7022039F54EC4DBF7D0C4223002</string>
+				<string>D091968E2C5439A8A6D9A229875CE9D3</string>
+				<string>9AE3724762891369254F21276752FBBC</string>
+				<string>36AE58D4844DFD26151C6A1803C91C55</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>PINCache</string>
+			<key>path</key>
+			<string>PINCache</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>F10FE054454442DBEB1891FDE3701A79</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINDataTaskOperation.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>F31EC5948759058807C5B0298D21A6DC</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>Pods-PINRemoteImage.tvOSExample.modulemap</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>F3A1FB86303BC0591CB47FF00876044B</key>
+		<dict>
+			<key>buildConfigurations</key>
+			<array>
+				<string>D8BBA19A80E9E07E57ED0A9305810A6A</string>
+				<string>8AFDBC0DF3E6109D63FA1DA4705ADE63</string>
+			</array>
+			<key>defaultConfigurationIsVisible</key>
+			<string>0</string>
+			<key>defaultConfigurationName</key>
+			<string>Release</string>
+			<key>isa</key>
+			<string>XCConfigurationList</string>
+		</dict>
+		<key>F4DBD6B7FC84ADB109BD7E87A9B3B3B1</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.plist.xml</string>
+			<key>path</key>
+			<string>Pods-PINRemoteImage.tvOSExample-acknowledgements.plist</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>F4DF8A0337AD15CBA4409403715B97E3</key>
+		<dict>
+			<key>fileRef</key>
+			<string>E07687FA3C93C4B992C6A1AE1646A03A</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>F4F85C3A97C5DA45547C0F195192BD7E</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text</string>
+			<key>path</key>
+			<string>Pods-PINRemoteImage.tvOSExample-acknowledgements.markdown</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>F5374B54826F44CBB8C7CC4C38667795</key>
+		<dict>
+			<key>fileRef</key>
+			<string>FBCF761B6C65AF87C324279281960D83</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>F563F7B563B8C771E5718A020F2F4630</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINImage+DecodedImage.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>F5EE8E8AEECACB6458F5B67E4D5F309B</key>
+		<dict>
+			<key>buildConfigurationList</key>
+			<string>3437B95AA2CBE7490149EEFA83978A7B</string>
+			<key>buildPhases</key>
+			<array>
+				<string>7F762BC83B1C5131ACFA008AB85652DE</string>
+				<string>AB8E2873E6E57D6D9850230DD0AEEAB8</string>
+				<string>3818FFD59B9280FAAE8521513DC6C260</string>
+			</array>
+			<key>buildRules</key>
+			<array/>
+			<key>dependencies</key>
+			<array>
+				<string>BC3756BCBD0E953A1C8BDAFCBF34514F</string>
+				<string>4F3090D1A95E67E0CB96FD93F97C948C</string>
+			</array>
+			<key>isa</key>
+			<string>PBXNativeTarget</string>
+			<key>name</key>
+			<string>Pods-PINRemoteImage.tvOSExample</string>
+			<key>productName</key>
+			<string>Pods-PINRemoteImage.tvOSExample</string>
+			<key>productReference</key>
+			<string>1178C76713EE167389861F46BD78DCB2</string>
+			<key>productType</key>
+			<string>com.apple.product-type.framework</string>
+		</dict>
+		<key>F638725E08D320BFEEE38B493278338B</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>name</key>
+			<string>PINCache.m</string>
+			<key>path</key>
+			<string>PINCache/PINCache.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>F760DCF9BE83B2E335AFE09E85AD8AB5</key>
+		<dict>
+			<key>fileRef</key>
+			<string>F638725E08D320BFEEE38B493278338B</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>F89BEFD0A7CC0797936BF229DC2BD11E</key>
+		<dict>
+			<key>buildConfigurationList</key>
+			<string>F3A1FB86303BC0591CB47FF00876044B</string>
+			<key>buildPhases</key>
+			<array>
+				<string>547C46A697CBBA6BF9D73E6ADC44F788</string>
+				<string>2C29CE313795DE4CFF398C1D71394C7D</string>
+				<string>E2B9114EACB748E5D082C54669916963</string>
+			</array>
+			<key>buildRules</key>
+			<array/>
+			<key>dependencies</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXNativeTarget</string>
+			<key>name</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINCache</string>
+			<key>productName</key>
+			<string>Pods-PINRemoteImage.tvOSExample-PINCache</string>
+			<key>productReference</key>
+			<string>9B71428B31BD826E391AB6F7278306F4</string>
+			<key>productType</key>
+			<string>com.apple.product-type.framework</string>
+		</dict>
+		<key>FBCF761B6C65AF87C324279281960D83</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINURLSessionManager.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>FDA38E88879464DEF6831AAE57B7698D</key>
+		<dict>
+			<key>fileRef</key>
+			<string>A0573F47DB4300556D47D5323FDEAB8E</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>FDCA32E17F1B744831555C06308FA3ED</key>
+		<dict>
+			<key>fileRef</key>
+			<string>6B762A2439C03034D53DBE2FAC1E3E5A</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>FE640665B9A81A36DCAFBA0839F34752</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINProgressiveImage.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>FEFDD108C6A774521A3006C7CFF7C1F8</key>
+		<dict>
+			<key>fileRef</key>
+			<string>C4ED19873054E6FEEB95F8188272E918</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+	</dict>
+	<key>rootObject</key>
+	<string>D41D8CD98F00B204E9800998ECF8427E</string>
+</dict>
+</plist>

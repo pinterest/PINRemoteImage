@@ -1,6 +1,6 @@
 {
   "name": "PINRemoteImage",
-  "version": "2.0.1",
+  "version": "2.1.2",
   "summary": "A thread safe, performant, feature rich image fetcher",
   "homepage": "https://github.com/pinterest/PINRemoteImage",
   "license": "Apache 2.0",
@@ -9,12 +9,13 @@
   },
   "source": {
     "git": "https://github.com/pinterest/PINRemoteImage.git",
-    "tag": "2.0.1"
+    "tag": "2.1.2"
   },
   "social_media_url": "https://twitter.com/garrettmoon",
   "platforms": {
     "ios": "6.0",
-    "osx": "10.8"
+    "osx": "10.8",
+    "tvos": "9.0"
   },
   "requires_arc": true,
   "default_subspecs": "FLAnimatedImage",
@@ -56,6 +57,16 @@
         ]
       },
       "frameworks": "Cocoa"
+    },
+    {
+      "name": "tvOS",
+      "platforms": "tvos",
+      "dependencies": {
+        "PINRemoteImage/Core": [
+
+        ]
+      },
+      "frameworks": "UIKit"
     },
     {
       "name": "FLAnimatedImage",

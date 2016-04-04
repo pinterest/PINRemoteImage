@@ -5,6 +5,7 @@
 #import "PINImage+WebP.h"
 #import "PINButton+PINRemoteImage.h"
 #import "PINImageView+PINRemoteImage.h"
+#import "PINAlternateRepresentationProvider.h"
 #import "PINDataTaskOperation.h"
 #import "PINProgressiveImage.h"
 #import "PINRemoteImage.h"
@@ -14,8 +15,10 @@
 #import "PINRemoteImageMacros.h"
 #import "PINRemoteImageManager.h"
 #import "PINRemoteImageManagerResult.h"
+#import "PINRemoteImageMemoryContainer.h"
 #import "PINRemoteImageProcessorTask.h"
 #import "PINRemoteImageTask.h"
+#import "PINRemoteLock.h"
 #import "PINURLSessionManager.h"
 
 FOUNDATION_EXPORT double PINRemoteImageVersionNumber;

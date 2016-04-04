@@ -66,6 +66,16 @@ typedef void (^PINMemoryCacheObjectBlock)(PINMemoryCache *cache, NSString *key, 
 @property (assign) NSTimeInterval ageLimit;
 
 /**
+ If ttlCache is YES, the cache behaves like a ttlCache. This means that once an object enters the
+ cache, it only lives as long as self.ageLimit. This has the following implications:
+ - Accessing an object in the cache does not extend that object's lifetime in the cache
+ - When attempting to access an object in the cache that has lived longer than self.ageLimit,
+ the cache will behave as if the object does not exist
+ 
+ */
+@property (nonatomic, assign, getter=isTTLCache) BOOL ttlCache;
+
+/**
  When `YES` on iOS the cache will remove all objects when the app receives a memory warning.
  Defaults to `YES`.
  */

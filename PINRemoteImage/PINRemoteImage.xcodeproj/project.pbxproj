@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		6858C0751C9CC5BA00E420EB /* PINRemoteLock.h in Headers */ = {isa = PBXBuildFile; fileRef = 6858C0731C9CC5BA00E420EB /* PINRemoteLock.h */; };
 		6858C0761C9CC5BA00E420EB /* PINRemoteLock.m in Sources */ = {isa = PBXBuildFile; fileRef = 6858C0741C9CC5BA00E420EB /* PINRemoteLock.m */; };
+		68F0EA921CB32EC900F1FD41 /* PINAlternateRepresentationProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 68F0EA8E1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.h */; };
+		68F0EA931CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 68F0EA8F1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m */; };
+		68F0EA941CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 68F0EA901CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.h */; };
+		68F0EA951CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 68F0EA911CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.m */; };
 		9DD47F9C1C699F4B00F12CA0 /* PINButton+PINRemoteImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DD47F981C699F4B00F12CA0 /* PINButton+PINRemoteImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9DD47F9D1C699F4B00F12CA0 /* PINButton+PINRemoteImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DD47F991C699F4B00F12CA0 /* PINButton+PINRemoteImage.m */; };
 		9DD47F9E1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DD47F9A1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -50,6 +54,10 @@
 		6858C0731C9CC5BA00E420EB /* PINRemoteLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINRemoteLock.h; path = ../../Pod/Classes/PINRemoteLock.h; sourceTree = "<group>"; };
 		6858C0741C9CC5BA00E420EB /* PINRemoteLock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PINRemoteLock.m; path = ../../Pod/Classes/PINRemoteLock.m; sourceTree = "<group>"; };
 		68EB25231C6A64E4002501A3 /* PINRemoteImage-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PINRemoteImage-Prefix.pch"; sourceTree = "<group>"; };
+		68F0EA8E1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINAlternateRepresentationProvider.h; path = ../../Pod/Classes/PINAlternateRepresentationProvider.h; sourceTree = "<group>"; };
+		68F0EA8F1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PINAlternateRepresentationProvider.m; path = ../../Pod/Classes/PINAlternateRepresentationProvider.m; sourceTree = "<group>"; };
+		68F0EA901CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINRemoteImageMemoryContainer.h; path = ../../Pod/Classes/PINRemoteImageMemoryContainer.h; sourceTree = "<group>"; };
+		68F0EA911CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PINRemoteImageMemoryContainer.m; path = ../../Pod/Classes/PINRemoteImageMemoryContainer.m; sourceTree = "<group>"; };
 		9DD47F981C699F4B00F12CA0 /* PINButton+PINRemoteImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PINButton+PINRemoteImage.h"; sourceTree = "<group>"; };
 		9DD47F991C699F4B00F12CA0 /* PINButton+PINRemoteImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PINButton+PINRemoteImage.m"; sourceTree = "<group>"; };
 		9DD47F9A1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PINImageView+PINRemoteImage.h"; sourceTree = "<group>"; };
@@ -146,6 +154,10 @@
 				F1B918FC1BCF23C800710963 /* PINRemoteImageTask.m */,
 				6858C0731C9CC5BA00E420EB /* PINRemoteLock.h */,
 				6858C0741C9CC5BA00E420EB /* PINRemoteLock.m */,
+				68F0EA8E1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.h */,
+				68F0EA8F1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m */,
+				68F0EA901CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.h */,
+				68F0EA911CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.m */,
 			);
 			name = Project;
 			sourceTree = "<group>";
@@ -221,6 +233,8 @@
 				9DD47F9E1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h in Headers */,
 				9DD47F9C1C699F4B00F12CA0 /* PINButton+PINRemoteImage.h in Headers */,
 				F165DFD91BD0504A0008C6E8 /* PINRemoteImageMacros.h in Headers */,
+				68F0EA941CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.h in Headers */,
+				68F0EA921CB32EC900F1FD41 /* PINAlternateRepresentationProvider.h in Headers */,
 				F1B9191C1BCF23C900710963 /* PINRemoteImageTask.h in Headers */,
 				F1B919101BCF23C900710963 /* PINRemoteImage.h in Headers */,
 				F1B919001BCF23C900710963 /* NSData+ImageDetectors.h in Headers */,
@@ -303,6 +317,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68F0EA931CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m in Sources */,
 				F1B919071BCF23C900710963 /* FLAnimatedImageView+PINRemoteImage.m in Sources */,
 				F1B9190F1BCF23C900710963 /* PINProgressiveImage.m in Sources */,
 				F1B919121BCF23C900710963 /* PINRemoteImageCallbacks.m in Sources */,
@@ -313,6 +328,7 @@
 				F1B919011BCF23C900710963 /* NSData+ImageDetectors.m in Sources */,
 				F1B918FF1BCF23C900710963 /* PINRemoteImageCategoryManager.m in Sources */,
 				9DD47FA51C699FDC00F12CA0 /* PINImage+DecodedImage.m in Sources */,
+				68F0EA951CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.m in Sources */,
 				F1B919151BCF23C900710963 /* PINRemoteImageDownloadTask.m in Sources */,
 				F1B9191F1BCF23C900710963 /* PINURLSessionManager.m in Sources */,
 				F1B9191B1BCF23C900710963 /* PINRemoteImageProcessorTask.m in Sources */,
