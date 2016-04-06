@@ -9,12 +9,13 @@
 #import <Foundation/Foundation.h>
 
 #import "PINAnimatedImage.h"
+#import "PINRemoteImageMacros.h"
 
 @class PINRemoteLock;
 @class PINSharedAnimatedImage;
 @class PINSharedAnimatedImageFile;
 
-typedef void(^PINAnimatedImageSharedReady)(UIImage *coverImage, PINSharedAnimatedImage *shared);
+typedef void(^PINAnimatedImageSharedReady)(PINImage *coverImage, PINSharedAnimatedImage *shared);
 typedef void(^PINAnimatedImageDecodedPath)(BOOL finished, NSString *path, NSError *error);
 
 @interface PINAnimatedImageManager : NSObject
@@ -36,12 +37,12 @@ typedef void(^PINAnimatedImageDecodedPath)(BOOL finished, NSString *path, NSErro
 
 @property (nonatomic, strong, readwrite) NSArray <PINAnimatedImageDecodedPath> *completions;
 @property (nonatomic, strong, readwrite) NSArray <PINAnimatedImageSharedReady> *infoCompletions;
-@property (nonatomic, weak, readwrite) UIImage *coverImage;
+@property (nonatomic, weak, readwrite) PINImage *coverImage;
 @property (nonatomic, strong, readwrite) NSError *error;
 //TODO is status thread safe?
 @property (nonatomic, assign, readwrite) PINAnimatedImageStatus status;
 
-- (void)setInfoProcessedWithCoverImage:(UIImage *)coverImage durations:(Float32 *)durations totalDuration:(CFTimeInterval)totalDuration loopCount:(size_t)loopCount frameCount:(size_t)frameCount width:(size_t)width height:(size_t)height bitmapInfo:(CGBitmapInfo)bitmapInfo;
+- (void)setInfoProcessedWithCoverImage:(PINImage *)coverImage durations:(Float32 *)durations totalDuration:(CFTimeInterval)totalDuration loopCount:(size_t)loopCount frameCount:(size_t)frameCount width:(size_t)width height:(size_t)height bitmapInfo:(CGBitmapInfo)bitmapInfo;
 
 @property (nonatomic, readonly) Float32 *durations;
 @property (nonatomic, readonly) CFTimeInterval totalDuration;

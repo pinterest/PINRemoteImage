@@ -10,7 +10,6 @@
 
 #import "PINRemoteLock.m"
 #import "PINAnimatedImageManager.h"
-#import "PINRemoteImageMacros.h"
 
 NSString *kPINAnimatedImageErrorDomain = @"kPINAnimatedImageErrorDomain";
 
@@ -127,7 +126,12 @@ const Float32 kPINAnimatedImageMinimumDuration = 1 / kPINAnimatedImageDisplayRef
 
 - (PINImage *)coverImageWithMemoryMap:(NSData *)memoryMap width:(UInt32)width height:(UInt32)height bitmapInfo:(CGBitmapInfo)bitmapInfo
 {
-  return [PINImage imageWithCGImage:[[self class] imageAtIndex:0 inMemoryMap:memoryMap width:width height:height bitmapInfo:bitmapInfo]];
+  CGImageRef imageRef = [[self class] imageAtIndex:0 inMemoryMap:memoryMap width:width height:height bitmapInfo:bitmapInfo];
+#if PIN_TARGET_IOS
+  return [UIImage imageWithCGImage:imageRef];
+#elif PIN_TARGET_MAC
+  return [[NSImage alloc] initWithCGImage:imageRef size:CGSizeMake(width, height)];
+#endif
 }
 
 void releaseData(void *data, const void *imageData, size_t size);
@@ -401,7 +405,12 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
   __block PINImage *coverImage = nil;
   [_coverImageLock lockWithBlock:^{
     if (_coverImage == nil) {
-      coverImage = [PINImage imageWithCGImage:[PINAnimatedImage imageAtIndex:0 inMemoryMap:self.maps[0].memoryMappedData width:(UInt32)self.width height:(UInt32)self.height bitmapInfo:self.bitmapInfo]];
+      CGImageRef imageRef = [PINAnimatedImage imageAtIndex:0 inMemoryMap:self.maps[0].memoryMappedData width:(UInt32)self.width height:(UInt32)self.height bitmapInfo:self.bitmapInfo];
+#if PIN_TARGET_IOS
+      coverImage = [UIImage imageWithCGImage:imageRef];
+#elif PIN_TARGET_MAC
+      coverImage = [[NSImage alloc] initWithCGImage:imageRef size:CGSizeMake(self.width, self.height)];
+#endif
       _coverImage = coverImage;
     } else {
       coverImage = _coverImage;

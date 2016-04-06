@@ -9,10 +9,13 @@
 #import "PINAnimatedImageManager.h"
 
 #import <ImageIO/ImageIO.h>
+#if PIN_TARGET_IOS
 #import <MobileCoreServices/UTCoreTypes.h>
+#elif PIN_TARGET_MAC
+#import <CoreServices/CoreServices.h>
+#endif
 
 #import "PINRemoteLock.h"
-#import "PINRemoteImageMacros.h"
 
 static const NSUInteger maxFileSize = 50000000; //max file size in bytes
 static const Float32 maxFileDuration = 1; //max duration of a file in seconds
@@ -66,7 +69,12 @@ BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
     _serialProcessingQueue = dispatch_queue_create("Serial animated image processing queue.", DISPATCH_QUEUE_SERIAL);
     
     __weak PINAnimatedImageManager *weakSelf = self;
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification
+#if PIN_TARGET_IOS
+    NSString * const notificationName = UIApplicationWillTerminateNotification;
+#elif PIN_TARGET_MAC
+    NSString * const notificationName = NSApplicationWillTerminateNotification;
+#endif
+    [[NSNotificationCenter defaultCenter] addObserverForName:notificationName
                                                       object:nil
                                                        queue:nil
                                                   usingBlock:^(NSNotification * _Nonnull note) {
@@ -220,7 +228,11 @@ BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
           width = (UInt32)CGImageGetWidth(frameImage);
           height = (UInt32)CGImageGetHeight(frameImage);
           
-          coverImage = [PINImage imageWithCGImage:frameImage];
+#if PIN_TARGET_IOS
+          coverImage = [UIImage imageWithCGImage:frameImage];
+#elif PIN_TARGET_MAC
+          coverImage = [[NSImage alloc] initWithCGImage:frameImage size:CGSizeMake(width, height)];
+#endif
           CGImageRelease(frameImage);
         }
         

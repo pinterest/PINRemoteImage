@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "PINRemoteImageMacros.h"
+
 #define PINAnimatedImageDebug  0
 
 extern NSString *kPINAnimatedImageErrorDomain;
@@ -35,7 +37,7 @@ extern const Float32 kPINAnimatedImageDefaultDuration;
 extern const Float32 kPINAnimatedImageMinimumDuration;
 extern const NSTimeInterval kPINAnimatedImageDisplayRefreshRate;
 
-typedef void(^PINAnimatedImageInfoReady)(UIImage *coverImage);
+typedef void(^PINAnimatedImageInfoReady)(PINImage *coverImage);
 
 @interface PINAnimatedImage : NSObject
 
@@ -48,7 +50,7 @@ typedef void(^PINAnimatedImageInfoReady)(UIImage *coverImage);
 @property (nonatomic, assign, readwrite) PINAnimatedImageStatus status;
 
 //Access to any properties or methods below this line before status == PINAnimatedImageStatusInfoProcessed is undefined.
-@property (nonatomic, readonly) UIImage *coverImage;
+@property (nonatomic, readonly) PINImage *coverImage;
 @property (nonatomic, readonly) BOOL coverImageReady;
 @property (nonatomic, readonly) BOOL playbackReady;
 @property (nonatomic, readonly) CFTimeInterval totalDuration;
