@@ -8,7 +8,7 @@
 
 #import "PINAnimatedImage.h"
 
-#import "PINRemoteLock.m"
+#import "PINRemoteLock.h"
 #import "PINAnimatedImageManager.h"
 
 NSString *kPINAnimatedImageErrorDomain = @"kPINAnimatedImageErrorDomain";
