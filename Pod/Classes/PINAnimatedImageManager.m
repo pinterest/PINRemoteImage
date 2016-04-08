@@ -211,6 +211,7 @@ static dispatch_once_t startupCleanupOnce;
   UInt32 bitmapInfo;
   NSUInteger fileCount = 0;
   UInt32 frameCountForFile = 0;
+  Float32 *durations = NULL;
   
 #if PINAnimatedImageDebug
   CFTimeInterval start = CACurrentMediaTime();
@@ -232,7 +233,7 @@ static dispatch_once_t startupCleanupOnce;
       
       Float32 fileDuration = 0;
       NSUInteger fileSize = 0;
-      Float32 durations[frameCount];
+      durations = (Float32 *)malloc(sizeof(Float32) * frameCount);
       CFTimeInterval totalDuration = 0;
       PINImage *coverImage = nil;
       
@@ -265,13 +266,8 @@ static dispatch_once_t startupCleanupOnce;
       
       if (error == nil) {
         //Get size, write file header get coverImage
-        
-        //blockDurations will be freed below after calling infoCompletion
-        Float32 *blockDurations = (Float32 *)malloc(sizeof(Float32) * frameCount);
-        memcpy(blockDurations, durations, sizeof(Float32) * frameCount);
-        
         dispatch_group_async(diskGroup, diskWriteQueue, ^{
-          [self writeFileHeader:fileHandle width:width height:height loopCount:loopCount frameCount:frameCount bitmapInfo:bitmapInfo durations:blockDurations];
+          [self writeFileHeader:fileHandle width:width height:height loopCount:loopCount frameCount:frameCount bitmapInfo:bitmapInfo durations:durations];
           [fileHandle closeFile];
         });
         fileCount = 1;
@@ -279,8 +275,7 @@ static dispatch_once_t startupCleanupOnce;
         
         dispatch_group_async(diskGroup, diskWriteQueue, ^{
           PINLog(@"notifying info");
-          infoCompletion(coverImage, blockDurations, totalDuration, loopCount, frameCount, width, height, bitmapInfo);
-          free(blockDurations);
+          infoCompletion(coverImage, durations, totalDuration, loopCount, frameCount, width, height, bitmapInfo);
           
           //write empty frame count
           [fileHandle writeData:[NSData dataWithBytes:&frameCountForFile length:sizeof(frameCountForFile)]];
@@ -351,6 +346,10 @@ static dispatch_once_t startupCleanupOnce;
   CFTimeInterval interval = CACurrentMediaTime() - start;
   NSLog(@"Encoding and write time: %f", interval);
 #endif
+  
+  if (durations) {
+    free(durations);
+  }
   
   completion(YES, filePath, error);
 }

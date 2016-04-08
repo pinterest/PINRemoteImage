@@ -214,6 +214,7 @@ void releaseData(void *data, const void *imageData, size_t size)
   return imageRef;
 }
 
+// Although the following methods are unused, they could be in the future for restoring decoded images off disk (they're cleared currently).
 + (UInt32)widthFromMemoryMap:(NSData *)memoryMap
 {
   UInt32 width;
@@ -242,10 +243,10 @@ void releaseData(void *data, const void *imageData, size_t size)
   return frameCount;
 }
 
-+ (Float32 *)createDurationsFromMemoryMap:(NSData *)memoryMap frameCount:(UInt32)frameCount frameSize:(NSUInteger)frameSize totalDuration:(CFTimeInterval *)totalDuration
+//durations should be a buffer of size Float32 * frameCount
++ (Float32 *)createDurations:(Float32 *)durations fromMemoryMap:(NSData *)memoryMap frameCount:(UInt32)frameCount frameSize:(NSUInteger)frameSize totalDuration:(nonnull CFTimeInterval *)totalDuration
 {
   *totalDuration = 0;
-  Float32 *durations = (Float32 *)malloc(sizeof(Float32) * frameCount);
   [memoryMap getBytes:&durations range:NSMakeRange(18, sizeof(Float32) * frameCount)];
 
   for (NSUInteger idx = 0; idx < frameCount; idx++) {
@@ -257,31 +258,37 @@ void releaseData(void *data, const void *imageData, size_t size)
 
 - (Float32 *)durations
 {
+  NSAssert([self infoReady], @"info must be ready");
   return self.sharedAnimatedImage.durations;
 }
 
 - (CFTimeInterval)totalDuration
 {
+  NSAssert([self infoReady], @"info must be ready");
   return self.sharedAnimatedImage.totalDuration;
 }
 
 - (size_t)loopCount
 {
+  NSAssert([self infoReady], @"info must be ready");
   return self.sharedAnimatedImage.loopCount;
 }
 
 - (size_t)frameCount
 {
+  NSAssert([self infoReady], @"info must be ready");
   return self.sharedAnimatedImage.frameCount;
 }
 
 - (size_t)width
 {
+  NSAssert([self infoReady], @"info must be ready");
   return self.sharedAnimatedImage.width;
 }
 
 - (size_t)height
 {
+  NSAssert([self infoReady], @"info must be ready");
   return self.sharedAnimatedImage.height;
 }
 
@@ -305,7 +312,13 @@ void releaseData(void *data, const void *imageData, size_t size)
 
 - (PINImage *)coverImage
 {
+  NSAssert(self.coverImageReady, @"cover image must be ready.");
   return self.sharedAnimatedImage.coverImage;
+}
+
+- (BOOL)infoReady
+{
+  return self.status == PINAnimatedImageStatusInfoProcessed || self.status == PINAnimatedImageStatusFirstFileProcessed || self.status == PINAnimatedImageStatusProcessed;
 }
 
 - (BOOL)coverImageReady
@@ -331,7 +344,7 @@ void releaseData(void *data, const void *imageData, size_t size)
   return MAX(self.minimumFrameInterval * kPINAnimatedImageDisplayRefreshRate, 1);
 }
 
-//Credit to FLAnimatedImage (https://github.com/Flipboard/FLAnimatedImage) for display link interval calculations
+//Credit to FLAnimatedImage ( https://github.com/Flipboard/FLAnimatedImage ) for display link interval calculations
 - (NSTimeInterval)minimumFrameInterval
 {
   const NSTimeInterval kGreatestCommonDivisorPrecision = 2.0 / kPINAnimatedImageMinimumDuration;
@@ -348,7 +361,7 @@ void releaseData(void *data, const void *imageData, size_t size)
   return (scaledGCD / kGreatestCommonDivisorPrecision);
 }
 
-//Credit to FLAnimatedImage (https://github.com/Flipboard/FLAnimatedImage) for display link interval calculations
+//Credit to FLAnimatedImage ( https://github.com/Flipboard/FLAnimatedImage ) for display link interval calculations
 static NSUInteger gcd(NSUInteger a, NSUInteger b)
 {
   // http://en.wikipedia.org/wiki/Greatest_common_divisor
