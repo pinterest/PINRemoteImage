@@ -172,6 +172,10 @@ void releaseData(void *data, const void *imageData, size_t size)
 
 + (CGImageRef)imageAtIndex:(NSUInteger)index inMemoryMap:(NSData *)memoryMap width:(UInt32)width height:(UInt32)height bitmapInfo:(CGBitmapInfo)bitmapInfo
 {
+  if (memoryMap == nil) {
+    return nil;
+  }
+  
   Float32 outDuration;
   
   size_t imageLength = width * height * kPINAnimatedImageComponentsPerPixel;

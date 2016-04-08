@@ -34,13 +34,25 @@ BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
 
 + (instancetype)sharedManager;
 
-@property (nonatomic, strong, readonly) NSString *temporaryDirectory;
 @property (nonatomic, strong, readonly) NSMutableDictionary <NSData *, PINSharedAnimatedImage *> *animatedImages;
 @property (nonatomic, strong, readonly) dispatch_queue_t serialProcessingQueue;
 
 @end
 
+static dispatch_once_t startupCleanupOnce;
+
 @implementation PINAnimatedImageManager
+
++ (void)load
+{
+  if (self == [PINAnimatedImageManager class]) {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, NULL), ^{
+      dispatch_once(&startupCleanupOnce, ^{
+        [self cleanupFiles];
+      });
+    });
+  }
+}
 
 + (instancetype)sharedManager
 {
@@ -52,23 +64,33 @@ BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
   return sharedManager;
 }
 
++ (NSString *)temporaryDirectory
+{
+  static dispatch_once_t onceToken;
+  static NSString *temporaryDirectory;
+  dispatch_once(&onceToken, ^{
+    //On iOS temp directories are not shared between apps. This may not be safe on OS X or other systems
+    temporaryDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"ASAnimatedImageCache"];
+  });
+  return temporaryDirectory;
+}
+
 - (instancetype)init
 {
   if (self = [super init]) {
-    //On iOS temp directories are not shared between apps. This may not be safe on OS X or other systems
-    _temporaryDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"PINAnimatedImageCache"];
-    [self cleanupFiles];
+    dispatch_once(&startupCleanupOnce, ^{
+      [PINAnimatedImageManager cleanupFiles];
+    });
     
     _lock = [[PINRemoteLock alloc] initWithName:@"PINAnimatedImageManager lock"];
     
-    if ([[NSFileManager defaultManager] fileExistsAtPath:_temporaryDirectory] == NO) {
-      [[NSFileManager defaultManager] createDirectoryAtPath:_temporaryDirectory withIntermediateDirectories:YES attributes:nil error:nil];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[PINAnimatedImageManager temporaryDirectory]] == NO) {
+      [[NSFileManager defaultManager] createDirectoryAtPath:[PINAnimatedImageManager temporaryDirectory] withIntermediateDirectories:YES attributes:nil error:nil];
     }
     
     _animatedImages = [[NSMutableDictionary alloc] init];
     _serialProcessingQueue = dispatch_queue_create("Serial animated image processing queue.", DISPATCH_QUEUE_SERIAL);
     
-    __weak PINAnimatedImageManager *weakSelf = self;
 #if PIN_TARGET_IOS
     NSString * const notificationName = UIApplicationWillTerminateNotification;
 #elif PIN_TARGET_MAC
@@ -78,15 +100,15 @@ BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
                                                       object:nil
                                                        queue:nil
                                                   usingBlock:^(NSNotification * _Nonnull note) {
-                                                    [weakSelf cleanupFiles];
+                                                    [PINAnimatedImageManager cleanupFiles];
                                                   }];
   }
   return self;
 }
 
-- (void)cleanupFiles
++ (void)cleanupFiles
 {
-  [[NSFileManager defaultManager] removeItemAtPath:self.temporaryDirectory error:nil];
+  [[NSFileManager defaultManager] removeItemAtPath:[PINAnimatedImageManager temporaryDirectory] error:nil];
 }
 
 - (void)animatedPathForImageData:(NSData *)animatedImageData infoCompletion:(PINAnimatedImageSharedReady)infoCompletion completion:(PINAnimatedImageDecodedPath)completion
@@ -129,7 +151,7 @@ BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
   
   if (startProcessing) {
     dispatch_async(self.serialProcessingQueue, ^{
-      [[self class] processAnimatedImage:animatedImageData temporaryDirectory:self.temporaryDirectory infoCompletion:^(PINImage *coverImage, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, size_t width, size_t height, UInt32 bitmapInfo) {
+      [[self class] processAnimatedImage:animatedImageData temporaryDirectory:[PINAnimatedImageManager temporaryDirectory] infoCompletion:^(PINImage *coverImage, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, size_t width, size_t height, UInt32 bitmapInfo) {
         __block NSArray *infoCompletions = nil;
         __block PINSharedAnimatedImage *shared = nil;
         [_lock lockWithBlock:^{
