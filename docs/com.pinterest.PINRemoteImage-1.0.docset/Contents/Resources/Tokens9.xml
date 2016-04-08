@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Constants/PINRemoteLockType.html">
+	<File path="Constants/PINRemoteImageManagerDownloadOptions.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/c/tdef/PINRemoteLockType</TokenIdentifier>
-			<Abstract type="html">The type of lock, either recursive or non-recursive</Abstract>
-			<DeclaredIn>PINRemoteLock.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/c/tdef/PINRemoteImageManagerDownloadOptions</TokenIdentifier>
+			<Abstract type="html">Options with which to download and process images</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
             
 			
 			<NodeRef refid="9"/>
@@ -14,21 +14,51 @@
 		
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteLockTypeNonRecursive</TokenIdentifier>
-            <Abstract type="html">A non-recursive version of the lock. The default.</Abstract>
-            <Declaration>PINRemoteLockTypeNonRecursive</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerDownloadOptionsNone</TokenIdentifier>
+            <Abstract type="html">Download and process with default options (no other options set)</Abstract>
+            <Declaration>PINRemoteImageManagerDownloadOptionsNone</Declaration>
             
-            <DeclaredIn>PINRemoteLock.h</DeclaredIn>
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
             
             <NodeRef refid="9"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteLockTypeRecursive</TokenIdentifier>
-            <Abstract type="html">A recursive version of the lock. More expensive.</Abstract>
-            <Declaration>PINRemoteLockTypeRecursive</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerDisallowAlternateRepresentations</TokenIdentifier>
+            <Abstract type="html">Set to disallow any alternate representations such as FLAnimatedImage</Abstract>
+            <Declaration>PINRemoteImageManagerDisallowAlternateRepresentations</Declaration>
             
-            <DeclaredIn>PINRemoteLock.h</DeclaredIn>
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+            <NodeRef refid="9"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerDownloadOptionsSkipDecode</TokenIdentifier>
+            <Abstract type="html">Skip decoding the image before returning. This means smaller images returned, but images will be decoded on the main thread when set on an image view</Abstract>
+            <Declaration>PINRemoteImageManagerDownloadOptionsSkipDecode</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+            <NodeRef refid="9"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerDownloadOptionsSkipEarlyCheck</TokenIdentifier>
+            <Abstract type="html">Skip the early check of the memory cache</Abstract>
+            <Declaration>PINRemoteImageManagerDownloadOptionsSkipEarlyCheck</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+            <NodeRef refid="9"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerSaveProcessedImageAsJPEG</TokenIdentifier>
+            <Abstract type="html">Save processed images as JPEGs in the cache. The default is PNG to support transparency</Abstract>
+            <Declaration>PINRemoteImageManagerSaveProcessedImageAsJPEG</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
             
             <NodeRef refid="9"/>
         </Token>

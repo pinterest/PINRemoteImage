@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Constants/PINRemoteImageResultType.html">
+	<File path="Constants/PINAnimatedImageStatus.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/c/tdef/PINRemoteImageResultType</TokenIdentifier>
-			<Abstract type="html">How the image was fetched.</Abstract>
-			<DeclaredIn>PINRemoteImageManagerResult.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/c/tdef/PINAnimatedImageStatus</TokenIdentifier>
+			<Abstract type="html">The processing status of the animated image.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
             
 			
 			<NodeRef refid="8"/>
@@ -14,51 +14,61 @@
 		
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageResultTypeNone</TokenIdentifier>
-            <Abstract type="html">Returned if no image is returned</Abstract>
-            <Declaration>PINRemoteImageResultTypeNone</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/PINAnimatedImageStatusUnprocessed</TokenIdentifier>
+            <Abstract type="html">No work has been done.</Abstract>
+            <Declaration>PINAnimatedImageStatusUnprocessed</Declaration>
             
-            <DeclaredIn>PINRemoteImageManagerResult.h</DeclaredIn>
-            
-            <NodeRef refid="8"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageResultTypeMemoryCache</TokenIdentifier>
-            <Abstract type="html">Image was fetched from the memory cache</Abstract>
-            <Declaration>PINRemoteImageResultTypeMemoryCache</Declaration>
-            
-            <DeclaredIn>PINRemoteImageManagerResult.h</DeclaredIn>
+            <DeclaredIn>PINAnimatedImage.h</DeclaredIn>
             
             <NodeRef refid="8"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageResultTypeCache</TokenIdentifier>
-            <Abstract type="html">Image was fetched from the disk cache</Abstract>
-            <Declaration>PINRemoteImageResultTypeCache</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/PINAnimatedImageStatusInfoProcessed</TokenIdentifier>
+            <Abstract type="html">Info about the animated image and the cover image are available.</Abstract>
+            <Declaration>PINAnimatedImageStatusInfoProcessed</Declaration>
             
-            <DeclaredIn>PINRemoteImageManagerResult.h</DeclaredIn>
-            
-            <NodeRef refid="8"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageResultTypeDownload</TokenIdentifier>
-            <Abstract type="html">Image was downloaded</Abstract>
-            <Declaration>PINRemoteImageResultTypeDownload</Declaration>
-            
-            <DeclaredIn>PINRemoteImageManagerResult.h</DeclaredIn>
+            <DeclaredIn>PINAnimatedImage.h</DeclaredIn>
             
             <NodeRef refid="8"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageResultTypeProgress</TokenIdentifier>
-            <Abstract type="html">Image is progress</Abstract>
-            <Declaration>PINRemoteImageResultTypeProgress</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/PINAnimatedImageStatusFirstFileProcessed</TokenIdentifier>
+            <Abstract type="html">At least one set of frames has been decoded to a file. It&apos;s safe to start playback.</Abstract>
+            <Declaration>PINAnimatedImageStatusFirstFileProcessed</Declaration>
             
-            <DeclaredIn>PINRemoteImageManagerResult.h</DeclaredIn>
+            <DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+            
+            <NodeRef refid="8"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINAnimatedImageStatusProcessed</TokenIdentifier>
+            <Abstract type="html">The entire animated image has been processed.</Abstract>
+            <Declaration>PINAnimatedImageStatusProcessed</Declaration>
+            
+            <DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+            
+            <NodeRef refid="8"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINAnimatedImageStatusCanceled</TokenIdentifier>
+            <Abstract type="html">Processing was canceled.</Abstract>
+            <Declaration>PINAnimatedImageStatusCanceled</Declaration>
+            
+            <DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+            
+            <NodeRef refid="8"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINAnimatedImageStatusError</TokenIdentifier>
+            <Abstract type="html">There was an error in processing.</Abstract>
+            <Declaration>PINAnimatedImageStatusError</Declaration>
+            
+            <DeclaredIn>PINAnimatedImage.h</DeclaredIn>
             
             <NodeRef refid="8"/>
         </Token>

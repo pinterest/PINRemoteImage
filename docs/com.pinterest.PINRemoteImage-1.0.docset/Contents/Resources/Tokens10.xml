@@ -1,8 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="">
+	<File path="Constants/PINRemoteImageManagerError.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/c/tdef/PINRemoteImageManagerError</TokenIdentifier>
+			<Abstract type="html">Error codes returned by PINRemoteImage</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+			
+			<NodeRef refid="10"/>
+		</Token>
 		
 		
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerErrorFailedToDecodeImage</TokenIdentifier>
+            <Abstract type="html">The image failed to decode</Abstract>
+            <Declaration>PINRemoteImageManagerErrorFailedToDecodeImage</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+            <NodeRef refid="10"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerErrorFailedToFetchImageForProcessing</TokenIdentifier>
+            <Abstract type="html">The image could not be downloaded and therefore could not be processed</Abstract>
+            <Declaration>PINRemoteImageManagerErrorFailedToFetchImageForProcessing</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+            <NodeRef refid="10"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerErrorFailedToProcessImage</TokenIdentifier>
+            <Abstract type="html">The image returned by the processor block was nil</Abstract>
+            <Declaration>PINRemoteImageManagerErrorFailedToProcessImage</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+            <NodeRef refid="10"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerErrorInvalidItemInCache</TokenIdentifier>
+            <Abstract type="html">The image in the cache was invalid</Abstract>
+            <Declaration>PINRemoteImageManagerErrorInvalidItemInCache</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+            <NodeRef refid="10"/>
+        </Token>
         
         
 	</File>

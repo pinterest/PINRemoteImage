@@ -1,57 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Constants/PINRemoteImageManagerError.html">
+	<File path="Protocols/PINRemoteImageManagerAlternateRepresentationProvider.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/c/tdef/PINRemoteImageManagerError</TokenIdentifier>
-			<Abstract type="html">Error codes returned by PINRemoteImage</Abstract>
-			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intf/PINRemoteImageManagerAlternateRepresentationProvider</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>PINAlternateRepresentationProvider.h</DeclaredIn>
             
 			
 			<NodeRef refid="6"/>
 		</Token>
 		
 		
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerErrorFailedToDecodeImage</TokenIdentifier>
-            <Abstract type="html">The image failed to decode</Abstract>
-            <Declaration>PINRemoteImageManagerErrorFailedToDecodeImage</Declaration>
-            
-            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
-            
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/PINRemoteImageManagerAlternateRepresentationProvider/alternateRepresentationWithData:options:</TokenIdentifier>
+			<Abstract type="html">This method will be called with data off the wire or stored in the cache. Return an object to have it returned as the alternativeRepresentation object in the PINRemoteImageManagerResult. @warning this method can be called on the main thread, be careful of doing expensive work.</Abstract>
+			<DeclaredIn>PINAlternateRepresentationProvider.h</DeclaredIn>
+			
+			<Declaration>- (id)alternateRepresentationWithData:(NSData *)data options:(PINRemoteImageManagerDownloadOptions)options</Declaration>
+			
+			
+			<Anchor>//api/name/alternateRepresentationWithData:options:</Anchor>
             <NodeRef refid="6"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerErrorFailedToFetchImageForProcessing</TokenIdentifier>
-            <Abstract type="html">The image could not be downloaded and therefore could not be processed</Abstract>
-            <Declaration>PINRemoteImageManagerErrorFailedToFetchImageForProcessing</Declaration>
-            
-            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
-            
-            <NodeRef refid="6"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerErrorFailedToProcessImage</TokenIdentifier>
-            <Abstract type="html">The image returned by the processor block was nil</Abstract>
-            <Declaration>PINRemoteImageManagerErrorFailedToProcessImage</Declaration>
-            
-            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
-            
-            <NodeRef refid="6"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerErrorInvalidItemInCache</TokenIdentifier>
-            <Abstract type="html">The image in the cache was invalid</Abstract>
-            <Declaration>PINRemoteImageManagerErrorInvalidItemInCache</Declaration>
-            
-            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
-            
-            <NodeRef refid="6"/>
-        </Token>
+		</Token>
+		
         
         
 	</File>

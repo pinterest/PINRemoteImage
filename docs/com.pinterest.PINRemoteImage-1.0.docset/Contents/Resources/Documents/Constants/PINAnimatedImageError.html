@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>PINRemoteImageManagerError Constants Reference</title>
+	<title>PINAnimatedImageError Constants Reference</title>
 
 	<link rel="stylesheet" href="../css/style.css">
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
@@ -59,13 +59,13 @@
 		<div id="overview_contents" class="container">
 			<div id="content">
 				<main role="main">
-					<h1 class="title">PINRemoteImageManagerError Constants Reference</h1>
+					<h1 class="title">PINAnimatedImageError Constants Reference</h1>
 
 					
 					<div class="section section-specification"><table cellspacing="0"><tbody>
 						<tr>
 	<th>Declared in</th>
-	<td>PINRemoteImageManager.h</td>
+	<td>PINAnimatedImage.h</td>
 </tr>
 						</tbody></table></div>
 					
@@ -75,11 +75,11 @@
 					
 
                     
-                    <h3 class="subsubtitle method-title">PINRemoteImageManagerError</h3>
+                    <h3 class="subsubtitle method-title">PINAnimatedImageError</h3>
                     
 					
 					<div class="section section-overview">
-                        <p>Error codes returned by PINRemoteImage</p>
+                        <p>PINAnimatedImage decoding and processing errors.</p>
 					</div>
 					
 					
@@ -87,15 +87,17 @@
                         <!-- display enum values -->
                         
                         <h4 class="method-subtitle">Definition</h4>
-                        <code>typedef NS_ENUM(NSUInteger, PINRemoteImageManagerError ) {<br>
+                        <code>typedef NS_ENUM(NSUInteger, PINAnimatedImageError ) {<br>
                             
-                            &nbsp;&nbsp; <a href="">PINRemoteImageManagerErrorFailedToDecodeImage</a> = 1,<br>
+                            &nbsp;&nbsp; <a href="">PINAnimatedImageErrorNoError</a> = 0,<br>
                             
-                            &nbsp;&nbsp; <a href="">PINRemoteImageManagerErrorFailedToFetchImageForProcessing</a> = 2,<br>
+                            &nbsp;&nbsp; <a href="">PINAnimatedImageErrorFileCreationError</a>,<br>
                             
-                            &nbsp;&nbsp; <a href="">PINRemoteImageManagerErrorFailedToProcessImage</a> = 3,<br>
+                            &nbsp;&nbsp; <a href="">PINAnimatedImageErrorFileHandleError</a>,<br>
                             
-                            &nbsp;&nbsp; <a href="">PINRemoteImageManagerErrorInvalidItemInCache</a> = 4,<br>
+                            &nbsp;&nbsp; <a href="">PINAnimatedImageErrorImageFrameError</a>,<br>
+                            
+                            &nbsp;&nbsp; <a href="">PINAnimatedImageErrorMappingError</a>,<br>
                             
                             };</code>
                     
@@ -105,11 +107,11 @@
                         <h4 class="method-subtitle">Constants</h4>
                         <dl class="termdef">
                             
-                            <dt><a name="" title="PINRemoteImageManagerErrorFailedToDecodeImage"></a><code>PINRemoteImageManagerErrorFailedToDecodeImage</code></dt>
+                            <dt><a name="" title="PINAnimatedImageErrorNoError"></a><code>PINAnimatedImageErrorNoError</code></dt>
 <dd>
 
 
-<p>The image failed to decode</p>
+<p>No error, yay!</p>
 
 
 
@@ -117,16 +119,16 @@
 
     
 	<p>
-		Declared In <code class="declared-in-ref">PINRemoteImageManager.h</code>.
+		Declared In <code class="declared-in-ref">PINAnimatedImage.h</code>.
 	</p>
 	
 </dd>
                             
-                            <dt><a name="" title="PINRemoteImageManagerErrorFailedToFetchImageForProcessing"></a><code>PINRemoteImageManagerErrorFailedToFetchImageForProcessing</code></dt>
+                            <dt><a name="" title="PINAnimatedImageErrorFileCreationError"></a><code>PINAnimatedImageErrorFileCreationError</code></dt>
 <dd>
 
 
-<p>The image could not be downloaded and therefore could not be processed</p>
+<p>Could not create a necessary file.</p>
 
 
 
@@ -134,16 +136,16 @@
 
     
 	<p>
-		Declared In <code class="declared-in-ref">PINRemoteImageManager.h</code>.
+		Declared In <code class="declared-in-ref">PINAnimatedImage.h</code>.
 	</p>
 	
 </dd>
                             
-                            <dt><a name="" title="PINRemoteImageManagerErrorFailedToProcessImage"></a><code>PINRemoteImageManagerErrorFailedToProcessImage</code></dt>
+                            <dt><a name="" title="PINAnimatedImageErrorFileHandleError"></a><code>PINAnimatedImageErrorFileHandleError</code></dt>
 <dd>
 
 
-<p>The image returned by the processor block was nil</p>
+<p>Could not get a file handle to the necessary file.</p>
 
 
 
@@ -151,16 +153,16 @@
 
     
 	<p>
-		Declared In <code class="declared-in-ref">PINRemoteImageManager.h</code>.
+		Declared In <code class="declared-in-ref">PINAnimatedImage.h</code>.
 	</p>
 	
 </dd>
                             
-                            <dt><a name="" title="PINRemoteImageManagerErrorInvalidItemInCache"></a><code>PINRemoteImageManagerErrorInvalidItemInCache</code></dt>
+                            <dt><a name="" title="PINAnimatedImageErrorImageFrameError"></a><code>PINAnimatedImageErrorImageFrameError</code></dt>
 <dd>
 
 
-<p>The image in the cache was invalid</p>
+<p>Could not decode the image.</p>
 
 
 
@@ -168,7 +170,24 @@
 
     
 	<p>
-		Declared In <code class="declared-in-ref">PINRemoteImageManager.h</code>.
+		Declared In <code class="declared-in-ref">PINAnimatedImage.h</code>.
+	</p>
+	
+</dd>
+                            
+                            <dt><a name="" title="PINAnimatedImageErrorMappingError"></a><code>PINAnimatedImageErrorMappingError</code></dt>
+<dd>
+
+
+<p>Could not memory map the file.</p>
+
+
+
+
+
+    
+	<p>
+		Declared In <code class="declared-in-ref">PINAnimatedImage.h</code>.
 	</p>
 	
 </dd>
@@ -185,7 +204,7 @@
                     
                     <div class="method-subsection declared-in-section">
                         <h4 class="method-subtitle">Declared In</h4>
-                        <p><code class="declared-in-ref">PINRemoteImageManager.h</code></p>
+                        <p><code class="declared-in-ref">PINAnimatedImage.h</code></p>
                     </div>
                     
                     

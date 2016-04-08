@@ -19,6 +19,7 @@ static const size_t kPINAnimatedImageBitsPerComponent = 8;
 const size_t kPINAnimatedImageComponentsPerPixel = 4;
 
 const NSTimeInterval kPINAnimatedImageDisplayRefreshRate = 60.0;
+//http://nullsleep.tumblr.com/post/16524517190/animated-gif-minimum-frame-delay-browser
 const Float32 kPINAnimatedImageMinimumDuration = 1 / kPINAnimatedImageDisplayRefreshRate;
 
 @class PINSharedAnimatedImage;
