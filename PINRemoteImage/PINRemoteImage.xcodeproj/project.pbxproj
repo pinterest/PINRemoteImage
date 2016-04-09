@@ -170,6 +170,7 @@
 				F1B918D21BCF239200710963 /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		F1B918D21BCF239200710963 /* Products */ = {
 			isa = PBXGroup;
