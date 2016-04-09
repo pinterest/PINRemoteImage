@@ -850,12 +850,12 @@ static dispatch_once_t sharedDispatchToken;
 {
 	NSMutableArray *tasks = [NSMutableArray arrayWithCapacity:urls.count];
     for (NSURL *url in urls) {
-		NSUUID *task = [self prefetchImageWithURL:url options:options];
-		if (task != nil) {
-			[tasks addObject:task];
-		}
+        NSUUID *task = [self prefetchImageWithURL:url options:options];
+        if (task != nil) {
+            [tasks addObject:task];
+        }
     }
-	return tasks;
+    return tasks;
 }
 
 - (NSUUID *)prefetchImageWithURL:(NSURL *)url
