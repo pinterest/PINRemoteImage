@@ -841,26 +841,31 @@ static dispatch_once_t sharedDispatchToken;
 
 #pragma mark - Prefetching
 
-- (void)prefetchImagesWithURLs:(NSArray <NSURL *> *)urls
+- (NSArray<NSUUID *> *)prefetchImagesWithURLs:(NSArray <NSURL *> *)urls
 {
     [self prefetchImagesWithURLs:urls options:PINRemoteImageManagerDownloadOptionsNone | PINRemoteImageManagerDownloadOptionsSkipEarlyCheck];
 }
 
-- (void)prefetchImagesWithURLs:(NSArray <NSURL *> *)urls options:(PINRemoteImageManagerDownloadOptions)options
+- (NSArray<NSUUID *> *)prefetchImagesWithURLs:(NSArray <NSURL *> *)urls options:(PINRemoteImageManagerDownloadOptions)options
 {
+	NSMutableArray *tasks = [NSMutableArray arrayWithCapacity:urls.count];
     for (NSURL *url in urls) {
-        [self prefetchImageWithURL:url options:options];
+		NSUUID *task = [self prefetchImageWithURL:url options:options];
+		if (task != nil) {
+			[tasks addObject:task];
+		}
     }
+	return tasks;
 }
 
-- (void)prefetchImageWithURL:(NSURL *)url
+- (NSUUID *)prefetchImageWithURL:(NSURL *)url
 {
-    [self prefetchImageWithURL:url options:PINRemoteImageManagerDownloadOptionsNone | PINRemoteImageManagerDownloadOptionsSkipEarlyCheck];
+    return [self prefetchImageWithURL:url options:PINRemoteImageManagerDownloadOptionsNone | PINRemoteImageManagerDownloadOptionsSkipEarlyCheck];
 }
 
-- (void)prefetchImageWithURL:(NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options
+- (NSUUID *)prefetchImageWithURL:(NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options
 {
-    [self downloadImageWithURL:url
+    return [self downloadImageWithURL:url
                        options:options
                       priority:PINRemoteImageManagerPriorityVeryLow
                   processorKey:nil
