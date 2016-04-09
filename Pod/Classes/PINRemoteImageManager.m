@@ -848,7 +848,7 @@ static dispatch_once_t sharedDispatchToken;
 
 - (NSArray<NSUUID *> *)prefetchImagesWithURLs:(NSArray <NSURL *> *)urls options:(PINRemoteImageManagerDownloadOptions)options
 {
-	NSMutableArray *tasks = [NSMutableArray arrayWithCapacity:urls.count];
+    NSMutableArray *tasks = [NSMutableArray arrayWithCapacity:urls.count];
     for (NSURL *url in urls) {
         NSUUID *task = [self prefetchImageWithURL:url options:options];
         if (task != nil) {
