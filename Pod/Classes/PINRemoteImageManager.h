@@ -218,9 +218,9 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
                                completion:(nullable dispatch_block_t)completion;
 
 /**
- Set the estimated time remaining to download threshold at which to generate progressive images. Progressive images previews will only be generated if the estimated remaining time on a download is greater than estimatedTimeRemainingThreshold. If estimatedTimeRemainingThreshold is less than zero, this check is skipped.
+ Set the estimated time remaining to download threshold at which to generate progressive images. Progressive images previews will only be generated if the estimated remaining time on a download is greater than estimatedTimeRemainingThreshold. If estimatedTimeRemainingThreshold is less than or equal to zero, this check is skipped.
  
- @param estimatedRemainingTimeThreshold The estimated remaining time threshold used to decide to skip progressive rendering. Defaults to 0.1.
+ @param estimatedRemainingTimeThreshold The estimated remaining time threshold used to decide to skip progressive rendering. Defaults to 0.
  @param completion Completion to be called once estimatedTimeRemainingTimeThreshold is set.
  */
 - (void)setEstimatedRemainingTimeThresholdForProgressiveDownloads:(NSTimeInterval)estimatedRemainingTimeThreshold

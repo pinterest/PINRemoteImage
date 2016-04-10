@@ -165,7 +165,7 @@
             return nil;
         }
         
-        if (_estimatedRemainingTimeThreshold < 0 || self.estimatedRemainingTime < _estimatedRemainingTimeThreshold) {
+        if (_estimatedRemainingTimeThreshold > 0 && self.estimatedRemainingTime < _estimatedRemainingTimeThreshold) {
             [self.lock unlock];
             return nil;
         }
