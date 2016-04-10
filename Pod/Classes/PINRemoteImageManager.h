@@ -245,7 +245,7 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
                              completion:(nullable dispatch_block_t)completion;
 
 /**
- Sets the maximum size of an image that PINRemoteImage will blur. If the image is too large, blurring is skipped
+ Sets the maximum size of an image that PINRemoteImage will render progessively. If the image is too large, progressive rendering is skipped.
  
  @param maxProgressiveRenderSize A CGSize which indicates the max size PINRemoteImage will render a progressive image. If an image is larger in either dimension, progressive rendering will be skipped
  @param completion Completion to be called once maxProgressiveRenderSize is set.
