@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Constants/PINRemoteImageManagerPriority.html">
+	<File path="Constants/PINAnimatedImageError.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/c/tdef/PINRemoteImageManagerPriority</TokenIdentifier>
-			<Abstract type="html">Priority to download and process image at.</Abstract>
-			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/c/tdef/PINAnimatedImageError</TokenIdentifier>
+			<Abstract type="html">PINAnimatedImage decoding and processing errors.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
             
 			
 			<NodeRef refid="7"/>
@@ -14,51 +14,51 @@
 		
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityVeryLow</TokenIdentifier>
-            <Abstract type="html">Very low priority</Abstract>
-            <Declaration>PINRemoteImageManagerPriorityVeryLow</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/PINAnimatedImageErrorNoError</TokenIdentifier>
+            <Abstract type="html">No error, yay!</Abstract>
+            <Declaration>PINAnimatedImageErrorNoError</Declaration>
             
-            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
-            
-            <NodeRef refid="7"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityLow</TokenIdentifier>
-            <Abstract type="html">Low priority</Abstract>
-            <Declaration>PINRemoteImageManagerPriorityLow</Declaration>
-            
-            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            <DeclaredIn>PINAnimatedImage.h</DeclaredIn>
             
             <NodeRef refid="7"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityMedium</TokenIdentifier>
-            <Abstract type="html">Medium priority</Abstract>
-            <Declaration>PINRemoteImageManagerPriorityMedium</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/PINAnimatedImageErrorFileCreationError</TokenIdentifier>
+            <Abstract type="html">Could not create a necessary file.</Abstract>
+            <Declaration>PINAnimatedImageErrorFileCreationError</Declaration>
             
-            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
-            
-            <NodeRef refid="7"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityHigh</TokenIdentifier>
-            <Abstract type="html">High priority</Abstract>
-            <Declaration>PINRemoteImageManagerPriorityHigh</Declaration>
-            
-            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            <DeclaredIn>PINAnimatedImage.h</DeclaredIn>
             
             <NodeRef refid="7"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityVeryHigh</TokenIdentifier>
-            <Abstract type="html">Very high priority</Abstract>
-            <Declaration>PINRemoteImageManagerPriorityVeryHigh</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/PINAnimatedImageErrorFileHandleError</TokenIdentifier>
+            <Abstract type="html">Could not get a file handle to the necessary file.</Abstract>
+            <Declaration>PINAnimatedImageErrorFileHandleError</Declaration>
             
-            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            <DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+            
+            <NodeRef refid="7"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINAnimatedImageErrorImageFrameError</TokenIdentifier>
+            <Abstract type="html">Could not decode the image.</Abstract>
+            <Declaration>PINAnimatedImageErrorImageFrameError</Declaration>
+            
+            <DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+            
+            <NodeRef refid="7"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINAnimatedImageErrorMappingError</TokenIdentifier>
+            <Abstract type="html">Could not memory map the file.</Abstract>
+            <Declaration>PINAnimatedImageErrorMappingError</Declaration>
+            
+            <DeclaredIn>PINAnimatedImage.h</DeclaredIn>
             
             <NodeRef refid="7"/>
         </Token>

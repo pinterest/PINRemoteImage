@@ -6,6 +6,8 @@
 #import "PINButton+PINRemoteImage.h"
 #import "PINImageView+PINRemoteImage.h"
 #import "PINAlternateRepresentationProvider.h"
+#import "PINAnimatedImage.h"
+#import "PINAnimatedImageManager.h"
 #import "PINDataTaskOperation.h"
 #import "PINProgressiveImage.h"
 #import "PINRemoteImage.h"

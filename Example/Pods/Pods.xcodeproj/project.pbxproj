@@ -10,6 +10,19 @@
 	<string>46</string>
 	<key>objects</key>
 	<dict>
+		<key>0076CD5A21FD8D4C3C81FE3D5A45C42E</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteImageMacros.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>00B2BEE1D596A306899DFE0B44C7D72A</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -75,12 +88,18 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>030FC8700254D812D6AB7EE6D6872576</key>
+		<key>03109C8E27BEDBE94EE41A75E6302D30</key>
 		<dict>
-			<key>fileRef</key>
-			<string>F9DD7EE75BAEBEE12846EEEFE0DF6C16</string>
+			<key>includeInIndex</key>
+			<string>1</string>
 			<key>isa</key>
-			<string>PBXBuildFile</string>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINRemoteLock.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>03160258C1B0B80A1AC250D009F60A52</key>
 		<dict>
@@ -117,6 +136,20 @@
 			<dict>
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
+			</dict>
+		</dict>
+		<key>036BF7C7F13A222709D33AD22A052295</key>
+		<dict>
+			<key>fileRef</key>
+			<string>6D93306E700F9299E37BD6DA937D260B</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
 			</dict>
 		</dict>
 		<key>03AAE5B8FDE4FC4381096DE9827E78F2</key>
@@ -199,20 +232,6 @@
 			<key>name</key>
 			<string>Release</string>
 		</dict>
-		<key>04381D9B46DD5DB37E32898AA4563815</key>
-		<dict>
-			<key>fileRef</key>
-			<string>2739770120B569DE91C2C2E408C84584</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
 		<key>047836507CA69F275975EADE4C9B8BA7</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -227,6 +246,27 @@
 			<string>src/dec/vp8i.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
+		</dict>
+		<key>0505797A63A7C59B37EFE5D8A21387D8</key>
+		<dict>
+			<key>fileRef</key>
+			<string>D249EDC6D35283EFF7570D39D07D1AAC</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>056272822D16293762F9F4B6B47C8A57</key>
+		<dict>
+			<key>fileRef</key>
+			<string>CAB44D3760A3CBEB05E388234A55CAE4</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
 		</dict>
 		<key>060A675570DC5A9909A7E75B4AA4B077</key>
 		<dict>
@@ -305,6 +345,33 @@
 				<string>-DOS_OBJECT_USE_OBJC=0</string>
 			</dict>
 		</dict>
+		<key>07A1B21C877983832F480A9E4E7C9B07</key>
+		<dict>
+			<key>fileRef</key>
+			<string>D249EDC6D35283EFF7570D39D07D1AAC</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>080E098218C3DB57319BE6254E7C9563</key>
+		<dict>
+			<key>fileRef</key>
+			<string>0DC5B05DCB0E8F00D23598C1C18806CC</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>08137A9E91CCA9EED36F3142809DE370</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINRemoteImageCategoryManager.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>0839296EA88638F77315F77F49687A01</key>
 		<dict>
 			<key>fileRef</key>
@@ -358,6 +425,20 @@
 			<key>sourceTree</key>
 			<string>DEVELOPER_DIR</string>
 		</dict>
+		<key>08D5D6CD76A31ABFA6E092502726BE9B</key>
+		<dict>
+			<key>fileRef</key>
+			<string>AB68ED522C720568EE98EF886E6D0BC4</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
 		<key>08ED420669A05CB90FB7FB746D33355E</key>
 		<dict>
 			<key>isa</key>
@@ -384,19 +465,6 @@
 					<string>Public</string>
 				</array>
 			</dict>
-		</dict>
-		<key>091AA69DAE76A35DC3720AEA01BA3D0E</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>PINImageView+PINRemoteImage.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>09272F14B86EB723F4F71382F4295BE2</key>
 		<dict>
@@ -442,47 +510,6 @@
 			<string>../Pods-PINRemoteImage-PINCache/Pods-PINRemoteImage-PINCache-prefix.pch</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
-		</dict>
-		<key>0A378C20FBC710B8D3551FFB3DDDA9F7</key>
-		<dict>
-			<key>fileRef</key>
-			<string>FA8698DA87B8D98AD05F6C8D86DBBD03</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
-		<key>0A5417BC46EB03CE143BB285C52829A0</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>PINRemoteImageMemoryContainer.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>0A6DAE3C7C8030425FA11DE1F386379F</key>
-		<dict>
-			<key>fileRef</key>
-			<string>21E4E0020AA60516B3D512496E9A95D0</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
 		</dict>
 		<key>0A7D6B7741B415DB5DA808A4FD6A9500</key>
 		<dict>
@@ -544,6 +571,20 @@
 			<string>XCBuildConfiguration</string>
 			<key>name</key>
 			<string>Release</string>
+		</dict>
+		<key>0B5413F443190A42FF9C73BB7A0CAD87</key>
+		<dict>
+			<key>fileRef</key>
+			<string>87D3D2520058424F65092DD64894D64C</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
 		</dict>
 		<key>0B57334D6C23DADAA4F7D802A5760EB2</key>
 		<dict>
@@ -618,19 +659,6 @@
 			<key>name</key>
 			<string>Debug</string>
 		</dict>
-		<key>0B84251127B0B50C44B947590DF55322</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>PINDataTaskOperation.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>0B92C6DE82F0014698D1A17D04BA24CE</key>
 		<dict>
 			<key>fileRef</key>
@@ -643,10 +671,10 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>0B9F7AC4AB812F12ECD2F549B0504739</key>
+		<key>0BB29132F5802654DC5F96AD3B7E8020</key>
 		<dict>
 			<key>fileRef</key>
-			<string>5CDAEC42CC06E9F629C117BA3B377FBB</string>
+			<string>C9018D8CFA86C1F8A3F447B39B08ED6B</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
@@ -740,6 +768,13 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
+		<key>0D1A3F13282F26A45DDEB1B3EBE8EA7E</key>
+		<dict>
+			<key>fileRef</key>
+			<string>08137A9E91CCA9EED36F3142809DE370</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
 		<key>0D648B0DE91E72036686B2543ED2AB2B</key>
 		<dict>
 			<key>fileRef</key>
@@ -767,16 +802,16 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>0DD43D93E41FFBAF5A9F241F3BC3837A</key>
+		<key>0DC5B05DCB0E8F00D23598C1C18806CC</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
+			<string>sourcecode.c.objc</string>
 			<key>path</key>
-			<string>PINImage+DecodedImage.h</string>
+			<string>PINAnimatedImage.m</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -803,13 +838,6 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
-		</dict>
-		<key>0E54762AD6F083ECF385C8476B6B8E60</key>
-		<dict>
-			<key>fileRef</key>
-			<string>FEF34F591D7081136906E3EF6443657F</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
 		</dict>
 		<key>0E54C5B38594372F7F0505E83627DCDB</key>
 		<dict>
@@ -887,6 +915,13 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
+		<key>109C43F051549A654A96059BB1E25509</key>
+		<dict>
+			<key>fileRef</key>
+			<string>2D689DDBAE70410B13FE24552095B9C1</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
 		<key>109DFFC70F517EB543DB249DB84B1B23</key>
 		<dict>
 			<key>fileRef</key>
@@ -910,19 +945,6 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
-		</dict>
-		<key>11082887BCFDA4949FBA997E1EEBC809</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>PINImage+DecodedImage.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>11631131641FB26234D690DAE94DB090</key>
 		<dict>
@@ -963,6 +985,13 @@
 			<key>isa</key>
 			<string>XCConfigurationList</string>
 		</dict>
+		<key>122BFECF9616C3651E58FA09991DA4D6</key>
+		<dict>
+			<key>fileRef</key>
+			<string>471AFDCC11C51C24D8C38EF4B35F5B7D</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
 		<key>128418F732403DDCA1B04186719D75C3</key>
 		<dict>
 			<key>fileRef</key>
@@ -974,6 +1003,19 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
+		</dict>
+		<key>12D8292EE1144C9DA5CB1B5C0A05AA98</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINImage+DecodedImage.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>13238AAE414C28744680FBB3371701BA</key>
 		<dict>
@@ -1001,6 +1043,20 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
+		<key>13B20953F5F50AA7C21EE06EA988419B</key>
+		<dict>
+			<key>fileRef</key>
+			<string>6AA582679EB729D68912F9C2D98AD93B</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
 		<key>13E434C0AE2F99377B4587AE15199116</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -1011,19 +1067,6 @@
 			<string>text.xcconfig</string>
 			<key>path</key>
 			<string>Pods-PINRemoteImage Tests.release.xcconfig</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>142B7B99689A8E8379BF43F9FBE32FDF</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>PINRemoteImage.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -1076,13 +1119,6 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>14C11847B4244318D0AF61ABB83D281F</key>
-		<dict>
-			<key>fileRef</key>
-			<string>3265D333ADFE8A793C0C69DC75D0BD14</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
 		<key>14DEB6FAB33B71BDECEA0EA07DFD60EE</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -1130,50 +1166,6 @@
 				<string>-DOS_OBJECT_USE_OBJC=0</string>
 			</dict>
 		</dict>
-		<key>15B16DE14EA48CCA5CBEFE3DFE028E5B</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>9E59C613082C55ABA7CBCC0237E77285</string>
-				<string>43A4A414995D57D80A59593D93C1FCB1</string>
-				<string>EC9C0199BDD24346C2E9A794D9C15975</string>
-				<string>0B84251127B0B50C44B947590DF55322</string>
-				<string>433F4E7B5562536EE5F8D1C45DD6F685</string>
-				<string>77F6C8F44DE7BCBD12A5D4D29180ACCF</string>
-				<string>142B7B99689A8E8379BF43F9FBE32FDF</string>
-				<string>C0D2E192CD2BE1D712ED8BD1D346181B</string>
-				<string>3265D333ADFE8A793C0C69DC75D0BD14</string>
-				<string>CF63D1A058D9329C25C9EE3BC4CFF99A</string>
-				<string>904DC366DAE7A988245D453AB214B682</string>
-				<string>27CE9888164D24FE48DD63D4BD520331</string>
-				<string>FEF34F591D7081136906E3EF6443657F</string>
-				<string>47135967CE8061966441A8968CC34C8A</string>
-				<string>2739770120B569DE91C2C2E408C84584</string>
-				<string>A4DC1DC4EFAD5788862408293786A5A3</string>
-				<string>62D8246E86C13742563BCCED3BF094D0</string>
-				<string>55898A679D150C9E811A83D2FD8E3CB6</string>
-				<string>0A5417BC46EB03CE143BB285C52829A0</string>
-				<string>F9DD7EE75BAEBEE12846EEEFE0DF6C16</string>
-				<string>2A161F82E0D80AE1AC83ACD6008106F2</string>
-				<string>27596FA4AFC71AFF18C5E123CA4DF339</string>
-				<string>BD9F35DDEDDD2CDF8D1DF197C4BB3B96</string>
-				<string>2CBAB7C7855B6E8D6E582EA2458A19A8</string>
-				<string>C9E3A321C73E7F58348C646BF01A6164</string>
-				<string>F470EE75A4F3CD3C1BCCCC870F254A4F</string>
-				<string>89933142E6B0E3632BAB8DCB5C314B48</string>
-				<string>6BD5467772C62FB997CC09C8B9B9945A</string>
-				<string>200C66ADE230EE2539C65993CCC5DE4F</string>
-				<string>3A065139227CAC4ECFD2549CF4A0ADC3</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Classes</string>
-			<key>path</key>
-			<string>Classes</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>1619F8675722831B260A0F3CF8ACD6B4</key>
 		<dict>
 			<key>fileRef</key>
@@ -1199,13 +1191,6 @@
 					<string>Public</string>
 				</array>
 			</dict>
-		</dict>
-		<key>16D974A8E683ECF02D48901A416D1579</key>
-		<dict>
-			<key>fileRef</key>
-			<string>27596FA4AFC71AFF18C5E123CA4DF339</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
 		</dict>
 		<key>1781B55E092353F762807E195F0D94F6</key>
 		<dict>
@@ -1305,32 +1290,12 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>191EA4516B2B0725FFBE717FB2D63F4B</key>
+		<key>197B61F6FEDF4D99E776DF3DCA871D89</key>
 		<dict>
 			<key>fileRef</key>
-			<string>47135967CE8061966441A8968CC34C8A</string>
+			<string>08137A9E91CCA9EED36F3142809DE370</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
-		<key>19766FFC040C77C7D35D96F8B035DD32</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>PINImage+WebP.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>19C6F5AD54B501CB69E9B4014B763468</key>
 		<dict>
@@ -1359,10 +1324,10 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>1A1CAD6FA572C8EFB2DCB9FFD46102A9</key>
+		<key>19CA21D4E473C742D1C8A16C68378AF6</key>
 		<dict>
 			<key>fileRef</key>
-			<string>0A5417BC46EB03CE143BB285C52829A0</string>
+			<string>871060E43061B65B8CF63D1F5F92FAA7</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -1383,20 +1348,6 @@
 			<dict>
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
-			</dict>
-		</dict>
-		<key>1AF42DF677908BCDEA0C44720CE9A9C5</key>
-		<dict>
-			<key>fileRef</key>
-			<string>BD9F35DDEDDD2CDF8D1DF197C4BB3B96</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
 			</dict>
 		</dict>
 		<key>1B57B3C900DE5296E499AC6140EEA0AA</key>
@@ -1424,6 +1375,20 @@
 			<string>src/dsp/lossless_enc.c</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
+		</dict>
+		<key>1B83821559C227571B7C8B3DF05303D1</key>
+		<dict>
+			<key>fileRef</key>
+			<string>E8E25D187CAA59B53571BABC995F95CE</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
 		</dict>
 		<key>1B9B582F669B390FA2D4545EF4E621F4</key>
 		<dict>
@@ -1453,20 +1418,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>1BE50AA93D6A47086C8835D23AF4C89E</key>
-		<dict>
-			<key>fileRef</key>
-			<string>2A161F82E0D80AE1AC83ACD6008106F2</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
 		<key>1BEE7D55F12EF83A55A1C8CCDF34D92F</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -1482,24 +1433,10 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>1CD611CFD89E3269183F04327ED0F912</key>
+		<key>1C109DB0BAE462FFBB7A7BB4A4C26986</key>
 		<dict>
 			<key>fileRef</key>
-			<string>0DD43D93E41FFBAF5A9F241F3BC3837A</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
-		<key>1DA13EE96D82E1EDF0A9911FEB952523</key>
-		<dict>
-			<key>fileRef</key>
-			<string>142B7B99689A8E8379BF43F9FBE32FDF</string>
+			<string>67A95FD2D4F661A107292347E6FFE0EE</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -1585,25 +1522,12 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>200C66ADE230EE2539C65993CCC5DE4F</key>
+		<key>206DCD0B7769047005159F3BC5EC2D60</key>
 		<dict>
-			<key>children</key>
-			<array>
-				<string>8F9C4578CD3A6A90DD49661C790AEC5A</string>
-				<string>A2F30F5A41C6F1062A846F16FD33B52D</string>
-				<string>0DD43D93E41FFBAF5A9F241F3BC3837A</string>
-				<string>11082887BCFDA4949FBA997E1EEBC809</string>
-				<string>BB860B20514C3C3D5963CBED4C602AB3</string>
-				<string>19766FFC040C77C7D35D96F8B035DD32</string>
-			</array>
+			<key>fileRef</key>
+			<string>76586C5A309E927C18A5CB63315A235C</string>
 			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Categories</string>
-			<key>path</key>
-			<string>Categories</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
+			<string>PBXBuildFile</string>
 		</dict>
 		<key>20C7F726E0D6A8676CEF34159DB97DC4</key>
 		<dict>
@@ -1617,19 +1541,6 @@
 			<string>Pods-PINRemoteImage-PINCache.xcconfig</string>
 			<key>path</key>
 			<string>../Pods-PINRemoteImage-PINCache/Pods-PINRemoteImage-PINCache.xcconfig</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>21E4E0020AA60516B3D512496E9A95D0</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>PINImageView+PINRemoteImage.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -1683,6 +1594,20 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>229713C4BC8F64F3C25C11915EE15CF2</key>
+		<dict>
+			<key>fileRef</key>
+			<string>DD21C5E2CBBC2F2FFC55ECD7E51F8968</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
 		<key>22A52AAD1EE943CE17A3EF447DB848C7</key>
 		<dict>
 			<key>children</key>
@@ -1697,10 +1622,38 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>22FB7EDFEC47DF28C7BDE5D8AA0AC34E</key>
+		<dict>
+			<key>fileRef</key>
+			<string>8FD45D3A953690DCBB9B94211C408399</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
 		<key>2310584B1A349A2AECE50064336B8C01</key>
 		<dict>
 			<key>fileRef</key>
 			<string>B2FF7D4A8188E0CB7A161A50C9BD1159</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>234D58303ECAEAFE19646BBEDE05E61A</key>
+		<dict>
+			<key>fileRef</key>
+			<string>E8E25D187CAA59B53571BABC995F95CE</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -1734,6 +1687,13 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
+		</dict>
+		<key>24C040A6E05CFF7B702DDB26436F33FC</key>
+		<dict>
+			<key>fileRef</key>
+			<string>B66E43BD29B7C4BAB87D0D70D9FB41E3</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
 		</dict>
 		<key>24C7E4E637BA83E975BBAC128FAC1E10</key>
 		<dict>
@@ -1795,20 +1755,6 @@
 			<string>../Target Support Files/Pods-PINRemoteImage Tests-PINCache</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
-		</dict>
-		<key>2562F4D6F8EC74AFB28D275D2E70D287</key>
-		<dict>
-			<key>fileRef</key>
-			<string>C0D2E192CD2BE1D712ED8BD1D346181B</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
 		</dict>
 		<key>2590656B0BF2C1970F0285AC1B019470</key>
 		<dict>
@@ -1879,16 +1825,29 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>2739770120B569DE91C2C2E408C84584</key>
+		<key>27112521141BB00141C08074BC587ACE</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
+			<string>sourcecode.c.objc</string>
 			<key>path</key>
-			<string>PINRemoteImageManager.h</string>
+			<string>PINAlternateRepresentationProvider.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>2711E67A2F6CFE14B876254E00913B43</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINAnimatedImageManager.m</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -1907,19 +1866,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>27596FA4AFC71AFF18C5E123CA4DF339</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>PINRemoteImageProcessorTask.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>27B69590B9949FADBA89D1640706268A</key>
 		<dict>
 			<key>fileRef</key>
@@ -1931,19 +1877,6 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
-		</dict>
-		<key>27CE9888164D24FE48DD63D4BD520331</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>PINRemoteImageDownloadTask.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>28666BA8AEB34E665A16AD54C9EE093A</key>
 		<dict>
@@ -1983,6 +1916,20 @@
 			<key>remoteInfo</key>
 			<string>Pods-PINRemoteImage Tests-libwebp</string>
 		</dict>
+		<key>2920D4CB7D46EC6195B0C496D72BA261</key>
+		<dict>
+			<key>fileRef</key>
+			<string>6D93306E700F9299E37BD6DA937D260B</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
 		<key>29327B849B1EB071694C1D54BAF24F5F</key>
 		<dict>
 			<key>buildActionMask</key>
@@ -2009,23 +1956,31 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>2A161F82E0D80AE1AC83ACD6008106F2</key>
+		<key>2A4F18D7D0777C2815D4FE52FD688DD9</key>
 		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
+			<key>fileRef</key>
+			<string>E6B9080F143874A2AB627C5AB26138DC</string>
 			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>PINRemoteImageProcessorTask.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
+			<string>PBXBuildFile</string>
 		</dict>
 		<key>2AB0C4A27016791DBE68A4D65DF85BCC</key>
 		<dict>
 			<key>fileRef</key>
 			<string>D8072297B2867A71194AC2D99C334F0C</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>2B2B19B78AF2E7588E1B3B4318FB50FC</key>
+		<dict>
+			<key>fileRef</key>
+			<string>D4FC2E26863E41224C008B568F9B1624</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -2108,6 +2063,13 @@
 				</array>
 			</dict>
 		</dict>
+		<key>2C4A3D969A809D664B722A6D3E2DF856</key>
+		<dict>
+			<key>fileRef</key>
+			<string>EB8E5133D9B0A3ACF1EEC167624CF965</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
 		<key>2C5CA9538539FE8AFB9687CFBCA0E87E</key>
 		<dict>
 			<key>fileRef</key>
@@ -2131,19 +2093,6 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
-		</dict>
-		<key>2CBAB7C7855B6E8D6E582EA2458A19A8</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>PINRemoteImageTask.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>2CBC048FEE035C457A0FA7E74D7215EA</key>
 		<dict>
@@ -2170,7 +2119,7 @@
 		<dict>
 			<key>children</key>
 			<array>
-				<string>6EEDA1AEBB7C305DFAA12E38C4EF8D99</string>
+				<string>BE7265D48658A7819C1DFC4F1887A206</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -2191,19 +2140,18 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>2D3A1B58D7E2C96FE05237E6A10DBB6D</key>
+		<key>2D689DDBAE70410B13FE24552095B9C1</key>
 		<dict>
-			<key>fileRef</key>
-			<string>27CE9888164D24FE48DD63D4BD520331</string>
+			<key>includeInIndex</key>
+			<string>1</string>
 			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINRemoteImageCallbacks.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>2D8E8EC45A3A1A1D94AE762CB5028504</key>
 		<dict>
@@ -2304,6 +2252,34 @@
 				</array>
 			</dict>
 		</dict>
+		<key>2FDC66BFB3C9084FE0A3F383015EED94</key>
+		<dict>
+			<key>fileRef</key>
+			<string>30911EC0FB016A9F581FC226DF46D316</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>300BD2CAB0E9D6EE1D3DB54348BE26A5</key>
+		<dict>
+			<key>fileRef</key>
+			<string>12D8292EE1144C9DA5CB1B5C0A05AA98</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
 		<key>303B856F72862C562506139B67598CE2</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -2318,6 +2294,26 @@
 			<string>src/utils/thread.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
+		</dict>
+		<key>30911EC0FB016A9F581FC226DF46D316</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteImageCategoryManager.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>309431721B1287C1EF949A06B7081E2B</key>
+		<dict>
+			<key>fileRef</key>
+			<string>E25BA8CB3CA1B61EED9034FF7B0D19AE</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
 		</dict>
 		<key>319E2DB18C97B1E00EF72C11B4C0FCE7</key>
 		<dict>
@@ -2334,6 +2330,19 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>31B62E1788B607052BD82B458DB16626</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINButton+PINRemoteImage.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>325E362B826F58E9DD425AA547679245</key>
 		<dict>
 			<key>fileRef</key>
@@ -2346,18 +2355,12 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>3265D333ADFE8A793C0C69DC75D0BD14</key>
+		<key>327E27C743D6481DD484F41376D22EEE</key>
 		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
+			<key>fileRef</key>
+			<string>5630DB7021C06707C6AA8A000876C18E</string>
 			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>PINRemoteImageCallbacks.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
+			<string>PBXBuildFile</string>
 		</dict>
 		<key>33057D50F577B01298AD63ED4780C0F4</key>
 		<dict>
@@ -2397,10 +2400,57 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>352F9D726F82D9570793FBC0F7F560CD</key>
+		<key>33F0ECC6B8542ACFDA701C06850D7773</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>433656F0C4262AE4B809020AC7236D20</string>
+				<string>CDAEB6B8250E0E15CC32D7F8A8CF51F9</string>
+				<string>351BB62877A2443D7F4D3432195543B5</string>
+				<string>3E939486B7FFD23A96BA275A34290547</string>
+				<string>683174BAF9BABDED8E120A7BDCD3BC3A</string>
+				<string>D7CA9AD90666B073CB366BC01C8EDD61</string>
+				<string>5789241C73EEACD6300A8B43802FD060</string>
+				<string>0505797A63A7C59B37EFE5D8A21387D8</string>
+				<string>309431721B1287C1EF949A06B7081E2B</string>
+				<string>A4442E96FF45F805EC227176F7625A10</string>
+				<string>109C43F051549A654A96059BB1E25509</string>
+				<string>197B61F6FEDF4D99E776DF3DCA871D89</string>
+				<string>B1DB08CA82CE7098A9D9A9F06C724618</string>
+				<string>206DCD0B7769047005159F3BC5EC2D60</string>
+				<string>2C4A3D969A809D664B722A6D3E2DF856</string>
+				<string>489F1523643BCE63CF8A8DFB90593519</string>
+				<string>89C624316E1D20FEDDC16CA1E32CAA0C</string>
+				<string>FE73D5C8FEBECC4AFDC151901213800F</string>
+				<string>FE3E46B0FDE02C58C70EF824AC9C61FF</string>
+				<string>122BFECF9616C3651E58FA09991DA4D6</string>
+				<string>C24E11D9419EA7B786DDBD8F5A149C67</string>
+			</array>
+			<key>isa</key>
+			<string>PBXSourcesBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>34168FD6B0CD9AD8FFA4E89726E00453</key>
 		<dict>
 			<key>fileRef</key>
-			<string>5630DB7021C06707C6AA8A000876C18E</string>
+			<string>8FD45D3A953690DCBB9B94211C408399</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>351BB62877A2443D7F4D3432195543B5</key>
+		<dict>
+			<key>fileRef</key>
+			<string>0DC5B05DCB0E8F00D23598C1C18806CC</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
@@ -2527,13 +2577,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>38E193BBE4DAC273BB1C896CF311901B</key>
-		<dict>
-			<key>fileRef</key>
-			<string>F470EE75A4F3CD3C1BCCCC870F254A4F</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
 		<key>38EC4D13757D2679EDECFA95AA8F905A</key>
 		<dict>
 			<key>fileRef</key>
@@ -2548,13 +2591,6 @@
 				</array>
 			</dict>
 		</dict>
-		<key>394152EE58732EA9AC07A67557907342</key>
-		<dict>
-			<key>fileRef</key>
-			<string>A2F30F5A41C6F1062A846F16FD33B52D</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
 		<key>398DDFAE84FFD1ED75C33790BD6AAF08</key>
 		<dict>
 			<key>fileRef</key>
@@ -2566,24 +2602,6 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
-		</dict>
-		<key>3A065139227CAC4ECFD2549CF4A0ADC3</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>FA8698DA87B8D98AD05F6C8D86DBBD03</string>
-				<string>5CDAEC42CC06E9F629C117BA3B377FBB</string>
-				<string>21E4E0020AA60516B3D512496E9A95D0</string>
-				<string>091AA69DAE76A35DC3720AEA01BA3D0E</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Image Categories</string>
-			<key>path</key>
-			<string>Image Categories</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>3A15E5D8E37501E8FD69943D260CB04D</key>
 		<dict>
@@ -2611,12 +2629,19 @@
 				</array>
 			</dict>
 		</dict>
-		<key>3AF8F53B83626655741285C55A81951A</key>
+		<key>3BBE043FE3AA767B6B31D6B009942109</key>
 		<dict>
 			<key>fileRef</key>
-			<string>F470EE75A4F3CD3C1BCCCC870F254A4F</string>
+			<string>AD4DED4A4857A57AA018BBEABCFF30AD</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
 		</dict>
 		<key>3BC7BF5D12FA6079B4DCAF5DE2FE0942</key>
 		<dict>
@@ -2692,20 +2717,6 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>3D41CFA5CA590890A5915A4D4863D37A</key>
-		<dict>
-			<key>fileRef</key>
-			<string>0B84251127B0B50C44B947590DF55322</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>3D5A1234631CC0F86F6D38D50C52BCC4</key>
-		<dict>
-			<key>fileRef</key>
-			<string>43A4A414995D57D80A59593D93C1FCB1</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
 		<key>3D8B33A6AF105DD2D8441D4B2FF3D883</key>
 		<dict>
 			<key>containerPortal</key>
@@ -2775,6 +2786,27 @@
 				</array>
 			</dict>
 		</dict>
+		<key>3E91A8F873C86625D273F773B59E0841</key>
+		<dict>
+			<key>fileRef</key>
+			<string>31B62E1788B607052BD82B458DB16626</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>3E939486B7FFD23A96BA275A34290547</key>
+		<dict>
+			<key>fileRef</key>
+			<string>2711E67A2F6CFE14B876254E00913B43</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
 		<key>3F28397BB3ECA016DF47059C9FA98296</key>
 		<dict>
 			<key>isa</key>
@@ -2785,38 +2817,6 @@
 			<string>F9376201BF64927784318551084CA15A</string>
 			<key>targetProxy</key>
 			<string>C65F7374DCB7E10EA172911CDC4D5354</string>
-		</dict>
-		<key>3FDD601FD823BD49986D097EB52A27E7</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array>
-				<string>C05AC86BD38F1782319D5F4D11C329DB</string>
-				<string>4D080CE5B930475BEF70E5D121D83A1A</string>
-				<string>0A378C20FBC710B8D3551FFB3DDDA9F7</string>
-				<string>95AB203136406AABA293933A4E4FEE17</string>
-				<string>9701C213FDAEDAD36030A495B6F4A065</string>
-				<string>7A8C0CDB2640A98F4D1DE89C6B2C7EAB</string>
-				<string>0A6DAE3C7C8030425FA11DE1F386379F</string>
-				<string>EA198E6006DF585C7B57F7F26EA83A3B</string>
-				<string>FA6EAB9FC89258BED0E9241465B345AF</string>
-				<string>2562F4D6F8EC74AFB28D275D2E70D287</string>
-				<string>F645FF06172C6DB063481A4906A9866E</string>
-				<string>E0D5468C2703AE1181AB0460E9F3FCE5</string>
-				<string>191EA4516B2B0725FFBE717FB2D63F4B</string>
-				<string>04381D9B46DD5DB37E32898AA4563815</string>
-				<string>4299AEF9A79A5A3E1E07CA11847FA04E</string>
-				<string>1A1CAD6FA572C8EFB2DCB9FFD46102A9</string>
-				<string>42838F669696406386D506C7E07707BA</string>
-				<string>CE10A4B1DC48AD2BA4984E18868FD1A1</string>
-				<string>C5B1A83AAB84704B1E4948425527E08D</string>
-				<string>5A08ED942B4763B40EC2253EE1FDCC92</string>
-			</array>
-			<key>isa</key>
-			<string>PBXHeadersBuildPhase</string>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
 		</dict>
 		<key>3FF2C8DE63A5EB18D3097EE3F3E95B8A</key>
 		<dict>
@@ -2830,19 +2830,18 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>418D50BE75E0FA8EF7951CE52C5599B0</key>
+		<key>40D9A1B544DF209D92E3907ED9E1A70A</key>
 		<dict>
-			<key>fileRef</key>
-			<string>89933142E6B0E3632BAB8DCB5C314B48</string>
+			<key>includeInIndex</key>
+			<string>1</string>
 			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINRemoteImageDownloadTask.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>419BABEEE67869F3FE43272B6EC711AA</key>
 		<dict>
@@ -2894,20 +2893,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>42838F669696406386D506C7E07707BA</key>
-		<dict>
-			<key>fileRef</key>
-			<string>2A161F82E0D80AE1AC83ACD6008106F2</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
 		<key>4295C947AD69FD429F982D216B4F4B0D</key>
 		<dict>
 			<key>buildConfigurationList</key>
@@ -2933,45 +2918,12 @@
 			<key>productType</key>
 			<string>com.apple.product-type.library.static</string>
 		</dict>
-		<key>4299AEF9A79A5A3E1E07CA11847FA04E</key>
+		<key>433656F0C4262AE4B809020AC7236D20</key>
 		<dict>
 			<key>fileRef</key>
-			<string>62D8246E86C13742563BCCED3BF094D0</string>
+			<string>67328FB8A8385DC81AE4C9DD890869D6</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
-		<key>433F4E7B5562536EE5F8D1C45DD6F685</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>PINProgressiveImage.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>43A4A414995D57D80A59593D93C1FCB1</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>PINAlternateRepresentationProvider.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>43D1AE3C1185CCC5E573D95614C8D97F</key>
 		<dict>
@@ -3013,6 +2965,54 @@
 				</array>
 			</dict>
 		</dict>
+		<key>443EBB6EDA6FB30E9AD2AF04DA38533A</key>
+		<dict>
+			<key>fileRef</key>
+			<string>87CF5151CC9022AE59E9C670BD6FD8B3</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>447A03DBB412CB31DFA7504CBBBF80C9</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>8E8DA75120CFCF628C4BFFADD282EBC0</string>
+				<string>229713C4BC8F64F3C25C11915EE15CF2</string>
+				<string>93DB3D3ECA623175659658E8718F51A4</string>
+				<string>0B5413F443190A42FF9C73BB7A0CAD87</string>
+				<string>8D4EC6AB911B6C30136F6DBA32085FB9</string>
+				<string>443EBB6EDA6FB30E9AD2AF04DA38533A</string>
+				<string>300BD2CAB0E9D6EE1D3DB54348BE26A5</string>
+				<string>FD69D552B8DF3A902BCDD438B2C9B40F</string>
+				<string>5F231ED6A5079555A28DD9DB986D440A</string>
+				<string>9803C777DA73F8A4C3382FE9BB1D0E6F</string>
+				<string>22FB7EDFEC47DF28C7BDE5D8AA0AC34E</string>
+				<string>036BF7C7F13A222709D33AD22A052295</string>
+				<string>2FDC66BFB3C9084FE0A3F383015EED94</string>
+				<string>1B83821559C227571B7C8B3DF05303D1</string>
+				<string>FF1E84FEE759005CB8B26D84A4C3239A</string>
+				<string>BD001F42D89237C7C54EC3C1402E975B</string>
+				<string>9DAD4A6D8436924F0CB5027617182A7E</string>
+				<string>1C109DB0BAE462FFBB7A7BB4A4C26986</string>
+				<string>AAE0A47833DFB4AC943AA809BC928266</string>
+				<string>D0D9CECE36C694D723A0B318CAB91820</string>
+				<string>7EAA82B88A3D8B1250826261147EF6C8</string>
+				<string>3BBE043FE3AA767B6B31D6B009942109</string>
+			</array>
+			<key>isa</key>
+			<string>PBXHeadersBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
 		<key>44DE405E9535690BEA4531B8D8B5EA40</key>
 		<dict>
 			<key>fileRef</key>
@@ -3024,13 +3024,6 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
-		</dict>
-		<key>4522AAAC132896FC557BA3B31334549F</key>
-		<dict>
-			<key>fileRef</key>
-			<string>A4DC1DC4EFAD5788862408293786A5A3</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
 		</dict>
 		<key>452E1BEAB1A85BA0CDB8854BC9F5A8E3</key>
 		<dict>
@@ -3074,9 +3067,9 @@
 			<string>C3F89E39B463FFD2021C7AE5BEBF65D6</string>
 			<key>buildPhases</key>
 			<array>
-				<string>B9357F11E13F0AC063D918F6237AD4AD</string>
+				<string>33F0ECC6B8542ACFDA701C06850D7773</string>
 				<string>82A10525E7723A03FE8C4FD942BEC8AD</string>
-				<string>3FDD601FD823BD49986D097EB52A27E7</string>
+				<string>447A03DBB412CB31DFA7504CBBBF80C9</string>
 			</array>
 			<key>buildRules</key>
 			<array/>
@@ -3107,6 +3100,13 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-DOS_OBJECT_USE_OBJC=0</string>
 			</dict>
+		</dict>
+		<key>4685089B1C4E3CA64D151A4618243265</key>
+		<dict>
+			<key>fileRef</key>
+			<string>27112521141BB00141C08074BC587ACE</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
 		</dict>
 		<key>469B6D1CDD0E3C7B1C97376722ADB0E2</key>
 		<dict>
@@ -3146,25 +3146,18 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>47135967CE8061966441A8968CC34C8A</key>
+		<key>471AFDCC11C51C24D8C38EF4B35F5B7D</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
+			<string>sourcecode.c.objc</string>
 			<key>path</key>
-			<string>PINRemoteImageMacros.h</string>
+			<string>PINURLSessionManager.m</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
-		</dict>
-		<key>472F7A659D1EC946774B4C0D58A128B5</key>
-		<dict>
-			<key>fileRef</key>
-			<string>0B84251127B0B50C44B947590DF55322</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
 		</dict>
 		<key>4786D05D8A2530F356F5F91DC2EB7C87</key>
 		<dict>
@@ -3195,20 +3188,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>48356B2C3AEB538BC4880E405FA6C15A</key>
-		<dict>
-			<key>fileRef</key>
-			<string>62D8246E86C13742563BCCED3BF094D0</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
 		<key>488C1E355EF45B52DDFB1B1C14601327</key>
 		<dict>
 			<key>fileRef</key>
@@ -3233,15 +3212,22 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
+		<key>489F1523643BCE63CF8A8DFB90593519</key>
+		<dict>
+			<key>fileRef</key>
+			<string>B66E43BD29B7C4BAB87D0D70D9FB41E3</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
 		<key>49081F3E6842F3DE8A4F88EBA06D8A8E</key>
 		<dict>
 			<key>buildConfigurationList</key>
 			<string>2CE3094E5B3487B8F790A1AB07048B00</string>
 			<key>buildPhases</key>
 			<array>
-				<string>BFC87017321371FC03B6374F89B5E5CA</string>
+				<string>97E6A65D18AB0C1A0FC3243A2E90976E</string>
 				<string>4786D05D8A2530F356F5F91DC2EB7C87</string>
-				<string>A87C03432BFAB7498CA89FACB10E235D</string>
+				<string>A227350F4130C68087CA0CEB7E634CB8</string>
 			</array>
 			<key>buildRules</key>
 			<array/>
@@ -3385,6 +3371,19 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
+		<key>4C8433106E42BA4F0196D08D729F10B6</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>NSData+ImageDetectors.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>4D007EA3944482E129D64AE79521CEDF</key>
 		<dict>
 			<key>fileRef</key>
@@ -3395,20 +3394,6 @@
 			<dict>
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
-			</dict>
-		</dict>
-		<key>4D080CE5B930475BEF70E5D121D83A1A</key>
-		<dict>
-			<key>fileRef</key>
-			<string>9E59C613082C55ABA7CBCC0237E77285</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
 			</dict>
 		</dict>
 		<key>4D54303811028A16BDAA51655FD097D0</key>
@@ -3434,13 +3419,6 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
-		</dict>
-		<key>4EADD3F153521129576080955C395143</key>
-		<dict>
-			<key>fileRef</key>
-			<string>904DC366DAE7A988245D453AB214B682</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
 		</dict>
 		<key>4EBEE02B552754BAD952BE2157688CA4</key>
 		<dict>
@@ -3675,13 +3653,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>54AAC4CFBEBD9FD0A2F5F6A8A53C65C9</key>
-		<dict>
-			<key>fileRef</key>
-			<string>2CBAB7C7855B6E8D6E582EA2458A19A8</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
 		<key>54F27F7B6DBD02B3C1ABB03D547E1C0E</key>
 		<dict>
 			<key>buildConfigurationList</key>
@@ -3719,19 +3690,6 @@
 			<string>cost.h</string>
 			<key>path</key>
 			<string>src/enc/cost.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>55898A679D150C9E811A83D2FD8E3CB6</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>PINRemoteImageManagerResult.m</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -3811,6 +3769,13 @@
 				</array>
 			</dict>
 		</dict>
+		<key>5789241C73EEACD6300A8B43802FD060</key>
+		<dict>
+			<key>fileRef</key>
+			<string>E6B9080F143874A2AB627C5AB26138DC</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
 		<key>57FE4459E712CFDA53B1D3FE1D0812CA</key>
 		<dict>
 			<key>fileRef</key>
@@ -3881,20 +3846,6 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>5A08ED942B4763B40EC2253EE1FDCC92</key>
-		<dict>
-			<key>fileRef</key>
-			<string>89933142E6B0E3632BAB8DCB5C314B48</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
 		<key>5A8B455EE7C81A24E0FC0B8F61BE5357</key>
 		<dict>
 			<key>fileRef</key>
@@ -3927,12 +3878,67 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>5BA8717CB6A0EF366D27EA0D29E6A587</key>
+		<key>5B7200B3AC59978D38D786E87C1E1791</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>DD21C5E2CBBC2F2FFC55ECD7E51F8968</string>
+				<string>27112521141BB00141C08074BC587ACE</string>
+				<string>871060E43061B65B8CF63D1F5F92FAA7</string>
+				<string>0DC5B05DCB0E8F00D23598C1C18806CC</string>
+				<string>87D3D2520058424F65092DD64894D64C</string>
+				<string>2711E67A2F6CFE14B876254E00913B43</string>
+				<string>87CF5151CC9022AE59E9C670BD6FD8B3</string>
+				<string>E409CAA7F1F5B8939AA7AAC8A16EDDC6</string>
+				<string>D2008DA780B9BCE0CC953A884735E599</string>
+				<string>77886E4A36DD5129771A8C8B33147500</string>
+				<string>8FD45D3A953690DCBB9B94211C408399</string>
+				<string>6D93306E700F9299E37BD6DA937D260B</string>
+				<string>2D689DDBAE70410B13FE24552095B9C1</string>
+				<string>30911EC0FB016A9F581FC226DF46D316</string>
+				<string>08137A9E91CCA9EED36F3142809DE370</string>
+				<string>E8E25D187CAA59B53571BABC995F95CE</string>
+				<string>40D9A1B544DF209D92E3907ED9E1A70A</string>
+				<string>0076CD5A21FD8D4C3C81FE3D5A45C42E</string>
+				<string>D4FC2E26863E41224C008B568F9B1624</string>
+				<string>76586C5A309E927C18A5CB63315A235C</string>
+				<string>634A9FF834E73711DD9ED72167FEA79B</string>
+				<string>EB8E5133D9B0A3ACF1EEC167624CF965</string>
+				<string>67A95FD2D4F661A107292347E6FFE0EE</string>
+				<string>B66E43BD29B7C4BAB87D0D70D9FB41E3</string>
+				<string>CAB44D3760A3CBEB05E388234A55CAE4</string>
+				<string>73100A667C0477929D7626776D40C661</string>
+				<string>E1032ECB8B988BC6CF0CBBBF51936A5F</string>
+				<string>C9018D8CFA86C1F8A3F447B39B08ED6B</string>
+				<string>6AA582679EB729D68912F9C2D98AD93B</string>
+				<string>03109C8E27BEDBE94EE41A75E6302D30</string>
+				<string>AD4DED4A4857A57AA018BBEABCFF30AD</string>
+				<string>471AFDCC11C51C24D8C38EF4B35F5B7D</string>
+				<string>DE035331EDFD25E55B9CCFD3E9EDEE91</string>
+				<string>E1AA1FAD6955CBB8DB7E2B3AB1E37D98</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Classes</string>
+			<key>path</key>
+			<string>Classes</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>5B955F65D735F2CD9D1156233F596B19</key>
 		<dict>
 			<key>fileRef</key>
-			<string>091AA69DAE76A35DC3720AEA01BA3D0E</string>
+			<string>67A95FD2D4F661A107292347E6FFE0EE</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
 		</dict>
 		<key>5BB7077146BA2AD9953A65648A97DD68</key>
 		<dict>
@@ -3991,19 +3997,6 @@
 			<string>frame.c</string>
 			<key>path</key>
 			<string>src/enc/frame.c</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>5CDAEC42CC06E9F629C117BA3B377FBB</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>PINButton+PINRemoteImage.m</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -4082,27 +4075,6 @@
 			<key>name</key>
 			<string>Release</string>
 		</dict>
-		<key>5E3FEE20298523905B84A3926822E325</key>
-		<dict>
-			<key>fileRef</key>
-			<string>433F4E7B5562536EE5F8D1C45DD6F685</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
-		<key>5E5EA96A146354E409D68550B9778775</key>
-		<dict>
-			<key>fileRef</key>
-			<string>904DC366DAE7A988245D453AB214B682</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
 		<key>5E8DE7D0685A7209483CC150A0A4E7D0</key>
 		<dict>
 			<key>explicitFileType</key>
@@ -4118,6 +4090,34 @@
 			<key>sourceTree</key>
 			<string>BUILT_PRODUCTS_DIR</string>
 		</dict>
+		<key>5EF76F77F6A44F2AA107FC8DA5B4A297</key>
+		<dict>
+			<key>fileRef</key>
+			<string>87CF5151CC9022AE59E9C670BD6FD8B3</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>5F231ED6A5079555A28DD9DB986D440A</key>
+		<dict>
+			<key>fileRef</key>
+			<string>A1796C3C681474C725E5327D6B72C6AD</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
 		<key>5F303C1F606F27A263A23280D04202EE</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -4130,6 +4130,13 @@
 			<string>src/utils/huffman.c</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
+		</dict>
+		<key>5F708F908B5D8C68B51C2119AB2D896B</key>
+		<dict>
+			<key>fileRef</key>
+			<string>A1093C67B5AE2176BCC235D2DE96887C</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
 		</dict>
 		<key>5FCCCBD3EA3D7C6E9DFE7C32284C9CE7</key>
 		<dict>
@@ -4155,6 +4162,20 @@
 			<string>src/enc/alpha.c</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
+		</dict>
+		<key>61294653A45CA0017BB58CB3AEF0A5D4</key>
+		<dict>
+			<key>fileRef</key>
+			<string>4C8433106E42BA4F0196D08D729F10B6</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
 		</dict>
 		<key>616906687440069E679BED18B66A3233</key>
 		<dict>
@@ -4225,19 +4246,6 @@
 			<key>remoteInfo</key>
 			<string>Pods-PINRemoteImage-PINCache</string>
 		</dict>
-		<key>62D8246E86C13742563BCCED3BF094D0</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>PINRemoteImageManagerResult.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>63320D1B4A59314FC40EEC86B1960925</key>
 		<dict>
 			<key>fileRef</key>
@@ -4251,6 +4259,19 @@
 					<string>Public</string>
 				</array>
 			</dict>
+		</dict>
+		<key>634A9FF834E73711DD9ED72167FEA79B</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteImageManagerResult.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>63723A933F9F44EA83B9F5F0B8D9CABB</key>
 		<dict>
@@ -4290,27 +4311,6 @@
 			<string>src/utils/filters.c</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
-		</dict>
-		<key>65A8F889403AD0B3EF399C8A37D76FA8</key>
-		<dict>
-			<key>fileRef</key>
-			<string>77F6C8F44DE7BCBD12A5D4D29180ACCF</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>65D3E0F7FFD675A63E25065ED511B5B1</key>
-		<dict>
-			<key>fileRef</key>
-			<string>8F9C4578CD3A6A90DD49661C790AEC5A</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
 		</dict>
 		<key>661607B3D93E621086FCBAA85921F167</key>
 		<dict>
@@ -4441,6 +4441,32 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>67328FB8A8385DC81AE4C9DD890869D6</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>NSData+ImageDetectors.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>67A95FD2D4F661A107292347E6FFE0EE</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteImageMemoryContainer.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>681EA22C94994D6846EB2149FD9490DD</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -4456,6 +4482,13 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>683174BAF9BABDED8E120A7BDCD3BC3A</key>
+		<dict>
+			<key>fileRef</key>
+			<string>A1093C67B5AE2176BCC235D2DE96887C</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
 		<key>68429D82C13F40EBAA7B8196131F5EA0</key>
 		<dict>
 			<key>fileRef</key>
@@ -4469,27 +4502,6 @@
 					<string>Public</string>
 				</array>
 			</dict>
-		</dict>
-		<key>68533EDCEE314950613158BD5FBCC2C8</key>
-		<dict>
-			<key>fileRef</key>
-			<string>9E59C613082C55ABA7CBCC0237E77285</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
-		<key>686470265929C319714D87B2047624EC</key>
-		<dict>
-			<key>fileRef</key>
-			<string>A4DC1DC4EFAD5788862408293786A5A3</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
 		</dict>
 		<key>68945C8820E96977E339B0E1AFB5BF8C</key>
 		<dict>
@@ -4518,6 +4530,13 @@
 			<string>Release</string>
 			<key>isa</key>
 			<string>XCConfigurationList</string>
+		</dict>
+		<key>68AC8D4A0A3FF361CBB3EF2C4ACFEA94</key>
+		<dict>
+			<key>fileRef</key>
+			<string>EB8E5133D9B0A3ACF1EEC167624CF965</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
 		</dict>
 		<key>696346637584B1D00F0623BE4B00FDA6</key>
 		<dict>
@@ -4549,20 +4568,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>69D66648AB212B49B9A87B69612D2D6F</key>
-		<dict>
-			<key>fileRef</key>
-			<string>47135967CE8061966441A8968CC34C8A</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
 		<key>69F1CCC7FDA8AE9101A1C90454D1A66A</key>
 		<dict>
 			<key>fileRef</key>
@@ -4589,6 +4594,19 @@
 			<string>libPods-PINRemoteImage-PINRemoteImage.a</string>
 			<key>sourceTree</key>
 			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>6AA582679EB729D68912F9C2D98AD93B</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteLock.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>6AC8D52CC6B811486AFF1CC4381FB5F5</key>
 		<dict>
@@ -4629,19 +4647,6 @@
 			<string>83E97BF934ECCFCB4591E1296D85489A</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
-		</dict>
-		<key>6BD5467772C62FB997CC09C8B9B9945A</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>PINURLSessionManager.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>6BEF4574755644E40611F12A799F84F0</key>
 		<dict>
@@ -4788,6 +4793,19 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
+		<key>6D93306E700F9299E37BD6DA937D260B</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteImageCallbacks.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>6DC053B3873069543472D68CBD99C7C2</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -4828,21 +4846,6 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
-		</dict>
-		<key>6EEDA1AEBB7C305DFAA12E38C4EF8D99</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>15B16DE14EA48CCA5CBEFE3DFE028E5B</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Pod</string>
-			<key>path</key>
-			<string>Pod</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>6FF7A8804F9B6855BFF8FB792B2CAC7C</key>
 		<dict>
@@ -4917,6 +4920,13 @@
 			<key>name</key>
 			<string>Release</string>
 		</dict>
+		<key>717D1CF3EF8E25DBF58E1F9588804E55</key>
+		<dict>
+			<key>fileRef</key>
+			<string>2D689DDBAE70410B13FE24552095B9C1</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
 		<key>72BA32C32C4A40FD67E2100E9FF5D979</key>
 		<dict>
 			<key>fileRef</key>
@@ -4939,6 +4949,19 @@
 			<string>rescaler.c</string>
 			<key>path</key>
 			<string>src/utils/rescaler.c</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>73100A667C0477929D7626776D40C661</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINRemoteImageProcessorTask.m</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -5099,6 +5122,19 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
+		<key>76586C5A309E927C18A5CB63315A235C</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINRemoteImageManager.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>7668AE55CBA5F0B083DB12F92B99C3AA</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -5111,13 +5147,6 @@
 			<string>src/dec/alpha.c</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
-		</dict>
-		<key>768FA3602AE1FE5D4063E8607E2B4F25</key>
-		<dict>
-			<key>fileRef</key>
-			<string>19766FFC040C77C7D35D96F8B035DD32</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
 		</dict>
 		<key>7734E4D7AE16EE579330251E1860258A</key>
 		<dict>
@@ -5132,21 +5161,7 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>777A65CD7F835FB6BB051BD8B15FAF1C</key>
-		<dict>
-			<key>fileRef</key>
-			<string>2739770120B569DE91C2C2E408C84584</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
-		<key>77F6C8F44DE7BCBD12A5D4D29180ACCF</key>
+		<key>77886E4A36DD5129771A8C8B33147500</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -5248,20 +5263,6 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>7A8C0CDB2640A98F4D1DE89C6B2C7EAB</key>
-		<dict>
-			<key>fileRef</key>
-			<string>BB860B20514C3C3D5963CBED4C602AB3</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
 		<key>7A9EE46DB52D2FBE53912B029476EDD8</key>
 		<dict>
 			<key>buildActionMask</key>
@@ -5353,13 +5354,6 @@
 			<string>src/webp/demux.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
-		</dict>
-		<key>7C1E3597721FFBA19216FE4A169D8893</key>
-		<dict>
-			<key>fileRef</key>
-			<string>DD7A7885527CDBACBB03AC7ACC070D6A</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
 		</dict>
 		<key>7C9071E76274A61115F8E5FB167CD8D0</key>
 		<dict>
@@ -5460,13 +5454,6 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>7E24FBACF0B29698CE3F3295833EA8B2</key>
-		<dict>
-			<key>fileRef</key>
-			<string>A2F30F5A41C6F1062A846F16FD33B52D</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
 		<key>7E2E59D9702480FF4D6B419C151E869D</key>
 		<dict>
 			<key>buildActionMask</key>
@@ -5517,6 +5504,20 @@
 			<string>src/dec/tree.c</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
+		</dict>
+		<key>7EAA82B88A3D8B1250826261147EF6C8</key>
+		<dict>
+			<key>fileRef</key>
+			<string>6AA582679EB729D68912F9C2D98AD93B</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
 		</dict>
 		<key>7EC874C64657EE6521C5F4CADA9EDCE9</key>
 		<dict>
@@ -5665,6 +5666,20 @@
 			<key>runOnlyForDeploymentPostprocessing</key>
 			<string>0</string>
 		</dict>
+		<key>82F712C6D7B19B4D0B48668BB0C32A4F</key>
+		<dict>
+			<key>fileRef</key>
+			<string>634A9FF834E73711DD9ED72167FEA79B</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
 		<key>8371E7319ADA2C62069380AADFDD43BF</key>
 		<dict>
 			<key>fileRef</key>
@@ -5741,10 +5756,10 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>862DA960A468F73B154F1447D962125B</key>
+		<key>8544F4274919C4DEEC0E8E2F81D0F8F8</key>
 		<dict>
 			<key>fileRef</key>
-			<string>5CDAEC42CC06E9F629C117BA3B377FBB</string>
+			<string>67328FB8A8385DC81AE4C9DD890869D6</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
@@ -5774,6 +5789,32 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>871060E43061B65B8CF63D1F5F92FAA7</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINAnimatedImage.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>87CF5151CC9022AE59E9C670BD6FD8B3</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINDataTaskOperation.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>87D0CB66E7D297E3373B2E3947B35ED3</key>
 		<dict>
 			<key>fileRef</key>
@@ -5787,6 +5828,19 @@
 					<string>Public</string>
 				</array>
 			</dict>
+		</dict>
+		<key>87D3D2520058424F65092DD64894D64C</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINAnimatedImageManager.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>8805086DB01D26D4D721583A4D0B1600</key>
 		<dict>
@@ -5857,19 +5911,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>89933142E6B0E3632BAB8DCB5C314B48</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>PINURLSessionManager.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>89A7F2C20C62FB1B52D09DB0612F9D6E</key>
 		<dict>
 			<key>containerPortal</key>
@@ -5882,6 +5923,13 @@
 			<string>4295C947AD69FD429F982D216B4F4B0D</string>
 			<key>remoteInfo</key>
 			<string>Pods-PINRemoteImage-libwebp</string>
+		</dict>
+		<key>89C624316E1D20FEDDC16CA1E32CAA0C</key>
+		<dict>
+			<key>fileRef</key>
+			<string>73100A667C0477929D7626776D40C661</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
 		</dict>
 		<key>89CBEDA8EC0EB7F3D3BF96695FDA7DF4</key>
 		<dict>
@@ -5995,10 +6043,38 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>8D4EC6AB911B6C30136F6DBA32085FB9</key>
+		<dict>
+			<key>fileRef</key>
+			<string>31B62E1788B607052BD82B458DB16626</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
 		<key>8DEB91BB20B21CE4820C9196C35D95D6</key>
 		<dict>
 			<key>fileRef</key>
 			<string>3DE376634CE3FD8D4D12944DD182628A</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>8E8DA75120CFCF628C4BFFADD282EBC0</key>
+		<dict>
+			<key>fileRef</key>
+			<string>4C8433106E42BA4F0196D08D729F10B6</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -6065,7 +6141,7 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>8F9C4578CD3A6A90DD49661C790AEC5A</key>
+		<key>8FD45D3A953690DCBB9B94211C408399</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -6074,57 +6150,16 @@
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.h</string>
 			<key>path</key>
-			<string>NSData+ImageDetectors.h</string>
+			<string>PINRemoteImage.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>8FEAF69E60D3DFCE1FEB872D737CD2DB</key>
+		<key>9078451D25A2A5DD2BD09B3BF1B95CC0</key>
 		<dict>
 			<key>fileRef</key>
-			<string>21E4E0020AA60516B3D512496E9A95D0</string>
+			<string>77886E4A36DD5129771A8C8B33147500</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
-		<key>904DC366DAE7A988245D453AB214B682</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>PINRemoteImageCategoryManager.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>90CA88EB4DD3C9BFEB753419EF1795AE</key>
-		<dict>
-			<key>fileRef</key>
-			<string>11082887BCFDA4949FBA997E1EEBC809</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>9179D28BA8344476A92A1A2C1B0A5473</key>
-		<dict>
-			<key>fileRef</key>
-			<string>FA8698DA87B8D98AD05F6C8D86DBBD03</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
 		</dict>
 		<key>925E841ADB0E805F18D8FC6955AE572C</key>
 		<dict>
@@ -6166,6 +6201,34 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
+		<key>93DB3D3ECA623175659658E8718F51A4</key>
+		<dict>
+			<key>fileRef</key>
+			<string>871060E43061B65B8CF63D1F5F92FAA7</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>94F8FA6C7F323CAC5C561ABF83DF1CB0</key>
+		<dict>
+			<key>fileRef</key>
+			<string>0076CD5A21FD8D4C3C81FE3D5A45C42E</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
 		<key>95174FD06AEBAE86CE63F82A2FC5C096</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -6178,20 +6241,6 @@
 			<string>src/utils/bit_reader.c</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
-		</dict>
-		<key>95AB203136406AABA293933A4E4FEE17</key>
-		<dict>
-			<key>fileRef</key>
-			<string>EC9C0199BDD24346C2E9A794D9C15975</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
 		</dict>
 		<key>95B2B8642D7F583BFB278E28DA1DA16D</key>
 		<dict>
@@ -6232,27 +6281,6 @@
 				</array>
 			</dict>
 		</dict>
-		<key>96EE078275584C1D87B12484CB721E8E</key>
-		<dict>
-			<key>fileRef</key>
-			<string>6BD5467772C62FB997CC09C8B9B9945A</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>9701C213FDAEDAD36030A495B6F4A065</key>
-		<dict>
-			<key>fileRef</key>
-			<string>0DD43D93E41FFBAF5A9F241F3BC3837A</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
 		<key>971EF9C0B5C5113522E155B917278C42</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -6280,6 +6308,53 @@
 			<string>src/mux/muxi.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
+		</dict>
+		<key>97E6A65D18AB0C1A0FC3243A2E90976E</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>8544F4274919C4DEEC0E8E2F81D0F8F8</string>
+				<string>4685089B1C4E3CA64D151A4618243265</string>
+				<string>080E098218C3DB57319BE6254E7C9563</string>
+				<string>FF718F94A66D16E8B41C3FA55DE6597C</string>
+				<string>5F708F908B5D8C68B51C2119AB2D896B</string>
+				<string>DF41403D582BB95402B2A737B0606341</string>
+				<string>2A4F18D7D0777C2815D4FE52FD688DD9</string>
+				<string>07A1B21C877983832F480A9E4E7C9B07</string>
+				<string>FEF136F6191A2874DC876EA514C5EC26</string>
+				<string>9078451D25A2A5DD2BD09B3BF1B95CC0</string>
+				<string>717D1CF3EF8E25DBF58E1F9588804E55</string>
+				<string>0D1A3F13282F26A45DDEB1B3EBE8EA7E</string>
+				<string>DE8B6D0B8E9B5C64D8ABBC77D06B7E07</string>
+				<string>B31B6344CCB60BFCBA012EAC07763261</string>
+				<string>68AC8D4A0A3FF361CBB3EF2C4ACFEA94</string>
+				<string>24C040A6E05CFF7B702DDB26436F33FC</string>
+				<string>EE5DA6F06087C5429E5EF1B84A0E2FC4</string>
+				<string>0BB29132F5802654DC5F96AD3B7E8020</string>
+				<string>A4A62D0B225AF4346604A32F9EF3BC38</string>
+				<string>CCADFE3A002F25FD370948C0181E8CEA</string>
+				<string>327E27C743D6481DD484F41376D22EEE</string>
+			</array>
+			<key>isa</key>
+			<string>PBXSourcesBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>9803C777DA73F8A4C3382FE9BB1D0E6F</key>
+		<dict>
+			<key>fileRef</key>
+			<string>D2008DA780B9BCE0CC953A884735E599</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
 		</dict>
 		<key>987AA18F3040FD88BD59BF2BBD4B0D99</key>
 		<dict>
@@ -6588,18 +6663,19 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>9E59C613082C55ABA7CBCC0237E77285</key>
+		<key>9DAD4A6D8436924F0CB5027617182A7E</key>
 		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
+			<key>fileRef</key>
+			<string>634A9FF834E73711DD9ED72167FEA79B</string>
 			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>PINAlternateRepresentationProvider.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
 		</dict>
 		<key>9E63B092F70C843637FA2D66B75A4099</key>
 		<dict>
@@ -6641,20 +6717,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>9F88752EB7E62BA22A197328BBFFE533</key>
-		<dict>
-			<key>fileRef</key>
-			<string>CF63D1A058D9329C25C9EE3BC4CFF99A</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
 		<key>9F896E8B7299A16FFDFA0BD3D227078E</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -6680,20 +6742,6 @@
 			<dict>
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
-			</dict>
-		</dict>
-		<key>9FD85BF1C11D47A71A7267BA3E9D3C97</key>
-		<dict>
-			<key>fileRef</key>
-			<string>C0D2E192CD2BE1D712ED8BD1D346181B</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
 			</dict>
 		</dict>
 		<key>9FDE7D4EEB0314728FAF07C980E28146</key>
@@ -6733,6 +6781,32 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
+		<key>A1093C67B5AE2176BCC235D2DE96887C</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINButton+PINRemoteImage.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>A1796C3C681474C725E5327D6B72C6AD</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINImageView+PINRemoteImage.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>A1BF55A26F8FD8E66123D7ECF70C1382</key>
 		<dict>
 			<key>fileRef</key>
@@ -6768,6 +6842,40 @@
 			<key>targetProxy</key>
 			<string>28F26A06F3AA8A72338D677DBEA15C04</string>
 		</dict>
+		<key>A227350F4130C68087CA0CEB7E634CB8</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>61294653A45CA0017BB58CB3AEF0A5D4</string>
+				<string>A72BF48BF8EC1FE8DFEEAF555503962B</string>
+				<string>19CA21D4E473C742D1C8A16C68378AF6</string>
+				<string>CE244CEF193D9BF0CEE12512AAB601AF</string>
+				<string>3E91A8F873C86625D273F773B59E0841</string>
+				<string>5EF76F77F6A44F2AA107FC8DA5B4A297</string>
+				<string>FA65978174B2A98AC19D5C33ED661FD0</string>
+				<string>08D5D6CD76A31ABFA6E092502726BE9B</string>
+				<string>C2D7ABA5C5115DB6523104EC9B6DCEF3</string>
+				<string>B79E421A78B877FB423982AEEBE1BA22</string>
+				<string>34168FD6B0CD9AD8FFA4E89726E00453</string>
+				<string>2920D4CB7D46EC6195B0C496D72BA261</string>
+				<string>F0DC3B2438333A7853152F7DBB224042</string>
+				<string>234D58303ECAEAFE19646BBEDE05E61A</string>
+				<string>94F8FA6C7F323CAC5C561ABF83DF1CB0</string>
+				<string>2B2B19B78AF2E7588E1B3B4318FB50FC</string>
+				<string>82F712C6D7B19B4D0B48668BB0C32A4F</string>
+				<string>5B955F65D735F2CD9D1156233F596B19</string>
+				<string>056272822D16293762F9F4B6B47C8A57</string>
+				<string>A37F22EB428786593AE461E80F0C3889</string>
+				<string>13B20953F5F50AA7C21EE06EA988419B</string>
+				<string>EF16E58EF853CCF02EB26BAEA03B6BC5</string>
+			</array>
+			<key>isa</key>
+			<string>PBXHeadersBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
 		<key>A277D318B56290F672B755DC958B6C05</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -6795,18 +6903,19 @@
 				</array>
 			</dict>
 		</dict>
-		<key>A2F30F5A41C6F1062A846F16FD33B52D</key>
+		<key>A37F22EB428786593AE461E80F0C3889</key>
 		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
+			<key>fileRef</key>
+			<string>E1032ECB8B988BC6CF0CBBBF51936A5F</string>
 			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>NSData+ImageDetectors.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
 		</dict>
 		<key>A4020085942C62DF0992D426B0163DA7</key>
 		<dict>
@@ -6823,6 +6932,20 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>A4442E96FF45F805EC227176F7625A10</key>
+		<dict>
+			<key>fileRef</key>
+			<string>77886E4A36DD5129771A8C8B33147500</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>A4A62D0B225AF4346604A32F9EF3BC38</key>
+		<dict>
+			<key>fileRef</key>
+			<string>03109C8E27BEDBE94EE41A75E6302D30</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
 		<key>A4D2AE3237C03C7A6AE8048D70AA8D1C</key>
 		<dict>
 			<key>fileRef</key>
@@ -6834,19 +6957,6 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
-		</dict>
-		<key>A4DC1DC4EFAD5788862408293786A5A3</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>PINRemoteImageManager.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>A552779C0CE2759682964AD7FA9BD13D</key>
 		<dict>
@@ -6917,6 +7027,20 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>A72BF48BF8EC1FE8DFEEAF555503962B</key>
+		<dict>
+			<key>fileRef</key>
+			<string>DD21C5E2CBBC2F2FFC55ECD7E51F8968</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
 		<key>A72FA2C7F53DE2FDE428B97245EE47B4</key>
 		<dict>
 			<key>fileRef</key>
@@ -6986,38 +7110,6 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
-		</dict>
-		<key>A87C03432BFAB7498CA89FACB10E235D</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array>
-				<string>65D3E0F7FFD675A63E25065ED511B5B1</string>
-				<string>68533EDCEE314950613158BD5FBCC2C8</string>
-				<string>9179D28BA8344476A92A1A2C1B0A5473</string>
-				<string>C424AE0F819B9E4541970E7F1E2A79A6</string>
-				<string>1CD611CFD89E3269183F04327ED0F912</string>
-				<string>BB51C746B30328B7883FDDE4C60B5C1F</string>
-				<string>8FEAF69E60D3DFCE1FEB872D737CD2DB</string>
-				<string>5E3FEE20298523905B84A3926822E325</string>
-				<string>1DA13EE96D82E1EDF0A9911FEB952523</string>
-				<string>9FD85BF1C11D47A71A7267BA3E9D3C97</string>
-				<string>9F88752EB7E62BA22A197328BBFFE533</string>
-				<string>2D3A1B58D7E2C96FE05237E6A10DBB6D</string>
-				<string>69D66648AB212B49B9A87B69612D2D6F</string>
-				<string>777A65CD7F835FB6BB051BD8B15FAF1C</string>
-				<string>48356B2C3AEB538BC4880E405FA6C15A</string>
-				<string>EF9FDABD9BBC5A171C2542954858F9CA</string>
-				<string>1BE50AA93D6A47086C8835D23AF4C89E</string>
-				<string>1AF42DF677908BCDEA0C44720CE9A9C5</string>
-				<string>BF470AB548BE1C47C3B408A285BAC6EA</string>
-				<string>418D50BE75E0FA8EF7951CE52C5599B0</string>
-			</array>
-			<key>isa</key>
-			<string>PBXHeadersBuildPhase</string>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
 		</dict>
 		<key>A8AE0B8B331DC95776FB2BED5BAFCDAC</key>
 		<dict>
@@ -7096,20 +7188,6 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>A9FDC839BACEF143A3CDE901F77BE97F</key>
-		<dict>
-			<key>fileRef</key>
-			<string>6BD5467772C62FB997CC09C8B9B9945A</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>AA820E85ED5AAF414F37182084F31EC0</key>
-		<dict>
-			<key>fileRef</key>
-			<string>FEF34F591D7081136906E3EF6443657F</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
 		<key>AAD51DD8962F8079939E6B0611FEED2D</key>
 		<dict>
 			<key>buildConfigurations</key>
@@ -7123,6 +7201,33 @@
 			<string>Release</string>
 			<key>isa</key>
 			<string>XCConfigurationList</string>
+		</dict>
+		<key>AAE0A47833DFB4AC943AA809BC928266</key>
+		<dict>
+			<key>fileRef</key>
+			<string>CAB44D3760A3CBEB05E388234A55CAE4</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>AB68ED522C720568EE98EF886E6D0BC4</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINImage+WebP.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>AC87B6818EAD3AE13773A0EF653B206E</key>
 		<dict>
@@ -7147,6 +7252,19 @@
 			<string>4295C947AD69FD429F982D216B4F4B0D</string>
 			<key>targetProxy</key>
 			<string>F807ECB0D11647282E3BD0CC2C16EF5B</string>
+		</dict>
+		<key>AD4DED4A4857A57AA018BBEABCFF30AD</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINURLSessionManager.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>AD749A45FB481EA176E9CCF3E7A55E5F</key>
 		<dict>
@@ -7174,13 +7292,6 @@
 					<string>Public</string>
 				</array>
 			</dict>
-		</dict>
-		<key>AD94F8E846C66B2A40C54A57CB519077</key>
-		<dict>
-			<key>fileRef</key>
-			<string>27596FA4AFC71AFF18C5E123CA4DF339</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
 		</dict>
 		<key>AE59BCCE742FB041D46CA25938A54133</key>
 		<dict>
@@ -7282,6 +7393,13 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>B1DB08CA82CE7098A9D9A9F06C724618</key>
+		<dict>
+			<key>fileRef</key>
+			<string>40D9A1B544DF209D92E3907ED9E1A70A</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
 		<key>B24938139F94D40CF6D65C7AA8C645EE</key>
 		<dict>
 			<key>fileRef</key>
@@ -7358,6 +7476,13 @@
 			<string>src/webp/format_constants.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
+		</dict>
+		<key>B31B6344CCB60BFCBA012EAC07763261</key>
+		<dict>
+			<key>fileRef</key>
+			<string>76586C5A309E927C18A5CB63315A235C</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
 		</dict>
 		<key>B32C03521437048A468D2EE3C3BFDD35</key>
 		<dict>
@@ -7535,6 +7660,19 @@
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
+		<key>B66E43BD29B7C4BAB87D0D70D9FB41E3</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINRemoteImageMemoryContainer.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>B6D792D666FFF7A9EEDA342548B2FB3B</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -7561,12 +7699,19 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>B7AB8F2BEDFFFCDFE61E9D1E06A9D15C</key>
+		<key>B79E421A78B877FB423982AEEBE1BA22</key>
 		<dict>
 			<key>fileRef</key>
-			<string>F9DD7EE75BAEBEE12846EEEFE0DF6C16</string>
+			<string>D2008DA780B9BCE0CC953A884735E599</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
 		</dict>
 		<key>B84BB6FB4408B12A48240A6AEA081D0C</key>
 		<dict>
@@ -7593,37 +7738,6 @@
 					<string>Public</string>
 				</array>
 			</dict>
-		</dict>
-		<key>B9357F11E13F0AC063D918F6237AD4AD</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array>
-				<string>394152EE58732EA9AC07A67557907342</string>
-				<string>C65BB7D506FA334096954FB3C3DD6A21</string>
-				<string>862DA960A468F73B154F1447D962125B</string>
-				<string>3D41CFA5CA590890A5915A4D4863D37A</string>
-				<string>C3C13A0EE239C80613163D0044BC73BF</string>
-				<string>768FA3602AE1FE5D4063E8607E2B4F25</string>
-				<string>E3B7E04A74DB22C30995756DC4537BCC</string>
-				<string>65A8F889403AD0B3EF399C8A37D76FA8</string>
-				<string>BC61B4983EAAD4DD58AC3AFC6EBC6A71</string>
-				<string>4EADD3F153521129576080955C395143</string>
-				<string>0E54762AD6F083ECF385C8476B6B8E60</string>
-				<string>4522AAAC132896FC557BA3B31334549F</string>
-				<string>EE8F9EF1648235703746184EBDBCB732</string>
-				<string>030FC8700254D812D6AB7EE6D6872576</string>
-				<string>16D974A8E683ECF02D48901A416D1579</string>
-				<string>54AAC4CFBEBD9FD0A2F5F6A8A53C65C9</string>
-				<string>3AF8F53B83626655741285C55A81951A</string>
-				<string>A9FDC839BACEF143A3CDE901F77BE97F</string>
-				<string>7C1E3597721FFBA19216FE4A169D8893</string>
-			</array>
-			<key>isa</key>
-			<string>PBXSourcesBuildPhase</string>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
 		</dict>
 		<key>B974D7A76F5A1DB6B3B873FE7C77FDC8</key>
 		<dict>
@@ -7734,33 +7848,6 @@
 				<string>-DOS_OBJECT_USE_OBJC=0</string>
 			</dict>
 		</dict>
-		<key>BB51C746B30328B7883FDDE4C60B5C1F</key>
-		<dict>
-			<key>fileRef</key>
-			<string>BB860B20514C3C3D5963CBED4C602AB3</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
-		<key>BB860B20514C3C3D5963CBED4C602AB3</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>PINImage+WebP.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>BC4A50CAE75C7A75174951BEC91F4F32</key>
 		<dict>
 			<key>fileRef</key>
@@ -7789,12 +7876,19 @@
 			<key>isa</key>
 			<string>XCConfigurationList</string>
 		</dict>
-		<key>BC61B4983EAAD4DD58AC3AFC6EBC6A71</key>
+		<key>BD001F42D89237C7C54EC3C1402E975B</key>
 		<dict>
 			<key>fileRef</key>
-			<string>3265D333ADFE8A793C0C69DC75D0BD14</string>
+			<string>D4FC2E26863E41224C008B568F9B1624</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
 		</dict>
 		<key>BD047943B639FEB03C0A1E91F887F643</key>
 		<dict>
@@ -7807,19 +7901,6 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
-		</dict>
-		<key>BD9F35DDEDDD2CDF8D1DF197C4BB3B96</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>PINRemoteImageTask.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>BDEB79FD4FA5E25A82EA118C061D89E0</key>
 		<dict>
@@ -7842,13 +7923,6 @@
 			<string>PINCache</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
-		</dict>
-		<key>BDEBAA7AB2D6AC274AFD276B4FF50C84</key>
-		<dict>
-			<key>fileRef</key>
-			<string>55898A679D150C9E811A83D2FD8E3CB6</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
 		</dict>
 		<key>BE4A6F2292DD7DBD7FE4167DF49274C3</key>
 		<dict>
@@ -7888,6 +7962,21 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
+		<key>BE7265D48658A7819C1DFC4F1887A206</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>5B7200B3AC59978D38D786E87C1E1791</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Pod</string>
+			<key>path</key>
+			<string>Pod</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>BEE4C19D2676501A4F4F6ACD28D2D120</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -7901,20 +7990,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>BF470AB548BE1C47C3B408A285BAC6EA</key>
-		<dict>
-			<key>fileRef</key>
-			<string>C9E3A321C73E7F58348C646BF01A6164</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
 		<key>BF79C88160A1548DA3DF2B1CC081B534</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -7927,37 +8002,6 @@
 			<string>src/utils/quant_levels_dec.c</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
-		</dict>
-		<key>BFC87017321371FC03B6374F89B5E5CA</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array>
-				<string>7E24FBACF0B29698CE3F3295833EA8B2</string>
-				<string>3D5A1234631CC0F86F6D38D50C52BCC4</string>
-				<string>0B9F7AC4AB812F12ECD2F549B0504739</string>
-				<string>472F7A659D1EC946774B4C0D58A128B5</string>
-				<string>90CA88EB4DD3C9BFEB753419EF1795AE</string>
-				<string>FBA970DD0E119E5351BBEC1B254016FF</string>
-				<string>5BA8717CB6A0EF366D27EA0D29E6A587</string>
-				<string>DB549AA1F11B66B15EE3AF58E86AEFD9</string>
-				<string>14C11847B4244318D0AF61ABB83D281F</string>
-				<string>5E5EA96A146354E409D68550B9778775</string>
-				<string>AA820E85ED5AAF414F37182084F31EC0</string>
-				<string>686470265929C319714D87B2047624EC</string>
-				<string>BDEBAA7AB2D6AC274AFD276B4FF50C84</string>
-				<string>B7AB8F2BEDFFFCDFE61E9D1E06A9D15C</string>
-				<string>AD94F8E846C66B2A40C54A57CB519077</string>
-				<string>F9EFB1235680AF3769782098FA8EB604</string>
-				<string>38E193BBE4DAC273BB1C896CF311901B</string>
-				<string>96EE078275584C1D87B12484CB721E8E</string>
-				<string>352F9D726F82D9570793FBC0F7F560CD</string>
-			</array>
-			<key>isa</key>
-			<string>PBXSourcesBuildPhase</string>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
 		</dict>
 		<key>BFE075C253ACC59BFDB23C92177A722A</key>
 		<dict>
@@ -7990,33 +8034,6 @@
 			<string>text.xcconfig</string>
 			<key>path</key>
 			<string>Pods-PINRemoteImage Tests.debug.xcconfig</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>C05AC86BD38F1782319D5F4D11C329DB</key>
-		<dict>
-			<key>fileRef</key>
-			<string>8F9C4578CD3A6A90DD49661C790AEC5A</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
-		<key>C0D2E192CD2BE1D712ED8BD1D346181B</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>PINRemoteImageCallbacks.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -8057,6 +8074,27 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
+		<key>C24E11D9419EA7B786DDBD8F5A149C67</key>
+		<dict>
+			<key>fileRef</key>
+			<string>DD7A7885527CDBACBB03AC7ACC070D6A</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>C2D7ABA5C5115DB6523104EC9B6DCEF3</key>
+		<dict>
+			<key>fileRef</key>
+			<string>A1796C3C681474C725E5327D6B72C6AD</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
 		<key>C3130D241C828616065862F53D603E77</key>
 		<dict>
 			<key>fileRef</key>
@@ -8080,13 +8118,6 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
-		</dict>
-		<key>C3C13A0EE239C80613163D0044BC73BF</key>
-		<dict>
-			<key>fileRef</key>
-			<string>11082887BCFDA4949FBA997E1EEBC809</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
 		</dict>
 		<key>C3F89E39B463FFD2021C7AE5BEBF65D6</key>
 		<dict>
@@ -8114,20 +8145,6 @@
 			<string>src/mux/anim_encode.c</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
-		</dict>
-		<key>C424AE0F819B9E4541970E7F1E2A79A6</key>
-		<dict>
-			<key>fileRef</key>
-			<string>EC9C0199BDD24346C2E9A794D9C15975</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
 		</dict>
 		<key>C478DF484960E4CD952EEA8D55125BC3</key>
 		<dict>
@@ -8168,20 +8185,6 @@
 			<key>runOnlyForDeploymentPostprocessing</key>
 			<string>0</string>
 		</dict>
-		<key>C5B1A83AAB84704B1E4948425527E08D</key>
-		<dict>
-			<key>fileRef</key>
-			<string>C9E3A321C73E7F58348C646BF01A6164</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
 		<key>C614CD1F2299FAE605449BA1D9894EB8</key>
 		<dict>
 			<key>buildConfigurations</key>
@@ -8208,13 +8211,6 @@
 			<string>src/enc/cost.c</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
-		</dict>
-		<key>C65BB7D506FA334096954FB3C3DD6A21</key>
-		<dict>
-			<key>fileRef</key>
-			<string>43A4A414995D57D80A59593D93C1FCB1</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
 		</dict>
 		<key>C65F7374DCB7E10EA172911CDC4D5354</key>
 		<dict>
@@ -8266,6 +8262,19 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
+		<key>C9018D8CFA86C1F8A3F447B39B08ED6B</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINRemoteImageTask.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>C9547C390BC8ED1D42F1652697F7C492</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -8291,19 +8300,6 @@
 			<string>49081F3E6842F3DE8A4F88EBA06D8A8E</string>
 			<key>targetProxy</key>
 			<string>3D8B33A6AF105DD2D8441D4B2FF3D883</string>
-		</dict>
-		<key>C9E3A321C73E7F58348C646BF01A6164</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>PINRemoteLock.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>C9EE4FB71DB3A9D72B5B4FF6143BA65F</key>
 		<dict>
@@ -8377,6 +8373,19 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
+		<key>CAB44D3760A3CBEB05E388234A55CAE4</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteImageProcessorTask.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>CAF7E195ED7F6F65645FF836081BBCFF</key>
 		<dict>
 			<key>buildConfigurationList</key>
@@ -8419,6 +8428,13 @@
 				</array>
 			</dict>
 		</dict>
+		<key>CCADFE3A002F25FD370948C0181E8CEA</key>
+		<dict>
+			<key>fileRef</key>
+			<string>471AFDCC11C51C24D8C38EF4B35F5B7D</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
 		<key>CD6CB65661FDE2958A3A5364EB0AAED9</key>
 		<dict>
 			<key>containerPortal</key>
@@ -8451,10 +8467,17 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>CE10A4B1DC48AD2BA4984E18868FD1A1</key>
+		<key>CDAEB6B8250E0E15CC32D7F8A8CF51F9</key>
 		<dict>
 			<key>fileRef</key>
-			<string>BD9F35DDEDDD2CDF8D1DF197C4BB3B96</string>
+			<string>27112521141BB00141C08074BC587ACE</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>CE244CEF193D9BF0CEE12512AAB601AF</key>
+		<dict>
+			<key>fileRef</key>
+			<string>87D3D2520058424F65092DD64894D64C</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -8476,19 +8499,6 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
-		</dict>
-		<key>CF63D1A058D9329C25C9EE3BC4CFF99A</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>PINRemoteImageCategoryManager.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>CFC1F581444B40E200EE51D644E0D074</key>
 		<dict>
@@ -8560,6 +8570,20 @@
 				</array>
 			</dict>
 		</dict>
+		<key>D0D9CECE36C694D723A0B318CAB91820</key>
+		<dict>
+			<key>fileRef</key>
+			<string>E1032ECB8B988BC6CF0CBBBF51936A5F</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
 		<key>D175F0B2CE4974DA4A1448ED5888697D</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -8598,6 +8622,32 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
+		</dict>
+		<key>D2008DA780B9BCE0CC953A884735E599</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINProgressiveImage.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>D249EDC6D35283EFF7570D39D07D1AAC</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINImage+WebP.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>D24BEE23C934B53826138ECFA997EBCA</key>
 		<dict>
@@ -8696,6 +8746,19 @@
 				<string>49081F3E6842F3DE8A4F88EBA06D8A8E</string>
 			</array>
 		</dict>
+		<key>D4FC2E26863E41224C008B568F9B1624</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteImageManager.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>D5E852B7531703AACCD90EF18ED0D3A8</key>
 		<dict>
 			<key>fileRef</key>
@@ -8762,6 +8825,13 @@
 					<string>Public</string>
 				</array>
 			</dict>
+		</dict>
+		<key>D7CA9AD90666B073CB366BC01C8EDD61</key>
+		<dict>
+			<key>fileRef</key>
+			<string>E409CAA7F1F5B8939AA7AAC8A16EDDC6</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
 		</dict>
 		<key>D7F393F3B25273B25D31481A121E9ED8</key>
 		<dict>
@@ -8977,13 +9047,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>DB549AA1F11B66B15EE3AF58E86AEFD9</key>
-		<dict>
-			<key>fileRef</key>
-			<string>77F6C8F44DE7BCBD12A5D4D29180ACCF</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
 		<key>DBA70329D901B7929BA1974AB74F1B44</key>
 		<dict>
 			<key>fileRef</key>
@@ -9010,6 +9073,19 @@
 			<string>Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/Accelerate.framework</string>
 			<key>sourceTree</key>
 			<string>DEVELOPER_DIR</string>
+		</dict>
+		<key>DD21C5E2CBBC2F2FFC55ECD7E51F8968</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINAlternateRepresentationProvider.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>DD657EB7E1CF7F9753F0DAFF42CC1A8D</key>
 		<dict>
@@ -9078,6 +9154,26 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>DE035331EDFD25E55B9CCFD3E9EDEE91</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>4C8433106E42BA4F0196D08D729F10B6</string>
+				<string>67328FB8A8385DC81AE4C9DD890869D6</string>
+				<string>12D8292EE1144C9DA5CB1B5C0A05AA98</string>
+				<string>E6B9080F143874A2AB627C5AB26138DC</string>
+				<string>AB68ED522C720568EE98EF886E6D0BC4</string>
+				<string>D249EDC6D35283EFF7570D39D07D1AAC</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Categories</string>
+			<key>path</key>
+			<string>Categories</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>DE4C1FD46E43020C37216D4540DA97DD</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -9091,6 +9187,13 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>DE8B6D0B8E9B5C64D8ABBC77D06B7E07</key>
+		<dict>
+			<key>fileRef</key>
+			<string>40D9A1B544DF209D92E3907ED9E1A70A</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
 		<key>DECFD03D228CFA10BE385904D0DF7814</key>
 		<dict>
 			<key>fileRef</key>
@@ -9102,6 +9205,13 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
+		</dict>
+		<key>DF41403D582BB95402B2A737B0606341</key>
+		<dict>
+			<key>fileRef</key>
+			<string>E409CAA7F1F5B8939AA7AAC8A16EDDC6</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
 		</dict>
 		<key>DF9E30DCFC8427B1CB642BFEB205CEB6</key>
 		<dict>
@@ -9181,19 +9291,18 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>E0D5468C2703AE1181AB0460E9F3FCE5</key>
+		<key>E1032ECB8B988BC6CF0CBBBF51936A5F</key>
 		<dict>
-			<key>fileRef</key>
-			<string>27CE9888164D24FE48DD63D4BD520331</string>
+			<key>includeInIndex</key>
+			<string>1</string>
 			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteImageTask.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>E19B7F778F7B5467181317683A085424</key>
 		<dict>
@@ -9218,6 +9327,24 @@
 			<key>targetProxy</key>
 			<string>7FC781C35D79A9DC6BE7744F72608432</string>
 		</dict>
+		<key>E1AA1FAD6955CBB8DB7E2B3AB1E37D98</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>31B62E1788B607052BD82B458DB16626</string>
+				<string>A1093C67B5AE2176BCC235D2DE96887C</string>
+				<string>A1796C3C681474C725E5327D6B72C6AD</string>
+				<string>E25BA8CB3CA1B61EED9034FF7B0D19AE</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Image Categories</string>
+			<key>path</key>
+			<string>Image Categories</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>E23DB6ED7944B001255161D7F486545E</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -9228,6 +9355,19 @@
 			<string>enc_mips_dsp_r2.c</string>
 			<key>path</key>
 			<string>src/dsp/enc_mips_dsp_r2.c</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>E25BA8CB3CA1B61EED9034FF7B0D19AE</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINImageView+PINRemoteImage.m</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -9267,13 +9407,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>E3B7E04A74DB22C30995756DC4537BCC</key>
-		<dict>
-			<key>fileRef</key>
-			<string>091AA69DAE76A35DC3720AEA01BA3D0E</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
 		<key>E3DBDB19E80D574E3151C04CDC24109F</key>
 		<dict>
 			<key>fileRef</key>
@@ -9287,6 +9420,19 @@
 					<string>Public</string>
 				</array>
 			</dict>
+		</dict>
+		<key>E409CAA7F1F5B8939AA7AAC8A16EDDC6</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINDataTaskOperation.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>E42242848CF6A8949B1DD6A697389E96</key>
 		<dict>
@@ -9367,6 +9513,19 @@
 			<string>filters.c</string>
 			<key>path</key>
 			<string>src/dsp/filters.c</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>E6B9080F143874A2AB627C5AB26138DC</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINImage+DecodedImage.m</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -9458,6 +9617,19 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
+		<key>E8E25D187CAA59B53571BABC995F95CE</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>PINRemoteImageDownloadTask.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>E8F7374A160119DF12E51DD85B16B8AC</key>
 		<dict>
 			<key>fileRef</key>
@@ -9497,20 +9669,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>EA198E6006DF585C7B57F7F26EA83A3B</key>
-		<dict>
-			<key>fileRef</key>
-			<string>433F4E7B5562536EE5F8D1C45DD6F685</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
 		<key>EA7989D20FE8CE5B76DF905381328EB8</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -9536,6 +9694,19 @@
 			<string>encode.h</string>
 			<key>path</key>
 			<string>src/webp/encode.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>EB8E5133D9B0A3ACF1EEC167624CF965</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>PINRemoteImageManagerResult.m</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -9572,19 +9743,6 @@
 			<string>08CEB42F3786551FDFF2AD2B3614744E</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
-		</dict>
-		<key>EC9C0199BDD24346C2E9A794D9C15975</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>PINDataTaskOperation.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>ECA054F0D9C82BEDFFC6EF04F8825DEF</key>
 		<dict>
@@ -9643,6 +9801,13 @@
 			<key>name</key>
 			<string>Release</string>
 		</dict>
+		<key>EE5DA6F06087C5429E5EF1B84A0E2FC4</key>
+		<dict>
+			<key>fileRef</key>
+			<string>73100A667C0477929D7626776D40C661</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
 		<key>EE6DB9BC80D16176392B972E40580ED3</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -9656,13 +9821,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>EE8F9EF1648235703746184EBDBCB732</key>
-		<dict>
-			<key>fileRef</key>
-			<string>55898A679D150C9E811A83D2FD8E3CB6</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
 		<key>EE900EAC18358C6D51D9D3AD6F279DE7</key>
 		<dict>
 			<key>fileRef</key>
@@ -9675,10 +9833,10 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>EF9FDABD9BBC5A171C2542954858F9CA</key>
+		<key>EF16E58EF853CCF02EB26BAEA03B6BC5</key>
 		<dict>
 			<key>fileRef</key>
-			<string>0A5417BC46EB03CE143BB285C52829A0</string>
+			<string>AD4DED4A4857A57AA018BBEABCFF30AD</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -9699,6 +9857,20 @@
 			<dict>
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
+			</dict>
+		</dict>
+		<key>F0DC3B2438333A7853152F7DBB224042</key>
+		<dict>
+			<key>fileRef</key>
+			<string>30911EC0FB016A9F581FC226DF46D316</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
 			</dict>
 		</dict>
 		<key>F0F1C8F22775171F67AD0190C1B15F44</key>
@@ -9854,19 +10026,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>F470EE75A4F3CD3C1BCCCC870F254A4F</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>PINRemoteLock.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>F4CF063631DE6218FB0B6B6C3F80500C</key>
 		<dict>
 			<key>fileRef</key>
@@ -9919,20 +10078,6 @@
 			<string>../..</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F645FF06172C6DB063481A4906A9866E</key>
-		<dict>
-			<key>fileRef</key>
-			<string>CF63D1A058D9329C25C9EE3BC4CFF99A</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
 		</dict>
 		<key>F6614F7200CA7CFCF8A9CFF1BF80C7E7</key>
 		<dict>
@@ -10085,26 +10230,6 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>F9DD7EE75BAEBEE12846EEEFE0DF6C16</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>PINRemoteImageMemoryContainer.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F9EFB1235680AF3769782098FA8EB604</key>
-		<dict>
-			<key>fileRef</key>
-			<string>2CBAB7C7855B6E8D6E582EA2458A19A8</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
 		<key>F9FDB44159AB46134C13CBD621F3667A</key>
 		<dict>
 			<key>fileRef</key>
@@ -10144,10 +10269,10 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>FA6EAB9FC89258BED0E9241465B345AF</key>
+		<key>FA65978174B2A98AC19D5C33ED661FD0</key>
 		<dict>
 			<key>fileRef</key>
-			<string>142B7B99689A8E8379BF43F9FBE32FDF</string>
+			<string>12D8292EE1144C9DA5CB1B5C0A05AA98</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -10157,19 +10282,6 @@
 					<string>Public</string>
 				</array>
 			</dict>
-		</dict>
-		<key>FA8698DA87B8D98AD05F6C8D86DBBD03</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>PINButton+PINRemoteImage.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>FAE16EC2F28D5ED0BCD2F6648CC402AD</key>
 		<dict>
@@ -10228,13 +10340,6 @@
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
 		</dict>
-		<key>FBA970DD0E119E5351BBEC1B254016FF</key>
-		<dict>
-			<key>fileRef</key>
-			<string>19766FFC040C77C7D35D96F8B035DD32</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
 		<key>FC606FD872346908E3B088952A06FC88</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -10275,6 +10380,20 @@
 			<string>Pods-PINRemoteImage Tests-libwebp-prefix.pch</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
+		</dict>
+		<key>FD69D552B8DF3A902BCDD438B2C9B40F</key>
+		<dict>
+			<key>fileRef</key>
+			<string>AB68ED522C720568EE98EF886E6D0BC4</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
 		</dict>
 		<key>FDC5971C4CD9C9E30D2D6DDC8C560BEB</key>
 		<dict>
@@ -10335,6 +10454,20 @@
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
+		<key>FE3E46B0FDE02C58C70EF824AC9C61FF</key>
+		<dict>
+			<key>fileRef</key>
+			<string>03109C8E27BEDBE94EE41A75E6302D30</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>FE73D5C8FEBECC4AFDC151901213800F</key>
+		<dict>
+			<key>fileRef</key>
+			<string>C9018D8CFA86C1F8A3F447B39B08ED6B</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
 		<key>FE825CBF59A6990EE2585AE24A4FECD9</key>
 		<dict>
 			<key>fileRef</key>
@@ -10356,18 +10489,26 @@
 				</array>
 			</dict>
 		</dict>
-		<key>FEF34F591D7081136906E3EF6443657F</key>
+		<key>FEF136F6191A2874DC876EA514C5EC26</key>
 		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
+			<key>fileRef</key>
+			<string>E25BA8CB3CA1B61EED9034FF7B0D19AE</string>
 			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>PINRemoteImageDownloadTask.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>FF1E84FEE759005CB8B26D84A4C3239A</key>
+		<dict>
+			<key>fileRef</key>
+			<string>0076CD5A21FD8D4C3C81FE3D5A45C42E</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
 		</dict>
 		<key>FF405C350EAB480DD0055B5F9BBA5E78</key>
 		<dict>
@@ -10380,6 +10521,13 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-D_THREAD_SAFE -fno-objc-arc</string>
 			</dict>
+		</dict>
+		<key>FF718F94A66D16E8B41C3FA55DE6597C</key>
+		<dict>
+			<key>fileRef</key>
+			<string>2711E67A2F6CFE14B876254E00913B43</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
 		</dict>
 		<key>FFBA9CB9B03705310B8D32C38C81FB6E</key>
 		<dict>

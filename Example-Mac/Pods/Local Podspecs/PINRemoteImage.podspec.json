@@ -46,7 +46,10 @@
 
         ]
       },
-      "frameworks": "UIKit"
+      "frameworks": [
+        "UIKit",
+        "MobileCoreServices"
+      ]
     },
     {
       "name": "OSX",
@@ -56,7 +59,10 @@
 
         ]
       },
-      "frameworks": "Cocoa"
+      "frameworks": [
+        "Cocoa",
+        "CoreServices"
+      ]
     },
     {
       "name": "tvOS",

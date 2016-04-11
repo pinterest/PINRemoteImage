@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Constants/PINRemoteImageResultType.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/c/tdef/PINRemoteImageResultType</TokenIdentifier>
+			<Abstract type="html">How the image was fetched.</Abstract>
+			<DeclaredIn>PINRemoteImageManagerResult.h</DeclaredIn>
+            
+			
+			<NodeRef refid="12"/>
+		</Token>
+		
+		
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageResultTypeNone</TokenIdentifier>
+            <Abstract type="html">Returned if no image is returned</Abstract>
+            <Declaration>PINRemoteImageResultTypeNone</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManagerResult.h</DeclaredIn>
+            
+            <NodeRef refid="12"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageResultTypeMemoryCache</TokenIdentifier>
+            <Abstract type="html">Image was fetched from the memory cache</Abstract>
+            <Declaration>PINRemoteImageResultTypeMemoryCache</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManagerResult.h</DeclaredIn>
+            
+            <NodeRef refid="12"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageResultTypeCache</TokenIdentifier>
+            <Abstract type="html">Image was fetched from the disk cache</Abstract>
+            <Declaration>PINRemoteImageResultTypeCache</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManagerResult.h</DeclaredIn>
+            
+            <NodeRef refid="12"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageResultTypeDownload</TokenIdentifier>
+            <Abstract type="html">Image was downloaded</Abstract>
+            <Declaration>PINRemoteImageResultTypeDownload</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManagerResult.h</DeclaredIn>
+            
+            <NodeRef refid="12"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageResultTypeProgress</TokenIdentifier>
+            <Abstract type="html">Image is progress</Abstract>
+            <Declaration>PINRemoteImageResultTypeProgress</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManagerResult.h</DeclaredIn>
+            
+            <NodeRef refid="12"/>
+        </Token>
+        
+        
+	</File>
+</Tokens>

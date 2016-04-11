@@ -37,13 +37,13 @@ Pod::Spec.new do |s|
   s.subspec 'iOS' do |ios|
     ios.platforms = "ios"
     ios.dependency 'PINRemoteImage/Core'
-    ios.frameworks = 'UIKit'
+    ios.frameworks = 'UIKit', 'MobileCoreServices'
   end
 
   s.subspec 'OSX' do |cs|
     cs.platforms = "osx"
     cs.dependency 'PINRemoteImage/Core'
-    cs.frameworks = 'Cocoa'
+    cs.frameworks = 'Cocoa', 'CoreServices'
   end
 
   s.subspec 'tvOS' do |tvos|

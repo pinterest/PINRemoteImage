@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Constants/PINRemoteImageManagerPriority.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/c/tdef/PINRemoteImageManagerPriority</TokenIdentifier>
+			<Abstract type="html">Priority to download and process image at.</Abstract>
+			<DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+			
+			<NodeRef refid="11"/>
+		</Token>
+		
+		
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityVeryLow</TokenIdentifier>
+            <Abstract type="html">Very low priority</Abstract>
+            <Declaration>PINRemoteImageManagerPriorityVeryLow</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+            <NodeRef refid="11"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityLow</TokenIdentifier>
+            <Abstract type="html">Low priority</Abstract>
+            <Declaration>PINRemoteImageManagerPriorityLow</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+            <NodeRef refid="11"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityMedium</TokenIdentifier>
+            <Abstract type="html">Medium priority</Abstract>
+            <Declaration>PINRemoteImageManagerPriorityMedium</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+            <NodeRef refid="11"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityHigh</TokenIdentifier>
+            <Abstract type="html">High priority</Abstract>
+            <Declaration>PINRemoteImageManagerPriorityHigh</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+            <NodeRef refid="11"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerPriorityVeryHigh</TokenIdentifier>
+            <Abstract type="html">Very high priority</Abstract>
+            <Declaration>PINRemoteImageManagerPriorityVeryHigh</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+            <NodeRef refid="11"/>
+        </Token>
+        
+        
+	</File>
+</Tokens>

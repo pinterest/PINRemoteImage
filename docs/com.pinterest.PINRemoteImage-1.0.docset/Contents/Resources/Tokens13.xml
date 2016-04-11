@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Constants/PINRemoteLockType.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/c/tdef/PINRemoteLockType</TokenIdentifier>
+			<Abstract type="html">The type of lock, either recursive or non-recursive</Abstract>
+			<DeclaredIn>PINRemoteLock.h</DeclaredIn>
+            
+			
+			<NodeRef refid="13"/>
+		</Token>
+		
+		
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteLockTypeNonRecursive</TokenIdentifier>
+            <Abstract type="html">A non-recursive version of the lock. The default.</Abstract>
+            <Declaration>PINRemoteLockTypeNonRecursive</Declaration>
+            
+            <DeclaredIn>PINRemoteLock.h</DeclaredIn>
+            
+            <NodeRef refid="13"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteLockTypeRecursive</TokenIdentifier>
+            <Abstract type="html">A recursive version of the lock. More expensive.</Abstract>
+            <Declaration>PINRemoteLockTypeRecursive</Declaration>
+            
+            <DeclaredIn>PINRemoteLock.h</DeclaredIn>
+            
+            <NodeRef refid="13"/>
+        </Token>
+        
+        
+	</File>
+</Tokens>
