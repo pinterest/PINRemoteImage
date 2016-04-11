@@ -21,6 +21,8 @@ typedef void(^PINAnimatedImageDecodedPath)(BOOL finished, NSString *path, NSErro
 @interface PINAnimatedImageManager : NSObject
 
 + (instancetype)sharedManager;
++ (NSString *)temporaryDirectory;
++ (NSString *)filePathWithTemporaryDirectory:(NSString *)temporaryDirectory UUID:(NSUUID *)UUID count:(NSUInteger)count;
 
 - (void)animatedPathForImageData:(NSData *)animatedImageData infoCompletion:(PINAnimatedImageSharedReady)infoCompletion completion:(PINAnimatedImageDecodedPath)completion;
 
@@ -42,8 +44,17 @@ typedef void(^PINAnimatedImageDecodedPath)(BOOL finished, NSString *path, NSErro
 //TODO is status thread safe?
 @property (nonatomic, assign, readwrite) PINAnimatedImageStatus status;
 
-- (void)setInfoProcessedWithCoverImage:(PINImage *)coverImage durations:(Float32 *)durations totalDuration:(CFTimeInterval)totalDuration loopCount:(size_t)loopCount frameCount:(size_t)frameCount width:(size_t)width height:(size_t)height bitmapInfo:(CGBitmapInfo)bitmapInfo;
+- (void)setInfoProcessedWithCoverImage:(PINImage *)coverImage
+                                  UUID:(NSUUID *)UUID
+                             durations:(Float32 *)durations
+                         totalDuration:(CFTimeInterval)totalDuration
+                             loopCount:(size_t)loopCount
+                            frameCount:(size_t)frameCount
+                                 width:(size_t)width
+                                height:(size_t)height
+                            bitmapInfo:(CGBitmapInfo)bitmapInfo;
 
+@property (nonatomic, readonly) NSUUID *UUID;
 @property (nonatomic, readonly) Float32 *durations;
 @property (nonatomic, readonly) CFTimeInterval totalDuration;
 @property (nonatomic, readonly) size_t loopCount;

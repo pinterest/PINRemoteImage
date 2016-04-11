@@ -66,6 +66,7 @@ const Float32 kPINAnimatedImageMinimumDuration = 1 / kPINAnimatedImageDisplayRef
       [_completionLock lockWithBlock:^{
         if (_infoCompletion) {
           _infoCompletion(coverImage);
+          _infoCompletion = nil;
         }
       }];
     } completion:^(BOOL completed, NSString *path, NSError *error) {
@@ -96,6 +97,8 @@ const Float32 kPINAnimatedImageMinimumDuration = 1 / kPINAnimatedImageDisplayRef
         [_completionLock lockWithBlock:^{
           if (_animatedImageReady) {
             _animatedImageReady();
+            _fileReady = nil;
+            _animatedImageReady = nil;
           }
         }];
       }
@@ -396,12 +399,13 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
   return self;
 }
 
-- (void)setInfoProcessedWithCoverImage:(PINImage *)coverImage durations:(Float32 *)durations totalDuration:(CFTimeInterval)totalDuration loopCount:(size_t)loopCount frameCount:(size_t)frameCount width:(size_t)width height:(size_t)height bitmapInfo:(CGBitmapInfo)bitmapInfo
+- (void)setInfoProcessedWithCoverImage:(PINImage *)coverImage UUID:(NSUUID *)UUID durations:(Float32 *)durations totalDuration:(CFTimeInterval)totalDuration loopCount:(size_t)loopCount frameCount:(size_t)frameCount width:(size_t)width height:(size_t)height bitmapInfo:(CGBitmapInfo)bitmapInfo
 {
   NSAssert(_status == PINAnimatedImageStatusUnprocessed, @"Status should be unprocessed.");
   [_coverImageLock lockWithBlock:^{
     _coverImage = coverImage;
   }];
+  _UUID = UUID;
   _durations = (Float32 *)malloc(sizeof(Float32) * frameCount);
   memcpy(_durations, durations, sizeof(Float32) * frameCount);
   _totalDuration = totalDuration;
@@ -415,6 +419,24 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
 
 - (void)dealloc
 {
+  NSAssert(self.completions.count == 0 && self.infoCompletions.count == 0, @"Shouldn't be dealloc'd if we have a completion or an infoCompletion");
+
+  //Clean up shared files.
+
+  //Get references to maps and UUID so the below block doesn't reference self.
+  NSArray *maps = self.maps;
+  self.maps = nil;
+  NSUUID *UUID = self.UUID;
+
+  if (maps.count > 0) {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+      //ignore errors
+      [[NSFileManager defaultManager] removeItemAtPath:[PINAnimatedImageManager filePathWithTemporaryDirectory:[PINAnimatedImageManager temporaryDirectory] UUID:UUID count:0] error:nil];
+      for (PINSharedAnimatedImageFile *file in maps) {
+        [[NSFileManager defaultManager] removeItemAtPath:file.path error:nil];
+      }
+    });
+  }
   free(_durations);
 }
 

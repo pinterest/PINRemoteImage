@@ -20,7 +20,7 @@
 static const NSUInteger maxFileSize = 50000000; //max file size in bytes
 static const Float32 maxFileDuration = 1; //max duration of a file in seconds
 
-typedef void(^PINAnimatedImageInfoProcessed)(PINImage *coverImage, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, size_t width, size_t height, UInt32 bitmapInfo);
+typedef void(^PINAnimatedImageInfoProcessed)(PINImage *coverImage, NSUUID *UUID, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, size_t width, size_t height, UInt32 bitmapInfo);
 
 BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status);
 BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
@@ -34,7 +34,7 @@ BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
 
 + (instancetype)sharedManager;
 
-@property (nonatomic, strong, readonly) NSMutableDictionary <NSData *, PINSharedAnimatedImage *> *animatedImages;
+@property (nonatomic, strong, readonly) NSMapTable <NSData *, PINSharedAnimatedImage *> *animatedImages;
 @property (nonatomic, strong, readonly) dispatch_queue_t serialProcessingQueue;
 
 @end
@@ -88,7 +88,7 @@ static dispatch_once_t startupCleanupOnce;
       [[NSFileManager defaultManager] createDirectoryAtPath:[PINAnimatedImageManager temporaryDirectory] withIntermediateDirectories:YES attributes:nil error:nil];
     }
     
-    _animatedImages = [[NSMutableDictionary alloc] init];
+    _animatedImages = [[NSMapTable alloc] initWithKeyOptions:NSMapTableWeakMemory valueOptions:NSMapTableWeakMemory capacity:1];
     _serialProcessingQueue = dispatch_queue_create("Serial animated image processing queue.", DISPATCH_QUEUE_SERIAL);
     
 #if PIN_TARGET_IOS
@@ -114,36 +114,51 @@ static dispatch_once_t startupCleanupOnce;
 - (void)animatedPathForImageData:(NSData *)animatedImageData infoCompletion:(PINAnimatedImageSharedReady)infoCompletion completion:(PINAnimatedImageDecodedPath)completion
 {
   __block BOOL startProcessing = NO;
+  __block PINSharedAnimatedImage *sharedAnimatedImage = nil;
   {
     [_lock lockWithBlock:^{
-      PINSharedAnimatedImage *shared = self.animatedImages[animatedImageData];
-      if (shared == nil) {
-        shared = [[PINSharedAnimatedImage alloc] init];
-        self.animatedImages[animatedImageData] = shared;
+      sharedAnimatedImage = [self.animatedImages objectForKey:animatedImageData];
+      if (sharedAnimatedImage == nil) {
+        sharedAnimatedImage = [[PINSharedAnimatedImage alloc] init];
+        [self.animatedImages setObject:sharedAnimatedImage forKey:animatedImageData];
         startProcessing = YES;
       }
       
-      if (shared.status == PINAnimatedImageStatusProcessed) {
-        if (completion) {
-          completion(YES, nil, nil);
-        }
-      } else if (shared.error) {
-        if (completion) {
-          completion(NO, nil, shared.error);
+      if (PINStatusCoverImageCompleted(sharedAnimatedImage.status)) {
+        //Info is already processed, call infoCompletion immediately
+        if (infoCompletion) {
+          infoCompletion(sharedAnimatedImage.coverImage, sharedAnimatedImage);
         }
       } else {
-        if (completion) {
-          shared.completions = [shared.completions arrayByAddingObject:completion];
+        //Add infoCompletion to sharedAnimatedImage
+        if (infoCompletion) {
+          //Since ASSharedAnimatedImages are stored weakly in our map, we need a strong reference in completions
+          PINAnimatedImageSharedReady capturingInfoCompletion = ^(PINImage *coverImage, PINSharedAnimatedImage *newShared) {
+            __unused PINSharedAnimatedImage *strongShared = sharedAnimatedImage;
+            infoCompletion(coverImage, newShared);
+          };
+          sharedAnimatedImage.infoCompletions = [sharedAnimatedImage.infoCompletions arrayByAddingObject:capturingInfoCompletion];
         }
       }
       
-      if (PINStatusCoverImageCompleted(shared.status)) {
-        if (infoCompletion) {
-          infoCompletion(shared.coverImage, shared);
+      if (sharedAnimatedImage.status == PINAnimatedImageStatusProcessed) {
+        //Animated image is already fully processed, call completion immediately
+        if (completion) {
+          completion(YES, nil, nil);
+        }
+      } else if (sharedAnimatedImage.status == PINAnimatedImageStatusError) {
+        if (completion) {
+          completion(NO, nil, sharedAnimatedImage.error);
         }
       } else {
-        if (infoCompletion) {
-          shared.infoCompletions = [shared.infoCompletions arrayByAddingObject:infoCompletion];
+        //Add completion to sharedAnimatedImage
+        if (completion) {
+          //Since PINSharedAnimatedImages are stored weakly in our map, we need a strong reference in completions
+          PINAnimatedImageDecodedPath capturingCompletion = ^(BOOL finished, NSString *path, NSError *error) {
+            __unused PINSharedAnimatedImage *strongShared = sharedAnimatedImage;
+            completion(finished, path, error);
+          };
+          sharedAnimatedImage.completions = [sharedAnimatedImage.completions arrayByAddingObject:capturingCompletion];
         }
       }
     }];
@@ -151,39 +166,42 @@ static dispatch_once_t startupCleanupOnce;
   
   if (startProcessing) {
     dispatch_async(self.serialProcessingQueue, ^{
-      [[self class] processAnimatedImage:animatedImageData temporaryDirectory:[PINAnimatedImageManager temporaryDirectory] infoCompletion:^(PINImage *coverImage, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, size_t width, size_t height, UInt32 bitmapInfo) {
+      [[self class] processAnimatedImage:animatedImageData temporaryDirectory:[PINAnimatedImageManager temporaryDirectory] infoCompletion:^(PINImage *coverImage, NSUUID *UUID, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, size_t width, size_t height, UInt32 bitmapInfo) {
         __block NSArray *infoCompletions = nil;
-        __block PINSharedAnimatedImage *shared = nil;
+        __block PINSharedAnimatedImage *sharedAnimatedImage = nil;
         [_lock lockWithBlock:^{
-          shared = self.animatedImages[animatedImageData];
-          [shared setInfoProcessedWithCoverImage:coverImage durations:durations totalDuration:totalDuration loopCount:loopCount frameCount:frameCount width:width height:height bitmapInfo:bitmapInfo];
-          infoCompletions = shared.infoCompletions;
-          shared.infoCompletions = @[];
+          sharedAnimatedImage = [self.animatedImages objectForKey:animatedImageData];
+          [sharedAnimatedImage setInfoProcessedWithCoverImage:coverImage UUID:UUID durations:durations totalDuration:totalDuration loopCount:loopCount frameCount:frameCount width:width height:height bitmapInfo:bitmapInfo];
+          infoCompletions = sharedAnimatedImage.infoCompletions;
+          sharedAnimatedImage.infoCompletions = @[];
         }];
         
         for (PINAnimatedImageSharedReady infoCompletion in infoCompletions) {
-          infoCompletion(coverImage, shared);
+          infoCompletion(coverImage, sharedAnimatedImage);
         }
       } decodedPath:^(BOOL finished, NSString *path, NSError *error) {
         __block NSArray *completions = nil;
         {
           [_lock lockWithBlock:^{
-            PINSharedAnimatedImage *shared = self.animatedImages[animatedImageData];
+            PINSharedAnimatedImage *sharedAnimatedImage = [self.animatedImages objectForKey:animatedImageData];
             
             if (path && error == nil) {
-              shared.maps = [shared.maps arrayByAddingObject:[[PINSharedAnimatedImageFile alloc] initWithPath:path]];
+              sharedAnimatedImage.maps = [sharedAnimatedImage.maps arrayByAddingObject:[[PINSharedAnimatedImageFile alloc] initWithPath:path]];
             }
-            shared.error = error;
+            sharedAnimatedImage.error = error;
+            if (error) {
+              sharedAnimatedImage.status = PINAnimatedImageStatusError;
+            }
             
-            completions = shared.completions;
+            completions = sharedAnimatedImage.completions;
             if (finished || error) {
-              shared.completions = @[];
+              sharedAnimatedImage.completions = @[];
             }
             
             if (finished) {
-              shared.status = PINAnimatedImageStatusProcessed;
+              sharedAnimatedImage.status = PINAnimatedImageStatusProcessed;
             } else {
-              shared.status = PINAnimatedImageStatusFirstFileProcessed;
+              sharedAnimatedImage.status = PINAnimatedImageStatusFirstFileProcessed;
             }
           }];
         }
@@ -275,7 +293,7 @@ static dispatch_once_t startupCleanupOnce;
         
         dispatch_group_async(diskGroup, diskWriteQueue, ^{
           PINLog(@"notifying info");
-          infoCompletion(coverImage, durations, totalDuration, loopCount, frameCount, width, height, bitmapInfo);
+          infoCompletion(coverImage, UUID, durations, totalDuration, loopCount, frameCount, width, height, bitmapInfo);
           
           //write empty frame count
           [fileHandle writeData:[NSData dataWithBytes:&frameCountForFile length:sizeof(frameCountForFile)]];
