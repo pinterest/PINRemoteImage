@@ -196,7 +196,7 @@ static dispatch_once_t sharedDispatchToken;
         self.sessionManager = [[PINURLSessionManager alloc] initWithSessionConfiguration:configuration];
         self.sessionManager.delegate = self;
         
-        self.estimatedRemainingTimeThreshold = 0.0;
+        self.estimatedRemainingTimeThreshold = 0.1;
         self.timeout = PINRemoteImageManagerDefaultTimeout;
         
         _highQualityBPSThreshold = 500000;
