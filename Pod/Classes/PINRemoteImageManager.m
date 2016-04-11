@@ -843,7 +843,7 @@ static dispatch_once_t sharedDispatchToken;
 
 - (NSArray<NSUUID *> *)prefetchImagesWithURLs:(NSArray <NSURL *> *)urls
 {
-    [self prefetchImagesWithURLs:urls options:PINRemoteImageManagerDownloadOptionsNone | PINRemoteImageManagerDownloadOptionsSkipEarlyCheck];
+    return [self prefetchImagesWithURLs:urls options:PINRemoteImageManagerDownloadOptionsNone | PINRemoteImageManagerDownloadOptionsSkipEarlyCheck];
 }
 
 - (NSArray<NSUUID *> *)prefetchImagesWithURLs:(NSArray <NSURL *> *)urls options:(PINRemoteImageManagerDownloadOptions)options
