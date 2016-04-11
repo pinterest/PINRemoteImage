@@ -46,7 +46,7 @@ static dispatch_once_t startupCleanupOnce;
 + (void)load
 {
   if (self == [PINAnimatedImageManager class]) {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, NULL), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
       dispatch_once(&startupCleanupOnce, ^{
         [self cleanupFiles];
       });
