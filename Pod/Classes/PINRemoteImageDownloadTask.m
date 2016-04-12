@@ -55,7 +55,7 @@
     }];
 }
 
-- (void)callProgressImageWithQueue:(dispatch_queue_t)queue withImage:(PINImage *)image
+- (void)callProgressImageWithQueue:(nonnull dispatch_queue_t)queue withImage:(nonnull PINImage *)image progress:(CGFloat)progress
 {
     [self.callbackBlocks enumerateKeysAndObjectsUsingBlock:^(NSUUID *UUID, PINRemoteImageCallbacks *callback, BOOL *stop) {
         if (callback.progressImageBlock != nil) {
