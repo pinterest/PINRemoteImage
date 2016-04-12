@@ -233,7 +233,9 @@
                     currentImage = [PINImage imageWithCGImage:image];
                 }
                 CGImageRelease(image);
-                *imageProgress = progress;
+                if (imageProgress) {
+                    *imageProgress = progress;
+                }
             }
         }
     
