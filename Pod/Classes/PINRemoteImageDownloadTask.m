@@ -72,7 +72,7 @@
                                                                                error:nil
                                                                           resultType:PINRemoteImageResultTypeProgress
                                                                                 UUID:UUID
-                                                                            progress:progress]);
+                                                                    downloadProgress:progress]);
            });
         }
     }];

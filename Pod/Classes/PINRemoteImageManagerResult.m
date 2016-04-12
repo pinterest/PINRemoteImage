@@ -23,7 +23,7 @@
                                 error:error
                            resultType:resultType
                                  UUID:uuid
-                             progress:1.0];
+                     downloadProgress:1.0];
 }
 
 + (instancetype)imageResultWithImage:(PINImage *)image
@@ -32,7 +32,7 @@
                                error:(NSError *)error
                           resultType:(PINRemoteImageResultType)resultType
                                 UUID:(NSUUID *)uuid
-                            progress:(CGFloat)progress
+                    downloadProgress:(CGFloat)downloadProgress
 {
     return [[self alloc] initWithImage:image
              alternativeRepresentation:alternativeRepresentation
@@ -40,7 +40,7 @@
                                  error:error
                             resultType:resultType
                                   UUID:uuid
-                              progress:progress];
+                      downloadProgress:downloadProgress];
 }
 
 - (instancetype)initWithImage:(PINImage *)image
@@ -49,7 +49,7 @@
                         error:(NSError *)error
                    resultType:(PINRemoteImageResultType)resultType
                          UUID:(NSUUID *)uuid
-                     progress:(CGFloat)progress
+             downloadProgress:(CGFloat)downloadProgress
 {
     if (self = [super init]) {
         _image = image;
@@ -58,7 +58,7 @@
         _error = error;
         _resultType = resultType;
         _UUID = uuid;
-        _progress = progress;
+        _downloadProgress = downloadProgress;
     }
     return self;
 }
@@ -78,7 +78,7 @@
     description = [description stringByAppendingString:@"\n"];
     description = [description stringByAppendingString:[NSString stringWithFormat:@"UUID: %@", self.UUID]];
     description = [description stringByAppendingString:@"\n"];
-    description = [description stringByAppendingString:[NSString stringWithFormat:@"UUID: %@", self.progress]];
+    description = [description stringByAppendingString:[NSString stringWithFormat:@"UUID: %@", self.downloadProgress]];
     return description;
 }
 
