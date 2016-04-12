@@ -33,7 +33,7 @@
  or width of this dimension, the image will *not* be blurred regardless of the blurred parameter.
  @return PINImage a progressive scan of the image or nil if a new one has not been generated
  */
-- (nullable PINImage *)currentImageBlurred:(BOOL)blurred maxProgressiveRenderSize:(CGSize)maxProgressiveRenderSize;
+- (nullable PINImage *)currentImageBlurred:(BOOL)blurred maxProgressiveRenderSize:(CGSize)maxProgressiveRenderSize imageProgress:(out CGFloat *)progress;
 
 /**
  Returns the current data for the image.

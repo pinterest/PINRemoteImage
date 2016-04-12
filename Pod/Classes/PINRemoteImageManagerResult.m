@@ -17,12 +17,30 @@
                           resultType:(PINRemoteImageResultType)resultType
                                 UUID:(NSUUID *)uuid
 {
+    return [self imageResultWithImage:image
+            alternativeRepresentation:alternativeRepresentation
+                        requestLength:requestLength
+                                error:error
+                           resultType:resultType
+                                 UUID:uuid
+                             progress:1.0];
+}
+
++ (instancetype)imageResultWithImage:(PINImage *)image
+           alternativeRepresentation:(id)alternativeRepresentation
+                       requestLength:(NSTimeInterval)requestLength
+                               error:(NSError *)error
+                          resultType:(PINRemoteImageResultType)resultType
+                                UUID:(NSUUID *)uuid
+                            progress:(CGFloat)progress
+{
     return [[self alloc] initWithImage:image
              alternativeRepresentation:alternativeRepresentation
                          requestLength:requestLength
                                  error:error
                             resultType:resultType
-                                  UUID:uuid];
+                                  UUID:uuid
+                              progress:progress];
 }
 
 - (instancetype)initWithImage:(PINImage *)image
@@ -30,7 +48,9 @@
                 requestLength:(NSTimeInterval)requestLength
                         error:(NSError *)error
                    resultType:(PINRemoteImageResultType)resultType
-                         UUID:(NSUUID *)uuid {
+                         UUID:(NSUUID *)uuid
+                     progress:(CGFloat)progress
+{
     if (self = [super init]) {
         _image = image;
         _alternativeRepresentation = alternativeRepresentation;
@@ -38,6 +58,7 @@
         _error = error;
         _resultType = resultType;
         _UUID = uuid;
+        _progress = progress;
     }
     return self;
 }
@@ -56,6 +77,8 @@
     description = [description stringByAppendingString:[NSString stringWithFormat:@"resultType: %lu", (unsigned long)self.resultType]];
     description = [description stringByAppendingString:@"\n"];
     description = [description stringByAppendingString:[NSString stringWithFormat:@"UUID: %@", self.UUID]];
+    description = [description stringByAppendingString:@"\n"];
+    description = [description stringByAppendingString:[NSString stringWithFormat:@"UUID: %@", self.progress]];
     return description;
 }
 

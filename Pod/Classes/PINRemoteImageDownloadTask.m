@@ -71,8 +71,9 @@
                                                                        requestLength:CACurrentMediaTime() - requestTime
                                                                                error:nil
                                                                           resultType:PINRemoteImageResultTypeProgress
-                                                                                UUID:UUID]);
-            });
+                                                                                UUID:UUID
+                                                                            progress:progress]);
+           });
         }
     }];
 }
