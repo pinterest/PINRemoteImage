@@ -1076,7 +1076,7 @@ static dispatch_once_t sharedDispatchToken;
                 [strongSelf lock];
                     NSString *cacheKey = [strongSelf cacheKeyForURL:[[dataTask originalRequest] URL] processorKey:nil];
                     PINRemoteImageDownloadTask *task = strongSelf.tasks[cacheKey];
-                    [task callProgressImageWithQueue:strongSelf.callbackQueue withImage:progressImage progress:renderedImageQuality];
+                    [task callProgressImageWithQueue:strongSelf.callbackQueue withImage:progressImage renderedImageQuality:renderedImageQuality];
                 [strongSelf unlock];
             }
         }];
