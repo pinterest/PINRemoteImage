@@ -708,7 +708,7 @@ static dispatch_once_t sharedDispatchToken;
 
     BOOL allowEarlyReturn = !(PINRemoteImageManagerDownloadOptionsSkipEarlyCheck & options);
 
-    if (url != nil) {
+    if (url != nil && object != nil) {
         resultType = PINRemoteImageResultTypeMemoryCache;
         [self materializeAndCacheObject:object key:key options:options outImage:&image outAltRep:&alternativeRepresentation];
     }
@@ -1021,7 +1021,10 @@ static dispatch_once_t sharedDispatchToken;
     PINImage *image;
     id alternativeRepresentation;
     NSError *error = nil;
-    if ([self materializeAndCacheObject:object key:cacheKey options:options outImage:&image outAltRep:&alternativeRepresentation] == NO) {
+    if (object == nil) {
+        image = nil;
+        alternativeRepresentation = nil;
+    } else if ([self materializeAndCacheObject:object key:cacheKey options:options outImage:&image outAltRep:&alternativeRepresentation] == NO) {
         error = [NSError errorWithDomain:PINRemoteImageManagerErrorDomain
                                     code:PINRemoteImageManagerErrorInvalidItemInCache
                                 userInfo:nil];
@@ -1298,6 +1301,10 @@ static dispatch_once_t sharedDispatchToken;
                          outImage:(PINImage **)outImage
                         outAltRep:(id *)outAlternateRepresentation
 {
+    NSAssert(object != nil, @"Object should not be nil.");
+    if (object == nil) {
+        return NO;
+    }
     BOOL alternateRepresentationsAllowed = (PINRemoteImageManagerDisallowAlternateRepresentations & options) == 0;
     BOOL skipDecode = (options & PINRemoteImageManagerDownloadOptionsSkipDecode) != 0;
     __block id alternateRepresentation = nil;
