@@ -802,17 +802,24 @@ static dispatch_once_t sharedDispatchToken;
 #if PINRemoteImageLogging
         if (error && error.code != NSURLErrorCancelled) {
             PINLog(@"Failed downloading image: %@ with error: %@", url, error);
-        } else if (error == nil && responseObject == nil) {
+        } else if (error == nil && response.expectedContentLength == 0) {
             PINLog(@"image is empty at URL: %@", url);
         } else {
             PINLog(@"Finished downloading image: %@", url);
         }
 #endif
+        
         if (error.code != NSURLErrorCancelled) {
             [strongSelf lock];
                 PINRemoteImageDownloadTask *task = [strongSelf.tasks objectForKey:key];
                 NSData *data = task.progressImage.data;
             [strongSelf unlock];
+            
+            if (error == nil && data == nil) {
+                error = [NSError errorWithDomain:PINRemoteImageManagerErrorDomain
+                                            code:PINRemoteImageManagerErrorImageEmpty
+                                        userInfo:nil];
+            }
             
             completion(data, error);
         }

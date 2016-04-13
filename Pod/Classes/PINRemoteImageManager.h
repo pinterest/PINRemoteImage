@@ -35,6 +35,8 @@ typedef NS_ENUM(NSUInteger, PINRemoteImageManagerError) {
     PINRemoteImageManagerErrorFailedToProcessImage = 3,
     /** The image in the cache was invalid */
     PINRemoteImageManagerErrorInvalidItemInCache = 4,
+    /** The image at the URL was empty */
+    PINRemoteImageManagerErrorImageEmpty = 5,
 };
 
 /**
