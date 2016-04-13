@@ -790,6 +790,11 @@ static dispatch_once_t sharedDispatchToken;
                  outImage:(PINImage **)outImage
          outAnimatedImage:(FLAnimatedImage **)outAnimatedImage
 {
+    NSAssert(object != nil, @"Object should not be nil.");
+    if (object == nil) {
+        return NO;
+    }
+  
     BOOL ignoreGIF = (PINRemoteImageManagerDownloadOptionsIgnoreGIFs & options) != 0;
     FLAnimatedImage *animatedImage = nil;
     PINImage *image = nil;
@@ -1119,7 +1124,10 @@ static dispatch_once_t sharedDispatchToken;
         PINImage *image;
         FLAnimatedImage *animatedImage;
         NSError *error = nil;
-        if ([strongSelf handleCacheObject:strongSelf.cache object:object key:cacheKey options:options outImage:&image outAnimatedImage:&animatedImage] == NO) {
+        if (object == nil) {
+            image = nil;
+            animatedImage = nil;
+        } else if ([strongSelf handleCacheObject:strongSelf.cache object:object key:cacheKey options:options outImage:&image outAnimatedImage:&animatedImage] == NO) {
             error = [NSError errorWithDomain:PINRemoteImageManagerErrorDomain
                                         code:PINRemoteImageManagerErrorInvalidItemInCache
                                     userInfo:nil];
@@ -1144,7 +1152,10 @@ static dispatch_once_t sharedDispatchToken;
     PINImage *image;
     FLAnimatedImage *animatedImage;
     NSError *error = nil;
-    if ([self handleCacheObject:self.cache object:object key:cacheKey options:options outImage:&image outAnimatedImage:&animatedImage] == NO) {
+    if (object == nil) {
+        image = nil;
+        animatedImage = nil;
+    } else if ([self handleCacheObject:self.cache object:object key:cacheKey options:options outImage:&image outAnimatedImage:&animatedImage] == NO) {
         error = [NSError errorWithDomain:PINRemoteImageManagerErrorDomain
                                     code:PINRemoteImageManagerErrorInvalidItemInCache
                                 userInfo:nil];
