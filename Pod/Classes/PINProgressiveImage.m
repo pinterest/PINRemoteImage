@@ -152,7 +152,7 @@
     [self.lock unlock];
 }
 
-- (PINImage *)currentImageBlurred:(BOOL)blurred maxProgressiveRenderSize:(CGSize)maxProgressiveRenderSize imageProgress:(out CGFloat *)imageProgress
+- (PINImage *)currentImageBlurred:(BOOL)blurred maxProgressiveRenderSize:(CGSize)maxProgressiveRenderSize renderedImageQuality:(out CGFloat *)renderedImageQuality
 {
     [self.lock lock];
         if (self.imageSource == nil) {
@@ -233,8 +233,8 @@
                     currentImage = [PINImage imageWithCGImage:image];
                 }
                 CGImageRelease(image);
-                if (imageProgress) {
-                    *imageProgress = progress;
+                if (renderedImageQuality) {
+                    *renderedImageQuality = progress;
                 }
             }
         }

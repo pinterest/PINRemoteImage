@@ -41,9 +41,9 @@ typedef NS_ENUM(NSUInteger, PINRemoteImageResultType) {
 @property (nonatomic, readonly, strong, nullable) NSError *error;
 @property (nonatomic, readonly, assign) PINRemoteImageResultType resultType;
 @property (nonatomic, readonly, strong, nullable) NSUUID *UUID;
-@property (nonatomic, readonly, assign) CGFloat downloadProgress;
+@property (nonatomic, readonly, assign) CGFloat renderedImageQuality;
 
-+ (instancetype)imageResultWithImage:(nullable PINImage *)image
++ (nonnull instancetype)imageResultWithImage:(nullable PINImage *)image
            alternativeRepresentation:(nullable id)alternativeRepresentation
                        requestLength:(NSTimeInterval)requestLength
                                error:(nullable NSError *)error
@@ -56,6 +56,6 @@ typedef NS_ENUM(NSUInteger, PINRemoteImageResultType) {
                                        error:(nullable NSError *)error
                                   resultType:(PINRemoteImageResultType)resultType
                                         UUID:(nullable NSUUID *)uuid
-                            downloadProgress:(CGFloat)downloadProgress;
+                        renderedImageQuality:(CGFloat)renderedImageQuality;
 
 @end

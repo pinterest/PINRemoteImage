@@ -1070,13 +1070,13 @@ static dispatch_once_t sharedDispatchToken;
         __weak typeof(self) weakSelf = self;
         [_concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityLow block:^{
             typeof(self) strongSelf = weakSelf;
-            CGFloat downloadProgress = 1.0;
-            PINImage *progressImage = [progressiveImage currentImageBlurred:shouldBlur maxProgressiveRenderSize:maxProgressiveRenderSize imageProgress:&downloadProgress];
+            CGFloat renderedImageQuality = 1.0;
+            PINImage *progressImage = [progressiveImage currentImageBlurred:shouldBlur maxProgressiveRenderSize:maxProgressiveRenderSize renderedImageQuality:&renderedImageQuality];
             if (progressImage) {
                 [strongSelf lock];
                     NSString *cacheKey = [strongSelf cacheKeyForURL:[[dataTask originalRequest] URL] processorKey:nil];
                     PINRemoteImageDownloadTask *task = strongSelf.tasks[cacheKey];
-                    [task callProgressImageWithQueue:strongSelf.callbackQueue withImage:progressImage progress:downloadProgress];
+                    [task callProgressImageWithQueue:strongSelf.callbackQueue withImage:progressImage progress:renderedImageQuality];
                 [strongSelf unlock];
             }
         }];

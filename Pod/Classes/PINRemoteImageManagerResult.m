@@ -23,7 +23,7 @@
                                 error:error
                            resultType:resultType
                                  UUID:uuid
-                     downloadProgress:1.0];
+                 renderedImageQuality:1.0];
 }
 
 + (instancetype)imageResultWithImage:(PINImage *)image
@@ -32,7 +32,7 @@
                                error:(NSError *)error
                           resultType:(PINRemoteImageResultType)resultType
                                 UUID:(NSUUID *)uuid
-                    downloadProgress:(CGFloat)downloadProgress
+                renderedImageQuality:(CGFloat)renderedImageQuality
 {
     return [[self alloc] initWithImage:image
              alternativeRepresentation:alternativeRepresentation
@@ -40,7 +40,7 @@
                                  error:error
                             resultType:resultType
                                   UUID:uuid
-                      downloadProgress:downloadProgress];
+                  renderedImageQuality:renderedImageQuality];
 }
 
 - (instancetype)initWithImage:(PINImage *)image
@@ -49,7 +49,7 @@
                         error:(NSError *)error
                    resultType:(PINRemoteImageResultType)resultType
                          UUID:(NSUUID *)uuid
-             downloadProgress:(CGFloat)downloadProgress
+         renderedImageQuality:(CGFloat)renderedImageQuality
 {
     if (self = [super init]) {
         _image = image;
@@ -58,7 +58,7 @@
         _error = error;
         _resultType = resultType;
         _UUID = uuid;
-        _downloadProgress = downloadProgress;
+        _renderedImageQuality = renderedImageQuality;
     }
     return self;
 }
@@ -78,7 +78,7 @@
     description = [description stringByAppendingString:@"\n"];
     description = [description stringByAppendingString:[NSString stringWithFormat:@"UUID: %@", self.UUID]];
     description = [description stringByAppendingString:@"\n"];
-    description = [description stringByAppendingString:[NSString stringWithFormat:@"UUID: %@", self.downloadProgress]];
+    description = [description stringByAppendingString:[NSString stringWithFormat:@"UUID: %f", self.renderedImageQuality]];
     return description;
 }
 

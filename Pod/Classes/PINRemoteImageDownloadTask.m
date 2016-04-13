@@ -55,7 +55,7 @@
     }];
 }
 
-- (void)callProgressImageWithQueue:(nonnull dispatch_queue_t)queue withImage:(nonnull PINImage *)image progress:(CGFloat)progress
+- (void)callProgressImageWithQueue:(nonnull dispatch_queue_t)queue withImage:(nonnull PINImage *)image renderedImageQuality:(CGFloat)renderedImageQuality
 {
     [self.callbackBlocks enumerateKeysAndObjectsUsingBlock:^(NSUUID *UUID, PINRemoteImageCallbacks *callback, BOOL *stop) {
         if (callback.progressImageBlock != nil) {
@@ -72,7 +72,7 @@
                                                                                error:nil
                                                                           resultType:PINRemoteImageResultTypeProgress
                                                                                 UUID:UUID
-                                                                    downloadProgress:progress]);
+                                                                renderedImageQuality:renderedImageQuality]);
            });
         }
     }];
