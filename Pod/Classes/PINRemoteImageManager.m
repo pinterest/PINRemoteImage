@@ -9,6 +9,7 @@
 #import "PINRemoteImageManager.h"
 
 #import <PINCache/PINCache.h>
+#import <CommonCrypto/CommonDigest.h>
 
 #import "PINAlternateRepresentationProvider.h"
 #import "PINRemoteImage.h"
@@ -26,6 +27,10 @@
 #import "PINImage+DecodedImage.h"
 
 #define PINRemoteImageManagerDefaultTimeout  60.0
+
+//A limit of 200 characters is chosen because PINDiskCache
+//may expand the length by encoding certain characters
+#define PINRemoteImageManagerCacheKeyMaxLength 200
 
 NSOperationQueuePriority operationPriorityWithImageManagerPriority(PINRemoteImageManagerPriority priority) {
     switch (priority) {
@@ -1392,6 +1397,29 @@ static dispatch_once_t sharedDispatchToken;
     if (processorKey.length > 0) {
         cacheKey = [cacheKey stringByAppendingString:[NSString stringWithFormat:@"-<%@>", processorKey]];
     }
+
+    //PINDiskCache uses this key as the filename of the file written to disk
+    //Due to the current filesystem used in Darwin, this name must be limited to 255 chars.
+    //In case the generated key exceeds PINRemoteImageManagerCacheKeyMaxLength characters,
+    //we return the hash of it instead.
+    if (cacheKey.length > PINRemoteImageManagerCacheKeyMaxLength) {
+        __block CC_MD5_CTX ctx;
+        CC_MD5_Init(&ctx);
+        NSData *data = [cacheKey dataUsingEncoding:NSUTF8StringEncoding];
+        [data enumerateByteRangesUsingBlock:^(const void * _Nonnull bytes, NSRange byteRange, BOOL * _Nonnull stop) {
+            CC_MD5_Update(&ctx, bytes, (CC_LONG)byteRange.length);
+        }];
+
+        unsigned char digest[CC_MD5_DIGEST_LENGTH];
+        CC_MD5_Final(digest, &ctx);
+
+        NSMutableString *hexString  = [NSMutableString stringWithCapacity:(CC_MD5_DIGEST_LENGTH * 2)];
+        for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
+            [hexString appendFormat:@"%02lx", (unsigned long)digest[i]];
+        }
+        cacheKey = hexString.copy;
+    }
+
     return cacheKey;
 }
 
