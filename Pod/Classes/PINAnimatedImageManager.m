@@ -237,20 +237,6 @@ if (ERROR != nil) { \
 }]; \
 ERROR;}) \
 
-//+ (BOOL)stopProcessing:(NSError **)destinationError lock:(PINRemoteLock *)lock
-//{
-//  return [self processingError:destinationError lock:lock] != nil;
-//}
-//
-//+ (NSError *)processingError:(NSError **)destinationError lock:(PINRemoteLock *)lock
-//{
-//  __block NSError *processingError;
-//  [lock lockWithBlock:^{
-//    processingError = *destinationError;
-//  }];
-//  return processingError;
-//}
-
 + (void)processAnimatedImage:(NSData *)animatedImageData
           temporaryDirectory:(NSString *)temporaryDirectory
               infoCompletion:(PINAnimatedImageInfoProcessed)infoCompletion
@@ -345,7 +331,7 @@ ERROR;}) \
           @try {
             [fileHandle writeData:[NSData dataWithBytes:&frameCountForFile length:sizeof(frameCountForFile)]];
           } @catch (NSException *exception) {
-            NSError *frameCountError = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorFileWrite userInfo:exception];
+            NSError *frameCountError = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorFileWrite userInfo:@{@"NSException" : exception}];
             HANDLE_PROCESSING_ERROR(frameCountError);
           } @finally {}
         });
@@ -365,7 +351,7 @@ ERROR;}) \
                   [fileHandle writeData:[NSData dataWithBytes:&frameCountForFile length:sizeof(frameCountForFile)]];
                   [fileHandle closeFile];
                 } @catch (NSException *exception) {
-                  NSError *frameCountError = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorFileWrite userInfo:exception];
+                  NSError *frameCountError = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorFileWrite userInfo:@{@"NSException" : exception}];
                   HANDLE_PROCESSING_ERROR(frameCountError);
                 } @finally {}
               });
@@ -388,7 +374,7 @@ ERROR;}) \
                 @try {
                   [fileHandle writeData:[NSData dataWithBytes:&frameCountForFile length:sizeof(frameCountForFile)]];
                 } @catch (NSException *exception) {
-                  NSError *frameCountError = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorFileWrite userInfo:exception];
+                  NSError *frameCountError = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorFileWrite userInfo:@{@"NSException" : exception}];
                   HANDLE_PROCESSING_ERROR(frameCountError);
                 } @finally {}
               });
@@ -430,7 +416,7 @@ ERROR;}) \
       [fileHandle writeData:[NSData dataWithBytes:&frameCountForFile length:sizeof(frameCountForFile)]];
       [fileHandle closeFile];
     } @catch (NSException *exception) {
-      NSError *frameCountError = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorFileWrite userInfo:exception];
+      NSError *frameCountError = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorFileWrite userInfo:@{@"NSException" : exception}];
       HANDLE_PROCESSING_ERROR(frameCountError);
     } @finally {}
   }
@@ -537,7 +523,7 @@ ERROR;}) \
     [fileHandle writeData:[NSData dataWithBytes:&bitmapInfo length:sizeof(bitmapInfo)]];
     [fileHandle writeData:[NSData dataWithBytes:durations length:sizeof(Float32) * frameCount]];
   } @catch (NSException *exception) {
-    error = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorFileWrite userInfo:exception];
+    error = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorFileWrite userInfo:@{@"NSException" : exception}];
   } @finally {}
   return error;
 }
@@ -559,7 +545,7 @@ ERROR;}) \
     [fileHandle writeData:[NSData dataWithBytes:&duration length:sizeof(duration)]];
     [fileHandle writeData:frameData];
   } @catch (NSException *exception) {
-    error = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorFileWrite userInfo:exception];
+    error = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorFileWrite userInfo:@{@"NSException" : exception}];
   } @finally {}
   return error;
 }
