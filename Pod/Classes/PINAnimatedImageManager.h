@@ -40,9 +40,10 @@ typedef void(^PINAnimatedImageDecodedPath)(BOOL finished, NSString *path, NSErro
 @property (nonatomic, strong, readwrite) NSArray <PINAnimatedImageDecodedPath> *completions;
 @property (nonatomic, strong, readwrite) NSArray <PINAnimatedImageSharedReady> *infoCompletions;
 @property (nonatomic, weak, readwrite) PINImage *coverImage;
-@property (nonatomic, strong, readwrite) NSError *error;
-//TODO is status thread safe?
-@property (nonatomic, assign, readwrite) PINAnimatedImageStatus status;
+
+//intentionally atomic
+@property (atomic, strong, readwrite) NSError *error;
+@property (atomic, assign, readwrite) PINAnimatedImageStatus status;
 
 - (void)setInfoProcessedWithCoverImage:(PINImage *)coverImage
                                   UUID:(NSUUID *)UUID

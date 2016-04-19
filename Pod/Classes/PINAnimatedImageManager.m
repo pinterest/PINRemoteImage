@@ -198,10 +198,12 @@ static dispatch_once_t startupCleanupOnce;
               sharedAnimatedImage.completions = @[];
             }
             
-            if (finished) {
-              sharedAnimatedImage.status = PINAnimatedImageStatusProcessed;
-            } else {
-              sharedAnimatedImage.status = PINAnimatedImageStatusFirstFileProcessed;
+            if (error == nil) {
+              if (finished) {
+                sharedAnimatedImage.status = PINAnimatedImageStatusProcessed;
+              } else {
+                sharedAnimatedImage.status = PINAnimatedImageStatusFirstFileProcessed;
+              }
             }
           }];
         }
@@ -214,16 +216,40 @@ static dispatch_once_t startupCleanupOnce;
   }
 }
 
+#define HANDLE_PROCESSING_ERROR(ERROR) \
+{ \
+if (ERROR != nil) { \
+  [errorLock lockWithBlock:^{ \
+    if (processingError == nil) { \
+      processingError = ERROR; \
+    } \
+  }]; \
+\
+[fileHandle closeFile]; \
+[[NSFileManager defaultManager] removeItemAtPath:filePath error:nil]; \
+} \
+}
+
+#define PROCESSING_ERROR \
+({__block NSError *ERROR; \
+[errorLock lockWithBlock:^{ \
+  ERROR = processingError; \
+}]; \
+ERROR;}) \
+
 + (void)processAnimatedImage:(NSData *)animatedImageData
           temporaryDirectory:(NSString *)temporaryDirectory
               infoCompletion:(PINAnimatedImageInfoProcessed)infoCompletion
                  decodedPath:(PINAnimatedImageDecodedPath)completion
 {
   NSUUID *UUID = [NSUUID UUID];
-  NSError *error = nil;
+  __block NSError *processingError = nil;
+  PINRemoteLock *errorLock = [[PINRemoteLock alloc] initWithName:@"animatedImage processing lock"];
   NSString *filePath = nil;
   //TODO Must handle file handle errors! Documentation says it throws exceptions on any errors :(
-  NSFileHandle *fileHandle = [self fileHandle:&error filePath:&filePath temporaryDirectory:temporaryDirectory UUID:UUID count:0];
+  NSError *fileHandleError = nil;
+  NSFileHandle *fileHandle = [self fileHandle:&fileHandleError filePath:&filePath temporaryDirectory:temporaryDirectory UUID:UUID count:0];
+  HANDLE_PROCESSING_ERROR(fileHandleError);
   UInt32 width;
   UInt32 height;
   UInt32 bitmapInfo;
@@ -235,7 +261,7 @@ static dispatch_once_t startupCleanupOnce;
   CFTimeInterval start = CACurrentMediaTime();
 #endif
   
-  if (fileHandle && error == nil) {
+  if (fileHandle && PROCESSING_ERROR == nil) {
     dispatch_queue_t diskWriteQueue = dispatch_queue_create("PINAnimatedImage disk write queue", DISPATCH_QUEUE_SERIAL);
     dispatch_group_t diskGroup = dispatch_group_create();
     
@@ -260,7 +286,8 @@ static dispatch_once_t startupCleanupOnce;
         if (frameIdx == 0) {
           CGImageRef frameImage = CGImageSourceCreateImageAtIndex(imageSource, frameIdx, (CFDictionaryRef)@{(__bridge NSString *)kCGImageSourceShouldCache : (__bridge NSNumber *)kCFBooleanFalse});
           if (frameImage == nil) {
-            error = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorImageFrameError userInfo:nil];
+            NSError *frameError = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorImageFrameError userInfo:nil];
+            HANDLE_PROCESSING_ERROR(frameError);
             break;
           }
           
@@ -282,55 +309,81 @@ static dispatch_once_t startupCleanupOnce;
         totalDuration += duration;
       }
       
-      if (error == nil) {
+      if (PROCESSING_ERROR == nil) {
         //Get size, write file header get coverImage
         dispatch_group_async(diskGroup, diskWriteQueue, ^{
-          [self writeFileHeader:fileHandle width:width height:height loopCount:loopCount frameCount:frameCount bitmapInfo:bitmapInfo durations:durations];
-          [fileHandle closeFile];
+          NSError *fileHeaderError = [self writeFileHeader:fileHandle width:width height:height loopCount:loopCount frameCount:frameCount bitmapInfo:bitmapInfo durations:durations];
+          HANDLE_PROCESSING_ERROR(fileHeaderError);
+          if (fileHeaderError == nil) {
+            [fileHandle closeFile];
+            
+            PINLog(@"notifying info");
+            infoCompletion(coverImage, UUID, durations, totalDuration, loopCount, frameCount, width, height, bitmapInfo);
+          }
         });
         fileCount = 1;
-        fileHandle = [self fileHandle:&error filePath:&filePath temporaryDirectory:temporaryDirectory UUID:UUID count:fileCount];
+        NSError *fileHandleError = nil;
+        fileHandle = [self fileHandle:&fileHandleError filePath:&filePath temporaryDirectory:temporaryDirectory UUID:UUID count:fileCount];
+        HANDLE_PROCESSING_ERROR(fileHandleError);
         
         dispatch_group_async(diskGroup, diskWriteQueue, ^{
-          PINLog(@"notifying info");
-          infoCompletion(coverImage, UUID, durations, totalDuration, loopCount, frameCount, width, height, bitmapInfo);
-          
           //write empty frame count
-          [fileHandle writeData:[NSData dataWithBytes:&frameCountForFile length:sizeof(frameCountForFile)]];
+          @try {
+            [fileHandle writeData:[NSData dataWithBytes:&frameCountForFile length:sizeof(frameCountForFile)]];
+          } @catch (NSException *exception) {
+            NSError *frameCountError = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorFileWrite userInfo:@{@"NSException" : exception}];
+            HANDLE_PROCESSING_ERROR(frameCountError);
+          } @finally {}
         });
         
         //Process frames
         for (NSUInteger frameIdx = 0; frameIdx < frameCount; frameIdx++) {
+          if (PROCESSING_ERROR != nil) {
+            break;
+          }
           @autoreleasepool {
             if (fileDuration > maxFileDuration || fileSize > maxFileSize) {
               //create a new file
               dispatch_group_async(diskGroup, diskWriteQueue, ^{
                 //prepend file with frameCount
-                [fileHandle seekToFileOffset:0];
-                [fileHandle writeData:[NSData dataWithBytes:&frameCountForFile length:sizeof(frameCountForFile)]];
-                [fileHandle closeFile];
+                @try {
+                  [fileHandle seekToFileOffset:0];
+                  [fileHandle writeData:[NSData dataWithBytes:&frameCountForFile length:sizeof(frameCountForFile)]];
+                  [fileHandle closeFile];
+                } @catch (NSException *exception) {
+                  NSError *frameCountError = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorFileWrite userInfo:@{@"NSException" : exception}];
+                  HANDLE_PROCESSING_ERROR(frameCountError);
+                } @finally {}
               });
               
               dispatch_group_async(diskGroup, diskWriteQueue, ^{
                 PINLog(@"notifying file: %@", filePath);
-                completion(NO, filePath, error);
+                completion(NO, filePath, PROCESSING_ERROR);
               });
               
               diskGroup = dispatch_group_create();
               fileCount++;
-              fileHandle = [self fileHandle:&error filePath:&filePath temporaryDirectory:temporaryDirectory UUID:UUID count:fileCount];
+              NSError *fileHandleError = nil;
+              fileHandle = [self fileHandle:&fileHandleError filePath:&filePath temporaryDirectory:temporaryDirectory UUID:UUID count:fileCount];
+              HANDLE_PROCESSING_ERROR(fileHandleError);
               frameCountForFile = 0;
               fileDuration = 0;
               fileSize = 0;
               //write empty frame count
               dispatch_group_async(diskGroup, diskWriteQueue, ^{
-                [fileHandle writeData:[NSData dataWithBytes:&frameCountForFile length:sizeof(frameCountForFile)]];
+                @try {
+                  [fileHandle writeData:[NSData dataWithBytes:&frameCountForFile length:sizeof(frameCountForFile)]];
+                } @catch (NSException *exception) {
+                  NSError *frameCountError = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorFileWrite userInfo:@{@"NSException" : exception}];
+                  HANDLE_PROCESSING_ERROR(frameCountError);
+                } @finally {}
               });
             }
             
             CGImageRef frameImage = CGImageSourceCreateImageAtIndex(imageSource, frameIdx, (CFDictionaryRef)@{(__bridge NSString *)kCGImageSourceShouldCache : (__bridge NSNumber *)kCFBooleanFalse});
             if (frameImage == nil) {
-              error = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorImageFrameError userInfo:nil];
+              NSError *frameImageError = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorImageFrameError userInfo:nil];
+              HANDLE_PROCESSING_ERROR(frameImageError);
               break;
             }
             
@@ -339,13 +392,16 @@ static dispatch_once_t startupCleanupOnce;
             NSData *frameData = (__bridge_transfer NSData *)CGDataProviderCopyData(CGImageGetDataProvider(frameImage));
             NSAssert(frameData.length == width * height * kPINAnimatedImageComponentsPerPixel, @"data should be width * height * 4 bytes");
             dispatch_group_async(diskGroup, diskWriteQueue, ^{
-              [self writeFrameToFile:fileHandle duration:duration frameData:frameData];
+              NSError *frameWriteError = [self writeFrameToFile:fileHandle duration:duration frameData:frameData];
+              HANDLE_PROCESSING_ERROR(frameWriteError);
             });
             
             CGImageRelease(frameImage);
             frameCountForFile++;
           }
         }
+      } else {
+        completion(NO, nil, PROCESSING_ERROR);
       }
       
       CFRelease(imageSource);
@@ -355,9 +411,14 @@ static dispatch_once_t startupCleanupOnce;
     
     //close the file handle
     PINLog(@"closing last file: %@", fileHandle);
-    [fileHandle seekToFileOffset:0];
-    [fileHandle writeData:[NSData dataWithBytes:&frameCountForFile length:sizeof(frameCountForFile)]];
-    [fileHandle closeFile];
+    @try {
+      [fileHandle seekToFileOffset:0];
+      [fileHandle writeData:[NSData dataWithBytes:&frameCountForFile length:sizeof(frameCountForFile)]];
+      [fileHandle closeFile];
+    } @catch (NSException *exception) {
+      NSError *frameCountError = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorFileWrite userInfo:@{@"NSException" : exception}];
+      HANDLE_PROCESSING_ERROR(frameCountError);
+    } @finally {}
   }
   
 #if PINAnimatedImageDebug
@@ -369,7 +430,7 @@ static dispatch_once_t startupCleanupOnce;
     free(durations);
   }
   
-  completion(YES, filePath, error);
+  completion(YES, filePath, PROCESSING_ERROR);
 }
 
 //http://stackoverflow.com/questions/16964366/delaytime-or-unclampeddelaytime-for-gifs
@@ -449,16 +510,23 @@ static dispatch_once_t startupCleanupOnce;
  
  */
 
-+ (void)writeFileHeader:(NSFileHandle *)fileHandle width:(UInt32)width height:(UInt32)height loopCount:(UInt32)loopCount frameCount:(UInt32)frameCount bitmapInfo:(UInt32)bitmapInfo durations:(Float32*)durations
++ (NSError *)writeFileHeader:(NSFileHandle *)fileHandle width:(UInt32)width height:(UInt32)height loopCount:(UInt32)loopCount frameCount:(UInt32)frameCount bitmapInfo:(UInt32)bitmapInfo durations:(Float32*)durations
 {
-  UInt16 version = 1;
-  [fileHandle writeData:[NSData dataWithBytes:&version length:sizeof(version)]];
-  [fileHandle writeData:[NSData dataWithBytes:&width length:sizeof(width)]];
-  [fileHandle writeData:[NSData dataWithBytes:&height length:sizeof(height)]];
-  [fileHandle writeData:[NSData dataWithBytes:&loopCount length:sizeof(loopCount)]];
-  [fileHandle writeData:[NSData dataWithBytes:&frameCount length:sizeof(frameCount)]];
-  [fileHandle writeData:[NSData dataWithBytes:&bitmapInfo length:sizeof(bitmapInfo)]];
-  [fileHandle writeData:[NSData dataWithBytes:durations length:sizeof(Float32) * frameCount]];
+  NSError *error = nil;
+  @try {
+    UInt16 version = 1;
+    [fileHandle writeData:[NSData dataWithBytes:&version length:sizeof(version)]];
+    [fileHandle writeData:[NSData dataWithBytes:&width length:sizeof(width)]];
+    [fileHandle writeData:[NSData dataWithBytes:&height length:sizeof(height)]];
+    [fileHandle writeData:[NSData dataWithBytes:&loopCount length:sizeof(loopCount)]];
+    [fileHandle writeData:[NSData dataWithBytes:&frameCount length:sizeof(frameCount)]];
+    [fileHandle writeData:[NSData dataWithBytes:&bitmapInfo length:sizeof(bitmapInfo)]];
+    //Since we can't get the length of the durations array from the pointer, we'll just calculate it based on the frameCount.
+    [fileHandle writeData:[NSData dataWithBytes:durations length:sizeof(Float32) * frameCount]];
+  } @catch (NSException *exception) {
+    error = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorFileWrite userInfo:@{@"NSException" : exception}];
+  } @finally {}
+  return error;
 }
 
 /**
@@ -471,10 +539,16 @@ static dispatch_once_t startupCleanupOnce;
  [frame data] width * height * 4 bytes
  */
 
-+ (void)writeFrameToFile:(NSFileHandle *)fileHandle duration:(Float32)duration frameData:(NSData *)frameData
++ (NSError *)writeFrameToFile:(NSFileHandle *)fileHandle duration:(Float32)duration frameData:(NSData *)frameData
 {
-  [fileHandle writeData:[NSData dataWithBytes:&duration length:sizeof(duration)]];
-  [fileHandle writeData:frameData];
+  NSError *error = nil;
+  @try {
+    [fileHandle writeData:[NSData dataWithBytes:&duration length:sizeof(duration)]];
+    [fileHandle writeData:frameData];
+  } @catch (NSException *exception) {
+    error = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorFileWrite userInfo:@{@"NSException" : exception}];
+  } @finally {}
+  return error;
 }
 
 @end

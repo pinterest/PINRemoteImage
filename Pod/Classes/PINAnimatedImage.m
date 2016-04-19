@@ -26,7 +26,6 @@ const Float32 kPINAnimatedImageMinimumDuration = 1 / kPINAnimatedImageDisplayRef
 
 @interface PINAnimatedImage ()
 {
-  PINRemoteLock *_statusLock;
   PINRemoteLock *_completionLock;
   PINRemoteLock *_dataLock;
   
@@ -34,7 +33,8 @@ const Float32 kPINAnimatedImageMinimumDuration = 1 / kPINAnimatedImageDisplayRef
   NSData *_nextData;
 }
 
-@property (nonatomic, strong, readonly) PINSharedAnimatedImage *sharedAnimatedImage;
+@property (atomic, strong, readwrite) PINSharedAnimatedImage *sharedAnimatedImage;
+@property (atomic, assign, readwrite) BOOL infoCompleted;
 
 @end
 
@@ -48,7 +48,6 @@ const Float32 kPINAnimatedImageMinimumDuration = 1 / kPINAnimatedImageDisplayRef
 - (instancetype)initWithAnimatedImageData:(NSData *)animatedImageData
 {
   if (self = [super init]) {
-    _statusLock = [[PINRemoteLock alloc] initWithName:@"PINAnimatedImage status lock"];
     _completionLock = [[PINRemoteLock alloc] initWithName:@"PINAnimatedImage completion lock"];
     _dataLock = [[PINRemoteLock alloc] initWithName:@"PINAnimatedImage data lock"];
     
@@ -56,12 +55,8 @@ const Float32 kPINAnimatedImageMinimumDuration = 1 / kPINAnimatedImageDisplayRef
     _status = PINAnimatedImageStatusUnprocessed;
     
     [[PINAnimatedImageManager sharedManager] animatedPathForImageData:animatedImageData infoCompletion:^(PINImage *coverImage, PINSharedAnimatedImage *shared) {
-      [_statusLock lockWithBlock:^{
-        _sharedAnimatedImage = shared;
-        if (_status == PINAnimatedImageStatusUnprocessed) {
-          _status = PINAnimatedImageStatusInfoProcessed;
-        }
-      }];
+      self.sharedAnimatedImage = shared;
+      self.infoCompleted = YES;
       
       [_completionLock lockWithBlock:^{
         if (_infoCompletion) {
@@ -70,22 +65,11 @@ const Float32 kPINAnimatedImageMinimumDuration = 1 / kPINAnimatedImageDisplayRef
         }
       }];
     } completion:^(BOOL completed, NSString *path, NSError *error) {
-      __block BOOL success = NO;
-      [_statusLock lockWithBlock:^{
-        if (_status == PINAnimatedImageStatusInfoProcessed) {
-          _status = PINAnimatedImageStatusFirstFileProcessed;
-        }
+      BOOL success = NO;
         
-        if (completed && error == nil) {
-          _status = PINAnimatedImageStatusProcessed;
-          success = YES;
-        } else if (error) {
-          _status = PINAnimatedImageStatusError;
-#if PINAnimatedImageDebug
-          NSLog(@"animated image error: %@", error);
-#endif
-        }
-      }];
+      if (completed && error == nil) {
+        success = YES;
+      }
       
       [_completionLock lockWithBlock:^{
         if (_fileReady) {
@@ -147,6 +131,10 @@ void releaseData(void *data, const void *imageData, size_t size)
 
 - (CGImageRef)imageAtIndex:(NSUInteger)index inSharedImageFiles:(NSArray <PINSharedAnimatedImageFile *>*)imageFiles width:(UInt32)width height:(UInt32)height bitmapInfo:(CGBitmapInfo)bitmapInfo
 {
+  if (self.status == PINAnimatedImageStatusError) {
+    return nil;
+  }
+  
   for (NSUInteger fileIdx = 0; fileIdx < imageFiles.count; fileIdx++) {
     PINSharedAnimatedImageFile *imageFile = imageFiles[fileIdx];
     if (index < imageFile.frameCount) {
@@ -295,13 +283,17 @@ void releaseData(void *data, const void *imageData, size_t size)
   return self.sharedAnimatedImage.height;
 }
 
+- (NSError *)error
+{
+  return self.sharedAnimatedImage.error;
+}
+
 - (PINAnimatedImageStatus)status
 {
-  __block PINAnimatedImageStatus status;
-  [_statusLock lockWithBlock:^{
-    status = _status;
-  }];
-  return status;
+  if (self.sharedAnimatedImage == nil) {
+    return PINAnimatedImageStatusUnprocessed;
+  }
+  return self.sharedAnimatedImage.status;
 }
 
 - (CGImageRef)imageAtIndex:(NSUInteger)index
@@ -321,7 +313,7 @@ void releaseData(void *data, const void *imageData, size_t size)
 
 - (BOOL)infoReady
 {
-  return self.status == PINAnimatedImageStatusInfoProcessed || self.status == PINAnimatedImageStatusFirstFileProcessed || self.status == PINAnimatedImageStatusProcessed;
+  return self.infoCompleted;
 }
 
 - (BOOL)coverImageReady
