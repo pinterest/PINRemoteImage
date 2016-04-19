@@ -1417,7 +1417,7 @@ static dispatch_once_t sharedDispatchToken;
         for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
             [hexString appendFormat:@"%02lx", (unsigned long)digest[i]];
         }
-        cacheKey = hexString.copy;
+        cacheKey = [hexString copy];
     }
 
     return cacheKey;
