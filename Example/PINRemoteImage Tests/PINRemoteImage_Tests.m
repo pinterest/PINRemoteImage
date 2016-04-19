@@ -108,6 +108,11 @@
     return [NSURL URLWithString:@"https://www.gstatic.com/webp/gallery3/4_webp_ll.webp"];
 }
 
+- (NSURL *)veryLongURL
+{
+    return [NSURL URLWithString:@"https://placekitten.com/g/200/300?longarg=helloMomHowAreYouDoing.IamFineJustMovedToLiveWithANiceChapWeTravelTogetherInHisBlueBoxThroughSpaceAndTimeMaybeYouveMetHimAlready.YesterdayWeMetACultureOfPeopleWithTentaclesWhoSingWithAVeryCelestialVoice.SoGood.SeeYouSoon.MaybeYesterday.WhoKnows.XOXO"];
+}
+
 #pragma mark - <PINURLSessionManagerDelegate>
 
 - (void)didReceiveData:(NSData *)data forTask:(NSURLSessionTask *)task
@@ -761,6 +766,45 @@
 								 completion:nil];
 	
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
+- (void)testDiskCacheOnLongURLs
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Image is available in the disk cache"];
+    PINCache *cache = self.imageManager.cache;
+    NSURL *longURL = [self veryLongURL];
+    NSString *key = [self.imageManager cacheKeyForURL:longURL processorKey:nil];
+    [self.imageManager downloadImageWithURL:longURL
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                                 completion:^(PINRemoteImageManagerResult *result)
+    {
+        XCTAssertNotNil(result.image, @"Image should not be nil");
+        id diskCachedObj = [cache.diskCache objectForKey:key];
+        XCTAssertNotNil(diskCachedObj);
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
+- (void)testLongCacheKeyCreationPerformance
+{
+    [self measureBlock:^{
+        NSURL *longURL = [self veryLongURL];
+        for (NSUInteger i = 0; i < 10000; i++) {
+            __unused NSString *key = [self.imageManager cacheKeyForURL:longURL processorKey:nil];
+        }
+    }];
+}
+
+- (void)testDefaultCacheKeyCreationPerformance
+{
+    [self measureBlock:^{
+        NSURL *defaultURL = [self JPEGURL];
+        for (NSUInteger i = 0; i < 10000; i++) {
+            __unused NSString *key = [self.imageManager cacheKeyForURL:defaultURL processorKey:nil];
+        }
+    }];
 }
 
 @end
