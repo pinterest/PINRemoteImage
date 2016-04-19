@@ -28,6 +28,8 @@ typedef NS_ENUM(NSUInteger, PINAnimatedImageError) {
   PINAnimatedImageErrorImageFrameError,
   /** Could not memory map the file. */
   PINAnimatedImageErrorMappingError,
+  /** File write error */
+  PINAnimatedImageErrorFileWrite,
 };
 
 /**
@@ -131,6 +133,10 @@ typedef void(^PINAnimatedImageInfoReady)(PINImage *coverImage);
  @warning Access to this property before status == PINAnimatedImageStatusInfoProcessed is undefined.
  */
 @property (nonatomic, readonly) size_t frameCount;
+/**
+ Any processing error that may have occured.
+ */
+@property (nonatomic, readonly) NSError *error;
 
 /**
  The image at the frame index passed in.
