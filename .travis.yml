@@ -8,7 +8,6 @@ language: objective-c
 osx_image: xcode7.2
 env:
     matrix:
-    - OS='8.4' name='iPhone 6'
     - OS='latest' name='iPhone 6'
     
 before_install:
