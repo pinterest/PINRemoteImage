@@ -521,6 +521,7 @@ ERROR;}) \
     [fileHandle writeData:[NSData dataWithBytes:&loopCount length:sizeof(loopCount)]];
     [fileHandle writeData:[NSData dataWithBytes:&frameCount length:sizeof(frameCount)]];
     [fileHandle writeData:[NSData dataWithBytes:&bitmapInfo length:sizeof(bitmapInfo)]];
+    //Since we can't get the length of the durations array from the pointer, we'll just calculate it based on the frameCount.
     [fileHandle writeData:[NSData dataWithBytes:durations length:sizeof(Float32) * frameCount]];
   } @catch (NSException *exception) {
     error = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorFileWrite userInfo:@{@"NSException" : exception}];
