@@ -18,7 +18,7 @@
                                 UUID:(NSUUID *)uuid
 {
     return [self imageResultWithImage:image
-            alternativeRepresentation:alternativeRepresentation
+                        animatedImage:animatedImage
                         requestLength:requestLength
                                 error:error
                            resultType:resultType
@@ -27,7 +27,7 @@
 }
 
 + (instancetype)imageResultWithImage:(PINImage *)image
-           alternativeRepresentation:(id)alternativeRepresentation
+                       animatedImage:(nullable FLAnimatedImage *)animatedImage
                        requestLength:(NSTimeInterval)requestLength
                                error:(NSError *)error
                           resultType:(PINRemoteImageResultType)resultType

@@ -44,11 +44,11 @@ typedef NS_ENUM(NSUInteger, PINRemoteImageResultType) {
 @property (nonatomic, readonly, assign) CGFloat renderedImageQuality;
 
 + (nonnull instancetype)imageResultWithImage:(nullable PINImage *)image
-           alternativeRepresentation:(nullable id)alternativeRepresentation
-                       requestLength:(NSTimeInterval)requestLength
-                               error:(nullable NSError *)error
-                          resultType:(PINRemoteImageResultType)resultType
-                                UUID:(nullable NSUUID *)uuid;
+                               animatedImage:(nullable FLAnimatedImage *)animatedImage
+                               requestLength:(NSTimeInterval)requestLength
+                                       error:(nullable NSError *)error
+                                  resultType:(PINRemoteImageResultType)resultType
+                                        UUID:(nullable NSUUID *)uuid;
 
 + (nonnull instancetype)imageResultWithImage:(nullable PINImage *)image
                                animatedImage:(nullable FLAnimatedImage *)animatedImage
