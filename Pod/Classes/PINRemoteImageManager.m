@@ -81,6 +81,7 @@ float dataTaskPriorityWithImageManagerPriority(PINRemoteImageManagerPriority pri
 }
 
 NSString * const PINRemoteImageManagerErrorDomain = @"PINRemoteImageManagerErrorDomain";
+NSString * const PINRemoteImageCacheKey = @"cacheKey";
 typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error);
 
 @interface NSOperationQueue (PINRemoteImageManager)
@@ -788,9 +789,10 @@ static dispatch_once_t sharedDispatchToken;
                                     priority:(PINRemoteImageManagerPriority)priority
                                   completion:(PINRemoteImageManagerDataCompletion)completion
 {
-    NSURLRequest *request = [NSURLRequest requestWithURL:url
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url
                                              cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                          timeoutInterval:self.timeout];
+    [NSURLProtocol setProperty:key forKey:PINRemoteImageCacheKey inRequest:request];
     
     __weak typeof(self) weakSelf = self;
     PINDataTaskOperation *dataTaskOperation = [PINDataTaskOperation dataTaskOperationWithSessionManager:self.sessionManager
@@ -1061,7 +1063,8 @@ static dispatch_once_t sharedDispatchToken;
 - (void)didReceiveData:(NSData *)data forTask:(NSURLSessionDataTask *)dataTask
 {
     [self lock];
-        PINRemoteImageDownloadTask *task = [self.tasks objectForKey:[self cacheKeyForURL:[[dataTask originalRequest] URL] processorKey:nil]];
+        NSString *cacheKey = [NSURLProtocol propertyForKey:PINRemoteImageCacheKey inRequest:dataTask.originalRequest];
+        PINRemoteImageDownloadTask *task = [self.tasks objectForKey:cacheKey];
         if (task.progressImage == nil) {
             task.progressImage = [[PINProgressiveImage alloc] init];
             task.progressImage.startTime = task.sessionTaskStartTime;
@@ -1089,7 +1092,6 @@ static dispatch_once_t sharedDispatchToken;
             PINImage *progressImage = [progressiveImage currentImageBlurred:shouldBlur maxProgressiveRenderSize:maxProgressiveRenderSize renderedImageQuality:&renderedImageQuality];
             if (progressImage) {
                 [strongSelf lock];
-                    NSString *cacheKey = [strongSelf cacheKeyForURL:[[dataTask originalRequest] URL] processorKey:nil];
                     PINRemoteImageDownloadTask *task = strongSelf.tasks[cacheKey];
                     [task callProgressImageWithQueue:strongSelf.callbackQueue withImage:progressImage renderedImageQuality:renderedImageQuality];
                 [strongSelf unlock];
@@ -1103,7 +1105,7 @@ static dispatch_once_t sharedDispatchToken;
     if (error == nil && [task isKindOfClass:[NSURLSessionDataTask class]]) {
         NSURLSessionDataTask *dataTask = (NSURLSessionDataTask *)task;
         [self lock];
-            NSString *cacheKey = [self cacheKeyForURL:[[dataTask originalRequest] URL] processorKey:nil];
+            NSString *cacheKey = [NSURLProtocol propertyForKey:PINRemoteImageCacheKey inRequest:dataTask.originalRequest];
             PINRemoteImageDownloadTask *task = [self.tasks objectForKey:cacheKey];
             task.sessionTaskEndTime = CACurrentMediaTime();
             CFTimeInterval taskLength = task.sessionTaskEndTime - task.sessionTaskStartTime;
