@@ -26,10 +26,12 @@
 #endif
 
 #if PIN_TARGET_IOS
+#import <UIKit/UIKit.h>
 #define PINImage     UIImage
 #define PINImageView UIImageView
 #define PINButton    UIButton
 #elif PIN_TARGET_MAC
+#import <AppKit/AppKit.h>
 #define PINImage     NSImage
 #define PINImageView NSImageView
 #define PINButton    NSButton
