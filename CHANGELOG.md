@@ -1,3 +1,9 @@
+### 2.1.4 -- 2016 Apr 22 ###
+- [new] Have PINProgressiveImage pass back the quality of the current progressive image [#185](https://github.com/pinterest/PINRemoteImage/pull/185)
+
+### 2.1.3 -- 2016 Apr 13 ###
+- [fixed] Images May Be Removed from Disk Cache for Not Being in Memory Cache [#186](https://github.com/pinterest/PINRemoteImage/commit/f15ca03ece954b4712b2c669c849245617e73e08)
+
 ### 2.1.2 -- 2016 Mar 25 ###
 - [fixed] Remove disk cache call potentially on main thread [#167](https://github.com/pinterest/PINRemoteImage/pull/167)
 - [fixed] Nullability specifiers [#170](https://github.com/pinterest/PINRemoteImage/pull/170)
