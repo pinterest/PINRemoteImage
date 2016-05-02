@@ -18,7 +18,6 @@ Pod::Spec.new do |s|
   s.social_media_url = 'https://twitter.com/garrettmoon'
 
   s.ios.deployment_target = "6.0"
-  s.osx.deployment_target = "10.8"
   s.tvos.deployment_target = "9.0"
   s.requires_arc = true
   
@@ -27,6 +26,9 @@ Pod::Spec.new do |s|
   
   ### Subspecs
   s.subspec 'Core' do |cs|
+    cs.ios.deployment_target = "6.0"
+    cs.tvos.deployment_target = "9.0"
+    cs.osx.deployment_target = "10.8"
     cs.source_files = 'Pod/Classes/**/*.{h,m}'
     cs.exclude_files = 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h', 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m'
     cs.public_header_files = 'Pod/Classes/**/*.h'
@@ -35,21 +37,21 @@ Pod::Spec.new do |s|
   end
   
   s.subspec 'iOS' do |ios|
-    ios.platforms = "ios"
+    ios.ios.deployment_target = "6.0"
+    ios.tvos.deployment_target = "9.0"
     ios.dependency 'PINRemoteImage/Core'
-    ios.frameworks = 'UIKit', 'MobileCoreServices'
+    ios.frameworks = 'UIKit'
   end
 
   s.subspec 'OSX' do |cs|
-    cs.platforms = "osx"
+    cs.osx.deployment_target = "10.8"
     cs.dependency 'PINRemoteImage/Core'
     cs.frameworks = 'Cocoa', 'CoreServices'
   end
 
+  # The tvOS spec is no longer necessary, iOS should be used instead.
   s.subspec 'tvOS' do |tvos|
-    tvos.platforms = "tvos"
-    tvos.dependency 'PINRemoteImage/Core'
-    tvos.frameworks = 'UIKit'
+    tvos.dependency 'PINRemoteImage/iOS'
   end
 
   s.subspec "FLAnimatedImage" do |fs|
