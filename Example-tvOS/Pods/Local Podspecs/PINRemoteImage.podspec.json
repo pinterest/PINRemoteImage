@@ -1,6 +1,6 @@
 {
   "name": "PINRemoteImage",
-  "version": "2.1.2",
+  "version": "3.0.0-beta",
   "summary": "A thread safe, performant, feature rich image fetcher",
   "homepage": "https://github.com/pinterest/PINRemoteImage",
   "license": "Apache 2.0",
@@ -9,12 +9,11 @@
   },
   "source": {
     "git": "https://github.com/pinterest/PINRemoteImage.git",
-    "tag": "2.1.2"
+    "tag": "3.0.0-beta"
   },
   "social_media_url": "https://twitter.com/garrettmoon",
   "platforms": {
     "ios": "6.0",
-    "osx": "10.8",
     "tvos": "9.0"
   },
   "requires_arc": true,
@@ -22,6 +21,11 @@
   "subspecs": [
     {
       "name": "Core",
+      "platforms": {
+        "ios": "6.0",
+        "tvos": "9.0",
+        "osx": "10.8"
+      },
       "source_files": "Pod/Classes/**/*.{h,m}",
       "exclude_files": [
         "Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h",
@@ -40,20 +44,22 @@
     },
     {
       "name": "iOS",
-      "platforms": "ios",
+      "platforms": {
+        "ios": "6.0",
+        "tvos": "9.0"
+      },
       "dependencies": {
         "PINRemoteImage/Core": [
 
         ]
       },
-      "frameworks": [
-        "UIKit",
-        "MobileCoreServices"
-      ]
+      "frameworks": "UIKit"
     },
     {
       "name": "OSX",
-      "platforms": "osx",
+      "platforms": {
+        "osx": "10.8"
+      },
       "dependencies": {
         "PINRemoteImage/Core": [
 
@@ -63,16 +69,6 @@
         "Cocoa",
         "CoreServices"
       ]
-    },
-    {
-      "name": "tvOS",
-      "platforms": "tvos",
-      "dependencies": {
-        "PINRemoteImage/Core": [
-
-        ]
-      },
-      "frameworks": "UIKit"
     },
     {
       "name": "FLAnimatedImage",

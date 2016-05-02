@@ -1,12 +1,12 @@
 PODS:
   - PINCache (2.2.2)
-  - PINRemoteImage/Core (2.1.2):
+  - PINRemoteImage/Core (3.0.0-beta):
     - PINCache (>= 2.1)
-  - PINRemoteImage/tvOS (2.1.2):
+  - PINRemoteImage/iOS (3.0.0-beta):
     - PINRemoteImage/Core
 
 DEPENDENCIES:
-  - PINRemoteImage/tvOS (from `../`)
+  - PINRemoteImage/iOS (from `../`)
 
 EXTERNAL SOURCES:
   PINRemoteImage:
@@ -14,6 +14,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   PINCache: 078426d356ab95ef875e9e62e5c35a2ea3333c28
-  PINRemoteImage: cee13f6a46c58d6ebfa1975da97f7674c7e6f305
+  PINRemoteImage: 43b7123d7cc96a8394b3c6afaa20101679e6d463
 
 COCOAPODS: 0.39.0

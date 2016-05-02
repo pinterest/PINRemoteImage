@@ -1,5 +1,5 @@
 use_frameworks!
 
 target 'PINRemoteImage.tvOSExample', :exclusive => true do
-  pod "PINRemoteImage/tvOS", :path => "../"
+  pod "PINRemoteImage/iOS", :path => "../"
 end
