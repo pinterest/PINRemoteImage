@@ -369,7 +369,7 @@
 #elif PIN_TARGET_MAC
     outputImage = [[NSImage alloc] initWithCGImage:outputImageRef size:bounds.size];
 #endif
-    CFRelease(outputImageRef);
+    CGImageRelease(outputImageRef);
     
     return outputImage;
 }
