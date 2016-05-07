@@ -321,21 +321,22 @@
     }
     
     CGRect bounds = (CGRect){ .size = inputImage.size };
-    
-    CIContext *context = [CIContext contextWithOptions:nil];
-    CGSize maxInputSize = context.inputImageMaximumSize;
-    CGSize maxOutputSize = context.outputImageMaximumSize;
     if (bounds.size.width < 1 ||
-        bounds.size.height < 1 ||
-        bounds.size.width > maxInputSize.width ||
-        bounds.size.height > maxInputSize.height ||
-        bounds.size.width > maxOutputSize.width ||
-        bounds.size.height > maxOutputSize.height) {
+        bounds.size.height < 1) {
         return inputImage;
     }
 
+    CIContext *context = [CIContext contextWithOptions:nil];
 #if PIN_TARGET_IOS
     CGFloat imageScale = inputImage.scale;
+	CGSize maxInputSize = context.inputImageMaximumSize;
+	CGSize maxOutputSize = context.outputImageMaximumSize;
+	if (bounds.size.width > maxInputSize.width ||
+		bounds.size.height > maxInputSize.height ||
+		bounds.size.width > maxOutputSize.width ||
+		bounds.size.height > maxOutputSize.height) {
+		return inputImage;
+	}
 #elif PIN_TARGET_MAC
     // TODO: What scale factor should be used here?
     CGFloat imageScale = [[NSScreen mainScreen] backingScaleFactor];
