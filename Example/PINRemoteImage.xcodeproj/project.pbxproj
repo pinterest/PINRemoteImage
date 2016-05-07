@@ -118,6 +118,7 @@
 				C9D363E7DDCEA7F35E576911 /* Pods */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		6003F58B195388D20070C39A /* Products */ = {
 			isa = PBXGroup;

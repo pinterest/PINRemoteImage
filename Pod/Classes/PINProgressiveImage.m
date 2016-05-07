@@ -315,22 +315,22 @@
 - (PINImage *)postProcessImage:(PINImage *)inputImage withProgress:(float)progress
 {
     PINImage *outputImage = nil;
-    CIImage *inputCIImage = [CIImage imageWithCGImage:inputImage.CGImage];
+    CIImage *inputCIImage = [CIImage imageWithCGImage:inputImage.CGImage options:nil];
     if (inputCIImage == nil) {
         return inputImage;
     }
-	
-	CGRect bounds = (CGRect){ .size = inputImage.size };
-	
+    
+    CGRect bounds = (CGRect){ .size = inputImage.size };
+    
     CIContext *context = [CIContext contextWithOptions:nil];
-	CGSize maxInputSize = context.inputImageMaximumSize;
-	CGSize maxOutputSize = context.outputImageMaximumSize;
+    CGSize maxInputSize = context.inputImageMaximumSize;
+    CGSize maxOutputSize = context.outputImageMaximumSize;
     if (bounds.size.width < 1 ||
         bounds.size.height < 1 ||
-		bounds.size.width > maxInputSize.width ||
-		bounds.size.height > maxInputSize.height ||
-		bounds.size.width > maxOutputSize.width ||
-		bounds.size.height > maxOutputSize.height) {
+        bounds.size.width > maxInputSize.width ||
+        bounds.size.height > maxInputSize.height ||
+        bounds.size.width > maxOutputSize.width ||
+        bounds.size.height > maxOutputSize.height) {
         return inputImage;
     }
 
@@ -343,19 +343,19 @@
     
     CGFloat radius = (bounds.size.width / 25.0) * MAX(0, 1.0 - progress);
     radius *= imageScale;
-	radius = floor(radius);
-	
+    radius = floor(radius);
+    
     if (radius < FLT_EPSILON) {
         return inputImage;
     }
-	
-	// Clamp the image so that its edges extend infinitely and we don't get a black border.
+    
+    // Clamp the image so that its edges extend infinitely and we don't get a black border.
     CIFilter *clamp = [CIFilter filterWithName:@"CIAffineClamp" keysAndValues:kCIInputImageKey, inputCIImage, nil];
     CIImage *clamped = clamp.outputImage;
     if (clamped == nil) {
         return inputImage;
     }
-	
+    
     CIFilter *blur = [CIFilter filterWithName:@"CIGaussianBlur" keysAndValues:kCIInputImageKey, clamped, kCIInputRadiusKey, @(radius), nil];
     CIImage *blurred = blur.outputImage;
     if (blurred == nil) {
