@@ -329,14 +329,14 @@
     CIContext *context = [CIContext contextWithOptions:nil];
 #if PIN_TARGET_IOS
     CGFloat imageScale = inputImage.scale;
-	CGSize maxInputSize = context.inputImageMaximumSize;
-	CGSize maxOutputSize = context.outputImageMaximumSize;
-	if (bounds.size.width > maxInputSize.width ||
-		bounds.size.height > maxInputSize.height ||
-		bounds.size.width > maxOutputSize.width ||
-		bounds.size.height > maxOutputSize.height) {
-		return inputImage;
-	}
+    CGSize maxInputSize = context.inputImageMaximumSize;
+    CGSize maxOutputSize = context.outputImageMaximumSize;
+    if (bounds.size.width > maxInputSize.width ||
+        bounds.size.height > maxInputSize.height ||
+        bounds.size.width > maxOutputSize.width ||
+        bounds.size.height > maxOutputSize.height) {
+        return inputImage;
+    }
 #elif PIN_TARGET_MAC
     // TODO: What scale factor should be used here?
     CGFloat imageScale = [[NSScreen mainScreen] backingScaleFactor];
