@@ -15,6 +15,7 @@
 #import <FLAnimatedImage/FLAnimatedImage.h>
 #endif
 #import <PINCache/PINCache.h>
+#import "PINProgressiveImage+Accelerate.h"
 
 #if DEBUG
 @interface PINRemoteImageManager ()
@@ -805,6 +806,53 @@
             __unused NSString *key = [self.imageManager cacheKeyForURL:defaultURL processorKey:nil];
         }
     }];
+}
+
+static const NSInteger kImageBlurringIterationCount = 10;
+static const float kImageBlurringProgress = 0.5;
+
+- (void)testImageBlurringPerformance_CoreImage
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Download and blur using CoreImage"];
+    [self.imageManager downloadImageWithURL:[self JPEGURL]
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                                 completion:^(PINRemoteImageManagerResult *result)
+     {
+         UIImage *image = result.image;
+         XCTAssertNotNil(image);
+
+         dispatch_queue_t q = dispatch_queue_create("Measurement Queue", DISPATCH_QUEUE_CONCURRENT);
+         [self measureBlock:^{
+             dispatch_apply(kImageBlurringIterationCount, q, ^(size_t i) {
+                 [PINProgressiveImage postProcessImage:image withProgress:kImageBlurringProgress];
+             });
+         }];
+
+         [expectation fulfill];
+     }];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
+- (void)testImageBlurringPerformance_Accelerate
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Download and blur using Accelerate"];
+    [self.imageManager downloadImageWithURL:[self JPEGURL]
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                                 completion:^(PINRemoteImageManagerResult *result)
+     {
+         UIImage *image = result.image;
+         XCTAssertNotNil(image);
+
+         dispatch_queue_t q = dispatch_queue_create("Measurement Queue", DISPATCH_QUEUE_CONCURRENT);
+         [self measureBlock:^{
+             dispatch_apply(kImageBlurringIterationCount, q, ^(size_t i) {
+                 [PINProgressiveImage postProcessImageUsingAccelerate:image withProgress:kImageBlurringProgress];
+             });
+         }];
+
+         [expectation fulfill];
+     }];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
 @end

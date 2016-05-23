@@ -228,7 +228,7 @@
             CGImageRef image = CGImageSourceCreateImageAtIndex(self.imageSource, 0, NULL);
             if (image) {
                 if (blurred) {
-                    currentImage = [self postProcessImage:[PINImage imageWithCGImage:image] withProgress:progress];
+                    currentImage = [PINProgressiveImage postProcessImage:[PINImage imageWithCGImage:image] withProgress:progress];
                 } else {
                     currentImage = [PINImage imageWithCGImage:image];
                 }
@@ -311,8 +311,7 @@
     return remainingBytes / self.bytesPerSecond;
 }
 
-//Must be called within lock
-- (PINImage *)postProcessImage:(PINImage *)inputImage withProgress:(float)progress
++ (PINImage *)postProcessImage:(PINImage *)inputImage withProgress:(float)progress
 {
     PINImage *outputImage = nil;
     CIImage *inputCIImage = [CIImage imageWithCGImage:inputImage.CGImage options:nil];
@@ -326,7 +325,30 @@
         return inputImage;
     }
 
-    CIContext *context = [CIContext contextWithOptions:nil];
+	// Creating CI contexts is expensive. We store them in a reuse pool to improve performance.
+
+	// TODO: Is it worth clearing this pool on memory warning? Probably not, since we're only going
+	// to create as many contexts as we have concurrent blur operations, but we need to profile
+	// the memory consumption of CIContext.
+	static NSMutableSet *contexts;
+	static NSLock *contextsLock;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		contexts = [NSMutableSet set];
+		contextsLock = [[NSLock alloc] init];
+	});
+	[contextsLock lock];
+		CIContext *context = [contexts anyObject];
+		if (context != nil) {
+			[contexts removeObject:context];
+		} else {
+			// NOTE: We use the software renderer because accessing the GPU when the app
+			// is not in the foreground is unsafe. We have attempted switching to the software
+			// renderer when the app goes into the background but crashes still remain.
+			context = [CIContext contextWithOptions:@{ kCIContextUseSoftwareRenderer: @YES }];
+		}
+	[contextsLock unlock];
+
 #if PIN_TARGET_IOS
     CGFloat imageScale = inputImage.scale;
     CGSize maxInputSize = context.inputImageMaximumSize;
@@ -364,7 +386,12 @@
     }
 
     CGImageRef outputImageRef = [context createCGImage:blurred fromRect:bounds];
-    
+
+	// Return our context to the reuse pool.
+	[contextsLock lock];
+		[contexts addObject:context];
+	[contextsLock unlock];
+
 #if PIN_TARGET_IOS
     outputImage = [UIImage imageWithCGImage:outputImageRef];
 #elif PIN_TARGET_MAC
