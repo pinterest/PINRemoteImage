@@ -325,25 +325,25 @@
         return inputImage;
     }
 
-	// Creating CI contexts is expensive. We store them in a reuse pool to improve performance.
+    // Creating CI contexts is expensive. We store them in a reuse pool to improve performance.
 
-	// TODO: Is it worth clearing this pool on memory warning? Probably not, since we're only going
-	// to create as many contexts as we have concurrent blur operations, but we need to profile
-	// the memory consumption of CIContext.
-	static NSMutableArray *contexts;
-	static NSLock *contextsLock;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
+    // TODO: Is it worth clearing this pool on memory warning? Probably not, since we're only going
+    // to create as many contexts as we have concurrent blur operations, but we need to profile
+    // the memory consumption of CIContext.
+    static NSMutableArray *contexts;
+    static NSLock *contextsLock;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         contexts = [NSMutableArray array];
-		contextsLock = [[NSLock alloc] init];
-	});
+        contextsLock = [[NSLock alloc] init];
+    });
     
-	[contextsLock lock];
+    [contextsLock lock];
         CIContext *context = [contexts lastObject];
-		if (context != nil) {
+        if (context != nil) {
             [contexts removeLastObject];
-		}
-	[contextsLock unlock];
+        }
+    [contextsLock unlock];
 
     if (context == nil) {
         // NOTE: We use the software renderer because accessing the GPU when the app
@@ -390,10 +390,10 @@
 
     CGImageRef outputImageRef = [context createCGImage:blurred fromRect:bounds];
 
-	// Return our context to the reuse pool.
-	[contextsLock lock];
-		[contexts addObject:context];
-	[contextsLock unlock];
+    // Return our context to the reuse pool.
+    [contextsLock lock];
+        [contexts addObject:context];
+    [contextsLock unlock];
 
 #if PIN_TARGET_IOS
     outputImage = [UIImage imageWithCGImage:outputImageRef];
