@@ -338,16 +338,16 @@
         return inputImage;
     }
 
-	
+    
 #if PIN_CICONTEXT_MULTITHREADING
-	// Share one context across all threads.
-	static CIContext *context;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		context = [CIContext contextWithOptions:@{ kCIContextUseSoftwareRenderer: @YES }];
-	});
+    // Share one context across all threads.
+    static CIContext *context;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        context = [CIContext contextWithOptions:@{ kCIContextUseSoftwareRenderer: @YES }];
+    });
 #else
-	// Create a reuse pool of contexts where each is confined to a thread.
+    // Create a reuse pool of contexts where each is confined to a thread.
     static NSMutableArray *contexts;
     static NSLock *contextsLock;
     static dispatch_once_t onceToken;
@@ -357,7 +357,7 @@
     });
     
     [contextsLock lock];
-		CIContext *context = [contexts lastObject];
+        CIContext *context = [contexts lastObject];
         if (context != nil) {
             [contexts removeLastObject];
         }
@@ -415,7 +415,7 @@
         [contexts addObject:context];
     [contextsLock unlock];
 #endif
-	
+    
 #if PIN_TARGET_IOS
     outputImage = [UIImage imageWithCGImage:outputImageRef];
 #elif PIN_TARGET_MAC
