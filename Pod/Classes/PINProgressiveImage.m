@@ -330,25 +330,28 @@
 	// TODO: Is it worth clearing this pool on memory warning? Probably not, since we're only going
 	// to create as many contexts as we have concurrent blur operations, but we need to profile
 	// the memory consumption of CIContext.
-	static NSMutableSet *contexts;
+	static NSMutableArray *contexts;
 	static NSLock *contextsLock;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		contexts = [NSMutableSet set];
+        contexts = [NSMutableArray array];
 		contextsLock = [[NSLock alloc] init];
 	});
+    
 	[contextsLock lock];
-		CIContext *context = [contexts anyObject];
+        CIContext *context = [contexts lastObject];
 		if (context != nil) {
-			[contexts removeObject:context];
-		} else {
-			// NOTE: We use the software renderer because accessing the GPU when the app
-			// is not in the foreground is unsafe. We have attempted switching to the software
-			// renderer when the app goes into the background but crashes still remain.
-			context = [CIContext contextWithOptions:@{ kCIContextUseSoftwareRenderer: @YES }];
+            [contexts removeLastObject];
 		}
 	[contextsLock unlock];
 
+    if (context == nil) {
+        // NOTE: We use the software renderer because accessing the GPU when the app
+        // is not in the foreground is unsafe. We have attempted switching to the software
+        // renderer when the app goes into the background but crashes still remain.
+        context = [CIContext contextWithOptions:@{ kCIContextUseSoftwareRenderer: @YES }];
+    }
+    
 #if PIN_TARGET_IOS
     CGFloat imageScale = inputImage.scale;
     CGSize maxInputSize = context.inputImageMaximumSize;
