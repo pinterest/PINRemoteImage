@@ -14,6 +14,19 @@
 #import "PINRemoteImage.h"
 #import "PINImage+DecodedImage.h"
 
+/**
+ * true if we should share a single CIContext across threads, false to create a reuse pool to confine
+ * each context to one thread.
+ *
+ * The CoreImage documentation claims that CIContexts are immutable and safe to share between threads.
+ * However, in past implementations, two contexts (a GPU and a software context) were shared between
+ * threads and crashes would occur. Crashes are expected when GPU contexts are used while the app
+ * is in the background but there was logic to disable the GPU context when the app gets backgrounded.
+ * So either that switching mechanism wasn't aggressive enough, or CIContexts are not truly thread-safe,
+ * or there was some other issue causing crashes.
+*/
+#define PIN_CICONTEXT_MULTITHREADING 1
+
 @interface PINProgressiveImage ()
 
 @property (nonatomic, strong) NSMutableData *mutableData;
@@ -325,11 +338,16 @@
         return inputImage;
     }
 
-    // Creating CI contexts is expensive. We store them in a reuse pool to improve performance.
-
-    // TODO: Is it worth clearing this pool on memory warning? Probably not, since we're only going
-    // to create as many contexts as we have concurrent blur operations, but we need to profile
-    // the memory consumption of CIContext.
+	
+#if PIN_CICONTEXT_MULTITHREADING
+	// Share one context across all threads.
+	static CIContext *context;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		context = [CIContext contextWithOptions:@{ kCIContextUseSoftwareRenderer: @YES }];
+	});
+#else
+	// Create a reuse pool of contexts where each is confined to a thread.
     static NSMutableArray *contexts;
     static NSLock *contextsLock;
     static dispatch_once_t onceToken;
@@ -339,7 +357,7 @@
     });
     
     [contextsLock lock];
-        CIContext *context = [contexts lastObject];
+		CIContext *context = [contexts lastObject];
         if (context != nil) {
             [contexts removeLastObject];
         }
@@ -351,6 +369,7 @@
         // renderer when the app goes into the background but crashes still remain.
         context = [CIContext contextWithOptions:@{ kCIContextUseSoftwareRenderer: @YES }];
     }
+#endif
     
 #if PIN_TARGET_IOS
     CGFloat imageScale = inputImage.scale;
@@ -390,11 +409,13 @@
 
     CGImageRef outputImageRef = [context createCGImage:blurred fromRect:bounds];
 
+#if !PIN_CICONTEXT_MULTITHREADING
     // Return our context to the reuse pool.
     [contextsLock lock];
         [contexts addObject:context];
     [contextsLock unlock];
-
+#endif
+	
 #if PIN_TARGET_IOS
     outputImage = [UIImage imageWithCGImage:outputImageRef];
 #elif PIN_TARGET_MAC
