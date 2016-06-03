@@ -197,7 +197,9 @@ void releaseData(void *data, const void *imageData, size_t size)
                                       NULL,
                                       NO,
                                       kCGRenderingIntentDefault);
-  CFAutorelease(imageRef);
+  if (imageRef) {
+    CFAutorelease(imageRef);
+  }
   
   CGColorSpaceRelease(colorSpace);
   CGDataProviderRelease(dataProvider);
