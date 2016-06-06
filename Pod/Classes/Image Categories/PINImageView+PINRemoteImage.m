@@ -100,9 +100,9 @@
     if (image) {
         self.image = image;
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if PIN_TARGET_IOS
         [self setNeedsLayout];
-#else
+#elif PIN_TARGET_MAC
         [self setNeedsLayout:YES];
 #endif
     }
@@ -112,9 +112,9 @@
 {
     self.image = nil;
     
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if PIN_TARGET_IOS
     [self setNeedsLayout];
-#else
+#elif PIN_TARGET_MAC
     [self setNeedsLayout:YES];
 #endif
 }

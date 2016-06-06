@@ -17,12 +17,30 @@
                           resultType:(PINRemoteImageResultType)resultType
                                 UUID:(NSUUID *)uuid
 {
+    return [self imageResultWithImage:image
+                        animatedImage:animatedImage
+                        requestLength:requestLength
+                                error:error
+                           resultType:resultType
+                                 UUID:uuid
+                 renderedImageQuality:1.0];
+}
+
++ (instancetype)imageResultWithImage:(PINImage *)image
+                       animatedImage:(nullable FLAnimatedImage *)animatedImage
+                       requestLength:(NSTimeInterval)requestLength
+                               error:(NSError *)error
+                          resultType:(PINRemoteImageResultType)resultType
+                                UUID:(NSUUID *)uuid
+                renderedImageQuality:(CGFloat)renderedImageQuality
+{
     return [[self alloc] initWithImage:image
                          animatedImage:animatedImage
                          requestLength:requestLength
                                  error:error
                             resultType:resultType
-                                  UUID:uuid];
+                                  UUID:uuid
+                  renderedImageQuality:renderedImageQuality];
 }
 
 - (instancetype)initWithImage:(PINImage *)image
@@ -30,7 +48,9 @@
                 requestLength:(NSTimeInterval)requestLength
                         error:(NSError *)error
                    resultType:(PINRemoteImageResultType)resultType
-                         UUID:(NSUUID *)uuid {
+                         UUID:(NSUUID *)uuid
+         renderedImageQuality:(CGFloat)renderedImageQuality
+{
     if (self = [super init]) {
         _image = image;
         _animatedImage = animatedImage;
@@ -38,6 +58,7 @@
         _error = error;
         _resultType = resultType;
         _UUID = uuid;
+        _renderedImageQuality = renderedImageQuality;
     }
     return self;
 }
@@ -56,6 +77,8 @@
     description = [description stringByAppendingString:[NSString stringWithFormat:@"resultType: %lu", (unsigned long)self.resultType]];
     description = [description stringByAppendingString:@"\n"];
     description = [description stringByAppendingString:[NSString stringWithFormat:@"UUID: %@", self.UUID]];
+    description = [description stringByAppendingString:@"\n"];
+    description = [description stringByAppendingString:[NSString stringWithFormat:@"UUID: %f", self.renderedImageQuality]];
     return description;
 }
 

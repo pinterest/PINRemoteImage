@@ -94,6 +94,8 @@
 		
 		<option value="//api/name/pin_setImageFromURLs:placeholderImage:completion:">- pin_setImageFromURLs:placeholderImage:completion:</option>
 		
+		<option value="//api/name/pin_updateUIWithRemoteImageManagerResult:">- pin_updateUIWithRemoteImageManagerResult:</option>
+		
 	</optgroup>
 	
 	
@@ -160,7 +162,7 @@
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURL:(NSURL *)<em>url</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURL:(nullable NSURL *)<em>url</em></code></div>
 
 		    
 			
@@ -213,7 +215,7 @@
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURL:(NSURL *)<em>url</em> placeholderImage:(UIImage *)<em>placeholderImage</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURL:(nullable NSURL *)<em>url</em> placeholderImage:(nullable PINImage *)<em>placeholderImage</em></code></div>
 
 		    
 			
@@ -228,7 +230,7 @@
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>placeholderImage</code></th>
-						<td><p>UIImage to set on the view while the image at URL is being retrieved.</p></td>
+						<td><p>PINImage to set on the view while the image at URL is being retrieved.</p></td>
 					</tr>
 				
 				</table>
@@ -271,7 +273,7 @@
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURL:(NSURL *)<em>url</em> completion:(PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURL:(nullable NSURL *)<em>url</em> completion:(nullable PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
 
 		    
 			
@@ -329,7 +331,7 @@
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURL:(NSURL *)<em>url</em> placeholderImage:(UIImage *)<em>placeholderImage</em> completion:(PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURL:(nullable NSURL *)<em>url</em> placeholderImage:(nullable PINImage *)<em>placeholderImage</em> completion:(nullable PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
 
 		    
 			
@@ -344,7 +346,7 @@
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>placeholderImage</code></th>
-						<td><p>UIImage to set on the view while the image at URL is being retrieved.</p></td>
+						<td><p>PINImage to set on the view while the image at URL is being retrieved.</p></td>
 					</tr>
 				
 					<tr>
@@ -392,7 +394,7 @@
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURL:(NSURL *)<em>url</em> processorKey:(NSString *)<em>processorKey</em> processor:(PINRemoteImageManagerImageProcessor)<em>processor</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURL:(nullable NSURL *)<em>url</em> processorKey:(nullable NSString *)<em>processorKey</em> processor:(nullable PINRemoteImageManagerImageProcessor)<em>processor</em></code></div>
 
 		    
 			
@@ -455,7 +457,7 @@
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURL:(NSURL *)<em>url</em> placeholderImage:(UIImage *)<em>placeholderImage</em> processorKey:(NSString *)<em>processorKey</em> processor:(PINRemoteImageManagerImageProcessor)<em>processor</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURL:(nullable NSURL *)<em>url</em> placeholderImage:(nullable PINImage *)<em>placeholderImage</em> processorKey:(nullable NSString *)<em>processorKey</em> processor:(nullable PINRemoteImageManagerImageProcessor)<em>processor</em></code></div>
 
 		    
 			
@@ -470,7 +472,7 @@
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>placeholderImage</code></th>
-						<td><p>UIImage to set on the view while the image at URL is being retrieved.</p></td>
+						<td><p>PINImage to set on the view while the image at URL is being retrieved.</p></td>
 					</tr>
 				
 					<tr>
@@ -523,7 +525,7 @@
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURL:(NSURL *)<em>url</em> processorKey:(NSString *)<em>processorKey</em> processor:(PINRemoteImageManagerImageProcessor)<em>processor</em> completion:(PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURL:(nullable NSURL *)<em>url</em> processorKey:(nullable NSString *)<em>processorKey</em> processor:(nullable PINRemoteImageManagerImageProcessor)<em>processor</em> completion:(nullable PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
 
 		    
 			
@@ -591,7 +593,7 @@
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURL:(NSURL *)<em>url</em> placeholderImage:(UIImage *)<em>placeholderImage</em> processorKey:(NSString *)<em>processorKey</em> processor:(PINRemoteImageManagerImageProcessor)<em>processor</em> completion:(PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURL:(nullable NSURL *)<em>url</em> placeholderImage:(nullable PINImage *)<em>placeholderImage</em> processorKey:(nullable NSString *)<em>processorKey</em> processor:(nullable PINRemoteImageManagerImageProcessor)<em>processor</em> completion:(nullable PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
 
 		    
 			
@@ -606,7 +608,7 @@
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>placeholderImage</code></th>
-						<td><p>UIImage to set on the view while the image at URL is being retrieved.</p></td>
+						<td><p>PINImage to set on the view while the image at URL is being retrieved.</p></td>
 					</tr>
 				
 					<tr>
@@ -664,7 +666,7 @@
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURLs:(NSArray *)<em>urls</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURLs:(nullable NSArray&lt;NSURL*&gt; *)<em>urls</em></code></div>
 
 		    
 			
@@ -717,7 +719,7 @@
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURLs:(NSArray *)<em>urls</em> placeholderImage:(UIImage *)<em>placeholderImage</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURLs:(nullable NSArray&lt;NSURL*&gt; *)<em>urls</em> placeholderImage:(nullable PINImage *)<em>placeholderImage</em></code></div>
 
 		    
 			
@@ -732,7 +734,7 @@
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>placeholderImage</code></th>
-						<td><p>UIImage to set on the view while the image at URL is being retrieved.</p></td>
+						<td><p>PINImage to set on the view while the image at URL is being retrieved.</p></td>
 					</tr>
 				
 				</table>
@@ -775,7 +777,7 @@
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURLs:(NSArray *)<em>urls</em> placeholderImage:(UIImage *)<em>placeholderImage</em> completion:(PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)pin_setImageFromURLs:(nullable NSArray&lt;NSURL*&gt; *)<em>urls</em> placeholderImage:(nullable PINImage *)<em>placeholderImage</em> completion:(nullable PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
 
 		    
 			
@@ -790,7 +792,7 @@
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>placeholderImage</code></th>
-						<td><p>UIImage to set on the view while the image at URL is being retrieved.</p></td>
+						<td><p>PINImage to set on the view while the image at URL is being retrieved.</p></td>
 					</tr>
 				
 					<tr>
@@ -879,7 +881,7 @@
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (NSUUID *)pin_downloadImageOperationUUID</code></div>
+			<div class="method-subsection method-declaration"><code>- (nullable NSUUID *)pin_downloadImageOperationUUID</code></div>
 
 		    
 			
@@ -925,7 +927,7 @@
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)pin_setDownloadImageOperationUUID:(NSUUID *)<em>downloadImageOperationUUID</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)pin_setDownloadImageOperationUUID:(nullable NSUUID *)<em>downloadImageOperationUUID</em></code></div>
 
 		    
 			
@@ -1007,6 +1009,59 @@
 			
 		</div>
 	</div>
+</div><div class="section-method">
+	<a name="//api/name/pin_updateUIWithRemoteImageManagerResult:" title="pin_updateUIWithRemoteImageManagerResult:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/pin_updateUIWithRemoteImageManagerResult:">&ndash;&nbsp;pin_updateUIWithRemoteImageManagerResult:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>If you implement this method, it is called instead of pin_updateUIWithImage:animatedImage:</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)pin_updateUIWithRemoteImageManagerResult:(nonnull PINRemoteImageManagerResult *)<em>result</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>result</code></th>
+						<td><p>A PINRemoteImageManagerResult</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">PINRemoteImageCategoryManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
 </div>
 						</div>
 						
@@ -1015,14 +1070,12 @@
 					
 
                     
-                    
-          
 				</main>
 
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2015 Pinterest. All rights reserved. Updated: 2015-07-24</p>
+						<p class="copyright">Copyright &copy; 2016 Pinterest. All rights reserved. Updated: 2016-03-20</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>

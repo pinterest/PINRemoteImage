@@ -6,15 +6,17 @@
 //
 //
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#import <Foundation/Foundation.h>
+
+#if PIN_TARGET_IOS
 #import <UIKit/UIKit.h>
-#else
+#elif PIN_TARGET_MAC
 #import <Cocoa/Cocoa.h>
 #endif
 
 #import "PINRemoteImageMacros.h"
 
-#ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
+#if !PIN_TARGET_IOS
 @interface NSImage (PINiOSMapping)
 
 @property(nonatomic, readonly, nullable) CGImageRef CGImage;
@@ -34,7 +36,7 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image);
 + (nullable PINImage *)pin_decodedImageWithData:(nonnull NSData *)data;
 + (nullable PINImage *)pin_decodedImageWithData:(nonnull NSData *)data skipDecodeIfPossible:(BOOL)skipDecodeIfPossible;
 + (nullable PINImage *)pin_decodedImageWithCGImageRef:(nonnull CGImageRef)imageRef;
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if PIN_TARGET_IOS
 + (nullable PINImage *)pin_decodedImageWithCGImageRef:(nonnull CGImageRef)imageRef orientation:(UIImageOrientation) orientation;
 #endif
 

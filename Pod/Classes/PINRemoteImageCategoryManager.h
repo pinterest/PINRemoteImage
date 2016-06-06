@@ -6,9 +6,9 @@
 //
 //
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if PIN_TARGET_IOS
 #import <UIKit/UIKit.h>
-#else
+#elif PIN_TARGET_MAC
 #import <Cocoa/Cocoa.h>
 #endif
 
@@ -225,6 +225,8 @@
 
 /**
  If you implement this method, it is called instead of pin_updateUIWithImage:animatedImage:
+ 
+ @param result A PINRemoteImageManagerResult
  */
 - (void)pin_updateUIWithRemoteImageManagerResult:(nonnull PINRemoteImageManagerResult *)result;
 

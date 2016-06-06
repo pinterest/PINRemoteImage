@@ -58,6 +58,8 @@
 	
 	<optgroup label="Class Methods">
 		
+		<option value="//api/name/setSharedImageManagerWithConfiguration:">+ setSharedImageManagerWithConfiguration:</option>
+		
 		<option value="//api/name/sharedImageManager">+ sharedImageManager</option>
 		
 	</optgroup>
@@ -78,11 +80,21 @@
 		
 		<option value="//api/name/downloadImageWithURL:options:processorKey:processor:completion:">- downloadImageWithURL:options:processorKey:processor:completion:</option>
 		
-		<option value="//api/name/downloadImageWithURL:options:progress:completion:">- downloadImageWithURL:options:progress:completion:</option>
+		<option value="//api/name/downloadImageWithURL:options:processorKey:processor:progressDownload:completion:">- downloadImageWithURL:options:processorKey:processor:progressDownload:completion:</option>
 		
-		<option value="//api/name/downloadImageWithURLs:options:progress:completion:">- downloadImageWithURLs:options:progress:completion:</option>
+		<option value="//api/name/downloadImageWithURL:options:progressDownload:completion:">- downloadImageWithURL:options:progressDownload:completion:</option>
+		
+		<option value="//api/name/downloadImageWithURL:options:progressImage:completion:">- downloadImageWithURL:options:progressImage:completion:</option>
+		
+		<option value="//api/name/downloadImageWithURL:options:progressImage:progressDownload:completion:">- downloadImageWithURL:options:progressImage:progressDownload:completion:</option>
+		
+		<option value="//api/name/downloadImageWithURLs:options:progressImage:completion:">- downloadImageWithURLs:options:progressImage:completion:</option>
 		
 		<option value="//api/name/imageFromCacheWithCacheKey:completion:">- imageFromCacheWithCacheKey:completion:</option>
+		
+		<option value="//api/name/imageFromCacheWithCacheKey:options:completion:">- imageFromCacheWithCacheKey:options:completion:</option>
+		
+		<option value="//api/name/initWithSessionConfiguration:">- initWithSessionConfiguration:</option>
 		
 		<option value="//api/name/prefetchImageWithURL:">- prefetchImageWithURL:</option>
 		
@@ -91,6 +103,8 @@
 		<option value="//api/name/prefetchImagesWithURLs:">- prefetchImagesWithURLs:</option>
 		
 		<option value="//api/name/prefetchImagesWithURLs:options:">- prefetchImagesWithURLs:options:</option>
+		
+		<option value="//api/name/setAuthenticationChallenge:">- setAuthenticationChallenge:</option>
 		
 		<option value="//api/name/setEstimatedRemainingTimeThresholdForProgressiveDownloads:completion:">- setEstimatedRemainingTimeThresholdForProgressiveDownloads:completion:</option>
 		
@@ -104,9 +118,17 @@
 		
 		<option value="//api/name/setPriority:ofTaskWithUUID:">- setPriority:ofTaskWithUUID:</option>
 		
+		<option value="//api/name/setProgressImageCallback:ofTaskWithUUID:">- setProgressImageCallback:ofTaskWithUUID:</option>
+		
 		<option value="//api/name/setProgressThresholds:completion:">- setProgressThresholds:completion:</option>
 		
+		<option value="//api/name/setProgressiveRendersMaxProgressiveRenderSize:completion:">- setProgressiveRendersMaxProgressiveRenderSize:completion:</option>
+		
+		<option value="//api/name/setProgressiveRendersShouldBlur:completion:">- setProgressiveRendersShouldBlur:completion:</option>
+		
 		<option value="//api/name/setShouldUpgradeLowQualityImages:completion:">- setShouldUpgradeLowQualityImages:completion:</option>
+		
+		<option value="//api/name/synchronousImageFromCacheWithCacheKey:options:">- synchronousImageFromCacheWithCacheKey:options:</option>
 		
 	</optgroup>
 	
@@ -142,12 +164,7 @@
 					<div class="section section-overview">
 						<a title="Overview" name="overview"></a>
 						<h2 class="subtitle subtitle-overview">Overview</h2>
-						<p>PINRemoteImageManager is the main workhorse of PINRemoteImage. It is unnecessary to access directly if you simply
-wish to download images and have them rendered in a UIImageView, UIButton or FLAnimatedImageView.</p>
-
-<p>However, if you wish to download images directly, this class is your guy / gal.</p>
-
-<p>You can use this class to download images, postprocess downloaded images, prefetch images, download images progressively, or download one image in a set of images depending on network performance.</p>
+						<p>An image downloading, processing and caching manager. It uses the concept of download and processing tasks to ensure that even if multiple calls to download or process an image are made, it only occurs one time (unless an item is no longer in the cache). PINRemoteImageManager is backed by GCD and safe to access from multiple threads simultaneously. It ensures that images are decoded off the main thread so that animation performance isn&rsquo;t affected. None of its exposed methods allow for synchronous access. However, it is optimized to call completions on the calling thread if an item is in its memory cache. *</p>
 					</div>
 					
 					
@@ -163,6 +180,64 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 
 						<div class="task-list">
 							<div class="section-method">
+	<a name="//api/name/initWithSessionConfiguration:" title="initWithSessionConfiguration:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithSessionConfiguration:">&ndash;&nbsp;initWithSessionConfiguration:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Create and return a PINRemoteImageManager created with the specified configuration. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. You specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)<em>configuration</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>configuration</code></th>
+						<td><p>The configuration used to create the PINRemoteImageManager.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A PINRemoteImageManager with the specified configuration.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">PINRemoteImageManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
 	<a name="//api/name/sharedImageManager" title="sharedImageManager"></a>
 	<h3 class="method-title"><code><a href="#//api/name/sharedImageManager">+&nbsp;sharedImageManager</a></code>
 </h3>
@@ -179,7 +254,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>+ (instancetype)sharedImageManager</code></div>
+			<div class="method-subsection method-declaration"><code>+ (nonnull instancetype)sharedImageManager</code></div>
 
 		    
 			
@@ -189,6 +264,59 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 				<h4 class="method-subtitle parameter-title">Return Value</h4>
 				<p>Shared instance of PINRemoteImageManager</p>
 			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">PINRemoteImageManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setSharedImageManagerWithConfiguration:" title="setSharedImageManagerWithConfiguration:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setSharedImageManagerWithConfiguration:">+&nbsp;setSharedImageManagerWithConfiguration:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Sets the shared instance of PINRemoteImageManager to an instance with the supplied configuration. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. You specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc. This method should not be used if the shared instance has already been created.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)setSharedImageManagerWithConfiguration:(nullable NSURLSessionConfiguration *)<em>configuration</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>configuration</code></th>
+						<td><p>The configuration used to create the PINRemoteImageManager.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
 			
 
 			
@@ -225,7 +353,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (PINCache *)defaultImageCache</code></div>
+			<div class="method-subsection method-declaration"><code>- (nonnull PINCache *)defaultImageCache</code></div>
 
 		    
 			
@@ -235,6 +363,59 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 				<h4 class="method-subtitle parameter-title">Return Value</h4>
 				<p>An instance of a PINCache object.</p>
 			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">PINRemoteImageManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setAuthenticationChallenge:" title="setAuthenticationChallenge:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setAuthenticationChallenge:">&ndash;&nbsp;setAuthenticationChallenge:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set the Authentication Challenge Block.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setAuthenticationChallenge:(nullable PINRemoteImageManagerAuthenticationChallenge)<em>challengeBlock</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>challengeBlock</code></th>
+						<td><p>A PINRemoteImageManagerAuthenticationChallenge block.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
 			
 
 			
@@ -271,7 +452,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)setHighQualityBPSThreshold:(float)<em>highQualityBPSThreshold</em> completion:(dispatch_block_t)<em>completion</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)setHighQualityBPSThreshold:(float)<em>highQualityBPSThreshold</em> completion:(nullable dispatch_block_t)<em>completion</em></code></div>
 
 		    
 			
@@ -306,7 +487,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 				<h4 class="method-subtitle">See Also</h4>
 				<ul>
 					
-					<li><code><p><a href="#//api/name/downloadImageWithURLs:options:progress:completion:">- downloadImageWithURLs:options:progress:completion:</a></p></code></li>
+					<li><code><p><a href="#//api/name/downloadImageWithURLs:options:progressImage:completion:">- downloadImageWithURLs:options:progressImage:completion:</a></p></code></li>
 					
 				</ul>
 			</div>
@@ -338,7 +519,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)setLowQualityBPSThreshold:(float)<em>lowQualityBPSThreshold</em> completion:(dispatch_block_t)<em>completion</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)setLowQualityBPSThreshold:(float)<em>lowQualityBPSThreshold</em> completion:(nullable dispatch_block_t)<em>completion</em></code></div>
 
 		    
 			
@@ -373,7 +554,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 				<h4 class="method-subtitle">See Also</h4>
 				<ul>
 					
-					<li><code><p><a href="#//api/name/downloadImageWithURLs:options:progress:completion:">- downloadImageWithURLs:options:progress:completion:</a></p></code></li>
+					<li><code><p><a href="#//api/name/downloadImageWithURLs:options:progressImage:completion:">- downloadImageWithURLs:options:progressImage:completion:</a></p></code></li>
 					
 				</ul>
 			</div>
@@ -405,7 +586,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)setShouldUpgradeLowQualityImages:(BOOL)<em>shouldUpgradeLowQualityImages</em> completion:(dispatch_block_t)<em>completion</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)setShouldUpgradeLowQualityImages:(BOOL)<em>shouldUpgradeLowQualityImages</em> completion:(nullable dispatch_block_t)<em>completion</em></code></div>
 
 		    
 			
@@ -440,7 +621,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 				<h4 class="method-subtitle">See Also</h4>
 				<ul>
 					
-					<li><code><p><a href="#//api/name/downloadImageWithURLs:options:progress:completion:">- downloadImageWithURLs:options:progress:completion:</a></p></code></li>
+					<li><code><p><a href="#//api/name/downloadImageWithURLs:options:progressImage:completion:">- downloadImageWithURLs:options:progressImage:completion:</a></p></code></li>
 					
 				</ul>
 			</div>
@@ -472,7 +653,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)setMaxNumberOfConcurrentOperations:(NSInteger)<em>maxNumberOfConcurrentOperations</em> completion:(dispatch_block_t)<em>completion</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)setMaxNumberOfConcurrentOperations:(NSInteger)<em>maxNumberOfConcurrentOperations</em> completion:(nullable dispatch_block_t)<em>completion</em></code></div>
 
 		    
 			
@@ -530,7 +711,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)setMaxNumberOfConcurrentDownloads:(NSInteger)<em>maxNumberOfConcurrentDownloads</em> completion:(dispatch_block_t)<em>completion</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)setMaxNumberOfConcurrentDownloads:(NSInteger)<em>maxNumberOfConcurrentDownloads</em> completion:(nullable dispatch_block_t)<em>completion</em></code></div>
 
 		    
 			
@@ -588,7 +769,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)setEstimatedRemainingTimeThresholdForProgressiveDownloads:(NSTimeInterval)<em>estimatedRemainingTimeThreshold</em> completion:(dispatch_block_t)<em>completion</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)setEstimatedRemainingTimeThresholdForProgressiveDownloads:(NSTimeInterval)<em>estimatedRemainingTimeThreshold</em> completion:(nullable dispatch_block_t)<em>completion</em></code></div>
 
 		    
 			
@@ -646,7 +827,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)setProgressThresholds:(NSArray *)<em>progressThresholds</em> completion:(dispatch_block_t)<em>completion</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)setProgressThresholds:(nonnull NSArray&lt;NSNumber*&gt; *)<em>progressThresholds</em> completion:(nullable dispatch_block_t)<em>completion</em></code></div>
 
 		    
 			
@@ -662,6 +843,122 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 					<tr>
 						<th scope="row" class="argument-name"><code>completion</code></th>
 						<td><p>Completion to be called once progressThresholds is set.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">PINRemoteImageManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setProgressiveRendersShouldBlur:completion:" title="setProgressiveRendersShouldBlur:completion:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setProgressiveRendersShouldBlur:completion:">&ndash;&nbsp;setProgressiveRendersShouldBlur:completion:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Sets whether PINRemoteImage should blur progressive render results</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setProgressiveRendersShouldBlur:(BOOL)<em>shouldBlur</em> completion:(nullable dispatch_block_t)<em>completion</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>shouldBlur</code></th>
+						<td><p>A bool value indicating whether PINRemoteImage should blur progressive render results</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>completion</code></th>
+						<td><p>Completion to be called once progressThresholds is set.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">PINRemoteImageManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setProgressiveRendersMaxProgressiveRenderSize:completion:" title="setProgressiveRendersMaxProgressiveRenderSize:completion:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setProgressiveRendersMaxProgressiveRenderSize:completion:">&ndash;&nbsp;setProgressiveRendersMaxProgressiveRenderSize:completion:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Sets the maximum size of an image that PINRemoteImage will blur. If the image is too large, blurring is skipped</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setProgressiveRendersMaxProgressiveRenderSize:(CGSize)<em>maxProgressiveRenderSize</em> completion:(nullable dispatch_block_t)<em>completion</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>maxProgressiveRenderSize</code></th>
+						<td><p>A CGSize which indicates the max size PINRemoteImage will render a progressive image. If an image is larger in either dimension, progressive rendering will be skipped</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>completion</code></th>
+						<td><p>Completion to be called once maxProgressiveRenderSize is set.</p></td>
 					</tr>
 				
 				</table>
@@ -704,7 +1001,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)prefetchImageWithURL:(NSURL *)<em>url</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)prefetchImageWithURL:(nonnull NSURL *)<em>url</em></code></div>
 
 		    
 			
@@ -757,7 +1054,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)prefetchImageWithURL:(NSURL *)<em>url</em> options:(PINRemoteImageManagerDownloadOptions)<em>options</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)prefetchImageWithURL:(nonnull NSURL *)<em>url</em> options:(PINRemoteImageManagerDownloadOptions)<em>options</em></code></div>
 
 		    
 			
@@ -815,7 +1112,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)prefetchImagesWithURLs:(NSArray *)<em>urls</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)prefetchImagesWithURLs:(nonnull NSArray&lt;NSURL*&gt; *)<em>urls</em></code></div>
 
 		    
 			
@@ -868,7 +1165,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)prefetchImagesWithURLs:(NSArray *)<em>urls</em> options:(PINRemoteImageManagerDownloadOptions)<em>options</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)prefetchImagesWithURLs:(nonnull NSArray&lt;NSURL*&gt; *)<em>urls</em> options:(PINRemoteImageManagerDownloadOptions)<em>options</em></code></div>
 
 		    
 			
@@ -926,7 +1223,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (NSUUID *)downloadImageWithURL:(NSURL *)<em>url</em> completion:(PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)<em>url</em> completion:(nullable PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
 
 		    
 			
@@ -989,7 +1286,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (NSUUID *)downloadImageWithURL:(NSURL *)<em>url</em> options:(PINRemoteImageManagerDownloadOptions)<em>options</em> completion:(PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)<em>url</em> options:(PINRemoteImageManagerDownloadOptions)<em>options</em> completion:(nullable PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
 
 		    
 			
@@ -1041,8 +1338,8 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/downloadImageWithURL:options:progress:completion:" title="downloadImageWithURL:options:progress:completion:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/downloadImageWithURL:options:progress:completion:">&ndash;&nbsp;downloadImageWithURL:options:progress:completion:</a></code>
+	<a name="//api/name/downloadImageWithURL:options:progressImage:completion:" title="downloadImageWithURL:options:progressImage:completion:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/downloadImageWithURL:options:progressImage:completion:">&ndash;&nbsp;downloadImageWithURL:options:progressImage:completion:</a></code>
 </h3>
 
 	<div class="method-info">
@@ -1057,7 +1354,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (NSUUID *)downloadImageWithURL:(NSURL *)<em>url</em> options:(PINRemoteImageManagerDownloadOptions)<em>options</em> progress:(PINRemoteImageManagerImageCompletion)<em>progress</em> completion:(PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)<em>url</em> options:(PINRemoteImageManagerDownloadOptions)<em>options</em> progressImage:(nullable PINRemoteImageManagerImageCompletion)<em>progressImage</em> completion:(nullable PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
 
 		    
 			
@@ -1076,8 +1373,159 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 					</tr>
 				
 					<tr>
-						<th scope="row" class="argument-name"><code>progress</code></th>
+						<th scope="row" class="argument-name"><code>progressImage</code></th>
 						<td><p>PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>completion</code></th>
+						<td><p>PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">PINRemoteImageManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/downloadImageWithURL:options:progressDownload:completion:" title="downloadImageWithURL:options:progressDownload:completion:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/downloadImageWithURL:options:progressDownload:completion:">&ndash;&nbsp;downloadImageWithURL:options:progressDownload:completion:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Download or retrieve from cache the image found at the url. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)<em>url</em> options:(PINRemoteImageManagerDownloadOptions)<em>options</em> progressDownload:(nullable PINRemoteImageManagerProgressDownload)<em>progressDownload</em> completion:(nullable PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>url</code></th>
+						<td><p>NSURL where the image to download resides.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>options</code></th>
+						<td><p>PINRemoteImageManagerDownloadOptions options with which to fetch the image.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>progressDownload</code></th>
+						<td><p>PINRemoteImageManagerDownloadProgress block which will be called to update progress in bytes of the image download. NOTE: For performance reasons, this block is not called on the main thread every time, if you need to update your UI ensure that you dispatch to the main thread first.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>completion</code></th>
+						<td><p>PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">PINRemoteImageManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/downloadImageWithURL:options:progressImage:progressDownload:completion:" title="downloadImageWithURL:options:progressImage:progressDownload:completion:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/downloadImageWithURL:options:progressImage:progressDownload:completion:">&ndash;&nbsp;downloadImageWithURL:options:progressImage:progressDownload:completion:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Download or retrieve from cache the image found at the url. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)<em>url</em> options:(PINRemoteImageManagerDownloadOptions)<em>options</em> progressImage:(nullable PINRemoteImageManagerImageCompletion)<em>progressImage</em> progressDownload:(nullable PINRemoteImageManagerProgressDownload)<em>progressDownload</em> completion:(nullable PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>url</code></th>
+						<td><p>NSURL where the image to download resides.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>options</code></th>
+						<td><p>PINRemoteImageManagerDownloadOptions options with which to fetch the image.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>progressImage</code></th>
+						<td><p>PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>progressDownload</code></th>
+						<td><p>PINRemoteImageManagerDownloadProgress block which will be called to update progress in bytes of the image download. NOTE: For performance reasons, this block is not called on the main thread every time, if you need to update your UI ensure that you dispatch to the main thread first.</p></td>
 					</tr>
 				
 					<tr>
@@ -1130,7 +1578,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (NSUUID *)downloadImageWithURL:(NSURL *)<em>url</em> options:(PINRemoteImageManagerDownloadOptions)<em>options</em> processorKey:(NSString *)<em>processorKey</em> processor:(PINRemoteImageManagerImageProcessor)<em>processor</em> completion:(PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)<em>url</em> options:(PINRemoteImageManagerDownloadOptions)<em>options</em> processorKey:(nullable NSString *)<em>processorKey</em> processor:(nullable PINRemoteImageManagerImageProcessor)<em>processor</em> completion:(nullable PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
 
 		    
 			
@@ -1192,8 +1640,8 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/downloadImageWithURLs:options:progress:completion:" title="downloadImageWithURLs:options:progress:completion:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/downloadImageWithURLs:options:progress:completion:">&ndash;&nbsp;downloadImageWithURLs:options:progress:completion:</a></code>
+	<a name="//api/name/downloadImageWithURL:options:processorKey:processor:progressDownload:completion:" title="downloadImageWithURL:options:processorKey:processor:progressDownload:completion:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/downloadImageWithURL:options:processorKey:processor:progressDownload:completion:">&ndash;&nbsp;downloadImageWithURL:options:processorKey:processor:progressDownload:completion:</a></code>
 </h3>
 
 	<div class="method-info">
@@ -1203,12 +1651,12 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Download or retrieve from cache one of the images found at the urls in the passed in array based on current network performance. URLs should be sorted from lowest quality image URL to highest. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).</p>
+				<p>Download or retrieve from cache the image found at the url and process it before calling completion. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).</p>
 			</div>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (NSUUID *)downloadImageWithURLs:(NSArray *)<em>urls</em> options:(PINRemoteImageManagerDownloadOptions)<em>options</em> progress:(PINRemoteImageManagerImageCompletion)<em>progress</em> completion:(PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)<em>url</em> options:(PINRemoteImageManagerDownloadOptions)<em>options</em> processorKey:(nullable NSString *)<em>processorKey</em> processor:(nullable PINRemoteImageManagerImageProcessor)<em>processor</em> progressDownload:(nullable PINRemoteImageManagerProgressDownload)<em>progressDownload</em> completion:(nullable PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
 
 		    
 			
@@ -1217,8 +1665,8 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 				<table class="argument-def parameter-def">
 				
 					<tr>
-						<th scope="row" class="argument-name"><code>urls</code></th>
-						<td><p>An array of NSURLs of increasing size.</p></td>
+						<th scope="row" class="argument-name"><code>url</code></th>
+						<td><p>NSURL where the image to download resides.</p></td>
 					</tr>
 				
 					<tr>
@@ -1227,8 +1675,18 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 					</tr>
 				
 					<tr>
-						<th scope="row" class="argument-name"><code>progress</code></th>
-						<td><p>PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.</p></td>
+						<th scope="row" class="argument-name"><code>processorKey</code></th>
+						<td><p>NSString key to uniquely identify processor and process. Will be used for caching processed images.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>processor</code></th>
+						<td><p>PINRemoteImageManagerImageProcessor block which will be called to post-process downloaded image.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>progressDownload</code></th>
+						<td><p>PINRemoteImageManagerDownloadProgress block which will be called to update progress in bytes of the image download. NOTE: For performance reasons, this block is not called on the main thread every time, if you need to update your UI ensure that you dispatch to the main thread first.</p></td>
 					</tr>
 				
 					<tr>
@@ -1265,6 +1723,84 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 		</div>
 	</div>
 </div><div class="section-method">
+	<a name="//api/name/downloadImageWithURLs:options:progressImage:completion:" title="downloadImageWithURLs:options:progressImage:completion:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/downloadImageWithURLs:options:progressImage:completion:">&ndash;&nbsp;downloadImageWithURLs:options:progressImage:completion:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Download or retrieve from cache one of the images found at the urls in the passed in array based on current network performance. URLs should be sorted from lowest quality image URL to highest. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (nullable NSUUID *)downloadImageWithURLs:(nonnull NSArray&lt;NSURL*&gt; *)<em>urls</em> options:(PINRemoteImageManagerDownloadOptions)<em>options</em> progressImage:(nullable PINRemoteImageManagerImageCompletion)<em>progressImage</em> completion:(nullable PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>urls</code></th>
+						<td><p>An array of NSURLs of increasing size.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>options</code></th>
+						<td><p>PINRemoteImageManagerDownloadOptions options with which to fetch the image.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>progressImage</code></th>
+						<td><p>PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>completion</code></th>
+						<td><p>PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Unless setShouldUpgradeLowQualityImages is set to YES, this method checks the cache for all URLs and returns the highest quality version stored. It is possible though unlikely for a cached image to not be returned if it is still being cached while a call is made to this method and if network conditions have changed. See source for more details.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">PINRemoteImageManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
 	<a name="//api/name/cacheKeyForURL:processorKey:" title="cacheKeyForURL:processorKey:"></a>
 	<h3 class="method-title"><code><a href="#//api/name/cacheKeyForURL:processorKey:">&ndash;&nbsp;cacheKeyForURL:processorKey:</a></code>
 </h3>
@@ -1281,7 +1817,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (NSString *)cacheKeyForURL:(NSURL *)<em>url</em> processorKey:(NSString *)<em>processorKey</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (nonnull NSString *)cacheKeyForURL:(nonnull NSURL *)<em>url</em> processorKey:(nullable NSString *)<em>processorKey</em></code></div>
 
 		    
 			
@@ -1348,12 +1884,13 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Directly get an image from the underlying cache.</p>
+				<p>imageFromCacheWithCacheKey:options:completion: instead
+@deprecated</p>
 			</div>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)imageFromCacheWithCacheKey:(NSString *)<em>cacheKey</em> completion:(PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)imageFromCacheWithCacheKey:(nonnull NSString *)<em>cacheKey</em> completion:(nonnull PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
 
 		    
 			
@@ -1375,6 +1912,151 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			</div>
 			
 
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection see-also-section">
+				<h4 class="method-subtitle">See Also</h4>
+				<ul>
+					
+					<li><code><p><a href="#//api/name/imageFromCacheWithCacheKey:options:completion:">- imageFromCacheWithCacheKey:options:completion:</a> instead
+@deprecated</p></code></li>
+					
+				</ul>
+			</div>
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">PINRemoteImageManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/imageFromCacheWithCacheKey:options:completion:" title="imageFromCacheWithCacheKey:options:completion:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/imageFromCacheWithCacheKey:options:completion:">&ndash;&nbsp;imageFromCacheWithCacheKey:options:completion:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Directly get an image from the underlying cache.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)imageFromCacheWithCacheKey:(nonnull NSString *)<em>cacheKey</em> options:(PINRemoteImageManagerDownloadOptions)<em>options</em> completion:(nonnull PINRemoteImageManagerImageCompletion)<em>completion</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>cacheKey</code></th>
+						<td><p>NSString key to look up image in the cache.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>options</code></th>
+						<td><p>options will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>completion</code></th>
+						<td><p>PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection see-also-section">
+				<h4 class="method-subtitle">See Also</h4>
+				<ul>
+					
+					<li><code><p><a href="#//api/name/cacheKeyForURL:processorKey:">- cacheKeyForURL:processorKey:</a></p></code></li>
+					
+				</ul>
+			</div>
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">PINRemoteImageManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/synchronousImageFromCacheWithCacheKey:options:" title="synchronousImageFromCacheWithCacheKey:options:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/synchronousImageFromCacheWithCacheKey:options:">&ndash;&nbsp;synchronousImageFromCacheWithCacheKey:options:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Directly get an image from the underlying memory cache synchronously.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (nonnull PINRemoteImageManagerResult *)synchronousImageFromCacheWithCacheKey:(nonnull NSString *)<em>cacheKey</em> options:(PINRemoteImageManagerDownloadOptions)<em>options</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>cacheKey</code></th>
+						<td><p>NSString key to look up image in the cache.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>options</code></th>
+						<td><p>optoins will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A PINRemoteImageManagerResult</p>
+			</div>
 			
 
 			
@@ -1420,7 +2102,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)cancelTaskWithUUID:(NSUUID *)<em>UUID</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)cancelTaskWithUUID:(nonnull NSUUID *)<em>UUID</em></code></div>
 
 		    
 			
@@ -1482,7 +2164,7 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)setPriority:(PINRemoteImageManagerPriority)<em>priority</em> ofTaskWithUUID:(NSUUID *)<em>UUID</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)setPriority:(PINRemoteImageManagerPriority)<em>priority</em> ofTaskWithUUID:(nonnull NSUUID *)<em>UUID</em></code></div>
 
 		    
 			
@@ -1523,6 +2205,64 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 			
 		</div>
 	</div>
+</div><div class="section-method">
+	<a name="//api/name/setProgressImageCallback:ofTaskWithUUID:" title="setProgressImageCallback:ofTaskWithUUID:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setProgressImageCallback:ofTaskWithUUID:">&ndash;&nbsp;setProgressImageCallback:ofTaskWithUUID:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>set the progress callback on a download task. You can use this to add progress callbacks or remove them for in flight downloads</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setProgressImageCallback:(nullable PINRemoteImageManagerImageCompletion)<em>progressImageCallback</em> ofTaskWithUUID:(nonnull NSUUID *)<em>UUID</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>progressImageCallback</code></th>
+						<td><p>a PINRemoteImageManagerImageCompletion block to be called with a progress update</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>UUID</code></th>
+						<td><p>NSUUID of the task to set the priority on.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">PINRemoteImageManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
 </div>
 						</div>
 						
@@ -1531,14 +2271,12 @@ wish to download images and have them rendered in a UIImageView, UIButton or FLA
 					
 
                     
-                    
-          
 				</main>
 
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2015 Pinterest. All rights reserved. Updated: 2015-07-24</p>
+						<p class="copyright">Copyright &copy; 2016 Pinterest. All rights reserved. Updated: 2016-03-20</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>

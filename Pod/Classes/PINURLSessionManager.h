@@ -28,6 +28,6 @@
 
 - (void)invalidateSessionAndCancelTasks;
 
-@property (atomic, weak) id <PINURLSessionManagerDelegate> delegate;
+@property (atomic, weak, nullable) id <PINURLSessionManagerDelegate> delegate;
 
 @end

@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "PINRemoteImage"
-  s.version          = "2.0.1"
+  s.version          = "2.1.4"
   s.summary          = "A thread safe, performant, feature rich image fetcher"
   s.homepage         = "https://github.com/pinterest/PINRemoteImage"
   s.license          = 'Apache 2.0'
@@ -19,6 +19,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = "6.0"
   s.osx.deployment_target = "10.8"
+  s.tvos.deployment_target = "9.0"
   s.requires_arc = true
   
   # Include optional FLAnimatedImage module
@@ -43,6 +44,12 @@ Pod::Spec.new do |s|
     cs.platforms = "osx"
     cs.dependency 'PINRemoteImage/Core'
     cs.frameworks = 'Cocoa'
+  end
+
+  s.subspec 'tvOS' do |tvos|
+    tvos.platforms = "tvos"
+    tvos.dependency 'PINRemoteImage/Core'
+    tvos.frameworks = 'UIKit'
   end
 
   s.subspec "FLAnimatedImage" do |fs|
