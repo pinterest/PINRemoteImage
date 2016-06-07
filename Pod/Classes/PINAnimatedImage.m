@@ -52,7 +52,6 @@ const Float32 kPINAnimatedImageMinimumDuration = 1 / kPINAnimatedImageDisplayRef
     _dataLock = [[PINRemoteLock alloc] initWithName:@"PINAnimatedImage data lock"];
     
     NSAssert(animatedImageData != nil, @"animatedImageData must not be nil.");
-    _status = PINAnimatedImageStatusUnprocessed;
     
     [[PINAnimatedImageManager sharedManager] animatedPathForImageData:animatedImageData infoCompletion:^(PINImage *coverImage, PINSharedAnimatedImage *shared) {
       self.sharedAnimatedImage = shared;
