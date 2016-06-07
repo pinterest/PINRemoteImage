@@ -105,7 +105,7 @@ static CGFloat pin_scale;
 #if PIN_TARGET_IOS
             UIImageOrientation orientation = pin_UIImageOrientationFromImageSource(imageSourceRef);
             if (skipDecodeIfPossible) {
-                decodedImage = [PINImage imageWithCGImage:imageRef scale:1.0 orientation:orientation];
+                decodedImage = [PINImage imageWithCGImage:imageRef scale:pin_scale orientation:orientation];
             } else {
                 decodedImage = [self pin_decodedImageWithCGImageRef:imageRef orientation:orientation];
             }
