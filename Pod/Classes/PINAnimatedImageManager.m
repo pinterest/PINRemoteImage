@@ -392,6 +392,7 @@ ERROR;}) \
               if (frameImage == nil) {
                 NSError *frameImageError = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorImageFrameError userInfo:nil];
                 HANDLE_PROCESSING_ERROR(frameImageError);
+                return;
               }
               
               NSData *frameData = (__bridge_transfer NSData *)CGDataProviderCopyData(CGImageGetDataProvider(frameImage));
