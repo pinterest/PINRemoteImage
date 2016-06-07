@@ -380,34 +380,40 @@ ERROR;}) \
               });
             }
             
-            CGImageRef frameImage = CGImageSourceCreateImageAtIndex(imageSource, frameIdx, (CFDictionaryRef)@{(__bridge NSString *)kCGImageSourceShouldCache : (__bridge NSNumber *)kCFBooleanFalse});
-            if (frameImage == nil) {
-              NSError *frameImageError = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorImageFrameError userInfo:nil];
-              HANDLE_PROCESSING_ERROR(frameImageError);
-              break;
-            }
-            
             Float32 duration = durations[frameIdx];
             fileDuration += duration;
-            NSData *frameData = (__bridge_transfer NSData *)CGDataProviderCopyData(CGImageGetDataProvider(frameImage));
-            NSAssert(frameData.length == width * height * kPINAnimatedImageComponentsPerPixel, @"data should be width * height * 4 bytes");
+            
             dispatch_group_async(diskGroup, diskWriteQueue, ^{
+              if (PROCESSING_ERROR) {
+                return;
+              }
+              
+              CGImageRef frameImage = CGImageSourceCreateImageAtIndex(imageSource, frameIdx, (CFDictionaryRef)@{(__bridge NSString *)kCGImageSourceShouldCache : (__bridge NSNumber *)kCFBooleanFalse});
+              if (frameImage == nil) {
+                NSError *frameImageError = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorImageFrameError userInfo:nil];
+                HANDLE_PROCESSING_ERROR(frameImageError);
+              }
+              
+              NSData *frameData = (__bridge_transfer NSData *)CGDataProviderCopyData(CGImageGetDataProvider(frameImage));
+              NSAssert(frameData.length == width * height * kPINAnimatedImageComponentsPerPixel, @"data should be width * height * 4 bytes");
               NSError *frameWriteError = [self writeFrameToFile:fileHandle duration:duration frameData:frameData];
               HANDLE_PROCESSING_ERROR(frameWriteError);
+              
+              CGImageRelease(frameImage);
             });
             
-            CGImageRelease(frameImage);
             frameCountForFile++;
           }
         }
       } else {
         completion(NO, nil, PROCESSING_ERROR);
       }
-      
-      CFRelease(imageSource);
     }
     
     dispatch_group_wait(diskGroup, DISPATCH_TIME_FOREVER);
+    if (imageSource) {
+      CFRelease(imageSource);
+    }
     
     //close the file handle
     PINLog(@"closing last file: %@", fileHandle);
