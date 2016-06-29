@@ -53,6 +53,7 @@ typedef void(^PINAnimatedImageDecodedPath)(BOOL finished, NSString *path, NSErro
                             frameCount:(size_t)frameCount
                                  width:(size_t)width
                                 height:(size_t)height
+                          bitsPerPixel:(size_t)bitsPerPixel
                             bitmapInfo:(CGBitmapInfo)bitmapInfo;
 
 @property (nonatomic, readonly) NSUUID *UUID;
@@ -62,6 +63,7 @@ typedef void(^PINAnimatedImageDecodedPath)(BOOL finished, NSString *path, NSErro
 @property (nonatomic, readonly) size_t frameCount;
 @property (nonatomic, readonly) size_t width;
 @property (nonatomic, readonly) size_t height;
+@property (nonatomic, readonly) size_t bitsPerPixel;
 @property (nonatomic, readonly) CGBitmapInfo bitmapInfo;
 
 @end
