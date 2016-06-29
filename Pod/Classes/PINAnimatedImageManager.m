@@ -523,7 +523,7 @@ ERROR;}) \
 {
   NSError *error = nil;
   @try {
-    UInt16 version = 1;
+    UInt16 version = 2;
     [fileHandle writeData:[NSData dataWithBytes:&version length:sizeof(version)]];
     [fileHandle writeData:[NSData dataWithBytes:&width length:sizeof(width)]];
     [fileHandle writeData:[NSData dataWithBytes:&height length:sizeof(height)]];

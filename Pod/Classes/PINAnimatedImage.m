@@ -220,17 +220,24 @@ void releaseData(void *data, const void *imageData, size_t size)
   return height;
 }
 
++ (UInt32)bitsPerPixelFromMemoryMap:(NSData *)memoryMap
+{
+  UInt32 bitsPerPixel;
+  [memoryMap getBytes:&bitsPerPixel range:NSMakeRange(10, sizeof(bitsPerPixel))];
+  return bitsPerPixel;
+}
+
 + (UInt32)loopCountFromMemoryMap:(NSData *)memoryMap
 {
   UInt32 loopCount;
-  [memoryMap getBytes:&loopCount range:NSMakeRange(10, sizeof(loopCount))];
+  [memoryMap getBytes:&loopCount range:NSMakeRange(14, sizeof(loopCount))];
   return loopCount;
 }
 
 + (UInt32)frameCountFromMemoryMap:(NSData *)memoryMap
 {
   UInt32 frameCount;
-  [memoryMap getBytes:&frameCount range:NSMakeRange(14, sizeof(frameCount))];
+  [memoryMap getBytes:&frameCount range:NSMakeRange(18, sizeof(frameCount))];
   return frameCount;
 }
 
@@ -238,7 +245,7 @@ void releaseData(void *data, const void *imageData, size_t size)
 + (Float32 *)createDurations:(Float32 *)durations fromMemoryMap:(NSData *)memoryMap frameCount:(UInt32)frameCount frameSize:(NSUInteger)frameSize totalDuration:(nonnull CFTimeInterval *)totalDuration
 {
   *totalDuration = 0;
-  [memoryMap getBytes:&durations range:NSMakeRange(18, sizeof(Float32) * frameCount)];
+  [memoryMap getBytes:&durations range:NSMakeRange(22, sizeof(Float32) * frameCount)];
 
   for (NSUInteger idx = 0; idx < frameCount; idx++) {
     *totalDuration += durations[idx];
