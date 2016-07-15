@@ -185,7 +185,7 @@ static dispatch_once_t sharedDispatchToken;
     if (self = [super init]) {
         self.cache = [self defaultImageCache];
         if (!configuration) {
-            configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+            configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
         }
         _callbackQueue = dispatch_queue_create("PINRemoteImageManagerCallbackQueue", DISPATCH_QUEUE_CONCURRENT);
         _lock = [[PINRemoteLock alloc] initWithName:@"PINRemoteImageManager"];
