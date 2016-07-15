@@ -26,9 +26,9 @@ Pod::Spec.new do |s|
   
   ### Subspecs
   s.subspec 'Core' do |cs|
-    cs.ios.deployment_target = "6.0"
+    cs.ios.deployment_target = "7.0"
     cs.tvos.deployment_target = "9.0"
-    cs.osx.deployment_target = "10.8"
+    cs.osx.deployment_target = "10.9"
     cs.source_files = 'Pod/Classes/**/*.{h,m}'
     cs.exclude_files = 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h', 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m'
     cs.public_header_files = 'Pod/Classes/**/*.h'
@@ -37,14 +37,14 @@ Pod::Spec.new do |s|
   end
   
   s.subspec 'iOS' do |ios|
-    ios.ios.deployment_target = "6.0"
+    ios.ios.deployment_target = "7.0"
     ios.tvos.deployment_target = "9.0"
     ios.dependency 'PINRemoteImage/Core'
     ios.frameworks = 'UIKit'
   end
 
   s.subspec 'OSX' do |cs|
-    cs.osx.deployment_target = "10.8"
+    cs.osx.deployment_target = "10.9"
     cs.dependency 'PINRemoteImage/Core'
     cs.frameworks = 'Cocoa', 'CoreServices'
   end
