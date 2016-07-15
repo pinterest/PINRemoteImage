@@ -115,7 +115,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 @property (nonatomic, strong) PINURLSessionManager *sessionManager;
 @property (nonatomic, assign) NSTimeInterval timeout;
 @property (nonatomic, strong) NSMutableDictionary <NSString *, __kindof PINRemoteImageTask *> *tasks;
-@property (nonatomic, strong) NSMutableSet <NSUUID *> *canceledTasks;
+@property (nonatomic, strong) NSHashTable <NSUUID *> *canceledTasks;
 @property (nonatomic, strong) NSArray <NSNumber *> *progressThresholds;
 @property (nonatomic, assign) BOOL shouldBlurProgressive;
 @property (nonatomic, assign) CGSize maxProgressiveRenderSize;
@@ -211,7 +211,7 @@ static dispatch_once_t sharedDispatchToken;
         _shouldBlurProgressive = YES;
         _maxProgressiveRenderSize = CGSizeMake(1024, 1024);
         self.tasks = [[NSMutableDictionary alloc] init];
-        self.canceledTasks = [[NSMutableSet alloc] init];
+        self.canceledTasks = [[NSHashTable alloc] initWithOptions:NSHashTableWeakMemory capacity:5];
         self.taskQOS = [[NSMutableArray alloc] initWithCapacity:5];
         
         if (alternateRepProvider == nil) {
@@ -536,10 +536,10 @@ static dispatch_once_t sharedDispatchToken;
          [strongSelf lock];
              //check canceled tasks first
              if ([strongSelf.canceledTasks containsObject:UUID]) {
+                 PINLog(@"skipping starting %@ because it was canceled.", UUID);
                  [strongSelf unlock];
                  return;
              }
-             [strongSelf.canceledTasks removeAllObjects];
          
              PINRemoteImageTask *task = [strongSelf.tasks objectForKey:key];
              BOOL taskExisted = NO;
@@ -915,7 +915,8 @@ static dispatch_once_t sharedDispatchToken;
             }];
         
             if (taskToEvaluate == nil) {
-                //maybe task hasn't been added to task list yet, add it to canceled tasks
+                //maybe task hasn't been added to task list yet, add it to canceled tasks.
+                //there's no need to ever remove a UUID from canceledTasks because it is weak.
                 [strongSelf.canceledTasks addObject:UUID];
             }
         
@@ -958,7 +959,7 @@ static dispatch_once_t sharedDispatchToken;
         return;
     }
     
-    PINLog(@"setting progress block of UUID: %@ progressBlock: %@", UUID, progress);
+    PINLog(@"setting progress block of UUID: %@ progressBlock: %@", UUID, progressImageCallback);
     __weak typeof(self) weakSelf = self;
     [_concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityHigh block:^{
         typeof(self) strongSelf = weakSelf;
