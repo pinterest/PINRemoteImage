@@ -117,7 +117,7 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
         dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
     [self unlock];
     if (!error && [task.response isKindOfClass:[NSHTTPURLResponse class]]) {
-        int statusCode = [(NSHTTPURLResponse *)task.response statusCode];
+        NSInteger statusCode = [(NSHTTPURLResponse *)task.response statusCode];
         if (statusCode >= 400) {
             error = [NSError errorWithDomain:PINURLErrorDomain
                                         code:statusCode
