@@ -11,6 +11,7 @@ env:
     - OS='latest' name='iPhone 6'
     
 before_install:
+    - gem uninstall cocoapods --version '>0.39.0'
     - gem install cocoapods -v '0.39.0'
     - gem install xcpretty
 before_script:
