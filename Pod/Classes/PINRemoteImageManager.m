@@ -769,7 +769,7 @@ static dispatch_once_t sharedDispatchToken;
             PINImage *image = nil;
             id alternativeRepresentation = nil;
             
-            if (remoteImageError) {
+            if (remoteImageError && [[self class] retriableError:remoteImageError]) {
                 //attempt to retry after delay
                 BOOL retry = NO;
                 NSUInteger newNumberOfRetries = 0;
@@ -798,7 +798,7 @@ static dispatch_once_t sharedDispatchToken;
                     });
                     return;
                 }
-            } else {
+            } else if (remoteImageError == nil) {
                 //stores the object in the caches
                 [strongSelf materializeAndCacheObject:data cacheInDisk:data additionalCost:0 key:key options:options outImage:&image outAltRep:&alternativeRepresentation];
             }
@@ -814,6 +814,17 @@ static dispatch_once_t sharedDispatchToken;
     }];
 }
 
++ (BOOL)retriableError:(NSError *)remoteImageError
+{
+    if ([remoteImageError.domain isEqualToString:PINURLErrorDomain]) {
+        return remoteImageError.code >= 500;
+    } else if ([remoteImageError.domain isEqualToString:NSURLErrorDomain] && remoteImageError.code == NSURLErrorUnsupportedURL) {
+        return NO;
+    } else if ([remoteImageError.domain isEqualToString:PINRemoteImageManagerErrorDomain]) {
+        return NO;
+    }
+    return YES;
+}
 
 - (PINDataTaskOperation *)downloadDataWithURL:(NSURL *)url
                                          key:(NSString *)key
