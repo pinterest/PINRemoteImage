@@ -16,7 +16,6 @@ NSString *kPINAnimatedImageErrorDomain = @"kPINAnimatedImageErrorDomain";
 const Float32 kPINAnimatedImageDefaultDuration = 0.1;
 
 static const size_t kPINAnimatedImageBitsPerComponent = 8;
-const size_t kPINAnimatedImageComponentsPerPixel = 4;
 
 const NSTimeInterval kPINAnimatedImageDisplayRefreshRate = 60.0;
 //http://nullsleep.tumblr.com/post/16524517190/animated-gif-minimum-frame-delay-browser
@@ -52,7 +51,6 @@ const Float32 kPINAnimatedImageMinimumDuration = 1 / kPINAnimatedImageDisplayRef
     _dataLock = [[PINRemoteLock alloc] initWithName:@"PINAnimatedImage data lock"];
     
     NSAssert(animatedImageData != nil, @"animatedImageData must not be nil.");
-    _status = PINAnimatedImageStatusUnprocessed;
     
     [[PINAnimatedImageManager sharedManager] animatedPathForImageData:animatedImageData infoCompletion:^(PINImage *coverImage, PINSharedAnimatedImage *shared) {
       self.sharedAnimatedImage = shared;
@@ -112,9 +110,9 @@ const Float32 kPINAnimatedImageMinimumDuration = 1 / kPINAnimatedImageDisplayRef
   }];
 }
 
-- (PINImage *)coverImageWithMemoryMap:(NSData *)memoryMap width:(UInt32)width height:(UInt32)height bitmapInfo:(CGBitmapInfo)bitmapInfo
+- (PINImage *)coverImageWithMemoryMap:(NSData *)memoryMap width:(UInt32)width height:(UInt32)height bitsPerPixel:(UInt32)bitsPerPixel bitmapInfo:(CGBitmapInfo)bitmapInfo
 {
-  CGImageRef imageRef = [[self class] imageAtIndex:0 inMemoryMap:memoryMap width:width height:height bitmapInfo:bitmapInfo];
+  CGImageRef imageRef = [[self class] imageAtIndex:0 inMemoryMap:memoryMap width:width height:height bitsPerPixel:bitsPerPixel bitmapInfo:bitmapInfo];
 #if PIN_TARGET_IOS
   return [UIImage imageWithCGImage:imageRef];
 #elif PIN_TARGET_MAC
@@ -129,7 +127,7 @@ void releaseData(void *data, const void *imageData, size_t size)
   CFRelease(data);
 }
 
-- (CGImageRef)imageAtIndex:(NSUInteger)index inSharedImageFiles:(NSArray <PINSharedAnimatedImageFile *>*)imageFiles width:(UInt32)width height:(UInt32)height bitmapInfo:(CGBitmapInfo)bitmapInfo
+- (CGImageRef)imageAtIndex:(NSUInteger)index inSharedImageFiles:(NSArray <PINSharedAnimatedImageFile *>*)imageFiles width:(UInt32)width height:(UInt32)height bitsPerPixel:(UInt32)bitsPerPixel bitmapInfo:(CGBitmapInfo)bitmapInfo
 {
   if (self.status == PINAnimatedImageStatusError) {
     return nil;
@@ -148,7 +146,7 @@ void releaseData(void *data, const void *imageData, size_t size)
           }];
         });
       }];
-      return [[self class] imageAtIndex:index inMemoryMap:memoryMappedData width:width height:height bitmapInfo:bitmapInfo];
+      return [[self class] imageAtIndex:index inMemoryMap:memoryMappedData width:width height:height bitsPerPixel:bitsPerPixel bitmapInfo:bitmapInfo];
     } else {
       index -= imageFile.frameCount;
     }
@@ -162,7 +160,7 @@ void releaseData(void *data, const void *imageData, size_t size)
   return self.durations[index];
 }
 
-+ (CGImageRef)imageAtIndex:(NSUInteger)index inMemoryMap:(NSData *)memoryMap width:(UInt32)width height:(UInt32)height bitmapInfo:(CGBitmapInfo)bitmapInfo
++ (CGImageRef)imageAtIndex:(NSUInteger)index inMemoryMap:(NSData *)memoryMap width:(UInt32)width height:(UInt32)height bitsPerPixel:(UInt32)bitsPerPixel bitmapInfo:(CGBitmapInfo)bitmapInfo
 {
   if (memoryMap == nil) {
     return nil;
@@ -170,7 +168,7 @@ void releaseData(void *data, const void *imageData, size_t size)
   
   Float32 outDuration;
   
-  size_t imageLength = width * height * kPINAnimatedImageComponentsPerPixel;
+  const size_t imageLength = width * height * bitsPerPixel / 8;
   
   //frame duration + previous images
   NSUInteger offset = sizeof(UInt32) + (index * (imageLength + sizeof(outDuration)));
@@ -184,20 +182,22 @@ void releaseData(void *data, const void *imageData, size_t size)
   
   //retain the memory map, it will be released when releaseData is called
   CFRetain((CFDataRef)memoryMap);
-  CGDataProviderRef dataProvider = CGDataProviderCreateWithData((void *)memoryMap, imageData, width * height * kPINAnimatedImageComponentsPerPixel, releaseData);
+  CGDataProviderRef dataProvider = CGDataProviderCreateWithData((void *)memoryMap, imageData, imageLength, releaseData);
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
   CGImageRef imageRef = CGImageCreate(width,
                                       height,
                                       kPINAnimatedImageBitsPerComponent,
-                                      kPINAnimatedImageBitsPerComponent * kPINAnimatedImageComponentsPerPixel,
-                                      kPINAnimatedImageComponentsPerPixel * width,
+                                      bitsPerPixel,
+                                      bitsPerPixel / 8 * width,
                                       colorSpace,
                                       bitmapInfo,
                                       dataProvider,
                                       NULL,
                                       NO,
                                       kCGRenderingIntentDefault);
-  CFAutorelease(imageRef);
+  if (imageRef) {
+    CFAutorelease(imageRef);
+  }
   
   CGColorSpaceRelease(colorSpace);
   CGDataProviderRelease(dataProvider);
@@ -220,17 +220,24 @@ void releaseData(void *data, const void *imageData, size_t size)
   return height;
 }
 
++ (UInt32)bitsPerPixelFromMemoryMap:(NSData *)memoryMap
+{
+  UInt32 bitsPerPixel;
+  [memoryMap getBytes:&bitsPerPixel range:NSMakeRange(10, sizeof(bitsPerPixel))];
+  return bitsPerPixel;
+}
+
 + (UInt32)loopCountFromMemoryMap:(NSData *)memoryMap
 {
   UInt32 loopCount;
-  [memoryMap getBytes:&loopCount range:NSMakeRange(10, sizeof(loopCount))];
+  [memoryMap getBytes:&loopCount range:NSMakeRange(14, sizeof(loopCount))];
   return loopCount;
 }
 
 + (UInt32)frameCountFromMemoryMap:(NSData *)memoryMap
 {
   UInt32 frameCount;
-  [memoryMap getBytes:&frameCount range:NSMakeRange(14, sizeof(frameCount))];
+  [memoryMap getBytes:&frameCount range:NSMakeRange(18, sizeof(frameCount))];
   return frameCount;
 }
 
@@ -238,7 +245,7 @@ void releaseData(void *data, const void *imageData, size_t size)
 + (Float32 *)createDurations:(Float32 *)durations fromMemoryMap:(NSData *)memoryMap frameCount:(UInt32)frameCount frameSize:(NSUInteger)frameSize totalDuration:(nonnull CFTimeInterval *)totalDuration
 {
   *totalDuration = 0;
-  [memoryMap getBytes:&durations range:NSMakeRange(18, sizeof(Float32) * frameCount)];
+  [memoryMap getBytes:&durations range:NSMakeRange(22, sizeof(Float32) * frameCount)];
 
   for (NSUInteger idx = 0; idx < frameCount; idx++) {
     *totalDuration += durations[idx];
@@ -302,6 +309,7 @@ void releaseData(void *data, const void *imageData, size_t size)
          inSharedImageFiles:self.sharedAnimatedImage.maps
                       width:(UInt32)self.sharedAnimatedImage.width
                      height:(UInt32)self.sharedAnimatedImage.height
+               bitsPerPixel:(UInt32)self.sharedAnimatedImage.bitsPerPixel
                  bitmapInfo:self.sharedAnimatedImage.bitmapInfo];
 }
 
@@ -391,7 +399,7 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
   return self;
 }
 
-- (void)setInfoProcessedWithCoverImage:(PINImage *)coverImage UUID:(NSUUID *)UUID durations:(Float32 *)durations totalDuration:(CFTimeInterval)totalDuration loopCount:(size_t)loopCount frameCount:(size_t)frameCount width:(size_t)width height:(size_t)height bitmapInfo:(CGBitmapInfo)bitmapInfo
+- (void)setInfoProcessedWithCoverImage:(PINImage *)coverImage UUID:(NSUUID *)UUID durations:(Float32 *)durations totalDuration:(CFTimeInterval)totalDuration loopCount:(size_t)loopCount frameCount:(size_t)frameCount width:(size_t)width height:(size_t)height bitsPerPixel:(size_t)bitsPerPixel bitmapInfo:(CGBitmapInfo)bitmapInfo
 {
   NSAssert(_status == PINAnimatedImageStatusUnprocessed, @"Status should be unprocessed.");
   [_coverImageLock lockWithBlock:^{
@@ -405,6 +413,7 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
   _frameCount = frameCount;
   _width = width;
   _height = height;
+  _bitsPerPixel = bitsPerPixel;
   _bitmapInfo = bitmapInfo;
   _status = PINAnimatedImageStatusInfoProcessed;
 }
@@ -437,7 +446,7 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
   __block PINImage *coverImage = nil;
   [_coverImageLock lockWithBlock:^{
     if (_coverImage == nil) {
-      CGImageRef imageRef = [PINAnimatedImage imageAtIndex:0 inMemoryMap:self.maps[0].memoryMappedData width:(UInt32)self.width height:(UInt32)self.height bitmapInfo:self.bitmapInfo];
+      CGImageRef imageRef = [PINAnimatedImage imageAtIndex:0 inMemoryMap:self.maps[0].memoryMappedData width:(UInt32)self.width height:(UInt32)self.height bitsPerPixel:(UInt32)self.bitsPerPixel bitmapInfo:self.bitmapInfo];
 #if PIN_TARGET_IOS
       coverImage = [UIImage imageWithCGImage:imageRef];
 #elif PIN_TARGET_MAC

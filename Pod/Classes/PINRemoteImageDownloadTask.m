@@ -23,6 +23,7 @@
 {
     if (self = [super init]) {
         _canSetDataTaskPriority = [NSURLSessionTask instancesRespondToSelector:@selector(setPriority:)];
+        _numberOfRetries = 0;
     }
     return self;
 }

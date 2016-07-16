@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * __nonnull const PINURLErrorDomain;
+
 @protocol PINURLSessionManagerDelegate <NSObject>
 
 @required

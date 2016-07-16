@@ -20,7 +20,7 @@
 static const NSUInteger maxFileSize = 50000000; //max file size in bytes
 static const Float32 maxFileDuration = 1; //max duration of a file in seconds
 
-typedef void(^PINAnimatedImageInfoProcessed)(PINImage *coverImage, NSUUID *UUID, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, size_t width, size_t height, UInt32 bitmapInfo);
+typedef void(^PINAnimatedImageInfoProcessed)(PINImage *coverImage, NSUUID *UUID, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, size_t width, size_t height, size_t bitsPerPixel, UInt32 bitmapInfo);
 
 BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status);
 BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
@@ -166,12 +166,12 @@ static dispatch_once_t startupCleanupOnce;
   
   if (startProcessing) {
     dispatch_async(self.serialProcessingQueue, ^{
-      [[self class] processAnimatedImage:animatedImageData temporaryDirectory:[PINAnimatedImageManager temporaryDirectory] infoCompletion:^(PINImage *coverImage, NSUUID *UUID, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, size_t width, size_t height, UInt32 bitmapInfo) {
+      [[self class] processAnimatedImage:animatedImageData temporaryDirectory:[PINAnimatedImageManager temporaryDirectory] infoCompletion:^(PINImage *coverImage, NSUUID *UUID, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, size_t width, size_t height, size_t bitsPerPixel, UInt32 bitmapInfo) {
         __block NSArray *infoCompletions = nil;
         __block PINSharedAnimatedImage *sharedAnimatedImage = nil;
         [_lock lockWithBlock:^{
           sharedAnimatedImage = [self.animatedImages objectForKey:animatedImageData];
-          [sharedAnimatedImage setInfoProcessedWithCoverImage:coverImage UUID:UUID durations:durations totalDuration:totalDuration loopCount:loopCount frameCount:frameCount width:width height:height bitmapInfo:bitmapInfo];
+          [sharedAnimatedImage setInfoProcessedWithCoverImage:coverImage UUID:UUID durations:durations totalDuration:totalDuration loopCount:loopCount frameCount:frameCount width:width height:height bitsPerPixel:bitsPerPixel bitmapInfo:bitmapInfo];
           infoCompletions = sharedAnimatedImage.infoCompletions;
           sharedAnimatedImage.infoCompletions = @[];
         }];
@@ -252,6 +252,7 @@ ERROR;}) \
   HANDLE_PROCESSING_ERROR(fileHandleError);
   UInt32 width;
   UInt32 height;
+  UInt32 bitsPerPixel;
   UInt32 bitmapInfo;
   NSUInteger fileCount = 0;
   UInt32 frameCountForFile = 0;
@@ -295,6 +296,7 @@ ERROR;}) \
           
           width = (UInt32)CGImageGetWidth(frameImage);
           height = (UInt32)CGImageGetHeight(frameImage);
+          bitsPerPixel = (UInt32)CGImageGetBitsPerPixel(frameImage);
           
 #if PIN_TARGET_IOS
           coverImage = [UIImage imageWithCGImage:frameImage];
@@ -312,13 +314,13 @@ ERROR;}) \
       if (PROCESSING_ERROR == nil) {
         //Get size, write file header get coverImage
         dispatch_group_async(diskGroup, diskWriteQueue, ^{
-          NSError *fileHeaderError = [self writeFileHeader:fileHandle width:width height:height loopCount:loopCount frameCount:frameCount bitmapInfo:bitmapInfo durations:durations];
+          NSError *fileHeaderError = [self writeFileHeader:fileHandle width:width height:height bitsPerPixel:bitsPerPixel loopCount:loopCount frameCount:frameCount bitmapInfo:bitmapInfo durations:durations];
           HANDLE_PROCESSING_ERROR(fileHeaderError);
           if (fileHeaderError == nil) {
             [fileHandle closeFile];
             
             PINLog(@"notifying info");
-            infoCompletion(coverImage, UUID, durations, totalDuration, loopCount, frameCount, width, height, bitmapInfo);
+            infoCompletion(coverImage, UUID, durations, totalDuration, loopCount, frameCount, width, height, bitsPerPixel, bitmapInfo);
           }
         });
         fileCount = 1;
@@ -380,34 +382,41 @@ ERROR;}) \
               });
             }
             
-            CGImageRef frameImage = CGImageSourceCreateImageAtIndex(imageSource, frameIdx, (CFDictionaryRef)@{(__bridge NSString *)kCGImageSourceShouldCache : (__bridge NSNumber *)kCFBooleanFalse});
-            if (frameImage == nil) {
-              NSError *frameImageError = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorImageFrameError userInfo:nil];
-              HANDLE_PROCESSING_ERROR(frameImageError);
-              break;
-            }
-            
             Float32 duration = durations[frameIdx];
             fileDuration += duration;
-            NSData *frameData = (__bridge_transfer NSData *)CGDataProviderCopyData(CGImageGetDataProvider(frameImage));
-            NSAssert(frameData.length == width * height * kPINAnimatedImageComponentsPerPixel, @"data should be width * height * 4 bytes");
+            
             dispatch_group_async(diskGroup, diskWriteQueue, ^{
+              if (PROCESSING_ERROR) {
+                return;
+              }
+              
+              CGImageRef frameImage = CGImageSourceCreateImageAtIndex(imageSource, frameIdx, (CFDictionaryRef)@{(__bridge NSString *)kCGImageSourceShouldCache : (__bridge NSNumber *)kCFBooleanFalse});
+              if (frameImage == nil) {
+                NSError *frameImageError = [NSError errorWithDomain:kPINAnimatedImageErrorDomain code:PINAnimatedImageErrorImageFrameError userInfo:nil];
+                HANDLE_PROCESSING_ERROR(frameImageError);
+                return;
+              }
+              
+              NSData *frameData = (__bridge_transfer NSData *)CGDataProviderCopyData(CGImageGetDataProvider(frameImage));
+              NSAssert(frameData.length == width * height * bitsPerPixel / 8, @"data should be width * height * bytes per pixel");
               NSError *frameWriteError = [self writeFrameToFile:fileHandle duration:duration frameData:frameData];
               HANDLE_PROCESSING_ERROR(frameWriteError);
+              
+              CGImageRelease(frameImage);
             });
             
-            CGImageRelease(frameImage);
             frameCountForFile++;
           }
         }
       } else {
         completion(NO, nil, PROCESSING_ERROR);
       }
-      
-      CFRelease(imageSource);
     }
     
     dispatch_group_wait(diskGroup, DISPATCH_TIME_FOREVER);
+    if (imageSource) {
+      CFRelease(imageSource);
+    }
     
     //close the file handle
     PINLog(@"closing last file: %@", fileHandle);
@@ -510,14 +519,15 @@ ERROR;}) \
  
  */
 
-+ (NSError *)writeFileHeader:(NSFileHandle *)fileHandle width:(UInt32)width height:(UInt32)height loopCount:(UInt32)loopCount frameCount:(UInt32)frameCount bitmapInfo:(UInt32)bitmapInfo durations:(Float32*)durations
++ (NSError *)writeFileHeader:(NSFileHandle *)fileHandle width:(UInt32)width height:(UInt32)height bitsPerPixel:(UInt32)bitsPerPixel loopCount:(UInt32)loopCount frameCount:(UInt32)frameCount bitmapInfo:(UInt32)bitmapInfo durations:(Float32*)durations
 {
   NSError *error = nil;
   @try {
-    UInt16 version = 1;
+    UInt16 version = 2;
     [fileHandle writeData:[NSData dataWithBytes:&version length:sizeof(version)]];
     [fileHandle writeData:[NSData dataWithBytes:&width length:sizeof(width)]];
     [fileHandle writeData:[NSData dataWithBytes:&height length:sizeof(height)]];
+    [fileHandle writeData:[NSData dataWithBytes:&bitsPerPixel length:sizeof(bitsPerPixel)]];
     [fileHandle writeData:[NSData dataWithBytes:&loopCount length:sizeof(loopCount)]];
     [fileHandle writeData:[NSData dataWithBytes:&frameCount length:sizeof(frameCount)]];
     [fileHandle writeData:[NSData dataWithBytes:&bitmapInfo length:sizeof(bitmapInfo)]];

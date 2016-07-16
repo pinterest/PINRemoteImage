@@ -315,9 +315,8 @@
      {
          NSError *outError = result.error;
          
-         XCTAssert([outError.domain isEqualToString:NSURLErrorDomain]);
-         XCTAssert(outError.code == NSURLErrorRedirectToNonExistentLocation);
-         XCTAssert([outError.localizedDescription isEqualToString:@"The requested URL was not found on this server."]);
+         XCTAssert([outError.domain isEqualToString:PINURLErrorDomain]);
+         XCTAssert(outError.code == 404);
          
          [expectation fulfill];
     }];
