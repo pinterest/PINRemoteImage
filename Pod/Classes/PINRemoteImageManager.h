@@ -131,6 +131,12 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
 @property (nonatomic, readonly, nonnull) PINCache * cache;
 
 /**
+ The dispatch queue that will be used for completion and progress callbacks (`PINRemoteImageManagerImageCompletion`) against image download requests.
+ Defaults to the main queue.
+ */
+@property (nonatomic, strong, nonnull) dispatch_queue_t callbackQueue;
+
+/**
  Create and return a PINRemoteImageManager created with the specified configuration. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. Specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc.
  @param configuration The configuration used to create the PINRemoteImageManager.
  @return A PINRemoteImageManager with the specified configuration.

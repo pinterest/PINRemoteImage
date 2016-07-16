@@ -120,7 +120,6 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 @property (nonatomic, assign) BOOL shouldBlurProgressive;
 @property (nonatomic, assign) CGSize maxProgressiveRenderSize;
 @property (nonatomic, assign) NSTimeInterval estimatedRemainingTimeThreshold;
-@property (nonatomic, strong) dispatch_queue_t callbackQueue;
 @property (nonatomic, strong) NSOperationQueue *concurrentOperationQueue;
 @property (nonatomic, strong) NSOperationQueue *urlSessionTaskQueue;
 @property (nonatomic, strong) NSMutableArray <PINTaskQOS *> *taskQOS;
@@ -187,7 +186,7 @@ static dispatch_once_t sharedDispatchToken;
         if (!configuration) {
             configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
         }
-        _callbackQueue = dispatch_queue_create("PINRemoteImageManagerCallbackQueue", DISPATCH_QUEUE_CONCURRENT);
+        _callbackQueue = dispatch_get_main_queue();
         _lock = [[PINRemoteLock alloc] initWithName:@"PINRemoteImageManager"];
         _concurrentOperationQueue = [[NSOperationQueue alloc] init];
         _concurrentOperationQueue.name = @"PINRemoteImageManager Concurrent Operation Queue";

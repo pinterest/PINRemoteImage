@@ -234,6 +234,37 @@
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
+- (void)testCallbackQueueDefaultsToMainQueue
+{
+    dispatch_queue_t callbackQueue = self.imageManager.callbackQueue;
+    dispatch_queue_t mainqueue = dispatch_get_main_queue();
+    XCTAssert(callbackQueue == mainqueue);
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Downloading JPEG image"];
+    [self.imageManager downloadImageWithURL:[self JPEGURL]
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                                 completion:^(PINRemoteImageManagerResult *result)
+     {
+         XCTAssertTrue([[NSThread currentThread] isMainThread]);
+         [expectation fulfill];
+     }];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
+- (void)testCanUseDifferentCallbackQueue {
+    dispatch_queue_t callbackQueue = dispatch_queue_create("PINRemoteImageManagerCallbackQueue", DISPATCH_QUEUE_CONCURRENT);
+    self.imageManager.callbackQueue = callbackQueue;
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Downloading JPEG image"];
+    [self.imageManager downloadImageWithURL:[self JPEGURL]
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                                 completion:^(PINRemoteImageManagerResult *result)
+     {
+         XCTAssertFalse([[NSThread currentThread] isMainThread]);
+         [expectation fulfill];
+     }];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+    
+}
+
 - (void)testErrorOnNilURLDownload
 {
 #pragma clang diagnostic push
