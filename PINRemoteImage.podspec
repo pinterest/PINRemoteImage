@@ -33,7 +33,7 @@ Pod::Spec.new do |s|
     cs.exclude_files = 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h', 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m'
     cs.public_header_files = 'Pod/Classes/**/*.h'
     cs.frameworks = 'ImageIO', 'Accelerate'
-    cs.dependency 'PINCache', '>=2.1'
+    cs.dependency 'PINCache', '>=3.0.0-beta'
   end
   
   s.subspec 'iOS' do |ios|
