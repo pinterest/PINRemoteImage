@@ -1486,7 +1486,7 @@ static dispatch_once_t sharedDispatchToken;
     if (container) {
         materialize(container);
     } else {
-        [self.cache.diskCache objectForKey:key block:^(PINDiskCache * _Nonnull cache, NSString * _Nonnull key, id<NSCoding>  _Nullable object, NSURL * _Nullable fileURL) {
+        [self.cache.diskCache objectForKey:key block:^(PINDiskCache * _Nonnull cache, NSString * _Nonnull key, id<NSCoding>  _Nullable object) {
             if (object) {
                 materialize(object);
             } else {
