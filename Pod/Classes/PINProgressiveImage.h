@@ -43,4 +43,12 @@
  */
 - (nullable NSData *)data;
 
+/**
+ Applies a gaussian blur to the provided input image.
+ If the blur cannot be applied, the original image is returned.
+
+ @return PINImage a copy of inputImage with a gaussian blur applied
+ */
++ (nullable PINImage *)postProcessImage:(nullable PINImage *)inputImage withProgress:(float)progress;
+
 @end

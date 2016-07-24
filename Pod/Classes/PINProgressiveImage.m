@@ -9,10 +9,23 @@
 #import "PINProgressiveImage.h"
 
 #import <ImageIO/ImageIO.h>
-#import <Accelerate/Accelerate.h>
+#import <CoreImage/CoreImage.h>
 
 #import "PINRemoteImage.h"
 #import "PINImage+DecodedImage.h"
+
+/**
+ * true if we should share a single CIContext across threads, false to create a reuse pool to confine
+ * each context to one thread.
+ *
+ * The CoreImage documentation claims that CIContexts are immutable and safe to share between threads.
+ * However, in past implementations, two contexts (a GPU and a software context) were shared between
+ * threads and crashes would occur. Crashes are expected when GPU contexts are used while the app
+ * is in the background but there was logic to disable the GPU context when the app gets backgrounded.
+ * So either that switching mechanism wasn't aggressive enough, or CIContexts are not truly thread-safe,
+ * or there was some other issue causing crashes.
+*/
+#define PIN_CICONTEXT_MULTITHREADING 1
 
 @interface PINProgressiveImage ()
 
@@ -228,7 +241,7 @@
             CGImageRef image = CGImageSourceCreateImageAtIndex(self.imageSource, 0, NULL);
             if (image) {
                 if (blurred) {
-                    currentImage = [self postProcessImage:[PINImage imageWithCGImage:image] withProgress:progress];
+                    currentImage = [PINProgressiveImage postProcessImage:[PINImage imageWithCGImage:image] withProgress:progress];
                 } else {
                     currentImage = [PINImage imageWithCGImage:image];
                 }
@@ -311,163 +324,106 @@
     return remainingBytes / self.bytesPerSecond;
 }
 
-//Must be called within lock
-//Heavily cribbed from https://developer.apple.com/library/ios/samplecode/UIImageEffects/Listings/UIImageEffects_UIImageEffects_m.html#//apple_ref/doc/uid/DTS40013396-UIImageEffects_UIImageEffects_m-DontLinkElementID_9
-- (PINImage *)postProcessImage:(PINImage *)inputImage withProgress:(float)progress
++ (PINImage *)postProcessImage:(PINImage *)inputImage withProgress:(float)progress
 {
     PINImage *outputImage = nil;
-    CGImageRef inputImageRef = CGImageRetain(inputImage.CGImage);
-    if (inputImageRef == nil) {
-        return nil;
+    CIImage *inputCIImage = [CIImage imageWithCGImage:inputImage.CGImage options:nil];
+    if (inputCIImage == nil) {
+        return inputImage;
     }
     
-    CGSize inputSize = inputImage.size;
-    if (inputSize.width < 1 ||
-        inputSize.height < 1) {
-        CGImageRelease(inputImageRef);
-        return nil;
+    CGRect bounds = (CGRect){ .size = inputImage.size };
+    if (bounds.size.width < 1 ||
+        bounds.size.height < 1) {
+        return inputImage;
     }
 
+    
+#if PIN_CICONTEXT_MULTITHREADING
+    // Share one context across all threads.
+    static CIContext *context;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        context = [CIContext contextWithOptions:@{ kCIContextUseSoftwareRenderer: @YES }];
+    });
+#else
+    // Create a reuse pool of contexts where each is confined to a thread.
+    static NSMutableArray *contexts;
+    static NSLock *contextsLock;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        contexts = [NSMutableArray array];
+        contextsLock = [[NSLock alloc] init];
+    });
+    
+    [contextsLock lock];
+        CIContext *context = [contexts lastObject];
+        if (context != nil) {
+            [contexts removeLastObject];
+        }
+    [contextsLock unlock];
+
+    if (context == nil) {
+        // NOTE: We use the software renderer because accessing the GPU when the app
+        // is not in the foreground is unsafe. We have attempted switching to the software
+        // renderer when the app goes into the background but crashes still remain.
+        context = [CIContext contextWithOptions:@{ kCIContextUseSoftwareRenderer: @YES }];
+    }
+#endif
+    
 #if PIN_TARGET_IOS
     CGFloat imageScale = inputImage.scale;
+    CGSize maxInputSize = context.inputImageMaximumSize;
+    CGSize maxOutputSize = context.outputImageMaximumSize;
+    if (bounds.size.width > maxInputSize.width ||
+        bounds.size.height > maxInputSize.height ||
+        bounds.size.width > maxOutputSize.width ||
+        bounds.size.height > maxOutputSize.height) {
+        return inputImage;
+    }
 #elif PIN_TARGET_MAC
     // TODO: What scale factor should be used here?
     CGFloat imageScale = [[NSScreen mainScreen] backingScaleFactor];
 #endif
     
-    CGFloat radius = (inputImage.size.width / 25.0) * MAX(0, 1.0 - progress);
+    CGFloat radius = (bounds.size.width / 25.0) * MAX(0, 1.0 - progress);
     radius *= imageScale;
+    radius = floor(radius);
     
-    //we'll round the radius to a whole number below anyway,
     if (radius < FLT_EPSILON) {
-        CGImageRelease(inputImageRef);
         return inputImage;
     }
     
-    CGContextRef ctx;
-#if PIN_TARGET_IOS
-    UIGraphicsBeginImageContextWithOptions(inputSize, YES, imageScale);
-    ctx = UIGraphicsGetCurrentContext();
-#elif PIN_TARGET_MAC
-    ctx = CGBitmapContextCreate(0, inputSize.width, inputSize.height, 8, 0, [NSColorSpace genericRGBColorSpace].CGColorSpace, kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little);
-#endif
-    
-    if (ctx) {
-#if PIN_TARGET_IOS
-        CGContextScaleCTM(ctx, 1.0, -1.0);
-        CGContextTranslateCTM(ctx, 0, -inputSize.height);
-#endif
-        
-        vImage_Buffer effectInBuffer;
-        vImage_Buffer scratchBuffer;
-        
-        vImage_Buffer *inputBuffer;
-        vImage_Buffer *outputBuffer;
-        
-        vImage_CGImageFormat format = {
-            .bitsPerComponent = 8,
-            .bitsPerPixel = 32,
-            .colorSpace = NULL,
-            // (kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little)
-            // requests a BGRA buffer.
-            .bitmapInfo = kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little,
-            .version = 0,
-            .decode = NULL,
-            .renderingIntent = kCGRenderingIntentDefault
-        };
-        
-        vImage_Error e = vImageBuffer_InitWithCGImage(&effectInBuffer, &format, NULL, inputImage.CGImage, kvImagePrintDiagnosticsToConsole);
-        if (e == kvImageNoError)
-        {
-            e = vImageBuffer_Init(&scratchBuffer, effectInBuffer.height, effectInBuffer.width, format.bitsPerPixel, kvImageNoFlags);
-            if (e == kvImageNoError) {
-                inputBuffer = &effectInBuffer;
-                outputBuffer = &scratchBuffer;
-                
-                // A description of how to compute the box kernel width from the Gaussian
-                // radius (aka standard deviation) appears in the SVG spec:
-                // http://www.w3.org/TR/SVG/filters.html#feGaussianBlurElement
-                //
-                // For larger values of 's' (s >= 2.0), an approximation can be used: Three
-                // successive box-blurs build a piece-wise quadratic convolution kernel, which
-                // approximates the Gaussian kernel to within roughly 3%.
-                //
-                // let d = floor(s * 3*sqrt(2*pi)/4 + 0.5)
-                //
-                // ... if d is odd, use three box-blurs of size 'd', centered on the output pixel.
-                //
-                if (radius - 2. < __FLT_EPSILON__)
-                    radius = 2.;
-                uint32_t wholeRadius = floor((radius * 3. * sqrt(2 * M_PI) / 4 + 0.5) / 2);
-                
-                wholeRadius |= 1; // force wholeRadius to be odd so that the three box-blur methodology works.
-                
-                //calculate the size necessary for vImageBoxConvolve_ARGB8888, this does not actually do any operations.
-                NSInteger tempBufferSize = vImageBoxConvolve_ARGB8888(inputBuffer, outputBuffer, NULL, 0, 0, wholeRadius, wholeRadius, NULL, kvImageGetTempBufferSize | kvImageEdgeExtend);
-                void *tempBuffer = malloc(tempBufferSize);
-                
-                if (tempBuffer) {
-                    //errors can be ignored because we've passed in allocated memory
-                    vImageBoxConvolve_ARGB8888(inputBuffer, outputBuffer, tempBuffer, 0, 0, wholeRadius, wholeRadius, NULL, kvImageEdgeExtend);
-                    vImageBoxConvolve_ARGB8888(outputBuffer, inputBuffer, tempBuffer, 0, 0, wholeRadius, wholeRadius, NULL, kvImageEdgeExtend);
-                    vImageBoxConvolve_ARGB8888(inputBuffer, outputBuffer, tempBuffer, 0, 0, wholeRadius, wholeRadius, NULL, kvImageEdgeExtend);
-                    
-                    free(tempBuffer);
-                    
-                    //switch input and output
-                    vImage_Buffer *temp = inputBuffer;
-                    inputBuffer = outputBuffer;
-                    outputBuffer = temp;
-                    
-                    CGImageRef effectCGImage = vImageCreateCGImageFromBuffer(inputBuffer, &format, &cleanupBuffer, NULL, kvImageNoAllocate, NULL);
-                    if (effectCGImage == NULL) {
-                        //if creating the cgimage failed, the cleanup buffer on input buffer will not be called, we must dealloc ourselves
-                        free(inputBuffer->data);
-                    } else {
-                        // draw effect image
-                        CGContextSaveGState(ctx);
-                        CGContextDrawImage(ctx, CGRectMake(0, 0, inputSize.width, inputSize.height), effectCGImage);
-                        CGContextRestoreGState(ctx);
-                        CGImageRelease(effectCGImage);
-                    }
-                    
-                    // Cleanup
-                    free(outputBuffer->data);
-#if PIN_TARGET_IOS
-                    outputImage = UIGraphicsGetImageFromCurrentImageContext();
-#elif PIN_TARGET_MAC
-                    CGImageRef outputImageRef = CGBitmapContextCreateImage(ctx);
-                    outputImage = [[NSImage alloc] initWithCGImage:outputImageRef size:inputSize];
-                    CFRelease(outputImageRef);
-#endif
-                    
-                }
-            } else {
-                if (scratchBuffer.data) {
-                    free(scratchBuffer.data);
-                }
-                free(effectInBuffer.data);
-            }
-        } else {
-            if (effectInBuffer.data) {
-                free(effectInBuffer.data);
-            }
-        }
+    // Clamp the image so that its edges extend infinitely and we don't get a black border.
+    CIFilter *clamp = [CIFilter filterWithName:@"CIAffineClamp" keysAndValues:kCIInputImageKey, inputCIImage, nil];
+    CIImage *clamped = clamp.outputImage;
+    if (clamped == nil) {
+        return inputImage;
     }
     
-#if PIN_TARGET_IOS
-    UIGraphicsEndImageContext();
-#endif
+    CIFilter *blur = [CIFilter filterWithName:@"CIGaussianBlur" keysAndValues:kCIInputImageKey, clamped, kCIInputRadiusKey, @(radius), nil];
+    CIImage *blurred = blur.outputImage;
+    if (blurred == nil) {
+        return inputImage;
+    }
 
-    CGImageRelease(inputImageRef);
+    CGImageRef outputImageRef = [context createCGImage:blurred fromRect:bounds];
+
+#if !PIN_CICONTEXT_MULTITHREADING
+    // Return our context to the reuse pool.
+    [contextsLock lock];
+        [contexts addObject:context];
+    [contextsLock unlock];
+#endif
+    
+#if PIN_TARGET_IOS
+    outputImage = [UIImage imageWithCGImage:outputImageRef];
+#elif PIN_TARGET_MAC
+    outputImage = [[NSImage alloc] initWithCGImage:outputImageRef size:bounds.size];
+#endif
+    CGImageRelease(outputImageRef);
     
     return outputImage;
-}
-
-//  Helper function to handle deferred cleanup of a buffer.
-static void cleanupBuffer(void *userData, void *buf_data)
-{
-    free(buf_data);
 }
 
 @end
