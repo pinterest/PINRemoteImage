@@ -258,7 +258,7 @@
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
      {
-         XCTAssertFalse([[NSThread currentThread] isMainThread]);
+         XCTAssertFalse([NSThread isMainThread]);
          [expectation fulfill];
      }];
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
