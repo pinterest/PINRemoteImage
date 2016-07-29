@@ -1351,7 +1351,7 @@ static dispatch_once_t sharedDispatchToken;
 - (id<PINRemoteImageCaching>) _createDefaultCache
 {
 #if USE_PINCACHE
-    return [[PINRemoteImagePINCache alloc] init];
+    return [[PINCache alloc] initWithName:@"PINRemoteImageManagerCache"];
 #else
     return [[PINRemoteImageBasicCache alloc] init];
 #endif
