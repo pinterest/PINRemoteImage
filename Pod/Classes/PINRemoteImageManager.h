@@ -19,7 +19,6 @@
 
 #import "PINRemoteImageManagerResult.h"
 
-//@class PINCache;
 @class PINRemoteImageManagerResult;
 
 extern NSString * __nonnull const PINRemoteImageManagerErrorDomain;

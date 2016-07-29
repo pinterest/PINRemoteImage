@@ -47,8 +47,8 @@
 -(void)objectCachedOnDiskForKey:(NSString *)key block:(PINRemoteImageCachingObjectBlock)block
 {
     __weak typeof(self) welf = self;
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
-        if(block) {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        if (block) {
             __strong typeof(self) sself = welf;
             block(sself, key, [sself.cache objectForKey:key]);
         }
@@ -77,8 +77,8 @@
     __weak typeof(self) welf = self;
     id object = [self.cache objectForKey:key];
     [self.cache removeObjectForKey:key];
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
-        if(block) {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        if (block) {
             __strong typeof(self) sself = welf;
             block(sself, key, object);
         }

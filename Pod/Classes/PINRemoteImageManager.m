@@ -26,10 +26,10 @@
 #import "NSData+ImageDetectors.h"
 #import "PINImage+DecodedImage.h"
 
-#import "PINRemoteImageBasicCache.h"
-
 #if USE_PINCACHE
 #import "PINCache+PINRemoteImageCaching.h"
+#else
+#import "PINRemoteImageBasicCache.h"
 #endif
 
 
@@ -201,7 +201,7 @@ static dispatch_once_t sharedDispatchToken;
 {
     if (self = [super init]) {
         
-        if(imageCache) {
+        if (imageCache) {
             self.cache = imageCache;
         }
         else {
