@@ -121,7 +121,6 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 
 }
 
-//@property (nonatomic, strong) PINCache *cache;
 @property (nonatomic, strong) id<PINRemoteImageCaching> cache;
 @property (nonatomic, strong) PINURLSessionManager *sessionManager;
 @property (nonatomic, assign) NSTimeInterval timeout;
@@ -203,9 +202,8 @@ static dispatch_once_t sharedDispatchToken;
         
         if (imageCache) {
             self.cache = imageCache;
-        }
-        else {
-            self.cache = [self _createDefaultCache];
+        } else {
+            self.cache = [self defaultImageCache];
         }
         
         if (!configuration) {
@@ -245,6 +243,15 @@ static dispatch_once_t sharedDispatchToken;
         _alternateRepProvider = alternateRepProvider;
     }
     return self;
+}
+
+- (id<PINRemoteImageCaching>)defaultImageCache
+{
+#if USE_PINCACHE
+    return [[PINCache alloc] initWithName:@"PINRemoteImageManagerCache"];
+#else
+    return [[PINRemoteImageBasicCache alloc] init];
+#endif
 }
 
 - (void)lockOnMainThread
@@ -1348,15 +1355,6 @@ static dispatch_once_t sharedDispatchToken;
 
 #pragma mark - Caching
 
-- (id<PINRemoteImageCaching>) _createDefaultCache
-{
-#if USE_PINCACHE
-    return [[PINCache alloc] initWithName:@"PINRemoteImageManagerCache"];
-#else
-    return [[PINRemoteImageBasicCache alloc] init];
-#endif
-}
-
 - (BOOL)materializeAndCacheObject:(id)object
                               key:(NSString *)key
                           options:(PINRemoteImageManagerDownloadOptions)options
@@ -1516,8 +1514,7 @@ static dispatch_once_t sharedDispatchToken;
                                                          id _Nullable object) {
           if (object) {
               materialize(object);
-          }
-          else {
+          } else {
               completion(NO, NO, nil, nil);
           }
         }];
