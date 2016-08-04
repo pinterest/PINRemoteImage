@@ -62,7 +62,10 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'WebP' do |webp|
-    webp.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) PIN_WEBP=1' }
+    webp.xcconfig = {
+        'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) PIN_WEBP=1', 
+        'USER_HEADER_SEARCH_PATHS' => '$(inherited) $(SRCROOT)/libwebp/src'
+    }
     webp.dependency 'PINRemoteImage/Core'
     webp.dependency 'libwebp'
   end
