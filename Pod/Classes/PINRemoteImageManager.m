@@ -548,7 +548,7 @@ static dispatch_once_t sharedDispatchToken;
 
     //Check to see if the image is in memory cache and we're on the main thread.
     //If so, special case this to avoid flashing the UI
-    id object = [self.cache objectCachedInMemoryForKey:key];
+    id object = [self.cache objectFromMemoryCacheForKey:key];
     if (object) {
         if ([self earlyReturnWithOptions:options url:url key:key object:object completion:completion]) {
             return nil;
@@ -1091,7 +1091,7 @@ static dispatch_once_t sharedDispatchToken;
 {
     CFTimeInterval requestTime = CACurrentMediaTime();
     
-    id object = [self.cache objectCachedInMemoryForKey:cacheKey];
+    id object = [self.cache objectFromMemoryCacheForKey:cacheKey];
     PINImage *image;
     id alternativeRepresentation;
     NSError *error = nil;
@@ -1292,7 +1292,7 @@ static dispatch_once_t sharedDispatchToken;
             NSString *cacheKey = [strongSelf cacheKeyForURL:url processorKey:nil];
             
             //we don't actually need the object, just need to know it exists so that we can request it later
-            BOOL hasObject = [self.cache hasObjectForKey:cacheKey];
+            BOOL hasObject = [self.cache objectExistsInCacheForKey:cacheKey];
             
             if (hasObject) {
                 highestQualityDownloadedIdx = idx;
@@ -1453,7 +1453,7 @@ static dispatch_once_t sharedDispatchToken;
     
     if (image == nil && alternateRepresentation == nil) {
         PINLog(@"Invalid item in cache");
-        [self.cache removeCachedObjectForKey:key block:nil];
+        [self.cache removeCachedObjectForKey:key completion:nil];
         return NO;
     }
     return YES;
@@ -1505,11 +1505,11 @@ static dispatch_once_t sharedDispatchToken;
         completion(YES, valid, image, alternativeRepresentation);
     };
     
-    PINRemoteImageMemoryContainer *container = [self.cache objectCachedInMemoryForKey:key];
+    PINRemoteImageMemoryContainer *container = [self.cache objectFromMemoryCacheForKey:key];
     if (container) {
         materialize(container);
     } else {
-        [self.cache objectCachedOnDiskForKey:key block:^(id<PINRemoteImageCaching> _Nonnull cache,
+        [self.cache objectFromDiskCacheForKey:key completion:^(id<PINRemoteImageCaching> _Nonnull cache,
                                                          NSString *_Nonnull key,
                                                          id _Nullable object) {
           if (object) {

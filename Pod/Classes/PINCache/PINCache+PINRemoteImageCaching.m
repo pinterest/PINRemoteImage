@@ -13,7 +13,7 @@
 //******************************************************************************************************
 // Memory cache methods
 //******************************************************************************************************
--(nullable id)objectCachedInMemoryForKey:(NSString *)key
+-(nullable id)objectFromMemoryCacheForKey:(NSString *)key
 {
     return [self.memoryCache objectForKey:key];
 }
@@ -26,18 +26,18 @@
 //******************************************************************************************************
 // Disk cache methods
 //******************************************************************************************************
--(nullable id)objectCachedOnDiskForKey:(NSString *)key
+-(nullable id)objectFromDiskCacheForKey:(NSString *)key
 {
     return [self.diskCache objectForKey:key];
 }
 
--(void)objectCachedOnDiskForKey:(NSString *)key block:(PINRemoteImageCachingObjectBlock)block
+-(void)objectFromDiskCacheForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
 {
     __weak typeof(self) welf = self;
     [self.diskCache objectForKey:key block:^(PINDiskCache * _Nonnull cache, NSString * _Nonnull key, id<NSCoding>  _Nullable object) {
-        if(block) {
+        if(completion) {
             id sself = welf;
-            block(sself, key, object);
+            completion(sself, key, object);
         }
     }];
 }
@@ -47,7 +47,7 @@
     [self.diskCache setObject:object forKey:key];
 }
 
-- (BOOL)hasObjectForKey:(NSString *)key
+- (BOOL)objectExistsInCacheForKey:(NSString *)key
 {
     return [self containsObjectForKey:key];
 }
@@ -59,13 +59,13 @@
 {
     [self removeObjectForKey:key];
 }
-- (void)removeCachedObjectForKey:(NSString *)key block:(PINRemoteImageCachingObjectBlock)block
+- (void)removeCachedObjectForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
 {
     __weak typeof(self) welf = self;
     [self removeObjectForKey:key block:^(PINCache * _Nonnull cache, NSString * _Nonnull key, id  _Nullable object) {
-        if(block) {
+        if(completion) {
             id sself = welf;
-            block(sself, key, object);
+            completion(sself, key, object);
         }
     }];
 }

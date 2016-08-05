@@ -26,7 +26,7 @@
 //******************************************************************************************************
 // Memory cache methods
 //******************************************************************************************************
--(nullable id)objectCachedInMemoryForKey:(NSString *)key
+-(nullable id)objectFromMemoryCacheForKey:(NSString *)key
 {
     return [self.cache objectForKey:key];
 }
@@ -39,18 +39,18 @@
 //******************************************************************************************************
 // Disk cache methods
 //******************************************************************************************************
--(nullable id)objectCachedOnDiskForKey:(NSString *)key
+-(nullable id)objectFromDiskCacheForKey:(NSString *)key
 {
     return [self.cache objectForKey:key];
 }
 
--(void)objectCachedOnDiskForKey:(NSString *)key block:(PINRemoteImageCachingObjectBlock)block
+-(void)objectFromDiskCacheForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
 {
     __weak typeof(self) welf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        if (block) {
+        if (completion) {
             __strong typeof(self) sself = welf;
-            block(sself, key, [sself.cache objectForKey:key]);
+            completion(sself, key, [sself.cache objectForKey:key]);
         }
     });
 }
@@ -60,7 +60,7 @@
     [self.cache setObject:object forKey:key];
 }
 
-- (BOOL)hasObjectForKey:(NSString *)key
+- (BOOL)objectExistsInCacheForKey:(NSString *)key
 {
     return [self.cache objectForKey:key] != nil;
 }
@@ -72,15 +72,15 @@
 {
     [self.cache removeObjectForKey:key];
 }
-- (void)removeCachedObjectForKey:(NSString *)key block:(PINRemoteImageCachingObjectBlock)block
+- (void)removeCachedObjectForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
 {
     __weak typeof(self) welf = self;
     id object = [self.cache objectForKey:key];
     [self.cache removeObjectForKey:key];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        if (block) {
+        if (completion) {
             __strong typeof(self) sself = welf;
-            block(sself, key, object);
+            completion(sself, key, object);
         }
     });
 }

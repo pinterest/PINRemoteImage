@@ -351,7 +351,7 @@
 {
     NSString *key = [self.imageManager cacheKeyForURL:URL processorKey:nil];
     for (NSUInteger idx = 0; idx < 100; idx++) {
-        if ([[self.imageManager cache] hasObjectForKey:key]) {
+        if ([[self.imageManager cache] objectExistsInCacheForKey:key]) {
             break;
         }
         if (idx == 99) {
@@ -413,13 +413,13 @@
 {
     id key  = [self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil];
 
-    id object = [[self.imageManager cache] objectCachedInMemoryForKey:key];
+    id object = [[self.imageManager cache] objectFromMemoryCacheForKey:key];
     XCTAssert(object == nil, @"image should not be in cache");
     
     [self.imageManager prefetchImageWithURL:[self JPEGURL]];
     sleep([self timeoutTimeInterval]);
     
-    object = [[self.imageManager cache] objectCachedInMemoryForKey:key];
+    object = [[self.imageManager cache] objectFromMemoryCacheForKey:key];
     XCTAssert(object, @"image was not prefetched or was not stored in cache");
 }
 
@@ -728,13 +728,13 @@
     //small image should have been removed from cache
     NSString *key = [self.imageManager cacheKeyForURL:[self JPEGURL_Small] processorKey:nil];
     for (NSUInteger idx = 0; idx < 100; idx++) {
-        if ([[self.imageManager cache] objectCachedInMemoryForKey:key] == nil) {
+        if ([[self.imageManager cache] objectFromMemoryCacheForKey:key] == nil) {
             break;
         }
         sleep(50);
     }
     XCTAssert(
-        [[self.imageManager cache] objectCachedInMemoryForKey:[self.imageManager cacheKeyForURL:[self JPEGURL_Small] processorKey:nil]] == nil, @"Small image should have been removed from cache");
+        [[self.imageManager cache] objectFromMemoryCacheForKey:[self.imageManager cacheKeyForURL:[self JPEGURL_Small] processorKey:nil]] == nil, @"Small image should have been removed from cache");
 
     [self.imageManager.cache removeAllCachedObjects];
     [self.imageManager setShouldUpgradeLowQualityImages:NO completion:^{
@@ -782,7 +782,7 @@
                                  completion:^(PINRemoteImageManagerResult *result)
     {
         XCTAssertNotNil(result.image, @"Image should not be nil");
-        id diskCachedObj = [cache objectCachedOnDiskForKey:key];
+        id diskCachedObj = [cache objectFromDiskCacheForKey:key];
         XCTAssertNotNil(diskCachedObj);
         [expectation fulfill];
     }];
