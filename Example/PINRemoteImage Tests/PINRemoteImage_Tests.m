@@ -11,10 +11,12 @@
 #import <PINRemoteImage/PINRemoteImage.h>
 #import <PINRemoteImage/PINURLSessionManager.h>
 #import <PINRemoteImage/PINImageView+PINRemoteImage.h>
+#import <PINRemoteImage/PINRemoteImageCaching.h>
+
 #if USE_FLANIMATED_IMAGE
 #import <FLAnimatedImage/FLAnimatedImage.h>
 #endif
-#import <PINCache/PINCache.h>
+
 
 #if DEBUG
 @interface PINRemoteImageManager ()
@@ -138,7 +140,7 @@
 {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     //clear disk cache
-    [self.imageManager.cache.diskCache removeAllObjects];
+    [self.imageManager.cache removeAllCachedObjects];
     self.imageManager = nil;
     [super tearDown];
 }
@@ -349,7 +351,7 @@
 {
     NSString *key = [self.imageManager cacheKeyForURL:URL processorKey:nil];
     for (NSUInteger idx = 0; idx < 100; idx++) {
-        if ([[self.imageManager cache] objectForKey:key] != nil) {
+        if ([[self.imageManager cache] objectExistsInCacheForKey:key]) {
             break;
         }
         if (idx == 99) {
@@ -409,13 +411,15 @@
 
 - (void)testPrefetchImage
 {
-    id object = [[self.imageManager cache] objectForKey:[self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil]];
+    id key  = [self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil];
+
+    id object = [[self.imageManager cache] objectFromMemoryCacheForKey:key];
     XCTAssert(object == nil, @"image should not be in cache");
     
     [self.imageManager prefetchImageWithURL:[self JPEGURL]];
     sleep([self timeoutTimeInterval]);
     
-    object = [[self.imageManager cache] objectForKey:[self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil]];
+    object = [[self.imageManager cache] objectFromMemoryCacheForKey:key];
     XCTAssert(object, @"image was not prefetched or was not stored in cache");
 }
 
@@ -496,7 +500,7 @@
             [countLock unlock];
             XCTAssert((result.image && !result.alternativeRepresentation) || (result.alternativeRepresentation && !result.image), @"image or alternativeRepresentation not downloaded");
             if (rand() % 2) {
-                [[self.imageManager cache] removeObjectForKey:[self.imageManager cacheKeyForURL:url processorKey:nil]];
+                [[self.imageManager cache] removeCachedObjectForKey:[self.imageManager cacheKeyForURL:url processorKey:nil]];
             }
             dispatch_group_leave(group);
         }];
@@ -507,14 +511,13 @@
 
 - (void)testInvalidObject
 {
-    [self.imageManager.cache setObject:@"invalid" forKey:[self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil]];
+    [self.imageManager.cache cacheObjectOnDisk:@"invalid" forKey:[self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil]];
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"Download JPEG image"];
     [self.imageManager downloadImageWithURL:[self JPEGURL] completion:^(PINRemoteImageManagerResult *result) {
         UIImage *image = result.image;
         
         XCTAssert([image isKindOfClass:[UIImage class]], @"image should be UIImage");
-        
         [expectation fulfill];
     }];
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
@@ -678,8 +681,8 @@
         dispatch_semaphore_signal(semaphore);
     }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
-    
-    [self.imageManager.cache removeAllObjects];
+
+    [self.imageManager.cache removeAllCachedObjects];
     [self.imageManager downloadImageWithURLs:@[[self JPEGURL_Small], [self JPEGURL_Medium], [self JPEGURL_Large]]
                                      options:PINRemoteImageManagerDownloadOptionsNone
                                progressImage:nil
@@ -725,14 +728,15 @@
     //small image should have been removed from cache
     NSString *key = [self.imageManager cacheKeyForURL:[self JPEGURL_Small] processorKey:nil];
     for (NSUInteger idx = 0; idx < 100; idx++) {
-        if ([[self.imageManager cache] objectForKey:key] == nil) {
+        if ([[self.imageManager cache] objectFromMemoryCacheForKey:key] == nil) {
             break;
         }
         sleep(50);
     }
-    XCTAssert([[self.imageManager cache] objectForKey:[self.imageManager cacheKeyForURL:[self JPEGURL_Small] processorKey:nil]] == nil, @"Small image should have been removed from cache");
-    
-    [self.imageManager.cache removeAllObjects];
+    XCTAssert(
+        [[self.imageManager cache] objectFromMemoryCacheForKey:[self.imageManager cacheKeyForURL:[self JPEGURL_Small] processorKey:nil]] == nil, @"Small image should have been removed from cache");
+
+    [self.imageManager.cache removeAllCachedObjects];
     [self.imageManager setShouldUpgradeLowQualityImages:NO completion:^{
         dispatch_semaphore_signal(semaphore);
     }];
@@ -770,7 +774,7 @@
 - (void)testDiskCacheOnLongURLs
 {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Image is available in the disk cache"];
-    PINCache *cache = self.imageManager.cache;
+    id<PINRemoteImageCaching> cache = self.imageManager.cache;
     NSURL *longURL = [self veryLongURL];
     NSString *key = [self.imageManager cacheKeyForURL:longURL processorKey:nil];
     [self.imageManager downloadImageWithURL:longURL
@@ -778,7 +782,7 @@
                                  completion:^(PINRemoteImageManagerResult *result)
     {
         XCTAssertNotNil(result.image, @"Image should not be nil");
-        id diskCachedObj = [cache.diskCache objectForKey:key];
+        id diskCachedObj = [cache objectFromDiskCacheForKey:key];
         XCTAssertNotNil(diskCachedObj);
         [expectation fulfill];
     }];

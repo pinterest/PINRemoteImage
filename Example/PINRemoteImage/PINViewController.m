@@ -10,7 +10,7 @@
 
 #import <PINRemoteImage/PINRemoteImage.h>
 #import <PINRemoteImage/PINImageView+PINRemoteImage.h>
-#import <PINCache/PINCache.h>
+#import <PINRemoteImage/PINRemoteImageCaching.h>
 #if USE_FLANIMATED_IMAGE
 #import <FLAnimatedImage/FLAnimatedImageView.h>
 #endif
@@ -36,7 +36,7 @@
 {
     srand([[NSDate date] timeIntervalSince1970]);
     if (self = [super initWithCoder:aDecoder]) {
-        [[[PINRemoteImageManager sharedImageManager] cache] removeAllObjects];
+        [[[PINRemoteImageManager sharedImageManager] cache] removeAllCachedObjects];
     }
     return self;
 }
