@@ -1,10 +1,14 @@
 xcodeproj 'PINRemoteImage.xcodeproj'
 
-target 'PINRemoteImage', :exclusive => true do
+def shared_pods
   pod "PINRemoteImage", :path => "../"
   pod "PINRemoteImage/WebP", :path => "../"
 end
 
-target 'PINRemoteImage Tests', :exclusive => true do
-  pod "PINRemoteImage/WebP", :path => "../"
+target 'PINRemoteImage' do
+  shared_pods
+end
+
+target 'PINRemoteImage Tests' do
+  shared_pods
 end

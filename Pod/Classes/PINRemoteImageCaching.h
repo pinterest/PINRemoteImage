@@ -1,5 +1,5 @@
 //
-//  PINImageCacheProtocol.h
+//  PINRemoteImageCaching.h
 //  Pods
 //
 //  Created by Aleksei Shevchenko on 7/25/16.
@@ -38,6 +38,10 @@ typedef void (^PINRemoteImageCachingObjectBlock)(id<PINRemoteImageCaching> cache
 - (void)removeCachedObjectForKey:(NSString *)key;
 - (void)removeCachedObjectForKey:(NSString *)key completion:(nullable PINRemoteImageCachingObjectBlock)completion;
 - (void)removeAllCachedObjects;
+
+@optional
+
+- (void)removeCachedObjectForKeyFromMemoryCache:(NSString *)key;
 
 @end
 

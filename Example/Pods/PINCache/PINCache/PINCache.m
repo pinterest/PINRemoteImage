@@ -35,10 +35,20 @@ static NSString * const PINCacheSharedName = @"PINCacheShared";
 
 - (instancetype)initWithName:(NSString *)name
 {
-    return [self initWithName:name rootPath:[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject]];
+    return [self initWithName:name fileExtension:nil];
 }
 
-- (instancetype)initWithName:(NSString *)name rootPath:(NSString *)rootPath
+- (instancetype)initWithName:(NSString *)name fileExtension:(NSString *)fileExtension
+{
+    return [self initWithName:name rootPath:[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject] fileExtension:fileExtension];
+}
+
+- (instancetype)initWithName:(NSString *)name rootPath:(NSString *)rootPath fileExtension:(NSString *)fileExtension
+{
+    return [self initWithName:name rootPath:rootPath serializer:nil deserializer:nil fileExtension:fileExtension];
+}
+
+- (instancetype)initWithName:(NSString *)name rootPath:(NSString *)rootPath serializer:(PINDiskCacheSerializerBlock)serializer deserializer:(PINDiskCacheDeserializerBlock)deserializer fileExtension:(NSString *)fileExtension
 {
     if (!name)
         return nil;
@@ -49,7 +59,7 @@ static NSString * const PINCacheSharedName = @"PINCacheShared";
         NSString *queueName = [[NSString alloc] initWithFormat:@"%@.%p", PINCachePrefix, (void *)self];
         _concurrentQueue = dispatch_queue_create([[NSString stringWithFormat:@"%@ Asynchronous Queue", queueName] UTF8String], DISPATCH_QUEUE_CONCURRENT);
         
-        _diskCache = [[PINDiskCache alloc] initWithName:_name rootPath:rootPath];
+        _diskCache = [[PINDiskCache alloc] initWithName:_name rootPath:rootPath serializer:serializer deserializer:deserializer fileExtension:fileExtension];
         _memoryCache = [[PINMemoryCache alloc] init];
     }
     return self;

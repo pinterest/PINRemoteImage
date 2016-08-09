@@ -1,6 +1,6 @@
 {
   "name": "PINRemoteImage",
-  "version": "3.0.0-beta.2",
+  "version": "3.0.0-beta.3",
   "summary": "A thread safe, performant, feature rich image fetcher",
   "homepage": "https://github.com/pinterest/PINRemoteImage",
   "license": "Apache 2.0",
@@ -9,7 +9,7 @@
   },
   "source": {
     "git": "https://github.com/pinterest/PINRemoteImage.git",
-    "tag": "3.0.0-beta.2"
+    "tag": "3.0.0-beta.3"
   },
   "social_media_url": "https://twitter.com/garrettmoon",
   "platforms": {
@@ -79,7 +79,9 @@
     },
     {
       "name": "FLAnimatedImage",
-      "platforms": "ios",
+      "platforms": {
+        "ios": "7.0"
+      },
       "dependencies": {
         "PINRemoteImage/Core": [
 
@@ -96,7 +98,8 @@
     {
       "name": "WebP",
       "xcconfig": {
-        "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) PIN_WEBP=1"
+        "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) PIN_WEBP=1",
+        "USER_HEADER_SEARCH_PATHS": "$(inherited) $(SRCROOT)/libwebp/src"
       },
       "dependencies": {
         "PINRemoteImage/Core": [
@@ -114,7 +117,7 @@
 
         ],
         "PINCache": [
-          ">=3.0.0-beta"
+          ">=3.0.1-beta"
         ]
       },
       "source_files": "Pod/Classes/PINCache/**/*.{h,m}"

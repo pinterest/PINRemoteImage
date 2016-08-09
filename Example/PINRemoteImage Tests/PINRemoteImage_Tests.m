@@ -12,6 +12,7 @@
 #import <PINRemoteImage/PINURLSessionManager.h>
 #import <PINRemoteImage/PINImageView+PINRemoteImage.h>
 #import <PINRemoteImage/PINRemoteImageCaching.h>
+#import <PINCache/PINCache.h>
 
 #if USE_FLANIMATED_IMAGE
 #import <FLAnimatedImage/FLAnimatedImage.h>
@@ -764,7 +765,7 @@
 		[expectation fulfill];
 	}];
 	
-	[self.imageManager downloadImageWithURL: [NSURL URLWithString:@"https://media-cache-ec0.pinimg.com/600x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"]
+	[self.imageManager downloadImageWithURL:[NSURL URLWithString:@"https://media-cache-ec0.pinimg.com/600x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"]
 									options:PINRemoteImageManagerDownloadOptionsNone
 								 completion:nil];
 	
