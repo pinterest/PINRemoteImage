@@ -248,12 +248,12 @@ static dispatch_once_t sharedDispatchToken;
 - (id<PINRemoteImageCaching>)defaultImageCache
 {
 #if USE_PINCACHE
-    const NSString *kPINRemoteImageDiskCacheName = @"PINRemoteImageManagerCache";
-    const NSString *kPINRemoteImageDiskCacheVersionKey = @"kPINRemoteImageDiskCacheVersionKey";
+    NSString * const kPINRemoteImageDiskCacheName = @"PINRemoteImageManagerCache";
+    NSString * const kPINRemoteImageDiskCacheVersionKey = @"kPINRemoteImageDiskCacheVersionKey";
     const NSInteger kPINRemoteImageDiskCacheVersion = 1;
     NSUserDefaults *pinDefaults = [[NSUserDefaults alloc] init];
     
-    NSURL *cacheURL = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *cacheURL = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     
     if ([pinDefaults integerForKey:kPINRemoteImageDiskCacheVersionKey] != kPINRemoteImageDiskCacheVersion) {
         //remove the old version of the disk cache
