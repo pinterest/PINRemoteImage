@@ -512,7 +512,16 @@
 
 - (void)testInvalidObject
 {
-    [self.imageManager.cache cacheObjectOnDisk:@"invalid" forKey:[self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil]];
+    NSString * const kPINRemoteImageDiskCacheName = @"PINRemoteImageManagerCache";
+    NSString *cacheURL = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    
+    PINDiskCache *tempDiskCache = [[PINDiskCache alloc] initWithName:kPINRemoteImageDiskCacheName rootPath:cacheURL serializer:^NSData * _Nonnull(id<NSCoding>  _Nonnull object) {
+        return [NSKeyedArchiver archivedDataWithRootObject:object];
+    } deserializer:^id<NSCoding> _Nonnull(NSData * _Nonnull data) {
+        return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    } fileExtension:nil];
+    
+    [tempDiskCache setObject:@"invalid" forKey:[self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil]];
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"Download JPEG image"];
     [self.imageManager downloadImageWithURL:[self JPEGURL] completion:^(PINRemoteImageManagerResult *result) {
