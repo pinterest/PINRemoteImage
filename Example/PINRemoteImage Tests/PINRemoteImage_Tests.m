@@ -513,9 +513,9 @@
 - (void)testInvalidObject
 {
     NSString * const kPINRemoteImageDiskCacheName = @"PINRemoteImageManagerCache";
-    NSString *cacheURL = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
     
-    PINDiskCache *tempDiskCache = [[PINDiskCache alloc] initWithName:kPINRemoteImageDiskCacheName rootPath:cacheURL serializer:^NSData * _Nonnull(id<NSCoding>  _Nonnull object) {
+    PINDiskCache *tempDiskCache = [[PINDiskCache alloc] initWithName:kPINRemoteImageDiskCacheName rootPath:cachePath serializer:^NSData * _Nonnull(id<NSCoding>  _Nonnull object) {
         return [NSKeyedArchiver archivedDataWithRootObject:object];
     } deserializer:^id<NSCoding> _Nonnull(NSData * _Nonnull data) {
         return [NSKeyedUnarchiver unarchiveObjectWithData:data];
