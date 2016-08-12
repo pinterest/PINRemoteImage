@@ -89,6 +89,8 @@ aCompletion(NSURLSessionAuthChallengePerformDefaultHandling, nil)];
 
 Add [PINRemoteImage](http://cocoapods.org/?q=name%3APINRemoteImage) to your `Podfile` and run `pod install`.
 
+If you'd like to use WebP images, add [PINRemoteImage/WebP](http://cocoapods.org/?q=name%3APINRemoteImage) to your `Podfile` and run `pod install`.
+
 
 ### Carthage
 
