@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1FD47F402F49690000F32909 /* libPods-PINRemoteImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3724371049C6EC94BD52D36F /* libPods-PINRemoteImage.a */; };
-		25B7EABF97E6D21ADB221741 /* libPods-PINRemoteImage Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 703B099303ED885727B9003F /* libPods-PINRemoteImage Tests.a */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -20,11 +18,13 @@
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
 		682C52611B584DD300B3B813 /* ProcessingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 682C52601B584DD300B3B813 /* ProcessingViewController.m */; };
 		682C52671B58515D00B3B813 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 682C52661B58515D00B3B813 /* Media.xcassets */; };
+		682D3F7BAE8A92A5E46F046B /* libPods-PINRemoteImage Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A85B7779305DF163437777D /* libPods-PINRemoteImage Tests.a */; };
 		68B385081B557116004EB26F /* WebPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B385071B557116004EB26F /* WebPViewController.m */; };
 		68B3850B1B5572BF004EB26F /* ProgressiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B3850A1B5572BF004EB26F /* ProgressiveViewController.m */; };
 		68B3850E1B5577D4004EB26F /* DegradedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B3850D1B5577D4004EB26F /* DegradedViewController.m */; };
 		68B5CDF21A0BEC8C00A4BAAC /* PINRemoteImage_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B5CDF11A0BEC8C00A4BAAC /* PINRemoteImage_Tests.m */; };
 		9D9328E51C3D4CC200E1F1D3 /* Kitten.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D9328E41C3D4CC200E1F1D3 /* Kitten.m */; };
+		D2712A480BA078E050EA2B3B /* libPods-PINRemoteImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CC3DC6E2AB62C575AEB6C8B /* libPods-PINRemoteImage.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,10 +38,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		02DBDD73B5E309E56A4C125D /* Pods-PIRemoteImage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PIRemoteImage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PIRemoteImage/Pods-PIRemoteImage.debug.xcconfig"; sourceTree = "<group>"; };
-		178181A23A5B75ED9549BF94 /* Pods-PIRemoteImage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PIRemoteImage.release.xcconfig"; path = "Pods/Target Support Files/Pods-PIRemoteImage/Pods-PIRemoteImage.release.xcconfig"; sourceTree = "<group>"; };
+		063FF605A6CC8884BB10EE35 /* Pods-PINRemoteImage Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage Tests/Pods-PINRemoteImage Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		1CC3DC6E2AB62C575AEB6C8B /* libPods-PINRemoteImage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PINRemoteImage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		25CF9DB8CF954119BAA63004 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		3724371049C6EC94BD52D36F /* libPods-PINRemoteImage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PINRemoteImage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A85B7779305DF163437777D /* libPods-PINRemoteImage Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PINRemoteImage Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58A195388D20070C39A /* PINRemoteImage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PINRemoteImage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -57,6 +57,7 @@
 		6003F5A6195388D20070C39A /* PINViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PINViewController.m; sourceTree = "<group>"; };
 		6003F5A8195388D20070C39A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		6008DA13D004B38845BA74EC /* Pods-PINRemoteImage Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage Tests/Pods-PINRemoteImage Tests.release.xcconfig"; sourceTree = "<group>"; };
 		682C525F1B584DD300B3B813 /* ProcessingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProcessingViewController.h; sourceTree = "<group>"; };
 		682C52601B584DD300B3B813 /* ProcessingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProcessingViewController.m; sourceTree = "<group>"; };
 		682C52661B58515D00B3B813 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = PINRemoteImage/Media.xcassets; sourceTree = SOURCE_ROOT; };
@@ -69,19 +70,12 @@
 		68B5CDED1A0BEC8C00A4BAAC /* PINRemoteImage Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PINRemoteImage Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		68B5CDF01A0BEC8C00A4BAAC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		68B5CDF11A0BEC8C00A4BAAC /* PINRemoteImage_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImage_Tests.m; sourceTree = "<group>"; };
-		703B099303ED885727B9003F /* libPods-PINRemoteImage Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PINRemoteImage Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		79AABFE9C80EDE100C822966 /* Pods-PIRemoteImage Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PIRemoteImage Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PIRemoteImage Tests/Pods-PIRemoteImage Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		804862496DA4D87612F805CC /* Pods-PINRemoteImage Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage Tests/Pods-PINRemoteImage Tests.release.xcconfig"; sourceTree = "<group>"; };
-		855F72A0CF3949DB873DBBC8 /* libPods-PIRemoteImage Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PIRemoteImage Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8FEF8351C6C35A80F5E99B0E /* Pods-PINRemoteImage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage.release.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage/Pods-PINRemoteImage.release.xcconfig"; sourceTree = "<group>"; };
+		8D571FD9970F7A64A2B80EE0 /* Pods-PINRemoteImage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage.release.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage/Pods-PINRemoteImage.release.xcconfig"; sourceTree = "<group>"; };
+		95043F8A31505C02E51C4D2F /* Pods-PINRemoteImage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage/Pods-PINRemoteImage.debug.xcconfig"; sourceTree = "<group>"; };
 		9D9328E31C3D4CC200E1F1D3 /* Kitten.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Kitten.h; path = "../../Example-Shared/Kitten.h"; sourceTree = "<group>"; };
 		9D9328E41C3D4CC200E1F1D3 /* Kitten.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Kitten.m; path = "../../Example-Shared/Kitten.m"; sourceTree = "<group>"; };
 		A5DEC9B706184109844D57E2 /* PINRemoteImage.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = PINRemoteImage.podspec; path = ../PINRemoteImage.podspec; sourceTree = "<group>"; };
-		BA758DBC0C76C8C8804BFDEA /* Pods-PINRemoteImage Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage Tests/Pods-PINRemoteImage Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		CF9B14D6B6E747C0BEB340CF /* libPods-PIRemoteImage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PIRemoteImage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DFBDA5F52A6A5B085AB182FC /* Pods-PIRemoteImage Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PIRemoteImage Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PIRemoteImage Tests/Pods-PIRemoteImage Tests.release.xcconfig"; sourceTree = "<group>"; };
 		E2B84DF860DF48B5B22537B6 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		E6B892907FA987D3EA61DCAC /* Pods-PINRemoteImage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage/Pods-PINRemoteImage.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,7 +86,7 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
-				1FD47F402F49690000F32909 /* libPods-PINRemoteImage.a in Frameworks */,
+				D2712A480BA078E050EA2B3B /* libPods-PINRemoteImage.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,7 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				25B7EABF97E6D21ADB221741 /* libPods-PINRemoteImage Tests.a in Frameworks */,
+				682D3F7BAE8A92A5E46F046B /* libPods-PINRemoteImage Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,7 +109,7 @@
 				68B5CDEE1A0BEC8C00A4BAAC /* PINRemoteImage Tests */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
-				C9D363E7DDCEA7F35E576911 /* Pods */,
+				F5A6BFF7672C3055495CF245 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -135,10 +129,8 @@
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
 				6003F5AF195388D20070C39A /* XCTest.framework */,
-				CF9B14D6B6E747C0BEB340CF /* libPods-PIRemoteImage.a */,
-				855F72A0CF3949DB873DBBC8 /* libPods-PIRemoteImage Tests.a */,
-				3724371049C6EC94BD52D36F /* libPods-PINRemoteImage.a */,
-				703B099303ED885727B9003F /* libPods-PINRemoteImage Tests.a */,
+				1CC3DC6E2AB62C575AEB6C8B /* libPods-PINRemoteImage.a */,
+				5A85B7779305DF163437777D /* libPods-PINRemoteImage Tests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -206,17 +198,13 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		C9D363E7DDCEA7F35E576911 /* Pods */ = {
+		F5A6BFF7672C3055495CF245 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				02DBDD73B5E309E56A4C125D /* Pods-PIRemoteImage.debug.xcconfig */,
-				178181A23A5B75ED9549BF94 /* Pods-PIRemoteImage.release.xcconfig */,
-				79AABFE9C80EDE100C822966 /* Pods-PIRemoteImage Tests.debug.xcconfig */,
-				DFBDA5F52A6A5B085AB182FC /* Pods-PIRemoteImage Tests.release.xcconfig */,
-				E6B892907FA987D3EA61DCAC /* Pods-PINRemoteImage.debug.xcconfig */,
-				BA758DBC0C76C8C8804BFDEA /* Pods-PINRemoteImage Tests.debug.xcconfig */,
-				8FEF8351C6C35A80F5E99B0E /* Pods-PINRemoteImage.release.xcconfig */,
-				804862496DA4D87612F805CC /* Pods-PINRemoteImage Tests.release.xcconfig */,
+				95043F8A31505C02E51C4D2F /* Pods-PINRemoteImage.debug.xcconfig */,
+				8D571FD9970F7A64A2B80EE0 /* Pods-PINRemoteImage.release.xcconfig */,
+				063FF605A6CC8884BB10EE35 /* Pods-PINRemoteImage Tests.debug.xcconfig */,
+				6008DA13D004B38845BA74EC /* Pods-PINRemoteImage Tests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -228,12 +216,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6003F5BF195388D20070C39A /* Build configuration list for PBXNativeTarget "PINRemoteImage" */;
 			buildPhases = (
-				03CA8BAB9131410DA4474CBA /* Check Pods Manifest.lock */,
+				D2E4FE25FDCE1E36A864F521 /* 📦 Check Pods Manifest.lock */,
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
-				976369F3155C4085B1D6B257 /* Copy Pods Resources */,
-				CA06F4EBD160279B91AC4611 /* Embed Pods Frameworks */,
+				C29CD064817F94933C01A33C /* 📦 Embed Pods Frameworks */,
+				5ADDA7CAEE4CC5113BCD55A4 /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -248,12 +236,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 68B5CDF71A0BEC8C00A4BAAC /* Build configuration list for PBXNativeTarget "PINRemoteImage Tests" */;
 			buildPhases = (
-				C18578E9FCCC4A349D17591E /* Check Pods Manifest.lock */,
+				7606B5F1EB3AB1B014CB163A /* 📦 Check Pods Manifest.lock */,
 				68B5CDE91A0BEC8C00A4BAAC /* Sources */,
 				68B5CDEA1A0BEC8C00A4BAAC /* Frameworks */,
 				68B5CDEB1A0BEC8C00A4BAAC /* Resources */,
-				82957B3C29244E2585DE33E5 /* Copy Pods Resources */,
-				01EE29DEABBCC2C48B66D4E8 /* Embed Pods Frameworks */,
+				47F0DF319C400B267A1F2C75 /* 📦 Embed Pods Frameworks */,
+				748F831FA73D7004D52EA52B /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -322,14 +310,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		01EE29DEABBCC2C48B66D4E8 /* Embed Pods Frameworks */ = {
+		47F0DF319C400B267A1F2C75 /* 📦 Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "📦 Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -337,44 +325,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PINRemoteImage Tests/Pods-PINRemoteImage Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		03CA8BAB9131410DA4474CBA /* Check Pods Manifest.lock */ = {
+		5ADDA7CAEE4CC5113BCD55A4 /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		82957B3C29244E2585DE33E5 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PINRemoteImage Tests/Pods-PINRemoteImage Tests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		976369F3155C4085B1D6B257 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
+			name = "📦 Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -382,14 +340,29 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PINRemoteImage/Pods-PINRemoteImage-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C18578E9FCCC4A349D17591E /* Check Pods Manifest.lock */ = {
+		748F831FA73D7004D52EA52B /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PINRemoteImage Tests/Pods-PINRemoteImage Tests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7606B5F1EB3AB1B014CB163A /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -397,19 +370,34 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		CA06F4EBD160279B91AC4611 /* Embed Pods Frameworks */ = {
+		C29CD064817F94933C01A33C /* 📦 Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "📦 Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PINRemoteImage/Pods-PINRemoteImage-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D2E4FE25FDCE1E36A864F521 /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -543,7 +531,7 @@
 		};
 		6003F5C0195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E6B892907FA987D3EA61DCAC /* Pods-PINRemoteImage.debug.xcconfig */;
+			baseConfigurationReference = 95043F8A31505C02E51C4D2F /* Pods-PINRemoteImage.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -561,7 +549,7 @@
 		};
 		6003F5C1195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8FEF8351C6C35A80F5E99B0E /* Pods-PINRemoteImage.release.xcconfig */;
+			baseConfigurationReference = 8D571FD9970F7A64A2B80EE0 /* Pods-PINRemoteImage.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -579,7 +567,7 @@
 		};
 		68B5CDF51A0BEC8C00A4BAAC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BA758DBC0C76C8C8804BFDEA /* Pods-PINRemoteImage Tests.debug.xcconfig */;
+			baseConfigurationReference = 063FF605A6CC8884BB10EE35 /* Pods-PINRemoteImage Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_WARN_UNREACHABLE_CODE = YES;
@@ -605,7 +593,7 @@
 		};
 		68B5CDF61A0BEC8C00A4BAAC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 804862496DA4D87612F805CC /* Pods-PINRemoteImage Tests.release.xcconfig */;
+			baseConfigurationReference = 6008DA13D004B38845BA74EC /* Pods-PINRemoteImage Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_WARN_UNREACHABLE_CODE = YES;

@@ -24,6 +24,9 @@ typedef NS_ENUM(NSUInteger, PINDiskCacheCondition) {
 
 @interface PINDiskCache () {
     NSConditionLock *_instanceLock;
+    
+    PINDiskCacheSerializerBlock _serializer;
+    PINDiskCacheDeserializerBlock _deserializer;
 }
 
 @property (assign) NSUInteger byteCount;
@@ -71,16 +74,33 @@ typedef NS_ENUM(NSUInteger, PINDiskCacheCondition) {
 
 - (instancetype)initWithName:(NSString *)name
 {
-    return [self initWithName:name rootPath:[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]];
+    return [self initWithName:name fileExtension:nil];
 }
 
-- (instancetype)initWithName:(NSString *)name rootPath:(NSString *)rootPath
+- (instancetype)initWithName:(NSString *)name fileExtension:(NSString *)fileExtension
+{
+    return [self initWithName:name rootPath:[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0] fileExtension:fileExtension];
+}
+
+- (instancetype)initWithName:(NSString *)name rootPath:(NSString *)rootPath fileExtension:(NSString *)fileExtension
+{
+    return [self initWithName:name rootPath:rootPath serializer:nil deserializer:nil fileExtension:fileExtension];
+}
+
+- (instancetype)initWithName:(NSString *)name rootPath:(NSString *)rootPath serializer:(PINDiskCacheSerializerBlock)serializer deserializer:(PINDiskCacheDeserializerBlock)deserializer fileExtension:(NSString *)fileExtension
 {
     if (!name)
         return nil;
     
+    if ((serializer && !deserializer) ||
+        (!serializer && deserializer)){
+        @throw [NSException exceptionWithName:@"Must initialize with a both serializer and deserializer" reason:@"PINDiskCache must be initialized with a serializer and deserializer." userInfo:nil];
+        return nil;
+    }
+    
     if (self = [super init]) {
         _name = [name copy];
+        _fileExtension = [fileExtension copy];
         _asyncQueue = dispatch_queue_create([[NSString stringWithFormat:@"%@ Asynchronous Queue", PINDiskCachePrefix] UTF8String], DISPATCH_QUEUE_CONCURRENT);
         _instanceLock = [[NSConditionLock alloc] initWithCondition:PINDiskCacheConditionNotReady];
         _willAddObjectBlock = nil;
@@ -93,23 +113,36 @@ typedef NS_ENUM(NSUInteger, PINDiskCacheCondition) {
         _byteCount = 0;
         _byteLimit = 0;
         _ageLimit = 0.0;
-      
-        #if TARGET_OS_IPHONE
-          _writingProtectionOption = NSDataWritingFileProtectionNone;
-        #endif
-      
+        
+#if TARGET_OS_IPHONE
+        _writingProtectionOption = NSDataWritingFileProtectionNone;
+#endif
+        
         _dates = [[NSMutableDictionary alloc] init];
         _sizes = [[NSMutableDictionary alloc] init];
         
         NSString *pathComponent = [[NSString alloc] initWithFormat:@"%@.%@", PINDiskCachePrefix, _name];
         _cacheURL = [NSURL fileURLWithPathComponents:@[ rootPath, pathComponent ]];
         
+        //setup serializers
+        if(serializer) {
+            _serializer = [serializer copy];
+        } else {
+            _serializer = self.defaultSerializer;
+        }
+
+        if(deserializer) {
+            _deserializer = [deserializer copy];
+        } else {
+            _deserializer = self.defaultDeserializer;
+        }
+
         //we don't want to do anything without setting up the disk cache, but we also don't want to block init, it can take a while to initialize
         dispatch_async(_asyncQueue, ^{
             //should always be able to aquire the lock unless the below code is running.
             [_instanceLock lockWhenCondition:PINDiskCacheConditionNotReady];
-                [self _locked_createCacheDirectory];
-                [self _locked_initializeDiskProperties];
+            [self _locked_createCacheDirectory];
+            [self _locked_initializeDiskProperties];
             [_instanceLock unlockWithCondition:PINDiskCacheConditionReady];
         });
     }
@@ -159,7 +192,13 @@ typedef NS_ENUM(NSUInteger, PINDiskCacheCondition) {
     }
     
     if ([string respondsToSelector:@selector(stringByAddingPercentEncodingWithAllowedCharacters:)]) {
-        return [string stringByAddingPercentEncodingWithAllowedCharacters:[[NSCharacterSet characterSetWithCharactersInString:@".:/%"] invertedSet]];
+        NSString *encodedString = [string stringByAddingPercentEncodingWithAllowedCharacters:[[NSCharacterSet characterSetWithCharactersInString:@".:/%"] invertedSet]];
+        if (self.fileExtension.length > 0) {
+            return [encodedString stringByAppendingPathExtension:self.fileExtension];
+        }
+        else {
+            return encodedString;
+        }
     }
     else {
         CFStringRef static const charsToEscape = CFSTR(".:/%");
@@ -171,7 +210,13 @@ typedef NS_ENUM(NSUInteger, PINDiskCacheCondition) {
                                                                             charsToEscape,
                                                                             kCFStringEncodingUTF8);
 #pragma clang diagnostic pop
-        return (__bridge_transfer NSString *)escapedString;
+        
+        if (self.fileExtension.length > 0) {
+            return [(__bridge_transfer NSString *)escapedString stringByAppendingPathExtension:self.fileExtension];
+        }
+        else {
+            return (__bridge_transfer NSString *)escapedString;
+        }
     }
 }
 
@@ -194,6 +239,20 @@ typedef NS_ENUM(NSUInteger, PINDiskCacheCondition) {
 #pragma clang diagnostic pop
         return (__bridge_transfer NSString *)unescapedString;
     }
+}
+
+-(PINDiskCacheSerializerBlock) defaultSerializer
+{
+    return ^NSData*(id<NSCoding> object){
+        return [NSKeyedArchiver archivedDataWithRootObject:object];
+    };
+}
+
+-(PINDiskCacheDeserializerBlock) defaultDeserializer
+{
+    return ^id(NSData * data){
+        return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    };
 }
 
 #pragma mark - Private Trash Methods -
@@ -670,14 +729,21 @@ typedef NS_ENUM(NSUInteger, PINDiskCacheCondition) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:[fileURL path]] &&
             // If the cache should behave like a TTL cache, then only fetch the object if there's a valid ageLimit and  the object is still alive
             (!self->_ttlCache || self->_ageLimit <= 0 || fabs([[_dates objectForKey:key] timeIntervalSinceDate:now]) < self->_ageLimit)) {
+            NSData *objectData = [[NSData alloc] initWithContentsOfFile:[fileURL path]];
+            
+            //Be careful with locking below. We unlock here so that we're not locked while deserializing, we re-lock after.
+            [self unlock];
             @try {
-                object = [NSKeyedUnarchiver unarchiveObjectWithFile:[fileURL path]];
+                object = _deserializer(objectData);
             }
             @catch (NSException *exception) {
                 NSError *error = nil;
-                [[NSFileManager defaultManager] removeItemAtPath:[fileURL path] error:&error];
+                [self lock];
+                    [[NSFileManager defaultManager] removeItemAtPath:[fileURL path] error:&error];
+                [self unlock];
                 PINDiskCacheError(error);
             }
+            [self lock];
           if (!self->_ttlCache) {
             [self _locked_setFileModificationDate:now forURL:fileURL];
           }
@@ -755,8 +821,12 @@ typedef NS_ENUM(NSUInteger, PINDiskCacheCondition) {
             willAddObjectBlock(self, key, object);
             [self lock];
         }
-  
-        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object];
+    
+        //We unlock here so that we're not locked while serializing.
+        [self unlock];
+            NSData *data = _serializer(object);
+        [self lock];
+    
         NSError *writeError = nil;
   
         BOOL written = [data writeToURL:fileURL options:writeOptions error:&writeError];

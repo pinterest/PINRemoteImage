@@ -36,6 +36,11 @@
     [self.cache setObject:object forKey:key cost:cost];
 }
 
+- (void)removeCachedObjectForKeyFromMemoryCache:(NSString *)key
+{
+    [self.cache removeObjectForKey:key];
+}
+
 //******************************************************************************************************
 // Disk cache methods
 //******************************************************************************************************
@@ -46,11 +51,11 @@
 
 -(void)objectFromDiskCacheForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
 {
-    __weak typeof(self) welf = self;
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if (completion) {
-            __strong typeof(self) sself = welf;
-            completion(sself, key, [sself.cache objectForKey:key]);
+            typeof(self) strongSelf = weakSelf;
+            completion(strongSelf, key, [strongSelf.cache objectForKey:key]);
         }
     });
 }
@@ -74,13 +79,13 @@
 }
 - (void)removeCachedObjectForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
 {
-    __weak typeof(self) welf = self;
+    __weak typeof(self) weakSelf = self;
     id object = [self.cache objectForKey:key];
     [self.cache removeObjectForKey:key];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if (completion) {
-            __strong typeof(self) sself = welf;
-            completion(sself, key, object);
+            typeof(self) strongSelf = weakSelf;
+            completion(strongSelf, key, object);
         }
     });
 }

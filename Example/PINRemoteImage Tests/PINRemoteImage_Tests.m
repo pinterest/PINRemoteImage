@@ -12,6 +12,7 @@
 #import <PINRemoteImage/PINURLSessionManager.h>
 #import <PINRemoteImage/PINImageView+PINRemoteImage.h>
 #import <PINRemoteImage/PINRemoteImageCaching.h>
+#import <PINCache/PINCache.h>
 
 #if USE_FLANIMATED_IMAGE
 #import <FLAnimatedImage/FLAnimatedImage.h>
@@ -511,7 +512,16 @@
 
 - (void)testInvalidObject
 {
-    [self.imageManager.cache cacheObjectOnDisk:@"invalid" forKey:[self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil]];
+    NSString * const kPINRemoteImageDiskCacheName = @"PINRemoteImageManagerCache";
+    NSString *cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+    
+    PINDiskCache *tempDiskCache = [[PINDiskCache alloc] initWithName:kPINRemoteImageDiskCacheName rootPath:cachePath serializer:^NSData * _Nonnull(id<NSCoding>  _Nonnull object) {
+        return [NSKeyedArchiver archivedDataWithRootObject:object];
+    } deserializer:^id<NSCoding> _Nonnull(NSData * _Nonnull data) {
+        return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    } fileExtension:nil];
+    
+    [tempDiskCache setObject:@"invalid" forKey:[self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil]];
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"Download JPEG image"];
     [self.imageManager downloadImageWithURL:[self JPEGURL] completion:^(PINRemoteImageManagerResult *result) {
@@ -764,7 +774,7 @@
 		[expectation fulfill];
 	}];
 	
-	[self.imageManager downloadImageWithURL: [NSURL URLWithString:@"https://media-cache-ec0.pinimg.com/600x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"]
+	[self.imageManager downloadImageWithURL:[NSURL URLWithString:@"https://media-cache-ec0.pinimg.com/600x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"]
 									options:PINRemoteImageManagerDownloadOptionsNone
 								 completion:nil];
 	

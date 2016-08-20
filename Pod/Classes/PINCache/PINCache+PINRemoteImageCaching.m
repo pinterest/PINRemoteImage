@@ -23,6 +23,11 @@
     [self.memoryCache setObject:object forKey:key withCost:cost];
 }
 
+- (void)removeCachedObjectForKeyFromMemoryCache:(NSString *)key
+{
+    [self.memoryCache removeObjectForKey:key];
+}
+
 //******************************************************************************************************
 // Disk cache methods
 //******************************************************************************************************
@@ -33,11 +38,11 @@
 
 -(void)objectFromDiskCacheForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
 {
-    __weak typeof(self) welf = self;
+    __weak typeof(self) weakSelf = self;
     [self.diskCache objectForKey:key block:^(PINDiskCache * _Nonnull cache, NSString * _Nonnull key, id<NSCoding>  _Nullable object) {
         if(completion) {
-            id sself = welf;
-            completion(sself, key, object);
+            typeof(self) strongSelf = weakSelf;
+            completion(strongSelf, key, object);
         }
     }];
 }
@@ -61,11 +66,11 @@
 }
 - (void)removeCachedObjectForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
 {
-    __weak typeof(self) welf = self;
+    __weak typeof(self) weakSelf = self;
     [self removeObjectForKey:key block:^(PINCache * _Nonnull cache, NSString * _Nonnull key, id  _Nullable object) {
         if(completion) {
-            id sself = welf;
-            completion(sself, key, object);
+            typeof(self) strongSelf = weakSelf;
+            completion(strongSelf, key, object);
         }
     }];
 }
