@@ -77,6 +77,7 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
     if ([self.delegate respondsToSelector:@selector(didReceiveAuthenticationChallenge:forTask:completionHandler:)]) {
         [self.delegate didReceiveAuthenticationChallenge:challenge forTask:nil completionHandler:completionHandler];
     } else {
+        //Even though this is documented to be non-nil, in the wild it sometimes is
         if (completionHandler) {
             completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
         }
@@ -96,6 +97,7 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
         if ([strongSelf.delegate respondsToSelector:@selector(didReceiveAuthenticationChallenge:forTask:completionHandler:)]) {
             [strongSelf.delegate didReceiveAuthenticationChallenge:challenge forTask:task completionHandler:completionHandler];
         } else {
+            //Even though this is documented to be non-nil, in the wild it sometimes is
             if (completionHandler) {
                 completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
             }
