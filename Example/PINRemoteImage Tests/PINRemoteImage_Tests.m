@@ -111,6 +111,11 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     return [self JPEGURL_Medium];
 }
 
+- (NSURL *)BASE64URL
+{
+    return [NSURL URLWithString:@"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAABlBMVEUAAAD///+l2Z/dAAAAM0lEQVR4nGP4/5/h/1+G/58ZDrAz3D/McH8yw83NDDeNGe4Ug9C9zwz3gVLMDA/A6P9/AFGGFyjOXZtQAAAAAElFTkSuQmCC"];
+}
+
 - (NSURL *)transparentPNGURL
 {
 	return [NSURL URLWithString:@"https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png"];
@@ -249,6 +254,25 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
         
         [expectation fulfill];
     }];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
+- (void)testBase64
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Decoding base64 image"];
+    [self.imageManager downloadImageWithURL:[self BASE64URL]
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                                 completion:^(PINRemoteImageManagerResult *result)
+     {
+         UIImage *outImage = result.image;
+         FLAnimatedImage *outAnimatedImage = result.animatedImage;
+         
+         XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
+         XCTAssert(CGSizeEqualToSize(outImage.size, CGSizeMake(16,16)), @"Failed decoding image, image size is wrong.");
+         XCTAssert(outAnimatedImage == nil, @"Animated image is not nil.");
+         
+         [expectation fulfill];
+     }];
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
