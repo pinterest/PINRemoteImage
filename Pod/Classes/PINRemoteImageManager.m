@@ -513,7 +513,9 @@ static dispatch_once_t sharedDispatchToken;
         if (data) {
             id object;
             if ([url.resourceSpecifier hasPrefix:@"image/gif"]) {
+#if USE_FLANIMATED_IMAGE
                 object = [FLAnimatedImage animatedImageWithGIFData:data];
+#endif
             } else {
                 object = [UIImage imageWithData:data];
             }
