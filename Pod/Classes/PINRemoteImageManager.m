@@ -574,14 +574,26 @@ static dispatch_once_t sharedDispatchToken;
     }
     
     if ([url.absoluteString hasPrefix:@"data:"]) {
+        NSUInteger colonLocation = [url.absoluteString rangeOfString:@":"].location;
         NSUInteger semicolonLocation = [url.absoluteString rangeOfString:@";"].location;
-        NSUInteger colonLocation = [url.absoluteString rangeOfString:@","].location;
-        if (semicolonLocation != NSNotFound && colonLocation != NSNotFound) {
-            NSString *coding = [url.absoluteString substringWithRange:NSMakeRange(semicolonLocation + 1, colonLocation - semicolonLocation - 1)];
-            NSData *data = [[NSData alloc] initWithBase64Encoding:[url.absoluteString substringFromIndex:colonLocation + 1]];
-            UIImage *object = [UIImage imageWithData:data];
-            if (object && [self earlyReturnWithOptions:options url:url object:object completion:completion]) {
-                return nil;
+        NSUInteger commaLocation = [url.absoluteString rangeOfString:@","].location;
+        if (colonLocation != NSNotFound && semicolonLocation != NSNotFound && commaLocation != NSNotFound && colonLocation < semicolonLocation && semicolonLocation < commaLocation) {
+            NSString *mediaType = [url.absoluteString substringWithRange:NSMakeRange(colonLocation + 1, semicolonLocation - colonLocation - 1)];
+            NSString *coding = [url.absoluteString substringWithRange:NSMakeRange(semicolonLocation + 1, commaLocation - semicolonLocation - 1)];
+            NSData *data;
+            if ([coding isEqualToString:@"base64"]) {
+                data = [[NSData alloc] initWithBase64Encoding:[url.absoluteString substringFromIndex:commaLocation + 1]];
+            }
+            if (data) {
+                id object;
+                if ([mediaType hasSuffix:@"/gif"]) {
+                    object = [FLAnimatedImage animatedImageWithGIFData:data];
+                } else {
+                    object = [UIImage imageWithData:data];
+                }
+                if (object && [self earlyReturnWithOptions:options url:url object:object completion:completion]) {
+                    return nil;
+                }
             }
         }
     }
