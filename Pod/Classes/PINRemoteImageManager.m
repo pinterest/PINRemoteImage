@@ -508,6 +508,19 @@ static dispatch_once_t sharedDispatchToken;
         }
     }
     
+    if ([url.absoluteString hasPrefix:@"data:"]) {
+        NSUInteger semicolonLocation = [url.absoluteString rangeOfString:@";"].location;
+        NSUInteger colonLocation = [url.absoluteString rangeOfString:@","].location;
+        if (semicolonLocation != NSNotFound && colonLocation != NSNotFound) {
+            NSString *coding = [url.absoluteString substringWithRange:NSMakeRange(semicolonLocation + 1, colonLocation - semicolonLocation - 1)];
+            NSData *data = [[NSData alloc] initWithBase64Encoding:[url.absoluteString substringFromIndex:colonLocation + 1]];
+            UIImage *object = [UIImage imageWithData:data];
+            if (object && [self earlyReturnWithOptions:options url:url object:object completion:completion]) {
+                return nil;
+            }
+        }
+    }
+    
     __weak typeof(self) weakSelf = self;
     [_concurrentOperationQueue pin_addOperationWithQueuePriority:priority block:^
      {
