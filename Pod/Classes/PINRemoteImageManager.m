@@ -508,17 +508,20 @@ static dispatch_once_t sharedDispatchToken;
         }
     }
     
-    if ([url.absoluteString hasPrefix:@"data:"]) {
+    if ([url.scheme isEqualToString:@"data"]) {
         NSData *data = [NSData dataWithContentsOfURL:url];
         if (data) {
             id object;
-            if ([url.resourceSpecifier isEqualToString:@"image/gif"]) {
+            if ([url.resourceSpecifier hasPrefix:@"image/gif"]) {
                 object = [FLAnimatedImage animatedImageWithGIFData:data];
             } else {
                 object = [UIImage imageWithData:data];
             }
-            if (object && [self earlyReturnWithOptions:options url:url object:object completion:completion]) {
-                return nil;
+            if (object) {
+                [self.cache.memoryCache setObject:object forKey:key];
+                if ([self earlyReturnWithOptions:options url:url object:object completion:completion]) {
+                    return nil;
+                }
             }
         }
     }
