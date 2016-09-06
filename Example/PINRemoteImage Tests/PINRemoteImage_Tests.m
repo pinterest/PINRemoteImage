@@ -18,6 +18,16 @@
 #import <FLAnimatedImage/FLAnimatedImage.h>
 #endif
 
+static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
+	switch (info) {
+		case kCGImageAlphaNone:
+		case kCGImageAlphaNoneSkipLast:
+		case kCGImageAlphaNoneSkipFirst:
+			return YES;
+		default:
+			return NO;
+	}
+}
 
 #if DEBUG
 @interface PINRemoteImageManager ()
@@ -835,7 +845,7 @@
 		 UIImage *outImage = result.image;
 		 
 		 XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
-		 XCTAssertEqual(CGImageGetAlphaInfo(outImage.CGImage), kCGImageAlphaNone, @"Opaque image has an alpha channel.");
+		 XCTAssert(PINImageAlphaInfoIsOpaque(CGImageGetAlphaInfo(outImage.CGImage)), @"Opaque image has an alpha channel.");
 		 
 		 [expectation fulfill];
 	 }];
@@ -852,7 +862,7 @@
 		 UIImage *outImage = result.image;
 		 
 		 XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
-		 XCTAssertEqual(CGImageGetAlphaInfo(outImage.CGImage), kCGImageAlphaNone, @"Opaque image has an alpha channel.");
+		 XCTAssert(PINImageAlphaInfoIsOpaque(CGImageGetAlphaInfo(outImage.CGImage)), @"Opaque image has an alpha channel.");
 		 
 		 [expectation fulfill];
 	 }];
@@ -870,7 +880,7 @@
 		 UIImage *outImage = result.image;
 		 
 		 XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
-		 XCTAssertNotEqual(CGImageGetAlphaInfo(outImage.CGImage), kCGImageAlphaNone, @"Transparent image has no alpha.");
+		 XCTAssertFalse(PINImageAlphaInfoIsOpaque(CGImageGetAlphaInfo(outImage.CGImage)), @"Transparent image has no alpha.");
 		 
 		 [expectation fulfill];
 	 }];
@@ -887,7 +897,7 @@
 		 UIImage *outImage = result.image;
 		 
 		 XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
-		 XCTAssertNotEqual(CGImageGetAlphaInfo(outImage.CGImage), kCGImageAlphaNone, @"Transparent image has no alpha.");
+		 XCTAssertFalse(PINImageAlphaInfoIsOpaque(CGImageGetAlphaInfo(outImage.CGImage)), @"Transparent image has no alpha.");
 		 
 		 [expectation fulfill];
 	 }];
