@@ -101,6 +101,11 @@
     return [self JPEGURL_Medium];
 }
 
+- (NSURL *)transparentPNGURL
+{
+	return [NSURL URLWithString:@"https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png"];
+}
+
 - (NSURL *)nonTransparentWebPURL
 {
     return [NSURL URLWithString:@"https://www.gstatic.com/webp/gallery/5.webp"];
@@ -818,6 +823,75 @@
             __unused NSString *key = [self.imageManager cacheKeyForURL:defaultURL processorKey:nil];
         }
     }];
+}
+
+- (void)testThatNondecodedJPEGImageHasNoAlpha
+{
+	XCTestExpectation *expectation = [self expectationWithDescription:@"Downloading JPEG image"];
+	[self.imageManager downloadImageWithURL:[self JPEGURL]
+									options:PINRemoteImageManagerDownloadOptionsSkipDecode
+								 completion:^(PINRemoteImageManagerResult *result)
+	 {
+		 UIImage *outImage = result.image;
+		 
+		 XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
+		 XCTAssertEqual(CGImageGetAlphaInfo(outImage.CGImage), kCGImageAlphaNone, @"Opaque image has an alpha channel.");
+		 
+		 [expectation fulfill];
+	 }];
+	[self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
+- (void)testThatDecodedJPEGImageHasNoAlpha
+{
+	XCTestExpectation *expectation = [self expectationWithDescription:@"Downloading JPEG image"];
+	[self.imageManager downloadImageWithURL:[self JPEGURL]
+									options:PINRemoteImageManagerDownloadOptionsNone
+								 completion:^(PINRemoteImageManagerResult *result)
+	 {
+		 UIImage *outImage = result.image;
+		 
+		 XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
+		 XCTAssertEqual(CGImageGetAlphaInfo(outImage.CGImage), kCGImageAlphaNone, @"Opaque image has an alpha channel.");
+		 
+		 [expectation fulfill];
+	 }];
+	[self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
+
+- (void)testThatNondecodedTransparentPNGImageHasAlpha
+{
+	XCTestExpectation *expectation = [self expectationWithDescription:@"Downloading PNG image"];
+	[self.imageManager downloadImageWithURL:[self transparentPNGURL]
+									options:PINRemoteImageManagerDownloadOptionsSkipDecode
+								 completion:^(PINRemoteImageManagerResult *result)
+	 {
+		 UIImage *outImage = result.image;
+		 
+		 XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
+		 XCTAssertNotEqual(CGImageGetAlphaInfo(outImage.CGImage), kCGImageAlphaNone, @"Transparent image has no alpha.");
+		 
+		 [expectation fulfill];
+	 }];
+	[self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
+- (void)testThatDecodedTransparentPNGImageHasAlpha
+{
+	XCTestExpectation *expectation = [self expectationWithDescription:@"Downloading PNG image"];
+	[self.imageManager downloadImageWithURL:[self transparentPNGURL]
+									options:PINRemoteImageManagerDownloadOptionsNone
+								 completion:^(PINRemoteImageManagerResult *result)
+	 {
+		 UIImage *outImage = result.image;
+		 
+		 XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
+		 XCTAssertNotEqual(CGImageGetAlphaInfo(outImage.CGImage), kCGImageAlphaNone, @"Transparent image has no alpha.");
+		 
+		 [expectation fulfill];
+	 }];
+	[self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
 @end
