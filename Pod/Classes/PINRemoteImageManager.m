@@ -520,7 +520,8 @@ static dispatch_once_t sharedDispatchToken;
                 object = [UIImage imageWithData:data];
             }
             if (object) {
-                [self.cache.memoryCache setObject:object forKey:key];
+                // Uncomment when cache key will be hash of URL
+                //[self.cache.memoryCache setObject:object forKey:key];
                 if ([self earlyReturnWithOptions:options url:url object:object completion:completion]) {
                     return nil;
                 }
