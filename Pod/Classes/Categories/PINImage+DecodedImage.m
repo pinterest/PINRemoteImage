@@ -150,6 +150,7 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
     
     PINImage *decodedImage = nil;
     if (ctx) {
+        CGContextSetBlendMode(ctx, kCGBlendModeCopy);
         CGContextDrawImage(ctx, CGRectMake(0, 0, imageSize.width, imageSize.height), imageRef);
         
         CGImageRef newImage = CGBitmapContextCreateImage(ctx);
