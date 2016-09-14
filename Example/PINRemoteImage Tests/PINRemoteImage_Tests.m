@@ -265,7 +265,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
                                  completion:^(PINRemoteImageManagerResult *result)
      {
          UIImage *outImage = result.image;
-         FLAnimatedImage *outAnimatedImage = result.animatedImage;
+         FLAnimatedImage *outAnimatedImage = result.alternativeRepresentation;
          
          XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
          XCTAssert(CGSizeEqualToSize(outImage.size, CGSizeMake(16,16)), @"Failed decoding image, image size is wrong.");

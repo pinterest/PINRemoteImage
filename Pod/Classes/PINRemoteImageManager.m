@@ -587,7 +587,7 @@ static dispatch_once_t sharedDispatchToken;
             if (object) {
                 // Uncomment when cache key will be hash of URL
                 //[self.cache.memoryCache setObject:object forKey:key];
-                if ([self earlyReturnWithOptions:options url:url object:object completion:completion]) {
+                if ([self earlyReturnWithOptions:options url:url key:key object:object completion:completion]) {
                     return nil;
                 }
             }
