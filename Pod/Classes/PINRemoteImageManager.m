@@ -582,7 +582,7 @@ static dispatch_once_t sharedDispatchToken;
                 object = [FLAnimatedImage animatedImageWithGIFData:data];
 #endif
             } else {
-                object = [UIImage imageWithData:data];
+                object = [PINImage imageWithData:data];
             }
             if (object) {
                 // Uncomment when cache key will be hash of URL
