@@ -576,20 +576,8 @@ static dispatch_once_t sharedDispatchToken;
     if ([url.scheme isEqualToString:@"data"]) {
         NSData *data = [NSData dataWithContentsOfURL:url];
         if (data) {
-            id object;
-            if ([url.resourceSpecifier hasPrefix:@"image/gif"]) {
-#if USE_FLANIMATED_IMAGE
-                object = [FLAnimatedImage animatedImageWithGIFData:data];
-#endif
-            } else {
-                object = [PINImage imageWithData:data];
-            }
-            if (object) {
-                // Uncomment when cache key will be hash of URL
-                //[self.cache.memoryCache setObject:object forKey:key];
-                if ([self earlyReturnWithOptions:options url:url key:key object:object completion:completion]) {
-                    return nil;
-                }
+            if ([self earlyReturnWithOptions:options url:url key:key object:data completion:completion]) {
+                return nil;
             }
         }
     }
