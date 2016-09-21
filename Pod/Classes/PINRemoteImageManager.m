@@ -573,6 +573,15 @@ static dispatch_once_t sharedDispatchToken;
         }
     }
     
+    if ([url.scheme isEqualToString:@"data"]) {
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        if (data) {
+            if ([self earlyReturnWithOptions:options url:url key:key object:data completion:completion]) {
+                return nil;
+            }
+        }
+    }
+    
     __weak typeof(self) weakSelf = self;
     [_concurrentOperationQueue pin_addOperationWithQueuePriority:priority block:^
      {
