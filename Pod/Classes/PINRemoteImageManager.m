@@ -22,6 +22,7 @@
 #import "PINURLSessionManager.h"
 #import "PINRemoteImageMemoryContainer.h"
 #import "PINRemoteImageCaching.h"
+#import "PINRequestRetryStrategy.h"
 
 #import "NSData+ImageDetectors.h"
 #import "PINImage+DecodedImage.h"
@@ -138,6 +139,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 @property (nonatomic, assign) float lowQualityBPSThreshold;
 @property (nonatomic, assign) BOOL shouldUpgradeLowQualityImages;
 @property (nonatomic, copy) PINRemoteImageManagerAuthenticationChallenge authenticationChallengeHandler;
+@property (nonatomic, copy) id<PINRequestRetryStrategy> (^retryStrategyCreationBlock)();
 #if DEBUG
 @property (nonatomic, assign) float currentBPS;
 @property (nonatomic, assign) BOOL overrideBPS;
@@ -241,6 +243,9 @@ static dispatch_once_t sharedDispatchToken;
             alternateRepProvider = _defaultAlternateRepresentationProvider;
         }
         _alternateRepProvider = alternateRepProvider;
+        [self setRetryStrategyCreationBlock:^id<PINRequestRetryStrategy>{
+            return [[PINRequestExponentialRetryStrategy alloc] initWithRetryMaxCount:PINRemoteImageMaxRetries delayBase:PINRemoteImageRetryDelayBase];
+        }];
     }
     return self;
 }
@@ -598,6 +603,7 @@ static dispatch_once_t sharedDispatchToken;
              BOOL taskExisted = NO;
              if (task == nil) {
                  task = [[taskClass alloc] init];
+                 task.retryStrategy = self.retryStrategyCreationBlock();
                  PINLog(@"Task does not exist creating with key: %@, URL: %@, UUID: %@, task: %p", key, url, UUID, task);
     #if PINRemoteImageLogging
                  task.key = key;
@@ -819,39 +825,35 @@ static dispatch_once_t sharedDispatchToken;
             NSError *remoteImageError = error;
             PINImage *image = nil;
             id alternativeRepresentation = nil;
+            [strongSelf lock];
+            PINRemoteImageDownloadTask *task = [strongSelf.tasks objectForKey:key];
             
-            if (remoteImageError && [[self class] retriableError:remoteImageError]) {
-                //attempt to retry after delay
-                BOOL retry = NO;
-                NSUInteger newNumberOfRetries = 0;
-                [strongSelf lock];
-                PINRemoteImageDownloadTask *task = [self.tasks objectForKey:key];
-                if (task.numberOfRetries < PINRemoteImageMaxRetries) {
-                    retry = YES;
-                    newNumberOfRetries = ++task.numberOfRetries;
-                    task.urlSessionTaskOperation = nil;
-                }
+            
+            if ([task.retryStrategy shouldRetryWithError:remoteImageError]) {
+                task.urlSessionTaskOperation = nil;
+                int64_t delay = [task.retryStrategy nextDelay];
                 [strongSelf unlock];
                 
-                if (retry) {
-                    int64_t delay = powf(PINRemoteImageRetryDelayBase, newNumberOfRetries);
-                    PINLog(@"Retrying download of %@ in %d seconds.", URL, delay);
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                        typeof(self) strongSelf = weakSelf;
-                        [strongSelf lock];
-                            PINRemoteImageDownloadTask *task = [strongSelf.tasks objectForKey:key];
-                            if (task.urlSessionTaskOperation == nil && task.callbackBlocks.count > 0) {
-                                //If completionBlocks.count == 0, we've canceled before we were even able to start.
-                                PINDataTaskOperation *urlSessionTaskOperation = [strongSelf sessionTaskWithURL:URL key:key options:options priority:priority];
-                                task.urlSessionTaskOperation = urlSessionTaskOperation;
-                            }
-                        [strongSelf unlock];
-                    });
-                    return;
-                }
+                PINLog(@"Retrying download of %@ in %d seconds.", URL, delay);
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    typeof(self) strongSelf = weakSelf;
+                    [strongSelf lock];
+                    PINRemoteImageDownloadTask *task = [strongSelf.tasks objectForKey:key];
+                    [task.retryStrategy incrementRetryCount];
+                    if (task.urlSessionTaskOperation == nil && task.callbackBlocks.count > 0) {
+                        //If completionBlocks.count == 0, we've canceled before we were even able to start.
+                        PINDataTaskOperation *urlSessionTaskOperation = [strongSelf sessionTaskWithURL:URL key:key options:options priority:priority];
+                        task.urlSessionTaskOperation = urlSessionTaskOperation;
+                    }
+                    [strongSelf unlock];
+                });
+                return;
             } else if (remoteImageError == nil) {
+                [strongSelf unlock];
                 //stores the object in the caches
                 [strongSelf materializeAndCacheObject:data cacheInDisk:data additionalCost:0 key:key options:options outImage:&image outAltRep:&alternativeRepresentation];
+            } else {
+                [strongSelf unlock];
             }
             
             if (error == nil && image == nil && alternativeRepresentation == nil) {
@@ -863,18 +865,6 @@ static dispatch_once_t sharedDispatchToken;
             [strongSelf callCompletionsWithKey:key image:image alternativeRepresentation:alternativeRepresentation cached:NO error:remoteImageError finalized:YES];
         }];
     }];
-}
-
-+ (BOOL)retriableError:(NSError *)remoteImageError
-{
-    if ([remoteImageError.domain isEqualToString:PINURLErrorDomain]) {
-        return remoteImageError.code >= 500;
-    } else if ([remoteImageError.domain isEqualToString:NSURLErrorDomain] && remoteImageError.code == NSURLErrorUnsupportedURL) {
-        return NO;
-    } else if ([remoteImageError.domain isEqualToString:PINRemoteImageManagerErrorDomain]) {
-        return NO;
-    }
-    return YES;
 }
 
 - (PINDataTaskOperation *)downloadDataWithURL:(NSURL *)url
@@ -1069,6 +1059,16 @@ static dispatch_once_t sharedDispatchToken;
                 }
             }
         }
+        [strongSelf unlock];
+    }];
+}
+
+- (void)setRetryStrategyCreationBlock:(id<PINRequestRetryStrategy> (^)())retryStrategyCreationBlock {
+    __weak typeof(self) weakSelf = self;
+    [_concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityHigh block:^{
+        typeof(self) strongSelf = weakSelf;
+        [strongSelf lock];
+        self.retryStrategyCreationBlock = retryStrategyCreationBlock;
         [strongSelf unlock];
     }];
 }

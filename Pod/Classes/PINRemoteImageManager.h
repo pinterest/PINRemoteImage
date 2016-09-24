@@ -14,6 +14,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
+@protocol PINRequestRetryStrategy;
 @protocol PINRemoteImageManagerAlternateRepresentationProvider;
 @protocol PINRemoteImageCaching;
 
@@ -485,5 +486,12 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  * @param UUID NSUUID of the task to set the priority on.
  */
 - (void)setProgressImageCallback:(nullable PINRemoteImageManagerImageCompletion)progressImageCallback ofTaskWithUUID:(nonnull NSUUID *)UUID;
+
+/**
+ Set retry strategy for all requests
+ 
+ @param retryStrategyCreationBlock a block which should create new instance of PINRequestRetryStrategy when called.
+ */
+- (void)setRetryStrategyCreationBlock:(id<PINRequestRetryStrategy> (^)())retryStrategyCreationBlock;
 
 @end

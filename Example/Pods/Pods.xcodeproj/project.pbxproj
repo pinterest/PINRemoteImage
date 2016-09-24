@@ -252,6 +252,10 @@
 		90FA2D3C61AD0C533AE59261AD685431 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F653D3FC69B3BFEFC81B9DD1AA0BF75 /* Foundation.framework */; };
 		91AE0CF3C6F67CB6A8F166FF13D8B57E /* color_cache.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B962ABB7F8EAC0B911CFD84D66A3651 /* color_cache.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc"; }; };
 		91C32064B18B0608B3C7E644DC1EB13E /* alphai.h in Headers */ = {isa = PBXBuildFile; fileRef = 15B4758BE6AB13C24A0835A3458E330F /* alphai.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		925830EA1D96715A00500C4F /* PINRequestRetryStrategy.h in Headers */ = {isa = PBXBuildFile; fileRef = 925830E81D96715A00500C4F /* PINRequestRetryStrategy.h */; };
+		925830EB1D96715A00500C4F /* PINRequestRetryStrategy.h in Headers */ = {isa = PBXBuildFile; fileRef = 925830E81D96715A00500C4F /* PINRequestRetryStrategy.h */; };
+		925830EC1D96715A00500C4F /* PINRequestRetryStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 925830E91D96715A00500C4F /* PINRequestRetryStrategy.m */; };
+		925830ED1D96715A00500C4F /* PINRequestRetryStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 925830E91D96715A00500C4F /* PINRequestRetryStrategy.m */; };
 		95B60590068F6B806928D8F7F95A697E /* yuv.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D58C7F209EF668DC65D9780ADE2755 /* yuv.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		961655E9BA895F0BC91B2FD8F7638481 /* cost_mips_dsp_r2.c in Sources */ = {isa = PBXBuildFile; fileRef = 1DA7B7E3D3641D4BB5A28D94B23BB252 /* cost_mips_dsp_r2.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc"; }; };
 		9634E001B76CEA45929789DD743A7FD3 /* PINRemoteImageManagerResult.m in Sources */ = {isa = PBXBuildFile; fileRef = B914244471E11A336CDF9E038E6B7EDB /* PINRemoteImageManagerResult.m */; };
@@ -695,6 +699,8 @@
 		90B25009CF8DCC27B2B1E0BDD881DE98 /* delta_palettization.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = delta_palettization.c; path = src/enc/delta_palettization.c; sourceTree = "<group>"; };
 		90FF34CEFA119D852ED6A6CC1B1B8F80 /* FLAnimatedImage-iOS7.1-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "FLAnimatedImage-iOS7.1-dummy.m"; sourceTree = "<group>"; };
 		9236DE015259BB06676240163A58E8E6 /* muxinternal.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = muxinternal.c; path = src/mux/muxinternal.c; sourceTree = "<group>"; };
+		925830E81D96715A00500C4F /* PINRequestRetryStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRequestRetryStrategy.h; sourceTree = "<group>"; };
+		925830E91D96715A00500C4F /* PINRequestRetryStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINRequestRetryStrategy.m; sourceTree = "<group>"; };
 		925E841ADB0E805F18D8FC6955AE572C /* Pods-PINRemoteImage Tests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-PINRemoteImage Tests-resources.sh"; sourceTree = "<group>"; };
 		92CAD77B67D37C3BEBCF08EEE0125E79 /* PINRemoteImage-iOS7.1.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "PINRemoteImage-iOS7.1.xcconfig"; sourceTree = "<group>"; };
 		92DD85B9CBF6ACB4C29AF647E7947C9E /* anim_encode.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = anim_encode.c; path = src/mux/anim_encode.c; sourceTree = "<group>"; };
@@ -1411,6 +1417,8 @@
 				C33913D3A4FA1EBCAF451B75D9F43A0D /* PINRemoteLock.m */,
 				D605ED50ACCB0380BF4F11E8FBBB1437 /* PINURLSessionManager.h */,
 				CEBC429BF6A1E9D5A40871BABE9F2237 /* PINURLSessionManager.m */,
+				925830E81D96715A00500C4F /* PINRequestRetryStrategy.h */,
+				925830E91D96715A00500C4F /* PINRequestRetryStrategy.m */,
 				C89F5D029794B69DC39B4F7122AB9AB5 /* Categories */,
 				030537BAFDD8F41975D8F3F973EB201D /* Image Categories */,
 			);
@@ -1466,6 +1474,7 @@
 				F04EA78A279461D73453838E188BE0E9 /* PINDataTaskOperation.h in Headers */,
 				2E45A4CE7532311115EF575288FA561D /* PINImage+DecodedImage.h in Headers */,
 				5824AD89543214E55BEEC8F632638EB9 /* PINImage+WebP.h in Headers */,
+				925830EA1D96715A00500C4F /* PINRequestRetryStrategy.h in Headers */,
 				CE6FD7F6A89F79661A59E0653FAE234A /* PINImageView+PINRemoteImage.h in Headers */,
 				07C0781173FC8DABC9132C218AE42962 /* PINProgressiveImage.h in Headers */,
 				9A5856797DCBEE1E1AA22A0777A39CDE /* PINRemoteImage.h in Headers */,
@@ -1626,6 +1635,7 @@
 				5B85FD81956AC86E6747E4EF27E54556 /* PINDataTaskOperation.h in Headers */,
 				38ECCA0587D751E1467EBB83F68DA283 /* PINImage+DecodedImage.h in Headers */,
 				233FF6DF7BDAA71EAF70603CE91B52FA /* PINImage+WebP.h in Headers */,
+				925830EB1D96715A00500C4F /* PINRequestRetryStrategy.h in Headers */,
 				752C801EB9448B3D377D6D5B33D23840 /* PINImageView+PINRemoteImage.h in Headers */,
 				ADD5AC209E44FAA788E1CC993B051FF8 /* PINProgressiveImage.h in Headers */,
 				62968D6BB6F31472F545ADBC248DC565 /* PINRemoteImage.h in Headers */,
@@ -2030,6 +2040,7 @@
 				EA3D0F856F9071FC3139318554B18D3A /* PINDataTaskOperation.m in Sources */,
 				CC616E25D7C8DC1EE3474E6BE920A576 /* PINImage+DecodedImage.m in Sources */,
 				B963874CA4C32B72196F27CECB65FB74 /* PINImage+WebP.m in Sources */,
+				925830ED1D96715A00500C4F /* PINRequestRetryStrategy.m in Sources */,
 				B16F98BE7850AF777BAB6F926ECD06CC /* PINImageView+PINRemoteImage.m in Sources */,
 				CD6C580DD854E1995F35012C10266C6B /* PINProgressiveImage.m in Sources */,
 				DD69BBEBEAFF56E661E56D4FA7BFB67A /* PINRemoteImage-iOS8.1-dummy.m in Sources */,
@@ -2181,6 +2192,7 @@
 				D8B13CC4D2D3AC7C22A3A72AB47B6E89 /* PINDataTaskOperation.m in Sources */,
 				35ABFD5C912308B29FB8FC29FCCD10CE /* PINImage+DecodedImage.m in Sources */,
 				7131881F05B82D5CAAA8E05D74DFB6FF /* PINImage+WebP.m in Sources */,
+				925830EC1D96715A00500C4F /* PINRequestRetryStrategy.m in Sources */,
 				A1C7460C23F542445882181942A657C7 /* PINImageView+PINRemoteImage.m in Sources */,
 				B791A933232219A1837BE9C46C286ADB /* PINProgressiveImage.m in Sources */,
 				83A1CD6E4FF3FD51834F7781210CA863 /* PINRemoteImage-iOS7.1-dummy.m in Sources */,

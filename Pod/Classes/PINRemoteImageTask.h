@@ -18,6 +18,9 @@
 @property (nonatomic, copy, nullable) NSString *key;
 #endif
 
+@property (nonatomic, strong, nullable) id<PINRequestRetryStrategy> retryStrategy;
+
+
 - (void)addCallbacksWithCompletionBlock:(nonnull PINRemoteImageManagerImageCompletion)completionBlock
                      progressImageBlock:(nullable PINRemoteImageManagerImageCompletion)progressImageBlock
                   progressDownloadBlock:(nullable PINRemoteImageManagerProgressDownload)progressDownloadBlock
