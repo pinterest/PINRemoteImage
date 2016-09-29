@@ -57,7 +57,7 @@ extern const NSTimeInterval kPINAnimatedImageDisplayRefreshRate;
 /**
  Called when the cover image of an animatedImage is ready.
  */
-typedef void(^PINAnimatedImageInfoReady)(PINImage *coverImage);
+typedef void(^PINAnimatedImageInfoReady)(PINImage *firstImage);
 
 
 /**
@@ -99,23 +99,23 @@ typedef void(^PINAnimatedImageInfoReady)(PINImage *coverImage);
 @property (nonatomic, assign, readwrite) PINAnimatedImageStatus status;
 
 /**
- A helper function which references status to check if the coverImage is ready.
+ A helper function which references status to check if the firstImage is ready.
  */
-@property (nonatomic, readonly) BOOL coverImageReady;
+@property (nonatomic, readonly) BOOL firstImageReady;
 /**
  A helper function which references status to check if playback is ready.
  */
 @property (nonatomic, readonly) BOOL playbackReady;
 /**
  The first frame / cover image of the animated image.
- @warning Access to this property before status == PINAnimatedImageStatusInfoProcessed is undefined. You can check coverImageReady too.
+ @warning Access to this property before status == PINAnimatedImageStatusInfoProcessed is undefined. You can check firstImageReady too.
  */
-@property (nonatomic, readonly) PINImage *coverImage;
+@property (nonatomic, readonly) PINImage *firstImage;
 /**
  The total duration of one loop of playback.
  @warning Access to this property before status == PINAnimatedImageStatusInfoProcessed is undefined.
  */
-@property (nonatomic, readonly) CFTimeInterval totalDuration;
+@property (nonatomic, readonly) CFTimeInterval combinedDurations;
 /**
  The number of frames to play per second * display refresh rate (defined as 60 which appears to be true on iOS). You probably want to 
  set this value on a displayLink.
@@ -142,13 +142,13 @@ typedef void(^PINAnimatedImageInfoReady)(PINImage *coverImage);
  @param index The index of the frame to retrieve.
  @warning Access to this property before status == PINAnimatedImageStatusInfoProcessed is undefined.
  */
-- (CGImageRef)imageAtIndex:(NSUInteger)index;
+- (CGImageRef)imageForIndex:(NSUInteger)index;
 /**
  The duration of the frame of the passed in index.
  @param index The index of the frame to retrieve the duration it should be shown for.
  @warning Access to this property before status == PINAnimatedImageStatusInfoProcessed is undefined.
  */
-- (CFTimeInterval)durationAtIndex:(NSUInteger)index;
+- (CFTimeInterval)durationForIndex:(NSUInteger)index;
 /**
  Clears out the strong references to any memory maps that are being held.
  */
