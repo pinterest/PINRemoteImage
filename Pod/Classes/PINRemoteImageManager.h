@@ -176,6 +176,7 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
 
 /**
  The result of this method is assigned to self.cache in init. If you wish to provide a customized cache to the manager you can subclass PINRemoteImageManager and return a custom object, implementing PINRemoteImageCaching protocol from this method. Same effect could be achieved by using initWithSessionConfiguration:alternativeRepresentationProvider:imageCache: initializer.
+  @warning This method is meant only for override. It will be called *once* by an instance of PINRemoteImageManager. The default implementation creates a new cache on every call. If you're looking to access the cache being used by an instance of PINRemoteImageManager, @c cache.
  @return An instance of a object, implementing PINRemoteImageCaching protocol.
  */
 - (nonnull id<PINRemoteImageCaching>)defaultImageCache;
