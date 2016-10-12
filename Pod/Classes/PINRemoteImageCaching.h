@@ -22,15 +22,15 @@ typedef void (^PINRemoteImageCachingObjectBlock)(id<PINRemoteImageCaching> cache
 //******************************************************************************************************
 // Memory cache methods
 //******************************************************************************************************
-- (nullable id)objectFromMemoryCacheForKey:(NSString *)key;
-- (void)cacheObjectInMemory:(id)object forKey:(NSString *)key withCost:(NSUInteger)cost;
+- (nullable id)objectFromMemoryForKey:(NSString *)key;
+- (void)setObjectInMemory:(id)object forKey:(NSString *)key withCost:(NSUInteger)cost;
 
 //******************************************************************************************************
 // Disk cache methods
 //******************************************************************************************************
 - (nullable id)objectFromDiskCacheForKey:(NSString *)key;
 - (void)objectFromDiskCacheForKey:(NSString *)key completion:(nullable PINRemoteImageCachingObjectBlock)completion;
-- (void)cacheObjectOnDisk:(id)object forKey:(NSString *)key;
+- (void)setObjectOnDisk:(id)object forKey:(NSString *)key;
 
 
 - (BOOL)objectExistsInCacheForKey:(NSString *)key;
@@ -41,7 +41,7 @@ typedef void (^PINRemoteImageCachingObjectBlock)(id<PINRemoteImageCaching> cache
 
 @optional
 
-- (void)removeCachedObjectForKeyFromMemoryCache:(NSString *)key;
+- (void)removeCachedObjectForKeyFromMemory:(NSString *)key;
 
 @end
 

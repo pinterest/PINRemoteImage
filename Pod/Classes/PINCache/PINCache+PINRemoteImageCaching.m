@@ -13,17 +13,17 @@
 //******************************************************************************************************
 // Memory cache methods
 //******************************************************************************************************
--(nullable id)objectFromMemoryCacheForKey:(NSString *)key
+-(nullable id)objectFromMemoryForKey:(NSString *)key
 {
     return [self.memoryCache objectForKey:key];
 }
 
--(void)cacheObjectInMemory:(id)object forKey:(NSString *)key withCost:(NSUInteger)cost
+-(void)setObjectInMemory:(id)object forKey:(NSString *)key withCost:(NSUInteger)cost
 {
     [self.memoryCache setObject:object forKey:key withCost:cost];
 }
 
-- (void)removeCachedObjectForKeyFromMemoryCache:(NSString *)key
+- (void)removeCachedObjectForKeyFromMemory:(NSString *)key
 {
     [self.memoryCache removeObjectForKey:key];
 }
