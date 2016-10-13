@@ -1319,7 +1319,7 @@ static dispatch_once_t sharedDispatchToken;
             NSString *cacheKey = [strongSelf cacheKeyForURL:url processorKey:nil];
             
             //we don't actually need the object, just need to know it exists so that we can request it later
-            BOOL hasObject = [self.cache objectExistsInCacheForKey:cacheKey];
+            BOOL hasObject = [self.cache objectExistsForKey:cacheKey];
             
             if (hasObject) {
                 highestQualityDownloadedIdx = idx;
@@ -1368,7 +1368,7 @@ static dispatch_once_t sharedDispatchToken;
                                   typeof(self) strongSelf = weakSelf;
                                   //clean out any lower quality images from the cache
                                   for (NSInteger idx = downloadIdx - 1; idx >= 0; idx--) {
-                                      [[strongSelf cache] removeCachedObjectForKey:[strongSelf cacheKeyForURL:[urls objectAtIndex:idx] processorKey:nil]];
+                                      [[strongSelf cache] removeObjectForKey:[strongSelf cacheKeyForURL:[urls objectAtIndex:idx] processorKey:nil]];
                                   }
                                   
                                   if (completion) {
@@ -1480,7 +1480,7 @@ static dispatch_once_t sharedDispatchToken;
     
     if (image == nil && alternateRepresentation == nil) {
         PINLog(@"Invalid item in cache");
-        [self.cache removeCachedObjectForKey:key completion:nil];
+        [self.cache removeObjectForKey:key completion:nil];
         return NO;
     }
     return YES;
@@ -1536,7 +1536,7 @@ static dispatch_once_t sharedDispatchToken;
     if (container) {
         materialize(container);
     } else {
-        [self.cache objectFromDiskCacheForKey:key completion:^(id<PINRemoteImageCaching> _Nonnull cache,
+        [self.cache objectFromDiskForKey:key completion:^(id<PINRemoteImageCaching> _Nonnull cache,
                                                          NSString *_Nonnull key,
                                                          id _Nullable object) {
           if (object) {

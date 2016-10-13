@@ -23,7 +23,7 @@
     [self.memoryCache setObject:object forKey:key withCost:cost];
 }
 
-- (void)removeCachedObjectForKeyFromMemory:(NSString *)key
+- (void)removeObjectForKeyFromMemory:(NSString *)key
 {
     [self.memoryCache removeObjectForKey:key];
 }
@@ -31,12 +31,12 @@
 //******************************************************************************************************
 // Disk cache methods
 //******************************************************************************************************
--(nullable id)objectFromDiskCacheForKey:(NSString *)key
+-(nullable id)objectFromDiskForKey:(NSString *)key
 {
     return [self.diskCache objectForKey:key];
 }
 
--(void)objectFromDiskCacheForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
+-(void)objectFromDiskForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
 {
     __weak typeof(self) weakSelf = self;
     [self.diskCache objectForKey:key block:^(PINDiskCache * _Nonnull cache, NSString * _Nonnull key, id<NSCoding>  _Nullable object) {
@@ -47,12 +47,12 @@
     }];
 }
 
--(void)cacheObjectOnDisk:(id)object forKey:(NSString *)key
+-(void)setObjectOnDisk:(id)object forKey:(NSString *)key
 {
     [self.diskCache setObject:object forKey:key];
 }
 
-- (BOOL)objectExistsInCacheForKey:(NSString *)key
+- (BOOL)objectExistsForKey:(NSString *)key
 {
     return [self containsObjectForKey:key];
 }
@@ -60,11 +60,7 @@
 //******************************************************************************************************
 // Common cache methods
 //******************************************************************************************************
-- (void)removeCachedObjectForKey:(NSString *)key
-{
-    [self removeObjectForKey:key];
-}
-- (void)removeCachedObjectForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
+- (void)removeObjectForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
 {
     __weak typeof(self) weakSelf = self;
     [self removeObjectForKey:key block:^(PINCache * _Nonnull cache, NSString * _Nonnull key, id  _Nullable object) {
@@ -74,11 +70,5 @@
         }
     }];
 }
-
-- (void)removeAllCachedObjects
-{
-    [self removeAllObjects];
-}
-
 
 @end

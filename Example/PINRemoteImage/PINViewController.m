@@ -36,7 +36,7 @@
 {
     srand([[NSDate date] timeIntervalSince1970]);
     if (self = [super initWithCoder:aDecoder]) {
-        [[[PINRemoteImageManager sharedImageManager] cache] removeAllCachedObjects];
+        [[[PINRemoteImageManager sharedImageManager] cache] removeAllObjects];
     }
     return self;
 }
