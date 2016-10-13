@@ -566,7 +566,7 @@ static dispatch_once_t sharedDispatchToken;
 
     //Check to see if the image is in memory cache and we're on the main thread.
     //If so, special case this to avoid flashing the UI
-    id object = [self.cache objectFromMemoryCacheForKey:key];
+    id object = [self.cache objectFromMemoryForKey:key];
     if (object) {
         if ([self earlyReturnWithOptions:options url:url key:key object:object completion:completion]) {
             return nil;
@@ -1118,7 +1118,7 @@ static dispatch_once_t sharedDispatchToken;
 {
     CFTimeInterval requestTime = CACurrentMediaTime();
     
-    id object = [self.cache objectFromMemoryCacheForKey:cacheKey];
+    id object = [self.cache objectFromMemoryForKey:cacheKey];
     PINImage *image;
     id alternativeRepresentation;
     NSError *error = nil;
@@ -1319,7 +1319,7 @@ static dispatch_once_t sharedDispatchToken;
             NSString *cacheKey = [strongSelf cacheKeyForURL:url processorKey:nil];
             
             //we don't actually need the object, just need to know it exists so that we can request it later
-            BOOL hasObject = [self.cache objectExistsInCacheForKey:cacheKey];
+            BOOL hasObject = [self.cache objectExistsForKey:cacheKey];
             
             if (hasObject) {
                 highestQualityDownloadedIdx = idx;
@@ -1368,7 +1368,7 @@ static dispatch_once_t sharedDispatchToken;
                                   typeof(self) strongSelf = weakSelf;
                                   //clean out any lower quality images from the cache
                                   for (NSInteger idx = downloadIdx - 1; idx >= 0; idx--) {
-                                      [[strongSelf cache] removeCachedObjectForKey:[strongSelf cacheKeyForURL:[urls objectAtIndex:idx] processorKey:nil]];
+                                      [[strongSelf cache] removeObjectForKey:[strongSelf cacheKeyForURL:[urls objectAtIndex:idx] processorKey:nil]];
                                   }
                                   
                                   if (completion) {
@@ -1463,11 +1463,11 @@ static dispatch_once_t sharedDispatchToken;
     if (updateMemoryCache) {
         cacheCost += [data length];
         cacheCost += (image.size.width + image.size.height) * 4; // 4 bytes per pixel
-        [self.cache cacheObjectInMemory:container forKey:key withCost:cacheCost];
+        [self.cache setObjectInMemory:container forKey:key withCost:cacheCost];
     }
     
     if (diskData) {
-        [self.cache cacheObjectOnDisk:diskData forKey:key];
+        [self.cache setObjectOnDisk:diskData forKey:key];
     }
     
     if (outImage) {
@@ -1480,7 +1480,7 @@ static dispatch_once_t sharedDispatchToken;
     
     if (image == nil && alternateRepresentation == nil) {
         PINLog(@"Invalid item in cache");
-        [self.cache removeCachedObjectForKey:key completion:nil];
+        [self.cache removeObjectForKey:key completion:nil];
         return NO;
     }
     return YES;
@@ -1532,11 +1532,11 @@ static dispatch_once_t sharedDispatchToken;
         completion(YES, valid, image, alternativeRepresentation);
     };
     
-    PINRemoteImageMemoryContainer *container = [self.cache objectFromMemoryCacheForKey:key];
+    PINRemoteImageMemoryContainer *container = [self.cache objectFromMemoryForKey:key];
     if (container) {
         materialize(container);
     } else {
-        [self.cache objectFromDiskCacheForKey:key completion:^(id<PINRemoteImageCaching> _Nonnull cache,
+        [self.cache objectFromDiskForKey:key completion:^(id<PINRemoteImageCaching> _Nonnull cache,
                                                          NSString *_Nonnull key,
                                                          id _Nullable object) {
           if (object) {

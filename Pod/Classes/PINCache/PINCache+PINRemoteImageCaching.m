@@ -13,17 +13,17 @@
 //******************************************************************************************************
 // Memory cache methods
 //******************************************************************************************************
--(nullable id)objectFromMemoryCacheForKey:(NSString *)key
+-(nullable id)objectFromMemoryForKey:(NSString *)key
 {
     return [self.memoryCache objectForKey:key];
 }
 
--(void)cacheObjectInMemory:(id)object forKey:(NSString *)key withCost:(NSUInteger)cost
+-(void)setObjectInMemory:(id)object forKey:(NSString *)key withCost:(NSUInteger)cost
 {
     [self.memoryCache setObject:object forKey:key withCost:cost];
 }
 
-- (void)removeCachedObjectForKeyFromMemoryCache:(NSString *)key
+- (void)removeObjectForKeyFromMemory:(NSString *)key
 {
     [self.memoryCache removeObjectForKey:key];
 }
@@ -31,12 +31,12 @@
 //******************************************************************************************************
 // Disk cache methods
 //******************************************************************************************************
--(nullable id)objectFromDiskCacheForKey:(NSString *)key
+-(nullable id)objectFromDiskForKey:(NSString *)key
 {
     return [self.diskCache objectForKey:key];
 }
 
--(void)objectFromDiskCacheForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
+-(void)objectFromDiskForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
 {
     __weak typeof(self) weakSelf = self;
     [self.diskCache objectForKey:key block:^(PINDiskCache * _Nonnull cache, NSString * _Nonnull key, id<NSCoding>  _Nullable object) {
@@ -47,12 +47,12 @@
     }];
 }
 
--(void)cacheObjectOnDisk:(id)object forKey:(NSString *)key
+-(void)setObjectOnDisk:(id)object forKey:(NSString *)key
 {
     [self.diskCache setObject:object forKey:key];
 }
 
-- (BOOL)objectExistsInCacheForKey:(NSString *)key
+- (BOOL)objectExistsForKey:(NSString *)key
 {
     return [self containsObjectForKey:key];
 }
@@ -60,25 +60,17 @@
 //******************************************************************************************************
 // Common cache methods
 //******************************************************************************************************
-- (void)removeCachedObjectForKey:(NSString *)key
+- (void)removeObjectForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
 {
-    [self removeObjectForKey:key];
-}
-- (void)removeCachedObjectForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
-{
+  if (completion) {
     __weak typeof(self) weakSelf = self;
     [self removeObjectForKey:key block:^(PINCache * _Nonnull cache, NSString * _Nonnull key, id  _Nullable object) {
-        if(completion) {
-            typeof(self) strongSelf = weakSelf;
-            completion(strongSelf, key, object);
-        }
+        typeof(self) strongSelf = weakSelf;
+        completion(strongSelf, key, object);
     }];
+  } else {
+    [self removeObjectForKey:key block:nil];
+  }
 }
-
-- (void)removeAllCachedObjects
-{
-    [self removeAllObjects];
-}
-
 
 @end

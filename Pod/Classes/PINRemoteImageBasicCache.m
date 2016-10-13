@@ -26,17 +26,17 @@
 //******************************************************************************************************
 // Memory cache methods
 //******************************************************************************************************
--(nullable id)objectFromMemoryCacheForKey:(NSString *)key
+-(nullable id)objectFromMemoryForKey:(NSString *)key
 {
     return [self.cache objectForKey:key];
 }
 
--(void)cacheObjectInMemory:(id)object forKey:(NSString *)key withCost:(NSUInteger)cost
+-(void)setObjectInMemory:(id)object forKey:(NSString *)key withCost:(NSUInteger)cost
 {
     [self.cache setObject:object forKey:key cost:cost];
 }
 
-- (void)removeCachedObjectForKeyFromMemoryCache:(NSString *)key
+- (void)removeObjectForKeyFromMemory:(NSString *)key
 {
     [self.cache removeObjectForKey:key];
 }
@@ -44,12 +44,12 @@
 //******************************************************************************************************
 // Disk cache methods
 //******************************************************************************************************
--(nullable id)objectFromDiskCacheForKey:(NSString *)key
+-(nullable id)objectFromDiskForKey:(NSString *)key
 {
     return [self.cache objectForKey:key];
 }
 
--(void)objectFromDiskCacheForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
+-(void)objectFromDiskForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
 {
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -60,12 +60,12 @@
     });
 }
 
--(void)cacheObjectOnDisk:(id)object forKey:(NSString *)key
+-(void)setObjectOnDisk:(id)object forKey:(NSString *)key
 {
     [self.cache setObject:object forKey:key];
 }
 
-- (BOOL)objectExistsInCacheForKey:(NSString *)key
+- (BOOL)objectExistsForKey:(NSString *)key
 {
     return [self.cache objectForKey:key] != nil;
 }
@@ -73,11 +73,11 @@
 //******************************************************************************************************
 // Common methods, should apply to both in-memory and disk storage
 //******************************************************************************************************
-- (void)removeCachedObjectForKey:(NSString *)key
+- (void)removeObjectForKey:(NSString *)key
 {
     [self.cache removeObjectForKey:key];
 }
-- (void)removeCachedObjectForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
+- (void)removeObjectForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
 {
     __weak typeof(self) weakSelf = self;
     id object = [self.cache objectForKey:key];
@@ -90,7 +90,7 @@
     });
 }
 
-- (void)removeAllCachedObjects
+- (void)removeAllObjects
 {
     [self.cache removeAllObjects];
 }

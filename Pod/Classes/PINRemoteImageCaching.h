@@ -22,26 +22,26 @@ typedef void (^PINRemoteImageCachingObjectBlock)(id<PINRemoteImageCaching> cache
 //******************************************************************************************************
 // Memory cache methods
 //******************************************************************************************************
-- (nullable id)objectFromMemoryCacheForKey:(NSString *)key;
-- (void)cacheObjectInMemory:(id)object forKey:(NSString *)key withCost:(NSUInteger)cost;
+- (nullable id)objectFromMemoryForKey:(NSString *)key;
+- (void)setObjectInMemory:(id)object forKey:(NSString *)key withCost:(NSUInteger)cost;
 
 //******************************************************************************************************
 // Disk cache methods
 //******************************************************************************************************
-- (nullable id)objectFromDiskCacheForKey:(NSString *)key;
-- (void)objectFromDiskCacheForKey:(NSString *)key completion:(nullable PINRemoteImageCachingObjectBlock)completion;
-- (void)cacheObjectOnDisk:(id)object forKey:(NSString *)key;
+- (nullable id)objectFromDiskForKey:(NSString *)key;
+- (void)objectFromDiskForKey:(NSString *)key completion:(nullable PINRemoteImageCachingObjectBlock)completion;
+- (void)setObjectOnDisk:(id)object forKey:(NSString *)key;
 
 
-- (BOOL)objectExistsInCacheForKey:(NSString *)key;
+- (BOOL)objectExistsForKey:(NSString *)key;
 
-- (void)removeCachedObjectForKey:(NSString *)key;
-- (void)removeCachedObjectForKey:(NSString *)key completion:(nullable PINRemoteImageCachingObjectBlock)completion;
-- (void)removeAllCachedObjects;
+- (void)removeObjectForKey:(NSString *)key;
+- (void)removeObjectForKey:(NSString *)key completion:(nullable PINRemoteImageCachingObjectBlock)completion;
+- (void)removeAllObjects;
 
 @optional
 
-- (void)removeCachedObjectForKeyFromMemoryCache:(NSString *)key;
+- (void)removeObjectForKeyFromMemory:(NSString *)key;
 
 @end
 
