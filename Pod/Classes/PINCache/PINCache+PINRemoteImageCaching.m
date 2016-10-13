@@ -62,13 +62,15 @@
 //******************************************************************************************************
 - (void)removeObjectForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
 {
+  if (completion) {
     __weak typeof(self) weakSelf = self;
     [self removeObjectForKey:key block:^(PINCache * _Nonnull cache, NSString * _Nonnull key, id  _Nullable object) {
-        if(completion) {
-            typeof(self) strongSelf = weakSelf;
-            completion(strongSelf, key, object);
-        }
+        typeof(self) strongSelf = weakSelf;
+        completion(strongSelf, key, object);
     }];
+  } else {
+    [self removeObjectForKey:key block:nil];
+  }
 }
 
 @end
