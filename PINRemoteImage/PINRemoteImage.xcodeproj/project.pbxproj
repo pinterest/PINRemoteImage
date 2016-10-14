@@ -12,6 +12,12 @@
 		68CA927C1DAEFF93008BECE2 /* PINRemoteImageBasicCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 68CA92791DAEFF93008BECE2 /* PINRemoteImageBasicCache.h */; };
 		68CA927D1DAEFF93008BECE2 /* PINRemoteImageBasicCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA927A1DAEFF93008BECE2 /* PINRemoteImageBasicCache.m */; };
 		68CA927E1DAEFF93008BECE2 /* PINRemoteImageCaching.h in Headers */ = {isa = PBXBuildFile; fileRef = 68CA927B1DAEFF93008BECE2 /* PINRemoteImageCaching.h */; };
+		68CA92831DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.h in Headers */ = {isa = PBXBuildFile; fileRef = 68CA92811DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.h */; };
+		68CA92841DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA92821DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.m */; };
+		68CA92891DB19C2F008BECE2 /* PINAnimatedImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 68CA92851DB19C2F008BECE2 /* PINAnimatedImage.h */; };
+		68CA928A1DB19C2F008BECE2 /* PINAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA92861DB19C2F008BECE2 /* PINAnimatedImage.m */; };
+		68CA928B1DB19C2F008BECE2 /* PINAnimatedImageManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 68CA92871DB19C2F008BECE2 /* PINAnimatedImageManager.h */; };
+		68CA928C1DB19C2F008BECE2 /* PINAnimatedImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA92881DB19C2F008BECE2 /* PINAnimatedImageManager.m */; };
 		68F0EA921CB32EC900F1FD41 /* PINAlternateRepresentationProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 68F0EA8E1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.h */; };
 		68F0EA931CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 68F0EA8F1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m */; };
 		68F0EA941CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 68F0EA901CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.h */; };
@@ -54,16 +60,22 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6858C0731C9CC5BA00E420EB /* PINRemoteLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINRemoteLock.h; path = ../../Pod/Classes/PINRemoteLock.h; sourceTree = "<group>"; };
-		6858C0741C9CC5BA00E420EB /* PINRemoteLock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PINRemoteLock.m; path = ../../Pod/Classes/PINRemoteLock.m; sourceTree = "<group>"; };
-		68CA92791DAEFF93008BECE2 /* PINRemoteImageBasicCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINRemoteImageBasicCache.h; path = ../../Pod/Classes/PINRemoteImageBasicCache.h; sourceTree = "<group>"; };
-		68CA927A1DAEFF93008BECE2 /* PINRemoteImageBasicCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PINRemoteImageBasicCache.m; path = ../../Pod/Classes/PINRemoteImageBasicCache.m; sourceTree = "<group>"; };
-		68CA927B1DAEFF93008BECE2 /* PINRemoteImageCaching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINRemoteImageCaching.h; path = ../../Pod/Classes/PINRemoteImageCaching.h; sourceTree = "<group>"; };
+		6858C0731C9CC5BA00E420EB /* PINRemoteLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteLock.h; sourceTree = "<group>"; };
+		6858C0741C9CC5BA00E420EB /* PINRemoteLock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINRemoteLock.m; sourceTree = "<group>"; };
+		68CA92791DAEFF93008BECE2 /* PINRemoteImageBasicCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageBasicCache.h; sourceTree = "<group>"; };
+		68CA927A1DAEFF93008BECE2 /* PINRemoteImageBasicCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageBasicCache.m; sourceTree = "<group>"; };
+		68CA927B1DAEFF93008BECE2 /* PINRemoteImageCaching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageCaching.h; sourceTree = "<group>"; };
+		68CA92811DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "PINCache+PINRemoteImageCaching.h"; path = "PINCache/PINCache+PINRemoteImageCaching.h"; sourceTree = "<group>"; };
+		68CA92821DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PINCache+PINRemoteImageCaching.m"; path = "PINCache/PINCache+PINRemoteImageCaching.m"; sourceTree = "<group>"; };
+		68CA92851DB19C2F008BECE2 /* PINAnimatedImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINAnimatedImage.h; sourceTree = "<group>"; };
+		68CA92861DB19C2F008BECE2 /* PINAnimatedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINAnimatedImage.m; sourceTree = "<group>"; };
+		68CA92871DB19C2F008BECE2 /* PINAnimatedImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINAnimatedImageManager.h; sourceTree = "<group>"; };
+		68CA92881DB19C2F008BECE2 /* PINAnimatedImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINAnimatedImageManager.m; sourceTree = "<group>"; };
 		68EB25231C6A64E4002501A3 /* PINRemoteImage-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PINRemoteImage-Prefix.pch"; sourceTree = "<group>"; };
-		68F0EA8E1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINAlternateRepresentationProvider.h; path = ../../Pod/Classes/PINAlternateRepresentationProvider.h; sourceTree = "<group>"; };
-		68F0EA8F1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PINAlternateRepresentationProvider.m; path = ../../Pod/Classes/PINAlternateRepresentationProvider.m; sourceTree = "<group>"; };
-		68F0EA901CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINRemoteImageMemoryContainer.h; path = ../../Pod/Classes/PINRemoteImageMemoryContainer.h; sourceTree = "<group>"; };
-		68F0EA911CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PINRemoteImageMemoryContainer.m; path = ../../Pod/Classes/PINRemoteImageMemoryContainer.m; sourceTree = "<group>"; };
+		68F0EA8E1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINAlternateRepresentationProvider.h; sourceTree = "<group>"; };
+		68F0EA8F1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINAlternateRepresentationProvider.m; sourceTree = "<group>"; };
+		68F0EA901CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageMemoryContainer.h; sourceTree = "<group>"; };
+		68F0EA911CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageMemoryContainer.m; sourceTree = "<group>"; };
 		9DD47F981C699F4B00F12CA0 /* PINButton+PINRemoteImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PINButton+PINRemoteImage.h"; sourceTree = "<group>"; };
 		9DD47F991C699F4B00F12CA0 /* PINButton+PINRemoteImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PINButton+PINRemoteImage.m"; sourceTree = "<group>"; };
 		9DD47F9A1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PINImageView+PINRemoteImage.h"; sourceTree = "<group>"; };
@@ -72,34 +84,34 @@
 		9DD47FA11C699FDC00F12CA0 /* PINImage+DecodedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PINImage+DecodedImage.m"; sourceTree = "<group>"; };
 		9DD47FA21C699FDC00F12CA0 /* PINImage+WebP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PINImage+WebP.h"; sourceTree = "<group>"; };
 		9DD47FA31C699FDC00F12CA0 /* PINImage+WebP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PINImage+WebP.m"; sourceTree = "<group>"; };
-		F165DFD81BD0504A0008C6E8 /* PINRemoteImageMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINRemoteImageMacros.h; path = ../../Pod/Classes/PINRemoteImageMacros.h; sourceTree = "<group>"; };
+		F165DFD81BD0504A0008C6E8 /* PINRemoteImageMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageMacros.h; sourceTree = "<group>"; };
 		F1B918D11BCF239200710963 /* PINRemoteImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PINRemoteImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1B918D61BCF239200710963 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F1B918DC1BCF23C800710963 /* PINRemoteImageCategoryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PINRemoteImageCategoryManager.m; path = ../../Pod/Classes/PINRemoteImageCategoryManager.m; sourceTree = "<group>"; };
+		F1B918DC1BCF23C800710963 /* PINRemoteImageCategoryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageCategoryManager.m; sourceTree = "<group>"; };
 		F1B918DE1BCF23C800710963 /* NSData+ImageDetectors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+ImageDetectors.h"; sourceTree = "<group>"; };
 		F1B918DF1BCF23C800710963 /* NSData+ImageDetectors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+ImageDetectors.m"; sourceTree = "<group>"; };
 		F1B918E51BCF23C800710963 /* FLAnimatedImageView+PINRemoteImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FLAnimatedImageView+PINRemoteImage.h"; sourceTree = "<group>"; };
 		F1B918E61BCF23C800710963 /* FLAnimatedImageView+PINRemoteImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FLAnimatedImageView+PINRemoteImage.m"; sourceTree = "<group>"; };
-		F1B918EB1BCF23C800710963 /* PINDataTaskOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINDataTaskOperation.h; path = ../../Pod/Classes/PINDataTaskOperation.h; sourceTree = "<group>"; };
-		F1B918EC1BCF23C800710963 /* PINDataTaskOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PINDataTaskOperation.m; path = ../../Pod/Classes/PINDataTaskOperation.m; sourceTree = "<group>"; };
-		F1B918ED1BCF23C800710963 /* PINProgressiveImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINProgressiveImage.h; path = ../../Pod/Classes/PINProgressiveImage.h; sourceTree = "<group>"; };
-		F1B918EE1BCF23C800710963 /* PINProgressiveImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PINProgressiveImage.m; path = ../../Pod/Classes/PINProgressiveImage.m; sourceTree = "<group>"; };
-		F1B918EF1BCF23C800710963 /* PINRemoteImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINRemoteImage.h; path = ../../Pod/Classes/PINRemoteImage.h; sourceTree = "<group>"; };
-		F1B918F01BCF23C800710963 /* PINRemoteImageCallbacks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINRemoteImageCallbacks.h; path = ../../Pod/Classes/PINRemoteImageCallbacks.h; sourceTree = "<group>"; };
-		F1B918F11BCF23C800710963 /* PINRemoteImageCallbacks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PINRemoteImageCallbacks.m; path = ../../Pod/Classes/PINRemoteImageCallbacks.m; sourceTree = "<group>"; };
-		F1B918F21BCF23C800710963 /* PINRemoteImageCategoryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINRemoteImageCategoryManager.h; path = ../../Pod/Classes/PINRemoteImageCategoryManager.h; sourceTree = "<group>"; };
-		F1B918F31BCF23C800710963 /* PINRemoteImageDownloadTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINRemoteImageDownloadTask.h; path = ../../Pod/Classes/PINRemoteImageDownloadTask.h; sourceTree = "<group>"; };
-		F1B918F41BCF23C800710963 /* PINRemoteImageDownloadTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PINRemoteImageDownloadTask.m; path = ../../Pod/Classes/PINRemoteImageDownloadTask.m; sourceTree = "<group>"; };
-		F1B918F51BCF23C800710963 /* PINRemoteImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINRemoteImageManager.h; path = ../../Pod/Classes/PINRemoteImageManager.h; sourceTree = "<group>"; };
-		F1B918F61BCF23C800710963 /* PINRemoteImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PINRemoteImageManager.m; path = ../../Pod/Classes/PINRemoteImageManager.m; sourceTree = "<group>"; };
-		F1B918F71BCF23C800710963 /* PINRemoteImageManagerResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINRemoteImageManagerResult.h; path = ../../Pod/Classes/PINRemoteImageManagerResult.h; sourceTree = "<group>"; };
-		F1B918F81BCF23C800710963 /* PINRemoteImageManagerResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PINRemoteImageManagerResult.m; path = ../../Pod/Classes/PINRemoteImageManagerResult.m; sourceTree = "<group>"; };
-		F1B918F91BCF23C800710963 /* PINRemoteImageProcessorTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINRemoteImageProcessorTask.h; path = ../../Pod/Classes/PINRemoteImageProcessorTask.h; sourceTree = "<group>"; };
-		F1B918FA1BCF23C800710963 /* PINRemoteImageProcessorTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PINRemoteImageProcessorTask.m; path = ../../Pod/Classes/PINRemoteImageProcessorTask.m; sourceTree = "<group>"; };
-		F1B918FB1BCF23C800710963 /* PINRemoteImageTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINRemoteImageTask.h; path = ../../Pod/Classes/PINRemoteImageTask.h; sourceTree = "<group>"; };
-		F1B918FC1BCF23C800710963 /* PINRemoteImageTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PINRemoteImageTask.m; path = ../../Pod/Classes/PINRemoteImageTask.m; sourceTree = "<group>"; };
-		F1B918FD1BCF23C800710963 /* PINURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PINURLSessionManager.h; path = ../../Pod/Classes/PINURLSessionManager.h; sourceTree = "<group>"; };
-		F1B918FE1BCF23C900710963 /* PINURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PINURLSessionManager.m; path = ../../Pod/Classes/PINURLSessionManager.m; sourceTree = "<group>"; };
+		F1B918EB1BCF23C800710963 /* PINDataTaskOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINDataTaskOperation.h; sourceTree = "<group>"; };
+		F1B918EC1BCF23C800710963 /* PINDataTaskOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINDataTaskOperation.m; sourceTree = "<group>"; };
+		F1B918ED1BCF23C800710963 /* PINProgressiveImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINProgressiveImage.h; sourceTree = "<group>"; };
+		F1B918EE1BCF23C800710963 /* PINProgressiveImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINProgressiveImage.m; sourceTree = "<group>"; };
+		F1B918EF1BCF23C800710963 /* PINRemoteImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteImage.h; sourceTree = "<group>"; };
+		F1B918F01BCF23C800710963 /* PINRemoteImageCallbacks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageCallbacks.h; sourceTree = "<group>"; };
+		F1B918F11BCF23C800710963 /* PINRemoteImageCallbacks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageCallbacks.m; sourceTree = "<group>"; };
+		F1B918F21BCF23C800710963 /* PINRemoteImageCategoryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageCategoryManager.h; sourceTree = "<group>"; };
+		F1B918F31BCF23C800710963 /* PINRemoteImageDownloadTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageDownloadTask.h; sourceTree = "<group>"; };
+		F1B918F41BCF23C800710963 /* PINRemoteImageDownloadTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageDownloadTask.m; sourceTree = "<group>"; };
+		F1B918F51BCF23C800710963 /* PINRemoteImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageManager.h; sourceTree = "<group>"; };
+		F1B918F61BCF23C800710963 /* PINRemoteImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageManager.m; sourceTree = "<group>"; };
+		F1B918F71BCF23C800710963 /* PINRemoteImageManagerResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageManagerResult.h; sourceTree = "<group>"; };
+		F1B918F81BCF23C800710963 /* PINRemoteImageManagerResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageManagerResult.m; sourceTree = "<group>"; };
+		F1B918F91BCF23C800710963 /* PINRemoteImageProcessorTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageProcessorTask.h; sourceTree = "<group>"; };
+		F1B918FA1BCF23C800710963 /* PINRemoteImageProcessorTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageProcessorTask.m; sourceTree = "<group>"; };
+		F1B918FB1BCF23C800710963 /* PINRemoteImageTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageTask.h; sourceTree = "<group>"; };
+		F1B918FC1BCF23C800710963 /* PINRemoteImageTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageTask.m; sourceTree = "<group>"; };
+		F1B918FD1BCF23C800710963 /* PINURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINURLSessionManager.h; sourceTree = "<group>"; };
+		F1B918FE1BCF23C900710963 /* PINURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINURLSessionManager.m; sourceTree = "<group>"; };
 		F1B919221BCF273F00710963 /* PINCache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PINCache.framework; path = ../Carthage/Build/iOS/PINCache.framework; sourceTree = "<group>"; };
 		F1E3658B1BE04112003BF022 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -116,6 +128,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		68CA92801DB19C06008BECE2 /* PINCache */ = {
+			isa = PBXGroup;
+			children = (
+				68CA92811DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.h */,
+				68CA92821DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.m */,
+			);
+			name = PINCache;
+			sourceTree = "<group>";
+		};
 		68EB25221C6A64BE002501A3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -127,9 +148,9 @@
 		F165DFD61BD021E30008C6E8 /* Public */ = {
 			isa = PBXGroup;
 			children = (
+				F1B918E41BCF23C800710963 /* Image Categories */,
 				F1B918EF1BCF23C800710963 /* PINRemoteImage.h */,
 				F165DFD81BD0504A0008C6E8 /* PINRemoteImageMacros.h */,
-				F1B918E41BCF23C800710963 /* Image Categories */,
 				F1B918ED1BCF23C800710963 /* PINProgressiveImage.h */,
 				F1B918EE1BCF23C800710963 /* PINProgressiveImage.m */,
 				F1B918F21BCF23C800710963 /* PINRemoteImageCategoryManager.h */,
@@ -142,12 +163,18 @@
 				F1B918FE1BCF23C900710963 /* PINURLSessionManager.m */,
 			);
 			name = Public;
+			path = ../../Pod/Classes;
 			sourceTree = "<group>";
 		};
 		F165DFD71BD021EE0008C6E8 /* Project */ = {
 			isa = PBXGroup;
 			children = (
+				68CA92801DB19C06008BECE2 /* PINCache */,
 				F1B918DD1BCF23C800710963 /* Categories */,
+				68CA92851DB19C2F008BECE2 /* PINAnimatedImage.h */,
+				68CA92861DB19C2F008BECE2 /* PINAnimatedImage.m */,
+				68CA92871DB19C2F008BECE2 /* PINAnimatedImageManager.h */,
+				68CA92881DB19C2F008BECE2 /* PINAnimatedImageManager.m */,
 				F1B918EB1BCF23C800710963 /* PINDataTaskOperation.h */,
 				F1B918EC1BCF23C800710963 /* PINDataTaskOperation.m */,
 				F1B918F01BCF23C800710963 /* PINRemoteImageCallbacks.h */,
@@ -169,6 +196,7 @@
 				68CA927B1DAEFF93008BECE2 /* PINRemoteImageCaching.h */,
 			);
 			name = Project;
+			path = ../../Pod/Classes;
 			sourceTree = "<group>";
 		};
 		F1B918C71BCF239200710963 = {
@@ -211,8 +239,7 @@
 				9DD47FA21C699FDC00F12CA0 /* PINImage+WebP.h */,
 				9DD47FA31C699FDC00F12CA0 /* PINImage+WebP.m */,
 			);
-			name = Categories;
-			path = ../../Pod/Classes/Categories;
+			path = Categories;
 			sourceTree = "<group>";
 		};
 		F1B918E41BCF23C800710963 /* Image Categories */ = {
@@ -225,8 +252,7 @@
 				9DD47F9A1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h */,
 				9DD47F9B1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.m */,
 			);
-			name = "Image Categories";
-			path = "../../Pod/Classes/Image Categories";
+			path = "Image Categories";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -237,11 +263,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				9DD47FA61C699FDC00F12CA0 /* PINImage+WebP.h in Headers */,
+				68CA928B1DB19C2F008BECE2 /* PINAnimatedImageManager.h in Headers */,
 				F1B919131BCF23C900710963 /* PINRemoteImageCategoryManager.h in Headers */,
 				68CA927E1DAEFF93008BECE2 /* PINRemoteImageCaching.h in Headers */,
 				F1B919161BCF23C900710963 /* PINRemoteImageManager.h in Headers */,
 				F1B9190C1BCF23C900710963 /* PINDataTaskOperation.h in Headers */,
 				9DD47F9E1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h in Headers */,
+				68CA92831DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.h in Headers */,
 				9DD47F9C1C699F4B00F12CA0 /* PINButton+PINRemoteImage.h in Headers */,
 				F165DFD91BD0504A0008C6E8 /* PINRemoteImageMacros.h in Headers */,
 				68F0EA941CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.h in Headers */,
@@ -259,6 +287,7 @@
 				9DD47FA41C699FDC00F12CA0 /* PINImage+DecodedImage.h in Headers */,
 				68CA927C1DAEFF93008BECE2 /* PINRemoteImageBasicCache.h in Headers */,
 				F1B919141BCF23C900710963 /* PINRemoteImageDownloadTask.h in Headers */,
+				68CA92891DB19C2F008BECE2 /* PINAnimatedImage.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,13 +364,16 @@
 				F1B919121BCF23C900710963 /* PINRemoteImageCallbacks.m in Sources */,
 				9DD47F9D1C699F4B00F12CA0 /* PINButton+PINRemoteImage.m in Sources */,
 				6858C0761C9CC5BA00E420EB /* PINRemoteLock.m in Sources */,
+				68CA928C1DB19C2F008BECE2 /* PINAnimatedImageManager.m in Sources */,
 				F1B919191BCF23C900710963 /* PINRemoteImageManagerResult.m in Sources */,
 				F1B9191D1BCF23C900710963 /* PINRemoteImageTask.m in Sources */,
+				68CA928A1DB19C2F008BECE2 /* PINAnimatedImage.m in Sources */,
 				F1B919011BCF23C900710963 /* NSData+ImageDetectors.m in Sources */,
 				F1B918FF1BCF23C900710963 /* PINRemoteImageCategoryManager.m in Sources */,
 				9DD47FA51C699FDC00F12CA0 /* PINImage+DecodedImage.m in Sources */,
 				68F0EA951CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.m in Sources */,
 				F1B919151BCF23C900710963 /* PINRemoteImageDownloadTask.m in Sources */,
+				68CA92841DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.m in Sources */,
 				68CA927D1DAEFF93008BECE2 /* PINRemoteImageBasicCache.m in Sources */,
 				F1B9191F1BCF23C900710963 /* PINURLSessionManager.m in Sources */,
 				F1B9191B1BCF23C900710963 /* PINRemoteImageProcessorTask.m in Sources */,
