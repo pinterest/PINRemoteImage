@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   
   # Include optional FLAnimatedImage module
-  s.default_subspecs = 'FLAnimatedImage','PINCache'
+  s.default_subspecs = 'FLAnimatedImage'
   
   ### Subspecs
   s.subspec 'Core' do |cs|
@@ -30,9 +30,10 @@ Pod::Spec.new do |s|
     cs.tvos.deployment_target = "9.0"
     cs.osx.deployment_target = "10.9"
     cs.source_files = 'Pod/Classes/**/*.{h,m}'
-    cs.exclude_files = 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h', 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m','Pod/Classes/PINCache/**/*.{h,m}'
+    cs.exclude_files = 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h', 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m'
     cs.public_header_files = 'Pod/Classes/**/*.h'
     cs.frameworks = 'ImageIO', 'Accelerate'
+	cs.dependency 'PINCache', '3.0.1-beta'
   end
   
   s.subspec 'iOS' do |ios|
@@ -67,12 +68,6 @@ Pod::Spec.new do |s|
     }
     webp.dependency 'PINRemoteImage/Core'
     webp.dependency 'libwebp'
-  end
-  
-  s.subspec "PINCache" do |pc|
-    pc.dependency 'PINRemoteImage/Core'    
-	pc.dependency 'PINCache', '>=3.0.1-beta'
-	pc.source_files = 'Pod/Classes/PINCache/**/*.{h,m}'
   end
   
 end
