@@ -39,15 +39,14 @@ BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
 
 @end
 
-static dispatch_once_t startupCleanupOnce;
-
 @implementation PINAnimatedImageManager
 
 + (void)initialize
 {
   if (self == [PINAnimatedImageManager class]) {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-      dispatch_once(&startupCleanupOnce, ^{
+    static dispatch_once_t startupCleanupOnce;
+    dispatch_once(&startupCleanupOnce, ^{
+      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self cleanupFiles];
       });
     });
@@ -78,9 +77,7 @@ static dispatch_once_t startupCleanupOnce;
 - (instancetype)init
 {
   if (self = [super init]) {
-    dispatch_once(&startupCleanupOnce, ^{
-      [PINAnimatedImageManager cleanupFiles];
-    });
+    // We perform cleanup at some point before -init, in +initialize.
     
     _lock = [[PINRemoteLock alloc] initWithName:@"PINAnimatedImageManager lock"];
     
