@@ -261,10 +261,10 @@ static dispatch_once_t sharedDispatchToken;
         [[NSFileManager defaultManager] removeItemAtURL:[tempDiskCache cacheURL] error:nil];
         [pinDefaults setInteger:kPINRemoteImageDiskCacheVersion forKey:kPINRemoteImageDiskCacheVersionKey];
     }
-    
-    return [[PINCache alloc] initWithName:kPINRemoteImageDiskCacheName rootPath:cacheURL serializer:^NSData * _Nonnull(id<NSCoding>  _Nonnull object) {
+  
+    return [[PINCache alloc] initWithName:kPINRemoteImageDiskCacheName rootPath:cacheURL serializer:^NSData * _Nonnull(id<NSCoding>  _Nonnull object, NSString * _Nonnull key) {
         return (NSData *)object;
-    } deserializer:^id<NSCoding> _Nonnull(NSData * _Nonnull data) {
+    } deserializer:^id<NSCoding> _Nonnull(NSData * _Nonnull data, NSString * _Nonnull key) {
         return data;
     } fileExtension:nil];
 #else

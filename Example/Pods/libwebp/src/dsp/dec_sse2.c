@@ -21,7 +21,9 @@
 // #define USE_TRANSFORM_AC3
 
 #include <emmintrin.h>
+#include "./common_sse2.h"
 #include "../dec/vp8i.h"
+#include "../utils/utils.h"
 
 //------------------------------------------------------------------------------
 // Transforms (Paragraph 14.4)
@@ -102,34 +104,7 @@ static void Transform(const int16_t* in, uint8_t* dst, int do_two) {
     const __m128i tmp3 = _mm_sub_epi16(a, d);
 
     // Transpose the two 4x4.
-    // a00 a01 a02 a03   b00 b01 b02 b03
-    // a10 a11 a12 a13   b10 b11 b12 b13
-    // a20 a21 a22 a23   b20 b21 b22 b23
-    // a30 a31 a32 a33   b30 b31 b32 b33
-    const __m128i transpose0_0 = _mm_unpacklo_epi16(tmp0, tmp1);
-    const __m128i transpose0_1 = _mm_unpacklo_epi16(tmp2, tmp3);
-    const __m128i transpose0_2 = _mm_unpackhi_epi16(tmp0, tmp1);
-    const __m128i transpose0_3 = _mm_unpackhi_epi16(tmp2, tmp3);
-    // a00 a10 a01 a11   a02 a12 a03 a13
-    // a20 a30 a21 a31   a22 a32 a23 a33
-    // b00 b10 b01 b11   b02 b12 b03 b13
-    // b20 b30 b21 b31   b22 b32 b23 b33
-    const __m128i transpose1_0 = _mm_unpacklo_epi32(transpose0_0, transpose0_1);
-    const __m128i transpose1_1 = _mm_unpacklo_epi32(transpose0_2, transpose0_3);
-    const __m128i transpose1_2 = _mm_unpackhi_epi32(transpose0_0, transpose0_1);
-    const __m128i transpose1_3 = _mm_unpackhi_epi32(transpose0_2, transpose0_3);
-    // a00 a10 a20 a30 a01 a11 a21 a31
-    // b00 b10 b20 b30 b01 b11 b21 b31
-    // a02 a12 a22 a32 a03 a13 a23 a33
-    // b02 b12 a22 b32 b03 b13 b23 b33
-    T0 = _mm_unpacklo_epi64(transpose1_0, transpose1_1);
-    T1 = _mm_unpackhi_epi64(transpose1_0, transpose1_1);
-    T2 = _mm_unpacklo_epi64(transpose1_2, transpose1_3);
-    T3 = _mm_unpackhi_epi64(transpose1_2, transpose1_3);
-    // a00 a10 a20 a30   b00 b10 b20 b30
-    // a01 a11 a21 a31   b01 b11 b21 b31
-    // a02 a12 a22 a32   b02 b12 b22 b32
-    // a03 a13 a23 a33   b03 b13 b23 b33
+    VP8Transpose_2_4x4_16b(&tmp0, &tmp1, &tmp2, &tmp3, &T0, &T1, &T2, &T3);
   }
 
   // Horizontal pass and subsequent transpose.
@@ -164,34 +139,8 @@ static void Transform(const int16_t* in, uint8_t* dst, int do_two) {
     const __m128i shifted3 = _mm_srai_epi16(tmp3, 3);
 
     // Transpose the two 4x4.
-    // a00 a01 a02 a03   b00 b01 b02 b03
-    // a10 a11 a12 a13   b10 b11 b12 b13
-    // a20 a21 a22 a23   b20 b21 b22 b23
-    // a30 a31 a32 a33   b30 b31 b32 b33
-    const __m128i transpose0_0 = _mm_unpacklo_epi16(shifted0, shifted1);
-    const __m128i transpose0_1 = _mm_unpacklo_epi16(shifted2, shifted3);
-    const __m128i transpose0_2 = _mm_unpackhi_epi16(shifted0, shifted1);
-    const __m128i transpose0_3 = _mm_unpackhi_epi16(shifted2, shifted3);
-    // a00 a10 a01 a11   a02 a12 a03 a13
-    // a20 a30 a21 a31   a22 a32 a23 a33
-    // b00 b10 b01 b11   b02 b12 b03 b13
-    // b20 b30 b21 b31   b22 b32 b23 b33
-    const __m128i transpose1_0 = _mm_unpacklo_epi32(transpose0_0, transpose0_1);
-    const __m128i transpose1_1 = _mm_unpacklo_epi32(transpose0_2, transpose0_3);
-    const __m128i transpose1_2 = _mm_unpackhi_epi32(transpose0_0, transpose0_1);
-    const __m128i transpose1_3 = _mm_unpackhi_epi32(transpose0_2, transpose0_3);
-    // a00 a10 a20 a30 a01 a11 a21 a31
-    // b00 b10 b20 b30 b01 b11 b21 b31
-    // a02 a12 a22 a32 a03 a13 a23 a33
-    // b02 b12 a22 b32 b03 b13 b23 b33
-    T0 = _mm_unpacklo_epi64(transpose1_0, transpose1_1);
-    T1 = _mm_unpackhi_epi64(transpose1_0, transpose1_1);
-    T2 = _mm_unpacklo_epi64(transpose1_2, transpose1_3);
-    T3 = _mm_unpackhi_epi64(transpose1_2, transpose1_3);
-    // a00 a10 a20 a30   b00 b10 b20 b30
-    // a01 a11 a21 a31   b01 b11 b21 b31
-    // a02 a12 a22 a32   b02 b12 b22 b32
-    // a03 a13 a23 a33   b03 b13 b23 b33
+    VP8Transpose_2_4x4_16b(&shifted0, &shifted1, &shifted2, &shifted3, &T0, &T1,
+                        &T2, &T3);
   }
 
   // Add inverse transform to 'dst' and store.

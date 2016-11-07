@@ -33,7 +33,8 @@ static void ConvertYUV444ToRGB(const __m128i* const Y0,
   const __m128i k19077 = _mm_set1_epi16(19077);
   const __m128i k26149 = _mm_set1_epi16(26149);
   const __m128i k14234 = _mm_set1_epi16(14234);
-  const __m128i k33050 = _mm_set1_epi16(33050);
+  // 33050 doesn't fit in a signed short: only use this with unsigned arithmetic
+  const __m128i k33050 = _mm_set1_epi16((short)33050);
   const __m128i k17685 = _mm_set1_epi16(17685);
   const __m128i k6419  = _mm_set1_epi16(6419);
   const __m128i k13320 = _mm_set1_epi16(13320);

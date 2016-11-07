@@ -105,6 +105,10 @@ static void MapConfigToTools(VP8Encoder* const enc) {
       256 * 16 * 16 *                 // upper bound: up to 16bit per 4x4 block
       (limit * limit) / (100 * 100);  // ... modulated with a quadratic curve.
 
+  // partition0 = 512k max.
+  enc->mb_header_limit_ =
+      (score_t)256 * 510 * 8 * 1024 / (enc->mb_w_ * enc->mb_h_);
+
   enc->thread_level_ = config->thread_level;
 
   enc->do_search_ = (config->target_size > 0 || config->target_PSNR > 0);

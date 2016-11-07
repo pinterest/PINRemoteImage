@@ -10,6 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class PINMemoryCache;
+@class PINOperationQueue;
 
 /**
  A callback block which provides only the cache as an argument
@@ -32,7 +33,7 @@ typedef void (^PINMemoryCacheContainmentBlock)(BOOL containsObject);
  automatically to reduce memory usage when the app receives a memory warning or goes into the background.
  
  Access is natively synchronous. Asynchronous variations are provided. Every asynchronous method accepts a
- callback block that runs on a concurrent <concurrentQueue>, with cache reads and writes protected by an semaphore.
+ callback block that runs on a concurrent <concurrentQueue>, with cache reads and writes protected by a lock.
  
  All access to the cache is dated so the that the least-used objects can be trimmed first. Setting an
  optional <ageLimit> will trigger a GCD timer to periodically to trim the cache to that age.
@@ -48,12 +49,6 @@ typedef void (^PINMemoryCacheContainmentBlock)(BOOL containsObject);
 
 #pragma mark -
 /// @name Core
-
-/**
- A concurrent queue on which all callbacks are called. It is exposed here so that it can be set to
- target some other queue, such as a global concurrent queue with a priority other than the default.
- */
-@property (readonly) dispatch_queue_t concurrentQueue;
 
 /**
  The total accumulated cost.
@@ -160,6 +155,8 @@ typedef void (^PINMemoryCacheContainmentBlock)(BOOL containsObject);
  @result The shared singleton cache instance.
  */
 + (instancetype)sharedCache;
+
+- (instancetype)initWithOperationQueue:(PINOperationQueue *)operationQueue NS_DESIGNATED_INITIALIZER;
 
 #pragma mark -
 /// @name Asynchronous Methods

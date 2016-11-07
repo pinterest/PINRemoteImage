@@ -553,10 +553,10 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 {
     NSString * const kPINRemoteImageDiskCacheName = @"PINRemoteImageManagerCache";
     NSString *cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
-    
-    PINDiskCache *tempDiskCache = [[PINDiskCache alloc] initWithName:kPINRemoteImageDiskCacheName rootPath:cachePath serializer:^NSData * _Nonnull(id<NSCoding>  _Nonnull object) {
+  
+    PINDiskCache *tempDiskCache = [[PINDiskCache alloc] initWithName:kPINRemoteImageDiskCacheName rootPath:cachePath serializer:^NSData * _Nonnull(id<NSCoding>  _Nonnull object, NSString * _Nonnull key) {
         return [NSKeyedArchiver archivedDataWithRootObject:object];
-    } deserializer:^id<NSCoding> _Nonnull(NSData * _Nonnull data) {
+    } deserializer:^id<NSCoding> _Nonnull(NSData * _Nonnull data, NSString * _Nonnull key) {
         return [NSKeyedUnarchiver unarchiveObjectWithData:data];
     } fileExtension:nil];
     

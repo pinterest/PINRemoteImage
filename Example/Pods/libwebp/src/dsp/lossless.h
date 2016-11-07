@@ -158,7 +158,8 @@ void VP8LCollectColorBlueTransforms_C(const uint32_t* argb, int stride,
 
 void VP8LResidualImage(int width, int height, int bits, int low_effort,
                        uint32_t* const argb, uint32_t* const argb_scratch,
-                       uint32_t* const image, int exact);
+                       uint32_t* const image, int near_lossless, int exact,
+                       int used_subtract_green);
 
 void VP8LColorSpaceTransform(int width, int height, int bits, int quality,
                              uint32_t* const argb, uint32_t* image);
@@ -170,6 +171,17 @@ void VP8LColorSpaceTransform(int width, int height, int bits, int quality,
 static WEBP_INLINE uint32_t VP8LSubSampleSize(uint32_t size,
                                               uint32_t sampling_bits) {
   return (size + (1 << sampling_bits) - 1) >> sampling_bits;
+}
+
+// Converts near lossless quality into max number of bits shaved off.
+static WEBP_INLINE int VP8LNearLosslessBits(int near_lossless_quality) {
+  //    100 -> 0
+  // 80..99 -> 1
+  // 60..79 -> 2
+  // 40..59 -> 3
+  // 20..39 -> 4
+  //  0..19 -> 5
+  return 5 - near_lossless_quality / 20;
 }
 
 // -----------------------------------------------------------------------------
@@ -262,6 +274,11 @@ extern VP8LHistogramAddFunc VP8LHistogramAdd;
 // -----------------------------------------------------------------------------
 // PrefixEncode()
 
+typedef int (*VP8LVectorMismatchFunc)(const uint32_t* const array1,
+                                      const uint32_t* const array2, int length);
+// Returns the first index where array1 and array2 are different.
+extern VP8LVectorMismatchFunc VP8LVectorMismatch;
+
 static WEBP_INLINE int VP8LBitsLog2Ceiling(uint32_t n) {
   const int log_floor = BitsLog2Floor(n);
   if (n == (n & ~(n - 1)))  // zero or a power of two.
@@ -324,7 +341,14 @@ static WEBP_INLINE void VP8LPrefixEncode(int distance, int* const code,
   }
 }
 
-// In-place difference of each component with mod 256.
+// Sum of each component, mod 256.
+static WEBP_INLINE uint32_t VP8LAddPixels(uint32_t a, uint32_t b) {
+  const uint32_t alpha_and_green = (a & 0xff00ff00u) + (b & 0xff00ff00u);
+  const uint32_t red_and_blue = (a & 0x00ff00ffu) + (b & 0x00ff00ffu);
+  return (alpha_and_green & 0xff00ff00u) | (red_and_blue & 0x00ff00ffu);
+}
+
+// Difference of each component, mod 256.
 static WEBP_INLINE uint32_t VP8LSubPixels(uint32_t a, uint32_t b) {
   const uint32_t alpha_and_green =
       0x00ff00ffu + (a & 0xff00ff00u) - (b & 0xff00ff00u);

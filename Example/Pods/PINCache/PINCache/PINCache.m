@@ -4,28 +4,19 @@
 
 #import "PINCache.h"
 
+#import "PINOperationQueue.h"
+#import "PINOperationGroup.h"
+
 static NSString * const PINCachePrefix = @"com.pinterest.PINCache";
 static NSString * const PINCacheSharedName = @"PINCacheShared";
 
 @interface PINCache ()
-#if OS_OBJECT_USE_OBJC
-@property (strong, nonatomic) dispatch_queue_t concurrentQueue;
-#else
-@property (assign, nonatomic) dispatch_queue_t concurrentQueue;
-#endif
+@property (strong, nonatomic) PINOperationQueue *operationQueue;
 @end
 
 @implementation PINCache
 
 #pragma mark - Initialization -
-
-#if !OS_OBJECT_USE_OBJC
-- (void)dealloc
-{
-    dispatch_release(_concurrentQueue);
-    _concurrentQueue = nil;
-}
-#endif
 
 - (instancetype)init
 {
@@ -55,12 +46,12 @@ static NSString * const PINCacheSharedName = @"PINCacheShared";
     
     if (self = [super init]) {
         _name = [name copy];
-        
-        NSString *queueName = [[NSString alloc] initWithFormat:@"%@.%p", PINCachePrefix, (void *)self];
-        _concurrentQueue = dispatch_queue_create([[NSString stringWithFormat:@"%@ Asynchronous Queue", queueName] UTF8String], DISPATCH_QUEUE_CONCURRENT);
-        
-        _diskCache = [[PINDiskCache alloc] initWithName:_name rootPath:rootPath serializer:serializer deserializer:deserializer fileExtension:fileExtension];
-        _memoryCache = [[PINMemoryCache alloc] init];
+      
+        //10 may actually be a bit high, but currently much of our threads are blocked on empyting the trash. Until we can resolve that, lets bump this up.
+        _operationQueue = [[PINOperationQueue alloc] initWithMaxConcurrentOperations:10];
+      
+        _diskCache = [[PINDiskCache alloc] initWithName:_name rootPath:rootPath serializer:serializer deserializer:deserializer fileExtension:fileExtension operationQueue:_operationQueue];
+        _memoryCache = [[PINMemoryCache alloc] initWithOperationQueue:_operationQueue];
     }
     return self;
 }
@@ -91,13 +82,13 @@ static NSString * const PINCacheSharedName = @"PINCacheShared";
     }
     
     __weak PINCache *weakSelf = self;
-    
-    dispatch_async(_concurrentQueue, ^{
+  
+    [self.operationQueue addOperation:^{
         PINCache *strongSelf = weakSelf;
         
         BOOL containsObject = [strongSelf containsObjectForKey:key];
         block(containsObject);
-    });
+    }];
 }
 
 #pragma clang diagnostic push
@@ -110,7 +101,7 @@ static NSString * const PINCacheSharedName = @"PINCacheShared";
     
     __weak PINCache *weakSelf = self;
     
-    dispatch_async(_concurrentQueue, ^{
+    [self.operationQueue addOperation:^{
         PINCache *strongSelf = weakSelf;
         if (!strongSelf)
             return;
@@ -121,11 +112,11 @@ static NSString * const PINCacheSharedName = @"PINCacheShared";
             
             if (memoryCacheObject) {
                 [strongSelf->_diskCache fileURLForKey:memoryCacheKey block:NULL];
-                dispatch_async(strongSelf->_concurrentQueue, ^{
+                [strongSelf->_operationQueue addOperation:^{
                     PINCache *strongSelf = weakSelf;
                     if (strongSelf)
                         block(strongSelf, memoryCacheKey, memoryCacheObject);
-                });
+                }];
             } else {
                 [strongSelf->_diskCache objectForKey:memoryCacheKey block:^(PINDiskCache *diskCache, NSString *diskCacheKey, id <NSCoding> diskCacheObject) {
                     PINCache *strongSelf = weakSelf;
@@ -134,16 +125,15 @@ static NSString * const PINCacheSharedName = @"PINCacheShared";
                     
                     [strongSelf->_memoryCache setObject:diskCacheObject forKey:diskCacheKey block:nil];
                     
-
-                    dispatch_async(strongSelf->_concurrentQueue, ^{
+                    [strongSelf->_operationQueue addOperation:^{
                         PINCache *strongSelf = weakSelf;
                         if (strongSelf)
                             block(strongSelf, diskCacheKey, diskCacheObject);
-                    });
+                    }];
                 }];
             }
         }];
-    });
+    }];
 }
 
 #pragma clang diagnostic pop
@@ -152,40 +142,23 @@ static NSString * const PINCacheSharedName = @"PINCacheShared";
 {
     if (!key || !object)
         return;
+  
+    PINOperationGroup *group = [PINOperationGroup asyncOperationGroupWithQueue:_operationQueue];
     
-    dispatch_group_t group = nil;
-    PINMemoryCacheObjectBlock memBlock = nil;
-    PINDiskCacheObjectBlock diskBlock = nil;
-    
+    [group addOperation:^{
+        [_memoryCache setObject:object forKey:key];
+    }];
+    [group addOperation:^{
+        [_diskCache setObject:object forKey:key];
+    }];
+  
     if (block) {
-        group = dispatch_group_create();
-        dispatch_group_enter(group);
-        dispatch_group_enter(group);
-        
-        memBlock = ^(PINMemoryCache *memoryCache, NSString *memoryCacheKey, id memoryCacheObject) {
-            dispatch_group_leave(group);
-        };
-        
-        diskBlock = ^(PINDiskCache *diskCache, NSString *diskCacheKey, id <NSCoding> memoryCacheObject) {
-            dispatch_group_leave(group);
-        };
+        [group setCompletion:^{
+            block(self, key, object);
+        }];
     }
     
-    [_memoryCache setObject:object forKey:key block:memBlock];
-    [_diskCache setObject:object forKey:key block:diskBlock];
-    
-    if (group) {
-        __weak PINCache *weakSelf = self;
-        dispatch_group_notify(group, _concurrentQueue, ^{
-            PINCache *strongSelf = weakSelf;
-            if (strongSelf)
-                block(strongSelf, key, object);
-        });
-        
-#if !OS_OBJECT_USE_OBJC
-        dispatch_release(group);
-#endif
-    }
+    [group start];
 }
 
 - (void)removeObjectForKey:(NSString *)key block:(PINCacheObjectBlock)block
@@ -193,76 +166,42 @@ static NSString * const PINCacheSharedName = @"PINCacheShared";
     if (!key)
         return;
     
-    dispatch_group_t group = nil;
-    PINMemoryCacheObjectBlock memBlock = nil;
-    PINDiskCacheObjectBlock diskBlock = nil;
+    PINOperationGroup *group = [PINOperationGroup asyncOperationGroupWithQueue:_operationQueue];
     
+    [group addOperation:^{
+        [_memoryCache removeObjectForKey:key];
+    }];
+    [group addOperation:^{
+        [_diskCache removeObjectForKey:key];
+    }];
+
     if (block) {
-        group = dispatch_group_create();
-        dispatch_group_enter(group);
-        dispatch_group_enter(group);
-        
-        memBlock = ^(PINMemoryCache *memoryCache, NSString *memoryCacheKey, id memoryCacheObject) {
-            dispatch_group_leave(group);
-        };
-        
-        diskBlock = ^(PINDiskCache *diskCache, NSString *diskCacheKey, id <NSCoding> memoryCacheObject) {
-            dispatch_group_leave(group);
-        };
+        [group setCompletion:^{
+            block(self, key, nil);
+        }];
     }
     
-    [_memoryCache removeObjectForKey:key block:memBlock];
-    [_diskCache removeObjectForKey:key block:diskBlock];
-    
-    if (group) {
-        __weak PINCache *weakSelf = self;
-        dispatch_group_notify(group, _concurrentQueue, ^{
-            PINCache *strongSelf = weakSelf;
-            if (strongSelf)
-                block(strongSelf, key, nil);
-        });
-        
-#if !OS_OBJECT_USE_OBJC
-        dispatch_release(group);
-#endif
-    }
+    [group start];
 }
 
 - (void)removeAllObjects:(PINCacheBlock)block
 {
-    dispatch_group_t group = nil;
-    PINMemoryCacheBlock memBlock = nil;
-    PINDiskCacheBlock diskBlock = nil;
+    PINOperationGroup *group = [PINOperationGroup asyncOperationGroupWithQueue:_operationQueue];
     
+    [group addOperation:^{
+        [_memoryCache removeAllObjects];
+    }];
+    [group addOperation:^{
+        [_diskCache removeAllObjects];
+    }];
+
     if (block) {
-        group = dispatch_group_create();
-        dispatch_group_enter(group);
-        dispatch_group_enter(group);
-        
-        memBlock = ^(PINMemoryCache *cache) {
-            dispatch_group_leave(group);
-        };
-        
-        diskBlock = ^(PINDiskCache *cache) {
-            dispatch_group_leave(group);
-        };
+        [group setCompletion:^{
+            block(self);
+        }];
     }
     
-    [_memoryCache removeAllObjects:memBlock];
-    [_diskCache removeAllObjects:diskBlock];
-    
-    if (group) {
-        __weak PINCache *weakSelf = self;
-        dispatch_group_notify(group, _concurrentQueue, ^{
-            PINCache *strongSelf = weakSelf;
-            if (strongSelf)
-                block(strongSelf);
-        });
-        
-#if !OS_OBJECT_USE_OBJC
-        dispatch_release(group);
-#endif
-    }
+    [group start];
 }
 
 - (void)trimToDate:(NSDate *)date block:(PINCacheBlock)block
@@ -270,39 +209,22 @@ static NSString * const PINCacheSharedName = @"PINCacheShared";
     if (!date)
         return;
     
-    dispatch_group_t group = nil;
-    PINMemoryCacheBlock memBlock = nil;
-    PINDiskCacheBlock diskBlock = nil;
+    PINOperationGroup *group = [PINOperationGroup asyncOperationGroupWithQueue:_operationQueue];
     
+    [group addOperation:^{
+        [_memoryCache trimToDate:date];
+    }];
+    [group addOperation:^{
+        [_diskCache trimToDate:date];
+    }];
+  
     if (block) {
-        group = dispatch_group_create();
-        dispatch_group_enter(group);
-        dispatch_group_enter(group);
-        
-        memBlock = ^(PINMemoryCache *cache) {
-            dispatch_group_leave(group);
-        };
-        
-        diskBlock = ^(PINDiskCache *cache) {
-            dispatch_group_leave(group);
-        };
+        [group setCompletion:^{
+            block(self);
+        }];
     }
     
-    [_memoryCache trimToDate:date block:memBlock];
-    [_diskCache trimToDate:date block:diskBlock];
-    
-    if (group) {
-        __weak PINCache *weakSelf = self;
-        dispatch_group_notify(group, _concurrentQueue, ^{
-            PINCache *strongSelf = weakSelf;
-            if (strongSelf)
-                block(strongSelf);
-        });
-        
-#if !OS_OBJECT_USE_OBJC
-        dispatch_release(group);
-#endif
-    }
+    [group start];
 }
 
 #pragma mark - Public Synchronous Accessors -

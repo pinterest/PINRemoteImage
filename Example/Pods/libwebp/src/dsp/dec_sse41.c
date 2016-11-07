@@ -17,6 +17,7 @@
 
 #include <smmintrin.h>
 #include "../dec/vp8i.h"
+#include "../utils/utils.h"
 
 static void HE16(uint8_t* dst) {     // horizontal
   int j;

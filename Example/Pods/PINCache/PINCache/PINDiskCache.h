@@ -10,6 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class PINDiskCache;
+@class PINOperationQueue;
 
 /**
  A callback block which provides only the cache as an argument
@@ -35,19 +36,21 @@ typedef void (^PINDiskCacheContainsBlock)(BOOL containsObject);
  *  A block used to serialize object before writing to disk
  *
  *  @param object Object to serialize
+ *  @param key The key associated with the object
  *
  *  @return Serialized object representation
  */
-typedef NSData* __nonnull(^PINDiskCacheSerializerBlock)(id<NSCoding> object);
+typedef NSData* __nonnull(^PINDiskCacheSerializerBlock)(id<NSCoding> object, NSString *key);
 
 /**
  *  A block used to deserialize objects
  *
  *  @param data Serialized object data
+ *  @param key The key associated with the object
  *
  *  @return Deserialized object
  */
-typedef id<NSCoding> __nonnull(^PINDiskCacheDeserializerBlock)(NSData* data);
+typedef id<NSCoding> __nonnull(^PINDiskCacheDeserializerBlock)(NSData* data, NSString *key);
 
 
 /**
@@ -129,7 +132,7 @@ typedef id<NSCoding> __nonnull(^PINDiskCacheDeserializerBlock)(NSData* data);
 /**
  Extension for all cache files on disk. Defaults to no extension. 
  */
-@property (readonly) NSString *fileExtension;
+@property (readonly) NSString * __nullable fileExtension;
 
 /**
  The writing protection option used when writing a file on disk. This value is used every time an object is set.
@@ -241,8 +244,6 @@ typedef id<NSCoding> __nonnull(^PINDiskCacheDeserializerBlock)(NSData* data);
 - (instancetype)initWithName:(nonnull NSString *)name rootPath:(nonnull NSString *)rootPath fileExtension:(nullable NSString *)fileExtension;
 
 /**
- The designated initializer allowing you to override default NSKeyedArchiver/NSKeyedUnarchiver serialization.
- 
  @see name
  @param name The name of the cache.
  @param rootPath The path of the cache.
@@ -251,7 +252,21 @@ typedef id<NSCoding> __nonnull(^PINDiskCacheDeserializerBlock)(NSData* data);
  @param fileExtension The file extension for files on disk.
  @result A new cache with the specified name.
  */
-- (instancetype)initWithName:(nonnull NSString *)name rootPath:(nonnull NSString *)rootPath serializer:(nullable PINDiskCacheSerializerBlock)serializer deserializer:(nullable PINDiskCacheDeserializerBlock)deserializer fileExtension:(nullable NSString *)fileExtension NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithName:(nonnull NSString *)name rootPath:(nonnull NSString *)rootPath serializer:(nullable PINDiskCacheSerializerBlock)serializer deserializer:(nullable PINDiskCacheDeserializerBlock)deserializer fileExtension:(nullable NSString *)fileExtension;
+
+/**
+ The designated initializer allowing you to override default NSKeyedArchiver/NSKeyedUnarchiver serialization.
+ 
+ @see name
+ @param name The name of the cache.
+ @param rootPath The path of the cache.
+ @param serializer   A block used to serialize object. If nil provided, default NSKeyedArchiver serialized will be used.
+ @param deserializer A block used to deserialize object. If nil provided, default NSKeyedUnarchiver serialized will be used.
+ @param fileExtension The file extension for files on disk.
+ @param operationQueue A PINOperationQueue to run asynchronous operations
+ @result A new cache with the specified name.
+ */
+- (instancetype)initWithName:(nonnull NSString *)name rootPath:(nonnull NSString *)rootPath serializer:(nullable PINDiskCacheSerializerBlock)serializer deserializer:(nullable PINDiskCacheDeserializerBlock)deserializer fileExtension:(nullable NSString *)fileExtension operationQueue:(nonnull PINOperationQueue *)operationQueue NS_DESIGNATED_INITIALIZER;
 
 #pragma mark -
 /// @name Asynchronous Methods

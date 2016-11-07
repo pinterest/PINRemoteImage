@@ -1,46 +1,52 @@
 PODS:
   - FLAnimatedImage (1.0.12)
-  - libwebp (0.5.0):
-    - libwebp/core (= 0.5.0)
-    - libwebp/dec (= 0.5.0)
-    - libwebp/demux (= 0.5.0)
-    - libwebp/dsp (= 0.5.0)
-    - libwebp/enc (= 0.5.0)
-    - libwebp/mux (= 0.5.0)
-    - libwebp/utils (= 0.5.0)
-    - libwebp/webp (= 0.5.0)
-  - libwebp/core (0.5.0):
+  - libwebp (0.5.1):
+    - libwebp/core (= 0.5.1)
+    - libwebp/dec (= 0.5.1)
+    - libwebp/demux (= 0.5.1)
+    - libwebp/dsp (= 0.5.1)
+    - libwebp/enc (= 0.5.1)
+    - libwebp/mux (= 0.5.1)
+    - libwebp/utils (= 0.5.1)
+    - libwebp/webp (= 0.5.1)
+  - libwebp/core (0.5.1):
     - libwebp/webp
-  - libwebp/dec (0.5.0):
+  - libwebp/dec (0.5.1):
     - libwebp/core
-  - libwebp/demux (0.5.0):
+  - libwebp/demux (0.5.1):
     - libwebp/core
-  - libwebp/dsp (0.5.0):
+  - libwebp/dsp (0.5.1):
     - libwebp/core
-  - libwebp/enc (0.5.0):
+  - libwebp/enc (0.5.1):
     - libwebp/core
-  - libwebp/mux (0.5.0):
+  - libwebp/mux (0.5.1):
     - libwebp/core
-  - libwebp/utils (0.5.0):
+  - libwebp/utils (0.5.1):
     - libwebp/core
-  - libwebp/webp (0.5.0)
-  - PINCache (3.0.1-beta)
-  - PINRemoteImage (3.0.0-beta.3):
-    - PINRemoteImage/FLAnimatedImage (= 3.0.0-beta.3)
-    - PINRemoteImage/PINCache (= 3.0.0-beta.3)
-  - PINRemoteImage/Core (3.0.0-beta.3)
-  - PINRemoteImage/FLAnimatedImage (3.0.0-beta.3):
+  - libwebp/webp (0.5.1)
+  - PINCache (3.0.1-beta.2):
+    - PINCache/Arc-exception-safe (= 3.0.1-beta.2)
+    - PINCache/Core (= 3.0.1-beta.2)
+  - PINCache/Arc-exception-safe (3.0.1-beta.2):
+    - PINCache/Core
+  - PINCache/Core (3.0.1-beta.2)
+  - PINRemoteImage (3.0.0-beta.5):
+    - PINRemoteImage/FLAnimatedImage (= 3.0.0-beta.5)
+    - PINRemoteImage/PINCache (= 3.0.0-beta.5)
+  - PINRemoteImage/Core (3.0.0-beta.5)
+  - PINRemoteImage/FLAnimatedImage (3.0.0-beta.5):
     - FLAnimatedImage (>= 1.0)
     - PINRemoteImage/Core
-  - PINRemoteImage/PINCache (3.0.0-beta.3):
-    - PINCache (>= 3.0.1-beta)
+  - PINRemoteImage/PINCache (3.0.0-beta.5):
+    - PINCache (= 3.0.1-beta.2)
     - PINRemoteImage/Core
-  - PINRemoteImage/WebP (3.0.0-beta.3):
+  - PINRemoteImage/WebP (3.0.0-beta.5):
     - libwebp
     - PINRemoteImage/Core
 
 DEPENDENCIES:
   - PINRemoteImage (from `../`)
+  - PINRemoteImage/PINCache (from `../`)
   - PINRemoteImage/WebP (from `../`)
 
 EXTERNAL SOURCES:
@@ -49,10 +55,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
-  libwebp: 68ba2001ba6806ee52837ebd77a551a0b6567e4e
-  PINCache: 6911fe422a633e18b3d3ddf2bd4f0e55e36e2892
-  PINRemoteImage: 909c740cc2878fa6b45a3cc093b87d8195a7e0fa
+  libwebp: b9126f8982a95370cf4eaad9bb3fefd57f052c15
+  PINCache: 6d273a6e0754bd26e3f12a38a90dde73cc6a42b2
+  PINRemoteImage: dba0cfbedb64378fdbec12ccb5895658b95459cf
 
-PODFILE CHECKSUM: a64f6dc82868b26747c10e6c5e963d51a1ba55ba
+PODFILE CHECKSUM: fd781389182d55117b32749ac8ebfe1de0ad6af9
 
 COCOAPODS: 1.0.0

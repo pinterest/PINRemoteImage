@@ -325,6 +325,57 @@ static float CombinedShannonEntropy(const int X[256], const int Y[256]) {
 #undef ANALYZE_XY
 
 //------------------------------------------------------------------------------
+
+static int VectorMismatch(const uint32_t* const array1,
+                          const uint32_t* const array2, int length) {
+  int match_len;
+
+  if (length >= 12) {
+    __m128i A0 = _mm_loadu_si128((const __m128i*)&array1[0]);
+    __m128i A1 = _mm_loadu_si128((const __m128i*)&array2[0]);
+    match_len = 0;
+    do {
+      // Loop unrolling and early load both provide a speedup of 10% for the
+      // current function. Also, max_limit can be MAX_LENGTH=4096 at most.
+      const __m128i cmpA = _mm_cmpeq_epi32(A0, A1);
+      const __m128i B0 =
+          _mm_loadu_si128((const __m128i*)&array1[match_len + 4]);
+      const __m128i B1 =
+          _mm_loadu_si128((const __m128i*)&array2[match_len + 4]);
+      if (_mm_movemask_epi8(cmpA) != 0xffff) break;
+      match_len += 4;
+
+      {
+        const __m128i cmpB = _mm_cmpeq_epi32(B0, B1);
+        A0 = _mm_loadu_si128((const __m128i*)&array1[match_len + 4]);
+        A1 = _mm_loadu_si128((const __m128i*)&array2[match_len + 4]);
+        if (_mm_movemask_epi8(cmpB) != 0xffff) break;
+        match_len += 4;
+      }
+    } while (match_len + 12 < length);
+  } else {
+    match_len = 0;
+    // Unroll the potential first two loops.
+    if (length >= 4 &&
+        _mm_movemask_epi8(_mm_cmpeq_epi32(
+            _mm_loadu_si128((const __m128i*)&array1[0]),
+            _mm_loadu_si128((const __m128i*)&array2[0]))) == 0xffff) {
+      match_len = 4;
+      if (length >= 8 &&
+          _mm_movemask_epi8(_mm_cmpeq_epi32(
+              _mm_loadu_si128((const __m128i*)&array1[4]),
+              _mm_loadu_si128((const __m128i*)&array2[4]))) == 0xffff)
+        match_len = 8;
+    }
+  }
+
+  while (match_len < length && array1[match_len] == array2[match_len]) {
+    ++match_len;
+  }
+  return match_len;
+}
+
+//------------------------------------------------------------------------------
 // Entry point
 
 extern void VP8LEncDspInitSSE2(void);
@@ -336,6 +387,7 @@ WEBP_TSAN_IGNORE_FUNCTION void VP8LEncDspInitSSE2(void) {
   VP8LCollectColorRedTransforms = CollectColorRedTransforms;
   VP8LHistogramAdd = HistogramAdd;
   VP8LCombinedShannonEntropy = CombinedShannonEntropy;
+  VP8LVectorMismatch = VectorMismatch;
 }
 
 #else  // !WEBP_USE_SSE2
