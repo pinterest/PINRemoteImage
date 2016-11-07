@@ -13,6 +13,11 @@
 
 #include "./dsp.h"
 
+#if defined(WEBP_HAVE_NEON_RTCD)
+#include <stdio.h>
+#include <string.h>
+#endif
+
 #if defined(WEBP_ANDROID_NEON)
 #include <cpu-features.h>
 #endif
@@ -142,13 +147,33 @@ VP8CPUInfo VP8GetCPUInfo = AndroidCPUInfo;
 // define a dummy function to enable turning off NEON at runtime by setting
 // VP8DecGetCPUInfo = NULL
 static int armCPUInfo(CPUFeature feature) {
-  (void)feature;
+  if (feature != kNEON) return 0;
+#if defined(__linux__) && defined(WEBP_HAVE_NEON_RTCD)
+  {
+    int has_neon = 0;
+    char line[200];
+    FILE* const cpuinfo = fopen("/proc/cpuinfo", "r");
+    if (cpuinfo == NULL) return 0;
+    while (fgets(line, sizeof(line), cpuinfo)) {
+      if (!strncmp(line, "Features", 8)) {
+        if (strstr(line, " neon ") != NULL) {
+          has_neon = 1;
+          break;
+        }
+      }
+    }
+    fclose(cpuinfo);
+    return has_neon;
+  }
+#else
   return 1;
+#endif
 }
 VP8CPUInfo VP8GetCPUInfo = armCPUInfo;
-#elif defined(WEBP_USE_MIPS32) || defined(WEBP_USE_MIPS_DSP_R2)
+#elif defined(WEBP_USE_MIPS32) || defined(WEBP_USE_MIPS_DSP_R2) || \
+      defined(WEBP_USE_MSA)
 static int mipsCPUInfo(CPUFeature feature) {
-  if ((feature == kMIPS32) || (feature == kMIPSdspR2)) {
+  if ((feature == kMIPS32) || (feature == kMIPSdspR2) || (feature == kMSA)) {
     return 1;
   } else {
     return 0;

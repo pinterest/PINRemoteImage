@@ -18,6 +18,7 @@
 
 #include <assert.h>
 #include "../utils/rescaler.h"
+#include "../utils/utils.h"
 
 //------------------------------------------------------------------------------
 // Implementations of critical functions ImportRow / ExportRow

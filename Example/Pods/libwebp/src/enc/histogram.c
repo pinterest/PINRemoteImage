@@ -386,29 +386,27 @@ static void UpdateHistogramCost(VP8LHistogram* const h) {
 }
 
 static int GetBinIdForEntropy(double min, double max, double val) {
-  const double range = max - min + 1e-6;
-  const double delta = val - min;
-  return (int)(NUM_PARTITIONS * delta / range);
+  const double range = max - min;
+  if (range > 0.) {
+    const double delta = val - min;
+    return (int)((NUM_PARTITIONS - 1e-6) * delta / range);
+  } else {
+    return 0;
+  }
 }
 
-static int GetHistoBinIndexLowEffort(
-    const VP8LHistogram* const h, const DominantCostRange* const c) {
-  const int bin_id = GetBinIdForEntropy(c->literal_min_, c->literal_max_,
-                                        h->literal_cost_);
+static int GetHistoBinIndex(const VP8LHistogram* const h,
+                            const DominantCostRange* const c, int low_effort) {
+  int bin_id = GetBinIdForEntropy(c->literal_min_, c->literal_max_,
+                                  h->literal_cost_);
   assert(bin_id < NUM_PARTITIONS);
-  return bin_id;
-}
-
-static int GetHistoBinIndex(
-    const VP8LHistogram* const h, const DominantCostRange* const c) {
-  const int bin_id =
-      GetBinIdForEntropy(c->blue_min_, c->blue_max_, h->blue_cost_) +
-      NUM_PARTITIONS * GetBinIdForEntropy(c->red_min_, c->red_max_,
-                                          h->red_cost_) +
-      NUM_PARTITIONS * NUM_PARTITIONS * GetBinIdForEntropy(c->literal_min_,
-                                                           c->literal_max_,
-                                                           h->literal_cost_);
-  assert(bin_id < BIN_SIZE);
+  if (!low_effort) {
+    bin_id = bin_id * NUM_PARTITIONS
+           + GetBinIdForEntropy(c->red_min_, c->red_max_, h->red_cost_);
+    bin_id = bin_id * NUM_PARTITIONS
+           + GetBinIdForEntropy(c->blue_min_, c->blue_max_, h->blue_cost_);
+    assert(bin_id < BIN_SIZE);
+  }
   return bin_id;
 }
 
@@ -469,16 +467,13 @@ static void HistogramAnalyzeEntropyBin(VP8LHistogramSet* const image_histo,
   // bin-hash histograms on three of the dominant (literal, red and blue)
   // symbol costs.
   for (i = 0; i < histo_size; ++i) {
-    int num_histos;
-    VP8LHistogram* const histo = histograms[i];
-    const int16_t bin_id = low_effort ?
-        (int16_t)GetHistoBinIndexLowEffort(histo, &cost_range) :
-        (int16_t)GetHistoBinIndex(histo, &cost_range);
+    const VP8LHistogram* const histo = histograms[i];
+    const int bin_id = GetHistoBinIndex(histo, &cost_range, low_effort);
     const int bin_offset = bin_id * bin_depth;
     // bin_map[n][0] for every bin 'n' maintains the counter for the number of
     // histograms in that bin.
     // Get and increment the num_histos in that bin.
-    num_histos = ++bin_map[bin_offset];
+    const int num_histos = ++bin_map[bin_offset];
     assert(bin_offset + num_histos < bin_depth * BIN_SIZE);
     // Add histogram i'th index at num_histos (last) position in the bin_map.
     bin_map[bin_offset + num_histos] = i;
@@ -636,8 +631,11 @@ static void UpdateQueueFront(HistoQueue* const histo_queue) {
 // -----------------------------------------------------------------------------
 
 static void PreparePair(VP8LHistogram** histograms, int idx1, int idx2,
-                        HistogramPair* const pair,
-                        VP8LHistogram* const histos) {
+                        HistogramPair* const pair) {
+  VP8LHistogram* h1;
+  VP8LHistogram* h2;
+  double sum_cost;
+
   if (idx1 > idx2) {
     const int tmp = idx2;
     idx2 = idx1;
@@ -645,15 +643,17 @@ static void PreparePair(VP8LHistogram** histograms, int idx1, int idx2,
   }
   pair->idx1 = idx1;
   pair->idx2 = idx2;
-  pair->cost_diff =
-      HistogramAddEval(histograms[idx1], histograms[idx2], histos, 0);
-  pair->cost_combo = histos->bit_cost_;
+  h1 = histograms[idx1];
+  h2 = histograms[idx2];
+  sum_cost = h1->bit_cost_ + h2->bit_cost_;
+  pair->cost_combo = 0.;
+  GetCombinedHistogramEntropy(h1, h2, sum_cost, &pair->cost_combo);
+  pair->cost_diff = pair->cost_combo - sum_cost;
 }
 
 // Combines histograms by continuously choosing the one with the highest cost
 // reduction.
-static int HistogramCombineGreedy(VP8LHistogramSet* const image_histo,
-                                  VP8LHistogram* const histos) {
+static int HistogramCombineGreedy(VP8LHistogramSet* const image_histo) {
   int ok = 0;
   int image_histo_size = image_histo->size;
   int i, j;
@@ -672,8 +672,7 @@ static int HistogramCombineGreedy(VP8LHistogramSet* const image_histo,
     clusters[i] = i;
     for (j = i + 1; j < image_histo_size; ++j) {
       // Initialize positions array.
-      PreparePair(histograms, i, j, &histo_queue.queue[histo_queue.size],
-                  histos);
+      PreparePair(histograms, i, j, &histo_queue.queue[histo_queue.size]);
       UpdateQueueFront(&histo_queue);
     }
   }
@@ -715,7 +714,7 @@ static int HistogramCombineGreedy(VP8LHistogramSet* const image_histo,
     for (i = 0; i < image_histo_size; ++i) {
       if (clusters[i] != idx1) {
         PreparePair(histograms, idx1, clusters[i],
-                    &histo_queue.queue[histo_queue.size], histos);
+                    &histo_queue.queue[histo_queue.size]);
         UpdateQueueFront(&histo_queue);
       }
     }
@@ -736,11 +735,10 @@ static int HistogramCombineGreedy(VP8LHistogramSet* const image_histo,
   return ok;
 }
 
-static VP8LHistogram* HistogramCombineStochastic(
-    VP8LHistogramSet* const image_histo,
-    VP8LHistogram* tmp_histo,
-    VP8LHistogram* best_combo,
-    int quality, int min_cluster_size) {
+static void HistogramCombineStochastic(VP8LHistogramSet* const image_histo,
+                                       VP8LHistogram* tmp_histo,
+                                       VP8LHistogram* best_combo,
+                                       int quality, int min_cluster_size) {
   int iter;
   uint32_t seed = 0;
   int tries_with_no_success = 0;
@@ -800,7 +798,6 @@ static VP8LHistogram* HistogramCombineStochastic(
     }
   }
   image_histo->size = image_histo_size;
-  return best_combo;
 }
 
 // -----------------------------------------------------------------------------
@@ -808,24 +805,23 @@ static VP8LHistogram* HistogramCombineStochastic(
 
 // Find the best 'out' histogram for each of the 'in' histograms.
 // Note: we assume that out[]->bit_cost_ is already up-to-date.
-static void HistogramRemap(const VP8LHistogramSet* const orig_histo,
-                           const VP8LHistogramSet* const image_histo,
+static void HistogramRemap(const VP8LHistogramSet* const in,
+                           const VP8LHistogramSet* const out,
                            uint16_t* const symbols) {
   int i;
-  VP8LHistogram** const orig_histograms = orig_histo->histograms;
-  VP8LHistogram** const histograms = image_histo->histograms;
-  const int orig_histo_size = orig_histo->size;
-  const int image_histo_size = image_histo->size;
-  if (image_histo_size > 1) {
-    for (i = 0; i < orig_histo_size; ++i) {
+  VP8LHistogram** const in_histo = in->histograms;
+  VP8LHistogram** const out_histo = out->histograms;
+  const int in_size = in->size;
+  const int out_size = out->size;
+  if (out_size > 1) {
+    for (i = 0; i < in_size; ++i) {
       int best_out = 0;
-      double best_bits =
-          HistogramAddThresh(histograms[0], orig_histograms[i], MAX_COST);
+      double best_bits = MAX_COST;
       int k;
-      for (k = 1; k < image_histo_size; ++k) {
+      for (k = 0; k < out_size; ++k) {
         const double cur_bits =
-            HistogramAddThresh(histograms[k], orig_histograms[i], best_bits);
-        if (cur_bits < best_bits) {
+            HistogramAddThresh(out_histo[k], in_histo[i], best_bits);
+        if (k == 0 || cur_bits < best_bits) {
           best_bits = cur_bits;
           best_out = k;
         }
@@ -833,20 +829,20 @@ static void HistogramRemap(const VP8LHistogramSet* const orig_histo,
       symbols[i] = best_out;
     }
   } else {
-    assert(image_histo_size == 1);
-    for (i = 0; i < orig_histo_size; ++i) {
+    assert(out_size == 1);
+    for (i = 0; i < in_size; ++i) {
       symbols[i] = 0;
     }
   }
 
   // Recompute each out based on raw and symbols.
-  for (i = 0; i < image_histo_size; ++i) {
-    HistogramClear(histograms[i]);
+  for (i = 0; i < out_size; ++i) {
+    HistogramClear(out_histo[i]);
   }
 
-  for (i = 0; i < orig_histo_size; ++i) {
+  for (i = 0; i < in_size; ++i) {
     const int idx = symbols[i];
-    VP8LHistogramAdd(orig_histograms[i], histograms[idx], histograms[idx]);
+    VP8LHistogramAdd(in_histo[i], out_histo[idx], out_histo[idx]);
   }
 }
 
@@ -920,11 +916,10 @@ int VP8LGetHistoImageSymbols(int xsize, int ysize,
     const float x = quality / 100.f;
     // cubic ramp between 1 and MAX_HISTO_GREEDY:
     const int threshold_size = (int)(1 + (x * x * x) * (MAX_HISTO_GREEDY - 1));
-    cur_combo = HistogramCombineStochastic(image_histo,
-                                           tmp_histos->histograms[0],
-                                           cur_combo, quality, threshold_size);
+    HistogramCombineStochastic(image_histo, tmp_histos->histograms[0],
+                               cur_combo, quality, threshold_size);
     if ((image_histo->size <= threshold_size) &&
-        !HistogramCombineGreedy(image_histo, cur_combo)) {
+        !HistogramCombineGreedy(image_histo)) {
       goto Error;
     }
   }

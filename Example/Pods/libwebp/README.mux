@@ -1,7 +1,7 @@
 ﻿          __   __  ____  ____  ____  __ __  _     __ __
          /  \\/  \/  _ \/  _ \/  _ \/  \  \/ \___/_ / _\
          \       /   __/  _  \   __/      /  /  (_/  /__
-          \__\__/\_____/_____/__/  \__//_/\_____/__/___/v0.3.0
+          \__\__/\_____/_____/__/  \__//_/\_____/__/___/v0.3.1
 
 
 Description:
@@ -198,7 +198,7 @@ For a detailed AnimEncoder API reference, please refer to the header file
 Bugs:
 =====
 
-Please report all bugs to our issue tracker:
+Please report all bugs to the issue tracker:
     https://bugs.chromium.org/p/webp
 Patches welcome! See this page to get started:
     http://www.webmproject.org/code/contribute/submitting-patches/
