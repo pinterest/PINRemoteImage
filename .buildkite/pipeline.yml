@@ -1,10 +1,10 @@
 steps:
-    - command: pod lib lint --allow-warnings
-        label: Pod Lint
+    - command: 'pod lib lint --allow-warnings'
+        label: 'Pod Lint'
         timeout_in_minutes: 15
-        branches: "buildKite"
+        branches: 'buildKite'
     - wait
-    - command: xcodebuild clean test -destination "platform=iOS Simulator,OS=latest,name=iPhone 6" -workspace Example/PINRemoteImage.xcworkspace -scheme PINRemoteImage ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO | xcpretty -t; test ${PIPESTATUS[0]} -eq 0
-        label: Tests        
+    - command: 'xcodebuild clean test -destination "platform=iOS Simulator,OS=latest,name=iPhone 6" -workspace Example/PINRemoteImage.xcworkspace -scheme PINRemoteImage ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO | xcpretty -t; test ${PIPESTATUS[0]} -eq 0'
+        label: 'Tests'
         timeout_in_minutes: 15
-        branches: "buildKite"
+        branches: 'buildKite'
