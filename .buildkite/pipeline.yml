@@ -1,5 +1,3 @@
-env:
-  LANG: 'en_US.UTF-8'
 steps:
   - label: 'Tests'
     command: "./run_tests_update_status.sh \"${UPDATE_STATUS_PATH}\" \"${BUILDKITE_PULL_REQUEST}\" \"${BUILDKITE_BUILD_URL}\""
