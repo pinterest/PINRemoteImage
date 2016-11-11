@@ -1,12 +1,6 @@
 env:
   LANG: 'en_US.UTF-8'
 steps:
-  - label: 'For fun'
-    command: "echo Hello world!"
   - label: 'Tests'
-    command: 'xcodebuild clean test -destination "platform=iOS Simulator,OS=latest,name=iPhone 7" -workspace Example/PINRemoteImage.xcworkspace -scheme PINRemoteImage ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO | xcpretty -t; test ${PIPESTATUS[0]} -eq 0'
-    timeout_in_minutes: 15
-  - wait
-  - label: 'Pod Lint'
-    command: 'pod lib lint --allow-warnings'
-    timeout_in_minutes: 15
+    command: "./run_tests_update_status.sh"
+    timeout_in_minutes: 30
