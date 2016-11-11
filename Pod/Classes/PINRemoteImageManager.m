@@ -564,12 +564,14 @@ static dispatch_once_t sharedDispatchToken;
         UUID = [NSUUID UUID];
     }
 
-    //Check to see if the image is in memory cache and we're on the main thread.
-    //If so, special case this to avoid flashing the UI
-    id object = [self.cache objectFromMemoryForKey:key];
-    if (object) {
-        if ([self earlyReturnWithOptions:options url:url key:key object:object completion:completion]) {
-            return nil;
+    if ((options & PINRemoteImageManagerDownloadOptionsIgnoreCache) == 0) {
+        //Check to see if the image is in memory cache and we're on the main thread.
+        //If so, special case this to avoid flashing the UI
+        id object = [self.cache objectFromMemoryForKey:key];
+        if (object) {
+            if ([self earlyReturnWithOptions:options url:url key:key object:object completion:completion]) {
+                return nil;
+            }
         }
     }
     
@@ -1520,6 +1522,11 @@ static dispatch_once_t sharedDispatchToken;
 
 - (void)objectForKey:(NSString *)key options:(PINRemoteImageManagerDownloadOptions)options completion:(void (^)(BOOL found, BOOL valid, PINImage *image, id alternativeRepresentation))completion
 {
+    if (options & PINRemoteImageManagerDownloadOptionsIgnoreCache) {
+        completion(NO, NO, nil, nil);
+        return;
+    }
+
     void (^materialize)(id object) = ^(id object) {
         PINImage *image = nil;
         id alternativeRepresentation = nil;

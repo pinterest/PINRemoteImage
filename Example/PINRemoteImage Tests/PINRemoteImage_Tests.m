@@ -239,6 +239,23 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
+- (void)testIgnoreCache
+{
+    [self.imageManager downloadImageWithURL:[self JPEGURL] completion:nil];
+    [self waitForImageWithURLToBeCached:[self JPEGURL]];
+
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Download ignoring cache"];
+    [self.imageManager downloadImageWithURL:[self JPEGURL]
+                                    options:PINRemoteImageManagerDownloadOptionsIgnoreCache
+                                 completion:^(PINRemoteImageManagerResult *result)
+     {
+         XCTAssert(result.resultType == PINRemoteImageResultTypeDownload, @"Image was fetched from cache");
+
+         [expectation fulfill];
+     }];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
 - (void)testJPEGDownload
 {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Downloading JPEG image"];
