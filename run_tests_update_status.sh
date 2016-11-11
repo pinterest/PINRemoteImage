@@ -20,18 +20,18 @@ fi
 trapped="false"
 function trap_handler() {
     if [[ "$trapped" = "false" ]]; then
-        $(updateStatus failure "Tests failed…")
+        updateStatus failure "Tests failed…"
         echo "Tests failed, updated status to failure"
     fi
     trapped="true"
 }
 trap trap_handler INT TERM EXIT
 
-$(updateStatus pending "Starting build…")
+updateStatus pending "Starting build…"
 
 ./build.sh all
 
-$(updateStatus success "Tests passed")
+updateStatus success "Tests passed"
 
 echo "All tests succeeded, updated status to success"
 trap - EXIT
