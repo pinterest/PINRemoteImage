@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
+UPDATE_STATUS_PATH=$1
+BUILDKITE_PULL_REQUEST=$2
+BUILDKITE_BUILD_URL=$3
+
 if [[ -z "${UPDATE_STATUS_PATH}" || -z "${BUILDKITE_PULL_REQUEST}" || -z "${BUILDKITE_BUILD_URL}" ]] ; then
     echo "Update status path, build url or pull request unset."
     trap - EXIT
