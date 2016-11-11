@@ -6,7 +6,7 @@ BUILDKITE_PULL_REQUEST=$2
 BUILDKITE_BUILD_URL=$3
 
 if [[ -z "${UPDATE_STATUS_PATH}" || -z "${BUILDKITE_PULL_REQUEST}" || -z "${BUILDKITE_BUILD_URL}" ]] ; then
-    echo "Update status path, build url or pull request unset."
+    echo "Update status path (${UPDATE_STATUS_PATH}), pull request (${BUILDKITE_BUILD_URL}) or build url (${BUILDKITE_PULL_REQUEST}) unset."
     trap - EXIT
     exit 255
 fi
