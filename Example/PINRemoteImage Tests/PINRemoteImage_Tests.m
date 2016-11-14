@@ -590,6 +590,19 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     
 }
 
+- (void)testImageFromCacheReturnsNilErrorForCacheMiss
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Image from cache"];
+
+    [self.imageManager imageFromCacheWithCacheKey:[self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil] options:PINRemoteImageManagerDownloadOptionsNone completion:^(PINRemoteImageManagerResult * _Nonnull result) {
+         XCTAssert(result.image == nil, @"Image was found in cache");
+         XCTAssert(result.error == nil, @"Error was returned in cache miss");
+
+         [expectation fulfill];
+     }];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
 - (void)testProcessingLoad
 {
     dispatch_group_t group = dispatch_group_create();

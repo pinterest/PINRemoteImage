@@ -1523,7 +1523,7 @@ static dispatch_once_t sharedDispatchToken;
 - (void)objectForKey:(NSString *)key options:(PINRemoteImageManagerDownloadOptions)options completion:(void (^)(BOOL found, BOOL valid, PINImage *image, id alternativeRepresentation))completion
 {
     if ((options & PINRemoteImageManagerDownloadOptionsIgnoreCache) != 0) {
-        completion(NO, NO, nil, nil);
+        completion(NO, YES, nil, nil);
         return;
     }
 
@@ -1549,7 +1549,7 @@ static dispatch_once_t sharedDispatchToken;
           if (object) {
               materialize(object);
           } else {
-              completion(NO, NO, nil, nil);
+              completion(NO, YES, nil, nil);
           }
         }];
     }
