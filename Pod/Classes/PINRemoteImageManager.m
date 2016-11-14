@@ -1522,7 +1522,7 @@ static dispatch_once_t sharedDispatchToken;
 
 - (void)objectForKey:(NSString *)key options:(PINRemoteImageManagerDownloadOptions)options completion:(void (^)(BOOL found, BOOL valid, PINImage *image, id alternativeRepresentation))completion
 {
-    if (options & PINRemoteImageManagerDownloadOptionsIgnoreCache) {
+    if ((options & PINRemoteImageManagerDownloadOptionsIgnoreCache) != 0) {
         completion(NO, NO, nil, nil);
         return;
     }
