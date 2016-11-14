@@ -11,7 +11,7 @@
 		6858C0761C9CC5BA00E420EB /* PINRemoteLock.m in Sources */ = {isa = PBXBuildFile; fileRef = 6858C0741C9CC5BA00E420EB /* PINRemoteLock.m */; };
 		68CA927C1DAEFF93008BECE2 /* PINRemoteImageBasicCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 68CA92791DAEFF93008BECE2 /* PINRemoteImageBasicCache.h */; };
 		68CA927D1DAEFF93008BECE2 /* PINRemoteImageBasicCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA927A1DAEFF93008BECE2 /* PINRemoteImageBasicCache.m */; };
-		68CA927E1DAEFF93008BECE2 /* PINRemoteImageCaching.h in Headers */ = {isa = PBXBuildFile; fileRef = 68CA927B1DAEFF93008BECE2 /* PINRemoteImageCaching.h */; };
+		68CA927E1DAEFF93008BECE2 /* PINRemoteImageCaching.h in Headers */ = {isa = PBXBuildFile; fileRef = 68CA927B1DAEFF93008BECE2 /* PINRemoteImageCaching.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		68CA92831DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.h in Headers */ = {isa = PBXBuildFile; fileRef = 68CA92811DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.h */; };
 		68CA92841DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA92821DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.m */; };
 		68CA92891DB19C2F008BECE2 /* PINAnimatedImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 68CA92851DB19C2F008BECE2 /* PINAnimatedImage.h */; };
@@ -265,13 +265,13 @@
 				9DD47FA61C699FDC00F12CA0 /* PINImage+WebP.h in Headers */,
 				68CA928B1DB19C2F008BECE2 /* PINAnimatedImageManager.h in Headers */,
 				F1B919131BCF23C900710963 /* PINRemoteImageCategoryManager.h in Headers */,
-				68CA927E1DAEFF93008BECE2 /* PINRemoteImageCaching.h in Headers */,
 				F1B919161BCF23C900710963 /* PINRemoteImageManager.h in Headers */,
 				F1B9190C1BCF23C900710963 /* PINDataTaskOperation.h in Headers */,
 				9DD47F9E1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h in Headers */,
 				68CA92831DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.h in Headers */,
 				9DD47F9C1C699F4B00F12CA0 /* PINButton+PINRemoteImage.h in Headers */,
 				F165DFD91BD0504A0008C6E8 /* PINRemoteImageMacros.h in Headers */,
+				68CA927E1DAEFF93008BECE2 /* PINRemoteImageCaching.h in Headers */,
 				68F0EA941CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.h in Headers */,
 				68F0EA921CB32EC900F1FD41 /* PINAlternateRepresentationProvider.h in Headers */,
 				F1B9191C1BCF23C900710963 /* PINRemoteImageTask.h in Headers */,
