@@ -14,6 +14,7 @@
 #import "PINRemoteImageManager.h"
 #import "PINRemoteImageCategoryManager.h"
 #import "PINRemoteImageManagerResult.h"
+#import "PINRemoteImageCaching.h"
 #import "PINProgressiveImage.h"
 #import "PINURLSessionManager.h"
 
