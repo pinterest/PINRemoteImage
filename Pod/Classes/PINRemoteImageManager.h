@@ -53,6 +53,8 @@ typedef NS_OPTIONS(NSUInteger, PINRemoteImageManagerDownloadOptions) {
     PINRemoteImageManagerDownloadOptionsSkipEarlyCheck = 1 << 2,
     /** Save processed images as JPEGs in the cache. The default is PNG to support transparency */
     PINRemoteImageManagerSaveProcessedImageAsJPEG = 1 << 3,
+    /** Ignore cache and force download */
+    PINRemoteImageManagerDownloadOptionsIgnoreCache = 1 << 4,
 };
 
 /**
