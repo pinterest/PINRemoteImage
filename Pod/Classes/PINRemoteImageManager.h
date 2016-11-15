@@ -169,7 +169,7 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
 + (nonnull instancetype)sharedImageManager;
 
 /**
- Sets the shared instance of PINRemoteImageManager to an instance with the supplied configuration. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. You specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc. This method should not be used if the shared instance has already been created.
+ Sets the shared instance of PINRemoteImageManager to an instance with the supplied configuration. If configuration is nil, [NSURLSessionConfiguration ephemeralSessionConfiguration] is used. You specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc. This method should not be used if the shared instance has already been created.
 
  @param configuration The configuration used to create the PINRemoteImageManager.
  */
