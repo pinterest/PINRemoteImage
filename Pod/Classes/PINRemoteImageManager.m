@@ -1413,7 +1413,6 @@ static dispatch_once_t sharedDispatchToken;
     __block PINImage *image = nil;
     __block NSData *data = nil;
     __block BOOL updateMemoryCache = NO;
-    NSUInteger cacheCost = additionalCost;
     
     PINRemoteImageMemoryContainer *container = nil;
     if ([object isKindOfClass:[PINRemoteImageMemoryContainer class]]) {
@@ -1463,9 +1462,16 @@ static dispatch_once_t sharedDispatchToken;
     }
     
     if (updateMemoryCache) {
-        cacheCost += [data length];
-        cacheCost += (image.size.width + image.size.height) * 4; // 4 bytes per pixel
-        [self.cache setObjectInMemory:container forKey:key withCost:cacheCost];
+        [container.lock lockWithBlock:^{
+            NSUInteger cacheCost = additionalCost;
+            cacheCost += [container.data length];
+            CGImageRef imageRef = container.image.CGImage;
+            NSAssert(container.image == nil || imageRef != NULL, @"We only cache a decompressed image if we decompressed it ourselves. In that case, it should be backed by a CGImageRef.");
+            if (imageRef) {
+                cacheCost += CGImageGetHeight(imageRef) * CGImageGetBytesPerRow(imageRef);
+            }
+            [self.cache setObjectInMemory:container forKey:key withCost:cacheCost];
+        }];
     }
     
     if (diskData) {
