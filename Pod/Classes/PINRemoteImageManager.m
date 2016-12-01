@@ -1466,6 +1466,7 @@ static dispatch_once_t sharedDispatchToken;
             NSUInteger cacheCost = additionalCost;
             cacheCost += [container.data length];
             CGImageRef imageRef = container.image.CGImage;
+            NSAssert(container.image == nil || imageRef != NULL, @"We only cache a decompressed image if we decompressed it ourselves. In that case, it should be backed by a CGImageRef.");
             if (imageRef) {
                 cacheCost += CGImageGetHeight(imageRef) * CGImageGetBytesPerRow(imageRef);
             }
