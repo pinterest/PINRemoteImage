@@ -6,49 +6,79 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Build status](https://badge.buildkite.com/556f751bb6455e96687a5f8fb05a65f2df9db8b033121b8c3d.svg?branch=master&style=flat)](https://buildkite.com/pinterest/pinremoteimage)
 
-[PINRemoteImageManager](Pod/Classes/PINRemoteImageManager.h) is an image downloading, processing and caching manager. It uses the concept of download and processing tasks to ensure that even if multiple calls to download or process an image are made, it only occurs one time (unless an item is no longer in the cache). PINRemoteImageManager is backed by GCD and safe to access from multiple threads simultaneously. It ensures that images are decoded off the main thread so that animation performance isn't affected. None of its exposed methods allow for synchronous access. However, it is optimized to call completions on the calling thread if an item is in its memory cache.
+[PINRemoteImageManager](Pod/Classes/PINRemoteImageManager.h) is an image downloading, processing and caching manager. It uses the concept of download and processing tasks to ensure that even if multiple calls to download or process an image are made, it only occurs one time (unless an item is no longer in the cache). PINRemoteImageManager is backed by **GCD** and safe to **access** from **multiple threads** simultaneously. It ensures that images are decoded off the main thread so that animation performance isn't affected. None of its exposed methods allow for synchronous access. However, it is optimized to call completions on the calling thread if an item is in its memory cache.
 
-PINRemoteImage supports downloading many types of files. It, of course, supports both PNGs and JPGs. It also supports decoding WebP images if Google's library is available. It even supports returning [FLAnimatedImages](https://github.com/Flipboard/FLAnimatedImage) if it's compiled in (though this can be disabled).
+PINRemoteImage supports downloading many types of files. It, of course, **supports** both **PNGs** and **JPGs**. It also supports decoding **WebP** images if Google's library is available. It even supports **GIFs** via returning [FLAnimatedImages](https://github.com/Flipboard/FLAnimatedImage) if it's compiled in (though this can be disabled).
 
-PINRemoteImage also has two methods to improve the experience of downloading images on slow network connections. The first is support for progressive JPGs. This isn't any old support for progressive JPGs though: PINRemoteImage adds an attractive blur to progressive scans before returning them.
+PINRemoteImage also has two methods to improve the experience of downloading images on slow network connections. The first is support for **progressive JPGs**. This isn't any old support for progressive JPGs though: PINRemoteImage adds an attractive blur to progressive scans before returning them.
 
 ![Progressive JPG with Blur](/progressive.gif "Looks better on device.")
 
 [PINRemoteImageCategoryManager](Pod/Classes/PINRemoteImageCategoryManager.h) defines a protocol which UIView subclasses can implement and provide easy access to 
-PINRemoteImageManager's methods. There are built-in categories on UIImageView, FLAnimatedImageView and UIButton, and it's very easy to implement a new category. See [PINImageView+PINRemoteImage](/Pod/Classes/Image Categories/PINImageView+PINRemoteImage.h) of the existing categories for reference.
+PINRemoteImageManager's methods. There are **built-in categories** on **UIImageView**, **FLAnimatedImageView** and **UIButton**, and it's very easy to implement a new category. See [UIImageView+PINRemoteImage](/Pod/Classes/Image Categories/UIImageView+PINRemoteImage.h) of the existing categories for reference.
 
 
-Download an image and set it on an image view:
+###Download an image and set it on an image view:
 
+**Objective-C**
 ```objc
 UIImageView *imageView = [[UIImageView alloc] init];
 [imageView pin_setImageFromURL:[NSURL URLWithString:@"http://pinterest.com/kitten.jpg"]];
 ```
-    
-Download a progressive jpeg and get attractive blurred updates:
 
+**Swift**
+```swift
+let imageView = UIImageView()
+imageView.pin_setImageFromURL(NSURL(string: "https://pinterest.com/kitten.jpg")!)
+```
+    
+###Download a progressive jpeg and get attractive blurred updates:
+
+**Objective-C**
 ```objc
 UIImageView *imageView = [[UIImageView alloc] init];
 [imageView setPin_updateWithProgress:YES];
 [imageView pin_setImageFromURL:[NSURL URLWithString:@"http://pinterest.com/progressiveKitten.jpg"]];
 ```
 
-Download a WebP file
+**Swift**
+```swift
+let imageView = UIImageView()
+imageView.pin_updateWithProgress = true
+imageView.pin_setImageFromURL(NSURL(string: "https://pinterest.com/progressiveKitten.jpg")!)
+```
 
+###Download a WebP file
+
+**Objective-C**
 ```objc
 UIImageView *imageView = [[UIImageView alloc] init];
 [imageView pin_setImageFromURL:[NSURL URLWithString:@"http://pinterest.com/googleKitten.webp"]];
 ```
 
-Download a GIF and display with FLAnimatedImageView
+**Swift**
+```swift
+let imageView = UIImageView()
+imageView.pin_setImageFromURL(NSURL(string: "https://pinterest.com/googleKitten.webp")!)
+```
 
+###Download a GIF and display with FLAnimatedImageView
+
+**Objective-C**
 ```objc
 FLAnimatedImageView *animatedImageView = [[FLAnimatedImageView alloc] init];
 [animatedImageView pin_setImageFromURL:[NSURL URLWithString:@"http://pinterest.com/flyingKitten.gif"]];
 ```
 
-Download and process an image
+**Swift**
+```swift
+let animatedImageView = FLAnimatedImageView()
+animatedImageView.pin_setImageFromURL(NSURL(string: "http://pinterest.com/flyingKitten.gif")!)
+```
 
+###Download and process an image
+
+**Objective-C**
 ```objc
 UIImageView *imageView = [[UIImageView alloc] init];
 [self.imageView pin_setImageFromURL:[NSURL URLWithString:@"https://s-media-cache-ak0.pinimg.com/736x/5b/c6/c5/5bc6c5387ff6f104fd642f2b375efba3.jpg"] processorKey:@"rounded" processor:^UIImage *(PINRemoteImageManagerResult *result, NSUInteger *cost)
@@ -77,10 +107,52 @@ UIImageView *imageView = [[UIImageView alloc] init];
  }];
 ```
 
-Handle Authentication
+**Swift**
+```swift
+let imageView = FLAnimatedImageView()
+imageView.pin_setImageFromURL(NSURL(string: "https://s-media-cache-ak0.pinimg.com/736x/5b/c6/c5/5bc6c5387ff6f104fd642f2b375efba3.jpg")!, processorKey: "rounded") { (result :PINRemoteImageManagerResult!, cost : UnsafeMutablePointer<UInt>) -> UIImage! in
+
+    let targetSize = CGSize(width: 200, height: 300)
+    let imageRect = CGRectMake(0, 0, targetSize.width, targetSize.height)
+    
+    UIGraphicsBeginImageContext(imageRect.size)
+    let bezierPath = UIBezierPath(roundedRect: imageRect, cornerRadius: 7.0)
+    bezierPath.addClip()
+    
+    let sizeMultiplier = max(targetSize.width / result.image.size.width, targetSize.height / result.image.size.height)
+    
+    var drawRect = CGRect(x: 0, y: 0, width: result.image.size.width * sizeMultiplier, height: result.image.size.height * sizeMultiplier)
+    
+    if CGRectGetMaxX(drawRect) > CGRectGetMaxX(imageRect) {
+        drawRect.origin.x -= (CGRectGetMaxX(drawRect) - CGRectGetMaxX(imageRect)) / 2
+    }
+    
+    if CGRectGetMaxY(drawRect) > CGRectGetMaxY(imageRect) {
+        drawRect.origin.y -= (CGRectGetMaxY(drawRect) - CGRectGetMaxY(imageRect)) / 2
+    }
+    
+    result.image.drawInRect(drawRect)
+    
+    let processedImage = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    
+    return processedImage
+}
+```
+
+###Handle Authentication
+
+**Objective-C**
 ```objc
 [[PINRemoteImageManager sharedImageManager] setAuthenticationChallenge:^(NSURLSessionTask *task, NSURLAuthenticationChallenge *challenge, PINRemoteImageManagerAuthenticationChallengeCompletionHandler aCompletion) {
 aCompletion(NSURLSessionAuthChallengePerformDefaultHandling, nil)];
+```
+
+**Swift**
+```swift
+PINRemoteImageManager.sharedImageManager().setAuthenticationChallenge { (task : NSURLSessionTask!, challange : NSURLAuthenticationChallenge!, aCompletion : PINRemoteImageManagerAuthenticationChallengeCompletionHandler!) -> Void in
+    aCompletion(NSURLSessionAuthChallengeDisposition.PerformDefaultHandling, nil)
+}
 ```
 
 ## Installation
