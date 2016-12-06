@@ -831,6 +831,9 @@ static dispatch_once_t sharedDispatchToken;
                 if (task.numberOfRetries < PINRemoteImageMaxRetries) {
                     retry = YES;
                     newNumberOfRetries = ++task.numberOfRetries;
+                  
+                    // Clear out the exsiting progress image or else new data from retry will be appended
+                    task.progressImage = nil;
                     task.urlSessionTaskOperation = nil;
                 }
                 [strongSelf unlock];
