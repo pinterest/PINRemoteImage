@@ -12,76 +12,60 @@ import PINRemoteImage
 class ProcessingViewController: UIViewController {
 
     @IBOutlet weak var imageView: UIImageView!
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        imageView.pin_setImageFromURL(NSURL(string: "https://s-media-cache-ak0.pinimg.com/736x/5b/c6/c5/5bc6c5387ff6f104fd642f2b375efba3.jpg")!, processorKey: "rounded") { (result :PINRemoteImageManagerResult!, cost :UnsafeMutablePointer<UInt>) -> UIImage! in
-            if let image = result.image {
-                let radius : CGFloat = 7.0
-                let targetSize = CGSize(width: 200, height: 300)
-                let imageRect = CGRect(x: 0, y: 0, width: targetSize.width, height: targetSize.height)
-                
-                UIGraphicsBeginImageContext(imageRect.size)
-                
-                let bezierPath = UIBezierPath(roundedRect: imageRect, cornerRadius: radius)
-                bezierPath.addClip()
-                
-                let widthMultiplier : CGFloat = targetSize.width / image.size.width
-                let heightMultiplier : CGFloat = targetSize.height / image.size.height
-                let sizeMultiplier = max(widthMultiplier, heightMultiplier)
-                
-                var drawRect = CGRect(x: 0, y: 0, width: image.size.width * sizeMultiplier, height: image.size.height * sizeMultiplier)
-                if (CGRectGetMaxX(drawRect) > CGRectGetMaxX(imageRect)) {
-                    drawRect.origin.x -= (CGRectGetMaxX(drawRect) - CGRectGetMaxX(imageRect)) / 2
-                }
-                if (CGRectGetMaxY(drawRect) > CGRectGetMaxY(imageRect)) {
-                    drawRect.origin.y -= (CGRectGetMaxY(drawRect) - CGRectGetMaxY(imageRect)) / 2
-                }
-                
-                image.drawInRect(drawRect)
-                
-                UIColor.redColor().setStroke()
-                bezierPath.lineWidth = 5.0
-                bezierPath.stroke()
-                
-                let ctx = UIGraphicsGetCurrentContext()
-                CGContextSetBlendMode(ctx, CGBlendMode.Overlay)
-                CGContextSetAlpha(ctx, 0.5)
-                
-                let logo = UIImage(named: "white-pinterest-logo")
-                CGContextScaleCTM(ctx, 1.0, -1.0)
-                CGContextTranslateCTM(ctx, 0.0, -drawRect.size.height)
-                CGContextDrawImage(ctx, CGRect(x: 90, y: 10, width: logo!.size.width, height: logo!.size.height), logo!.CGImage)
-                
-                let processedImage = UIGraphicsGetImageFromCurrentImageContext()
-                UIGraphicsEndImageContext()
-                
-                return processedImage
-            } else {
-                return UIImage()
+        let url = URL(string: "https://s-media-cache-ak0.pinimg.com/736x/5b/c6/c5/5bc6c5387ff6f104fd642f2b375efba3.jpg")
+        
+        imageView.pin_setImage(from: url, processorKey: "rounded") { (result, unsafePointer) -> UIImage? in
+            
+            guard let image = result.image else { return nil }
+            
+            let radius : CGFloat = 7.0
+            let targetSize = CGSize(width: 200, height: 300)
+            let imageRect = CGRect(x: 0, y: 0, width: targetSize.width, height: targetSize.height)
+            
+            UIGraphicsBeginImageContext(imageRect.size)
+            
+            let bezierPath = UIBezierPath(roundedRect: imageRect, cornerRadius: radius)
+            bezierPath.addClip()
+            
+            let widthMultiplier : CGFloat = targetSize.width / image.size.width
+            let heightMultiplier : CGFloat = targetSize.height / image.size.height
+            let sizeMultiplier = max(widthMultiplier, heightMultiplier)
+            
+            var drawRect = CGRect(x: 0, y: 0, width: image.size.width * sizeMultiplier, height: image.size.height * sizeMultiplier)
+            if (drawRect.maxX > imageRect.maxX) {
+                drawRect.origin.x -= (drawRect.maxX - imageRect.maxX) / 2
             }
+            if (drawRect.maxY > imageRect.maxY) {
+                drawRect.origin.y -= (drawRect.maxY - imageRect.maxY) / 2
+            }
+            
+            image.draw(in: drawRect)
+            
+            UIColor.red.setStroke()
+            bezierPath.lineWidth = 5.0
+            bezierPath.stroke()
+            
+            let ctx = UIGraphicsGetCurrentContext()
+            ctx?.setBlendMode(CGBlendMode.overlay)
+            ctx?.setAlpha(0.5)
+            
+            let logo = UIImage(named: "white-pinterest-logo")
+            ctx?.scaleBy(x: 1.0, y: -1.0)
+            ctx?.translateBy(x: 0.0, y: -drawRect.size.height)
+            
+            if let coreGraphicsImage = logo?.cgImage {
+                ctx?.draw(coreGraphicsImage, in: CGRect(x: 90, y: 10, width: logo!.size.width, height: logo!.size.height))
+            }
+            
+            let processedImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            return processedImage
+            
         }
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

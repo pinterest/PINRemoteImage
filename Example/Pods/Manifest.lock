@@ -30,17 +30,17 @@ PODS:
   - PINCache/Arc-exception-safe (3.0.1-beta.2):
     - PINCache/Core
   - PINCache/Core (3.0.1-beta.2)
-  - PINRemoteImage (3.0.0-beta.5):
-    - PINRemoteImage/FLAnimatedImage (= 3.0.0-beta.5)
-    - PINRemoteImage/PINCache (= 3.0.0-beta.5)
-  - PINRemoteImage/Core (3.0.0-beta.5)
-  - PINRemoteImage/FLAnimatedImage (3.0.0-beta.5):
+  - PINRemoteImage (3.0.0-beta.7):
+    - PINRemoteImage/FLAnimatedImage (= 3.0.0-beta.7)
+    - PINRemoteImage/PINCache (= 3.0.0-beta.7)
+  - PINRemoteImage/Core (3.0.0-beta.7)
+  - PINRemoteImage/FLAnimatedImage (3.0.0-beta.7):
     - FLAnimatedImage (>= 1.0)
     - PINRemoteImage/Core
-  - PINRemoteImage/PINCache (3.0.0-beta.5):
+  - PINRemoteImage/PINCache (3.0.0-beta.7):
     - PINCache (= 3.0.1-beta.2)
     - PINRemoteImage/Core
-  - PINRemoteImage/WebP (3.0.0-beta.5):
+  - PINRemoteImage/WebP (3.0.0-beta.7):
     - libwebp
     - PINRemoteImage/Core
 
@@ -51,14 +51,14 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   PINRemoteImage:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   libwebp: b9126f8982a95370cf4eaad9bb3fefd57f052c15
   PINCache: 6d273a6e0754bd26e3f12a38a90dde73cc6a42b2
-  PINRemoteImage: dba0cfbedb64378fdbec12ccb5895658b95459cf
+  PINRemoteImage: ff63baf185088530db6cfa41cb665e2b5126b5c3
 
 PODFILE CHECKSUM: fd781389182d55117b32749ac8ebfe1de0ad6af9
 
-COCOAPODS: 1.0.0
+COCOAPODS: 1.1.1

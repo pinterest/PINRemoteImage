@@ -12,36 +12,19 @@ import PINRemoteImage
 class DegradedViewController: UIViewController {
 
     @IBOutlet weak var imageView: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        PINRemoteImageManager.sharedImageManager().setShouldUpgradeLowQualityImages(true, completion: nil)
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        PINRemoteImageManager.shared().setShouldUpgradeLowQualityImages(true, completion: nil)
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        imageView.pin_setImageFromURLs([
-            NSURL(string: "https://placekitten.com/101/101")!,
-            NSURL(string: "https://placekitten.com/401/401")!,
-            NSURL(string: "https://placekitten.com/801/801")!])
+        imageView.pin_setImage(from: [
+            URL(string: "https://placekitten.com/101/101")!,
+            URL(string: "https://placekitten.com/401/401")!,
+            URL(string: "https://placekitten.com/801/801")!])
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

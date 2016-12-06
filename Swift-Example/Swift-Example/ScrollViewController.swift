@@ -12,12 +12,12 @@ import PINCache
 
 struct Kitten {
     
-    let imageUrl : NSURL
+    let imageUrl : URL
     let size : CGSize
     var dominantColor : UIColor?
     
     init(urlString : String, size : CGSize) {
-        self.imageUrl = NSURL(string: urlString)!
+        self.imageUrl = URL(string: urlString)!
         self.size = size
     }
 }
@@ -36,8 +36,8 @@ class PinImageCell : UICollectionViewCell {
         
         let view = ["imageView" : imageView]
         
-        let constraintsH = NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[imageView]-0-|", options: [], metrics: nil, views: view)
-        let constraintsV = NSLayoutConstraint.constraintsWithVisualFormat("V:|-0-[imageView]-0-|", options: [], metrics: nil, views: view)
+        let constraintsH = NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[imageView]-0-|", options: [], metrics: nil, views: view)
+        let constraintsV = NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[imageView]-0-|", options: [], metrics: nil, views: view)
         contentView.addConstraints(constraintsH)
         contentView.addConstraints(constraintsV)
         
@@ -84,21 +84,21 @@ class ScrollViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     var collectionView : UICollectionView?
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        PINRemoteImageManager.sharedImageManager().cache.removeAllObjects()
+        PINRemoteImageManager.shared().cache.removeAllObjects()
     }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        PINRemoteImageManager.sharedImageManager().cache.removeAllObjects()
+        PINRemoteImageManager.shared().cache.removeAllObjects()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView?.registerClass(PinImageCell.self, forCellWithReuseIdentifier: String(PinImageCell))
+        collectionView?.register(PinImageCell.self, forCellWithReuseIdentifier: String(describing: PinImageCell.self))
         collectionView?.delegate = self
         collectionView?.dataSource = self
         
@@ -110,12 +110,12 @@ class ScrollViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func createRandomKittens() {
-        let dispatchGroup = dispatch_group_create()
+        let dispatchGroup = DispatchGroup()
         if let bounds = collectionView?.bounds {
             var tmpKittens = [Kitten]()
-            let scale = UIScreen.mainScreen().scale
+            let scale = UIScreen.main.scale
             
-            dispatch_group_async(dispatchGroup, dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0)) { () -> Void in
+            DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async(group: dispatchGroup) { () -> Void in
             
                 for _ in 1...500 {
                     let randGreen : CGFloat = CGFloat(drand48())
@@ -123,7 +123,7 @@ class ScrollViewController: UIViewController, UICollectionViewDataSource, UIColl
                     let randRed : CGFloat = CGFloat(drand48())
                     
                     let randomColor = UIColor(red: randRed, green: randGreen, blue: randBlue, alpha: 1)
-                    let kittenIndex : Int = Int(rand() % 20)
+                    let kittenIndex : Int = Int(arc4random() % 20)
                     let randKitten = self.kittens[kittenIndex]
                     
                     var width = randKitten.size.width
@@ -137,26 +137,27 @@ class ScrollViewController: UIViewController, UICollectionViewDataSource, UIColl
                     var newKitten = Kitten(urlString: randKitten.imageUrl.absoluteString, size: CGSize(width: width, height: height))
                     newKitten.dominantColor = randomColor
                     
-                    dispatch_sync(dispatch_get_main_queue(), { () -> Void in
+                    DispatchQueue.main.sync(execute: { () -> Void in
                         tmpKittens.append(newKitten)
                     })
                 }
             }
             
-            dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), { () -> Void in
+            dispatchGroup.notify(queue: DispatchQueue.main, execute: { () -> Void in
                 self.collectionKittens += tmpKittens
                 self.collectionView?.reloadData()
             })
         }
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let kitten = collectionKittens[indexPath.row]
         return kitten.size
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(String(PinImageCell), forIndexPath: indexPath)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PinImageCell.self), for: indexPath)
         
         if let pinCell = cell as? PinImageCell {
             
@@ -165,9 +166,10 @@ class ScrollViewController: UIViewController, UICollectionViewDataSource, UIColl
             pinCell.alpha = 0
             
             weak var weakPinCell = pinCell
-            pinCell.imageView.pin_setImageFromURL(kitten.imageUrl, completion: { (result : PINRemoteImageManagerResult!) -> Void in
+            
+            pinCell.imageView.pin_setImage(from: kitten.imageUrl, completion: { (result) in
                 if result.requestDuration > 0.25 {
-                    UIView.animateWithDuration(0.3, animations: { () -> Void in
+                    UIView.animate(withDuration: 0.3, animations: { 
                         weakPinCell?.alpha = 1
                     })
                 } else {
@@ -179,11 +181,11 @@ class ScrollViewController: UIViewController, UICollectionViewDataSource, UIColl
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return collectionKittens.count
     }
     
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
 }
