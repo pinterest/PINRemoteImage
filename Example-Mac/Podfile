@@ -1,6 +1,0 @@
-target 'PINRemoteImage', :exclusive => true do
-  pod "PINRemoteImage/OSX", :path => "../"
-  pod "PINRemoteImage/WebP", :path => "../"
-  pod "PINCache"
-  pod "libwebp"
-end

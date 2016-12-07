@@ -1,5 +1,0 @@
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1 $(inherited) PIN_WEBP=1
-HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/PINCache" "${PODS_ROOT}/Headers/Public/PINRemoteImage" "${PODS_ROOT}/Headers/Public/libwebp"
-OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/PINCache" -isystem "${PODS_ROOT}/Headers/Public/PINRemoteImage" -isystem "${PODS_ROOT}/Headers/Public/libwebp"
-OTHER_LDFLAGS = $(inherited) -ObjC -l"Pods-PINRemoteImage-PINCache" -l"Pods-PINRemoteImage-PINRemoteImage" -l"Pods-PINRemoteImage-libwebp" -framework "Accelerate" -framework "Cocoa" -framework "CoreServices" -framework "Foundation" -framework "ImageIO" -weak_framework "AppKit"
-PODS_ROOT = ${SRCROOT}/Pods

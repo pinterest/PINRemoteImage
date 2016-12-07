@@ -1,0 +1,6 @@
+target 'PINRemoteImage' do
+  pod "PINRemoteImage/OSX", :path => "../../"
+  pod "PINRemoteImage/WebP", :path => "../../"
+  pod "PINCache"
+  pod "libwebp"
+end

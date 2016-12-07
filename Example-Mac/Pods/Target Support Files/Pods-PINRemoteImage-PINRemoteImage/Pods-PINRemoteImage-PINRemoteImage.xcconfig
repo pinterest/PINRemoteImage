@@ -1,5 +1,0 @@
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1 $(inherited) PIN_WEBP=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/PINRemoteImage" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/PINCache" "${PODS_ROOT}/Headers/Public/PINRemoteImage" "${PODS_ROOT}/Headers/Public/libwebp"
-OTHER_LDFLAGS = -framework "Accelerate" -framework "Cocoa" -framework "CoreServices" -framework "ImageIO"
-PODS_ROOT = ${SRCROOT}
-SKIP_INSTALL = YES
