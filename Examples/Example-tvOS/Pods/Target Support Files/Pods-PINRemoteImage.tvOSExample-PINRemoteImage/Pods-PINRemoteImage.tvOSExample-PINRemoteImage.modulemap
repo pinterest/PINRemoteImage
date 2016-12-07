@@ -1,6 +1,0 @@
-framework module PINRemoteImage {
-  umbrella header "Pods-PINRemoteImage.tvOSExample-PINRemoteImage-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -1,9 +1,0 @@
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1 $(inherited) PIN_WEBP=1
-HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/FLAnimatedImage" "${PODS_ROOT}/Headers/Public/PINCache" "${PODS_ROOT}/Headers/Public/PINRemoteImage" "${PODS_ROOT}/Headers/Public/libwebp"
-LIBRARY_SEARCH_PATHS = $(inherited) "$PODS_CONFIGURATION_BUILD_DIR/FLAnimatedImage-iOS8.1" "$PODS_CONFIGURATION_BUILD_DIR/PINCache-iOS8.1" "$PODS_CONFIGURATION_BUILD_DIR/PINRemoteImage-iOS8.1" "$PODS_CONFIGURATION_BUILD_DIR/libwebp-iOS8.1"
-OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/FLAnimatedImage" -isystem "${PODS_ROOT}/Headers/Public/PINCache" -isystem "${PODS_ROOT}/Headers/Public/PINRemoteImage" -isystem "${PODS_ROOT}/Headers/Public/libwebp"
-OTHER_LDFLAGS = $(inherited) -ObjC -l"FLAnimatedImage-iOS8.1" -l"PINCache-iOS8.1" -l"PINRemoteImage-iOS8.1" -l"libwebp-iOS8.1" -framework "Accelerate" -framework "CoreGraphics" -framework "Foundation" -framework "ImageIO" -framework "MobileCoreServices" -framework "QuartzCore" -weak_framework "UIKit"
-PODS_BUILD_DIR = $BUILD_DIR
-PODS_CONFIGURATION_BUILD_DIR = $PODS_BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
-PODS_ROOT = ${SRCROOT}/Pods
-USER_HEADER_SEARCH_PATHS = $(inherited) $(SRCROOT)/libwebp/src
