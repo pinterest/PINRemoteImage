@@ -25,7 +25,7 @@ fi
 
 if [[ "$MODE" = "tests" || "$MODE" = "all" ]] ; then
     echoHeader "Running unit tests"
-    xcodebuild clean test -destination "$PLATFORM" -sdk "$SDK" -workspace Example/PINRemoteImage.xcworkspace -scheme PINRemoteImage ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO | xcpretty -t; test ${PIPESTATUS[0]} -eq 0
+    xcodebuild clean test -destination "$PLATFORM" -sdk "$SDK" -workspace Examples/Example/PINRemoteImage.xcworkspace -scheme PINRemoteImage ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO | xcpretty -t; test ${PIPESTATUS[0]} -eq 0
 fi
 
 if [[ "$MODE" = "carthage" || "$MODE" = "all" ]] ; then

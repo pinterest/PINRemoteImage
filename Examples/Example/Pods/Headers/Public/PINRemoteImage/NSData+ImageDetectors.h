@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Categories/NSData+ImageDetectors.h
+../../../../../../Pod/Classes/Categories/NSData+ImageDetectors.h

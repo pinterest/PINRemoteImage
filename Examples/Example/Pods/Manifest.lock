@@ -45,13 +45,13 @@ PODS:
     - PINRemoteImage/Core
 
 DEPENDENCIES:
-  - PINRemoteImage (from `../`)
-  - PINRemoteImage/PINCache (from `../`)
-  - PINRemoteImage/WebP (from `../`)
+  - PINRemoteImage (from `../../`)
+  - PINRemoteImage/PINCache (from `../../`)
+  - PINRemoteImage/WebP (from `../../`)
 
 EXTERNAL SOURCES:
   PINRemoteImage:
-    :path: "../"
+    :path: "../../"
 
 SPEC CHECKSUMS:
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
@@ -59,6 +59,6 @@ SPEC CHECKSUMS:
   PINCache: 6d273a6e0754bd26e3f12a38a90dde73cc6a42b2
   PINRemoteImage: ff63baf185088530db6cfa41cb665e2b5126b5c3
 
-PODFILE CHECKSUM: fd781389182d55117b32749ac8ebfe1de0ad6af9
+PODFILE CHECKSUM: 2517a458c3a57ea6f5a444414c01acdffcaf8dbf
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.0.1

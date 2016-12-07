@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/PINAnimatedImageManager.h
+../../../../../../Pod/Classes/PINAnimatedImageManager.h
