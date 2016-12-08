@@ -1036,13 +1036,10 @@ static dispatch_once_t sharedDispatchToken;
         typeof(self) strongSelf = weakSelf;
         [strongSelf lock];
             PINRemoteImageTask *taskToEvaluate = nil;
-            for (NSString *key in [strongSelf.tasks allKeys]) {
-                PINRemoteImageTask *task = [strongSelf.tasks objectForKey:key];
-                for (NSUUID *blockUUID in [task.callbackBlocks allKeys]) {
-                    if ([blockUUID isEqual:UUID]) {
-                        taskToEvaluate = task;
-                        break;
-                    }
+            for (PINRemoteImageTask *task in [strongSelf.tasks objectEnumerator]) {
+                if (task.callbackBlocks[UUID] != nil) {
+                    taskToEvaluate = task;
+                    break;
                 }
             }
         
@@ -1062,16 +1059,13 @@ static dispatch_once_t sharedDispatchToken;
     [_concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityHigh block:^{
         typeof(self) strongSelf = weakSelf;
         [strongSelf lock];
-        for (NSString *key in [strongSelf.tasks allKeys]) {
-            PINRemoteImageTask *task = [strongSelf.tasks objectForKey:key];
-            for (NSUUID *blockUUID in [task.callbackBlocks allKeys]) {
-                if ([blockUUID isEqual:UUID]) {
-                    if ([task isKindOfClass:[PINRemoteImageDownloadTask class]]) {
-                        PINRemoteImageCallbacks *callbacks = task.callbackBlocks[blockUUID];
-                        callbacks.progressImageBlock = progressImageCallback;
-                    }
-                    break;
+        for (PINRemoteImageTask *task in [strongSelf.tasks objectEnumerator]) {
+            PINRemoteImageCallbacks *callbacks = task.callbackBlocks[UUID];
+            if (callbacks != nil) {
+                if ([task isKindOfClass:[PINRemoteImageDownloadTask class]]) {
+                    callbacks.progressImageBlock = progressImageCallback;
                 }
+                break;
             }
         }
         [strongSelf unlock];
