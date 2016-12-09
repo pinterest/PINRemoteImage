@@ -25,6 +25,7 @@
 
 #import "NSData+ImageDetectors.h"
 #import "PINImage+DecodedImage.h"
+#import <stdatomic.h>
 
 #if USE_PINCACHE
 #import "PINCache+PINRemoteImageCaching.h"
@@ -1000,17 +1001,9 @@ static dispatch_once_t sharedDispatchToken;
     [_concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityHigh block:^
      {
         typeof(self) strongSelf = weakSelf;
-        //find the task associated with the UUID. This might be spead up by storing a mapping of UUIDs to tasks
         [strongSelf lock];
-            __block PINRemoteImageTask *taskToEvaluate = nil;
-            __block NSString *taskKey = nil;
-            [strongSelf.tasks enumerateKeysAndObjectsUsingBlock:^(NSString *key, PINRemoteImageTask *task, BOOL *stop) {
-                if (task.callbackBlocks[UUID]) {
-                    taskToEvaluate = task;
-                    taskKey = key;
-                    *stop = YES;
-                }
-            }];
+			 NSString *taskKey = nil;
+			 PINRemoteImageTask *taskToEvaluate = [strongSelf _locked_taskForUUID:UUID key:&taskKey];
         
             if (taskToEvaluate == nil) {
                 //maybe task hasn't been added to task list yet, add it to canceled tasks.
@@ -1035,15 +1028,8 @@ static dispatch_once_t sharedDispatchToken;
     [_concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityHigh block:^{
         typeof(self) strongSelf = weakSelf;
         [strongSelf lock];
-            PINRemoteImageTask *taskToEvaluate = nil;
-            for (PINRemoteImageTask *task in [strongSelf.tasks objectEnumerator]) {
-                if (task.callbackBlocks[UUID] != nil) {
-                    taskToEvaluate = task;
-                    break;
-                }
-            }
-        
-            [taskToEvaluate setPriority:priority];
+			PINRemoteImageTask *task = [strongSelf _locked_taskForUUID:UUID key:NULL];
+			[task setPriority:priority];
         [strongSelf unlock];
     }];
 }
@@ -1059,15 +1045,11 @@ static dispatch_once_t sharedDispatchToken;
     [_concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityHigh block:^{
         typeof(self) strongSelf = weakSelf;
         [strongSelf lock];
-        for (PINRemoteImageTask *task in [strongSelf.tasks objectEnumerator]) {
-            PINRemoteImageCallbacks *callbacks = task.callbackBlocks[UUID];
-            if (callbacks != nil) {
-                if ([task isKindOfClass:[PINRemoteImageDownloadTask class]]) {
-                    callbacks.progressImageBlock = progressImageCallback;
-                }
-                break;
-            }
-        }
+			PINRemoteImageTask *task = [strongSelf _locked_taskForUUID:UUID key:NULL];
+			if ([task isKindOfClass:[PINRemoteImageDownloadTask class]]) {
+				PINRemoteImageCallbacks *callbacks = task.callbackBlocks[UUID];
+				callbacks.progressImageBlock = progressImageCallback;
+			}
         [strongSelf unlock];
     }];
 }
@@ -1556,6 +1538,48 @@ static dispatch_once_t sharedDispatchToken;
           }
         }];
     }
+}
+
+/// Attempt to find the task with the callbacks for the given uuid
+- (nullable PINRemoteImageTask *)_locked_taskForUUID:(NSUUID *)uuid key:(NSString * _Nullable * _Nullable)outKey
+{
+	/**
+	 * Use enumerateKeysAndObjects concurrently to lookup the task.
+	 * This method uses dispatch_apply under the hood and so is safe
+	 * from thread explosion.
+	 *
+	 * Block-based enumeration should be avoided in general, but unfortunately
+	 * using NSDictionary.objectEnumerator + fast enumeration results in a
+	 * slowish path involving 2N calls to -nextObject, N calls to objectForKey:,
+	 * and an Objective-C allocation on top of the normal fast-enumeration machinery.
+	 *
+	 * Thus, using -objectEnumerator is slightly slower than the fast-enumeration example
+	 * at https://www.objc.io/issues/7-foundation/collections/#enumeration-and-higher-order-messaging-2
+	 */
+	__block PINRemoteImageTask *result = nil;
+
+	/**
+	 * A flag to protect our result.
+	 * In practice there will only be one task that passes this test and so
+	 * the chances of us concurrently writing to result are virtually 0 but
+	 * the cost here is also virtually 0 so let's just be safe.
+	 */
+	__block atomic_flag finished = ATOMIC_FLAG_INIT;
+
+	[self.tasks enumerateKeysAndObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSString * _Nonnull key, __kindof PINRemoteImageTask * _Nonnull task, BOOL * _Nonnull stop) {
+		// If this isn't our task, or if we've already found it (somehow!), just return.
+		if (task.callbackBlocks[uuid] == nil || atomic_flag_test_and_set(&finished)) {
+			return;
+		}
+
+		// Found it! Save our results and end enumeration
+		result = task;
+		if (outKey != NULL) {
+			*outKey = key;
+		}
+		*stop = YES;
+	}];
+	return result;
 }
 
 @end
