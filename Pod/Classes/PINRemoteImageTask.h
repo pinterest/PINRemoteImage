@@ -8,12 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+#import "PINRemoteImageCallbacks.h"
 #import "PINRemoteImageManager.h"
 #import "PINRemoteImageMacros.h"
 
 @interface PINRemoteImageTask : NSObject
 
-@property (nonatomic, strong, nonnull) NSMutableDictionary *callbackBlocks;
+@property (nonatomic, strong, nonnull) NSMutableDictionary<NSUUID *, PINRemoteImageCallbacks *> *callbackBlocks;
 #if PINRemoteImageLogging
 @property (nonatomic, copy, nullable) NSString *key;
 #endif

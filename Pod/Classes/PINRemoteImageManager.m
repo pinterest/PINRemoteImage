@@ -25,6 +25,7 @@
 
 #import "NSData+ImageDetectors.h"
 #import "PINImage+DecodedImage.h"
+#import <stdatomic.h>
 
 #if USE_PINCACHE
 #import "PINCache+PINRemoteImageCaching.h"
@@ -999,29 +1000,21 @@ static dispatch_once_t sharedDispatchToken;
     __weak typeof(self) weakSelf = self;
     [_concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityHigh block:^
      {
-        typeof(self) strongSelf = weakSelf;
-        //find the task associated with the UUID. This might be spead up by storing a mapping of UUIDs to tasks
-        [strongSelf lock];
-            __block PINRemoteImageTask *taskToEvaluate = nil;
-            __block NSString *taskKey = nil;
-            [strongSelf.tasks enumerateKeysAndObjectsUsingBlock:^(NSString *key, PINRemoteImageTask *task, BOOL *stop) {
-                if (task.callbackBlocks[UUID]) {
-                    taskToEvaluate = task;
-                    taskKey = key;
-                    *stop = YES;
-                }
-            }];
-        
-            if (taskToEvaluate == nil) {
-                //maybe task hasn't been added to task list yet, add it to canceled tasks.
-                //there's no need to ever remove a UUID from canceledTasks because it is weak.
-                [strongSelf.canceledTasks addObject:UUID];
-            }
-        
-            if ([taskToEvaluate cancelWithUUID:UUID manager:strongSelf]) {
-                [strongSelf.tasks removeObjectForKey:taskKey];
-            }
-        [strongSelf unlock];
+         typeof(self) strongSelf = weakSelf;
+         [strongSelf lock];
+             NSString *taskKey = nil;
+             PINRemoteImageTask *taskToEvaluate = [strongSelf _locked_taskForUUID:UUID key:&taskKey];
+
+             if (taskToEvaluate == nil) {
+                 //maybe task hasn't been added to task list yet, add it to canceled tasks.
+                 //there's no need to ever remove a UUID from canceledTasks because it is weak.
+                 [strongSelf.canceledTasks addObject:UUID];
+             }
+
+             if ([taskToEvaluate cancelWithUUID:UUID manager:strongSelf]) {
+                 [strongSelf.tasks removeObjectForKey:taskKey];
+             }
+         [strongSelf unlock];
      }];
 }
 
@@ -1035,18 +1028,8 @@ static dispatch_once_t sharedDispatchToken;
     [_concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityHigh block:^{
         typeof(self) strongSelf = weakSelf;
         [strongSelf lock];
-            PINRemoteImageTask *taskToEvaluate = nil;
-            for (NSString *key in [strongSelf.tasks allKeys]) {
-                PINRemoteImageTask *task = [strongSelf.tasks objectForKey:key];
-                for (NSUUID *blockUUID in [task.callbackBlocks allKeys]) {
-                    if ([blockUUID isEqual:UUID]) {
-                        taskToEvaluate = task;
-                        break;
-                    }
-                }
-            }
-        
-            [taskToEvaluate setPriority:priority];
+            PINRemoteImageTask *task = [strongSelf _locked_taskForUUID:UUID key:NULL];
+            [task setPriority:priority];
         [strongSelf unlock];
     }];
 }
@@ -1062,18 +1045,11 @@ static dispatch_once_t sharedDispatchToken;
     [_concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityHigh block:^{
         typeof(self) strongSelf = weakSelf;
         [strongSelf lock];
-        for (NSString *key in [strongSelf.tasks allKeys]) {
-            PINRemoteImageTask *task = [strongSelf.tasks objectForKey:key];
-            for (NSUUID *blockUUID in [task.callbackBlocks allKeys]) {
-                if ([blockUUID isEqual:UUID]) {
-                    if ([task isKindOfClass:[PINRemoteImageDownloadTask class]]) {
-                        PINRemoteImageCallbacks *callbacks = task.callbackBlocks[blockUUID];
-                        callbacks.progressImageBlock = progressImageCallback;
-                    }
-                    break;
-                }
+            PINRemoteImageTask *task = [strongSelf _locked_taskForUUID:UUID key:NULL];
+            if ([task isKindOfClass:[PINRemoteImageDownloadTask class]]) {
+                PINRemoteImageCallbacks *callbacks = task.callbackBlocks[UUID];
+                callbacks.progressImageBlock = progressImageCallback;
             }
-        }
         [strongSelf unlock];
     }];
 }
@@ -1562,6 +1538,27 @@ static dispatch_once_t sharedDispatchToken;
           }
         }];
     }
+}
+
+/// Attempt to find the task with the callbacks for the given uuid
+- (nullable PINRemoteImageTask *)_locked_taskForUUID:(NSUUID *)uuid key:(NSString * _Nullable * _Nullable)outKey
+{
+    __block PINRemoteImageTask *result = nil;
+
+    [self.tasks enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, __kindof PINRemoteImageTask * _Nonnull task, BOOL * _Nonnull stop) {
+        // If this isn't our task, just return.
+        if (task.callbackBlocks[uuid] == nil) {
+            return;
+        }
+
+        // Found it! Save our results and end enumeration
+        result = task;
+        if (outKey != NULL) {
+            *outKey = key;
+        }
+        *stop = YES;
+    }];
+    return result;
 }
 
 @end
