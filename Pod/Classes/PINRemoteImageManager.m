@@ -25,7 +25,6 @@
 
 #import "NSData+ImageDetectors.h"
 #import "PINImage+DecodedImage.h"
-#import <stdatomic.h>
 
 #if USE_PINCACHE
 #import "PINCache+PINRemoteImageCaching.h"
