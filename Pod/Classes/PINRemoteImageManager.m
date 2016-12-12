@@ -153,16 +153,6 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 static PINRemoteImageManager *sharedImageManager = nil;
 static dispatch_once_t sharedDispatchToken;
 
-+ (BOOL)supportsQOS
-{
-    static dispatch_once_t onceToken;
-    static BOOL supportsQOS;
-    dispatch_once(&onceToken, ^{
-        supportsQOS = [NSOperation instancesRespondToSelector:@selector(setQualityOfService:)];
-    });
-    return supportsQOS;
-}
-
 + (instancetype)sharedImageManager
 {
     dispatch_once(&sharedDispatchToken, ^{
@@ -214,7 +204,7 @@ static dispatch_once_t sharedDispatchToken;
         _concurrentOperationQueue = [[NSOperationQueue alloc] init];
         _concurrentOperationQueue.name = @"PINRemoteImageManager Concurrent Operation Queue";
         _concurrentOperationQueue.maxConcurrentOperationCount = NSOperationQueueDefaultMaxConcurrentOperationCount;
-        if ([[self class] supportsQOS]) {
+        if (PINNSOperationSupportsQOS) {
             _concurrentOperationQueue.qualityOfService = NSQualityOfServiceUtility;
         }
         _urlSessionTaskQueue = [[NSOperationQueue alloc] init];
@@ -883,9 +873,9 @@ static dispatch_once_t sharedDispatchToken;
 }
 
 - (PINDataTaskOperation *)downloadDataWithURL:(NSURL *)url
-                                         key:(NSString *)key
-                                    priority:(PINRemoteImageManagerPriority)priority
-                                  completion:(PINRemoteImageManagerDataCompletion)completion
+                                          key:(NSString *)key
+                                     priority:(PINRemoteImageManagerPriority)priority
+                                   completion:(PINRemoteImageManagerDataCompletion)completion
 {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url
                                              cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
@@ -930,7 +920,7 @@ static dispatch_once_t sharedDispatchToken;
         }
     }];
     
-    if ([dataTaskOperation.dataTask respondsToSelector:@selector(setPriority:)]) {
+    if (PINNSURLSessionTaskSupportsPriority) {
         dataTaskOperation.dataTask.priority = dataTaskPriorityWithImageManagerPriority(priority);
     }
     
@@ -1124,9 +1114,7 @@ static dispatch_once_t sharedDispatchToken;
 - (void)didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge forTask:(NSURLSessionTask *)task completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler {
     [self lock];
     if (self.authenticationChallengeHandler) {
-        self.authenticationChallengeHandler(task, challenge, ^(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential){
-            completionHandler(disposition, credential);
-        });
+        self.authenticationChallengeHandler(task, challenge, completionHandler);
     } else {
         completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
     }
@@ -1158,7 +1146,7 @@ static dispatch_once_t sharedDispatchToken;
     
     [progressiveImage updateProgressiveImageWithData:data expectedNumberOfBytes:[dataTask countOfBytesExpectedToReceive]];
 
-    if (hasProgressBlocks && [NSOperation instancesRespondToSelector:@selector(qualityOfService)]) {
+    if (hasProgressBlocks && PINNSOperationSupportsQOS) {
         __weak typeof(self) weakSelf = self;
         [_concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityLow block:^{
             typeof(self) strongSelf = weakSelf;
@@ -1476,7 +1464,7 @@ static dispatch_once_t sharedDispatchToken;
 {
     NSString *cacheKey = [url absoluteString];
     if (processorKey.length > 0) {
-        cacheKey = [cacheKey stringByAppendingString:[NSString stringWithFormat:@"-<%@>", processorKey]];
+        cacheKey = [cacheKey stringByAppendingFormat:@"-<%@>", processorKey];
     }
 
     //PINDiskCache uses this key as the filename of the file written to disk
@@ -1568,7 +1556,7 @@ static dispatch_once_t sharedDispatchToken;
 {
     NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:block];
     operation.queuePriority = operationPriorityWithImageManagerPriority(priority);
-    if ([PINRemoteImageManager supportsQOS] == NO) {
+    if (PINNSOperationSupportsQOS == NO) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
         operation.threadPriority = 0.2;
