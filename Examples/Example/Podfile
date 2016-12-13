@@ -1,7 +1,7 @@
 xcodeproj 'PINRemoteImage.xcodeproj'
 
 def shared_pods
-  pod "PINRemoteImage", :path => “../../“
+  pod "PINRemoteImage", :path => "../../"
   pod "PINRemoteImage/WebP", :path => "../../"
   pod "PINRemoteImage/PINCache", :path => "../../"
 end
