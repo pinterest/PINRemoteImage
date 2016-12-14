@@ -14,7 +14,7 @@ PINRemoteImage also has two methods to improve the experience of downloading ima
 
 ![Progressive JPG with Blur](/progressive.gif "Looks better on device.")
 
-[PINRemoteImageCategoryManager](Pod/Classes/PINRemoteImageCategoryManager.h) defines a protocol which UIView subclasses can implement and provide easy access to 
+[PINRemoteImageCategoryManager](Pod/Classes/PINRemoteImageCategoryManager.h) defines a protocol which UIView subclasses can implement and provide easy access to
 PINRemoteImageManager's methods. There are **built-in categories** on **UIImageView**, **FLAnimatedImageView** and **UIButton**, and it's very easy to implement a new category. See [UIImageView+PINRemoteImage](/Pod/Classes/Image Categories/UIImageView+PINRemoteImage.h) of the existing categories for reference.
 
 
@@ -29,9 +29,9 @@ UIImageView *imageView = [[UIImageView alloc] init];
 **Swift**
 ```swift
 let imageView = UIImageView()
-imageView.pin_setImageFromURL(NSURL(string: "https://pinterest.com/kitten.jpg")!)
+imageView.pin_setImage(from: URL(string: "https://pinterest.com/kitten.jpg")!)
 ```
-    
+
 ###Download a progressive jpeg and get attractive blurred updates:
 
 **Objective-C**
@@ -45,7 +45,7 @@ UIImageView *imageView = [[UIImageView alloc] init];
 ```swift
 let imageView = UIImageView()
 imageView.pin_updateWithProgress = true
-imageView.pin_setImageFromURL(NSURL(string: "https://pinterest.com/progressiveKitten.jpg")!)
+imageView.pin_setImage(from: URL(string: "https://pinterest.com/progressiveKitten.jpg")!)
 ```
 
 ###Download a WebP file
@@ -59,7 +59,7 @@ UIImageView *imageView = [[UIImageView alloc] init];
 **Swift**
 ```swift
 let imageView = UIImageView()
-imageView.pin_setImageFromURL(NSURL(string: "https://pinterest.com/googleKitten.webp")!)
+imageView.pin_setImage(from: URL(string: "https://pinterest.com/googleKitten.webp")!)
 ```
 
 ###Download a GIF and display with FLAnimatedImageView
@@ -73,7 +73,7 @@ FLAnimatedImageView *animatedImageView = [[FLAnimatedImageView alloc] init];
 **Swift**
 ```swift
 let animatedImageView = FLAnimatedImageView()
-animatedImageView.pin_setImageFromURL(NSURL(string: "http://pinterest.com/flyingKitten.gif")!)
+animatedImageView.pin_setImage(from: URL(string: "http://pinterest.com/flyingKitten.gif")!)
 ```
 
 ###Download and process an image
@@ -88,9 +88,9 @@ UIImageView *imageView = [[UIImageView alloc] init];
      UIGraphicsBeginImageContext(imageRect.size);
      UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:imageRect cornerRadius:7.0];
      [bezierPath addClip];
-     
+
      CGFloat sizeMultiplier = MAX(targetSize.width / result.image.size.width, targetSize.height / result.image.size.height);
-     
+
      CGRect drawRect = CGRectMake(0, 0, result.image.size.width * sizeMultiplier, result.image.size.height * sizeMultiplier);
      if (CGRectGetMaxX(drawRect) > CGRectGetMaxX(imageRect)) {
          drawRect.origin.x -= (CGRectGetMaxX(drawRect) - CGRectGetMaxX(imageRect)) / 2.0;
@@ -98,9 +98,9 @@ UIImageView *imageView = [[UIImageView alloc] init];
      if (CGRectGetMaxY(drawRect) > CGRectGetMaxY(imageRect)) {
          drawRect.origin.y -= (CGRectGetMaxY(drawRect) - CGRectGetMaxY(imageRect)) / 2.0;
      }
-     
+
      [result.image drawInRect:drawRect];
-     
+
      UIImage *processedImage = UIGraphicsGetImageFromCurrentImageContext();
      UIGraphicsEndImageContext();
      return processedImage;
@@ -110,33 +110,54 @@ UIImageView *imageView = [[UIImageView alloc] init];
 **Swift**
 ```swift
 let imageView = FLAnimatedImageView()
-imageView.pin_setImageFromURL(NSURL(string: "https://s-media-cache-ak0.pinimg.com/736x/5b/c6/c5/5bc6c5387ff6f104fd642f2b375efba3.jpg")!, processorKey: "rounded") { (result :PINRemoteImageManagerResult!, cost : UnsafeMutablePointer<UInt>) -> UIImage! in
+imageView.pin_setImage(from: URL(string: "https://s-media-cache-ak0.pinimg.com/736x/5b/c6/c5/5bc6c5387ff6f104fd642f2b375efba3.jpg")!, processorKey: "rounded")  { (result, unsafePointer) -> UIImage? in
 
+    guard let image = result.image else { return nil }
+
+    let radius : CGFloat = 7.0
     let targetSize = CGSize(width: 200, height: 300)
-    let imageRect = CGRectMake(0, 0, targetSize.width, targetSize.height)
-    
+    let imageRect = CGRect(x: 0, y: 0, width: targetSize.width, height: targetSize.height)
+
     UIGraphicsBeginImageContext(imageRect.size)
-    let bezierPath = UIBezierPath(roundedRect: imageRect, cornerRadius: 7.0)
+
+    let bezierPath = UIBezierPath(roundedRect: imageRect, cornerRadius: radius)
     bezierPath.addClip()
-    
-    let sizeMultiplier = max(targetSize.width / result.image.size.width, targetSize.height / result.image.size.height)
-    
-    var drawRect = CGRect(x: 0, y: 0, width: result.image.size.width * sizeMultiplier, height: result.image.size.height * sizeMultiplier)
-    
-    if CGRectGetMaxX(drawRect) > CGRectGetMaxX(imageRect) {
-        drawRect.origin.x -= (CGRectGetMaxX(drawRect) - CGRectGetMaxX(imageRect)) / 2
+
+    let widthMultiplier : CGFloat = targetSize.width / image.size.width
+    let heightMultiplier : CGFloat = targetSize.height / image.size.height
+    let sizeMultiplier = max(widthMultiplier, heightMultiplier)
+
+    var drawRect = CGRect(x: 0, y: 0, width: image.size.width * sizeMultiplier, height: image.size.height * sizeMultiplier)
+    if (drawRect.maxX > imageRect.maxX) {
+        drawRect.origin.x -= (drawRect.maxX - imageRect.maxX) / 2
     }
-    
-    if CGRectGetMaxY(drawRect) > CGRectGetMaxY(imageRect) {
-        drawRect.origin.y -= (CGRectGetMaxY(drawRect) - CGRectGetMaxY(imageRect)) / 2
+    if (drawRect.maxY > imageRect.maxY) {
+        drawRect.origin.y -= (drawRect.maxY - imageRect.maxY) / 2
     }
-    
-    result.image.drawInRect(drawRect)
-    
+
+    image.draw(in: drawRect)
+
+    UIColor.red.setStroke()
+    bezierPath.lineWidth = 5.0
+    bezierPath.stroke()
+
+    let ctx = UIGraphicsGetCurrentContext()
+    ctx?.setBlendMode(CGBlendMode.overlay)
+    ctx?.setAlpha(0.5)
+
+    let logo = UIImage(named: "white-pinterest-logo")
+    ctx?.scaleBy(x: 1.0, y: -1.0)
+    ctx?.translateBy(x: 0.0, y: -drawRect.size.height)
+
+    if let coreGraphicsImage = logo?.cgImage {
+        ctx?.draw(coreGraphicsImage, in: CGRect(x: 90, y: 10, width: logo!.size.width, height: logo!.size.height))
+    }
+
     let processedImage = UIGraphicsGetImageFromCurrentImageContext()
     UIGraphicsEndImageContext()
-    
+
     return processedImage
+
 }
 ```
 
@@ -150,8 +171,8 @@ aCompletion(NSURLSessionAuthChallengePerformDefaultHandling, nil)];
 
 **Swift**
 ```swift
-PINRemoteImageManager.sharedImageManager().setAuthenticationChallenge { (task : NSURLSessionTask!, challange : NSURLAuthenticationChallenge!, aCompletion : PINRemoteImageManagerAuthenticationChallengeCompletionHandler!) -> Void in
-    aCompletion(NSURLSessionAuthChallengeDisposition.PerformDefaultHandling, nil)
+PINRemoteImageManager.shared().setAuthenticationChallenge { (task, challenge, completion) in
+  completion?(.performDefaultHandling, nil)
 }
 ```
 
