@@ -138,6 +138,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 @property (nonatomic, assign) float lowQualityBPSThreshold;
 @property (nonatomic, assign) BOOL shouldUpgradeLowQualityImages;
 @property (nonatomic, copy) PINRemoteImageManagerAuthenticationChallenge authenticationChallengeHandler;
+@property (nonatomic, strong) NSMutableDictionary <NSString *, NSString *> *httpHeaderFields;
 #if DEBUG
 @property (nonatomic, assign) float currentBPS;
 @property (nonatomic, assign) BOOL overrideBPS;
@@ -231,6 +232,7 @@ static dispatch_once_t sharedDispatchToken;
             alternateRepProvider = _defaultAlternateRepresentationProvider;
         }
         _alternateRepProvider = alternateRepProvider;
+        _httpHeaderFields = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -279,6 +281,21 @@ static dispatch_once_t sharedDispatchToken;
 - (void)unlock
 {
     [_lock unlock];
+}
+
+- (void)setValue:(nullable NSString *)value forHTTPHeaderField:(nullable NSString *)header {
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        typeof(self) strongSelf = weakSelf;
+        [strongSelf lock];
+            if (value) {
+                strongSelf.httpHeaderFields[header] = value;
+            }
+            else {
+                [strongSelf.httpHeaderFields removeObjectForKey:header];
+            }
+        [strongSelf unlock];
+    });
 }
 
 - (void)setAuthenticationChallenge:(PINRemoteImageManagerAuthenticationChallenge)challengeBlock {
@@ -899,6 +916,9 @@ static dispatch_once_t sharedDispatchToken;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url
                                              cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                          timeoutInterval:self.timeout];
+    if (self.httpHeaderFields.count > 0) {
+        request.allHTTPHeaderFields = [self.httpHeaderFields copy];
+    }
     [NSURLProtocol setProperty:key forKey:PINRemoteImageCacheKey inRequest:request];
     
     __weak typeof(self) weakSelf = self;

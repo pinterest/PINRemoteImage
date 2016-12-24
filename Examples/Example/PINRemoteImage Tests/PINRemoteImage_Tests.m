@@ -221,6 +221,31 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
+- (void)testCustomRequestHeaderIsAddedToImageRequests
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Custom request header was added to image request"];
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    configuration.HTTPAdditionalHeaders = @{ @"X-Custom-Header" : @"Custom Header Value" };
+    
+    self.imageManager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:configuration];
+    [self.imageManager setValue:@"Should not be overrided" forHTTPHeaderField:@"X-Custom-Header"];
+    [self.imageManager setValue:@"Custom Request Header" forHTTPHeaderField:@"X-Custom-Request-Header"];
+    [self.imageManager setValue:@"Custom Request Header 2" forHTTPHeaderField:@"X-Custom-Request-Header-2"];
+    [self.imageManager setValue:nil forHTTPHeaderField:@"X-Custom-Request-Header-2"];
+    self.imageManager.sessionManager.delegate = self;
+    [self.imageManager downloadImageWithURL:[self headersURL]
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                                 completion:^(PINRemoteImageManagerResult *result)
+                                 {
+                                     NSDictionary *headers = [[NSJSONSerialization JSONObjectWithData:self.data options:NSJSONReadingMutableContainers error:nil] valueForKey:@"headers"];
+                                     XCTAssert([headers[@"X-Custom-Header"] isEqualToString:@"Should not be overrided"]);
+                                     XCTAssert([headers[@"X-Custom-Request-Header"] isEqualToString:@"Custom Request Header"]);
+                                     XCTAssert(headers[@"X-Custom-Request-Header-2"] == nil);
+                                     [expectation fulfill];
+                                 }];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
 - (void)testSkipFLAnimatedImageDownload
 {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Download animated image"];
