@@ -10,6 +10,7 @@
 
 #ifdef PIN_WEBP
 #import "webp/decode.h"
+#import "webp/encode.h"
 
 static void releaseData(void *info, const void *data, size_t size)
 {
@@ -75,6 +76,52 @@ static void releaseData(void *info, const void *data, size_t size)
         }
     }
     return nil;
+}
+
++ (NSData *)pin_DataFromWebPimage:(PINImage *)image {
+ 
+    WebPConfig config;
+    if (!WebPConfigPreset(&config, WEBP_PRESET_DEFAULT, 75)) {
+        return nil;
+    }
+
+    if (!WebPValidateConfig(&config)) {
+        return nil;
+    }
+    
+    CGImageRef imageRef = image.CGImage;
+    CGDataProviderRef dataProvider = CGImageGetDataProvider(imageRef);
+    CFDataRef dataRef = CGDataProviderCopyData(dataProvider);
+
+    WebPPicture picture;
+    if (!WebPPictureInit(&picture)) {
+        return nil;
+    }
+    
+    picture.colorspace = WEBP_YUV420;
+    picture.width = CGImageGetWidth(imageRef);
+    picture.height = CGImageGetHeight(imageRef);
+    
+    WebPPictureImportRGBA(&picture, (uint8_t *)CFDataGetBytePtr(dataRef), (int) CGImageGetBytesPerRow(imageRef));
+    WebPPictureARGBToYUVA(&picture, picture.colorspace);
+    WebPCleanupTransparentArea(&picture);
+    
+    CFRelease(dataRef);
+    
+    WebPMemoryWriter writer;
+    WebPMemoryWriterInit(&writer);
+    
+    picture.writer = WebPMemoryWrite;
+    picture.custom_ptr = &writer;
+    
+    WebPEncode(&config, &picture);
+    
+    NSData *data = [NSData dataWithBytes:writer.mem length:writer.size];
+    
+    WebPPictureFree(&picture);
+    
+    return data;
+    
 }
 
 @end

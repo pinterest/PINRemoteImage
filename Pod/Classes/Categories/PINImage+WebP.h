@@ -19,6 +19,7 @@
 @interface PINImage (PINWebP)
 
 + (PINImage *)pin_imageWithWebPData:(NSData *)webPData;
++ (NSData *)pin_DataFromWebPimage:(PINImage *)image;
 
 @end
 
