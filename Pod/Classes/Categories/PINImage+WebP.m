@@ -79,28 +79,38 @@ static void releaseData(void *info, const void *data, size_t size)
 }
 
 + (NSData *)pin_DataFromWebPimage:(PINImage *)image {
- 
-    WebPConfig config;
-    if (!WebPConfigPreset(&config, WEBP_PRESET_DEFAULT, 75)) {
-        return nil;
-    }
-
-    if (!WebPValidateConfig(&config)) {
-        return nil;
-    }
     
-    CGImageRef imageRef = image.CGImage;
+    WebPConfig config;
+    WebPPicture picture;
+    WebPConfigPreset(&config, WEBP_PRESET_DEFAULT, 75);
+    WebPPictureInit(&picture);
+    
+    // convert color space.
+    CGRect imageRect = CGRectMake(0, 0, image.size.width, image.size.height);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    
+    NSUInteger bytesPerPixel = 4;
+    NSUInteger bytesPerRow = bytesPerPixel * image.size.width;
+    NSUInteger bitsPerComponent = 8;
+    NSUInteger bitmapByteCount = bytesPerRow * image.size.height;
+    
+    unsigned char *rawData = (unsigned char*) calloc(bitmapByteCount, sizeof(unsigned char));
+    
+    CGContextRef context = CGBitmapContextCreate(rawData, image.size.width, image.size.height,
+                                                 bitsPerComponent, bytesPerRow, colorSpace,
+                                                 kCGImageAlphaPremultipliedLast | kCGImageByteOrder32Big);
+    
+    CGContextDrawImage(context, imageRect, image.CGImage);
+    CGImageRef imageRef = CGBitmapContextCreateImage(context);
+    CGColorSpaceRelease(colorSpace);
+    CGContextRelease(context);
+    
     CGDataProviderRef dataProvider = CGImageGetDataProvider(imageRef);
     CFDataRef dataRef = CGDataProviderCopyData(dataProvider);
-
-    WebPPicture picture;
-    if (!WebPPictureInit(&picture)) {
-        return nil;
-    }
     
-    picture.colorspace = WEBP_YUV420;
-    picture.width = CGImageGetWidth(imageRef);
-    picture.height = CGImageGetHeight(imageRef);
+    picture.colorspace = WEBP_YUV420A;
+    picture.width = image.size.width;
+    picture.height = image.size.height;
     
     WebPPictureImportRGBA(&picture, (uint8_t *)CFDataGetBytePtr(dataRef), (int) CGImageGetBytesPerRow(imageRef));
     WebPPictureARGBToYUVA(&picture, picture.colorspace);
