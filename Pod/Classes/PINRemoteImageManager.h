@@ -424,6 +424,22 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
                              progressImage:(nullable PINRemoteImageManagerImageCompletion)progressImage
                                 completion:(nullable PINRemoteImageManagerImageCompletion)completion;
 
+
+/**
+ Adds an image manually into the memory and disk cache.
+ 
+ @param data NSData with the raw image data.
+ @param url NSURL where the image resides.
+ @processorKey NSString key to uniquely identify processor and process. Will be used for caching processed images.
+ @additionalCost NSUInteger the additional cost (for cache eviction purposes) to generate the processed image
+ 
+ @return A BOOL indicating if the image was successfully added to the cache.
+ */
+- (BOOL) insertImageDataIntoCache:(nonnull NSData*)data
+                          withURL:(nonnull NSURL *)url
+                     processorKey:(nullable NSString *)processorKey
+                   additionalCost:(NSUInteger)additionalCost;
+
 /**
  Returns the cacheKey for a given URL and processorKey. Exposed to be overridden if necessary or to be used with imageFromCacheWithCacheKey
  @see imageFromCacheWithCacheKey:completion:
