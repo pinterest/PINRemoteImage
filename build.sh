@@ -2,8 +2,8 @@
 set -eo pipefail
 
 # **** Update me when new Xcode versions are released! ****
-PLATFORM="platform=iOS Simulator,OS=10.1,name=iPhone 7"
-SDK="iphonesimulator10.1"
+PLATFORM="platform=iOS Simulator,OS=10.2,name=iPhone 7"
+SDK="iphonesimulator10.2"
 
 MODE="$1"
 
