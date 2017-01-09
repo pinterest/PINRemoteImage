@@ -2,13 +2,11 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 project 'Examples/Example/PINRemoteImage.xcodeproj'
 
-#TODO CocoaPods plugin instead?
-abstract_target 'Buck' do
-  target 'PINRemoteImage' do
-    pod 'FLAnimatedImage', '~> 1.0'
-    pod 'PINCache', '3.0.1-beta.2'
-  end
+target 'PINRemoteImage' do
+  pod 'FLAnimatedImage', '~> 1.0'
+  pod 'PINCache', '3.0.1-beta.2'
 
+  #TODO CocoaPods plugin instead?
   post_install do |installer|
     require 'fileutils'
 
