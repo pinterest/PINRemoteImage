@@ -751,6 +751,25 @@ static dispatch_once_t sharedDispatchToken;
     [self unlock];
 }
 
+-(BOOL) insertImageDataIntoCache:(nonnull NSData*)data
+                         withURL:(nonnull NSURL *)url
+                    processorKey:(nullable NSString *)processorKey
+                  additionalCost:(NSUInteger)additionalCost
+{
+  
+  if (url != nil) {
+    NSString *key = [self cacheKeyForURL:url processorKey:processorKey];
+    
+    PINRemoteImageManagerDownloadOptions options = PINRemoteImageManagerDownloadOptionsSkipDecode & PINRemoteImageManagerDownloadOptionsSkipEarlyCheck;
+    PINRemoteImageMemoryContainer *container = [[PINRemoteImageMemoryContainer alloc] init];
+    container.data = data;
+    
+    return [self materializeAndCacheObject: container cacheInDisk: data additionalCost: additionalCost key:key options:options outImage: nil outAltRep: nil];
+  }
+  
+  return NO;
+}
+
 - (BOOL)earlyReturnWithOptions:(PINRemoteImageManagerDownloadOptions)options url:(NSURL *)url key:(NSString *)key object:(id)object completion:(PINRemoteImageManagerImageCompletion)completion
 {
     PINImage *image = nil;
