@@ -78,13 +78,8 @@ static void releaseData(void *info, const void *data, size_t size)
     return nil;
 }
 
-+ (NSData *)pin_DataFromWebPimage:(PINImage *)image {
-    
-    WebPConfig config;
-    WebPPicture picture;
-    WebPConfigPreset(&config, WEBP_PRESET_DEFAULT, 75);
-    WebPPictureInit(&picture);
-    
++ (NSData *)pin_DataFromWebPimage:(PINImage *)image
+{
     // convert color space.
     CGRect imageRect = CGRectMake(0, 0, image.size.width, image.size.height);
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -108,12 +103,17 @@ static void releaseData(void *info, const void *data, size_t size)
     CGDataProviderRef dataProvider = CGImageGetDataProvider(imageRef);
     CFDataRef dataRef = CGDataProviderCopyData(dataProvider);
     
+    WebPConfig config;
+    WebPConfigLosslessPreset(&config, 6);
+    
+    WebPPicture picture;
+    WebPPictureInit(&picture);
+    
     picture.colorspace = WEBP_YUV420A;
     picture.width = image.size.width;
     picture.height = image.size.height;
     
     WebPPictureImportRGBA(&picture, (uint8_t *)CFDataGetBytePtr(dataRef), (int) CGImageGetBytesPerRow(imageRef));
-    WebPPictureARGBToYUVA(&picture, picture.colorspace);
     WebPCleanupTransparentArea(&picture);
     
     CFRelease(dataRef);
@@ -129,6 +129,8 @@ static void releaseData(void *info, const void *data, size_t size)
     NSData *data = [NSData dataWithBytes:writer.mem length:writer.size];
     
     WebPPictureFree(&picture);
+    
+    free(rawData);
     
     return data;
     
