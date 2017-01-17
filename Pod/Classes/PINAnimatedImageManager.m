@@ -20,10 +20,10 @@
 static const NSUInteger maxFileSize = 50000000; //max file size in bytes
 static const Float32 maxFileDuration = 1; //max duration of a file in seconds
 
-typedef void(^PINAnimatedImageInfoProcessed)(PINImage *coverImage, NSUUID *UUID, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, size_t width, size_t height, size_t bitsPerPixel, UInt32 bitmapInfo);
+typedef void(^PINAnimatedImageInfoProcessed)(PINImage *firstImage, NSUUID *UUID, Float32 *durations, CFTimeInterval combinedDurations, size_t loopCount, size_t frameCount, size_t width, size_t height, size_t bitsPerPixel, UInt32 bitmapInfo);
 
-BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status);
-BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
+BOOL PINStatusFirstImageCompleted(PINAnimatedImageStatus status);
+BOOL PINStatusFirstImageCompleted(PINAnimatedImageStatus status) {
   return status == PINAnimatedImageStatusInfoProcessed || status == PINAnimatedImageStatusFirstFileProcessed || status == PINAnimatedImageStatusProcessed;
 }
 
@@ -121,18 +121,18 @@ BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
         startProcessing = YES;
       }
       
-      if (PINStatusCoverImageCompleted(sharedAnimatedImage.status)) {
+      if (PINStatusFirstImageCompleted(sharedAnimatedImage.status)) {
         //Info is already processed, call infoCompletion immediately
         if (infoCompletion) {
-          infoCompletion(sharedAnimatedImage.coverImage, sharedAnimatedImage);
+          infoCompletion(sharedAnimatedImage.firstImage, sharedAnimatedImage);
         }
       } else {
         //Add infoCompletion to sharedAnimatedImage
         if (infoCompletion) {
           //Since ASSharedAnimatedImages are stored weakly in our map, we need a strong reference in completions
-          PINAnimatedImageSharedReady capturingInfoCompletion = ^(PINImage *coverImage, PINSharedAnimatedImage *newShared) {
+          PINAnimatedImageSharedReady capturingInfoCompletion = ^(PINImage *firstImage, PINSharedAnimatedImage *newShared) {
             __unused PINSharedAnimatedImage *strongShared = sharedAnimatedImage;
-            infoCompletion(coverImage, newShared);
+            infoCompletion(firstImage, newShared);
           };
           sharedAnimatedImage.infoCompletions = [sharedAnimatedImage.infoCompletions arrayByAddingObject:capturingInfoCompletion];
         }
@@ -163,18 +163,18 @@ BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
   
   if (startProcessing) {
     dispatch_async(self.serialProcessingQueue, ^{
-      [[self class] processAnimatedImage:animatedImageData temporaryDirectory:[PINAnimatedImageManager temporaryDirectory] infoCompletion:^(PINImage *coverImage, NSUUID *UUID, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, size_t width, size_t height, size_t bitsPerPixel, UInt32 bitmapInfo) {
+      [[self class] processAnimatedImage:animatedImageData temporaryDirectory:[PINAnimatedImageManager temporaryDirectory] infoCompletion:^(PINImage *firstImage, NSUUID *UUID, Float32 *durations, CFTimeInterval combinedDurations, size_t loopCount, size_t frameCount, size_t width, size_t height, size_t bitsPerPixel, UInt32 bitmapInfo) {
         __block NSArray *infoCompletions = nil;
         __block PINSharedAnimatedImage *sharedAnimatedImage = nil;
         [_lock lockWithBlock:^{
           sharedAnimatedImage = [self.animatedImages objectForKey:animatedImageData];
-          [sharedAnimatedImage setInfoProcessedWithCoverImage:coverImage UUID:UUID durations:durations totalDuration:totalDuration loopCount:loopCount frameCount:frameCount width:width height:height bitsPerPixel:bitsPerPixel bitmapInfo:bitmapInfo];
+          [sharedAnimatedImage setInfoProcessedWithFirstImage:firstImage UUID:UUID durations:durations combinedDurations:combinedDurations loopCount:loopCount frameCount:frameCount width:width height:height bitsPerPixel:bitsPerPixel bitmapInfo:bitmapInfo];
           infoCompletions = sharedAnimatedImage.infoCompletions;
           sharedAnimatedImage.infoCompletions = @[];
         }];
         
         for (PINAnimatedImageSharedReady infoCompletion in infoCompletions) {
-          infoCompletion(coverImage, sharedAnimatedImage);
+          infoCompletion(firstImage, sharedAnimatedImage);
         }
       } decodedPath:^(BOOL finished, NSString *path, NSError *error) {
         __block NSArray *completions = nil;
@@ -276,8 +276,8 @@ ERROR;}) \
       Float32 fileDuration = 0;
       NSUInteger fileSize = 0;
       durations = (Float32 *)malloc(sizeof(Float32) * frameCount);
-      CFTimeInterval totalDuration = 0;
-      PINImage *coverImage = nil;
+      CFTimeInterval combinedDurations = 0;
+      PINImage *firstImage = nil;
       
       //Gather header file info
       for (NSUInteger frameIdx = 0; frameIdx < frameCount; frameIdx++) {
@@ -296,20 +296,20 @@ ERROR;}) \
           bitsPerPixel = (UInt32)CGImageGetBitsPerPixel(frameImage);
           
 #if PIN_TARGET_IOS
-          coverImage = [UIImage imageWithCGImage:frameImage];
+          firstImage = [UIImage imageWithCGImage:frameImage];
 #elif PIN_TARGET_MAC
-          coverImage = [[NSImage alloc] initWithCGImage:frameImage size:CGSizeMake(width, height)];
+          firstImage = [[NSImage alloc] initWithCGImage:frameImage size:CGSizeMake(width, height)];
 #endif
           CGImageRelease(frameImage);
         }
         
-        Float32 duration = [[self class] frameDurationAtIndex:frameIdx source:imageSource];
+        Float32 duration = [[self class] frameDurationForIndex:frameIdx source:imageSource];
         durations[frameIdx] = duration;
-        totalDuration += duration;
+        combinedDurations += duration;
       }
       
       if (PROCESSING_ERROR == nil) {
-        //Get size, write file header get coverImage
+        //Get size, write file header get firstImage
         dispatch_group_async(diskGroup, diskWriteQueue, ^{
           NSError *fileHeaderError = [self writeFileHeader:fileHandle width:width height:height bitsPerPixel:bitsPerPixel loopCount:loopCount frameCount:frameCount bitmapInfo:bitmapInfo durations:durations];
           HANDLE_PROCESSING_ERROR(fileHeaderError);
@@ -317,7 +317,7 @@ ERROR;}) \
             [fileHandle closeFile];
             
             PINLog(@"notifying info");
-            infoCompletion(coverImage, UUID, durations, totalDuration, loopCount, frameCount, width, height, bitsPerPixel, bitmapInfo);
+            infoCompletion(firstImage, UUID, durations, combinedDurations, loopCount, frameCount, width, height, bitsPerPixel, bitmapInfo);
           }
         });
         fileCount = 1;
@@ -440,7 +440,7 @@ ERROR;}) \
 }
 
 //http://stackoverflow.com/questions/16964366/delaytime-or-unclampeddelaytime-for-gifs
-+ (Float32)frameDurationAtIndex:(NSUInteger)index source:(CGImageSourceRef)source
++ (Float32)frameDurationForIndex:(NSUInteger)index source:(CGImageSourceRef)source
 {
   Float32 frameDuration = kPINAnimatedImageDefaultDuration;
   NSDictionary *frameProperties = (__bridge_transfer NSDictionary *)CGImageSourceCopyPropertiesAtIndex(source, index, nil);

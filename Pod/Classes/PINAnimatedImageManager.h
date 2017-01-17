@@ -15,7 +15,7 @@
 @class PINSharedAnimatedImage;
 @class PINSharedAnimatedImageFile;
 
-typedef void(^PINAnimatedImageSharedReady)(PINImage *coverImage, PINSharedAnimatedImage *shared);
+typedef void(^PINAnimatedImageSharedReady)(PINImage *firstImage, PINSharedAnimatedImage *shared);
 typedef void(^PINAnimatedImageDecodedPath)(BOOL finished, NSString *path, NSError *error);
 
 @interface PINAnimatedImageManager : NSObject
@@ -30,7 +30,7 @@ typedef void(^PINAnimatedImageDecodedPath)(BOOL finished, NSString *path, NSErro
 
 @interface PINSharedAnimatedImage : NSObject
 {
-  PINRemoteLock *_coverImageLock;
+  PINRemoteLock *_firstImageLock;
 }
 
 //This is intentionally atomic. PINAnimatedImageManager must be able to add entries
@@ -39,16 +39,16 @@ typedef void(^PINAnimatedImageDecodedPath)(BOOL finished, NSString *path, NSErro
 
 @property (nonatomic, strong, readwrite) NSArray <PINAnimatedImageDecodedPath> *completions;
 @property (nonatomic, strong, readwrite) NSArray <PINAnimatedImageSharedReady> *infoCompletions;
-@property (nonatomic, weak, readwrite) PINImage *coverImage;
+@property (nonatomic, weak, readwrite) PINImage *firstImage;
 
 //intentionally atomic
 @property (atomic, strong, readwrite) NSError *error;
 @property (atomic, assign, readwrite) PINAnimatedImageStatus status;
 
-- (void)setInfoProcessedWithCoverImage:(PINImage *)coverImage
+- (void)setInfoProcessedWithFirstImage:(PINImage *)firstImage
                                   UUID:(NSUUID *)UUID
                              durations:(Float32 *)durations
-                         totalDuration:(CFTimeInterval)totalDuration
+                         combinedDurations:(CFTimeInterval)combinedDurations
                              loopCount:(size_t)loopCount
                             frameCount:(size_t)frameCount
                                  width:(size_t)width
@@ -58,7 +58,7 @@ typedef void(^PINAnimatedImageDecodedPath)(BOOL finished, NSString *path, NSErro
 
 @property (nonatomic, readonly) NSUUID *UUID;
 @property (nonatomic, readonly) Float32 *durations;
-@property (nonatomic, readonly) CFTimeInterval totalDuration;
+@property (nonatomic, readonly) CFTimeInterval combinedDurations;
 @property (nonatomic, readonly) size_t loopCount;
 @property (nonatomic, readonly) size_t frameCount;
 @property (nonatomic, readonly) size_t width;
