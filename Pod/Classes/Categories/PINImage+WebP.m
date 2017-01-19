@@ -90,13 +90,20 @@ static void releaseData(void *info, const void *data, size_t size)
     NSUInteger bitmapByteCount = bytesPerRow * image.size.height;
     
     unsigned char *rawData = (unsigned char*) calloc(bitmapByteCount, sizeof(unsigned char));
-    
+
     CGContextRef context = CGBitmapContextCreate(rawData, image.size.width, image.size.height,
                                                  bitsPerComponent, bytesPerRow, colorSpace,
                                                  kCGImageAlphaPremultipliedLast | kCGImageByteOrder32Big);
-    
+
+    CGImageRef imageRef;
+    #if PIN_TARGET_IOS
     CGContextDrawImage(context, imageRect, image.CGImage);
-    CGImageRef imageRef = CGBitmapContextCreateImage(context);
+    imageRef = CGBitmapContextCreateImage(context);
+    #elif PIN_TARGET_MAC
+    NSGraphicsContext *graphicsContext = [NSGraphicsContext graphicsContextWithCGContext:context flipped:NO];
+    imageRef = [image CGImageForProposedRect:&imageRect context:graphicsContext hints:nil];
+    #endif
+    
     CGColorSpaceRelease(colorSpace);
     CGContextRelease(context);
     

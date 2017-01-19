@@ -712,11 +712,16 @@ static dispatch_once_t sharedDispatchToken;
                 if (error == nil) {
                     
                     BOOL saveAsJPEG = (options & PINRemoteImageManagerSaveProcessedImageAsJPEG) != 0;
-                    BOOL saveAsWebP = (options & PINRemoteImageManagerSaveProcessedImageAsWEBP && PIN_WEBP) != 0;
-
+                    BOOL saveAsWebP = NO;
+                    #ifdef PIN_WEBP
+                    saveAsWebP = (options & PINRemoteImageManagerSaveProcessedImageAsWEBP && PIN_WEBP) != 0;
+                    #endif
+                
                     NSData *diskData = nil;
                     if (saveAsWebP) {
+                        #ifdef PIN_WEBP
                         diskData = [PINImage pin_DataFromWebPimage:image];
+                        #endif
                     } else if (saveAsJPEG) {
                         diskData = PINImageJPEGRepresentation(image, 1.0);
                     } else {
