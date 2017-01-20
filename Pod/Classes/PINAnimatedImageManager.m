@@ -19,6 +19,7 @@
 
 static const NSUInteger maxFileSize = 50000000; //max file size in bytes
 static const Float32 maxFileDuration = 1; //max duration of a file in seconds
+static const NSUInteger kCleanupAfterStartupDelay = 10; //clean up files after 10 seconds if it hasn't been done.
 
 typedef void(^PINAnimatedImageInfoProcessed)(PINImage *coverImage, NSUUID *UUID, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, size_t width, size_t height, size_t bitsPerPixel, UInt32 bitmapInfo);
 
@@ -49,20 +50,9 @@ typedef NS_ENUM(NSUInteger, PINAnimatedImageManagerCondition) {
 + (void)load
 {
   if (self == [PINAnimatedImageManager class]) {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-#if PIN_TARGET_IOS
-      NSString * const notificationName = UIApplicationDidFinishLaunchingNotification;
-#elif PIN_TARGET_MAC
-      NSString * const notificationName = NSApplicationDidFinishLaunchingNotification;
-#endif
-      
-      [[NSNotificationCenter defaultCenter] addObserverForName:notificationName
-                                                        object:nil
-                                                         queue:nil
-                                                    usingBlock:^(NSNotification * _Nonnull note) {
-                                                      //This forces a cleanup of files
-                                                      [PINAnimatedImageManager sharedManager];
-                                                    }];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kCleanupAfterStartupDelay * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+      //This forces a cleanup of files
+      [PINAnimatedImageManager sharedManager];
     });
   }
 }
