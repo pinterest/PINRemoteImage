@@ -19,6 +19,7 @@
 
 static const NSUInteger maxFileSize = 50000000; //max file size in bytes
 static const Float32 maxFileDuration = 1; //max duration of a file in seconds
+static const NSUInteger kCleanupAfterStartupDelay = 10; //clean up files after 10 seconds if it hasn't been done.
 
 typedef void(^PINAnimatedImageInfoProcessed)(PINImage *coverImage, NSUUID *UUID, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, size_t width, size_t height, size_t bitsPerPixel, UInt32 bitmapInfo);
 
@@ -27,9 +28,14 @@ BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
   return status == PINAnimatedImageStatusInfoProcessed || status == PINAnimatedImageStatusFirstFileProcessed || status == PINAnimatedImageStatusProcessed;
 }
 
+typedef NS_ENUM(NSUInteger, PINAnimatedImageManagerCondition) {
+  PINAnimatedImageManagerConditionNotReady = 0,
+  PINAnimatedImageManagerConditionReady = 1,
+};
+
 @interface PINAnimatedImageManager ()
 {
-  PINRemoteLock *_lock;
+  NSConditionLock *_lock;
 }
 
 + (instancetype)sharedManager;
@@ -41,14 +47,12 @@ BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
 
 @implementation PINAnimatedImageManager
 
-+ (void)initialize
++ (void)load
 {
   if (self == [PINAnimatedImageManager class]) {
-    static dispatch_once_t startupCleanupOnce;
-    dispatch_once(&startupCleanupOnce, ^{
-      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self cleanupFiles];
-      });
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kCleanupAfterStartupDelay * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+      //This forces a cleanup of files
+      [PINAnimatedImageManager sharedManager];
     });
   }
 }
@@ -77,13 +81,16 @@ BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
 - (instancetype)init
 {
   if (self = [super init]) {
-    // We perform cleanup at some point before -init, in +initialize.
+    _lock = [[NSConditionLock alloc] initWithCondition:PINAnimatedImageManagerConditionNotReady];
     
-    _lock = [[PINRemoteLock alloc] initWithName:@"PINAnimatedImageManager lock"];
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[PINAnimatedImageManager temporaryDirectory]] == NO) {
-      [[NSFileManager defaultManager] createDirectoryAtPath:[PINAnimatedImageManager temporaryDirectory] withIntermediateDirectories:YES attributes:nil error:nil];
-    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+      [_lock lockWhenCondition:PINAnimatedImageManagerConditionNotReady];
+        [PINAnimatedImageManager cleanupFiles];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[PINAnimatedImageManager temporaryDirectory]] == NO) {
+          [[NSFileManager defaultManager] createDirectoryAtPath:[PINAnimatedImageManager temporaryDirectory] withIntermediateDirectories:YES attributes:nil error:nil];
+        }
+      [_lock unlockWithCondition:PINAnimatedImageManagerConditionReady];
+    });
     
     _animatedImages = [[NSMapTable alloc] initWithKeyOptions:NSMapTableWeakMemory valueOptions:NSMapTableWeakMemory capacity:1];
     _serialProcessingQueue = dispatch_queue_create("Serial animated image processing queue.", DISPATCH_QUEUE_SERIAL);
@@ -112,8 +119,8 @@ BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
 {
   __block BOOL startProcessing = NO;
   __block PINSharedAnimatedImage *sharedAnimatedImage = nil;
-  {
-    [_lock lockWithBlock:^{
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    [_lock lockWhenCondition:PINAnimatedImageManagerConditionReady];
       sharedAnimatedImage = [self.animatedImages objectForKey:animatedImageData];
       if (sharedAnimatedImage == nil) {
         sharedAnimatedImage = [[PINSharedAnimatedImage alloc] init];
@@ -158,28 +165,27 @@ BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
           sharedAnimatedImage.completions = [sharedAnimatedImage.completions arrayByAddingObject:capturingCompletion];
         }
       }
-    }];
-  }
+    [_lock unlockWithCondition:PINAnimatedImageManagerConditionReady];
   
-  if (startProcessing) {
-    dispatch_async(self.serialProcessingQueue, ^{
-      [[self class] processAnimatedImage:animatedImageData temporaryDirectory:[PINAnimatedImageManager temporaryDirectory] infoCompletion:^(PINImage *coverImage, NSUUID *UUID, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, size_t width, size_t height, size_t bitsPerPixel, UInt32 bitmapInfo) {
-        __block NSArray *infoCompletions = nil;
-        __block PINSharedAnimatedImage *sharedAnimatedImage = nil;
-        [_lock lockWithBlock:^{
+    if (startProcessing) {
+      dispatch_async(self.serialProcessingQueue, ^{
+        [[self class] processAnimatedImage:animatedImageData temporaryDirectory:[PINAnimatedImageManager temporaryDirectory] infoCompletion:^(PINImage *coverImage, NSUUID *UUID, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, size_t width, size_t height, size_t bitsPerPixel, UInt32 bitmapInfo) {
+          __block NSArray *infoCompletions = nil;
+          __block PINSharedAnimatedImage *sharedAnimatedImage = nil;
+          [_lock lockWhenCondition:PINAnimatedImageManagerConditionReady];
           sharedAnimatedImage = [self.animatedImages objectForKey:animatedImageData];
           [sharedAnimatedImage setInfoProcessedWithCoverImage:coverImage UUID:UUID durations:durations totalDuration:totalDuration loopCount:loopCount frameCount:frameCount width:width height:height bitsPerPixel:bitsPerPixel bitmapInfo:bitmapInfo];
           infoCompletions = sharedAnimatedImage.infoCompletions;
           sharedAnimatedImage.infoCompletions = @[];
-        }];
-        
-        for (PINAnimatedImageSharedReady infoCompletion in infoCompletions) {
-          infoCompletion(coverImage, sharedAnimatedImage);
-        }
-      } decodedPath:^(BOOL finished, NSString *path, NSError *error) {
-        __block NSArray *completions = nil;
-        {
-          [_lock lockWithBlock:^{
+          [_lock unlockWithCondition:PINAnimatedImageManagerConditionReady];
+          
+          for (PINAnimatedImageSharedReady infoCompletion in infoCompletions) {
+            infoCompletion(coverImage, sharedAnimatedImage);
+          }
+        } decodedPath:^(BOOL finished, NSString *path, NSError *error) {
+          __block NSArray *completions = nil;
+          {
+            [_lock lockWhenCondition:PINAnimatedImageManagerConditionReady];
             PINSharedAnimatedImage *sharedAnimatedImage = [self.animatedImages objectForKey:animatedImageData];
             
             if (path && error == nil) {
@@ -202,15 +208,16 @@ BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
                 sharedAnimatedImage.status = PINAnimatedImageStatusFirstFileProcessed;
               }
             }
-          }];
-        }
-        
-        for (PINAnimatedImageDecodedPath completion in completions) {
-          completion(finished, path, error);
-        }
-      }];
-    });
-  }
+            [_lock unlockWithCondition:PINAnimatedImageManagerConditionReady];
+          }
+          
+          for (PINAnimatedImageDecodedPath completion in completions) {
+            completion(finished, path, error);
+          }
+        }];
+      });
+    }
+  });
 }
 
 #define HANDLE_PROCESSING_ERROR(ERROR) \
