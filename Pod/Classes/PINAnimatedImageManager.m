@@ -120,7 +120,6 @@ typedef NS_ENUM(NSUInteger, PINAnimatedImageManagerCondition) {
 
 + (void)cleanupFiles
 {
-  NSLog(@"cleaning files…");
   [[NSFileManager defaultManager] removeItemAtPath:[PINAnimatedImageManager temporaryDirectory] error:nil];
 }
 
