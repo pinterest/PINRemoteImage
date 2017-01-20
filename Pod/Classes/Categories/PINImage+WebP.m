@@ -111,7 +111,7 @@ static void releaseData(void *info, const void *data, size_t size)
     CFDataRef dataRef = CGDataProviderCopyData(dataProvider);
     
     WebPConfig config;
-    WebPConfigLosslessPreset(&config, 6);
+    WebPConfigPreset(&config, WEBP_PRESET_DEFAULT, 75);
     
     WebPPicture picture;
     WebPPictureInit(&picture);
@@ -136,7 +136,6 @@ static void releaseData(void *info, const void *data, size_t size)
     NSData *data = [NSData dataWithBytes:writer.mem length:writer.size];
     
     WebPPictureFree(&picture);
-    
     free(rawData);
     
     return data;
