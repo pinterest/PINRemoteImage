@@ -49,19 +49,21 @@ typedef NS_ENUM(NSUInteger, PINAnimatedImageManagerCondition) {
 + (void)load
 {
   if (self == [PINAnimatedImageManager class]) {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 #if PIN_TARGET_IOS
-    NSString * const notificationName = UIApplicationDidFinishLaunchingNotification;
+      NSString * const notificationName = UIApplicationDidFinishLaunchingNotification;
 #elif PIN_TARGET_MAC
-    NSString * const notificationName = NSApplicationDidFinishLaunchingNotification;
+      NSString * const notificationName = NSApplicationDidFinishLaunchingNotification;
 #endif
-    
-    [[NSNotificationCenter defaultCenter] addObserverForName:notificationName
-                                                      object:nil
-                                                       queue:nil
-                                                  usingBlock:^(NSNotification * _Nonnull note) {
-                                                    //This forces a cleanup of files
-                                                    [PINAnimatedImageManager sharedManager];
-                                                  }];
+      
+      [[NSNotificationCenter defaultCenter] addObserverForName:notificationName
+                                                        object:nil
+                                                         queue:nil
+                                                    usingBlock:^(NSNotification * _Nonnull note) {
+                                                      //This forces a cleanup of files
+                                                      [PINAnimatedImageManager sharedManager];
+                                                    }];
+    });
   }
 }
 
