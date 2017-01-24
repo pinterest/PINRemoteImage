@@ -32,12 +32,14 @@
 #endif
 
 #if PIN_TARGET_IOS
+#import <UIKit/UIKit.h>
 #define PINImage     UIImage
 #define PINImageView UIImageView
 #define PINButton    UIButton
 #define PINNSOperationSupportsQOS (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber_iOS_8_0)
 #define PINNSURLSessionTaskSupportsPriority (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber_iOS_8_0)
 #elif PIN_TARGET_MAC
+#import <AppKit/AppKit.h>
 #define PINImage     NSImage
 #define PINImageView NSImageView
 #define PINButton    NSButton
