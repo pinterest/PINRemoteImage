@@ -288,12 +288,7 @@ static dispatch_once_t sharedDispatchToken;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         typeof(self) strongSelf = weakSelf;
         [strongSelf lock];
-            if (value) {
-                strongSelf.httpHeaderFields[header] = value;
-            }
-            else {
-                [strongSelf.httpHeaderFields removeObjectForKey:header];
-            }
+            strongSelf.httpHeaderFields[[header copy]] = [value copy];
         [strongSelf unlock];
     });
 }
