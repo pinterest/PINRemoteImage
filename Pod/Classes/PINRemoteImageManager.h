@@ -184,6 +184,14 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
 - (nonnull id<PINRemoteImageCaching>)defaultImageCache;
 
 /**
+ * Sets a custom header to be included in every request. Headers set from this method will override any header from NSURLSessionConfiguration.
+ *
+ * @param value A value for the header. Pass in nil to remove a previously set value.
+ * @param header A string field for header.
+ */
+- (void)setValue:(nullable NSString *)value forHTTPHeaderField:(nullable NSString *)header;
+
+/**
  Set the Authentication Challenge Block.
  
  @param challengeBlock A PINRemoteImageManagerAuthenticationChallenge block.
