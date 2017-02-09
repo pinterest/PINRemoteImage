@@ -25,6 +25,7 @@
 
 #import "NSData+ImageDetectors.h"
 #import "PINImage+DecodedImage.h"
+#import "PINImage+ScaledImage.h"
 
 #if USE_PINCACHE
 #import "PINCache+PINRemoteImageCaching.h"
@@ -1452,6 +1453,7 @@ static dispatch_once_t sharedDispatchToken;
         }];
         if (image == nil) {
             image = [PINImage pin_decodedImageWithData:container.data skipDecodeIfPossible:skipDecode];
+            image = [PINImage pin_scaledImageForImage:image withKey:key];
             if (skipDecode == NO) {
                 [container.lock lockWithBlock:^{
                     updateMemoryCache = YES;

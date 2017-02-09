@@ -136,6 +136,11 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     return [NSURL URLWithString:@"https://placekitten.com/g/200/301?longarg=helloMomHowAreYouDoing.IamFineJustMovedToLiveWithANiceChapWeTravelTogetherInHisBlueBoxThroughSpaceAndTimeMaybeYouveMetHimAlready.YesterdayWeMetACultureOfPeopleWithTentaclesWhoSingWithAVeryCelestialVoice.SoGood.SeeYouSoon.MaybeYesterday.WhoKnows.XOXO"];
 }
 
+- (NSURL *)scaledImageURL
+{
+    return [NSURL URLWithString:@"http://www.grenadabluewatersailing.com/wp-content/uploads/2014/09/Coconut-wikipedia.com_-300x225@2x.jpg"];
+}
+
 #pragma mark - <PINURLSessionManagerDelegate>
 
 - (void)didReceiveData:(NSData *)data forTask:(NSURLSessionTask *)task
@@ -418,6 +423,22 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     XCTAssert(outImageEncoded && [outImageEncoded isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
     XCTAssert(outImageDecoded && [outImageDecoded isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
     XCTAssert(encodedDrawTime / decodedDrawTime > 2, @"Drawing decoded image should be much faster");
+}
+
+- (void)testScalingWithURLPostfix
+{
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Error on scaling"];
+    [self.imageManager downloadImageWithURL:[self scaledImageURL]
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                                 completion:^(PINRemoteImageManagerResult *result)
+     {
+         XCTAssert(result.image != nil);
+         XCTAssert(result.image.scale == 2.0);
+         
+         [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
 - (void)drawImage:(UIImage *)image
