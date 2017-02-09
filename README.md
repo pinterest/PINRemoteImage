@@ -18,7 +18,7 @@ PINRemoteImage also has two methods to improve the experience of downloading ima
 PINRemoteImageManager's methods. There are **built-in categories** on **UIImageView**, **FLAnimatedImageView** and **UIButton**, and it's very easy to implement a new category. See [UIImageView+PINRemoteImage](/Pod/Classes/Image Categories/UIImageView+PINRemoteImage.h) of the existing categories for reference.
 
 
-###Download an image and set it on an image view:
+### Download an image and set it on an image view:
 
 **Objective-C**
 ```objc
@@ -32,7 +32,7 @@ let imageView = UIImageView()
 imageView.pin_setImage(from: URL(string: "https://pinterest.com/kitten.jpg")!)
 ```
 
-###Download a progressive jpeg and get attractive blurred updates:
+### Download a progressive jpeg and get attractive blurred updates:
 
 **Objective-C**
 ```objc
@@ -48,7 +48,7 @@ imageView.pin_updateWithProgress = true
 imageView.pin_setImage(from: URL(string: "https://pinterest.com/progressiveKitten.jpg")!)
 ```
 
-###Download a WebP file
+### Download a WebP file
 
 **Objective-C**
 ```objc
@@ -62,7 +62,7 @@ let imageView = UIImageView()
 imageView.pin_setImage(from: URL(string: "https://pinterest.com/googleKitten.webp")!)
 ```
 
-###Download a GIF and display with FLAnimatedImageView
+### Download a GIF and display with FLAnimatedImageView
 
 **Objective-C**
 ```objc
@@ -76,7 +76,7 @@ let animatedImageView = FLAnimatedImageView()
 animatedImageView.pin_setImage(from: URL(string: "http://pinterest.com/flyingKitten.gif")!)
 ```
 
-###Download and process an image
+### Download and process an image
 
 **Objective-C**
 ```objc
@@ -161,7 +161,7 @@ imageView.pin_setImage(from: URL(string: "https://s-media-cache-ak0.pinimg.com/7
 }
 ```
 
-###Handle Authentication
+### Handle Authentication
 
 **Objective-C**
 ```objc
@@ -174,6 +174,22 @@ aCompletion(NSURLSessionAuthChallengePerformDefaultHandling, nil)];
 PINRemoteImageManager.shared().setAuthenticationChallenge { (task, challenge, completion) in
   completion?(.performDefaultHandling, nil)
 }
+```
+
+### Support for high resolution images
+Currently there are two ways PINRemoteImage is supporting high resolution images:
+1. If the URL will contains a `@2x` or a `@3x` postfix it will automatically handled from PINRemoteImage and the resulting image will be returned with the right scale.
+2. If it's not possible to provide an URL with the `@2x` or `@3x` postfix, it also can be handled within the completion handler:
+```objc
+NSURL *url = ...;
+__weak UIImageView *weakImageView = self.imageView;
+[self.imageView pin_setImageFromURL:url completion:^(PINRemoteImageManagerResult * _Nonnull result) {
+  CGFloat scale = UIScreen.mainScreen.scale;
+  if (scale > 1.0) {
+    UIImage *image = result.image;
+    weakImageView.image = [UIImage imageWithCGImage:image.CGImage scale:scale orientation:image.imageOrientation];
+    }
+}];
 ```
 
 ## Installation
