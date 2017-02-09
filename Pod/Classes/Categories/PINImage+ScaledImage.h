@@ -19,6 +19,6 @@
 @interface PINImage (PINScaledImage)
 
 - (PINImage *)pin_scaledImageForKey:(NSString *)key;
-+ (PINImage *)pin_scaledImageForImage:(UIImage *)image withKey:(NSString *)key;
++ (PINImage *)pin_scaledImageForImage:(PINImage *)image withKey:(NSString *)key;
 
 @end

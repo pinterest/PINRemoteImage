@@ -45,7 +45,7 @@ static inline PINImage *PINScaledImageForKey(NSString * __nullable key, PINImage
     return PINScaledImageForKey(key, self);
 }
 
-+ (PINImage *)pin_scaledImageForImage:(UIImage *)image withKey:(NSString *)key
++ (PINImage *)pin_scaledImageForImage:(PINImage *)image withKey:(NSString *)key
 {
     return PINScaledImageForKey(key, image);
 }
