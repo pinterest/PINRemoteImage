@@ -438,8 +438,8 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  
  @param data NSData with the raw image data.
  @param url NSURL where the image resides.
- @processorKey NSString key to uniquely identify processor and process. Will be used for caching processed images.
- @additionalCost NSUInteger the additional cost (for cache eviction purposes) to generate the processed image
+ @param processorKey NSString key to uniquely identify processor and process. Will be used for caching processed images.
+ @param additionalCost NSUInteger the additional cost (for cache eviction purposes) to generate the processed image
  
  @return A BOOL indicating if the image was successfully added to the cache.
  */
@@ -476,7 +476,16 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  @param options options will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache.
  */
-- (void)imageFromCacheWithCacheKey:(nonnull NSString *)cacheKey options:(PINRemoteImageManagerDownloadOptions)options completion:(nonnull PINRemoteImageManagerImageCompletion)completion;
+- (void)imageFromCacheWithCacheKey:(nonnull NSString *)cacheKey options:(PINRemoteImageManagerDownloadOptions)options completion:(nonnull PINRemoteImageManagerImageCompletion)completion __attribute__((deprecated));;
+
+/**
+ Directly get an image from the underlying cache.
+ 
+ @param url NSURL to look up image in the cache.
+ @param options options will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.
+ @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache.
+ */
+- (void)imageFromCacheWithURL:(nonnull NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options completion:(nonnull PINRemoteImageManagerImageCompletion)completion;
 
 /**
  Directly get an image from the underlying memory cache synchronously.
@@ -488,6 +497,16 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  @return A PINRemoteImageManagerResult
  */
 - (nonnull PINRemoteImageManagerResult *)synchronousImageFromCacheWithCacheKey:(nonnull NSString *)cacheKey options:(PINRemoteImageManagerDownloadOptions)options;
+
+/**
+ Directly get an image from the underlying memory cache synchronously.
+ 
+ @param url NSURL to look up image in the cache.
+ @param options options will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.
+ 
+ @return A PINRemoteImageManagerResult
+ */
+- (nonnull PINRemoteImageManagerResult *)synchronousImageFromCacheWithURL:(NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options;
 
 /**
  Cancel a download. Canceling will only cancel the download if all other downloads are also canceled with their associated UUIDs. Canceling *does not* guarantee that your completion will not be called. You can use the UUID provided on the result object verify the completion you want called is being called.

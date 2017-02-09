@@ -16,12 +16,12 @@ static inline PINImage *PINScaledImageForKey(NSString * __nullable key, PINImage
 #if PIN_TARGET_IOS
     CGFloat scale = 1.0;
     if (key.length >= 8) {
-        NSRange range = [key rangeOfString:@"@2x."];
+        NSRange range = [key rangeOfString:@"_2x."];
         if (range.location != NSNotFound) {
             scale = 2.0;
         }
         
-        range = [key rangeOfString:@"@3x."];
+        range = [key rangeOfString:@"_3x."];
         if (range.location != NSNotFound) {
             scale = 3.0;
         }

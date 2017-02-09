@@ -136,10 +136,10 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     return [NSURL URLWithString:@"https://placekitten.com/g/200/301?longarg=helloMomHowAreYouDoing.IamFineJustMovedToLiveWithANiceChapWeTravelTogetherInHisBlueBoxThroughSpaceAndTimeMaybeYouveMetHimAlready.YesterdayWeMetACultureOfPeopleWithTentaclesWhoSingWithAVeryCelestialVoice.SoGood.SeeYouSoon.MaybeYesterday.WhoKnows.XOXO"];
 }
 
-- (NSURL *)scaledImageURL
-{
-    return [NSURL URLWithString:@"http://www.grenadabluewatersailing.com/wp-content/uploads/2014/09/Coconut-wikipedia.com_-300x225@2x.jpg"];
-}
+//- (NSURL *)scaledImageURL
+//{
+//    return [NSURL URLWithString:@"http://www.grenadabluewatersailing.com/wp-content/uploads/2014/09/Coconut-wikipedia.com_-300x225@2x.jpg"];
+//}
 
 #pragma mark - <PINURLSessionManagerDelegate>
 
@@ -425,21 +425,21 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     XCTAssert(encodedDrawTime / decodedDrawTime > 2, @"Drawing decoded image should be much faster");
 }
 
-- (void)testScalingWithURLPostfix
-{
-    
-    XCTestExpectation *expectation = [self expectationWithDescription:@"Error on scaling"];
-    [self.imageManager downloadImageWithURL:[self scaledImageURL]
-                                    options:PINRemoteImageManagerDownloadOptionsNone
-                                 completion:^(PINRemoteImageManagerResult *result)
-     {
-         XCTAssert(result.image != nil);
-         XCTAssert(result.image.scale == 2.0);
-         
-         [expectation fulfill];
-    }];
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
-}
+//- (void)testScalingWithURLPostfix
+//{
+//    
+//    XCTestExpectation *expectation = [self expectationWithDescription:@"Error on scaling"];
+//    [self.imageManager downloadImageWithURL:[self scaledImageURL]
+//                                    options:PINRemoteImageManagerDownloadOptionsNone
+//                                 completion:^(PINRemoteImageManagerResult *result)
+//     {
+//         XCTAssert(result.image != nil);
+//         XCTAssert(result.image.scale == 2.0);
+//         
+//         [expectation fulfill];
+//    }];
+//    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+//}
 
 - (void)drawImage:(UIImage *)image
 {
@@ -640,7 +640,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Image from cache"];
 
-    [self.imageManager imageFromCacheWithCacheKey:[self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil] options:PINRemoteImageManagerDownloadOptionsNone completion:^(PINRemoteImageManagerResult * _Nonnull result) {
+    [self.imageManager imageFromCacheWithURL:[self JPEGURL] options:PINRemoteImageManagerDownloadOptionsNone completion:^(PINRemoteImageManagerResult * _Nonnull result) {
          XCTAssert(result.image == nil, @"Image was found in cache");
          XCTAssert(result.error == nil, @"Error was returned in cache miss");
 
