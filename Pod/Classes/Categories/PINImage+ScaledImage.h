@@ -16,8 +16,6 @@
 
 #import "PINRemoteImageMacros.h"
 
-extern PINImage *PINScaledImageForKey(NSString * __nullable key, PINImage * __nullable image);
-
 @interface PINImage (PINScaledImage)
 
 - (PINImage *)pin_scaledImageForKey:(NSString *)key;

@@ -8,7 +8,7 @@
 
 #import "PINImage+ScaledImage.h"
 
-inline PINImage *PINScaledImageForKey(NSString * __nullable key, PINImage * __nullable image) {
+static inline PINImage *PINScaledImageForKey(NSString * __nullable key, PINImage * __nullable image) {
     if (image == nil) {
         return nil;
     }
