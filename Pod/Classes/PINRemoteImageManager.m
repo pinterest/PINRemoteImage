@@ -1094,13 +1094,6 @@ static dispatch_once_t sharedDispatchToken;
 }
 
 - (void)imageFromCacheWithURL:(nonnull NSURL *)url
-                      options:(PINRemoteImageManagerDownloadOptions)options
-                   completion:(nonnull PINRemoteImageManagerImageCompletion)completion
-{
-    return [self imageFromCacheWithURL:url cacheKey:nil options:options completion:completion];
-}
-
-- (void)imageFromCacheWithURL:(nonnull NSURL *)url
                  processorKey:(nullable NSString *)processorKey
                       options:(PINRemoteImageManagerDownloadOptions)options
                    completion:(nonnull PINRemoteImageManagerImageCompletion)completion

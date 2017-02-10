@@ -482,15 +482,6 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  Directly get an image from the underlying cache.
  
  @param url NSURL to look up image in the cache.
- @param options options will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.
- @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache.
- */
-- (void)imageFromCacheWithURL:(nonnull NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options completion:(nonnull PINRemoteImageManagerImageCompletion)completion;
-
-/**
- Directly get an image from the underlying cache.
- 
- @param url NSURL to look up image in the cache.
  @param processorKey NSString key to uniquely identify processor and process.
  @param options options will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache.
