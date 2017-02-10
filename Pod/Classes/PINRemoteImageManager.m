@@ -32,6 +32,10 @@
 #import "PINRemoteImageBasicCache.h"
 #endif
 
+#ifdef PIN_WEBP
+#import "PINImage+WebP.h"
+#endif
+
 
 #define PINRemoteImageManagerDefaultTimeout     30.0
 #define PINRemoteImageMaxRetries                3
@@ -718,14 +722,24 @@ static dispatch_once_t sharedDispatchToken;
                 [strongSelf callCompletionsWithKey:key image:image alternativeRepresentation:nil cached:NO error:error finalized:NO];
                 
                 if (error == nil) {
+                    
                     BOOL saveAsJPEG = (options & PINRemoteImageManagerSaveProcessedImageAsJPEG) != 0;
+                    BOOL saveAsWebP = NO;
+                    #ifdef PIN_WEBP
+                    saveAsWebP = (options & PINRemoteImageManagerSaveProcessedImageAsWEBP && PIN_WEBP) != 0;
+                    #endif
+                
                     NSData *diskData = nil;
-                    if (saveAsJPEG) {
+                    if (saveAsWebP) {
+                        #ifdef PIN_WEBP
+                        diskData = [PINImage pin_DataFromWebPimage:image];
+                        #endif
+                    } else if (saveAsJPEG) {
                         diskData = PINImageJPEGRepresentation(image, 1.0);
                     } else {
                         diskData = PINImagePNGRepresentation(image);
                     }
-                    
+    
                     [strongSelf materializeAndCacheObject:image cacheInDisk:diskData additionalCost:processCost key:key options:options outImage:nil outAltRep:nil];
                 }
                 

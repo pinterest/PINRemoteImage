@@ -18,6 +18,10 @@
 #import <FLAnimatedImage/FLAnimatedImage.h>
 #endif
 
+#ifdef PIN_WEBP
+#import "PINImage+WebP.h"
+#endif
+
 static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 	switch (info) {
 		case kCGImageAlphaNone:
@@ -60,7 +64,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 @implementation PINRemoteImage_Tests
 
 - (NSTimeInterval)timeoutTimeInterval {
-    return 10.0;
+    return 30.0;
 }
 
 - (dispatch_time_t)timeoutWithInterval:(NSTimeInterval)interval {
@@ -431,7 +435,12 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (void)waitForImageWithURLToBeCached:(NSURL *)URL
 {
-    NSString *key = [self.imageManager cacheKeyForURL:URL processorKey:nil];
+    [self waitForImageWithURLToBeCached:URL processorKey:nil];
+}
+
+- (void)waitForImageWithURLToBeCached:(NSURL *)URL processorKey:(NSString *)processorKey
+{
+    NSString *key = [self.imageManager cacheKeyForURL:URL processorKey:processorKey];
     for (NSUInteger idx = 0; idx < 100; idx++) {
         if ([[self.imageManager cache] objectExistsForKey:key]) {
             break;
@@ -874,6 +883,28 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 	
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
+
+#if PIN_WEBP
+- (void)testDiskCacheOnWebP
+{
+    id<PINRemoteImageCaching> cache = self.imageManager.cache;
+    NSString *processorKey = @"webp";
+    NSURL *pngUrl = [self transparentPNGURL];
+    NSString *key = [self.imageManager cacheKeyForURL:pngUrl processorKey:processorKey];
+
+    [self.imageManager downloadImageWithURL:pngUrl options:PINRemoteImageManagerSaveProcessedImageAsWEBP processorKey:processorKey
+                                  processor:^UIImage *(PINRemoteImageManagerResult *result, NSUInteger *cost) {
+                                      return result.image;
+    } completion:nil];
+    [self waitForImageWithURLToBeCached:pngUrl processorKey:processorKey];
+
+    id diskCachedObj = [cache objectFromDiskForKey:key];
+    XCTAssertNotNil(diskCachedObj);
+    PINImage *image = [PINImage pin_imageWithWebPData:diskCachedObj];
+    XCTAssert(image, @"Image should be WebP");
+
+}
+#endif
 
 - (void)testDiskCacheOnLongURLs
 {
