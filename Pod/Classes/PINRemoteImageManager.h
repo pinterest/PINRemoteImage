@@ -476,7 +476,7 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  @param options options will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache.
  */
-- (void)imageFromCacheWithCacheKey:(nonnull NSString *)cacheKey options:(PINRemoteImageManagerDownloadOptions)options completion:(nonnull PINRemoteImageManagerImageCompletion)completion __attribute__((deprecated));;
+- (void)imageFromCacheWithCacheKey:(nonnull NSString *)cacheKey options:(PINRemoteImageManagerDownloadOptions)options completion:(nonnull PINRemoteImageManagerImageCompletion)completion __attribute__((deprecated));
 
 /**
  Directly get an image from the underlying cache.
@@ -489,15 +489,15 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
 - (void)imageFromCacheWithURL:(nonnull NSURL *)url processorKey:(nullable NSString *)processorKey options:(PINRemoteImageManagerDownloadOptions)options completion:(nonnull PINRemoteImageManagerImageCompletion)completion;
 
 /**
- Directly get an image from the underlying memory cache synchronously.
- @see cacheKeyForURL:processorKey:
+ @deprecated
+ @see synchronousImageFromCacheWithURL:processorKey:options:
  
  @param cacheKey NSString key to look up image in the cache.
  @param options options will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.
  
  @return A PINRemoteImageManagerResult
  */
-- (nonnull PINRemoteImageManagerResult *)synchronousImageFromCacheWithCacheKey:(nonnull NSString *)cacheKey options:(PINRemoteImageManagerDownloadOptions)options;
+- (nonnull PINRemoteImageManagerResult *)synchronousImageFromCacheWithCacheKey:(nonnull NSString *)cacheKey options:(PINRemoteImageManagerDownloadOptions)options __attribute__((deprecated));
 
 /**
  Directly get an image from the underlying memory cache synchronously.
