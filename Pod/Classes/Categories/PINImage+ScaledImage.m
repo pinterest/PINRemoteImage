@@ -19,13 +19,13 @@ static inline PINImage *PINScaledImageForKey(NSString * __nullable key, PINImage
     
     CGFloat scale = 1.0;
     if (key.length >= 8) {
-        NSRange range = [key rangeOfString:@"_2x."];
-        if (range.location != NSNotFound) {
+        if ([key rangeOfString:@"_2x."].location != NSNotFound ||
+            [key rangeOfString:@"@2x."].location != NSNotFound) {
             scale = 2.0;
         }
         
-        range = [key rangeOfString:@"_3x."];
-        if (range.location != NSNotFound) {
+        if ([key rangeOfString:@"_3x."].location != NSNotFound ||
+            [key rangeOfString:@"@3x."].location != NSNotFound) {
             scale = 3.0;
         }
     }
