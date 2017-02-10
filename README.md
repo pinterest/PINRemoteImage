@@ -178,8 +178,8 @@ PINRemoteImageManager.shared().setAuthenticationChallenge { (task, challenge, co
 
 ### Support for high resolution images
 Currently there are two ways PINRemoteImage is supporting high resolution images:
-1. If the URL will contains a `@2x` or a `@3x` postfix it will automatically handled from PINRemoteImage and the resulting image will be returned with the right scale.
-2. If it's not possible to provide an URL with the `@2x` or `@3x` postfix, it also can be handled within the completion handler:
+1. If the URL contains an `_2x.` or an `_3x.` postfix it will be automatically handled by PINRemoteImage and the resulting image will be returned at the right scale.
+2. If it's not possible to provide an URL with an `_2x.` or `_3x.` postfix, you can also handle it with a completion handler:
 ```objc
 NSURL *url = ...;
 __weak UIImageView *weakImageView = self.imageView;

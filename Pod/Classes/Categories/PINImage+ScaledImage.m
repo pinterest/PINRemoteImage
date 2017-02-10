@@ -14,6 +14,9 @@ static inline PINImage *PINScaledImageForKey(NSString * __nullable key, PINImage
     }
     
 #if PIN_TARGET_IOS
+    
+    NSCAssert(image.CGImage != NULL, @"CGImage should not be NULL");
+    
     CGFloat scale = 1.0;
     if (key.length >= 8) {
         NSRange range = [key rangeOfString:@"_2x."];
