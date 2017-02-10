@@ -1117,7 +1117,7 @@ static dispatch_once_t sharedDispatchToken;
         }
     }
     
-    [self objectForURL:url key:cacheKey options:options completion:^(BOOL found, BOOL valid, PINImage *image, id alternativeRepresentation) {
+    [self objectForURL:url processorKey:processorKey key:cacheKey options:options completion:^(BOOL found, BOOL valid, PINImage *image, id alternativeRepresentation) {
         NSError *error = nil;
         if (valid == NO) {
             error = [NSError errorWithDomain:PINRemoteImageManagerErrorDomain
@@ -1565,17 +1565,17 @@ static dispatch_once_t sharedDispatchToken;
 
 - (void)objectForKey:(NSString *)key options:(PINRemoteImageManagerDownloadOptions)options completion:(void (^)(BOOL found, BOOL valid, PINImage *image, id alternativeRepresentation))completion
 {
-    return [self objectForURL:nil key:key options:options completion:completion];
+    return [self objectForURL:nil processorKey:nil key:key options:options completion:completion];
 }
 
-- (void)objectForURL:(NSURL *)url key:(NSString *)key options:(PINRemoteImageManagerDownloadOptions)options completion:(void (^)(BOOL found, BOOL valid, PINImage *image, id alternativeRepresentation))completion
+- (void)objectForURL:(NSURL *)url processorKey:(NSString *)processorKey key:(NSString *)key options:(PINRemoteImageManagerDownloadOptions)options completion:(void (^)(BOOL found, BOOL valid, PINImage *image, id alternativeRepresentation))completion
 {
     if ((options & PINRemoteImageManagerDownloadOptionsIgnoreCache) != 0) {
         completion(NO, YES, nil, nil);
         return;
     }
     
-    key = key ?: [self cacheKeyForURL:url processorKey:nil];
+    key = key ?: [self cacheKeyForURL:url processorKey:processorKey];
 
     void (^materialize)(id object) = ^(id object) {
         PINImage *image = nil;
