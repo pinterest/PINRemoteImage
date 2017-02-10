@@ -460,7 +460,7 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
 - (nonnull NSString *)cacheKeyForURL:(nonnull NSURL *)url processorKey:(nullable NSString *)processorKey;
 
 /**
- @see imageFromCacheWithCacheKey:options:completion: instead
+ @see imageFromCacheWithURL:processorKey:options:completion:
  @deprecated
  
  @param cacheKey NSString key to look up image in the cache.
@@ -469,8 +469,8 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
 - (void)imageFromCacheWithCacheKey:(nonnull NSString *)cacheKey completion:(nonnull PINRemoteImageManagerImageCompletion)completion __attribute__((deprecated));
 
 /**
- Directly get an image from the underlying cache.
- @see cacheKeyForURL:processorKey:
+ @see imageFromCacheWithURL:processorKey:options:completion:
+ @deprecated
  
  @param cacheKey NSString key to look up image in the cache.
  @param options options will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.
@@ -486,6 +486,16 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache.
  */
 - (void)imageFromCacheWithURL:(nonnull NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options completion:(nonnull PINRemoteImageManagerImageCompletion)completion;
+
+/**
+ Directly get an image from the underlying cache.
+ 
+ @param url NSURL to look up image in the cache.
+ @param processorKey NSString key to uniquely identify processor and process.
+ @param options options will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.
+ @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache.
+ */
+- (void)imageFromCacheWithURL:(nonnull NSURL *)url processorKey:(nullable NSString *)processorKey options:(PINRemoteImageManagerDownloadOptions)options completion:(nonnull PINRemoteImageManagerImageCompletion)completion;
 
 /**
  Directly get an image from the underlying memory cache synchronously.

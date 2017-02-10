@@ -1100,6 +1100,15 @@ static dispatch_once_t sharedDispatchToken;
     return [self imageFromCacheWithURL:url cacheKey:nil options:options completion:completion];
 }
 
+- (void)imageFromCacheWithURL:(nonnull NSURL *)url
+                 processorKey:(nullable NSString *)processorKey
+                      options:(PINRemoteImageManagerDownloadOptions)options
+                   completion:(nonnull PINRemoteImageManagerImageCompletion)completion
+{
+    NSString *cacheKey = [self cacheKeyForURL:url processorKey:processorKey];
+    return [self imageFromCacheWithURL:url cacheKey:cacheKey options:options completion:completion];
+}
+
 - (void)imageFromCacheWithURL:(NSURL *)url
                      cacheKey:(NSString *)cacheKey
                       options:(PINRemoteImageManagerDownloadOptions)options
