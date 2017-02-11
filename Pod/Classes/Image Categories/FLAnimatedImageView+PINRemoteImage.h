@@ -6,11 +6,11 @@
 //
 //
 
-#import "PINRemoteImageMacros.h"
+#import <PINRemoteImage/PINRemoteImageMacros.h>
 #if USE_FLANIMATED_IMAGE
 #import <FLAnimatedImage/FLAnimatedImageView.h>
 
-#import "PINRemoteImageCategoryManager.h"
+#import <PINRemoteImage/PINRemoteImageCategoryManager.h>
 
 @interface FLAnimatedImageView (PINRemoteImage) <PINRemoteImageCategory>
 

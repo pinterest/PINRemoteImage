@@ -1,0 +1,19 @@
+[cxx]
+  default_platform = iphonesimulator-x86_64
+  combined_preprocess_and_compile = true
+
+[apple]
+  iphonesimulator_target_sdk_version = 7.0
+  iphoneos_target_sdk_version = 5.0
+  macosx_target_sdk_version = 10.9
+
+[alias]
+  lib = //:PINRemoteImage
+
+[project]
+  parallel_parsing = false
+  ide = xcode
+  ignore = .buckd, \
+           .hg, \
+           .git, \
+           buck-out, \

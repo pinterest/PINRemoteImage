@@ -39,7 +39,7 @@ Pod::Spec.new do |s|
     ios.ios.deployment_target = "7.0"
     ios.tvos.deployment_target = "9.0"
     ios.dependency 'PINRemoteImage/Core'
-    ios.frameworks = 'UIKit'
+    ios.frameworks = 'UIKit', 'MobileCoreServices'
   end
 
   s.subspec 'OSX' do |cs|
