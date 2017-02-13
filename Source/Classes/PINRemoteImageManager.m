@@ -718,7 +718,7 @@ static dispatch_once_t sharedDispatchToken;
                 }
                 [strongSelf callCompletionsWithKey:key image:image alternativeRepresentation:nil cached:NO error:error finalized:NO];
                 
-                if (error == nil) {
+                if (error == nil && image != nil) {
                     BOOL saveAsJPEG = (options & PINRemoteImageManagerSaveProcessedImageAsJPEG) != 0;
                     NSData *diskData = nil;
                     if (saveAsJPEG) {
@@ -1149,7 +1149,11 @@ static dispatch_once_t sharedDispatchToken;
 - (PINRemoteImageManagerResult *)synchronousImageFromCacheWithURL:(NSURL *)url processorKey:(NSString *)processorKey cacheKey:(NSString *)cacheKey options:(PINRemoteImageManagerDownloadOptions)options
 {
     CFTimeInterval requestTime = CACurrentMediaTime();
-    
+  
+    if (cacheKey == nil && url == nil) {
+        return nil;
+    }
+  
     cacheKey = cacheKey ?: [self cacheKeyForURL:url processorKey:processorKey];
     
     id object = [self.cache objectFromMemoryForKey:cacheKey];
@@ -1482,7 +1486,7 @@ static dispatch_once_t sharedDispatchToken;
         [container.lock lockWithBlock:^{
             image = container.image;
         }];
-        if (image == nil) {
+        if (image == nil && container.data) {
             image = [PINImage pin_decodedImageWithData:container.data skipDecodeIfPossible:skipDecode];
             
             if (url != nil) {
@@ -1574,7 +1578,12 @@ static dispatch_once_t sharedDispatchToken;
         completion(NO, YES, nil, nil);
         return;
     }
-    
+  
+    if (key == nil && url == nil) {
+        completion(NO, YES, nil, nil);
+        return;
+    }
+  
     key = key ?: [self cacheKeyForURL:url processorKey:processorKey];
 
     void (^materialize)(id object) = ^(id object) {
