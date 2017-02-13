@@ -21,10 +21,10 @@ test:
 	carthage update
 	xcodebuild clean test -destination ${PLATFORM} -sdk ${SDK} -project PINRemoteImage.xcodeproj -scheme PINRemoteImage \
 	ONLY_ACTIVE_ARCH=NO \
-	CODE_SIGNING_REQUIRED=NO | xcpretty
+	CODE_SIGNING_REQUIRED=NO
 	
 carthage:
 	carthage update
 	carthage build --no-skip-current PINRemoteImage
 	
-all: carthage lint test analyze
+all: test carthage lint analyze
