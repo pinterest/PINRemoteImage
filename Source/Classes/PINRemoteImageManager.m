@@ -246,16 +246,16 @@ static dispatch_once_t sharedDispatchToken;
     const NSInteger kPINRemoteImageDiskCacheVersion = 1;
     NSUserDefaults *pinDefaults = [[NSUserDefaults alloc] init];
     
-    NSString *cacheURL = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *cacheURLRoot = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     
     if ([pinDefaults integerForKey:kPINRemoteImageDiskCacheVersionKey] != kPINRemoteImageDiskCacheVersion) {
         //remove the old version of the disk cache
-        PINDiskCache *tempDiskCache = [[PINDiskCache alloc] initWithName:kPINRemoteImageDiskCacheName];
-        [[NSFileManager defaultManager] removeItemAtURL:[tempDiskCache cacheURL] error:nil];
+        NSURL *diskCacheURL = [PINDiskCache cacheURLWithRootPath:cacheURLRoot prefix:PINDiskCachePrefix name:kPINRemoteImageDiskCacheName];
+        [[NSFileManager defaultManager] removeItemAtURL:diskCacheURL error:nil];
         [pinDefaults setInteger:kPINRemoteImageDiskCacheVersion forKey:kPINRemoteImageDiskCacheVersionKey];
     }
   
-    return [[PINCache alloc] initWithName:kPINRemoteImageDiskCacheName rootPath:cacheURL serializer:^NSData * _Nonnull(id<NSCoding>  _Nonnull object, NSString * _Nonnull key) {
+    return [[PINCache alloc] initWithName:kPINRemoteImageDiskCacheName rootPath:cacheURLRoot serializer:^NSData * _Nonnull(id<NSCoding>  _Nonnull object, NSString * _Nonnull key) {
         return (NSData *)object;
     } deserializer:^id<NSCoding> _Nonnull(NSData * _Nonnull data, NSString * _Nonnull key) {
         return data;
