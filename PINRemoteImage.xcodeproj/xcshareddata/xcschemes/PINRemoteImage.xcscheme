@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "68A0FC181E523434000B552D"
+               BuildableName = "PINRemoteImageTests.xctest"
+               BlueprintName = "PINRemoteImageTests"
+               ReferencedContainer = "container:PINRemoteImage.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "F1B918D01BCF239200710963"
+            BuildableName = "PINRemoteImage.framework"
+            BlueprintName = "PINRemoteImage-iOS"
+            ReferencedContainer = "container:PINRemoteImage.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>

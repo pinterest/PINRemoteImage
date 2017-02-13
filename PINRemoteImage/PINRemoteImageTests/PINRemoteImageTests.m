@@ -2,8 +2,8 @@
 //  PINRemoteImageTests.m
 //  PINRemoteImageTests
 //
-//  Created by Michael Schneider on 1/3/16.
-//  Copyright © 2016 mischneider. All rights reserved.
+//  Created by Garrett Moon on 2/13/17.
+//  Copyright © 2017 Pinterest. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>

@@ -11,7 +11,7 @@
 #import <Quartz/Quartz.h>
 #import <PINRemoteImage/PINRemoteImageManager.h>
 #import <PINRemoteImage/PINImageView+PINRemoteImage.h>
-#import <PINCache/PINCache.h>
+#import <PINRemoteImage/PINRemoteImageCaching.h>
 
 #import "PINViewWithBackgroundColor.h"
 #import "Kitten.h"

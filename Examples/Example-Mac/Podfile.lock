@@ -1,0 +1,63 @@
+PODS:
+  - libwebp (0.5.1):
+    - libwebp/core (= 0.5.1)
+    - libwebp/dec (= 0.5.1)
+    - libwebp/demux (= 0.5.1)
+    - libwebp/dsp (= 0.5.1)
+    - libwebp/enc (= 0.5.1)
+    - libwebp/mux (= 0.5.1)
+    - libwebp/utils (= 0.5.1)
+    - libwebp/webp (= 0.5.1)
+  - libwebp/core (0.5.1):
+    - libwebp/webp
+  - libwebp/dec (0.5.1):
+    - libwebp/core
+  - libwebp/demux (0.5.1):
+    - libwebp/core
+  - libwebp/dsp (0.5.1):
+    - libwebp/core
+  - libwebp/enc (0.5.1):
+    - libwebp/core
+  - libwebp/mux (0.5.1):
+    - libwebp/core
+  - libwebp/utils (0.5.1):
+    - libwebp/core
+  - libwebp/webp (0.5.1)
+  - PINCache (3.0.1-beta.3):
+    - PINCache/Arc-exception-safe (= 3.0.1-beta.3)
+    - PINCache/Core (= 3.0.1-beta.3)
+  - PINCache/Arc-exception-safe (3.0.1-beta.3):
+    - PINCache/Core
+  - PINCache/Core (3.0.1-beta.3):
+    - PINOperation (= 1.0.3)
+  - PINOperation (1.0.3)
+  - PINRemoteImage/Core (3.0.0-beta.8)
+  - PINRemoteImage/OSX (3.0.0-beta.8):
+    - PINRemoteImage/Core
+  - PINRemoteImage/PINCache (3.0.0-beta.8):
+    - PINCache (= 3.0.1-beta.3)
+    - PINRemoteImage/Core
+  - PINRemoteImage/WebP (3.0.0-beta.8):
+    - libwebp
+    - PINRemoteImage/Core
+
+DEPENDENCIES:
+  - libwebp
+  - PINCache
+  - PINRemoteImage/OSX (from `../../`)
+  - PINRemoteImage/PINCache (from `../../`)
+  - PINRemoteImage/WebP (from `../../`)
+
+EXTERNAL SOURCES:
+  PINRemoteImage:
+    :path: ../../
+
+SPEC CHECKSUMS:
+  libwebp: b9126f8982a95370cf4eaad9bb3fefd57f052c15
+  PINCache: e77c2d484fc4d1eb8c4f9a48647a0202b6f415b2
+  PINOperation: ac23db44796d4a564ecf9b5ea7163510f579b71d
+  PINRemoteImage: 4fb1281a68aea2987be74f7dec03cc0c9d67987e
+
+PODFILE CHECKSUM: 0593b5c3090986ef94e1cbeda6c04a0f8f224cb9
+
+COCOAPODS: 1.1.1
