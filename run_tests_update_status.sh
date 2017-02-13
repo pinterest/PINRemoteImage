@@ -29,7 +29,7 @@ trap trap_handler INT TERM EXIT
 
 updateStatus pending "Starting build…"
 
-./build.sh all
+make all
 
 updateStatus success "Tests passed"
 
