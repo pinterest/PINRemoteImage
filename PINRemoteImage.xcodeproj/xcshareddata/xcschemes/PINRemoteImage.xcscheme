@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F1B918D01BCF239200710963"
                BuildableName = "PINRemoteImage.framework"
-               BlueprintName = "PINRemoteImage-iOS"
+               BlueprintName = "PINRemoteImage"
                ReferencedContainer = "container:PINRemoteImage.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -44,7 +44,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F1B918D01BCF239200710963"
             BuildableName = "PINRemoteImage.framework"
-            BlueprintName = "PINRemoteImage-iOS"
+            BlueprintName = "PINRemoteImage"
             ReferencedContainer = "container:PINRemoteImage.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -66,7 +66,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F1B918D01BCF239200710963"
             BuildableName = "PINRemoteImage.framework"
-            BlueprintName = "PINRemoteImage-iOS"
+            BlueprintName = "PINRemoteImage"
             ReferencedContainer = "container:PINRemoteImage.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -84,7 +84,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F1B918D01BCF239200710963"
             BuildableName = "PINRemoteImage.framework"
-            BlueprintName = "PINRemoteImage-iOS"
+            BlueprintName = "PINRemoteImage"
             ReferencedContainer = "container:PINRemoteImage.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

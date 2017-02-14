@@ -8,7 +8,6 @@ lint:
 	pod lib lint
 	
 analyze:
-	carthage update
 	xcodebuild clean analyze -destination ${PLATFORM} -sdk ${SDK} -project PINRemoteImage.xcodeproj -scheme PINRemoteImage \
 	ONLY_ACTIVE_ARCH=NO \
 	CODE_SIGNING_REQUIRED=NO \
@@ -18,10 +17,9 @@ analyze:
 	rm -rf $(shell pwd)/clang
 	
 test:
-	carthage update
 	xcodebuild clean test -destination ${PLATFORM} -sdk ${SDK} -project PINRemoteImage.xcodeproj -scheme PINRemoteImage \
 	ONLY_ACTIVE_ARCH=NO \
-	CODE_SIGNING_REQUIRED=NO
+	CODE_SIGNING_REQUIRED=NO | xcpretty
 	
 carthage:
 	carthage update

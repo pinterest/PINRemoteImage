@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Protocols/PINCacheObjectSubscripting.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intf/PINCacheObjectSubscripting</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>PINCacheObjectSubscripting.h</DeclaredIn>
+            
+			
+			<NodeRef refid="4"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/PINCacheObjectSubscripting/objectForKeyedSubscript:</TokenIdentifier>
+			<Abstract type="html">This method enables using literals on the receiving object, such as id object = cache[@&quot;key&quot;];.</Abstract>
+			<DeclaredIn>PINCacheObjectSubscripting.h</DeclaredIn>
+			
+			<Declaration>- (id)objectForKeyedSubscript:(NSString *)key</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the object.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">The object for the specified key.</Abstract></ReturnValue>
+			<Anchor>//api/name/objectForKeyedSubscript:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/PINCacheObjectSubscripting/setObject:forKeyedSubscript:</TokenIdentifier>
+			<Abstract type="html">This method enables using literals on the receiving object, such as cache[@&quot;key&quot;] = object;.</Abstract>
+			<DeclaredIn>PINCacheObjectSubscripting.h</DeclaredIn>
+			
+			<Declaration>- (void)setObject:(id)obj forKeyedSubscript:(NSString *)key</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">A key to associate with the object. This string will be copied.</Abstract>
+				</Parameter><Parameter>
+					<Name>object</Name>
+					<Abstract type="html">An object to be assigned for the key.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setObject:forKeyedSubscript:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>
