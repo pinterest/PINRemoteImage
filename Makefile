@@ -22,7 +22,7 @@ test:
 	CODE_SIGNING_REQUIRED=NO | xcpretty
 	
 carthage:
-	carthage update
+	carthage update --no-use-binaries
 	carthage build --no-skip-current PINRemoteImage
 	
-all: test carthage lint analyze
+all: carthage test lint analyze
