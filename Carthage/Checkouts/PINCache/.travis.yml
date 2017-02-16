@@ -1,0 +1,18 @@
+language: objective-c
+osx_image: xcode7.3
+cache:
+    - bundler
+    - cocoapods
+branches:
+  only:
+    - master
+before_install: 
+    - gem install cocoapods -v '0.39.0'
+before_script:
+    - pod lib lint --verbose
+env:
+    matrix:
+    - OS='8.4' name='iPhone 6'
+    - OS='latest' name='iPhone 6'
+script:
+    - xcodebuild clean test -project tests/PINCache.xcodeproj -scheme PINCacheTests -sdk iphonesimulator  -destination "platform=iOS Simulator,name=$name,OS=$OS" ONLY_ACTIVE_ARCH=NO

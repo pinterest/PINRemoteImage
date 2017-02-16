@@ -1,0 +1,1047 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/PINDiskCache.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/PINDiskCache</TokenIdentifier>
+			<Abstract type="html">PINDiskCache is a thread safe key/value store backed by the file system. It accepts any object conforming
+to the NSCoding protocol, which includes the basic Foundation data types and collection classes and also
+many UIKit classes, notably UIImage. All work is performed on a serial queue shared by all instances in
+the app, and archiving is handled by NSKeyedArchiver. This is a particular advantage for UIImage because
+it skips UIImagePNGRepresentation() and retains information like scale and orientation.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+            
+			
+			<NodeRef refid="2"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/setName:</TokenIdentifier>
+			<Abstract type="html">The name of this cache, used to create a directory under Library/Caches and also appearing in stack traces.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSString *name</Declaration>
+			
+			
+			<Anchor>//api/name/name</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/name</TokenIdentifier>
+			<Abstract type="html">The name of this cache, used to create a directory under Library/Caches and also appearing in stack traces.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSString *name</Declaration>
+			
+			
+			<Anchor>//api/name/name</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINDiskCache/name</TokenIdentifier>
+			<Abstract type="html">The name of this cache, used to create a directory under Library/Caches and also appearing in stack traces.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSString *name</Declaration>
+			
+			
+			<Anchor>//api/name/name</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/setCacheURL:</TokenIdentifier>
+			<Abstract type="html">The URL of the directory used by this cache, usually Library/Caches/com.pinterest.PINDiskCache.(name)</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSURL *cacheURL</Declaration>
+			
+			
+			<Anchor>//api/name/cacheURL</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/cacheURL</TokenIdentifier>
+			<Abstract type="html">The URL of the directory used by this cache, usually Library/Caches/com.pinterest.PINDiskCache.(name)</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSURL *cacheURL</Declaration>
+			
+			
+			<Anchor>//api/name/cacheURL</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINDiskCache/cacheURL</TokenIdentifier>
+			<Abstract type="html">The URL of the directory used by this cache, usually Library/Caches/com.pinterest.PINDiskCache.(name)</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSURL *cacheURL</Declaration>
+			
+			
+			<Anchor>//api/name/cacheURL</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/setByteCount:</TokenIdentifier>
+			<Abstract type="html">The total number of bytes used on disk, as reported by NSURLTotalFileAllocatedSizeKey.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSUInteger byteCount</Declaration>
+			
+			
+			<Anchor>//api/name/byteCount</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/byteCount</TokenIdentifier>
+			<Abstract type="html">The total number of bytes used on disk, as reported by NSURLTotalFileAllocatedSizeKey.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSUInteger byteCount</Declaration>
+			
+			
+			<Anchor>//api/name/byteCount</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINDiskCache/byteCount</TokenIdentifier>
+			<Abstract type="html">The total number of bytes used on disk, as reported by NSURLTotalFileAllocatedSizeKey.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSUInteger byteCount</Declaration>
+			
+			
+			<Anchor>//api/name/byteCount</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/setByteLimit:</TokenIdentifier>
+			<Abstract type="html">The maximum number of bytes allowed on disk. This value is checked every time an object is set, if the written
+size exceeds the limit a trim call is queued. Defaults to 0.0, meaning no practical limit.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) NSUInteger byteLimit</Declaration>
+			
+			
+			<Anchor>//api/name/byteLimit</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/byteLimit</TokenIdentifier>
+			<Abstract type="html">The maximum number of bytes allowed on disk. This value is checked every time an object is set, if the written
+size exceeds the limit a trim call is queued. Defaults to 0.0, meaning no practical limit.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) NSUInteger byteLimit</Declaration>
+			
+			
+			<Anchor>//api/name/byteLimit</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINDiskCache/byteLimit</TokenIdentifier>
+			<Abstract type="html">The maximum number of bytes allowed on disk. This value is checked every time an object is set, if the written
+size exceeds the limit a trim call is queued. Defaults to 0.0, meaning no practical limit.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) NSUInteger byteLimit</Declaration>
+			
+			
+			<Anchor>//api/name/byteLimit</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/setAgeLimit:</TokenIdentifier>
+			<Abstract type="html">The maximum number of seconds an object is allowed to exist in the cache. Setting this to a value
+greater than 0.0 will start a recurring GCD timer with the same period that calls trimToDate:.
+Setting it back to 0.0 will stop the timer. Defaults to 0.0, meaning no limit.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) NSTimeInterval ageLimit</Declaration>
+			
+			
+			<Anchor>//api/name/ageLimit</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/ageLimit</TokenIdentifier>
+			<Abstract type="html">The maximum number of seconds an object is allowed to exist in the cache. Setting this to a value
+greater than 0.0 will start a recurring GCD timer with the same period that calls trimToDate:.
+Setting it back to 0.0 will stop the timer. Defaults to 0.0, meaning no limit.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) NSTimeInterval ageLimit</Declaration>
+			
+			
+			<Anchor>//api/name/ageLimit</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINDiskCache/ageLimit</TokenIdentifier>
+			<Abstract type="html">The maximum number of seconds an object is allowed to exist in the cache. Setting this to a value
+greater than 0.0 will start a recurring GCD timer with the same period that calls trimToDate:.
+Setting it back to 0.0 will stop the timer. Defaults to 0.0, meaning no limit.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) NSTimeInterval ageLimit</Declaration>
+			
+			
+			<Anchor>//api/name/ageLimit</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/setWritingProtectionOption:</TokenIdentifier>
+			<Abstract type="html">The writing protection option used when writing a file on disk. This value is used every time an object is set.
+NSDataWritingAtomic and NSDataWritingWithoutOverwriting are ignored if set
+Defaults to NSDataWritingFileProtectionNone.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) NSDataWritingOptions writingProtectionOption</Declaration>
+			
+			
+			<Anchor>//api/name/writingProtectionOption</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/writingProtectionOption</TokenIdentifier>
+			<Abstract type="html">The writing protection option used when writing a file on disk. This value is used every time an object is set.
+NSDataWritingAtomic and NSDataWritingWithoutOverwriting are ignored if set
+Defaults to NSDataWritingFileProtectionNone.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) NSDataWritingOptions writingProtectionOption</Declaration>
+			
+			
+			<Anchor>//api/name/writingProtectionOption</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINDiskCache/writingProtectionOption</TokenIdentifier>
+			<Abstract type="html">The writing protection option used when writing a file on disk. This value is used every time an object is set.
+NSDataWritingAtomic and NSDataWritingWithoutOverwriting are ignored if set
+Defaults to NSDataWritingFileProtectionNone.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) NSDataWritingOptions writingProtectionOption</Declaration>
+			
+			
+			<Anchor>//api/name/writingProtectionOption</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/setTtlCache:</TokenIdentifier>
+			<Abstract type="html">If ttlCache is YES, the cache behaves like a ttlCache. This means that once an object enters the
+cache, it only lives as long as self.ageLimit. This has the following implications:
+    - Accessing an object in the cache does not extend that object&apos;s lifetime in the cache
+    - When attempting to access an object in the cache that has lived longer than self.ageLimit,
+      the cache will behave as if the object does not exist</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign, getter=isTTLCache) BOOL ttlCache</Declaration>
+			
+			
+			<Anchor>//api/name/ttlCache</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/isTTLCache</TokenIdentifier>
+			<Abstract type="html">If ttlCache is YES, the cache behaves like a ttlCache. This means that once an object enters the
+cache, it only lives as long as self.ageLimit. This has the following implications:
+    - Accessing an object in the cache does not extend that object&apos;s lifetime in the cache
+    - When attempting to access an object in the cache that has lived longer than self.ageLimit,
+      the cache will behave as if the object does not exist</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign, getter=isTTLCache) BOOL ttlCache</Declaration>
+			
+			
+			<Anchor>//api/name/ttlCache</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINDiskCache/ttlCache</TokenIdentifier>
+			<Abstract type="html">If ttlCache is YES, the cache behaves like a ttlCache. This means that once an object enters the
+cache, it only lives as long as self.ageLimit. This has the following implications:
+    - Accessing an object in the cache does not extend that object&apos;s lifetime in the cache
+    - When attempting to access an object in the cache that has lived longer than self.ageLimit,
+      the cache will behave as if the object does not exist</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign, getter=isTTLCache) BOOL ttlCache</Declaration>
+			
+			
+			<Anchor>//api/name/ttlCache</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/setWillAddObjectBlock:</TokenIdentifier>
+			<Abstract type="html">A block to be executed just before an object is added to the cache. The queue waits during execution.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINDiskCacheObjectBlock __nullable willAddObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/willAddObjectBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/willAddObjectBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just before an object is added to the cache. The queue waits during execution.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINDiskCacheObjectBlock __nullable willAddObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/willAddObjectBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINDiskCache/willAddObjectBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just before an object is added to the cache. The queue waits during execution.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINDiskCacheObjectBlock __nullable willAddObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/willAddObjectBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/setWillRemoveObjectBlock:</TokenIdentifier>
+			<Abstract type="html">A block to be executed just before an object is removed from the cache. The queue waits during execution.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINDiskCacheObjectBlock __nullable willRemoveObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/willRemoveObjectBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/willRemoveObjectBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just before an object is removed from the cache. The queue waits during execution.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINDiskCacheObjectBlock __nullable willRemoveObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/willRemoveObjectBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINDiskCache/willRemoveObjectBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just before an object is removed from the cache. The queue waits during execution.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINDiskCacheObjectBlock __nullable willRemoveObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/willRemoveObjectBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/setWillRemoveAllObjectsBlock:</TokenIdentifier>
+			<Abstract type="html">A block to be executed just before all objects are removed from the cache as a result of removeAllObjects:.
+The queue waits during execution.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINDiskCacheBlock __nullable willRemoveAllObjectsBlock</Declaration>
+			
+			
+			<Anchor>//api/name/willRemoveAllObjectsBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/willRemoveAllObjectsBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just before all objects are removed from the cache as a result of removeAllObjects:.
+The queue waits during execution.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINDiskCacheBlock __nullable willRemoveAllObjectsBlock</Declaration>
+			
+			
+			<Anchor>//api/name/willRemoveAllObjectsBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINDiskCache/willRemoveAllObjectsBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just before all objects are removed from the cache as a result of removeAllObjects:.
+The queue waits during execution.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINDiskCacheBlock __nullable willRemoveAllObjectsBlock</Declaration>
+			
+			
+			<Anchor>//api/name/willRemoveAllObjectsBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/setDidAddObjectBlock:</TokenIdentifier>
+			<Abstract type="html">A block to be executed just after an object is added to the cache. The queue waits during execution.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINDiskCacheObjectBlock __nullable didAddObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didAddObjectBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/didAddObjectBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just after an object is added to the cache. The queue waits during execution.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINDiskCacheObjectBlock __nullable didAddObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didAddObjectBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINDiskCache/didAddObjectBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just after an object is added to the cache. The queue waits during execution.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINDiskCacheObjectBlock __nullable didAddObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didAddObjectBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/setDidRemoveObjectBlock:</TokenIdentifier>
+			<Abstract type="html">A block to be executed just after an object is removed from the cache. The queue waits during execution.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINDiskCacheObjectBlock __nullable didRemoveObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didRemoveObjectBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/didRemoveObjectBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just after an object is removed from the cache. The queue waits during execution.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINDiskCacheObjectBlock __nullable didRemoveObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didRemoveObjectBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINDiskCache/didRemoveObjectBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just after an object is removed from the cache. The queue waits during execution.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINDiskCacheObjectBlock __nullable didRemoveObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didRemoveObjectBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/setDidRemoveAllObjectsBlock:</TokenIdentifier>
+			<Abstract type="html">A block to be executed just after all objects are removed from the cache as a result of removeAllObjects:.
+The queue waits during execution.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINDiskCacheBlock __nullable didRemoveAllObjectsBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didRemoveAllObjectsBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/didRemoveAllObjectsBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just after all objects are removed from the cache as a result of removeAllObjects:.
+The queue waits during execution.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINDiskCacheBlock __nullable didRemoveAllObjectsBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didRemoveAllObjectsBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINDiskCache/didRemoveAllObjectsBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just after all objects are removed from the cache as a result of removeAllObjects:.
+The queue waits during execution.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINDiskCacheBlock __nullable didRemoveAllObjectsBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didRemoveAllObjectsBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/PINDiskCache/sharedCache</TokenIdentifier>
+			<Abstract type="html">A shared cache.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)sharedCache</Declaration>
+			
+			<ReturnValue><Abstract type="html">The shared singleton cache instance.</Abstract></ReturnValue>
+			<Anchor>//api/name/sharedCache</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/PINDiskCache/emptyTrash</TokenIdentifier>
+			<Abstract type="html">Empties the trash with DISPATCHQUEUEPRIORITY_BACKGROUND. Does not use lock.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>+ (void)emptyTrash</Declaration>
+			
+			
+			<Anchor>//api/name/emptyTrash</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/initWithName:</TokenIdentifier>
+			<Abstract type="html">Multiple instances with the same name are allowed and can safely access
+the same data on disk thanks to the magic of seriality.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instp/PINDiskCache/name</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (instancetype)initWithName:(NSString *)name</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>name</Name>
+					<Abstract type="html">The name of the cache.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">A new cache with the specified name.</Abstract></ReturnValue>
+			<Anchor>//api/name/initWithName:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/initWithName:rootPath:</TokenIdentifier>
+			<Abstract type="html">The designated initializer. Multiple instances with the same name are allowed and can safely access
+the same data on disk thanks to the magic of seriality.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instp/PINDiskCache/name</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (instancetype)initWithName:(NSString *)name rootPath:(NSString *)rootPath</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>name</Name>
+					<Abstract type="html">The name of the cache.</Abstract>
+				</Parameter><Parameter>
+					<Name>rootPath</Name>
+					<Abstract type="html">The path of the cache.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">A new cache with the specified name.</Abstract></ReturnValue>
+			<Anchor>//api/name/initWithName:rootPath:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/lockFileAccessWhileExecutingBlock:</TokenIdentifier>
+			<Abstract type="html">Locks access to ivars and allows safe interaction with files on disk. This method returns immediately.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>- (void)lockFileAccessWhileExecutingBlock:(nullable PINDiskCacheBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed when a lock is available.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/lockFileAccessWhileExecutingBlock:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/containsObjectForKey:block:</TokenIdentifier>
+			<Abstract type="html">This method determines whether an object is present for the given key in the cache. This method returns immediately
+and executes the passed block after the object is available, potentially in parallel with other blocks on the
+&lt;concurrentQueue&gt;.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/containsObjectForKey:</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (void)containsObjectForKey:(NSString *)key block:(PINDiskCacheContainsBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the object.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed concurrently after the containment check happened</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/containsObjectForKey:block:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/objectForKey:block:</TokenIdentifier>
+			<Abstract type="html">Retrieves the object for the specified key. This method returns immediately and executes the passed
+block as soon as the object is available.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>- (void)objectForKey:(NSString *)key block:(nullable PINDiskCacheObjectBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the requested object.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed serially when the object is available.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/objectForKey:block:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/fileURLForKey:block:</TokenIdentifier>
+			<Abstract type="html">Retrieves the fileURL for the specified key without actually reading the data from disk. This method
+returns immediately and executes the passed block as soon as the object is available.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>- (void)fileURLForKey:(nullable NSString *)key block:(nullable PINDiskCacheObjectBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the requested object.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed serially when the file URL is available.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/fileURLForKey:block:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/setObject:forKey:block:</TokenIdentifier>
+			<Abstract type="html">Stores an object in the cache for the specified key. This method returns immediately and executes the
+passed block as soon as the object has been stored.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>- (void)setObject:(id&lt;NSCoding&gt;)object forKey:(NSString *)key block:(nullable PINDiskCacheObjectBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>object</Name>
+					<Abstract type="html">An object to store in the cache.</Abstract>
+				</Parameter><Parameter>
+					<Name>key</Name>
+					<Abstract type="html">A key to associate with the object. This string will be copied.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed serially after the object has been stored, or nil.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setObject:forKey:block:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/removeObjectForKey:block:</TokenIdentifier>
+			<Abstract type="html">Removes the object for the specified key. This method returns immediately and executes the passed block
+as soon as the object has been removed.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>- (void)removeObjectForKey:(NSString *)key block:(nullable PINDiskCacheObjectBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the object to be removed.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed serially after the object has been removed, or nil.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/removeObjectForKey:block:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/trimToDate:block:</TokenIdentifier>
+			<Abstract type="html">Removes all objects from the cache that have not been used since the specified date.
+This method returns immediately and executes the passed block as soon as the cache has been trimmed.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>- (void)trimToDate:(NSDate *)date block:(nullable PINDiskCacheBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>date</Name>
+					<Abstract type="html">Objects that haven&apos;t been accessed since this date are removed from the cache.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed serially after the cache has been trimmed, or nil.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/trimToDate:block:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/trimToSize:block:</TokenIdentifier>
+			<Abstract type="html">Removes objects from the cache, largest first, until the cache is equal to or smaller than the specified byteCount.
+This method returns immediately and executes the passed block as soon as the cache has been trimmed.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>- (void)trimToSize:(NSUInteger)byteCount block:(nullable PINDiskCacheBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>byteCount</Name>
+					<Abstract type="html">The cache will be trimmed equal to or smaller than this size.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed serially after the cache has been trimmed, or nil.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/trimToSize:block:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/trimToSizeByDate:block:</TokenIdentifier>
+			<Abstract type="html">Removes objects from the cache, ordered by date (least recently used first), until the cache is equal to or smaller
+than the specified byteCount. This method returns immediately and executes the passed block as soon as the cache has
+been trimmed.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>- (void)trimToSizeByDate:(NSUInteger)byteCount block:(nullable PINDiskCacheBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>byteCount</Name>
+					<Abstract type="html">The cache will be trimmed equal to or smaller than this size.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed serially after the cache has been trimmed, or nil.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/trimToSizeByDate:block:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/removeAllObjects:</TokenIdentifier>
+			<Abstract type="html">Removes all objects from the cache. This method returns immediately and executes the passed block as soon as the
+cache has been cleared.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>- (void)removeAllObjects:(nullable PINDiskCacheBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed serially after the cache has been cleared, or nil.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/removeAllObjects:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/enumerateObjectsWithBlock:completionBlock:</TokenIdentifier>
+			<Abstract type="html">Loops through all objects in the cache (reads and writes are suspended during the enumeration). Data is not actually
+read from disk, the object parameter of the block will be nil but the fileURL will be available.
+This method returns immediately.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>- (void)enumerateObjectsWithBlock:(PINDiskCacheObjectBlock)block completionBlock:(nullable PINDiskCacheBlock)completionBlock</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed for every object in the cache.</Abstract>
+				</Parameter><Parameter>
+					<Name>completionBlock</Name>
+					<Abstract type="html">An optional block to be executed after the enumeration is complete.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/enumerateObjectsWithBlock:completionBlock:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/synchronouslyLockFileAccessWhileExecutingBlock:</TokenIdentifier>
+			<Abstract type="html">Locks access to ivars and allows safe interaction with files on disk. This method only returns once the block
+has been run.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>- (void)synchronouslyLockFileAccessWhileExecutingBlock:(nullable PINDiskCacheBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed when a lock is available.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/synchronouslyLockFileAccessWhileExecutingBlock:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/containsObjectForKey:</TokenIdentifier>
+			<Abstract type="html">This method determines whether an object is present for the given key in the cache.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/containsObjectForKey:block:</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (BOOL)containsObjectForKey:(NSString *)key</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the object.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">YES if an object is present for the given key in the cache, otherwise NO.</Abstract></ReturnValue>
+			<Anchor>//api/name/containsObjectForKey:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/objectForKey:</TokenIdentifier>
+			<Abstract type="html">Retrieves the object for the specified key. This method blocks the calling thread until the
+object is available.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/objectForKey:block:</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (__nullable id&lt;NSCoding&gt;)objectForKey:(NSString *)key</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the object.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">The object for the specified key.</Abstract></ReturnValue>
+			<Anchor>//api/name/objectForKey:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/fileURLForKey:</TokenIdentifier>
+			<Abstract type="html">Retrieves the file URL for the specified key. This method blocks the calling thread until the
+url is available. Do not use this URL anywhere except with lockFileAccessWhileExecutingBlock:. This method probably
+shouldn&apos;t even exist, just use the asynchronous one.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/fileURLForKey:block:</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (nullable NSURL *)fileURLForKey:(nullable NSString *)key</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the object.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">The file URL for the specified key.</Abstract></ReturnValue>
+			<Anchor>//api/name/fileURLForKey:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/setObject:forKey:</TokenIdentifier>
+			<Abstract type="html">Stores an object in the cache for the specified key. This method blocks the calling thread until
+the object has been stored.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/setObject:forKey:block:</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (void)setObject:(id&lt;NSCoding&gt;)object forKey:(NSString *)key</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>object</Name>
+					<Abstract type="html">An object to store in the cache.</Abstract>
+				</Parameter><Parameter>
+					<Name>key</Name>
+					<Abstract type="html">A key to associate with the object. This string will be copied.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setObject:forKey:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/removeObjectForKey:</TokenIdentifier>
+			<Abstract type="html">Removes the object for the specified key. This method blocks the calling thread until the object
+has been removed.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>- (void)removeObjectForKey:(NSString *)key</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the object to be removed.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/removeObjectForKey:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/trimToDate:</TokenIdentifier>
+			<Abstract type="html">Removes all objects from the cache that have not been used since the specified date.
+This method blocks the calling thread until the cache has been trimmed.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>- (void)trimToDate:(nullable NSDate *)date</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>date</Name>
+					<Abstract type="html">Objects that haven&apos;t been accessed since this date are removed from the cache.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/trimToDate:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/trimToSize:</TokenIdentifier>
+			<Abstract type="html">Removes objects from the cache, largest first, until the cache is equal to or smaller than the
+specified byteCount. This method blocks the calling thread until the cache has been trimmed.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>- (void)trimToSize:(NSUInteger)byteCount</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>byteCount</Name>
+					<Abstract type="html">The cache will be trimmed equal to or smaller than this size.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/trimToSize:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/trimToSizeByDate:</TokenIdentifier>
+			<Abstract type="html">Removes objects from the cache, ordered by date (least recently used first), until the cache is equal to or
+smaller than the specified byteCount. This method blocks the calling thread until the cache has been trimmed.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>- (void)trimToSizeByDate:(NSUInteger)byteCount</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>byteCount</Name>
+					<Abstract type="html">The cache will be trimmed equal to or smaller than this size.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/trimToSizeByDate:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/removeAllObjects</TokenIdentifier>
+			<Abstract type="html">Removes all objects from the cache. This method blocks the calling thread until the cache has been cleared.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>- (void)removeAllObjects</Declaration>
+			
+			
+			<Anchor>//api/name/removeAllObjects</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINDiskCache/enumerateObjectsWithBlock:</TokenIdentifier>
+			<Abstract type="html">Loops through all objects in the cache (reads and writes are suspended during the enumeration). Data is not actually
+read from disk, the object parameter of the block will be nil but the fileURL will be available.
+This method blocks the calling thread until all objects have been enumerated.</Abstract>
+			<DeclaredIn>PINDiskCache.h</DeclaredIn>
+			
+			<Declaration>- (void)enumerateObjectsWithBlock:(nullable PINDiskCacheObjectBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed for every object in the cache.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/enumerateObjectsWithBlock:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

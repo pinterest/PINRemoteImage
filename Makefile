@@ -8,7 +8,7 @@ lint:
 	pod lib lint
 	
 analyze:
-	xcodebuild clean analyze -destination ${PLATFORM} -sdk ${SDK} -workspace PINRemoteImage.xcworkspace -scheme PINRemoteImage \
+	xcodebuild clean analyze -destination ${PLATFORM} -sdk ${SDK} -project PINRemoteImage.xcodeproj -scheme PINRemoteImage \
 	ONLY_ACTIVE_ARCH=NO \
 	CODE_SIGNING_REQUIRED=NO \
 	CLANG_ANALYZER_OUTPUT=plist-html \
@@ -17,7 +17,7 @@ analyze:
 	rm -rf $(shell pwd)/clang
 	
 test:
-	xcodebuild clean test -destination ${PLATFORM} -sdk ${SDK} -workspace PINRemoteImage.xcworkspace -scheme PINRemoteImage \
+	xcodebuild clean test -destination ${PLATFORM} -sdk ${SDK} -project PINRemoteImage.xcodeproj -scheme PINRemoteImage \
 	ONLY_ACTIVE_ARCH=NO \
 	CODE_SIGNING_REQUIRED=NO | xcpretty
 	

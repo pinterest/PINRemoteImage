@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		6818C1551E551B5A00875DB7 /* PINCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6818C1541E551B5A00875DB7 /* PINCache.framework */; };
-		6818C1571E551BAB00875DB7 /* PINOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6818C1561E551BAB00875DB7 /* PINOperation.framework */; };
 		6818C1661E551CC600875DB7 /* decode.h in Headers */ = {isa = PBXBuildFile; fileRef = 6818C15E1E551CC600875DB7 /* decode.h */; };
 		6818C1671E551CC600875DB7 /* demux.h in Headers */ = {isa = PBXBuildFile; fileRef = 6818C15F1E551CC600875DB7 /* demux.h */; };
 		6818C1681E551CC600875DB7 /* encode.h in Headers */ = {isa = PBXBuildFile; fileRef = 6818C1601E551CC600875DB7 /* encode.h */; };
@@ -156,6 +155,7 @@
 		6818C2851E551DA800875DB7 /* utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6818C26B1E551DA800875DB7 /* utils.h */; };
 		6858C0751C9CC5BA00E420EB /* PINRemoteLock.h in Headers */ = {isa = PBXBuildFile; fileRef = 6858C0731C9CC5BA00E420EB /* PINRemoteLock.h */; };
 		6858C0761C9CC5BA00E420EB /* PINRemoteLock.m in Sources */ = {isa = PBXBuildFile; fileRef = 6858C0741C9CC5BA00E420EB /* PINRemoteLock.m */; };
+		687D3FC91E5650790027B131 /* PINOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 687D3FC81E5650790027B131 /* PINOperation.framework */; };
 		68A0FC1C1E523434000B552D /* PINRemoteImageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A0FC1B1E523434000B552D /* PINRemoteImageTests.m */; };
 		68A0FC1E1E523434000B552D /* PINRemoteImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1B918D11BCF239200710963 /* PINRemoteImage.framework */; };
 		68A6B1DB1E5248BF003A92D1 /* PINImage+ScaledImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A6B1D91E5248BF003A92D1 /* PINImage+ScaledImage.m */; };
@@ -210,6 +210,55 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		6818C2B71E564FF900875DB7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6818C2AE1E564FF900875DB7 /* PINCache.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CC0105B11E271A1600890935;
+			remoteInfo = PINCache;
+		};
+		6818C2B91E564FF900875DB7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6818C2AE1E564FF900875DB7 /* PINCache.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CC0105DA1E271A5C00890935;
+			remoteInfo = PINCacheTests;
+		};
+		6818C2BB1E564FF900875DB7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6818C2AE1E564FF900875DB7 /* PINCache.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CC0105C11E271A4000890935;
+			remoteInfo = "PINCache-tvOS";
+		};
+		6818C2BD1E564FF900875DB7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6818C2AE1E564FF900875DB7 /* PINCache.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CC0105E91E271A6400890935;
+			remoteInfo = "PINCache-tvOSTests";
+		};
+		6818C2BF1E564FF900875DB7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6818C2AE1E564FF900875DB7 /* PINCache.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CC0105CE1E271A4900890935;
+			remoteInfo = "PINCache-macOS";
+		};
+		6818C2C11E564FF900875DB7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6818C2AE1E564FF900875DB7 /* PINCache.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CC0105F81E271A7300890935;
+			remoteInfo = "PINCache-macOSTests";
+		};
+		6818C2C31E56500900875DB7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6818C2AE1E564FF900875DB7 /* PINCache.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = CC0105B01E271A1600890935;
+			remoteInfo = PINCache;
+		};
 		68A0FC1F1E523434000B552D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F1B918C81BCF239200710963 /* Project object */;
@@ -388,8 +437,10 @@
 		6818C2691E551DA800875DB7 /* thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = thread.h; path = Carthage/Checkouts/libwebp/src/utils/thread.h; sourceTree = "<group>"; };
 		6818C26A1E551DA800875DB7 /* utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = utils.c; path = Carthage/Checkouts/libwebp/src/utils/utils.c; sourceTree = "<group>"; };
 		6818C26B1E551DA800875DB7 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = utils.h; path = Carthage/Checkouts/libwebp/src/utils/utils.h; sourceTree = "<group>"; };
+		6818C2AE1E564FF900875DB7 /* PINCache.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PINCache.xcodeproj; path = Carthage/Checkouts/PINCache/PINCache.xcodeproj; sourceTree = "<group>"; };
 		6858C0731C9CC5BA00E420EB /* PINRemoteLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteLock.h; sourceTree = "<group>"; };
 		6858C0741C9CC5BA00E420EB /* PINRemoteLock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINRemoteLock.m; sourceTree = "<group>"; };
+		687D3FC81E5650790027B131 /* PINOperation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PINOperation.framework; path = "Carthage/Checkouts/PINCache/Carthage/Checkouts/PINOperation/build/Debug-iphoneos/PINOperation.framework"; sourceTree = "<group>"; };
 		68A0FC191E523434000B552D /* PINRemoteImageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PINRemoteImageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		68A0FC1B1E523434000B552D /* PINRemoteImageTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageTests.m; sourceTree = "<group>"; };
 		68A0FC1D1E523434000B552D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -453,7 +504,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6818C1571E551BAB00875DB7 /* PINOperation.framework in Frameworks */,
+				687D3FC91E5650790027B131 /* PINOperation.framework in Frameworks */,
 				6818C1551E551B5A00875DB7 /* PINCache.framework in Frameworks */,
 				68A0FC1E1E523434000B552D /* PINRemoteImage.framework in Frameworks */,
 			);
@@ -472,6 +523,7 @@
 		6818C1531E551B5900875DB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				687D3FC81E5650790027B131 /* PINOperation.framework */,
 				6818C1561E551BAB00875DB7 /* PINOperation.framework */,
 				6818C1541E551B5A00875DB7 /* PINCache.framework */,
 			);
@@ -695,6 +747,19 @@
 			name = utils;
 			sourceTree = "<group>";
 		};
+		6818C2AF1E564FF900875DB7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6818C2B81E564FF900875DB7 /* PINCache.framework */,
+				6818C2BA1E564FF900875DB7 /* PINCacheTests.xctest */,
+				6818C2BC1E564FF900875DB7 /* PINCache.framework */,
+				6818C2BE1E564FF900875DB7 /* PINCache-tvOSTests.xctest */,
+				6818C2C01E564FF900875DB7 /* PINCache.framework */,
+				6818C2C21E564FF900875DB7 /* PINCache-macOSTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		68A0FC1A1E523434000B552D /* Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -780,6 +845,7 @@
 		F1B918C71BCF239200710963 = {
 			isa = PBXGroup;
 			children = (
+				6818C2AE1E564FF900875DB7 /* PINCache.xcodeproj */,
 				6818C15B1E551CA300875DB7 /* libwebp */,
 				F1B918D31BCF239200710963 /* PINRemoteImage */,
 				68A0FC1A1E523434000B552D /* Tests */,
@@ -950,6 +1016,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				6818C2C41E56500900875DB7 /* PBXTargetDependency */,
 			);
 			name = PINRemoteImage;
 			productName = PINRemoteImage;
@@ -984,6 +1051,12 @@
 			mainGroup = F1B918C71BCF239200710963;
 			productRefGroup = F1B918D21BCF239200710963 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 6818C2AF1E564FF900875DB7 /* Products */;
+					ProjectRef = 6818C2AE1E564FF900875DB7 /* PINCache.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				F1B918D01BCF239200710963 /* PINRemoteImage */,
@@ -991,6 +1064,51 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		6818C2B81E564FF900875DB7 /* PINCache.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PINCache.framework;
+			remoteRef = 6818C2B71E564FF900875DB7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6818C2BA1E564FF900875DB7 /* PINCacheTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PINCacheTests.xctest;
+			remoteRef = 6818C2B91E564FF900875DB7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6818C2BC1E564FF900875DB7 /* PINCache.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PINCache.framework;
+			remoteRef = 6818C2BB1E564FF900875DB7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6818C2BE1E564FF900875DB7 /* PINCache-tvOSTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "PINCache-tvOSTests.xctest";
+			remoteRef = 6818C2BD1E564FF900875DB7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6818C2C01E564FF900875DB7 /* PINCache.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PINCache.framework;
+			remoteRef = 6818C2BF1E564FF900875DB7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6818C2C21E564FF900875DB7 /* PINCache-macOSTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "PINCache-macOSTests.xctest";
+			remoteRef = 6818C2C11E564FF900875DB7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		68A0FC171E523434000B552D /* Resources */ = {
@@ -1148,6 +1266,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		6818C2C41E56500900875DB7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PINCache;
+			targetProxy = 6818C2C31E56500900875DB7 /* PBXContainerItemProxy */;
+		};
 		68A0FC201E523434000B552D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F1B918D01BCF239200710963 /* PINRemoteImage */;
@@ -1168,6 +1291,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Checkouts/PINOperation/build/Debug-iphoneos",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
@@ -1190,6 +1314,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Checkouts/PINOperation/build/Debug-iphoneos",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
