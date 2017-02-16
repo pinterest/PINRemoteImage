@@ -1,0 +1,18 @@
+PODS:
+  - PINRemoteImage/Core (3.0.0-beta.8)
+  - PINRemoteImage/iOS (3.0.0-beta.8):
+    - PINRemoteImage/Core
+
+DEPENDENCIES:
+  - PINRemoteImage/iOS (from `../../`)
+
+EXTERNAL SOURCES:
+  PINRemoteImage:
+    :path: ../../
+
+SPEC CHECKSUMS:
+  PINRemoteImage: e2ed7a05206c1c290e2bcce587b301c33820d410
+
+PODFILE CHECKSUM: 3ca0dcd328792561995daf845d89cfe8082d44c1
+
+COCOAPODS: 1.1.1

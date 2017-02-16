@@ -25,18 +25,7 @@
 		9DC09DBB1C39AB0D00C6451E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DC09DBA1C39AB0D00C6451E /* main.m */; };
 		9DC09DBD1C39AB0D00C6451E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9DC09DBC1C39AB0D00C6451E /* Assets.xcassets */; };
 		9DC09DC01C39AB0D00C6451E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9DC09DBE1C39AB0D00C6451E /* MainMenu.xib */; };
-		9DC09DCB1C39AB0D00C6451E /* PINRemoteImageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DC09DCA1C39AB0D00C6451E /* PINRemoteImageTests.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		9DC09DC71C39AB0D00C6451E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9DC09DAB1C39AB0D00C6451E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9DC09DB21C39AB0D00C6451E;
-			remoteInfo = PINRemoteImage;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0141C54D0963FCEA0DB0381A /* libPods-PINRemoteImage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PINRemoteImage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -68,7 +57,6 @@
 		9DC09DBC1C39AB0D00C6451E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9DC09DBF1C39AB0D00C6451E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		9DC09DC11C39AB0D00C6451E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9DC09DC61C39AB0D00C6451E /* PINRemoteImageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PINRemoteImageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9DC09DCA1C39AB0D00C6451E /* PINRemoteImageTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageTests.m; sourceTree = "<group>"; };
 		9DC09DCC1C39AB0D00C6451E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A560E2F6800411CCF5086206 /* Pods-PINRemoteImage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage.release.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage/Pods-PINRemoteImage.release.xcconfig"; sourceTree = "<group>"; };
@@ -80,13 +68,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				42796FDA2C0B59B150630DA3 /* libPods-PINRemoteImage.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9DC09DC31C39AB0D00C6451E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,7 +107,6 @@
 			isa = PBXGroup;
 			children = (
 				9DC09DB31C39AB0D00C6451E /* PINRemoteImage.app */,
-				9DC09DC61C39AB0D00C6451E /* PINRemoteImageTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -195,12 +175,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9DC09DCF1C39AB0D00C6451E /* Build configuration list for PBXNativeTarget "PINRemoteImage" */;
 			buildPhases = (
-				8CFB37DD63603884BA1E041F /* Check Pods Manifest.lock */,
+				8CFB37DD63603884BA1E041F /* [CP] Check Pods Manifest.lock */,
 				9DC09DAF1C39AB0D00C6451E /* Sources */,
 				9DC09DB01C39AB0D00C6451E /* Frameworks */,
 				9DC09DB11C39AB0D00C6451E /* Resources */,
-				16F443D310E08F018ED7D05A /* Copy Pods Resources */,
-				86B463CD99BA36A3184D5560 /* Embed Pods Frameworks */,
+				16F443D310E08F018ED7D05A /* [CP] Copy Pods Resources */,
+				86B463CD99BA36A3184D5560 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -210,24 +190,6 @@
 			productName = PINRemoteImage;
 			productReference = 9DC09DB31C39AB0D00C6451E /* PINRemoteImage.app */;
 			productType = "com.apple.product-type.application";
-		};
-		9DC09DC51C39AB0D00C6451E /* PINRemoteImageTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9DC09DD21C39AB0D00C6451E /* Build configuration list for PBXNativeTarget "PINRemoteImageTests" */;
-			buildPhases = (
-				9DC09DC21C39AB0D00C6451E /* Sources */,
-				9DC09DC31C39AB0D00C6451E /* Frameworks */,
-				9DC09DC41C39AB0D00C6451E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				9DC09DC81C39AB0D00C6451E /* PBXTargetDependency */,
-			);
-			name = PINRemoteImageTests;
-			productName = PINRemoteImageTests;
-			productReference = 9DC09DC61C39AB0D00C6451E /* PINRemoteImageTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -240,10 +202,6 @@
 				TargetAttributes = {
 					9DC09DB21C39AB0D00C6451E = {
 						CreatedOnToolsVersion = 7.2;
-					};
-					9DC09DC51C39AB0D00C6451E = {
-						CreatedOnToolsVersion = 7.2;
-						TestTargetID = 9DC09DB21C39AB0D00C6451E;
 					};
 				};
 			};
@@ -261,7 +219,6 @@
 			projectRoot = "";
 			targets = (
 				9DC09DB21C39AB0D00C6451E /* PINRemoteImage */,
-				9DC09DC51C39AB0D00C6451E /* PINRemoteImageTests */,
 			);
 		};
 /* End PBXProject section */
@@ -282,24 +239,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9DC09DC41C39AB0D00C6451E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		16F443D310E08F018ED7D05A /* Copy Pods Resources */ = {
+		16F443D310E08F018ED7D05A /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -307,14 +257,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PINRemoteImage/Pods-PINRemoteImage-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		86B463CD99BA36A3184D5560 /* Embed Pods Frameworks */ = {
+		86B463CD99BA36A3184D5560 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -322,19 +272,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PINRemoteImage/Pods-PINRemoteImage-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8CFB37DD63603884BA1E041F /* Check Pods Manifest.lock */ = {
+		8CFB37DD63603884BA1E041F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -356,23 +306,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9DC09DC21C39AB0D00C6451E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9DC09DCB1C39AB0D00C6451E /* PINRemoteImageTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		9DC09DC81C39AB0D00C6451E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9DC09DB21C39AB0D00C6451E /* PINRemoteImage */;
-			targetProxy = 9DC09DC71C39AB0D00C6451E /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		9D97D09B1C3C4D960006C115 /* PINImageCollectionViewItemView.xib */ = {
@@ -499,32 +433,6 @@
 			};
 			name = Release;
 		};
-		9DC09DD31C39AB0D00C6451E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = PINRemoteImageTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.mischneider.PINRemoteImageTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PINRemoteImage.app/Contents/MacOS/PINRemoteImage";
-			};
-			name = Debug;
-		};
-		9DC09DD41C39AB0D00C6451E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = PINRemoteImageTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.mischneider.PINRemoteImageTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PINRemoteImage.app/Contents/MacOS/PINRemoteImage";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -542,15 +450,6 @@
 			buildConfigurations = (
 				9DC09DD01C39AB0D00C6451E /* Debug */,
 				9DC09DD11C39AB0D00C6451E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		9DC09DD21C39AB0D00C6451E /* Build configuration list for PBXNativeTarget "PINRemoteImageTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9DC09DD31C39AB0D00C6451E /* Debug */,
-				9DC09DD41C39AB0D00C6451E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

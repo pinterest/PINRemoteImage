@@ -9,7 +9,7 @@
 #import "ProgressiveViewController.h"
 
 #import <PINRemoteImage/PINImageView+PINRemoteImage.h>
-#import <PINCache/PINCache.h>
+#import <PINRemoteImage/PINRemoteImageCaching.h>
 
 @interface ProgressiveViewController ()
 @property (weak) IBOutlet NSImageView *imageView;
