@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param object An object to be assigned for the key. Pass `nil` to remove the existing object for this key.
  @param key A key to associate with the object. This string will be copied.
  */
-- (void)setObject:(nullable id)obj forKeyedSubscript:(NSString *)key;
+- (void)setObject:(nullable id)object forKeyedSubscript:(NSString *)key;
 
 @end
 

@@ -869,7 +869,7 @@ static NSURL *_sharedTrashURL;
     NSURL *fileURL = [self encodedFileURLForKey:key];
     
     [self lock];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:[fileURL path]]) {
+        if (fileURL.path && [[NSFileManager defaultManager] fileExistsAtPath:fileURL.path]) {
             if (updateFileModificationDate) {
                 [self asynchronouslySetFileModificationDate:now forURL:fileURL];
             }

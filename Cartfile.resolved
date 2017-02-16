@@ -1,3 +1,3 @@
-github "pinterest/PINCache" "54a00abf3ecad3b573a1e9390389234ad93236a2"
 github "pinterest/PINOperation" "1.0.3"
 git "https://chromium.googlesource.com/webm/libwebp" "v0.5.1"
+github "pinterest/PINCache" "d6b7800d60cc703bba10ad7da8670eac82798772"

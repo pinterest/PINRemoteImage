@@ -44,6 +44,4 @@ xcuserdata
 #
 Pods/
 
-# Carthage can't be ignored or else we can't build on checkout
-# Carthage/Checkouts
-# Carthage/Build
+Carthage/Build

@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6818C1491E55020400875DB7 /* PINCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC0105CE1E271A4900890935 /* PINCache.framework */; };
+		6818C2881E55217D00875DB7 /* PINOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6818C2871E55217D00875DB7 /* PINOperation.framework */; };
+		6818C28A1E55218400875DB7 /* PINOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6818C2891E55218400875DB7 /* PINOperation.framework */; };
+		6818C28C1E55218A00875DB7 /* PINOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6818C28B1E55218A00875DB7 /* PINOperation.framework */; };
 		687BB0AA1E52706B005D70C6 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CC0106CA1E28248800890935 /* Default-568h@2x.png */; };
-		687BB55A1E528174005D70C6 /* PINOperation.framework in Resources */ = {isa = PBXBuildFile; fileRef = CC01065C1E281CD900890935 /* PINOperation.framework */; };
-		687BB55D1E528198005D70C6 /* PINOperation.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC0106631E281CD900890935 /* PINOperation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		687BB55F1E528812005D70C6 /* PINOperation.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC01065F1E281CD900890935 /* PINOperation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		687BB5611E528826005D70C6 /* PINOperation.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC01065C1E281CD900890935 /* PINOperation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		68A0FC001E4D32C4000B552D /* PINCacheMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 68A0FBFF1E4D3282000B552D /* PINCacheMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		68A0FC011E4D32C6000B552D /* PINCacheMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 68A0FBFF1E4D3282000B552D /* PINCacheMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		68A0FC021E4D32C7000B552D /* PINCacheMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 68A0FBFF1E4D3282000B552D /* PINCacheMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -20,7 +20,6 @@
 		6928EED51E41610700B5D975 /* PINCaching.h in Headers */ = {isa = PBXBuildFile; fileRef = 6928EED21E4160EE00B5D975 /* PINCaching.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC0105DF1E271A5C00890935 /* PINCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC0105B11E271A1600890935 /* PINCache.framework */; };
 		CC0105EE1E271A6400890935 /* PINCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC0105C11E271A4000890935 /* PINCache.framework */; };
-		CC0105FD1E271A7300890935 /* PINCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC0105CE1E271A4900890935 /* PINCache.framework */; };
 		CC01060E1E271A9500890935 /* PINCache.m in Sources */ = {isa = PBXBuildFile; fileRef = CC0106061E271A9000890935 /* PINCache.m */; };
 		CC01060F1E271A9500890935 /* PINDiskCache.m in Sources */ = {isa = PBXBuildFile; fileRef = CC0106091E271A9000890935 /* PINDiskCache.m */; };
 		CC0106101E271A9500890935 /* PINMemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = CC01060B1E271A9000890935 /* PINMemoryCache.m */; };
@@ -42,9 +41,6 @@
 		CC0106201E271AB000890935 /* PINCacheObjectSubscripting.h in Headers */ = {isa = PBXBuildFile; fileRef = CC0106071E271A9000890935 /* PINCacheObjectSubscripting.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC0106211E271AB000890935 /* PINDiskCache.h in Headers */ = {isa = PBXBuildFile; fileRef = CC0106081E271A9000890935 /* PINDiskCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC0106221E271AB000890935 /* PINMemoryCache.h in Headers */ = {isa = PBXBuildFile; fileRef = CC01060A1E271A9000890935 /* PINMemoryCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		CC0106C21E281CEF00890935 /* PINOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC01065C1E281CD900890935 /* PINOperation.framework */; };
-		CC0106C31E281CF400890935 /* PINOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC0106631E281CD900890935 /* PINOperation.framework */; };
-		CC0106C41E281CF800890935 /* PINOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC01065F1E281CD900890935 /* PINOperation.framework */; };
 		CC0106C61E28226900890935 /* PINCacheTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CC01060D1E271A9000890935 /* PINCacheTests.m */; };
 		CC0106C71E28226A00890935 /* PINCacheTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CC01060D1E271A9000890935 /* PINCacheTests.m */; };
 		CC0106C81E28226A00890935 /* PINCacheTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CC01060D1E271A9000890935 /* PINCacheTests.m */; };
@@ -74,41 +70,6 @@
 			remoteGlobalIDString = CC0105CD1E271A4900890935;
 			remoteInfo = "PINCache-macOS";
 		};
-		CC0106B81E281CD900890935 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CC0106AA1E281CD900890935 /* PINOperation.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D07F1ED2171AFB7A001DBA02;
-			remoteInfo = PINOperationTests;
-		};
-		CC0106BA1E281CD900890935 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CC0106AA1E281CD900890935 /* PINOperation.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 6629FFED1A66B512009C10BD;
-			remoteInfo = iOS;
-		};
-		CC0106BC1E281CD900890935 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CC0106AA1E281CD900890935 /* PINOperation.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 662900111A66B60D009C10BD;
-			remoteInfo = "OS X";
-		};
-		CC0106BE1E281CD900890935 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CC0106AA1E281CD900890935 /* PINOperation.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 962F1E0C1CFC53540086E394;
-			remoteInfo = tvOS;
-		};
-		CC0106C01E281CD900890935 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CC0106AA1E281CD900890935 /* PINOperation.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = CC0105091E26EAD800890935;
-			remoteInfo = PINOperation;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -118,7 +79,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				687BB55D1E528198005D70C6 /* PINOperation.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,7 +88,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				687BB55F1E528812005D70C6 /* PINOperation.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,13 +97,15 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				687BB5611E528826005D70C6 /* PINOperation.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6818C2871E55217D00875DB7 /* PINOperation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PINOperation.framework; path = "../../Library/Developer/Xcode/DerivedData/PINCache-cxjnintatqynfgceozwzgezmeypl/Build/Products/Debug-iphonesimulator/PINOperation.framework"; sourceTree = "<group>"; };
+		6818C2891E55218400875DB7 /* PINOperation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PINOperation.framework; path = "../../Library/Developer/Xcode/DerivedData/PINCache-cxjnintatqynfgceozwzgezmeypl/Build/Products/Debug-appletvsimulator/PINOperation.framework"; sourceTree = "<group>"; };
+		6818C28B1E55218A00875DB7 /* PINOperation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PINOperation.framework; path = Carthage/Checkouts/PINOperation/build/Debug/PINOperation.framework; sourceTree = "<group>"; };
 		68A0FBFF1E4D3282000B552D /* PINCacheMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PINCacheMacros.h; sourceTree = "<group>"; };
 		6928EED21E4160EE00B5D975 /* PINCaching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINCaching.h; sourceTree = "<group>"; };
 		CC0105B11E271A1600890935 /* PINCache.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PINCache.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -162,69 +123,6 @@
 		CC01060B1E271A9000890935 /* PINMemoryCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PINMemoryCache.m; sourceTree = "<group>"; };
 		CC01060D1E271A9000890935 /* PINCacheTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PINCacheTests.m; sourceTree = "<group>"; };
 		CC0106441E281B0E00890935 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CC01065A1E281CD900890935 /* 09CF4BE4-5B71-301A-8408-3B9DCF7A88FA.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "09CF4BE4-5B71-301A-8408-3B9DCF7A88FA.bcsymbolmap"; sourceTree = "<group>"; };
-		CC01065B1E281CD900890935 /* 42CEED12-83E8-3775-BEF2-52804D11D71C.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "42CEED12-83E8-3775-BEF2-52804D11D71C.bcsymbolmap"; sourceTree = "<group>"; };
-		CC01065C1E281CD900890935 /* PINOperation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PINOperation.framework; sourceTree = "<group>"; };
-		CC01065D1E281CD900890935 /* PINOperation.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = PINOperation.framework.dSYM; sourceTree = "<group>"; };
-		CC01065F1E281CD900890935 /* PINOperation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PINOperation.framework; sourceTree = "<group>"; };
-		CC0106601E281CD900890935 /* PINOperation.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = PINOperation.framework.dSYM; sourceTree = "<group>"; };
-		CC0106621E281CD900890935 /* 30888767-4C7B-3B47-9601-65DBD48A5DD6.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "30888767-4C7B-3B47-9601-65DBD48A5DD6.bcsymbolmap"; sourceTree = "<group>"; };
-		CC0106631E281CD900890935 /* PINOperation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PINOperation.framework; sourceTree = "<group>"; };
-		CC0106641E281CD900890935 /* PINOperation.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = PINOperation.framework.dSYM; sourceTree = "<group>"; };
-		CC0106671E281CD900890935 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		CC0106681E281CD900890935 /* BUCK */ = {isa = PBXFileReference; lastKnownFileType = text; path = BUCK; sourceTree = "<group>"; };
-		CC0106691E281CD900890935 /* build_docs.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build_docs.sh; sourceTree = "<group>"; };
-		CC01066A1E281CD900890935 /* build_tests.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build_tests.sh; sourceTree = "<group>"; };
-		CC01066E1E281CD900890935 /* 09CF4BE4-5B71-301A-8408-3B9DCF7A88FA.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "09CF4BE4-5B71-301A-8408-3B9DCF7A88FA.bcsymbolmap"; sourceTree = "<group>"; };
-		CC01066F1E281CD900890935 /* 42CEED12-83E8-3775-BEF2-52804D11D71C.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "42CEED12-83E8-3775-BEF2-52804D11D71C.bcsymbolmap"; sourceTree = "<group>"; };
-		CC0106701E281CD900890935 /* PINOperation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PINOperation.framework; sourceTree = "<group>"; };
-		CC0106711E281CD900890935 /* PINOperation.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = PINOperation.framework.dSYM; sourceTree = "<group>"; };
-		CC0106731E281CD900890935 /* PINOperation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PINOperation.framework; sourceTree = "<group>"; };
-		CC0106741E281CD900890935 /* PINOperation.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = PINOperation.framework.dSYM; sourceTree = "<group>"; };
-		CC0106761E281CD900890935 /* 30888767-4C7B-3B47-9601-65DBD48A5DD6.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "30888767-4C7B-3B47-9601-65DBD48A5DD6.bcsymbolmap"; sourceTree = "<group>"; };
-		CC0106771E281CD900890935 /* PINOperation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PINOperation.framework; sourceTree = "<group>"; };
-		CC0106781E281CD900890935 /* PINOperation.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = PINOperation.framework.dSYM; sourceTree = "<group>"; };
-		CC0106791E281CD900890935 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
-		CC01067B1E281CD900890935 /* com.pinterest.PINOperationQueue-1.0.docset */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "com.pinterest.PINOperationQueue-1.0.docset"; sourceTree = "<group>"; };
-		CC01067E1E281CD900890935 /* PINOperationBlock.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = PINOperationBlock.html; sourceTree = "<group>"; };
-		CC0106801E281CD900890935 /* PINOperationQueuePriority.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = PINOperationQueuePriority.html; sourceTree = "<group>"; };
-		CC0106831E281CD900890935 /* _index.scss */ = {isa = PBXFileReference; lastKnownFileType = text; path = _index.scss; sourceTree = "<group>"; };
-		CC0106841E281CD900890935 /* _layout.scss */ = {isa = PBXFileReference; lastKnownFileType = text; path = _layout.scss; sourceTree = "<group>"; };
-		CC0106851E281CD900890935 /* _normalize.scss */ = {isa = PBXFileReference; lastKnownFileType = text; path = _normalize.scss; sourceTree = "<group>"; };
-		CC0106861E281CD900890935 /* _object.scss */ = {isa = PBXFileReference; lastKnownFileType = text; path = _object.scss; sourceTree = "<group>"; };
-		CC0106871E281CD900890935 /* _print.scss */ = {isa = PBXFileReference; lastKnownFileType = text; path = _print.scss; sourceTree = "<group>"; };
-		CC0106881E281CD900890935 /* _variables.scss */ = {isa = PBXFileReference; lastKnownFileType = text; path = _variables.scss; sourceTree = "<group>"; };
-		CC0106891E281CD900890935 /* _xcode.scss */ = {isa = PBXFileReference; lastKnownFileType = text; path = _xcode.scss; sourceTree = "<group>"; };
-		CC01068A1E281CD900890935 /* style.scss */ = {isa = PBXFileReference; lastKnownFileType = text; path = style.scss; sourceTree = "<group>"; };
-		CC01068B1E281CD900890935 /* hierarchy.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = hierarchy.html; sourceTree = "<group>"; };
-		CC01068D1E281CD900890935 /* button_bar_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_bar_background.png; sourceTree = "<group>"; };
-		CC01068E1E281CD900890935 /* disclosure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = disclosure.png; sourceTree = "<group>"; };
-		CC01068F1E281CD900890935 /* disclosure_open.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = disclosure_open.png; sourceTree = "<group>"; };
-		CC0106901E281CD900890935 /* library_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = library_background.png; sourceTree = "<group>"; };
-		CC0106911E281CD900890935 /* title_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = title_background.png; sourceTree = "<group>"; };
-		CC0106921E281CD900890935 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
-		CC0106941E281CD900890935 /* script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = script.js; sourceTree = "<group>"; };
-		CC0106961E281CD900890935 /* PINOperationReference.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = PINOperationReference.html; sourceTree = "<group>"; };
-		CC0106971E281CD900890935 /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
-		CC0106981E281CD900890935 /* makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = makefile; sourceTree = "<group>"; };
-		CC01069A1E281CD900890935 /* PINOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PINOperation.h; sourceTree = "<group>"; };
-		CC01069B1E281CD900890935 /* PINOperationGroup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PINOperationGroup.h; sourceTree = "<group>"; };
-		CC01069C1E281CD900890935 /* PINOperationGroup.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PINOperationGroup.m; sourceTree = "<group>"; };
-		CC01069D1E281CD900890935 /* PINOperationMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PINOperationMacros.h; sourceTree = "<group>"; };
-		CC01069E1E281CD900890935 /* PINOperationQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PINOperationQueue.h; sourceTree = "<group>"; };
-		CC01069F1E281CD900890935 /* PINOperationQueue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PINOperationQueue.m; sourceTree = "<group>"; };
-		CC0106A01E281CD900890935 /* PINOperationTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PINOperationTypes.h; sourceTree = "<group>"; };
-		CC0106A11E281CD900890935 /* PINOperation.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = PINOperation.podspec; sourceTree = "<group>"; };
-		CC0106A21E281CD900890935 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		CC0106A31E281CD900890935 /* run_tests_update_status.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = run_tests_update_status.sh; sourceTree = "<group>"; };
-		CC0106A51E281CD900890935 /* BUCK */ = {isa = PBXFileReference; lastKnownFileType = text; path = BUCK; sourceTree = "<group>"; };
-		CC0106A71E281CD900890935 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CC0106A91E281CD900890935 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CC0106AA1E281CD900890935 /* PINOperation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = PINOperation.xcodeproj; sourceTree = "<group>"; };
-		CC0106AE1E281CD900890935 /* PINOperationGroupTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PINOperationGroupTests.m; sourceTree = "<group>"; };
-		CC0106AF1E281CD900890935 /* PINOperationQueueTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PINOperationQueueTests.m; sourceTree = "<group>"; };
-		CC0106B01E281CD900890935 /* PINOperationTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PINOperationTests-Info.plist"; sourceTree = "<group>"; };
-		CC0106B21E281CD900890935 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CC0106C51E281D6900890935 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CC0106C91E28228300890935 /* PINCacheTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PINCacheTests.h; sourceTree = "<group>"; };
 		CC0106CA1E28248800890935 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -235,7 +133,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC0106C21E281CEF00890935 /* PINOperation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,7 +140,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC0106C31E281CF400890935 /* PINOperation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,7 +147,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC0106C41E281CF800890935 /* PINOperation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,6 +154,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6818C2881E55217D00875DB7 /* PINOperation.framework in Frameworks */,
 				CC0105DF1E271A5C00890935 /* PINCache.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -267,6 +163,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6818C28A1E55218400875DB7 /* PINOperation.framework in Frameworks */,
 				CC0105EE1E271A6400890935 /* PINCache.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -275,20 +172,31 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC0105FD1E271A7300890935 /* PINCache.framework in Frameworks */,
+				6818C28C1E55218A00875DB7 /* PINOperation.framework in Frameworks */,
+				6818C1491E55020400875DB7 /* PINCache.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6818C2861E55217D00875DB7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6818C28B1E55218A00875DB7 /* PINOperation.framework */,
+				6818C2891E55218400875DB7 /* PINOperation.framework */,
+				6818C2871E55217D00875DB7 /* PINOperation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		CC0105A71E271A1600890935 = {
 			isa = PBXGroup;
 			children = (
 				CC0106031E271A9000890935 /* Source */,
 				CC01060C1E271A9000890935 /* Tests */,
-				CC0106571E281CD900890935 /* Carthage */,
 				CC0105B21E271A1600890935 /* Products */,
+				6818C2861E55217D00875DB7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -331,296 +239,6 @@
 				CC01060D1E271A9000890935 /* PINCacheTests.m */,
 			);
 			path = Tests;
-			sourceTree = "<group>";
-		};
-		CC0106571E281CD900890935 /* Carthage */ = {
-			isa = PBXGroup;
-			children = (
-				CC0106581E281CD900890935 /* Build */,
-				CC0106651E281CD900890935 /* Checkouts */,
-			);
-			path = Carthage;
-			sourceTree = "<group>";
-		};
-		CC0106581E281CD900890935 /* Build */ = {
-			isa = PBXGroup;
-			children = (
-				CC0106591E281CD900890935 /* iOS */,
-				CC01065E1E281CD900890935 /* Mac */,
-				CC0106611E281CD900890935 /* tvOS */,
-			);
-			path = Build;
-			sourceTree = "<group>";
-		};
-		CC0106591E281CD900890935 /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				CC01065A1E281CD900890935 /* 09CF4BE4-5B71-301A-8408-3B9DCF7A88FA.bcsymbolmap */,
-				CC01065B1E281CD900890935 /* 42CEED12-83E8-3775-BEF2-52804D11D71C.bcsymbolmap */,
-				CC01065C1E281CD900890935 /* PINOperation.framework */,
-				CC01065D1E281CD900890935 /* PINOperation.framework.dSYM */,
-			);
-			path = iOS;
-			sourceTree = "<group>";
-		};
-		CC01065E1E281CD900890935 /* Mac */ = {
-			isa = PBXGroup;
-			children = (
-				CC01065F1E281CD900890935 /* PINOperation.framework */,
-				CC0106601E281CD900890935 /* PINOperation.framework.dSYM */,
-			);
-			path = Mac;
-			sourceTree = "<group>";
-		};
-		CC0106611E281CD900890935 /* tvOS */ = {
-			isa = PBXGroup;
-			children = (
-				CC0106621E281CD900890935 /* 30888767-4C7B-3B47-9601-65DBD48A5DD6.bcsymbolmap */,
-				CC0106631E281CD900890935 /* PINOperation.framework */,
-				CC0106641E281CD900890935 /* PINOperation.framework.dSYM */,
-			);
-			path = tvOS;
-			sourceTree = "<group>";
-		};
-		CC0106651E281CD900890935 /* Checkouts */ = {
-			isa = PBXGroup;
-			children = (
-				CC0106661E281CD900890935 /* PINOperation */,
-			);
-			path = Checkouts;
-			sourceTree = "<group>";
-		};
-		CC0106661E281CD900890935 /* PINOperation */ = {
-			isa = PBXGroup;
-			children = (
-				CC0106671E281CD900890935 /* .gitignore */,
-				CC0106681E281CD900890935 /* BUCK */,
-				CC0106691E281CD900890935 /* build_docs.sh */,
-				CC01066A1E281CD900890935 /* build_tests.sh */,
-				CC01066B1E281CD900890935 /* Carthage */,
-				CC0106791E281CD900890935 /* CHANGELOG.md */,
-				CC01067A1E281CD900890935 /* docs */,
-				CC0106971E281CD900890935 /* LICENSE.txt */,
-				CC0106981E281CD900890935 /* makefile */,
-				CC0106991E281CD900890935 /* PINOperation */,
-				CC0106A11E281CD900890935 /* PINOperation.podspec */,
-				CC0106A21E281CD900890935 /* README.md */,
-				CC0106A31E281CD900890935 /* run_tests_update_status.sh */,
-				CC0106A41E281CD900890935 /* tests */,
-			);
-			path = PINOperation;
-			sourceTree = "<group>";
-		};
-		CC01066B1E281CD900890935 /* Carthage */ = {
-			isa = PBXGroup;
-			children = (
-				CC01066C1E281CD900890935 /* Build */,
-			);
-			path = Carthage;
-			sourceTree = "<group>";
-		};
-		CC01066C1E281CD900890935 /* Build */ = {
-			isa = PBXGroup;
-			children = (
-				CC01066D1E281CD900890935 /* iOS */,
-				CC0106721E281CD900890935 /* Mac */,
-				CC0106751E281CD900890935 /* tvOS */,
-			);
-			path = Build;
-			sourceTree = "<group>";
-		};
-		CC01066D1E281CD900890935 /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				CC01066E1E281CD900890935 /* 09CF4BE4-5B71-301A-8408-3B9DCF7A88FA.bcsymbolmap */,
-				CC01066F1E281CD900890935 /* 42CEED12-83E8-3775-BEF2-52804D11D71C.bcsymbolmap */,
-				CC0106701E281CD900890935 /* PINOperation.framework */,
-				CC0106711E281CD900890935 /* PINOperation.framework.dSYM */,
-			);
-			path = iOS;
-			sourceTree = "<group>";
-		};
-		CC0106721E281CD900890935 /* Mac */ = {
-			isa = PBXGroup;
-			children = (
-				CC0106731E281CD900890935 /* PINOperation.framework */,
-				CC0106741E281CD900890935 /* PINOperation.framework.dSYM */,
-			);
-			path = Mac;
-			sourceTree = "<group>";
-		};
-		CC0106751E281CD900890935 /* tvOS */ = {
-			isa = PBXGroup;
-			children = (
-				CC0106761E281CD900890935 /* 30888767-4C7B-3B47-9601-65DBD48A5DD6.bcsymbolmap */,
-				CC0106771E281CD900890935 /* PINOperation.framework */,
-				CC0106781E281CD900890935 /* PINOperation.framework.dSYM */,
-			);
-			path = tvOS;
-			sourceTree = "<group>";
-		};
-		CC01067A1E281CD900890935 /* docs */ = {
-			isa = PBXGroup;
-			children = (
-				CC01067B1E281CD900890935 /* com.pinterest.PINOperationQueue-1.0.docset */,
-				CC01067C1E281CD900890935 /* html */,
-			);
-			path = docs;
-			sourceTree = "<group>";
-		};
-		CC01067C1E281CD900890935 /* html */ = {
-			isa = PBXGroup;
-			children = (
-				CC01067D1E281CD900890935 /* Blocks */,
-				CC01067F1E281CD900890935 /* Constants */,
-				CC0106811E281CD900890935 /* css */,
-				CC01068B1E281CD900890935 /* hierarchy.html */,
-				CC01068C1E281CD900890935 /* img */,
-				CC0106921E281CD900890935 /* index.html */,
-				CC0106931E281CD900890935 /* js */,
-				CC0106951E281CD900890935 /* Protocols */,
-			);
-			path = html;
-			sourceTree = "<group>";
-		};
-		CC01067D1E281CD900890935 /* Blocks */ = {
-			isa = PBXGroup;
-			children = (
-				CC01067E1E281CD900890935 /* PINOperationBlock.html */,
-			);
-			path = Blocks;
-			sourceTree = "<group>";
-		};
-		CC01067F1E281CD900890935 /* Constants */ = {
-			isa = PBXGroup;
-			children = (
-				CC0106801E281CD900890935 /* PINOperationQueuePriority.html */,
-			);
-			path = Constants;
-			sourceTree = "<group>";
-		};
-		CC0106811E281CD900890935 /* css */ = {
-			isa = PBXGroup;
-			children = (
-				CC0106821E281CD900890935 /* scss */,
-			);
-			path = css;
-			sourceTree = "<group>";
-		};
-		CC0106821E281CD900890935 /* scss */ = {
-			isa = PBXGroup;
-			children = (
-				CC0106831E281CD900890935 /* _index.scss */,
-				CC0106841E281CD900890935 /* _layout.scss */,
-				CC0106851E281CD900890935 /* _normalize.scss */,
-				CC0106861E281CD900890935 /* _object.scss */,
-				CC0106871E281CD900890935 /* _print.scss */,
-				CC0106881E281CD900890935 /* _variables.scss */,
-				CC0106891E281CD900890935 /* _xcode.scss */,
-				CC01068A1E281CD900890935 /* style.scss */,
-			);
-			path = scss;
-			sourceTree = "<group>";
-		};
-		CC01068C1E281CD900890935 /* img */ = {
-			isa = PBXGroup;
-			children = (
-				CC01068D1E281CD900890935 /* button_bar_background.png */,
-				CC01068E1E281CD900890935 /* disclosure.png */,
-				CC01068F1E281CD900890935 /* disclosure_open.png */,
-				CC0106901E281CD900890935 /* library_background.png */,
-				CC0106911E281CD900890935 /* title_background.png */,
-			);
-			path = img;
-			sourceTree = "<group>";
-		};
-		CC0106931E281CD900890935 /* js */ = {
-			isa = PBXGroup;
-			children = (
-				CC0106941E281CD900890935 /* script.js */,
-			);
-			path = js;
-			sourceTree = "<group>";
-		};
-		CC0106951E281CD900890935 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				CC0106961E281CD900890935 /* PINOperationReference.html */,
-			);
-			path = Protocols;
-			sourceTree = "<group>";
-		};
-		CC0106991E281CD900890935 /* PINOperation */ = {
-			isa = PBXGroup;
-			children = (
-				CC01069A1E281CD900890935 /* PINOperation.h */,
-				CC01069B1E281CD900890935 /* PINOperationGroup.h */,
-				CC01069C1E281CD900890935 /* PINOperationGroup.m */,
-				CC01069D1E281CD900890935 /* PINOperationMacros.h */,
-				CC01069E1E281CD900890935 /* PINOperationQueue.h */,
-				CC01069F1E281CD900890935 /* PINOperationQueue.m */,
-				CC0106A01E281CD900890935 /* PINOperationTypes.h */,
-			);
-			path = PINOperation;
-			sourceTree = "<group>";
-		};
-		CC0106A41E281CD900890935 /* tests */ = {
-			isa = PBXGroup;
-			children = (
-				CC0106A51E281CD900890935 /* BUCK */,
-				CC0106A61E281CD900890935 /* iOS */,
-				CC0106A81E281CD900890935 /* OS X */,
-				CC0106AA1E281CD900890935 /* PINOperation.xcodeproj */,
-				CC0106AD1E281CD900890935 /* PINOperationTests */,
-				CC0106B11E281CD900890935 /* tvOS */,
-			);
-			path = tests;
-			sourceTree = "<group>";
-		};
-		CC0106A61E281CD900890935 /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				CC0106A71E281CD900890935 /* Info.plist */,
-			);
-			path = iOS;
-			sourceTree = "<group>";
-		};
-		CC0106A81E281CD900890935 /* OS X */ = {
-			isa = PBXGroup;
-			children = (
-				CC0106A91E281CD900890935 /* Info.plist */,
-			);
-			path = "OS X";
-			sourceTree = "<group>";
-		};
-		CC0106AB1E281CD900890935 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				CC0106B91E281CD900890935 /* PINOperationQueueTests.xctest */,
-				CC0106BB1E281CD900890935 /* PINOperation.framework */,
-				CC0106BD1E281CD900890935 /* PINOperation.framework */,
-				CC0106BF1E281CD900890935 /* PINOperation.framework */,
-				CC0106C11E281CD900890935 /* libPINOperation.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		CC0106AD1E281CD900890935 /* PINOperationTests */ = {
-			isa = PBXGroup;
-			children = (
-				CC0106AE1E281CD900890935 /* PINOperationGroupTests.m */,
-				CC0106AF1E281CD900890935 /* PINOperationQueueTests.m */,
-				CC0106B01E281CD900890935 /* PINOperationTests-Info.plist */,
-			);
-			path = PINOperationTests;
-			sourceTree = "<group>";
-		};
-		CC0106B11E281CD900890935 /* tvOS */ = {
-			isa = PBXGroup;
-			children = (
-				CC0106B21E281CD900890935 /* Info.plist */,
-			);
-			path = tvOS;
 			sourceTree = "<group>";
 		};
 		CC0106CB1E28248A00890935 /* Assets */ = {
@@ -826,12 +444,6 @@
 			mainGroup = CC0105A71E271A1600890935;
 			productRefGroup = CC0105B21E271A1600890935 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = CC0106AB1E281CD900890935 /* Products */;
-					ProjectRef = CC0106AA1E281CD900890935 /* PINOperation.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				CC0105B01E271A1600890935 /* PINCache */,
@@ -843,44 +455,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		CC0106B91E281CD900890935 /* PINOperationQueueTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = PINOperationQueueTests.xctest;
-			remoteRef = CC0106B81E281CD900890935 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		CC0106BB1E281CD900890935 /* PINOperation.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = PINOperation.framework;
-			remoteRef = CC0106BA1E281CD900890935 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		CC0106BD1E281CD900890935 /* PINOperation.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = PINOperation.framework;
-			remoteRef = CC0106BC1E281CD900890935 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		CC0106BF1E281CD900890935 /* PINOperation.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = PINOperation.framework;
-			remoteRef = CC0106BE1E281CD900890935 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		CC0106C11E281CD900890935 /* libPINOperation.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libPINOperation.a;
-			remoteRef = CC0106C01E281CD900890935 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		CC0105AF1E271A1600890935 /* Resources */ = {
@@ -908,7 +482,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				687BB55A1E528174005D70C6 /* PINOperation.framework in Resources */,
 				687BB0AA1E52706B005D70C6 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1288,6 +861,10 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/build/Debug",
+				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
@@ -1302,6 +879,10 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/build/Debug",
+				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
