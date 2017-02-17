@@ -1143,7 +1143,7 @@ static dispatch_once_t sharedDispatchToken;
 
 - (nonnull PINRemoteImageManagerResult *)synchronousImageFromCacheWithURL:(NSURL *)url processorKey:(nullable NSString *)processorKey options:(PINRemoteImageManagerDownloadOptions)options
 {
-    return [self synchronousImageFromCacheWithURL:url processorKey:processorKey options:options];
+    return [self synchronousImageFromCacheWithURL:url processorKey:processorKey cacheKey:nil options:options];
 }
 
 - (PINRemoteImageManagerResult *)synchronousImageFromCacheWithURL:(NSURL *)url processorKey:(NSString *)processorKey cacheKey:(NSString *)cacheKey options:(PINRemoteImageManagerDownloadOptions)options
