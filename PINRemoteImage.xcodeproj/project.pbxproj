@@ -1289,9 +1289,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/build/Debug-iphoneos",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/build/Debug-iphoneos",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Checkouts/PINOperation/build/Debug-iphoneos",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
@@ -1312,9 +1309,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/build/Debug-iphoneos",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/build/Debug-iphoneos",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Checkouts/PINOperation/build/Debug-iphoneos",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
@@ -1446,9 +1440,6 @@
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/iOS",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/Mac",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/tvOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/Carthage/Build/Mac",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/Carthage/Build/tvOS",
 				);
 				GCC_PREFIX_HEADER = "Source/PINRemoteImage-Prefix.pch";
 				INFOPLIST_FILE = Source/Info.plist;
@@ -1480,9 +1471,6 @@
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/iOS",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/Mac",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/tvOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/Carthage/Build/Mac",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/Carthage/Build/tvOS",
 				);
 				GCC_PREFIX_HEADER = "Source/PINRemoteImage-Prefix.pch";
 				INFOPLIST_FILE = Source/Info.plist;
