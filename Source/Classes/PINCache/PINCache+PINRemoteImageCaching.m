@@ -74,3 +74,20 @@
 }
 
 @end
+
+@implementation PINRemoteImageManager (PINCache)
+
+- (PINCache <PINRemoteImageCaching> *)pinCache
+{
+  static BOOL isCachePINCache = NO;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    isCachePINCache = [self.cache isKindOfClass:[PINCache class]];
+  });
+  if (isCachePINCache) {
+    return (PINCache <PINRemoteImageCaching> *)self.cache;
+  }
+  return nil;
+}
+
+@end

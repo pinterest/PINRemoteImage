@@ -15,9 +15,6 @@
 #endif
 
 #import "PINRemoteImageMacros.h"
-#if USE_PINCACHE
-#import "PINCache+PINRemoteImageCaching.h"
-#endif
 
 #import "PINRemoteImageManagerResult.h"
 
@@ -135,11 +132,7 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
 /** An image downloading, processing and caching manager. It uses the concept of download and processing tasks to ensure that even if multiple calls to download or process an image are made, it only occurs one time (unless an item is no longer in the cache). PINRemoteImageManager is backed by GCD and safe to access from multiple threads simultaneously. It ensures that images are decoded off the main thread so that animation performance isn't affected. None of its exposed methods allow for synchronous access. However, it is optimized to call completions on the calling thread if an item is in its memory cache. **/
 @interface PINRemoteImageManager : NSObject
 
-#if USE_PINCACHE
-@property (nonatomic, readonly, nonnull) PINCache<PINRemoteImageCaching> *cache;
-#else
 @property (nonatomic, readonly, nonnull) id<PINRemoteImageCaching> cache;
-#endif
 
 /**
  Create and return a PINRemoteImageManager created with the specified configuration. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. Specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc.

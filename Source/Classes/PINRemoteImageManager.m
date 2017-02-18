@@ -122,11 +122,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 
 }
 
-#if USE_PINCACHE
-@property (nonatomic, strong) PINCache<PINRemoteImageCaching> *cache;
-#else
 @property (nonatomic, strong) id<PINRemoteImageCaching> cache;
-#endif
 @property (nonatomic, strong) PINURLSessionManager *sessionManager;
 @property (nonatomic, assign) NSTimeInterval timeout;
 @property (nonatomic, strong) NSMutableDictionary <NSString *, __kindof PINRemoteImageTask *> *tasks;
@@ -191,7 +187,8 @@ static dispatch_once_t sharedDispatchToken;
     return [self initWithSessionConfiguration:configuration alternativeRepresentationProvider:alternateRepProvider imageCache:nil];
 }
 
-- (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)configuration alternativeRepresentationProvider:(nullable id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepProvider
+- (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)configuration
+                   alternativeRepresentationProvider:(nullable id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepProvider
                                           imageCache:(nullable id<PINRemoteImageCaching>)imageCache
 {
     if (self = [super init]) {
