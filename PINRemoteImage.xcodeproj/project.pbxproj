@@ -95,7 +95,7 @@
 		6818C20B1E551D1E00875DB7 /* yuv.c in Sources */ = {isa = PBXBuildFile; fileRef = 6818C1CF1E551D1D00875DB7 /* yuv.c */; };
 		6818C20C1E551D1E00875DB7 /* yuv.h in Headers */ = {isa = PBXBuildFile; fileRef = 6818C1D01E551D1D00875DB7 /* yuv.h */; };
 		6818C22A1E551D7500875DB7 /* alpha.c in Sources */ = {isa = PBXBuildFile; fileRef = 6818C20E1E551D7500875DB7 /* alpha.c */; };
-		6818C22B1E551D7500875DB7 /* analysis.c in Sources */ = {isa = PBXBuildFile; fileRef = 6818C20F1E551D7500875DB7 /* analysis.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		6818C22B1E551D7500875DB7 /* analysis.c in Sources */ = {isa = PBXBuildFile; fileRef = 6818C20F1E551D7500875DB7 /* analysis.c */; settings = {COMPILER_FLAGS = "-Qunused-arguments -Xanalyzer -analyzer-disable-all-checks"; }; };
 		6818C22C1E551D7500875DB7 /* backward_references.c in Sources */ = {isa = PBXBuildFile; fileRef = 6818C2101E551D7500875DB7 /* backward_references.c */; };
 		6818C22D1E551D7500875DB7 /* backward_references.h in Headers */ = {isa = PBXBuildFile; fileRef = 6818C2111E551D7500875DB7 /* backward_references.h */; };
 		6818C22E1E551D7500875DB7 /* config.c in Sources */ = {isa = PBXBuildFile; fileRef = 6818C2121E551D7500875DB7 /* config.c */; };
@@ -163,7 +163,7 @@
 		68CA927C1DAEFF93008BECE2 /* PINRemoteImageBasicCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 68CA92791DAEFF93008BECE2 /* PINRemoteImageBasicCache.h */; };
 		68CA927D1DAEFF93008BECE2 /* PINRemoteImageBasicCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA927A1DAEFF93008BECE2 /* PINRemoteImageBasicCache.m */; };
 		68CA927E1DAEFF93008BECE2 /* PINRemoteImageCaching.h in Headers */ = {isa = PBXBuildFile; fileRef = 68CA927B1DAEFF93008BECE2 /* PINRemoteImageCaching.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		68CA92831DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.h in Headers */ = {isa = PBXBuildFile; fileRef = 68CA92811DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.h */; };
+		68CA92831DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.h in Headers */ = {isa = PBXBuildFile; fileRef = 68CA92811DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		68CA92841DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA92821DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.m */; };
 		68CA92891DB19C2F008BECE2 /* PINAnimatedImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 68CA92851DB19C2F008BECE2 /* PINAnimatedImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		68CA928A1DB19C2F008BECE2 /* PINAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA92861DB19C2F008BECE2 /* PINAnimatedImage.m */; };
@@ -1029,7 +1029,7 @@
 		F1B918C81BCF239200710963 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = Pinterest;
 				TargetAttributes = {
 					68A0FC181E523434000B552D = {
@@ -1337,8 +1337,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1389,8 +1391,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1426,6 +1430,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1441,15 +1446,9 @@
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/iOS",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/Mac",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/tvOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Checkouts/PINOperation/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Checkouts/PINOperation/Carthage/Build/Mac",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Checkouts/PINOperation/Carthage/Build/tvOS",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/Carthage/Build/iOS",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/Carthage/Build/Mac",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/Carthage/Build/tvOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/Carthage/Build/Mac",
-					"$(PROJECT_DIR)/Carthage/Checkouts/Carthage/Build/tvOS",
 				);
 				GCC_PREFIX_HEADER = "Source/PINRemoteImage-Prefix.pch";
 				INFOPLIST_FILE = Source/Info.plist;
@@ -1465,6 +1464,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1480,15 +1480,9 @@
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/iOS",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/Mac",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/tvOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Checkouts/PINOperation/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Checkouts/PINOperation/Carthage/Build/Mac",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Checkouts/PINOperation/Carthage/Build/tvOS",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/Carthage/Build/iOS",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/Carthage/Build/Mac",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/Carthage/Build/tvOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/Carthage/Build/Mac",
-					"$(PROJECT_DIR)/Carthage/Checkouts/Carthage/Build/tvOS",
 				);
 				GCC_PREFIX_HEADER = "Source/PINRemoteImage-Prefix.pch";
 				INFOPLIST_FILE = Source/Info.plist;
