@@ -192,6 +192,18 @@ __weak UIImageView *weakImageView = self.imageView;
 }];
 ```
 
+### Set some limits
+```
+PINCache *cache = [[PINRemoteImageManager sharedImageManager] pinCache];
+// Max memory cost is based on number of pixels, we estimate the size of one hundred 600x600 images as our max memory image cache.
+[[cache memoryCache] setCostLimit:600 * 600 * 100 * [[UIScreen mainScreen] scale]];
+
+// ~50 MB
+[[cache diskCache] setByteLimit:50 * 1024 * 1024];
+// 30 days
+[[cache diskCache] setAgeLimit:60 * 60 * 24 * 30];
+```
+
 ## Installation
 
 ### CocoaPods
