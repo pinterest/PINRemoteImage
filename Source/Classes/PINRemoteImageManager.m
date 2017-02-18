@@ -122,7 +122,11 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 
 }
 
+#if USE_PINCACHE
+@property (nonatomic, strong) PINCache<PINRemoteImageCaching> *cache;
+#else
 @property (nonatomic, strong) id<PINRemoteImageCaching> cache;
+#endif
 @property (nonatomic, strong) PINURLSessionManager *sessionManager;
 @property (nonatomic, assign) NSTimeInterval timeout;
 @property (nonatomic, strong) NSMutableDictionary <NSString *, __kindof PINRemoteImageTask *> *tasks;

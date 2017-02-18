@@ -11,6 +11,10 @@
 
 #import "PINRemoteImageMacros.h"
 
+#if USE_PINCACHE
+  #import "PINCache+PINRemoteImageCaching.h"
+#endif
+
 #import "PINRemoteImageManager.h"
 #import "PINRemoteImageCategoryManager.h"
 #import "PINRemoteImageManagerResult.h"
