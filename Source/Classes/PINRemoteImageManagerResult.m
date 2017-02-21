@@ -78,7 +78,7 @@
     description = [description stringByAppendingString:@"\n"];
     description = [description stringByAppendingString:[NSString stringWithFormat:@"UUID: %@", self.UUID]];
     description = [description stringByAppendingString:@"\n"];
-    description = [description stringByAppendingString:[NSString stringWithFormat:@"UUID: %f", self.renderedImageQuality]];
+    description = [description stringByAppendingString:[NSString stringWithFormat:@"renderedImageQuality: %f", self.renderedImageQuality]];
     return description;
 }
 
