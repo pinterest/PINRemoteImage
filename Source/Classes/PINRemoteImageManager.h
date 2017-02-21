@@ -14,10 +14,12 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-@protocol PINRemoteImageManagerAlternateRepresentationProvider;
-@protocol PINRemoteImageCaching;
+#import "PINRemoteImageMacros.h"
 
 #import "PINRemoteImageManagerResult.h"
+
+@protocol PINRemoteImageManagerAlternateRepresentationProvider;
+@protocol PINRemoteImageCaching;
 
 @class PINRemoteImageManagerResult;
 
@@ -129,7 +131,6 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
 
 /** An image downloading, processing and caching manager. It uses the concept of download and processing tasks to ensure that even if multiple calls to download or process an image are made, it only occurs one time (unless an item is no longer in the cache). PINRemoteImageManager is backed by GCD and safe to access from multiple threads simultaneously. It ensures that images are decoded off the main thread so that animation performance isn't affected. None of its exposed methods allow for synchronous access. However, it is optimized to call completions on the calling thread if an item is in its memory cache. **/
 @interface PINRemoteImageManager : NSObject
-
 
 @property (nonatomic, readonly, nonnull) id<PINRemoteImageCaching> cache;
 

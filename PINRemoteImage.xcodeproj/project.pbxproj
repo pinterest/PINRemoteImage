@@ -51,7 +51,7 @@
 		6818C1DF1E551D1D00875DB7 /* dec_mips_dsp_r2.c in Sources */ = {isa = PBXBuildFile; fileRef = 6818C1A31E551D1D00875DB7 /* dec_mips_dsp_r2.c */; };
 		6818C1E01E551D1D00875DB7 /* dec_mips32.c in Sources */ = {isa = PBXBuildFile; fileRef = 6818C1A41E551D1D00875DB7 /* dec_mips32.c */; };
 		6818C1E11E551D1D00875DB7 /* dec_msa.c in Sources */ = {isa = PBXBuildFile; fileRef = 6818C1A51E551D1D00875DB7 /* dec_msa.c */; };
-		6818C1E21E551D1D00875DB7 /* dec_neon.c in Sources */ = {isa = PBXBuildFile; fileRef = 6818C1A61E551D1D00875DB7 /* dec_neon.c */; };
+		6818C1E21E551D1D00875DB7 /* dec_neon.c in Sources */ = {isa = PBXBuildFile; fileRef = 6818C1A61E551D1D00875DB7 /* dec_neon.c */; settings = {COMPILER_FLAGS = "-Wconditional-uninitialized"; }; };
 		6818C1E31E551D1D00875DB7 /* dec_sse2.c in Sources */ = {isa = PBXBuildFile; fileRef = 6818C1A71E551D1D00875DB7 /* dec_sse2.c */; };
 		6818C1E41E551D1D00875DB7 /* dec_sse41.c in Sources */ = {isa = PBXBuildFile; fileRef = 6818C1A81E551D1D00875DB7 /* dec_sse41.c */; };
 		6818C1E51E551D1D00875DB7 /* dec.c in Sources */ = {isa = PBXBuildFile; fileRef = 6818C1A91E551D1D00875DB7 /* dec.c */; };
@@ -1289,9 +1289,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/build/Debug-iphoneos",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/build/Debug-iphoneos",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Checkouts/PINOperation/build/Debug-iphoneos",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
@@ -1312,9 +1309,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/build/Debug-iphoneos",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/build/Debug-iphoneos",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Checkouts/PINOperation/build/Debug-iphoneos",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
@@ -1446,9 +1440,6 @@
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/iOS",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/Mac",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/tvOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/Carthage/Build/Mac",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/Carthage/Build/tvOS",
 				);
 				GCC_PREFIX_HEADER = "Source/PINRemoteImage-Prefix.pch";
 				INFOPLIST_FILE = Source/Info.plist;
@@ -1480,9 +1471,6 @@
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/iOS",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/Mac",
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/tvOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/Carthage/Build/Mac",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINOperation/Carthage/Build/tvOS",
 				);
 				GCC_PREFIX_HEADER = "Source/PINRemoteImage-Prefix.pch";
 				INFOPLIST_FILE = Source/Info.plist;
