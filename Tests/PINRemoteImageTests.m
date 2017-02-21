@@ -269,6 +269,33 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
+- (void)testRequestConfigurationIsUsedForImageRequest
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Requestion configuration block was called image request"];
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    configuration.HTTPAdditionalHeaders = @{ @"X-Custom-Header" : @"Custom Header Value" };
+
+    self.imageManager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:configuration];
+    [self.imageManager setRequestConfiguration:^NSURLRequest * _Nonnull(NSURLRequest * _Nonnull request) {
+        NSMutableURLRequest *mutableRequest = [request mutableCopy];
+        [mutableRequest setValue:@"Custom Header 2 Value" forHTTPHeaderField:@"X-Custom-Header-2"];
+        return mutableRequest;
+    }];
+    
+    self.imageManager.sessionManager.delegate = self;
+    [self.imageManager downloadImageWithURL:[self headersURL]
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                                 completion:^(PINRemoteImageManagerResult *result)
+     {
+         NSDictionary *headers = [[NSJSONSerialization JSONObjectWithData:self.data options:NSJSONReadingMutableContainers error:nil] valueForKey:@"headers"];
+         XCTAssert([headers[@"X-Custom-Header"] isEqualToString:@"Custom Header Value"]);
+         XCTAssert([headers[@"X-Custom-Header-2"] isEqualToString:@"Custom Header 2 Value"]);
+
+         [expectation fulfill];
+     }];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
 - (void)testSkipFLAnimatedImageDownload
 {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Download animated image"];

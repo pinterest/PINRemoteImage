@@ -121,6 +121,16 @@ typedef void(^PINRemoteImageManagerAuthenticationChallengeCompletionHandler)(NSU
  */
 typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask * __nullable task, NSURLAuthenticationChallenge * __nonnull challenge, PINRemoteImageManagerAuthenticationChallengeCompletionHandler __nullable aHandler);
 
+
+/**
+ Request configuration handler. Used to modify a network request before it is executed.
+ Useful for adding custom, per-request headers.
+ 
+ @param request The request about to be executed
+ */
+typedef NSURLRequest * _Nonnull(^PINRemoteImageManagerRequestConfigurationHandler)(NSURLRequest * __nonnull request);
+
+
 /**
  Handler called for many PINRemoteImage tasks providing the progress of the download.
  
@@ -191,6 +201,13 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  * @param header A string field for header.
  */
 - (void)setValue:(nullable NSString *)value forHTTPHeaderField:(nullable NSString *)header;
+
+/**
+ Sets the Request Configuration Block.
+ 
+ @param configurationBlock A PINRemoteImageManagerRequestConfigurationHandler block.
+ */
+- (void)setRequestConfiguration:(nullable PINRemoteImageManagerRequestConfigurationHandler)configurationBlock;
 
 /**
  Set the Authentication Challenge Block.

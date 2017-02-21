@@ -121,6 +121,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 @property (nonatomic, assign) float lowQualityBPSThreshold;
 @property (nonatomic, assign) BOOL shouldUpgradeLowQualityImages;
 @property (nonatomic, copy) PINRemoteImageManagerAuthenticationChallenge authenticationChallengeHandler;
+@property (nonatomic, copy) PINRemoteImageManagerRequestConfigurationHandler requestConfigurationHandler;
 @property (nonatomic, strong) NSMutableDictionary <NSString *, NSString *> *httpHeaderFields;
 #if DEBUG
 @property (nonatomic, assign) float currentBPS;
@@ -277,6 +278,16 @@ static dispatch_once_t sharedDispatchToken;
         typeof(self) strongSelf = weakSelf;
         [strongSelf lock];
             strongSelf.httpHeaderFields[[header copy]] = [value copy];
+        [strongSelf unlock];
+    });
+}
+
+- (void)setRequestConfiguration:(PINRemoteImageManagerRequestConfigurationHandler)configurationBlock {
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        typeof(self) strongSelf = weakSelf;
+        [strongSelf lock];
+        strongSelf.requestConfigurationHandler = configurationBlock;
         [strongSelf unlock];
     });
 }
@@ -919,6 +930,10 @@ static dispatch_once_t sharedDispatchToken;
     
     if (headers.count > 0) {
         request.allHTTPHeaderFields = headers;
+    }
+    
+    if (self.requestConfigurationHandler) {
+        request = [self.requestConfigurationHandler(request) mutableCopy];
     }
     
     [NSURLProtocol setProperty:key forKey:PINRemoteImageCacheKey inRequest:request];
