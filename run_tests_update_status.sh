@@ -7,7 +7,7 @@ BUILDKITE_BUILD_URL=$3
 
 function updateStatus() {
   if [ "${BUILDKITE_PULL_REQUEST}" != "false" ] ; then
-    ${UPDATE_STATUS_PATH} "pinterest" "PINRemoteImage" ${BUILDKITE_PULL_REQUEST} "$1" ${BUILDKITE_BUILD_URL} "$2" "CI/Pinterest"
+    ${UPDATE_STATUS_PATH} "pinterest" "PINRemoteImage" ${BUILDKITE_PULL_REQUEST} "$1" ${BUILDKITE_BUILD_URL} "$2" "CI/Pinterest" "$3"
   fi
 }
 
@@ -20,18 +20,21 @@ fi
 trapped="false"
 function trap_handler() {
     if [[ "$trapped" = "false" ]]; then
-        updateStatus failure "Tests failed…"
+        updateStatus "failure" "Tests failed…" `pwd`/log.txt
         echo "Tests failed, updated status to failure"
+        rm `pwd`/log.txt
     fi
     trapped="true"
 }
 trap trap_handler INT TERM EXIT
 
-updateStatus pending "Starting build…"
+updateStatus "pending" "Starting build…"
 
-make all
+make all 2>&1|tee `pwd`/log.txt
 
-updateStatus success "Tests passed"
+rm `pwd`/log.txt
+
+updateStatus "success" "Tests passed"
 
 echo "All tests succeeded, updated status to success"
 trap - EXIT
