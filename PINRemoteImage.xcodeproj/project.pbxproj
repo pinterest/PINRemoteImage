@@ -788,14 +788,30 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		CC4243F61E62051900FD6517 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				F1B918DE1BCF23C800710963 /* NSData+ImageDetectors.h */,
+				F1B918DF1BCF23C800710963 /* NSData+ImageDetectors.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
 		F165DFD61BD021E30008C6E8 /* Public */ = {
 			isa = PBXGroup;
 			children = (
 				F1B918E41BCF23C800710963 /* Image Categories */,
+				CC4243F61E62051900FD6517 /* Categories */,
+				68CA92801DB19C06008BECE2 /* PINCache */,
 				F1B918EF1BCF23C800710963 /* PINRemoteImage.h */,
+				68F0EA8E1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.h */,
+				68F0EA8F1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m */,
+				68CA92851DB19C2F008BECE2 /* PINAnimatedImage.h */,
+				68CA92861DB19C2F008BECE2 /* PINAnimatedImage.m */,
 				F165DFD81BD0504A0008C6E8 /* PINRemoteImageMacros.h */,
 				F1B918ED1BCF23C800710963 /* PINProgressiveImage.h */,
 				F1B918EE1BCF23C800710963 /* PINProgressiveImage.m */,
+				68CA927B1DAEFF93008BECE2 /* PINRemoteImageCaching.h */,
 				F1B918F21BCF23C800710963 /* PINRemoteImageCategoryManager.h */,
 				F1B918DC1BCF23C800710963 /* PINRemoteImageCategoryManager.m */,
 				F1B918F51BCF23C800710963 /* PINRemoteImageManager.h */,
@@ -812,10 +828,7 @@
 		F165DFD71BD021EE0008C6E8 /* Project */ = {
 			isa = PBXGroup;
 			children = (
-				68CA92801DB19C06008BECE2 /* PINCache */,
 				F1B918DD1BCF23C800710963 /* Categories */,
-				68CA92851DB19C2F008BECE2 /* PINAnimatedImage.h */,
-				68CA92861DB19C2F008BECE2 /* PINAnimatedImage.m */,
 				68CA92871DB19C2F008BECE2 /* PINAnimatedImageManager.h */,
 				68CA92881DB19C2F008BECE2 /* PINAnimatedImageManager.m */,
 				F1B918EB1BCF23C800710963 /* PINDataTaskOperation.h */,
@@ -830,13 +843,10 @@
 				F1B918FC1BCF23C800710963 /* PINRemoteImageTask.m */,
 				6858C0731C9CC5BA00E420EB /* PINRemoteLock.h */,
 				6858C0741C9CC5BA00E420EB /* PINRemoteLock.m */,
-				68F0EA8E1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.h */,
-				68F0EA8F1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m */,
 				68F0EA901CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.h */,
 				68F0EA911CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.m */,
 				68CA92791DAEFF93008BECE2 /* PINRemoteImageBasicCache.h */,
 				68CA927A1DAEFF93008BECE2 /* PINRemoteImageBasicCache.m */,
-				68CA927B1DAEFF93008BECE2 /* PINRemoteImageCaching.h */,
 			);
 			name = Project;
 			path = Classes;
@@ -880,8 +890,6 @@
 			children = (
 				68A6B1D91E5248BF003A92D1 /* PINImage+ScaledImage.m */,
 				68A6B1DA1E5248BF003A92D1 /* PINImage+ScaledImage.h */,
-				F1B918DE1BCF23C800710963 /* NSData+ImageDetectors.h */,
-				F1B918DF1BCF23C800710963 /* NSData+ImageDetectors.m */,
 				9DD47FA01C699FDC00F12CA0 /* PINImage+DecodedImage.h */,
 				9DD47FA11C699FDC00F12CA0 /* PINImage+DecodedImage.m */,
 				9DD47FA21C699FDC00F12CA0 /* PINImage+WebP.h */,
