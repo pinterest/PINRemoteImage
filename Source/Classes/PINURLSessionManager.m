@@ -8,6 +8,8 @@
 
 #import "PINURLSessionManager.h"
 
+#import "NSURLSessionDataTask+SupportsResume.h"
+
 NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
 
 @interface PINURLSessionManager () <NSURLSessionDelegate, NSURLSessionDataDelegate>
@@ -71,6 +73,23 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
 }
 
 #pragma mark NSURLSessionDataDelegate
+
+- (void)URLSession:(NSURLSession *)session dataTask:(nonnull NSURLSessionDataTask *)dataTask didReceiveResponse:(nonnull NSURLResponse *)response completionHandler:(nonnull void (^)(NSURLSessionResponseDisposition))completionHandler
+{
+    //TODO change this to NO
+    BOOL supportsResume = YES;
+    if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        if ([[[httpResponse allHeaderFields] objectForKey:@"Accept-Ranges"] isEqualToString:@"bytes"]) {
+            supportsResume = YES;
+        }
+    }
+    
+    if (supportsResume) {
+        dataTask.supportsResume = YES;
+    }
+    completionHandler(NSURLSessionResponseAllow);
+}
 
 - (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
 {

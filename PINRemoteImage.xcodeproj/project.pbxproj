@@ -160,6 +160,8 @@
 		68A0FC1E1E523434000B552D /* PINRemoteImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1B918D11BCF239200710963 /* PINRemoteImage.framework */; };
 		68A6B1DB1E5248BF003A92D1 /* PINImage+ScaledImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A6B1D91E5248BF003A92D1 /* PINImage+ScaledImage.m */; };
 		68A6B1DC1E5248BF003A92D1 /* PINImage+ScaledImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 68A6B1DA1E5248BF003A92D1 /* PINImage+ScaledImage.h */; };
+		68B1F2721E6795A300ED87C4 /* NSURLSessionDataTask+SupportsResume.h in Headers */ = {isa = PBXBuildFile; fileRef = 68B1F2701E6795A300ED87C4 /* NSURLSessionDataTask+SupportsResume.h */; };
+		68B1F2731E6795A300ED87C4 /* NSURLSessionDataTask+SupportsResume.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B1F2711E6795A300ED87C4 /* NSURLSessionDataTask+SupportsResume.m */; };
 		68CA927C1DAEFF93008BECE2 /* PINRemoteImageBasicCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 68CA92791DAEFF93008BECE2 /* PINRemoteImageBasicCache.h */; };
 		68CA927D1DAEFF93008BECE2 /* PINRemoteImageBasicCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA927A1DAEFF93008BECE2 /* PINRemoteImageBasicCache.m */; };
 		68CA927E1DAEFF93008BECE2 /* PINRemoteImageCaching.h in Headers */ = {isa = PBXBuildFile; fileRef = 68CA927B1DAEFF93008BECE2 /* PINRemoteImageCaching.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -446,6 +448,8 @@
 		68A0FC1D1E523434000B552D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		68A6B1D91E5248BF003A92D1 /* PINImage+ScaledImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PINImage+ScaledImage.m"; sourceTree = "<group>"; };
 		68A6B1DA1E5248BF003A92D1 /* PINImage+ScaledImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PINImage+ScaledImage.h"; sourceTree = "<group>"; };
+		68B1F2701E6795A300ED87C4 /* NSURLSessionDataTask+SupportsResume.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLSessionDataTask+SupportsResume.h"; sourceTree = "<group>"; };
+		68B1F2711E6795A300ED87C4 /* NSURLSessionDataTask+SupportsResume.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLSessionDataTask+SupportsResume.m"; sourceTree = "<group>"; };
 		68CA92791DAEFF93008BECE2 /* PINRemoteImageBasicCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageBasicCache.h; sourceTree = "<group>"; };
 		68CA927A1DAEFF93008BECE2 /* PINRemoteImageBasicCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageBasicCache.m; sourceTree = "<group>"; };
 		68CA927B1DAEFF93008BECE2 /* PINRemoteImageCaching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageCaching.h; sourceTree = "<group>"; };
@@ -888,8 +892,10 @@
 		F1B918DD1BCF23C800710963 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				68A6B1D91E5248BF003A92D1 /* PINImage+ScaledImage.m */,
+				68B1F2701E6795A300ED87C4 /* NSURLSessionDataTask+SupportsResume.h */,
+				68B1F2711E6795A300ED87C4 /* NSURLSessionDataTask+SupportsResume.m */,
 				68A6B1DA1E5248BF003A92D1 /* PINImage+ScaledImage.h */,
+				68A6B1D91E5248BF003A92D1 /* PINImage+ScaledImage.m */,
 				9DD47FA01C699FDC00F12CA0 /* PINImage+DecodedImage.h */,
 				9DD47FA11C699FDC00F12CA0 /* PINImage+DecodedImage.m */,
 				9DD47FA21C699FDC00F12CA0 /* PINImage+WebP.h */,
@@ -934,6 +940,7 @@
 				68CA92831DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.h in Headers */,
 				6818C18C1E551CE000875DB7 /* vp8li.h in Headers */,
 				6818C26E1E551DA800875DB7 /* bit_reader.h in Headers */,
+				68B1F2721E6795A300ED87C4 /* NSURLSessionDataTask+SupportsResume.h in Headers */,
 				6818C22D1E551D7500875DB7 /* backward_references.h in Headers */,
 				6818C2731E551DA800875DB7 /* endian_inl.h in Headers */,
 				6818C1821E551CE000875DB7 /* common.h in Headers */,
@@ -1254,6 +1261,7 @@
 				6818C23E1E551D7500875DB7 /* quant.c in Sources */,
 				6818C1DC1E551D1D00875DB7 /* cost.c in Sources */,
 				6818C2001E551D1D00875DB7 /* rescaler_mips32.c in Sources */,
+				68B1F2731E6795A300ED87C4 /* NSURLSessionDataTask+SupportsResume.m in Sources */,
 				9DD47FA71C699FDC00F12CA0 /* PINImage+WebP.m in Sources */,
 				68A6B1DB1E5248BF003A92D1 /* PINImage+ScaledImage.m in Sources */,
 				6818C1871E551CE000875DB7 /* quant.c in Sources */,

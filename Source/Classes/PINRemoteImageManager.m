@@ -953,6 +953,12 @@ static dispatch_once_t sharedDispatchToken;
             }
             
             completion(data, error);
+        } else {
+            [strongSelf lock];
+                PINRemoteImageDownloadTask *task = [strongSelf.tasks objectForKey:key];
+                NSData *data = task.progressImage.data;
+            [strongSelf unlock];
+            NSLog(@"We should probably store some restore data of length: %d", data.length);
         }
     }];
     
@@ -1018,28 +1024,35 @@ static dispatch_once_t sharedDispatchToken;
 
 - (void)cancelTaskWithUUID:(NSUUID *)UUID
 {
+    [self cancelTaskWithUUID:UUID shouldAttemptToResume:NO];
+}
+
+- (void)cancelTaskWithUUID:(NSUUID *)UUID shouldAttemptToResume:(BOOL)shouldAttemptToResume
+{
     if (UUID == nil) {
         return;
     }
     PINLog(@"Attempting to cancel UUID: %@", UUID);
     __weak typeof(self) weakSelf = self;
-    [_concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityHigh block:^
-     {
-         typeof(self) strongSelf = weakSelf;
-         [strongSelf lock];
-             NSString *taskKey = nil;
-             PINRemoteImageTask *taskToEvaluate = [strongSelf _locked_taskForUUID:UUID key:&taskKey];
+    [_concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityHigh block:^{
+        typeof(self) strongSelf = weakSelf;
+        [strongSelf lock];
+            NSString *taskKey = nil;
+            PINRemoteImageTask *taskToEvaluate = [strongSelf _locked_taskForUUID:UUID key:&taskKey];
 
-             if (taskToEvaluate == nil) {
-                 //maybe task hasn't been added to task list yet, add it to canceled tasks.
-                 //there's no need to ever remove a UUID from canceledTasks because it is weak.
-                 [strongSelf.canceledTasks addObject:UUID];
-             }
+            if (taskToEvaluate == nil) {
+                //maybe task hasn't been added to task list yet, add it to canceled tasks.
+                //there's no need to ever remove a UUID from canceledTasks because it is weak.
+                [strongSelf.canceledTasks addObject:UUID];
+            }
 
-             if ([taskToEvaluate cancelWithUUID:UUID manager:strongSelf]) {
-                 [strongSelf.tasks removeObjectForKey:taskKey];
-             }
-         [strongSelf unlock];
+            if ([taskToEvaluate cancelWithUUID:UUID manager:strongSelf]) {
+                if (shouldAttemptToResume && [taskToEvaluate isKindOfClass:[PINRemoteImageDownloadTask class]]) {
+                    taskToEvaluate
+                }
+                [strongSelf.tasks removeObjectForKey:taskKey];
+            }
+        [strongSelf unlock];
      }];
 }
 

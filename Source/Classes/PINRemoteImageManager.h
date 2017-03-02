@@ -519,6 +519,8 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  */
 - (void)cancelTaskWithUUID:(nonnull NSUUID *)UUID;
 
+- (void)cancelTaskWithUUID:(nonnull NSUUID *)UUID shouldAttemptToResume:(BOOL)shouldAttemptToResume;
+
 /**
  Set the priority of a download task. Since there is only one task per download, the priority of the download task will always be the last priority this method was called with.
  
