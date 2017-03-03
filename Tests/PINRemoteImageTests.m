@@ -1029,7 +1029,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     checkConcurrentDownloads = ^{
         usleep(10000);
         [self.imageManager.sessionManager concurrentDownloads:^(NSUInteger concurrentDownloads) {
-            XCTAssert(concurrentDownloads <= maxConcurrentDownloads + 1, @"conurrent downloads: %lu", concurrentDownloads);
+            XCTAssert(concurrentDownloads <= maxConcurrentDownloads, @"conurrent downloads: %lu", concurrentDownloads);
             checkConcurrentDownloads();
         }];
     };

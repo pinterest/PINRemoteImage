@@ -92,7 +92,6 @@
             if (queue) {
                 NSURLSessionDataTask *task = [queue firstObject];
                 [queue removeObjectAtIndex:0];
-                NSLog(@"resuming task: %@", task.originalRequest.URL);
                 [task resume];
                 
                 _runningOperationCount++;
