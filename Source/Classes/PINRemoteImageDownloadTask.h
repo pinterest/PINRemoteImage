@@ -8,11 +8,10 @@
 
 #import "PINRemoteImageTask.h"
 #import "PINProgressiveImage.h"
-#import "PINDataTaskOperation.h"
 
 @interface PINRemoteImageDownloadTask : PINRemoteImageTask
 
-@property (nonatomic, strong, nullable) PINDataTaskOperation *urlSessionTaskOperation;
+@property (nonatomic, strong, nullable) NSURLSessionDataTask *urlSessionTask;
 @property (nonatomic, assign) CFTimeInterval sessionTaskStartTime;
 @property (nonatomic, assign) CFTimeInterval sessionTaskEndTime;
 @property (nonatomic, assign) BOOL hasProgressBlocks;

@@ -63,16 +63,15 @@ typedef NS_OPTIONS(NSUInteger, PINRemoteImageManagerDownloadOptions) {
  Priority to download and process image at.
  */
 typedef NS_ENUM(NSUInteger, PINRemoteImageManagerPriority) {
-    /** Very low priority */
-    PINRemoteImageManagerPriorityVeryLow = 0,
     /** Low priority */
-    PINRemoteImageManagerPriorityLow,
-    /** Medium priority */
-    PINRemoteImageManagerPriorityMedium,
+    PINRemoteImageManagerPriorityLow = 0,
+    /** Default priority */
+    PINRemoteImageManagerPriorityDefault,
     /** High priority */
     PINRemoteImageManagerPriorityHigh,
-    /** Very high priority */
-    PINRemoteImageManagerPriorityVeryHigh,
+    PINRemoteImageManagerPriorityVeryHigh DEPRECATED_ATTRIBUTE = PINRemoteImageManagerPriorityHigh,
+    PINRemoteImageManagerPriorityVeryLow DEPRECATED_ATTRIBUTE = PINRemoteImageManagerPriorityLow,
+    PINRemoteImageManagerPriorityMedium DEPRECATED_ATTRIBUTE = PINRemoteImageManagerPriorityDefault,
 };
 
 NSOperationQueuePriority operationPriorityWithImageManagerPriority(PINRemoteImageManagerPriority priority);
