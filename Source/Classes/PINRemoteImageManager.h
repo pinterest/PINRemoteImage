@@ -74,7 +74,6 @@ typedef NS_ENUM(NSUInteger, PINRemoteImageManagerPriority) {
     PINRemoteImageManagerPriorityMedium DEPRECATED_ATTRIBUTE = PINRemoteImageManagerPriorityDefault,
 };
 
-NSOperationQueuePriority operationPriorityWithImageManagerPriority(PINRemoteImageManagerPriority priority);
 float dataTaskPriorityWithImageManagerPriority(PINRemoteImageManagerPriority priority);
 
 /**
