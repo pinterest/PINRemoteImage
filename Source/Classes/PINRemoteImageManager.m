@@ -1021,7 +1021,7 @@ static dispatch_once_t sharedDispatchToken;
                  
                  if ([taskToEvaluate isKindOfClass:[PINRemoteImageDownloadTask class]]) {
                      PINRemoteImageDownloadTask *downloadTask = (PINRemoteImageDownloadTask *)taskToEvaluate;
-                     [self.urlSessionTaskQueue dequeueDownload:downloadTask.urlSessionTask];
+                     [strongSelf.urlSessionTaskQueue dequeueDownload:downloadTask.urlSessionTask];
                  }
              }
          [strongSelf unlock];
@@ -1042,7 +1042,7 @@ static dispatch_once_t sharedDispatchToken;
             [task setPriority:priority];
             if ([task isKindOfClass:[PINRemoteImageDownloadTask class]]) {
                 PINRemoteImageDownloadTask *downloadTask = (PINRemoteImageDownloadTask *)task;
-                [self.urlSessionTaskQueue setTaskQueuePriority:downloadTask.urlSessionTask priority:priority];
+                [strongSelf.urlSessionTaskQueue setTaskQueuePriority:downloadTask.urlSessionTask priority:priority];
             }
         [strongSelf unlock];
     }];
