@@ -194,7 +194,7 @@ static dispatch_once_t sharedDispatchToken;
         if (PINNSOperationSupportsQOS) {
             _concurrentOperationQueue.qualityOfService = NSQualityOfServiceUtility;
         }
-        _urlSessionTaskQueue = [[PINRemoteImageDownloadQueue alloc] initWithMaximumNumberOfOperations:10];
+        _urlSessionTaskQueue = [PINRemoteImageDownloadQueue queueWithMaxConcurrentDownloads:10];
         
         self.sessionManager = [[PINURLSessionManager alloc] initWithSessionConfiguration:configuration];
         self.sessionManager.delegate = self;
@@ -307,7 +307,7 @@ static dispatch_once_t sharedDispatchToken;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         typeof(self) strongSelf = weakSelf;
         [strongSelf lock];
-            strongSelf.urlSessionTaskQueue.maximumNumberOfOperations = maxNumberOfConcurrentDownloads;
+            strongSelf.urlSessionTaskQueue.maxNumberOfConcurrentDownloads = maxNumberOfConcurrentDownloads;
         [strongSelf unlock];
         if (completion) {
             completion();
@@ -1021,7 +1021,7 @@ static dispatch_once_t sharedDispatchToken;
                  
                  if ([taskToEvaluate isKindOfClass:[PINRemoteImageDownloadTask class]]) {
                      PINRemoteImageDownloadTask *downloadTask = (PINRemoteImageDownloadTask *)taskToEvaluate;
-                     [strongSelf.urlSessionTaskQueue dequeueDownload:downloadTask.urlSessionTask];
+                     [strongSelf.urlSessionTaskQueue removeDownloadTaskFromQueue:downloadTask.urlSessionTask];
                  }
              }
          [strongSelf unlock];
@@ -1042,7 +1042,7 @@ static dispatch_once_t sharedDispatchToken;
             [task setPriority:priority];
             if ([task isKindOfClass:[PINRemoteImageDownloadTask class]]) {
                 PINRemoteImageDownloadTask *downloadTask = (PINRemoteImageDownloadTask *)task;
-                [strongSelf.urlSessionTaskQueue setTaskQueuePriority:downloadTask.urlSessionTask priority:priority];
+                [strongSelf.urlSessionTaskQueue setQueuePriority:priority forTask:downloadTask.urlSessionTask];
             }
         [strongSelf unlock];
     }];

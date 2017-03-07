@@ -25,12 +25,17 @@
 
 @implementation PINRemoteImageDownloadQueue
 
-@synthesize maximumNumberOfOperations = _maximumNumberOfOperations;
+@synthesize maxNumberOfConcurrentDownloads = _maxNumberOfConcurrentDownloads;
 
-- (PINRemoteImageDownloadQueue *)initWithMaximumNumberOfOperations:(NSUInteger)maximumNumberOfOperations
++ (PINRemoteImageDownloadQueue *)queueWithMaxConcurrentDownloads:(NSUInteger)maxNumberOfConcurrentDownloads
+{
+    return [[PINRemoteImageDownloadQueue alloc] initWithMaxConcurrentDownloads:maxNumberOfConcurrentDownloads];
+}
+
+- (PINRemoteImageDownloadQueue *)initWithMaxConcurrentDownloads:(NSUInteger)maxNumberOfConcurrentDownloads
 {
     if (self = [super init]) {
-        _maximumNumberOfOperations = maximumNumberOfOperations;
+        _maxNumberOfConcurrentDownloads = maxNumberOfConcurrentDownloads;
         
         _lock = [[PINRemoteLock alloc] initWithName:@"PINRemoteImageDownloadQueue Lock"];
         _highPriorityQueuedOperations = [[NSMutableArray alloc] init];
@@ -40,18 +45,18 @@
     return self;
 }
 
-- (NSUInteger)maximumNumberOfOperations
+- (NSUInteger)maxNumberOfConcurrentDownloads
 {
     [self lock];
-        NSUInteger maximumNumberOfOperations = _maximumNumberOfOperations;
+        NSUInteger maxNumberOfConcurrentDownloads = _maxNumberOfConcurrentDownloads;
     [self unlock];
-    return maximumNumberOfOperations;
+    return maxNumberOfConcurrentDownloads;
 }
 
-- (void)setMaximumNumberOfOperations:(NSUInteger)maximumNumberOfOperations
+- (void)setMaxNumberOfConcurrentDownloads:(NSUInteger)maxNumberOfConcurrentDownloads
 {
     [self lock];
-        _maximumNumberOfOperations = maximumNumberOfOperations;
+        _maxNumberOfConcurrentDownloads = maxNumberOfConcurrentDownloads;
     [self unlock];
 }
 
@@ -69,7 +74,7 @@
         [self scheduleDownloadsIfNeeded];
     }];
     
-    [self setTaskQueuePriority:dataTask priority:priority];
+    [self setQueuePriority:priority forTask:dataTask];
     
     [self scheduleDownloadsIfNeeded];
     
@@ -79,7 +84,7 @@
 - (void)scheduleDownloadsIfNeeded
 {
     [self lock];
-        if (_runningOperationCount < _maximumNumberOfOperations) {
+        if (_runningOperationCount < _maxNumberOfConcurrentDownloads) {
             NSMutableArray <NSURLSessionDataTask *> *queue = nil;
             if (_highPriorityQueuedOperations.count > 0) {
                 [_highPriorityQueuedOperations removeObjectAtIndex:0];
@@ -100,7 +105,7 @@
     [self unlock];
 }
 
-- (void)dequeueDownload:(NSURLSessionDataTask *)downloadTask
+- (void)removeDownloadTaskFromQueue:(NSURLSessionDataTask *)downloadTask
 {
     [self lock];
         [_highPriorityQueuedOperations removeObject:downloadTask];
@@ -109,9 +114,9 @@
     [self unlock];
 }
 
-- (void)setTaskQueuePriority:(NSURLSessionDataTask *)downloadTask priority:(PINRemoteImageManagerPriority)priority
+- (void)setQueuePriority:(PINRemoteImageManagerPriority)priority forTask:(NSURLSessionDataTask *)downloadTask
 {
-    [self dequeueDownload:downloadTask];
+    [self removeDownloadTaskFromQueue:downloadTask];
     
     NSMutableArray <NSURLSessionDataTask *> *queue = nil;
     [self lock];

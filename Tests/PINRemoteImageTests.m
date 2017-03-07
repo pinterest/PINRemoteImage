@@ -1002,7 +1002,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 {
     __block NSInteger count = 0;
     NSUInteger totalDownloads = [self bigURLs].count;
-    static NSUInteger maxConcurrentDownloads = 2;
+    static NSUInteger maxNumberOfConcurrentDownloads = 2;
     NSLock *countLock = [[NSLock alloc] init];
     XCTestExpectation *expectation = [self expectationWithDescription:@"All images downloaded"];
     
@@ -1016,7 +1016,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     };
     
     __weak typeof(self) weakSelf = self;
-    [self.imageManager setMaxNumberOfConcurrentDownloads:maxConcurrentDownloads completion:^{
+    [self.imageManager setMaxNumberOfConcurrentDownloads:maxNumberOfConcurrentDownloads completion:^{
         for (NSUInteger idx = 0; idx < totalDownloads; idx++) {
             [weakSelf.imageManager downloadImageWithURL:[weakSelf bigURLs][idx] completion:imageCompletion];
         }
@@ -1029,7 +1029,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     checkConcurrentDownloads = ^{
         usleep(10000);
         [self.imageManager.sessionManager concurrentDownloads:^(NSUInteger concurrentDownloads) {
-            XCTAssert(concurrentDownloads <= maxConcurrentDownloads, @"conurrent downloads: %lu", concurrentDownloads);
+            XCTAssert(concurrentDownloads <= maxNumberOfConcurrentDownloads, @"conurrent downloads: %lu", concurrentDownloads);
             checkConcurrentDownloads();
         }];
     };

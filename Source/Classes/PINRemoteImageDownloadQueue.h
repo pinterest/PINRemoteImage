@@ -18,19 +18,27 @@ typedef void (^PINRemoteImageDownloadCompletion)(NSURLResponse *response, NSErro
 
 @interface PINRemoteImageDownloadQueue : NSObject
 
-@property (nonatomic, assign) NSUInteger maximumNumberOfOperations;
+@property (nonatomic, assign) NSUInteger maxNumberOfConcurrentDownloads;
 
 - (instancetype)init NS_UNAVAILABLE;
-- (PINRemoteImageDownloadQueue *)initWithMaximumNumberOfOperations:(NSUInteger)maximumNumberOfOperations NS_DESIGNATED_INITIALIZER;
++ (PINRemoteImageDownloadQueue *)queueWithMaxConcurrentDownloads:(NSUInteger)maxNumberOfConcurrentDownloads;
 
 - (NSURLSessionDataTask *)addDownloadWithSessionManager:(PINURLSessionManager *)sessionManager
                                                 request:(NSURLRequest *)request
                                                priority:(PINRemoteImageManagerPriority)priority
                                       completionHandler:(PINRemoteImageDownloadCompletion)completionHandler;
 
-- (void)dequeueDownload:(NSURLSessionDataTask *)downloadTask;
+/*
+ This prevents a task from being run if it hasn't already started yet. It is the caller's responsibility to cancel
+ the task if it has already been started.
+ */
+- (void)removeDownloadTaskFromQueue:(NSURLSessionDataTask *)downloadTask;
 
-- (void)setTaskQueuePriority:(NSURLSessionDataTask *)downloadTask priority:(PINRemoteImageManagerPriority)priority;
+/*
+ This sets the tasks priority of execution. It is the caller's responsibility to set the priority on the task itself
+ for NSURLSessionManager.
+ */
+- (void)setQueuePriority:(PINRemoteImageManagerPriority)priority forTask:(NSURLSessionDataTask *)downloadTask;
 
 NS_ASSUME_NONNULL_END
 
