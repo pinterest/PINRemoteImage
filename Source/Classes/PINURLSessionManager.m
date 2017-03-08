@@ -148,4 +148,14 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
     });
 }
 
+#if DEBUG
+- (void)concurrentDownloads:(void (^_Nullable)(NSUInteger concurrentDownloads))concurrentDownloadsCompletion
+{
+    [self.session getAllTasksWithCompletionHandler:^(NSArray<__kindof NSURLSessionTask *> * _Nonnull tasks) {
+        concurrentDownloadsCompletion(tasks.count);
+    }];
+}
+
+#endif
+
 @end

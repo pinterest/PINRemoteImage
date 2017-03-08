@@ -32,4 +32,8 @@ extern NSString * __nonnull const PINURLErrorDomain;
 
 @property (atomic, weak, nullable) id <PINURLSessionManagerDelegate> delegate;
 
+#if DEBUG
+- (void)concurrentDownloads:(void (^_Nullable)(NSUInteger concurrentDownloads))concurrentDownloadsCompletion;
+#endif
+
 @end

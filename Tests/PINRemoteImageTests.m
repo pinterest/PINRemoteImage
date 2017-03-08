@@ -136,6 +136,21 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     return [NSURL URLWithString:@"https://placekitten.com/g/200/301?longarg=helloMomHowAreYouDoing.IamFineJustMovedToLiveWithANiceChapWeTravelTogetherInHisBlueBoxThroughSpaceAndTimeMaybeYouveMetHimAlready.YesterdayWeMetACultureOfPeopleWithTentaclesWhoSingWithAVeryCelestialVoice.SoGood.SeeYouSoon.MaybeYesterday.WhoKnows.XOXO"];
 }
 
+- (NSArray <NSURL *> *)bigURLs
+{
+    static dispatch_once_t onceToken;
+    static NSArray *bigURLs;
+    dispatch_once(&onceToken, ^{
+        bigURLs = @[[NSURL URLWithString:@"https://images.unsplash.com/photo-1483388381485-344c3a9ded7f"],
+                    [NSURL URLWithString:@"https://images.unsplash.com/photo-1483279745275-2a5d5a1074d2"],
+                    [NSURL URLWithString:@"https://images.unsplash.com/photo-1483127140828-af66a3429184"],
+                    [NSURL URLWithString:@"https://images.unsplash.com/photo-1482160310982-3adf8b38daef"],
+                    ];
+    });
+    
+    return bigURLs;
+}
+
 #pragma mark - <PINURLSessionManagerDelegate>
 
 - (void)didReceiveData:(NSData *)data forTask:(NSURLSessionTask *)task
@@ -704,7 +719,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     
     XCTAssert(dispatch_group_wait(group, [self timeout]) == 0, @"Group timed out.");
     
-    XCTAssert(self.imageManager.totalDownloads <= 1, @"image downloaded too many times");
+    XCTAssert(self.imageManager.totalDownloads <= 1, @"image downloaded too many times: %lu", self.imageManager.totalDownloads);
     XCTAssert([image isKindOfClass:[UIImage class]], @"result image is not a UIImage");
 }
 
@@ -981,6 +996,49 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 		 [expectation fulfill];
 	 }];
 	[self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
+- (void)testMaximumNumberOfDownloads
+{
+    __block NSInteger count = 0;
+    NSUInteger totalDownloads = [self bigURLs].count;
+    static NSUInteger maxNumberOfConcurrentDownloads = 2;
+    NSLock *countLock = [[NSLock alloc] init];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"All images downloaded"];
+    
+    void (^imageCompletion) (PINRemoteImageManagerResult* _Nonnull result) = ^(PINRemoteImageManagerResult * _Nonnull result) {
+        [countLock lock];
+        count++;
+        if (count == totalDownloads) {
+            [expectation fulfill];
+        }
+        [countLock unlock];
+    };
+    
+    __weak typeof(self) weakSelf = self;
+    [self.imageManager setMaxNumberOfConcurrentDownloads:maxNumberOfConcurrentDownloads completion:^{
+        for (NSUInteger idx = 0; idx < totalDownloads; idx++) {
+            [weakSelf.imageManager downloadImageWithURL:[weakSelf bigURLs][idx] completion:imageCompletion];
+        }
+    }];
+    
+    //I want this retain cycle
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-retain-cycles"
+    __block void (^checkConcurrentDownloads) ();
+    checkConcurrentDownloads = ^{
+        usleep(10000);
+        [self.imageManager.sessionManager concurrentDownloads:^(NSUInteger concurrentDownloads) {
+            XCTAssert(concurrentDownloads <= maxNumberOfConcurrentDownloads, @"conurrent downloads: %lu", concurrentDownloads);
+            checkConcurrentDownloads();
+        }];
+    };
+#pragma clang diagnostic pop
+    
+    checkConcurrentDownloads();
+    
+    //Give this one a bit longer since these are big images.
+    [self waitForExpectationsWithTimeout:30 handler:nil];
 }
 
 @end
