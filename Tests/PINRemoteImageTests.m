@@ -719,7 +719,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     
     XCTAssert(dispatch_group_wait(group, [self timeout]) == 0, @"Group timed out.");
     
-    XCTAssert(self.imageManager.totalDownloads <= 1, @"image downloaded too many times: %lu", self.imageManager.totalDownloads);
+    XCTAssert(self.imageManager.totalDownloads <= 1, @"image downloaded too many times: %lu", (unsigned long)self.imageManager.totalDownloads);
     XCTAssert([image isKindOfClass:[UIImage class]], @"result image is not a UIImage");
 }
 
@@ -1029,7 +1029,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     checkConcurrentDownloads = ^{
         usleep(10000);
         [self.imageManager.sessionManager concurrentDownloads:^(NSUInteger concurrentDownloads) {
-            XCTAssert(concurrentDownloads <= maxNumberOfConcurrentDownloads, @"conurrent downloads: %lu", concurrentDownloads);
+            XCTAssert(concurrentDownloads <= maxNumberOfConcurrentDownloads, @"concurrent downloads: %lu", (unsigned long)concurrentDownloads);
             checkConcurrentDownloads();
         }];
     };

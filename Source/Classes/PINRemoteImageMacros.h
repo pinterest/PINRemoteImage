@@ -41,7 +41,7 @@
 #define PINImage     NSImage
 #define PINImageView NSImageView
 #define PINButton    NSButton
-#define PINNSOperationSupportsBlur (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber_iOS_10_10)
+#define PINNSOperationSupportsBlur (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber10_10)
 #define PINNSURLSessionTaskSupportsPriority (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber10_10)
 #endif
 

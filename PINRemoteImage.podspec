@@ -29,6 +29,7 @@ Pod::Spec.new do |s|
   
   ### Subspecs
   s.subspec 'Core' do |cs|
+    cs.dependency 'PINOperation'
     cs.ios.deployment_target = ios_deployment
     cs.tvos.deployment_target = tvos_deployment
     cs.osx.deployment_target = osx_deployment
