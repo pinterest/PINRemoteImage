@@ -22,11 +22,13 @@ extern NSString * __nonnull const PINURLErrorDomain;
 
 @end
 
+typedef void (^PINURLSessionDataTaskCompletion)(NSURLSessionTask * _Nonnull task, NSError * _Nullable error);
+
 @interface PINURLSessionManager : NSObject
 
 - (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)configuration;
 
-- (nonnull NSURLSessionDataTask *)dataTaskWithRequest:(nonnull NSURLRequest *)request completionHandler:(nullable void (^)(NSURLResponse * _Nonnull response, NSError * _Nullable error))completionHandler;
+- (nonnull NSURLSessionDataTask *)dataTaskWithRequest:(nonnull NSURLRequest *)request completionHandler:(nonnull PINURLSessionDataTaskCompletion)completionHandler;
 
 - (void)invalidateSessionAndCancelTasks;
 

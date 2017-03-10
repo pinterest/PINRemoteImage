@@ -1034,7 +1034,9 @@ static dispatch_once_t sharedDispatchToken;
             [task setPriority:priority];
             if ([task isKindOfClass:[PINRemoteImageDownloadTask class]]) {
                 PINRemoteImageDownloadTask *downloadTask = (PINRemoteImageDownloadTask *)task;
-                [strongSelf.urlSessionTaskQueue setQueuePriority:priority forTask:downloadTask.urlSessionTask];
+                if (downloadTask.urlSessionTask) {
+                    [strongSelf.urlSessionTaskQueue setQueuePriority:priority forTask:downloadTask.urlSessionTask];
+                }
             }
         [strongSelf unlock];
     } withPriority:PINOperationQueuePriorityHigh];

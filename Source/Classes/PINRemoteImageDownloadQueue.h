@@ -14,7 +14,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void (^PINRemoteImageDownloadCompletion)(NSURLResponse *response, NSError *error);
+typedef void (^PINRemoteImageDownloadCompletion)(NSURLResponse * _Nullable response, NSError *error);
 
 @interface PINRemoteImageDownloadQueue : NSObject
 
@@ -28,11 +28,13 @@ typedef void (^PINRemoteImageDownloadCompletion)(NSURLResponse *response, NSErro
                                                priority:(PINRemoteImageManagerPriority)priority
                                       completionHandler:(PINRemoteImageDownloadCompletion)completionHandler;
 
-/*
+/***
  This prevents a task from being run if it hasn't already started yet. It is the caller's responsibility to cancel
  the task if it has already been started.
+ 
+ @return BOOL Returns YES if the task was in the queue. 
  */
-- (void)removeDownloadTaskFromQueue:(NSURLSessionDataTask *)downloadTask;
+- (BOOL)removeDownloadTaskFromQueue:(NSURLSessionDataTask *)downloadTask;
 
 /*
  This sets the tasks priority of execution. It is the caller's responsibility to set the priority on the task itself

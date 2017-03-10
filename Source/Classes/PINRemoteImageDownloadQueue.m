@@ -13,12 +13,12 @@
 
 @interface PINRemoteImageDownloadQueue ()
 {
-    NSUInteger _runningOperationCount;
     PINRemoteLock *_lock;
     
-    NSMutableArray <NSURLSessionDataTask *> *_highPriorityQueuedOperations;
-    NSMutableArray <NSURLSessionDataTask *> *_defaultPriorityQueuedOperations;
-    NSMutableArray <NSURLSessionDataTask *> *_lowPriorityQueuedOperations;
+    NSMutableOrderedSet <NSURLSessionDataTask *> *_highPriorityQueuedOperations;
+    NSMutableOrderedSet <NSURLSessionDataTask *> *_defaultPriorityQueuedOperations;
+    NSMutableOrderedSet <NSURLSessionDataTask *> *_lowPriorityQueuedOperations;
+    NSMutableSet <NSURLSessionTask *> *_runningTasks;
 }
 
 @end
@@ -38,9 +38,10 @@
         _maxNumberOfConcurrentDownloads = maxNumberOfConcurrentDownloads;
         
         _lock = [[PINRemoteLock alloc] initWithName:@"PINRemoteImageDownloadQueue Lock"];
-        _highPriorityQueuedOperations = [[NSMutableArray alloc] init];
-        _defaultPriorityQueuedOperations = [[NSMutableArray alloc] init];
-        _lowPriorityQueuedOperations = [[NSMutableArray alloc] init];
+        _highPriorityQueuedOperations = [[NSMutableOrderedSet alloc] init];
+        _defaultPriorityQueuedOperations = [[NSMutableOrderedSet alloc] init];
+        _lowPriorityQueuedOperations = [[NSMutableOrderedSet alloc] init];
+        _runningTasks = [[NSMutableSet alloc] init];
     }
     return self;
 }
@@ -65,16 +66,16 @@
                                                priority:(PINRemoteImageManagerPriority)priority
                                       completionHandler:(PINRemoteImageDownloadCompletion)completionHandler
 {
-    NSURLSessionDataTask *dataTask = [sessionManager dataTaskWithRequest:request completionHandler:^(NSURLResponse *response, NSError *error) {
-        completionHandler(response, error);
+    NSURLSessionDataTask *dataTask = [sessionManager dataTaskWithRequest:request completionHandler:^(NSURLSessionTask *task, NSError *error) {
+        completionHandler(task.response, error);
         [self lock];
-            _runningOperationCount--;
+            [_runningTasks removeObject:task];
         [self unlock];
         
         [self scheduleDownloadsIfNeeded];
     }];
     
-    [self setQueuePriority:priority forTask:dataTask];
+    [self setQueuePriority:priority forTask:dataTask addIfNecessary:YES];
     
     [self scheduleDownloadsIfNeeded];
     
@@ -84,10 +85,10 @@
 - (void)scheduleDownloadsIfNeeded
 {
     [self lock];
-        if (_runningOperationCount < _maxNumberOfConcurrentDownloads) {
-            NSMutableArray <NSURLSessionDataTask *> *queue = nil;
+        if (_runningTasks.count < _maxNumberOfConcurrentDownloads) {
+            NSMutableOrderedSet <NSURLSessionDataTask *> *queue = nil;
             if (_highPriorityQueuedOperations.count > 0) {
-                [_highPriorityQueuedOperations removeObjectAtIndex:0];
+                queue = _highPriorityQueuedOperations;
             } else if (_defaultPriorityQueuedOperations.count > 0) {
                 queue = _defaultPriorityQueuedOperations;
             } else if (_lowPriorityQueuedOperations.count > 0) {
@@ -99,42 +100,62 @@
                 [queue removeObjectAtIndex:0];
                 [task resume];
                 
-                _runningOperationCount++;
+                [_runningTasks addObject:task];
             }
         }
     [self unlock];
 }
 
-- (void)removeDownloadTaskFromQueue:(NSURLSessionDataTask *)downloadTask
+- (BOOL)removeDownloadTaskFromQueue:(NSURLSessionDataTask *)downloadTask
 {
+    BOOL containsTask = NO;
     [self lock];
-        [_highPriorityQueuedOperations removeObject:downloadTask];
-        [_defaultPriorityQueuedOperations removeObject:downloadTask];
-        [_lowPriorityQueuedOperations removeObject:downloadTask];
+        if ([_highPriorityQueuedOperations containsObject:downloadTask]) {
+            containsTask = YES;
+            [_highPriorityQueuedOperations removeObject:downloadTask];
+        } else if ([_defaultPriorityQueuedOperations containsObject:downloadTask]) {
+            containsTask = YES;
+            [_defaultPriorityQueuedOperations removeObject:downloadTask];
+        } else if ([_lowPriorityQueuedOperations containsObject:downloadTask]) {
+            containsTask = YES;
+            [_lowPriorityQueuedOperations removeObject:downloadTask];
+        }
     [self unlock];
+    return containsTask;
 }
 
 - (void)setQueuePriority:(PINRemoteImageManagerPriority)priority forTask:(NSURLSessionDataTask *)downloadTask
 {
-    [self removeDownloadTaskFromQueue:downloadTask];
+    [self setQueuePriority:priority forTask:downloadTask addIfNecessary:NO];
+}
+
+- (void)setQueuePriority:(PINRemoteImageManagerPriority)priority forTask:(NSURLSessionDataTask *)downloadTask addIfNecessary:(BOOL)addIfNecessary
+{
+    BOOL containsTask = [self removeDownloadTaskFromQueue:downloadTask];
     
-    NSMutableArray <NSURLSessionDataTask *> *queue = nil;
-    [self lock];
-        switch (priority) {
-            case PINRemoteImageManagerPriorityLow:
-                queue = _lowPriorityQueuedOperations;
-                break;
-                
-            case PINRemoteImageManagerPriorityDefault:
-                queue = _defaultPriorityQueuedOperations;
-                break;
-                
-            case PINRemoteImageManagerPriorityHigh:
-                queue = _highPriorityQueuedOperations;
-                break;
-        }
-        [queue addObject:downloadTask];
-    [self unlock];
+    if (containsTask || addIfNecessary) {
+        NSMutableOrderedSet <NSURLSessionDataTask *> *queue = nil;
+        [self lock];
+            switch (priority) {
+                case PINRemoteImageManagerPriorityLow:
+                    queue = _lowPriorityQueuedOperations;
+                    break;
+                    
+                case PINRemoteImageManagerPriorityDefault:
+                    queue = _defaultPriorityQueuedOperations;
+                    break;
+                    
+                case PINRemoteImageManagerPriorityHigh:
+                    queue = _highPriorityQueuedOperations;
+                    break;
+                    
+                default:
+                    NSAssert(NO, @"invalid priority: %d", priority);
+                    break;
+            }
+            [queue addObject:downloadTask];
+        [self unlock];
+    }
 }
 
 - (void)lock
