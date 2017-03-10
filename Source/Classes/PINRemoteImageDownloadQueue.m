@@ -148,6 +148,10 @@
                 case PINRemoteImageManagerPriorityHigh:
                     queue = _highPriorityQueuedOperations;
                     break;
+                    
+                default:
+                    NSAssert(NO, @"invalid priority: %d", priority);
+                    break;
             }
             [queue addObject:downloadTask];
         [self unlock];
