@@ -19,7 +19,6 @@
     NSMutableOrderedSet <NSURLSessionDataTask *> *_defaultPriorityQueuedOperations;
     NSMutableOrderedSet <NSURLSessionDataTask *> *_lowPriorityQueuedOperations;
     NSMutableSet <NSURLSessionTask *> *_runningTasks;
-    NSMutableSet <NSNumber *> *_identifiers;
 }
 
 @end
@@ -43,7 +42,6 @@
         _defaultPriorityQueuedOperations = [[NSMutableOrderedSet alloc] init];
         _lowPriorityQueuedOperations = [[NSMutableOrderedSet alloc] init];
         _runningTasks = [[NSMutableSet alloc] init];
-        _identifiers = [[NSMutableSet alloc] init];
     }
     return self;
 }
@@ -103,7 +101,6 @@
                 [task resume];
                 
                 [_runningTasks addObject:task];
-                [_identifiers addObject:@(task.taskIdentifier)];
             }
         }
     [self unlock];
