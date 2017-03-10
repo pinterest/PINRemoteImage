@@ -22,7 +22,7 @@ extern NSString * __nonnull const PINURLErrorDomain;
 
 @end
 
-typedef void (^PINURLSessionDataTaskCompletion)(NSURLSessionDataTask * _Nonnull task, NSError * _Nullable error);
+typedef void (^PINURLSessionDataTaskCompletion)(NSURLSessionTask * _Nonnull task, NSError * _Nullable error);
 
 @interface PINURLSessionManager : NSObject
 

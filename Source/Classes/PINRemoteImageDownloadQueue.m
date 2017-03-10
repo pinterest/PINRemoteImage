@@ -66,10 +66,10 @@
                                                priority:(PINRemoteImageManagerPriority)priority
                                       completionHandler:(PINRemoteImageDownloadCompletion)completionHandler
 {
-    NSURLSessionDataTask *dataTask = [sessionManager dataTaskWithRequest:request completionHandler:^(NSURLSessionDataTask *dataTask, NSError *error) {
-        completionHandler(dataTask.response, error);
+    NSURLSessionDataTask *dataTask = [sessionManager dataTaskWithRequest:request completionHandler:^(NSURLSessionTask *task, NSError *error) {
+        completionHandler(task.response, error);
         [self lock];
-            [_runningTasks removeObject:dataTask];
+            [_runningTasks removeObject:task];
         [self unlock];
         
         [self scheduleDownloadsIfNeeded];
@@ -86,7 +86,7 @@
 {
     [self lock];
         if (_runningTasks.count < _maxNumberOfConcurrentDownloads) {
-            NSMutableArray <NSURLSessionDataTask *> *queue = nil;
+            NSMutableOrderedSet <NSURLSessionDataTask *> *queue = nil;
             if (_highPriorityQueuedOperations.count > 0) {
                 queue = _highPriorityQueuedOperations;
             } else if (_defaultPriorityQueuedOperations.count > 0) {
@@ -134,7 +134,7 @@
     BOOL containsTask = [self removeDownloadTaskFromQueue:downloadTask];
     
     if (containsTask || addIfNecessary) {
-        NSMutableArray <NSURLSessionDataTask *> *queue = nil;
+        NSMutableOrderedSet <NSURLSessionDataTask *> *queue = nil;
         [self lock];
             switch (priority) {
                 case PINRemoteImageManagerPriorityLow:
