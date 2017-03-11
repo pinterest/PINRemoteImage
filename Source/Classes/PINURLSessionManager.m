@@ -72,6 +72,20 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
 
 #pragma mark NSURLSessionDataDelegate
 
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)task didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler
+{
+    [self lock];
+        dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
+    [self unlock];
+    
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(delegateQueue, ^{
+        typeof(self) strongSelf = weakSelf;
+        [strongSelf.delegate didReceiveResponse:response forTask:task];
+    });
+    completionHandler(NSURLSessionResponseAllow);
+}
+
 - (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
 {
     if ([self.delegate respondsToSelector:@selector(didReceiveAuthenticationChallenge:forTask:completionHandler:)]) {
@@ -81,7 +95,6 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
         if (completionHandler) {
             completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
         }
-        
     }
 }
 

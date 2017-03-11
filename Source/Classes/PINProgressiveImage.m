@@ -22,6 +22,7 @@
 @property (nonatomic, assign) CGSize size;
 @property (nonatomic, assign) BOOL isProgressiveJPEG;
 @property (nonatomic, assign) NSUInteger currentThreshold;
+@property (nonatomic, assign) NSUInteger startingBytes;
 @property (nonatomic, assign) float bytesPerSecond;
 @property (nonatomic, assign) NSUInteger scannedByte;
 @property (nonatomic, assign) NSInteger sosCount;
@@ -116,9 +117,13 @@
     return startTime;
 }
 
-- (void)updateProgressiveImageWithData:(NSData *)data expectedNumberOfBytes:(int64_t)expectedNumberOfBytes
+- (void)updateProgressiveImageWithData:(nonnull NSData *)data expectedNumberOfBytes:(int64_t)expectedNumberOfBytes isResume:(BOOL)isResume
 {
     [self.lock lock];
+        if (isResume) {
+            self.startingBytes = data.length;
+        }
+    
         if (self.mutableData == nil) {
             NSUInteger bytesToAlloc = 0;
             if (expectedNumberOfBytes > 0) {
@@ -246,7 +251,7 @@
 - (NSData *)data
 {
     [self.lock lock];
-    NSData *data = [self.mutableData copy];
+        NSData *data = [self.mutableData copy];
     [self.lock unlock];
     return data;
 }
@@ -289,7 +294,10 @@
 - (float)bytesPerSecond
 {
     CFTimeInterval length = CACurrentMediaTime() - _startTime;
-    return self.mutableData.length / length;
+    if (length == 0) {
+        return 0;
+    }
+    return (self.mutableData.length - self.startingBytes) / length;
 }
 
 //Must be called within lock

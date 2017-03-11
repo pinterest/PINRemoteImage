@@ -19,6 +19,7 @@
 #import "PINRemoteImageTask.h"
 #import "PINRemoteImageProcessorTask.h"
 #import "PINRemoteImageDownloadTask.h"
+#import "PINResumeData.h"
 #import "PINURLSessionManager.h"
 #import "PINRemoteImageMemoryContainer.h"
 #import "PINRemoteImageCaching.h"
@@ -727,12 +728,16 @@ static dispatch_once_t sharedDispatchToken;
                progressImage:(PINRemoteImageManagerImageCompletion)progressImage
                         UUID:(NSUUID *)UUID
 {
+    NSString *resumeKey = [self resumeCacheKeyForURL:url];
+    PINResumeData *resumeData = [self.cache objectFromMemoryForKey:resumeKey];
+    
     [self lock];
         PINRemoteImageDownloadTask *task = [self.tasks objectForKey:key];
         if (task.urlSessionTask == nil && task.callbackBlocks.count > 0 && task.numberOfRetries == 0) {
             //If completionBlocks.count == 0, we've canceled before we were even able to start.
             CFTimeInterval startTime = CACurrentMediaTime();
-            NSURLSessionDataTask *urlSessionTask = [self sessionTaskWithURL:url key:key options:options priority:priority];
+            task.resume = resumeData;
+            NSURLSessionDataTask *urlSessionTask = [self sessionTaskWithURL:url key:key resumeData:resumeData options:options priority:priority];
             task.urlSessionTask = urlSessionTask;
             task.sessionTaskStartTime = startTime;
         }
@@ -803,12 +808,14 @@ static dispatch_once_t sharedDispatchToken;
 
 - (NSURLSessionDataTask *)sessionTaskWithURL:(NSURL *)url
                                          key:(NSString *)key
+                                  resumeData:(PINResumeData *)resumeData
                                      options:(PINRemoteImageManagerDownloadOptions)options
                                     priority:(PINRemoteImageManagerPriority)priority
 {
     __weak typeof(self) weakSelf = self;
     return [self downloadDataWithURL:url
                                  key:key
+                          resumeData:resumeData
                             priority:priority
                           completion:^(NSData *data, NSError *error)
     {
@@ -824,15 +831,15 @@ static dispatch_once_t sharedDispatchToken;
                 BOOL retry = NO;
                 NSUInteger newNumberOfRetries = 0;
                 [strongSelf lock];
-                PINRemoteImageDownloadTask *task = [strongSelf.tasks objectForKey:key];
-                if (task.numberOfRetries < PINRemoteImageMaxRetries) {
-                    retry = YES;
-                    newNumberOfRetries = ++task.numberOfRetries;
-                  
-                    // Clear out the exsiting progress image or else new data from retry will be appended
-                    task.progressImage = nil;
-                    task.urlSessionTask = nil;
-                }
+                    PINRemoteImageDownloadTask *task = [strongSelf.tasks objectForKey:key];
+                    if (task.numberOfRetries < PINRemoteImageMaxRetries) {
+                        retry = YES;
+                        newNumberOfRetries = ++task.numberOfRetries;
+                      
+                        // Clear out the exsiting progress image or else new data from retry will be appended
+                        task.progressImage = nil;
+                        task.urlSessionTask = nil;
+                    }
                 [strongSelf unlock];
                 
                 if (retry) {
@@ -844,7 +851,8 @@ static dispatch_once_t sharedDispatchToken;
                             PINRemoteImageDownloadTask *task = [strongSelf.tasks objectForKey:key];
                             if (task.urlSessionTask == nil && task.callbackBlocks.count > 0) {
                                 //If completionBlocks.count == 0, we've canceled before we were even able to start.
-                                NSURLSessionDataTask *urlSessionTask = [strongSelf sessionTaskWithURL:url key:key options:options priority:priority];
+                                //If there was an error, do not attempt to use resume data
+                                NSURLSessionDataTask *urlSessionTask = [strongSelf sessionTaskWithURL:url key:key resumeData:nil options:options priority:priority];
                                 task.urlSessionTask = urlSessionTask;
                             }
                         [strongSelf unlock];
@@ -881,15 +889,25 @@ static dispatch_once_t sharedDispatchToken;
 
 - (NSURLSessionDataTask *)downloadDataWithURL:(NSURL *)url
                                           key:(NSString *)key
+                                   resumeData:(PINResumeData *)resumeData
                                      priority:(PINRemoteImageManagerPriority)priority
                                    completion:(PINRemoteImageManagerDataCompletion)completion
 {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url
-                                             cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                         timeoutInterval:self.timeout];
-    if (self.httpHeaderFields.count > 0) {
+                                                           cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+                                                       timeoutInterval:self.timeout];
+    
+    NSMutableDictionary *headers = [self.httpHeaderFields mutableCopy];
+    
+    if (resumeData) {
+        headers[@"If-Range"] = resumeData.ifRange;
+        headers[@"Range"] = [NSString stringWithFormat:@"bytes=%lu-", resumeData.resumeData.length + 1];
+    }
+    
+    if (headers.count > 0) {
         request.allHTTPHeaderFields = [self.httpHeaderFields copy];
     }
+    
     [NSURLProtocol setProperty:key forKey:PINRemoteImageCacheKey inRequest:request];
     
     __weak typeof(self) weakSelf = self;
@@ -976,14 +994,14 @@ static dispatch_once_t sharedDispatchToken;
 - (NSUUID *)prefetchImageWithURL:(NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options
 {
     return [self downloadImageWithURL:url
-                       options:options
-                      priority:PINRemoteImageManagerPriorityLow
-                  processorKey:nil
-                     processor:nil
-                 progressImage:nil
-              progressDownload:nil
-                    completion:nil
-                     inputUUID:nil];
+                              options:options
+                             priority:PINRemoteImageManagerPriorityLow
+                         processorKey:nil
+                            processor:nil
+                        progressImage:nil
+                     progressDownload:nil
+                           completion:nil
+                            inputUUID:nil];
 }
 
 #pragma mark - Cancelation & Priority
@@ -995,29 +1013,44 @@ static dispatch_once_t sharedDispatchToken;
     }
     PINLog(@"Attempting to cancel UUID: %@", UUID);
     __weak typeof(self) weakSelf = self;
-    [_concurrentOperationQueue addOperation:^
-     {
-         typeof(self) strongSelf = weakSelf;
-         [strongSelf lock];
-             NSString *taskKey = nil;
-             PINRemoteImageTask *taskToEvaluate = [strongSelf _locked_taskForUUID:UUID key:&taskKey];
-
-             if (taskToEvaluate == nil) {
-                 //maybe task hasn't been added to task list yet, add it to canceled tasks.
-                 //there's no need to ever remove a UUID from canceledTasks because it is weak.
-                 [strongSelf.canceledTasks addObject:UUID];
-             }
-
-             if ([taskToEvaluate cancelWithUUID:UUID manager:strongSelf]) {
-                 [strongSelf.tasks removeObjectForKey:taskKey];
-                 
-                 if ([taskToEvaluate isKindOfClass:[PINRemoteImageDownloadTask class]]) {
-                     PINRemoteImageDownloadTask *downloadTask = (PINRemoteImageDownloadTask *)taskToEvaluate;
-                     [strongSelf.urlSessionTaskQueue removeDownloadTaskFromQueue:downloadTask.urlSessionTask];
-                 }
-             }
-         [strongSelf unlock];
-     } withPriority:PINOperationQueuePriorityHigh];
+    [_concurrentOperationQueue addOperation:^{
+        typeof(self) strongSelf = weakSelf;
+        NSData *resumeData = nil;
+        NSURL *resumeURL = nil;
+        NSString *ifRange = nil;
+        NSUInteger totalBytes = 0;
+        [strongSelf lock];
+            NSString *taskKey = nil;
+            PINRemoteImageTask *taskToEvaluate = [strongSelf _locked_taskForUUID:UUID key:&taskKey];
+            
+            if (taskToEvaluate == nil) {
+                //maybe task hasn't been added to task list yet, add it to canceled tasks.
+                //there's no need to ever remove a UUID from canceledTasks because it is weak.
+                [strongSelf.canceledTasks addObject:UUID];
+            }
+            
+            if ([taskToEvaluate cancelWithUUID:UUID manager:strongSelf]) {
+                [strongSelf.tasks removeObjectForKey:taskKey];
+                
+                if ([taskToEvaluate isKindOfClass:[PINRemoteImageDownloadTask class]]) {
+                    PINRemoteImageDownloadTask *downloadTask = (PINRemoteImageDownloadTask *)taskToEvaluate;
+                    [strongSelf.urlSessionTaskQueue removeDownloadTaskFromQueue:downloadTask.urlSessionTask];
+                    
+                    if (downloadTask.ifRange) {
+                        ifRange = downloadTask.ifRange;
+                        totalBytes = downloadTask.totalBytes;
+                        resumeData = downloadTask.progressImage.data;
+                        resumeURL = downloadTask.urlSessionTask.originalRequest.URL;
+                    }
+                }
+            }
+        [strongSelf unlock];
+        
+        if (resumeData) {
+            //store resume data away
+            [strongSelf storeResumeData:[PINResumeData resumeData:resumeData ifRange:ifRange totalBytes:totalBytes] forURL:resumeURL];
+        }
+    } withPriority:PINOperationQueuePriorityHigh];
 }
 
 - (void)setPriority:(PINRemoteImageManagerPriority)priority ofTaskWithUUID:(NSUUID *)UUID
@@ -1163,30 +1196,66 @@ static dispatch_once_t sharedDispatchToken;
 
 #pragma mark - Session Task Blocks
 
-- (void)didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge forTask:(NSURLSessionTask *)task completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler {
+- (void)didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge forTask:(NSURLSessionTask *)dataTask completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler {
     [self lock];
-    if (self.authenticationChallengeHandler) {
-        self.authenticationChallengeHandler(task, challenge, completionHandler);
-    } else {
-        completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
-    }
-
+        if (self.authenticationChallengeHandler) {
+            self.authenticationChallengeHandler(dataTask, challenge, completionHandler);
+        } else {
+            completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
+        }
     [self unlock];
 }
 
-- (void)didReceiveData:(NSData *)data forTask:(NSURLSessionDataTask *)dataTask
+- (void)didReceiveResponse:(nonnull NSURLResponse *)response forTask:(nonnull NSURLSessionTask *)dataTask
 {
     [self lock];
         NSString *cacheKey = [NSURLProtocol propertyForKey:PINRemoteImageCacheKey inRequest:dataTask.originalRequest];
         PINRemoteImageDownloadTask *task = [self.tasks objectForKey:cacheKey];
-        if (task.progressImage == nil) {
-            task.progressImage = [[PINProgressiveImage alloc] init];
-            task.progressImage.startTime = task.sessionTaskStartTime;
-            task.progressImage.estimatedRemainingTimeThreshold = self.estimatedRemainingTimeThreshold;
-            if (self.progressThresholds) {
-                task.progressImage.progressThresholds = self.progressThresholds;
+    [self unlock];
+    
+    if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        
+        if (httpResponse.statusCode == 206) {
+            PINResumeData *resume = nil;
+            PINProgressiveImage *progressImage = nil;
+            [self lock];
+                NSAssert(task.resume != nil, @"We received a partial response but don't have resume data");
+                resume = task.resume;
+                [self _locked_setupProgressImageIfNeeded:task];
+            [self unlock];
+            
+            [progressImage updateProgressiveImageWithData:resume.resumeData expectedNumberOfBytes:resume.totalBytes isResume:YES];
+        }
+        
+        if ([[httpResponse allHeaderFields][@"Accept-Ranges"] isEqualToString:@"bytes"]) {
+            NSString *ifRange = nil;
+            NSString *etag = nil;
+
+            if ((etag = [httpResponse allHeaderFields][@"ETag"])) {
+                if ([etag hasPrefix:@"W/"] == NO) {
+                    ifRange = etag;
+                }
+            } else {
+                ifRange = [httpResponse allHeaderFields][@"Last-Modified"];
+            }
+            
+            if (ifRange.length > 0) {
+                [self lock];
+                    task.ifRange = ifRange;
+                    task.totalBytes = httpResponse.expectedContentLength;
+                [self unlock];
             }
         }
+    }
+}
+
+- (void)didReceiveData:(NSData *)data forTask:(NSURLSessionTask *)dataTask
+{
+    [self lock];
+        NSString *cacheKey = [NSURLProtocol propertyForKey:PINRemoteImageCacheKey inRequest:dataTask.originalRequest];
+        PINRemoteImageDownloadTask *task = [self.tasks objectForKey:cacheKey];
+        [self _locked_setupProgressImageIfNeeded:task];
 
         PINProgressiveImage *progressiveImage = task.progressImage;
         BOOL hasProgressBlocks = task.hasProgressBlocks;
@@ -1196,7 +1265,7 @@ static dispatch_once_t sharedDispatchToken;
         [task callProgressDownloadWithQueue:self.callbackQueue completedBytes:dataTask.countOfBytesReceived totalBytes:dataTask.countOfBytesExpectedToReceive];
     [self unlock];
     
-    [progressiveImage updateProgressiveImageWithData:data expectedNumberOfBytes:[dataTask countOfBytesExpectedToReceive]];
+    [progressiveImage updateProgressiveImageWithData:data expectedNumberOfBytes:[dataTask countOfBytesExpectedToReceive] isResume:NO];
 
     if (hasProgressBlocks && PINNSOperationSupportsBlur) {
         __weak typeof(self) weakSelf = self;
@@ -1521,9 +1590,18 @@ static dispatch_once_t sharedDispatchToken;
 
 - (NSString *)cacheKeyForURL:(NSURL *)url processorKey:(NSString *)processorKey
 {
+    return [self cacheKeyForURL:url processorKey:processorKey resume:NO];
+}
+
+- (NSString *)cacheKeyForURL:(NSURL *)url processorKey:(NSString *)processorKey resume:(BOOL)resume
+{
     NSString *cacheKey = [url absoluteString];
+    NSAssert((processorKey.length == 0 && resume == YES) || resume == NO, @"It doesn't make sense to use resume with processing.");
     if (processorKey.length > 0) {
         cacheKey = [cacheKey stringByAppendingFormat:@"-<%@>", processorKey];
+    }
+    if (resume) {
+        cacheKey = [@"R-" stringByAppendingString:cacheKey];
     }
 
     //PINDiskCache uses this key as the filename of the file written to disk
@@ -1599,6 +1677,19 @@ static dispatch_once_t sharedDispatchToken;
     }
 }
 
+#pragma mark - Resume support
+
+- (NSString *)resumeCacheKeyForURL:(NSURL *)url
+{
+    return [self cacheKeyForURL:url processorKey:nil resume:YES];
+}
+
+- (void)storeResumeData:(PINResumeData *)resumeData forURL:(NSURL *)URL
+{
+    NSString *resumeKey = [self resumeCacheKeyForURL:URL];
+    [self.cache setObjectInMemory:resumeData forKey:resumeKey withCost:0];
+}
+
 /// Attempt to find the task with the callbacks for the given uuid
 - (nullable PINRemoteImageTask *)_locked_taskForUUID:(NSUUID *)uuid key:(NSString * _Nullable * _Nullable)outKey
 {
@@ -1618,6 +1709,18 @@ static dispatch_once_t sharedDispatchToken;
         *stop = YES;
     }];
     return result;
+}
+
+- (void)_locked_setupProgressImageIfNeeded:(PINRemoteImageDownloadTask *)task
+{
+    if (task.progressImage == nil) {
+        task.progressImage = [[PINProgressiveImage alloc] init];
+        task.progressImage.startTime = task.sessionTaskStartTime;
+        task.progressImage.estimatedRemainingTimeThreshold = self.estimatedRemainingTimeThreshold;
+        if (self.progressThresholds) {
+            task.progressImage.progressThresholds = self.progressThresholds;
+        }
+    }
 }
 
 #if DEBUG
