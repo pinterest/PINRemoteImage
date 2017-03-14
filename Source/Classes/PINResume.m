@@ -10,13 +10,13 @@
 
 @implementation PINResume
 
-+ (PINResume *)resumeData:(NSData *)resumeData ifRange:(NSString *)ifRange totalBytes:(NSUInteger)totalBytes
++ (PINResume *)resumeData:(NSData *)resumeData ifRange:(NSString *)ifRange totalBytes:(long long)totalBytes
 {
     PINResume *resume = [[PINResume alloc] initWithResumeData:resumeData ifRange:ifRange totalBytes:totalBytes];
     return resume;
 }
 
-- (PINResume *)initWithResumeData:(NSData *)resumeData ifRange:(NSString *)ifRange totalBytes:(NSUInteger)totalBytes
+- (PINResume *)initWithResumeData:(NSData *)resumeData ifRange:(NSString *)ifRange totalBytes:(long long)totalBytes
 {
     if (self = [super init]) {
         _resumeData = resumeData;

@@ -901,7 +901,7 @@ static dispatch_once_t sharedDispatchToken;
     
     if (resume) {
         headers[@"If-Range"] = resume.ifRange;
-        headers[@"Range"] = [NSString stringWithFormat:@"bytes=%lu-", resume.resumeData.length];
+        headers[@"Range"] = [NSString stringWithFormat:@"bytes=%tu-", resume.resumeData.length];
     }
     
     if (headers.count > 0) {
@@ -1024,7 +1024,7 @@ static dispatch_once_t sharedDispatchToken;
         NSData *resumeData = nil;
         NSURL *resumeURL = nil;
         NSString *ifRange = nil;
-        NSUInteger totalBytes = 0;
+        long long totalBytes = 0;
         [strongSelf lock];
             NSString *taskKey = nil;
             PINRemoteImageTask *taskToEvaluate = [strongSelf _locked_taskForUUID:UUID key:&taskKey];
