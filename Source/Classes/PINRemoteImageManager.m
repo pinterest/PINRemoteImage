@@ -905,7 +905,8 @@ static dispatch_once_t sharedDispatchToken;
     }
     
     if (headers.count > 0) {
-        request.allHTTPHeaderFields = [self.httpHeaderFields copy];
+        //copy is probably not necessary here since we created headers locally…
+        request.allHTTPHeaderFields = [headers copy];
     }
     
     [NSURLProtocol setProperty:key forKey:PINRemoteImageCacheKey inRequest:request];
@@ -1223,9 +1224,19 @@ static dispatch_once_t sharedDispatchToken;
                 NSAssert(task.resume != nil, @"We received a partial response but don't have resume data");
                 resume = task.resume;
                 [self _locked_setupProgressImageIfNeeded:task];
+                progressImage = task.progressImage;
+                BOOL hasProgressBlocks = task.hasProgressBlocks;
+                BOOL shouldBlur = self.shouldBlurProgressive;
+                CGSize maxProgressiveRenderSize = self.maxProgressiveRenderSize;
+            
+                [task callProgressDownloadWithQueue:self.callbackQueue completedBytes:dataTask.countOfBytesReceived totalBytes:dataTask.countOfBytesExpectedToReceive];
             [self unlock];
             
             [progressImage updateProgressiveImageWithData:resume.resumeData expectedNumberOfBytes:resume.totalBytes isResume:YES];
+            
+            if (hasProgressBlocks) {
+                [self callProgressWithProgressImageIfNecessary:progressImage cacheKey:cacheKey shouldBlur:shouldBlur maxProgressiveRenderSize:maxProgressiveRenderSize];
+            }
         }
         
         if ([[httpResponse allHeaderFields][@"Accept-Ranges"] isEqualToString:@"bytes"]) {
@@ -1266,13 +1277,23 @@ static dispatch_once_t sharedDispatchToken;
     [self unlock];
     
     [progressiveImage updateProgressiveImageWithData:data expectedNumberOfBytes:[dataTask countOfBytesExpectedToReceive] isResume:NO];
+    
+    if (hasProgressBlocks) {
+        [self callProgressWithProgressImageIfNecessary:progressiveImage cacheKey:cacheKey shouldBlur:shouldBlur maxProgressiveRenderSize:maxProgressiveRenderSize];
+    }
+}
 
-    if (hasProgressBlocks && PINNSOperationSupportsBlur) {
+- (void)callProgressWithProgressImageIfNecessary:(PINProgressiveImage *)progress
+                                        cacheKey:(NSString *)cacheKey
+                                      shouldBlur:(BOOL)shouldBlur
+                        maxProgressiveRenderSize:(CGSize)maxProgressiveRenderSize
+{
+    if (PINNSOperationSupportsBlur) {
         __weak typeof(self) weakSelf = self;
         [_concurrentOperationQueue addOperation:^{
             typeof(self) strongSelf = weakSelf;
             CGFloat renderedImageQuality = 1.0;
-            PINImage *progressImage = [progressiveImage currentImageBlurred:shouldBlur maxProgressiveRenderSize:maxProgressiveRenderSize renderedImageQuality:&renderedImageQuality];
+            PINImage *progressImage = [progress currentImageBlurred:shouldBlur maxProgressiveRenderSize:maxProgressiveRenderSize renderedImageQuality:&renderedImageQuality];
             if (progressImage) {
                 [strongSelf lock];
                     PINRemoteImageDownloadTask *task = strongSelf.tasks[cacheKey];

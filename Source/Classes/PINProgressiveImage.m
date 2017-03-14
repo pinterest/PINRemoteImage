@@ -121,6 +121,7 @@
 {
     [self.lock lock];
         if (isResume) {
+            NSAssert(self.mutableData == nil, @"If we're resuming, data shouldn't be setup yet.");
             self.startingBytes = data.length;
         }
     
@@ -224,7 +225,7 @@
             [self.lock unlock];
             return nil;
         }
-    
+
         if (self.isProgressiveJPEG && self.size.width > 0 && self.size.height > 0 && progress > [_progressThresholds[self.currentThreshold] floatValue]) {
             while (self.currentThreshold < _progressThresholds.count && progress > [_progressThresholds[self.currentThreshold] floatValue]) {
                 self.currentThreshold++;

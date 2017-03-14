@@ -14,6 +14,8 @@
 #import <PINRemoteImage/PINRemoteImageCaching.h>
 #import <PINCache/PINCache.h>
 
+#import "PINResumeData.h"
+
 #if USE_FLANIMATED_IMAGE
 #import <FLAnimatedImage/FLAnimatedImage.h>
 #endif
@@ -38,6 +40,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 - (float)currentBytesPerSecond;
 - (void)addTaskBPS:(float)bytesPerSecond endDate:(NSDate *)endDate;
 - (void)setCurrentBytesPerSecond:(float)currentBPS;
+- (NSString *)resumeCacheKeyForURL:(NSURL *)url;
 
 @end
 
@@ -136,6 +139,11 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     return [NSURL URLWithString:@"https://placekitten.com/g/200/301?longarg=helloMomHowAreYouDoing.IamFineJustMovedToLiveWithANiceChapWeTravelTogetherInHisBlueBoxThroughSpaceAndTimeMaybeYouveMetHimAlready.YesterdayWeMetACultureOfPeopleWithTentaclesWhoSingWithAVeryCelestialVoice.SoGood.SeeYouSoon.MaybeYesterday.WhoKnows.XOXO"];
 }
 
+- (NSURL *)progressiveURL
+{
+    return [NSURL URLWithString:@"https://s-media-cache-ak0.pinimg.com/564x/80/03/1b/80031b76573a358ed4fed5de391b6d36.jpg"];
+}
+
 - (NSArray <NSURL *> *)bigURLs
 {
     static dispatch_once_t onceToken;
@@ -163,6 +171,11 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 {
     self.task = task;
     self.error = error;
+}
+
+- (void)didReceiveResponse:(NSURLResponse *)response forTask:(NSURLSessionTask *)task
+{
+    
 }
 
 - (void)setUp
@@ -1039,6 +1052,49 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     
     //Give this one a bit longer since these are big images.
     [self waitForExpectationsWithTimeout:30 handler:nil];
+}
+
+- (void)testResume
+{
+    __block BOOL renderedImageQualitySame = NO;
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    [self.imageManager downloadImageWithURL:[self progressiveURL]
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                              progressImage:^(PINRemoteImageManagerResult * _Nonnull result) {
+                                  [self.imageManager cancelTaskWithUUID:result.UUID];
+                                  //Wait a second for cancelation.
+                                  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                                      dispatch_semaphore_signal(semaphore);
+                                  });
+                              }
+                                 completion:^(PINRemoteImageManagerResult * _Nonnull result) {
+                                     XCTAssert(result.image == nil, @"should not complete download: %@", result);
+                                 }];
+    
+    dispatch_semaphore_wait(semaphore, [self timeout]);
+    
+    PINResumeData *resume = [self.imageManager.cache objectFromMemoryForKey:[self.imageManager resumeCacheKeyForURL:[self progressiveURL]]];
+    
+    //Make sure cancel is processed before kicking off download again
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self.imageManager downloadImageWithURL:[self progressiveURL]
+                                        options:PINRemoteImageManagerDownloadOptionsNone
+                                  progressImage:^(PINRemoteImageManagerResult * _Nonnull result) {
+                                      // We expect renderedImageQualitySame to be true because we want an initial progress callback on a resumed
+                                      // download. Otherwise, a canceled download which had already rendered progress, may not render progress again
+                                      // until completed.
+                                      if (resume.resumeData.length > 0 && fabs(result.renderedImageQuality - ((CGFloat)resume.resumeData.length / resume.totalBytes)) < 0.01) {
+                                          renderedImageQualitySame = YES;
+                                      }
+                                  }
+                                     completion:^(PINRemoteImageManagerResult * _Nonnull result) {
+                                         XCTAssert(renderedImageQualitySame, @"Rendered image quality should non-zero and the same at least once.");
+                                         XCTAssert(result.image && result.error == nil, @"Image not downloaded");
+                                         dispatch_semaphore_signal(semaphore);
+                                     }];
+    });
+    
+    dispatch_semaphore_wait(semaphore, [self timeout]);
 }
 
 @end
