@@ -1,5 +1,5 @@
 //
-//  PINResumeData.h
+//  PINResume.h
 //  PINRemoteImage
 //
 //  Created by Garrett Moon on 3/10/17.
@@ -10,10 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PINResumeData : NSObject
+@interface PINResume : NSObject
 
 - (id)init NS_UNAVAILABLE;
-+ (PINResumeData *)resumeData:(NSData *)resumeData ifRange:(NSString *)ifRange totalBytes:(NSUInteger)totalBytes;
++ (PINResume *)resumeData:(NSData *)resumeData ifRange:(NSString *)ifRange totalBytes:(NSUInteger)totalBytes;
 
 @property (nonatomic, strong, readonly) NSData *resumeData;
 @property (nonatomic, strong, readonly) NSString *ifRange;

@@ -19,7 +19,7 @@
 #import "PINRemoteImageTask.h"
 #import "PINRemoteImageProcessorTask.h"
 #import "PINRemoteImageDownloadTask.h"
-#import "PINResumeData.h"
+#import "PINResume.h"
 #import "PINURLSessionManager.h"
 #import "PINRemoteImageMemoryContainer.h"
 #import "PINRemoteImageCaching.h"
@@ -729,15 +729,15 @@ static dispatch_once_t sharedDispatchToken;
                         UUID:(NSUUID *)UUID
 {
     NSString *resumeKey = [self resumeCacheKeyForURL:url];
-    PINResumeData *resumeData = [self.cache objectFromMemoryForKey:resumeKey];
+    PINResume *resume = [self.cache objectFromMemoryForKey:resumeKey];
     
     [self lock];
         PINRemoteImageDownloadTask *task = [self.tasks objectForKey:key];
         if (task.urlSessionTask == nil && task.callbackBlocks.count > 0 && task.numberOfRetries == 0) {
             //If completionBlocks.count == 0, we've canceled before we were even able to start.
             CFTimeInterval startTime = CACurrentMediaTime();
-            task.resume = resumeData;
-            NSURLSessionDataTask *urlSessionTask = [self sessionTaskWithURL:url key:key resumeData:resumeData options:options priority:priority];
+            task.resume = resume;
+            NSURLSessionDataTask *urlSessionTask = [self sessionTaskWithURL:url key:key resumeData:resume options:options priority:priority];
             task.urlSessionTask = urlSessionTask;
             task.sessionTaskStartTime = startTime;
         }
@@ -808,14 +808,14 @@ static dispatch_once_t sharedDispatchToken;
 
 - (NSURLSessionDataTask *)sessionTaskWithURL:(NSURL *)url
                                          key:(NSString *)key
-                                  resumeData:(PINResumeData *)resumeData
+                                  resumeData:(PINResume *)resume
                                      options:(PINRemoteImageManagerDownloadOptions)options
                                     priority:(PINRemoteImageManagerPriority)priority
 {
     __weak typeof(self) weakSelf = self;
     return [self downloadDataWithURL:url
                                  key:key
-                          resumeData:resumeData
+                          resumeData:resume
                             priority:priority
                           completion:^(NSData *data, NSError *error)
     {
@@ -889,7 +889,7 @@ static dispatch_once_t sharedDispatchToken;
 
 - (NSURLSessionDataTask *)downloadDataWithURL:(NSURL *)url
                                           key:(NSString *)key
-                                   resumeData:(PINResumeData *)resumeData
+                                   resumeData:(PINResume *)resume
                                      priority:(PINRemoteImageManagerPriority)priority
                                    completion:(PINRemoteImageManagerDataCompletion)completion
 {
@@ -899,9 +899,9 @@ static dispatch_once_t sharedDispatchToken;
     
     NSMutableDictionary *headers = [self.httpHeaderFields mutableCopy];
     
-    if (resumeData) {
-        headers[@"If-Range"] = resumeData.ifRange;
-        headers[@"Range"] = [NSString stringWithFormat:@"bytes=%lu-", resumeData.resumeData.length];
+    if (resume) {
+        headers[@"If-Range"] = resume.ifRange;
+        headers[@"Range"] = [NSString stringWithFormat:@"bytes=%lu-", resume.resumeData.length];
     }
     
     if (headers.count > 0) {
@@ -1054,7 +1054,7 @@ static dispatch_once_t sharedDispatchToken;
         
         if (resumeData) {
             //store resume data away
-            [strongSelf storeResumeData:[PINResumeData resumeData:resumeData ifRange:ifRange totalBytes:totalBytes] forURL:resumeURL];
+            [strongSelf storeResumeData:[PINResume resumeData:resumeData ifRange:ifRange totalBytes:totalBytes] forURL:resumeURL];
         }
     } withPriority:PINOperationQueuePriorityHigh];
 }
@@ -1224,7 +1224,7 @@ static dispatch_once_t sharedDispatchToken;
         
         // Got partial data back for a resume
         if (httpResponse.statusCode == 206) {
-            PINResumeData *resume = nil;
+            PINResume *resume = nil;
             PINProgressiveImage *progressImage = nil;
             [self lock];
                 NSAssert(task.resume != nil, @"We received a partial response but don't have resume data");
@@ -1717,10 +1717,10 @@ static dispatch_once_t sharedDispatchToken;
     return [self cacheKeyForURL:url processorKey:nil resume:YES];
 }
 
-- (void)storeResumeData:(PINResumeData *)resumeData forURL:(NSURL *)URL
+- (void)storeResumeData:(PINResume *)resume forURL:(NSURL *)URL
 {
     NSString *resumeKey = [self resumeCacheKeyForURL:URL];
-    [self.cache setObjectInMemory:resumeData forKey:resumeKey withCost:0];
+    [self.cache setObjectInMemory:resume forKey:resumeKey withCost:resume.resumeData.length];
 }
 
 /// Attempt to find the task with the callbacks for the given uuid
