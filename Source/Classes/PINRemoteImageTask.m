@@ -68,12 +68,12 @@
                 } else {
                     result = PINRemoteImageResultTypeNone;
                 }
-                completionBlock([PINRemoteImageManagerResult imageResultWithImage:image
-                                                        alternativeRepresentation:alternativeRepresentation
-                                                                    requestLength:CACurrentMediaTime() - requestTime
-                                                                            error:error
-                                                                       resultType:result
-                                                                             UUID:UUID]);
+                completionBlock([self imageResultWithImage:image
+                                 alternativeRepresentation:alternativeRepresentation
+                                             requestLength:CACurrentMediaTime() - requestTime
+                                                     error:error
+                                                resultType:result
+                                                      UUID:UUID]);
             });
         }
         if (remove) {
@@ -95,6 +95,21 @@
 - (void)setPriority:(PINRemoteImageManagerPriority)priority
 {
     
+}
+
+- (nonnull PINRemoteImageManagerResult *)imageResultWithImage:(nullable PINImage *)image
+                                    alternativeRepresentation:(nullable id)alternativeRepresentation
+                                                requestLength:(NSTimeInterval)requestLength
+                                                        error:(nullable NSError *)error
+                                                   resultType:(PINRemoteImageResultType)resultType
+                                                         UUID:(nullable NSUUID *)UUID
+{
+    return [PINRemoteImageManagerResult imageResultWithImage:image
+                                   alternativeRepresentation:alternativeRepresentation
+                                               requestLength:requestLength
+                                                       error:error
+                                                  resultType:resultType
+                                                        UUID:UUID];
 }
 
 @end

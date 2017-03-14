@@ -787,10 +787,10 @@ static dispatch_once_t sharedDispatchToken;
         if (allowEarlyReturn && [NSThread isMainThread]) {
             completion([PINRemoteImageManagerResult imageResultWithImage:image
                                                alternativeRepresentation:alternativeRepresentation
-                                                          requestLength:0
-                                                                  error:error
-                                                             resultType:resultType
-                                                                   UUID:nil]);
+                                                           requestLength:0
+                                                                   error:error
+                                                              resultType:resultType
+                                                                    UUID:nil]);
         } else {
             dispatch_async(self.callbackQueue, ^{
                 completion([PINRemoteImageManagerResult imageResultWithImage:image
@@ -901,7 +901,7 @@ static dispatch_once_t sharedDispatchToken;
     
     if (resumeData) {
         headers[@"If-Range"] = resumeData.ifRange;
-        headers[@"Range"] = [NSString stringWithFormat:@"bytes=%lu-", resumeData.resumeData.length + 1];
+        headers[@"Range"] = [NSString stringWithFormat:@"bytes=%lu-", resumeData.resumeData.length];
     }
     
     if (headers.count > 0) {
@@ -1009,6 +1009,11 @@ static dispatch_once_t sharedDispatchToken;
 
 - (void)cancelTaskWithUUID:(NSUUID *)UUID
 {
+    [self cancelTaskWithUUID:UUID storeResumeData:NO];
+}
+
+- (void)cancelTaskWithUUID:(nonnull NSUUID *)UUID storeResumeData:(BOOL)storeResumeData
+{
     if (UUID == nil) {
         return;
     }
@@ -1037,7 +1042,7 @@ static dispatch_once_t sharedDispatchToken;
                     PINRemoteImageDownloadTask *downloadTask = (PINRemoteImageDownloadTask *)taskToEvaluate;
                     [strongSelf.urlSessionTaskQueue removeDownloadTaskFromQueue:downloadTask.urlSessionTask];
                     
-                    if (downloadTask.ifRange) {
+                    if (storeResumeData && downloadTask.ifRange) {
                         ifRange = downloadTask.ifRange;
                         totalBytes = downloadTask.totalBytes;
                         resumeData = downloadTask.progressImage.data;
@@ -1217,6 +1222,7 @@ static dispatch_once_t sharedDispatchToken;
     if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         
+        // Got partial data back for a resume
         if (httpResponse.statusCode == 206) {
             PINResumeData *resume = nil;
             PINProgressiveImage *progressImage = nil;
@@ -1237,8 +1243,14 @@ static dispatch_once_t sharedDispatchToken;
             if (hasProgressBlocks) {
                 [self callProgressWithProgressImageIfNecessary:progressImage cacheKey:cacheKey shouldBlur:shouldBlur maxProgressiveRenderSize:maxProgressiveRenderSize];
             }
+        } else {
+            //Check if there's resume data and we didn't get back a 206, get rid of it
+            [self lock];
+                task.resume = nil;
+            [self unlock];
         }
         
+        // Check to see if the server supports resume
         if ([[httpResponse allHeaderFields][@"Accept-Ranges"] isEqualToString:@"bytes"]) {
             NSString *ifRange = nil;
             NSString *etag = nil;

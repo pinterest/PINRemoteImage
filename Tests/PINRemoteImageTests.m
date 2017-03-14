@@ -1061,7 +1061,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     [self.imageManager downloadImageWithURL:[self progressiveURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                               progressImage:^(PINRemoteImageManagerResult * _Nonnull result) {
-                                  [self.imageManager cancelTaskWithUUID:result.UUID];
+                                  [self.imageManager cancelTaskWithUUID:result.UUID storeResumeData:YES];
                                   //Wait a second for cancelation.
                                   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                                       dispatch_semaphore_signal(semaphore);
@@ -1090,11 +1090,31 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
                                      completion:^(PINRemoteImageManagerResult * _Nonnull result) {
                                          XCTAssert(renderedImageQualitySame, @"Rendered image quality should non-zero and the same at least once.");
                                          XCTAssert(result.image && result.error == nil, @"Image not downloaded");
-                                         dispatch_semaphore_signal(semaphore);
+                                         //Wait a second for disk storage.
+                                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                                             dispatch_semaphore_signal(semaphore);
+                                         });
                                      }];
     });
     
     dispatch_semaphore_wait(semaphore, [self timeout]);
+    
+    NSData *resumedImageData = [self.imageManager.cache objectFromDiskForKey:[self.imageManager cacheKeyForURL:[self progressiveURL] processorKey:nil]];
+    
+    [self.imageManager.cache removeAllObjects];
+    
+    [self.imageManager downloadImageWithURL:[self progressiveURL] completion:^(PINRemoteImageManagerResult * _Nonnull result) {
+        //Wait a second for disk storage.
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            dispatch_semaphore_signal(semaphore);
+        });
+    }];
+    
+    dispatch_semaphore_wait(semaphore, [self timeout]);
+    
+    NSData *nonResumedImageData = [self.imageManager.cache objectFromDiskForKey:[self.imageManager cacheKeyForURL:[self progressiveURL] processorKey:nil]];
+    
+    XCTAssert([nonResumedImageData isEqualToData:resumedImageData], @"Resumed image data and non resumed image data should be the same.");
 }
 
 @end
