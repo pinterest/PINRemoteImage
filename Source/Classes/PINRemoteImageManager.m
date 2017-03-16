@@ -1052,7 +1052,7 @@ static dispatch_once_t sharedDispatchToken;
             }
         [strongSelf unlock];
         
-        if (resumeData) {
+        if (resumeData.length > 0) {
             //store resume data away
             [strongSelf storeResumeData:[PINResume resumeData:resumeData ifRange:ifRange totalBytes:totalBytes] forURL:resumeURL];
         }

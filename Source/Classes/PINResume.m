@@ -19,6 +19,7 @@
 - (PINResume *)initWithResumeData:(NSData *)resumeData ifRange:(NSString *)ifRange totalBytes:(long long)totalBytes
 {
     if (self = [super init]) {
+        NSAssert(resumeData.length > 0 && ifRange.length > 0 && totalBytes > 0, @"PINResume must have all fields non-nil and non-zero length.");
         _resumeData = resumeData;
         _ifRange = ifRange;
         _totalBytes = totalBytes;

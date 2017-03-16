@@ -16,7 +16,7 @@
 @property (nonatomic, assign) CFTimeInterval sessionTaskStartTime;
 @property (nonatomic, assign) CFTimeInterval sessionTaskEndTime;
 @property (nonatomic, assign) BOOL hasProgressBlocks;
-@property (nonatomic, strong, nullable) NSString *ifRange;
+@property (nonatomic, copy, nullable) NSString *ifRange;
 @property (nonatomic, assign) long long totalBytes;
 @property (nonatomic, strong, nullable) PINResume *resume;
 @property (nonatomic, strong, nullable) PINProgressiveImage *progressImage;
