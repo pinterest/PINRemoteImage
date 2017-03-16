@@ -1056,7 +1056,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (void)testResume
 {
-    __block BOOL renderedImageQualitySame = NO;
+    __block BOOL renderedImageQualityGreater = NO;
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     [self.imageManager downloadImageWithURL:[self progressiveURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
@@ -1083,12 +1083,12 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
                                       // We expect renderedImageQualitySame to be true because we want an initial progress callback on a resumed
                                       // download. Otherwise, a canceled download which had already rendered progress, may not render progress again
                                       // until completed.
-                                      if (resume.resumeData.length > 0 && fabs(result.renderedImageQuality - ((CGFloat)resume.resumeData.length / resume.totalBytes)) < 0.01) {
-                                          renderedImageQualitySame = YES;
+                                      if (resume.resumeData.length > 0 && result.renderedImageQuality >= ((CGFloat)resume.resumeData.length / resume.totalBytes)) {
+                                          renderedImageQualityGreater = YES;
                                       }
                                   }
                                      completion:^(PINRemoteImageManagerResult * _Nonnull result) {
-                                         XCTAssert(renderedImageQualitySame, @"Rendered image quality should non-zero and the same at least once.");
+                                         XCTAssert(renderedImageQualityGreater, @"Rendered image quality should non-zero and be greater than resume length.");
                                          XCTAssert(result.image && result.error == nil, @"Image not downloaded");
                                          //Wait a second for disk storage.
                                          dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
