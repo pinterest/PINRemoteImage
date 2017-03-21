@@ -57,6 +57,8 @@ typedef NS_OPTIONS(NSUInteger, PINRemoteImageManagerDownloadOptions) {
     PINRemoteImageManagerSaveProcessedImageAsJPEG = 1 << 3,
     /** Ignore cache and force download */
     PINRemoteImageManagerDownloadOptionsIgnoreCache = 1 << 4,
+    /** Skip download retry */
+    PINRemoteImageManagerDownloadOptionsSkipRetry = 1 << 5,
 };
 
 /**

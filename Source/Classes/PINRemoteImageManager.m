@@ -825,7 +825,7 @@ static dispatch_once_t sharedDispatchToken;
                 NSUInteger newNumberOfRetries = 0;
                 [strongSelf lock];
                 PINRemoteImageDownloadTask *task = [strongSelf.tasks objectForKey:key];
-                if (task.numberOfRetries < PINRemoteImageMaxRetries) {
+                if (task.numberOfRetries < PINRemoteImageMaxRetries && (options & PINRemoteImageManagerDownloadOptionsSkipRetry) == NO) {
                     retry = YES;
                     newNumberOfRetries = ++task.numberOfRetries;
                   
