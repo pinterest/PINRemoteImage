@@ -23,7 +23,7 @@
 @property (atomic, assign) CFTimeInterval estimatedRemainingTimeThreshold;
 @property (atomic, assign) CFTimeInterval startTime;
 
-- (void)updateProgressiveImageWithData:(nonnull NSData *)data expectedNumberOfBytes:(int64_t)expectedNumberOfBytes;
+- (void)updateProgressiveImageWithData:(nonnull NSData *)data expectedNumberOfBytes:(int64_t)expectedNumberOfBytes isResume:(BOOL)isResume;
 
 /**
  Returns the latest image based on thresholds, returns nil if no new image is generated

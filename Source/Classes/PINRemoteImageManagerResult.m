@@ -26,6 +26,24 @@
                  renderedImageQuality:1.0];
 }
 
++ (nonnull instancetype)imageResultWithImage:(nullable PINImage *)image
+                   alternativeRepresentation:(nullable id)alternativeRepresentation
+                               requestLength:(NSTimeInterval)requestLength
+                                       error:(nullable NSError *)error
+                                  resultType:(PINRemoteImageResultType)resultType
+                                        UUID:(nullable NSUUID *)uuid
+                        bytesSavedByResuming:(NSUInteger)bytesSavedByResuming
+{
+    return [[self alloc] initWithImage:image
+             alternativeRepresentation:alternativeRepresentation
+                         requestLength:requestLength
+                                 error:error
+                            resultType:resultType
+                                  UUID:uuid
+                  renderedImageQuality:1.0
+                  bytesSavedByResuming:bytesSavedByResuming];
+}
+
 + (instancetype)imageResultWithImage:(PINImage *)image
            alternativeRepresentation:(id)alternativeRepresentation
                        requestLength:(NSTimeInterval)requestLength
@@ -40,7 +58,8 @@
                                  error:error
                             resultType:resultType
                                   UUID:uuid
-                  renderedImageQuality:renderedImageQuality];
+                  renderedImageQuality:renderedImageQuality
+                  bytesSavedByResuming:0];
 }
 
 - (instancetype)initWithImage:(PINImage *)image
@@ -50,6 +69,7 @@
                    resultType:(PINRemoteImageResultType)resultType
                          UUID:(NSUUID *)uuid
          renderedImageQuality:(CGFloat)renderedImageQuality
+         bytesSavedByResuming:(NSUInteger)bytesSavedByResuming;
 {
     if (self = [super init]) {
         _image = image;
@@ -59,6 +79,7 @@
         _resultType = resultType;
         _UUID = uuid;
         _renderedImageQuality = renderedImageQuality;
+        _bytesSavedByResuming = bytesSavedByResuming;
     }
     return self;
 }

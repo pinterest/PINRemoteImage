@@ -38,4 +38,11 @@
 
 - (void)setPriority:(PINRemoteImageManagerPriority)priority;
 
+- (nonnull PINRemoteImageManagerResult *)imageResultWithImage:(nullable PINImage *)image
+                                    alternativeRepresentation:(nullable id)alternativeRepresentation
+                                                requestLength:(NSTimeInterval)requestLength
+                                                        error:(nullable NSError *)error
+                                                   resultType:(PINRemoteImageResultType)resultType
+                                                         UUID:(nullable NSUUID *)uuid;
+
 @end

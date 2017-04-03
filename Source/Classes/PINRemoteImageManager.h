@@ -510,12 +510,23 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
 - (nonnull PINRemoteImageManagerResult *)synchronousImageFromCacheWithURL:(nonnull NSURL *)url processorKey:(nullable NSString *)processorKey options:(PINRemoteImageManagerDownloadOptions)options;
 
 /**
- Cancel a download. Canceling will only cancel the download if all other downloads are also canceled with their associated UUIDs. Canceling *does not* guarantee that your completion will not be called. You can use the UUID provided on the result object verify the completion you want called is being called.
+ Cancel a download. Canceling will only cancel the download if all other downloads are also canceled with their associated UUIDs. 
+ Canceling *does not* guarantee that your completion will not be called. You can use the UUID provided on the result object to verify
+ the completion you want called is being called.
  @see PINRemoteImageCategoryManager
  
  @param UUID NSUUID of the task to cancel.
  */
 - (void)cancelTaskWithUUID:(nonnull NSUUID *)UUID;
+
+/**
+ Cancel a download. Canceling will only cancel the download if all other downloads are also canceled with their associated UUIDs. 
+ Canceling *does not* guarantee that your completion will not be called. You can use the UUID provided on the result object to verify
+ the completion you want called is being called.
+ @param storeResumeData if YES and the server indicates it supports resuming downloads, downloaded data will be stored in the memory
+ cache and used to resume the download if the same URL is attempted to be downloaded in the future.
+ */
+- (void)cancelTaskWithUUID:(nonnull NSUUID *)UUID storeResumeData:(BOOL)storeResumeData;
 
 /**
  Set the priority of a download task. Since there is only one task per download, the priority of the download task will always be the last priority this method was called with.
