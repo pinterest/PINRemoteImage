@@ -60,7 +60,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 @implementation PINRemoteImage_Tests
 
 - (NSTimeInterval)timeoutTimeInterval {
-    return 10.0;
+    return 30.0;
 }
 
 - (dispatch_time_t)timeoutWithInterval:(NSTimeInterval)interval {
