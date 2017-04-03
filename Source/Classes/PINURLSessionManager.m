@@ -81,7 +81,9 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
     __weak typeof(self) weakSelf = self;
     dispatch_async(delegateQueue, ^{
         typeof(self) strongSelf = weakSelf;
-        [strongSelf.delegate didReceiveResponse:response forTask:task];
+        if ([strongSelf.delegate respondsToSelector:@selector(didReceiveResponse:forTask:)]) {
+            [strongSelf.delegate didReceiveResponse:response forTask:task];
+        }
     });
     completionHandler(NSURLSessionResponseAllow);
 }

@@ -173,11 +173,6 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     self.error = error;
 }
 
-- (void)didReceiveResponse:(NSURLResponse *)response forTask:(NSURLSessionTask *)task
-{
-    
-}
-
 - (void)setUp
 {
     [super setUp];

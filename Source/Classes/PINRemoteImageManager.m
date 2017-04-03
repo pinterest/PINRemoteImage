@@ -905,8 +905,7 @@ static dispatch_once_t sharedDispatchToken;
     }
     
     if (headers.count > 0) {
-        //copy is probably not necessary here since we created headers locally…
-        request.allHTTPHeaderFields = [headers copy];
+        request.allHTTPHeaderFields = headers;
     }
     
     [NSURLProtocol setProperty:key forKey:PINRemoteImageCacheKey inRequest:request];

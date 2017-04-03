@@ -13,11 +13,11 @@ extern NSString * __nonnull const PINURLErrorDomain;
 @protocol PINURLSessionManagerDelegate <NSObject>
 
 @required
-- (void)didReceiveResponse:(nonnull NSURLResponse *)response forTask:(nonnull NSURLSessionTask *)task;
 - (void)didReceiveData:(nonnull NSData *)data forTask:(nonnull NSURLSessionTask *)task;
 - (void)didCompleteTask:(nonnull NSURLSessionTask *)task withError:(nullable NSError *)error;
 
 @optional
+- (void)didReceiveResponse:(nonnull NSURLResponse *)response forTask:(nonnull NSURLSessionTask *)task;
 - (void)didReceiveAuthenticationChallenge:(nonnull NSURLAuthenticationChallenge *)challenge forTask:(nullable NSURLSessionTask *)task completionHandler:(nonnull void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential  * _Nullable credential))completionHandler;
 
 
