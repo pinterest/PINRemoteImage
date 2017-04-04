@@ -96,4 +96,21 @@
     }
 }
 
+- (nonnull PINRemoteImageManagerResult *)imageResultWithImage:(nullable PINImage *)image
+                                    alternativeRepresentation:(nullable id)alternativeRepresentation
+                                                requestLength:(NSTimeInterval)requestLength
+                                                        error:(nullable NSError *)error
+                                                   resultType:(PINRemoteImageResultType)resultType
+                                                         UUID:(nullable NSUUID *)UUID
+{
+    NSUInteger bytesSavedByResuming = self.resume.resumeData.length;
+    return [PINRemoteImageManagerResult imageResultWithImage:image
+                                   alternativeRepresentation:alternativeRepresentation
+                                               requestLength:requestLength
+                                                       error:error
+                                                  resultType:resultType
+                                                        UUID:UUID
+                                        bytesSavedByResuming:bytesSavedByResuming];
+}
+
 @end

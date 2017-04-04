@@ -14,6 +14,8 @@
 #import <PINRemoteImage/PINRemoteImageCaching.h>
 #import <PINCache/PINCache.h>
 
+#import "PINResume.h"
+
 #if USE_FLANIMATED_IMAGE
 #import <FLAnimatedImage/FLAnimatedImage.h>
 #endif
@@ -38,6 +40,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 - (float)currentBytesPerSecond;
 - (void)addTaskBPS:(float)bytesPerSecond endDate:(NSDate *)endDate;
 - (void)setCurrentBytesPerSecond:(float)currentBPS;
+- (NSString *)resumeCacheKeyForURL:(NSURL *)url;
 
 @end
 
@@ -60,7 +63,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 @implementation PINRemoteImage_Tests
 
 - (NSTimeInterval)timeoutTimeInterval {
-    return 10.0;
+    return 30.0;
 }
 
 - (dispatch_time_t)timeoutWithInterval:(NSTimeInterval)interval {
@@ -134,6 +137,11 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 - (NSURL *)veryLongURL
 {
     return [NSURL URLWithString:@"https://placekitten.com/g/200/301?longarg=helloMomHowAreYouDoing.IamFineJustMovedToLiveWithANiceChapWeTravelTogetherInHisBlueBoxThroughSpaceAndTimeMaybeYouveMetHimAlready.YesterdayWeMetACultureOfPeopleWithTentaclesWhoSingWithAVeryCelestialVoice.SoGood.SeeYouSoon.MaybeYesterday.WhoKnows.XOXO"];
+}
+
+- (NSURL *)progressiveURL
+{
+    return [NSURL URLWithString:@"https://s-media-cache-ak0.pinimg.com/564x/80/03/1b/80031b76573a358ed4fed5de391b6d36.jpg"];
 }
 
 - (NSArray <NSURL *> *)bigURLs
@@ -1039,6 +1047,69 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     
     //Give this one a bit longer since these are big images.
     [self waitForExpectationsWithTimeout:30 handler:nil];
+}
+
+- (void)testResume
+{
+    __block BOOL renderedImageQualityGreater = NO;
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    [self.imageManager downloadImageWithURL:[self progressiveURL]
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                              progressImage:^(PINRemoteImageManagerResult * _Nonnull result) {
+                                  [self.imageManager cancelTaskWithUUID:result.UUID storeResumeData:YES];
+                                  //Wait a second for cancelation.
+                                  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                                      dispatch_semaphore_signal(semaphore);
+                                  });
+                              }
+                                 completion:^(PINRemoteImageManagerResult * _Nonnull result) {
+                                     XCTAssert(result.image == nil, @"should not complete download: %@", result);
+                                 }];
+    
+    dispatch_semaphore_wait(semaphore, [self timeout]);
+    
+    PINResume *resume = [self.imageManager.cache objectFromMemoryForKey:[self.imageManager resumeCacheKeyForURL:[self progressiveURL]]];
+    
+    //Make sure cancel is processed before kicking off download again
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self.imageManager downloadImageWithURL:[self progressiveURL]
+                                        options:PINRemoteImageManagerDownloadOptionsNone
+                                  progressImage:^(PINRemoteImageManagerResult * _Nonnull result) {
+                                      // We expect renderedImageQualitySame to be true because we want an initial progress callback on a resumed
+                                      // download. Otherwise, a canceled download which had already rendered progress, may not render progress again
+                                      // until completed.
+                                      if (resume.resumeData.length > 0 && result.renderedImageQuality >= ((CGFloat)resume.resumeData.length / resume.totalBytes)) {
+                                          renderedImageQualityGreater = YES;
+                                      }
+                                  }
+                                     completion:^(PINRemoteImageManagerResult * _Nonnull result) {
+                                         XCTAssert(renderedImageQualityGreater, @"Rendered image quality should non-zero and be greater than resume length.");
+                                         XCTAssert(result.image && result.error == nil, @"Image not downloaded");
+                                         //Wait a second for disk storage.
+                                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                                             dispatch_semaphore_signal(semaphore);
+                                         });
+                                     }];
+    });
+    
+    dispatch_semaphore_wait(semaphore, [self timeout]);
+    
+    NSData *resumedImageData = [self.imageManager.cache objectFromDiskForKey:[self.imageManager cacheKeyForURL:[self progressiveURL] processorKey:nil]];
+    
+    [self.imageManager.cache removeAllObjects];
+    
+    [self.imageManager downloadImageWithURL:[self progressiveURL] completion:^(PINRemoteImageManagerResult * _Nonnull result) {
+        //Wait a second for disk storage.
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            dispatch_semaphore_signal(semaphore);
+        });
+    }];
+    
+    dispatch_semaphore_wait(semaphore, [self timeout]);
+    
+    NSData *nonResumedImageData = [self.imageManager.cache objectFromDiskForKey:[self.imageManager cacheKeyForURL:[self progressiveURL] processorKey:nil]];
+    
+    XCTAssert([nonResumedImageData isEqualToData:resumedImageData], @"Resumed image data and non resumed image data should be the same.");
 }
 
 @end
