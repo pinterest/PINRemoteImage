@@ -12,9 +12,6 @@ import UIKIt
 import Cocoa
 #endif
 
-import PINRemoteImageManager
-import PINRemoteImageCategoryManager
-
 extension Pin where Base: PINButton {
     /**
      Set placeholder on view and retrieve the image from the given URL, process it using the passed in processor block and set result on view. Call completion after image has been fetched, processed and set on view.
@@ -30,7 +27,7 @@ extension Pin where Base: PINButton {
                   at processorKey: String? = .none,
                   with processor: PINRemoteImageManagerImageProcessor? = .none,
                   completion: PINRemoteImageManagerImageCompletion? = .none) {
-
+    
     }
 
     /**
