@@ -59,6 +59,8 @@
     [self lock];
         _maxNumberOfConcurrentDownloads = maxNumberOfConcurrentDownloads;
     [self unlock];
+    
+    [self scheduleDownloadsIfNeeded];
 }
 
 - (NSURLSessionDataTask *)addDownloadWithSessionManager:(PINURLSessionManager *)sessionManager
@@ -85,7 +87,7 @@
 - (void)scheduleDownloadsIfNeeded
 {
     [self lock];
-        if (_runningTasks.count < _maxNumberOfConcurrentDownloads) {
+        while (_runningTasks.count < _maxNumberOfConcurrentDownloads) {
             NSMutableOrderedSet <NSURLSessionDataTask *> *queue = nil;
             if (_highPriorityQueuedOperations.count > 0) {
                 queue = _highPriorityQueuedOperations;
@@ -95,13 +97,15 @@
                 queue = _lowPriorityQueuedOperations;
             }
             
-            if (queue) {
-                NSURLSessionDataTask *task = [queue firstObject];
-                [queue removeObjectAtIndex:0];
-                [task resume];
-                
-                [_runningTasks addObject:task];
+            if (!queue) {
+                break;
             }
+            
+            NSURLSessionDataTask *task = [queue firstObject];
+            [queue removeObjectAtIndex:0];
+            [task resume];
+            
+            [_runningTasks addObject:task];
         }
     [self unlock];
 }

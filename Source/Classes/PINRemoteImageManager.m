@@ -36,10 +36,10 @@
 #endif
 
 
-#define PINRemoteImageManagerDefaultTimeout     30.0
-#define PINRemoteImageMaxRetries                3
-#define PINRemoteImageRetryDelayBase            4
-
+#define PINRemoteImageManagerDefaultTimeout            30.0
+#define PINRemoteImageMaxRetries                       3
+#define PINRemoteImageRetryDelayBase                   4
+#define PINRemoteImageHTTPMaximumConnectionsPerHost    UINT16_MAX
 //A limit of 200 characters is chosen because PINDiskCache
 //may expand the length by encoding certain characters
 #define PINRemoteImageManagerCacheKeyMaxLength 200
@@ -180,9 +180,12 @@ static dispatch_once_t sharedDispatchToken;
             self.cache = [self defaultImageCache];
         }
         
+        configuration = [configuration copy];
         if (!configuration) {
             configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
         }
+        configuration.HTTPMaximumConnectionsPerHost = PINRemoteImageHTTPMaximumConnectionsPerHost;
+        
         _callbackQueue = dispatch_queue_create("PINRemoteImageManagerCallbackQueue", DISPATCH_QUEUE_CONCURRENT);
         _lock = [[PINRemoteLock alloc] initWithName:@"PINRemoteImageManager"];
 
@@ -296,6 +299,7 @@ static dispatch_once_t sharedDispatchToken;
 
 - (void)setMaxNumberOfConcurrentDownloads:(NSInteger)maxNumberOfConcurrentDownloads completion:(dispatch_block_t)completion
 {
+    NSAssert(maxNumberOfConcurrentDownloads <= PINRemoteImageHTTPMaximumConnectionsPerHost, @"maxNumberOfConcurrentDownloads must be less than or equal to %d", PINRemoteImageHTTPMaximumConnectionsPerHost);
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         typeof(self) strongSelf = weakSelf;
