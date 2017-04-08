@@ -177,6 +177,10 @@
 		68F0EA931CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 68F0EA8F1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m */; };
 		68F0EA941CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 68F0EA901CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.h */; };
 		68F0EA951CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 68F0EA911CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.m */; };
+		81061A361E99649900FC4723 /* PINImageVIew + Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81061A351E99649900FC4723 /* PINImageVIew + Pin.swift */; };
+		81061A391E9964C700FC4723 /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81061A381E9964C700FC4723 /* Pin.swift */; };
+		81061A3B1E99697A00FC4723 /* PINButton + Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81061A3A1E99697A00FC4723 /* PINButton + Pin.swift */; };
+		81061A3D1E996ADF00FC4723 /* FLAnimatedImageView + Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81061A3C1E996ADF00FC4723 /* FLAnimatedImageView + Pin.swift */; };
 		9DD47F9C1C699F4B00F12CA0 /* PINButton+PINRemoteImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DD47F981C699F4B00F12CA0 /* PINButton+PINRemoteImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9DD47F9D1C699F4B00F12CA0 /* PINButton+PINRemoteImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DD47F991C699F4B00F12CA0 /* PINButton+PINRemoteImage.m */; };
 		9DD47F9E1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DD47F9A1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -466,6 +470,10 @@
 		68F0EA8F1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINAlternateRepresentationProvider.m; sourceTree = "<group>"; };
 		68F0EA901CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageMemoryContainer.h; sourceTree = "<group>"; };
 		68F0EA911CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageMemoryContainer.m; sourceTree = "<group>"; };
+		81061A351E99649900FC4723 /* PINImageVIew + Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PINImageVIew + Pin.swift"; sourceTree = "<group>"; };
+		81061A381E9964C700FC4723 /* Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pin.swift; sourceTree = "<group>"; };
+		81061A3A1E99697A00FC4723 /* PINButton + Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PINButton + Pin.swift"; sourceTree = "<group>"; };
+		81061A3C1E996ADF00FC4723 /* FLAnimatedImageView + Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FLAnimatedImageView + Pin.swift"; sourceTree = "<group>"; };
 		9DD47F981C699F4B00F12CA0 /* PINButton+PINRemoteImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PINButton+PINRemoteImage.h"; sourceTree = "<group>"; };
 		9DD47F991C699F4B00F12CA0 /* PINButton+PINRemoteImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PINButton+PINRemoteImage.m"; sourceTree = "<group>"; };
 		9DD47F9A1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PINImageView+PINRemoteImage.h"; sourceTree = "<group>"; };
@@ -792,6 +800,30 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		81061A2F1E99648300FC4723 /* Objective-C */ = {
+			isa = PBXGroup;
+			children = (
+				F1B918E51BCF23C800710963 /* FLAnimatedImageView+PINRemoteImage.h */,
+				F1B918E61BCF23C800710963 /* FLAnimatedImageView+PINRemoteImage.m */,
+				9DD47F981C699F4B00F12CA0 /* PINButton+PINRemoteImage.h */,
+				9DD47F991C699F4B00F12CA0 /* PINButton+PINRemoteImage.m */,
+				9DD47F9A1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h */,
+				9DD47F9B1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.m */,
+			);
+			name = "Objective-C";
+			sourceTree = "<group>";
+		};
+		81061A371E9964A300FC4723 /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				81061A381E9964C700FC4723 /* Pin.swift */,
+				81061A351E99649900FC4723 /* PINImageVIew + Pin.swift */,
+				81061A3A1E99697A00FC4723 /* PINButton + Pin.swift */,
+				81061A3C1E996ADF00FC4723 /* FLAnimatedImageView + Pin.swift */,
+			);
+			name = Swift;
+			sourceTree = "<group>";
+		};
 		CC4243F61E62051900FD6517 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
@@ -907,12 +939,8 @@
 		F1B918E41BCF23C800710963 /* Image Categories */ = {
 			isa = PBXGroup;
 			children = (
-				F1B918E51BCF23C800710963 /* FLAnimatedImageView+PINRemoteImage.h */,
-				F1B918E61BCF23C800710963 /* FLAnimatedImageView+PINRemoteImage.m */,
-				9DD47F981C699F4B00F12CA0 /* PINButton+PINRemoteImage.h */,
-				9DD47F991C699F4B00F12CA0 /* PINButton+PINRemoteImage.m */,
-				9DD47F9A1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h */,
-				9DD47F9B1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.m */,
+				81061A371E9964A300FC4723 /* Swift */,
+				81061A2F1E99648300FC4723 /* Objective-C */,
 			);
 			path = "Image Categories";
 			sourceTree = "<group>";
@@ -1053,6 +1081,7 @@
 					};
 					F1B918D01BCF239200710963 = {
 						CreatedOnToolsVersion = 7.0;
+						LastSwiftMigration = 0830;
 					};
 				};
 			};
@@ -1179,6 +1208,7 @@
 				6818C2071E551D1E00875DB7 /* upsampling.c in Sources */,
 				6818C2051E551D1E00875DB7 /* upsampling_neon.c in Sources */,
 				F1B919191BCF23C900710963 /* PINRemoteImageManagerResult.m in Sources */,
+				81061A361E99649900FC4723 /* PINImageVIew + Pin.swift in Sources */,
 				6818C1E21E551D1D00875DB7 /* dec_neon.c in Sources */,
 				6818C1EC1E551D1D00875DB7 /* enc_sse41.c in Sources */,
 				6818C1EB1E551D1D00875DB7 /* enc_sse2.c in Sources */,
@@ -1192,6 +1222,7 @@
 				6818C1E71E551D1D00875DB7 /* enc_avx2.c in Sources */,
 				68CA928A1DB19C2F008BECE2 /* PINAnimatedImage.m in Sources */,
 				68B1F2821E679D7A00ED87C4 /* PINRemoteImageDownloadQueue.m in Sources */,
+				81061A391E9964C700FC4723 /* Pin.swift in Sources */,
 				6818C2021E551D1D00875DB7 /* rescaler_sse2.c in Sources */,
 				6818C1F11E551D1D00875DB7 /* lossless_enc_mips_dsp_r2.c in Sources */,
 				6818C2801E551DA800875DB7 /* rescaler.c in Sources */,
@@ -1226,6 +1257,7 @@
 				6818C1F81E551D1D00875DB7 /* lossless_neon.c in Sources */,
 				6818C1F01E551D1D00875DB7 /* filters.c in Sources */,
 				6818C1F91E551D1D00875DB7 /* lossless_sse2.c in Sources */,
+				81061A3B1E99697A00FC4723 /* PINButton + Pin.swift in Sources */,
 				6818C27E1E551DA800875DB7 /* random.c in Sources */,
 				6818C1F31E551D1D00875DB7 /* lossless_enc_neon.c in Sources */,
 				6818C22B1E551D7500875DB7 /* analysis.c in Sources */,
@@ -1240,6 +1272,7 @@
 				6818C2431E551D7500875DB7 /* vp8l.c in Sources */,
 				6818C1891E551CE000875DB7 /* vp8.c in Sources */,
 				6818C2011E551D1D00875DB7 /* rescaler_neon.c in Sources */,
+				81061A3D1E996ADF00FC4723 /* FLAnimatedImageView + Pin.swift in Sources */,
 				6818C26F1E551DA800875DB7 /* bit_writer.c in Sources */,
 				6818C1F41E551D1D00875DB7 /* lossless_enc_sse2.c in Sources */,
 				6818C24C1E551D9200875DB7 /* anim_encode.c in Sources */,
@@ -1298,6 +1331,7 @@
 		68A0FC211E523434000B552D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
@@ -1317,6 +1351,7 @@
 		68A0FC221E523434000B552D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
@@ -1440,6 +1475,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1464,6 +1500,8 @@
 				MODULEMAP_FILE = Source/PINRemoteImage.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINRemoteImage;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1471,6 +1509,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1495,6 +1534,7 @@
 				MODULEMAP_FILE = Source/PINRemoteImage.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINRemoteImage;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
