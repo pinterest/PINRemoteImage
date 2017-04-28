@@ -86,7 +86,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (NSURL *)fourZeroFourURL
 {
-    return [NSURL URLWithString:@"https://www.pinterest.com/404/"];
+    return [NSURL URLWithString:@"https://google.com/404"];
 }
 
 - (NSURL *)headersURL
