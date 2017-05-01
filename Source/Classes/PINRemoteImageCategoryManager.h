@@ -17,7 +17,7 @@
 @protocol PINRemoteImageCategory;
 
 /**
- PINRemoteImageCategoryManager is a class that handles subclassing image display classes. PINImage+PINRemoteImage, UIButton+PINRemoteImage, etc, all delegate their work to this class. If you'd like to create a category to display an image on a view, you should mimic one of the above categories.
+ PINRemoteImageCategoryManager is a class that handles subclassing image display classes. PINImageView+PINRemoteImage, UIButton+PINRemoteImage, etc, all delegate their work to this class. If you'd like to create a category to display an image on a view, you should mimic one of the above categories.
  */
 
 @interface PINRemoteImageCategoryManager : NSObject
