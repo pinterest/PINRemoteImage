@@ -1068,7 +1068,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     
     dispatch_semaphore_wait(semaphore, [self timeout]);
     
-    PINResume *resume = [self.imageManager.cache objectFromMemoryForKey:[self.imageManager resumeCacheKeyForURL:[self progressiveURL]]];
+    PINResume *resume = [self.imageManager.cache objectFromDiskForKey:[self.imageManager resumeCacheKeyForURL:[self progressiveURL]]];
     
     //Make sure cancel is processed before kicking off download again
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
