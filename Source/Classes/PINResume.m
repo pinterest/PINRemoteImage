@@ -19,7 +19,7 @@ NSString * const kTotalBytesKey = @"kTotalBytesKey";
     if (self = [super init]) {
         _resumeData = [aDecoder decodeObjectForKey:kResumeDataKey];
         _ifRange = [aDecoder decodeObjectForKey:kIfRangeKey];
-        _totalBytes = [aDecoder decodeIntegerForKey:kTotalBytesKey];
+        _totalBytes = [aDecoder decodeInt64ForKey:kTotalBytesKey];
     }
     return self;
 }
@@ -28,7 +28,7 @@ NSString * const kTotalBytesKey = @"kTotalBytesKey";
 {
     [aCoder encodeObject:_resumeData forKey:kResumeDataKey];
     [aCoder encodeObject:_ifRange forKey:kIfRangeKey];
-    [aCoder encodeInteger:_totalBytes forKey:kTotalBytesKey];
+    [aCoder encodeInt64:_totalBytes forKey:kTotalBytesKey];
 }
 
 + (PINResume *)resumeData:(NSData *)resumeData ifRange:(NSString *)ifRange totalBytes:(long long)totalBytes
