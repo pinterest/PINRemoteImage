@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PINResume : NSObject
+@interface PINResume : NSObject <NSCoding>
 
 - (id)init NS_UNAVAILABLE;
 + (PINResume *)resumeData:(NSData *)resumeData ifRange:(NSString *)ifRange totalBytes:(long long)totalBytes;
