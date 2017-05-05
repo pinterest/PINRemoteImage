@@ -79,6 +79,7 @@ float dataTaskPriorityWithImageManagerPriority(PINRemoteImageManagerPriority pri
 
 NSString * const PINRemoteImageManagerErrorDomain = @"PINRemoteImageManagerErrorDomain";
 NSString * const PINRemoteImageCacheKey = @"cacheKey";
+NSString * const PINRemoteImageCacheKeyResumePrefix = @"R-";
 typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error);
 
 @interface PINTaskQOS : NSObject
@@ -235,8 +236,15 @@ static dispatch_once_t sharedDispatchToken;
     }
   
     return [[PINCache alloc] initWithName:kPINRemoteImageDiskCacheName rootPath:cacheURLRoot serializer:^NSData * _Nonnull(id<NSCoding>  _Nonnull object, NSString * _Nonnull key) {
+        id <NSCoding, NSObject> obj = (id <NSCoding, NSObject>)object;
+        if ([key hasPrefix:PINRemoteImageCacheKeyResumePrefix]) {
+            return [NSKeyedArchiver archivedDataWithRootObject:obj];
+        }
         return (NSData *)object;
     } deserializer:^id<NSCoding> _Nonnull(NSData * _Nonnull data, NSString * _Nonnull key) {
+        if ([key hasPrefix:PINRemoteImageCacheKeyResumePrefix]) {
+            return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        }
         return data;
     } fileExtension:nil];
 #else
@@ -733,7 +741,8 @@ static dispatch_once_t sharedDispatchToken;
                         UUID:(NSUUID *)UUID
 {
     NSString *resumeKey = [self resumeCacheKeyForURL:url];
-    PINResume *resume = [self.cache objectFromMemoryForKey:resumeKey];
+    PINResume *resume = [self.cache objectFromDiskForKey:resumeKey];
+    [self.cache removeObjectForKey:resumeKey completion:nil];
     
     [self lock];
         PINRemoteImageDownloadTask *task = [self.tasks objectForKey:key];
@@ -1637,7 +1646,7 @@ static dispatch_once_t sharedDispatchToken;
         cacheKey = [cacheKey stringByAppendingFormat:@"-<%@>", processorKey];
     }
     if (resume) {
-        cacheKey = [@"R-" stringByAppendingString:cacheKey];
+        cacheKey = [PINRemoteImageCacheKeyResumePrefix stringByAppendingString:cacheKey];
     }
 
     //PINDiskCache uses this key as the filename of the file written to disk
@@ -1723,7 +1732,7 @@ static dispatch_once_t sharedDispatchToken;
 - (void)storeResumeData:(PINResume *)resume forURL:(NSURL *)URL
 {
     NSString *resumeKey = [self resumeCacheKeyForURL:URL];
-    [self.cache setObjectInMemory:resume forKey:resumeKey withCost:resume.resumeData.length];
+    [self.cache setObjectOnDisk:resume forKey:resumeKey];
 }
 
 /// Attempt to find the task with the callbacks for the given uuid

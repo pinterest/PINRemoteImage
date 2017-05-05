@@ -10,6 +10,27 @@
 
 @implementation PINResume
 
+NSString * const kResumeDataKey = @"kResumeDataKey";
+NSString * const kIfRangeKey = @"kIfRangeKey";
+NSString * const kTotalBytesKey = @"kTotalBytesKey";
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super init]) {
+        _resumeData = [aDecoder decodeObjectForKey:kResumeDataKey];
+        _ifRange = [aDecoder decodeObjectForKey:kIfRangeKey];
+        _totalBytes = [aDecoder decodeInt64ForKey:kTotalBytesKey];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:_resumeData forKey:kResumeDataKey];
+    [aCoder encodeObject:_ifRange forKey:kIfRangeKey];
+    [aCoder encodeInt64:_totalBytes forKey:kTotalBytesKey];
+}
+
 + (PINResume *)resumeData:(NSData *)resumeData ifRange:(NSString *)ifRange totalBytes:(long long)totalBytes
 {
     PINResume *resume = [[PINResume alloc] initWithResumeData:resumeData ifRange:ifRange totalBytes:totalBytes];
