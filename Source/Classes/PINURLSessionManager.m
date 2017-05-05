@@ -78,6 +78,7 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
         dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
     [self unlock];
     
+    if (delegateQueue == nil) return;
     __weak typeof(self) weakSelf = self;
     dispatch_async(delegateQueue, ^{
         typeof(self) strongSelf = weakSelf;
@@ -109,6 +110,7 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
         dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
     [self unlock];
 
+    if (delegateQueue == nil) return;
     __weak typeof(self) weakSelf = self;
     dispatch_async(delegateQueue, ^{
         typeof(self) strongSelf = weakSelf;
@@ -129,6 +131,7 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
         dispatch_queue_t delegateQueue = self.delegateQueues[@(dataTask.taskIdentifier)];
     [self unlock];
     
+    if (delegateQueue == nil) return;
     __weak typeof(self) weakSelf = self;
     dispatch_async(delegateQueue, ^{
         typeof(self) strongSelf = weakSelf;
@@ -149,6 +152,8 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
                                     userInfo:@{NSLocalizedDescriptionKey : @"HTTP Error Response."}];
         }
     }
+    
+    if (delegateQueue == nil) return;
     __weak typeof(self) weakSelf = self;
     dispatch_async(delegateQueue, ^{
         typeof(self) strongSelf = weakSelf;
