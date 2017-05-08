@@ -129,6 +129,11 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
         dispatch_queue_t delegateQueue = self.delegateQueues[@(dataTask.taskIdentifier)];
     [self unlock];
     
+    NSAssert(delegateQueue != nil, @"There seems to be an issue in iOS 9 where this can be nil. If you can reliably reproduce hitting this, *please* open an issue: https://github.com/pinterest/PINRemoteImage/issues");
+    if (delegateQueue == nil) {
+        return;
+    }
+    
     __weak typeof(self) weakSelf = self;
     dispatch_async(delegateQueue, ^{
         typeof(self) strongSelf = weakSelf;
@@ -141,6 +146,12 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
     [self lock];
         dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
     [self unlock];
+    
+    NSAssert(delegateQueue != nil, @"There seems to be an issue in iOS 9 where this can be nil. If you can reliably reproduce hitting this, *please* open an issue: https://github.com/pinterest/PINRemoteImage/issues");
+    if (delegateQueue == nil) {
+        return;
+    }
+    
     if (!error && [task.response isKindOfClass:[NSHTTPURLResponse class]]) {
         NSInteger statusCode = [(NSHTTPURLResponse *)task.response statusCode];
         if (statusCode >= 400) {
