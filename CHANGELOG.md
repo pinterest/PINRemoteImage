@@ -1,6 +1,7 @@
 ## master
 * Add your own contributions to the next release on the line below this with your name.
 - [fixed] Moved storage of resume data to disk from memory. [garrettmoon](https://github.com/garrettmoon)
+- [fixed] Hopefully fixes crashes occuring in PINURLSessionManager on iOS 9. [garrettmoon](https://github.com/garrettmoon)
 
 ## 2.1.4 -- 2016 Apr 22
 - [new] Have PINProgressiveImage pass back the quality of the current progressive image [#185](https://github.com/pinterest/PINRemoteImage/pull/185)
