@@ -78,6 +78,11 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
         dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
     [self unlock];
     
+    NSAssert(delegateQueue != nil, @"There seems to be an issue in iOS 9 where this can be nil. If you can reliably reproduce hitting this, *please* open an issue: https://github.com/pinterest/PINRemoteImage/issues");
+    if (delegateQueue == nil) {
+        return;
+    }
+    
     __weak typeof(self) weakSelf = self;
     dispatch_async(delegateQueue, ^{
         typeof(self) strongSelf = weakSelf;
@@ -108,6 +113,11 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
     [self lock];
         dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
     [self unlock];
+    
+    NSAssert(delegateQueue != nil, @"There seems to be an issue in iOS 9 where this can be nil. If you can reliably reproduce hitting this, *please* open an issue: https://github.com/pinterest/PINRemoteImage/issues");
+    if (delegateQueue == nil) {
+        return;
+    }
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(delegateQueue, ^{
@@ -123,10 +133,10 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
     });
 }
 
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)task didReceiveData:(NSData *)data
 {
     [self lock];
-        dispatch_queue_t delegateQueue = self.delegateQueues[@(dataTask.taskIdentifier)];
+        dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
     [self unlock];
     
     NSAssert(delegateQueue != nil, @"There seems to be an issue in iOS 9 where this can be nil. If you can reliably reproduce hitting this, *please* open an issue: https://github.com/pinterest/PINRemoteImage/issues");
@@ -137,12 +147,13 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
     __weak typeof(self) weakSelf = self;
     dispatch_async(delegateQueue, ^{
         typeof(self) strongSelf = weakSelf;
-        [strongSelf.delegate didReceiveData:data forTask:dataTask];
+        [strongSelf.delegate didReceiveData:data forTask:task];
     });
 }
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {
+    NSLog(@"task: %@ completed with error: %@", task, error);
     [self lock];
         dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
     [self unlock];

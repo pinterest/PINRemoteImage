@@ -618,11 +618,11 @@ static dispatch_once_t sharedDispatchToken;
                               //Remove completion and try again
                               typeof(self) strongSelf = weakSelf;
                               [strongSelf lock];
-                              PINRemoteImageTask *task = [strongSelf.tasks objectForKey:key];
-                              [task removeCallbackWithUUID:UUID];
-                              if (task.callbackBlocks.count == 0) {
-                                  [strongSelf.tasks removeObjectForKey:key];
-                              }
+                                  PINRemoteImageTask *task = [strongSelf.tasks objectForKey:key];
+                                  [task removeCallbackWithUUID:UUID];
+                                  if (task.callbackBlocks.count == 0) {
+                                      [strongSelf.tasks removeObjectForKey:key];
+                                  }
                               [strongSelf unlock];
                               
                               //Skip early check
