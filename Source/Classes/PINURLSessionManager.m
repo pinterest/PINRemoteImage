@@ -153,7 +153,6 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {
-    NSLog(@"task: %@ completed with error: %@", task, error);
     [self lock];
         dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
     [self unlock];
