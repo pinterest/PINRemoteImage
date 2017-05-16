@@ -932,8 +932,8 @@ static dispatch_once_t sharedDispatchToken;
         request.allHTTPHeaderFields = headers;
     }
     
-    if (self.requestConfigurationHandler) {
-        request = [self.requestConfigurationHandler(request) mutableCopy];
+    if (_requestConfigurationHandler) {
+        request = [_requestConfigurationHandler(request) mutableCopy];
     }
     
     [NSURLProtocol setProperty:key forKey:PINRemoteImageCacheKey inRequest:request];
