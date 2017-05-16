@@ -1,5 +1,6 @@
 ## master
 * Add your own contributions to the next release on the line below this with your name.
+- [new] Added request configuration handler to allow customizing HTTP headers per request [#355](https://github.com/pinterest/PINRemoteImage/pull/355) [zachwaugh](https://github.com/zachwaugh)
 - [fixed] Moved storage of resume data to disk from memory. [garrettmoon](https://github.com/garrettmoon)
 - [fixed] Hopefully fixes crashes occuring in PINURLSessionManager on iOS 9. [garrettmoon](https://github.com/garrettmoon)
 
