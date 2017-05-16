@@ -1041,6 +1041,11 @@ static dispatch_once_t sharedDispatchToken;
 
 - (void)cancelTaskWithUUID:(nonnull NSUUID *)UUID storeResumeData:(BOOL)storeResumeData
 {
+    [self cancelTaskWithUUID:UUID ifExpectedToExceedTimeInterval:0 storeResumeData:storeResumeData];
+}
+
+- (void)cancelTaskWithUUID:(nonnull NSUUID *)UUID ifExpectedToExceedTimeInterval:(NSTimeInterval)timeToExceed storeResumeData:(BOOL)storeResumeData
+{
     if (UUID == nil) {
         return;
     }
@@ -1055,6 +1060,16 @@ static dispatch_once_t sharedDispatchToken;
         [strongSelf lock];
             NSString *taskKey = nil;
             PINRemoteImageTask *taskToEvaluate = [strongSelf _locked_taskForUUID:UUID key:&taskKey];
+            PINRemoteImageDownloadTask *downloadTask = nil;
+            if ([taskToEvaluate isKindOfClass:[PINRemoteImageDownloadTask class]]) {
+                downloadTask = (PINRemoteImageDownloadTask *)taskToEvaluate;
+            }
+        
+            //consider skipping cancelation if the expected time left to download the image is < timeToExceed
+            if (timeToExceed > 0 && downloadTask && [downloadTask expectedSecondsLeftToComplete] < timeToExceed) {
+                [strongSelf unlock];
+                return;
+            }
             
             if (taskToEvaluate == nil) {
                 //maybe task hasn't been added to task list yet, add it to canceled tasks.
@@ -1065,8 +1080,7 @@ static dispatch_once_t sharedDispatchToken;
             if ([taskToEvaluate cancelWithUUID:UUID manager:strongSelf]) {
                 [strongSelf.tasks removeObjectForKey:taskKey];
                 
-                if ([taskToEvaluate isKindOfClass:[PINRemoteImageDownloadTask class]]) {
-                    PINRemoteImageDownloadTask *downloadTask = (PINRemoteImageDownloadTask *)taskToEvaluate;
+                if (downloadTask) {
                     [strongSelf.urlSessionTaskQueue removeDownloadTaskFromQueue:downloadTask.urlSessionTask];
                     
                     if (storeResumeData && downloadTask.ifRange) {
