@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3FF3CE761EAC09880020D698 /* PINImage+GIF.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FF3CE741EAC09880020D698 /* PINImage+GIF.h */; };
+		3FF3CE771EAC09880020D698 /* PINImage+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF3CE751EAC09880020D698 /* PINImage+GIF.m */; };
 		6818C1551E551B5A00875DB7 /* PINCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6818C1541E551B5A00875DB7 /* PINCache.framework */; };
 		6818C1661E551CC600875DB7 /* decode.h in Headers */ = {isa = PBXBuildFile; fileRef = 6818C15E1E551CC600875DB7 /* decode.h */; };
 		6818C1671E551CC600875DB7 /* demux.h in Headers */ = {isa = PBXBuildFile; fileRef = 6818C15F1E551CC600875DB7 /* demux.h */; };
@@ -292,6 +294,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3FF3CE741EAC09880020D698 /* PINImage+GIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PINImage+GIF.h"; sourceTree = "<group>"; };
+		3FF3CE751EAC09880020D698 /* PINImage+GIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PINImage+GIF.m"; sourceTree = "<group>"; };
 		6818C1541E551B5A00875DB7 /* PINCache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PINCache.framework; path = "Carthage/Checkouts/PINCache/build/Debug-iphoneos/PINCache.framework"; sourceTree = "<group>"; };
 		6818C1561E551BAB00875DB7 /* PINOperation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PINOperation.framework; path = "Carthage/Checkouts/PINOperation/build/Debug-iphoneos/PINOperation.framework"; sourceTree = "<group>"; };
 		6818C15E1E551CC600875DB7 /* decode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = decode.h; sourceTree = "<group>"; };
@@ -900,6 +904,8 @@
 				9DD47FA11C699FDC00F12CA0 /* PINImage+DecodedImage.m */,
 				9DD47FA21C699FDC00F12CA0 /* PINImage+WebP.h */,
 				9DD47FA31C699FDC00F12CA0 /* PINImage+WebP.m */,
+				3FF3CE741EAC09880020D698 /* PINImage+GIF.h */,
+				3FF3CE751EAC09880020D698 /* PINImage+GIF.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -969,6 +975,7 @@
 				6818C1FC1E551D1D00875DB7 /* mips_macro.h in Headers */,
 				6818C2851E551DA800875DB7 /* utils.h in Headers */,
 				6818C2721E551DA800875DB7 /* color_cache.h in Headers */,
+				3FF3CE761EAC09880020D698 /* PINImage+GIF.h in Headers */,
 				6818C1661E551CC600875DB7 /* decode.h in Headers */,
 				6818C1FE1E551D1D00875DB7 /* neon.h in Headers */,
 				6818C1691E551CC600875DB7 /* extras.h in Headers */,
@@ -1202,6 +1209,7 @@
 				F1B918FF1BCF23C900710963 /* PINRemoteImageCategoryManager.m in Sources */,
 				6818C2341E551D7500875DB7 /* frame.c in Sources */,
 				6818C24D1E551D9200875DB7 /* muxedit.c in Sources */,
+				3FF3CE771EAC09880020D698 /* PINImage+GIF.m in Sources */,
 				6818C1E01E551D1D00875DB7 /* dec_mips32.c in Sources */,
 				6818C1851E551CE000875DB7 /* idec.c in Sources */,
 				6818C2391E551D7500875DB7 /* picture_csp.c in Sources */,
