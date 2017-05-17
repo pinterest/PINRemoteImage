@@ -115,7 +115,7 @@
                                         bytesSavedByResuming:bytesSavedByResuming];
 }
 
-- (CFTimeInterval)expectedSecondsLeftToComplete
+- (CFTimeInterval)estimatedTimeRemaining
 {
     if (self.sessionTaskStartTime == 0) {
         return DBL_MAX;
@@ -123,8 +123,8 @@
     if (self.sessionTaskEndTime > 0) {
         return 0;
     }
-    CFTimeInterval taskLength = CACurrentMediaTime() - self.sessionTaskStartTime;
-    float bytesPerSecond = self.urlSessionTask.countOfBytesReceived / taskLength;
+    CFTimeInterval elapsedTime = CACurrentMediaTime() - self.sessionTaskStartTime;
+    float bytesPerSecond = self.urlSessionTask.countOfBytesReceived / elapsedTime;
     if (bytesPerSecond < 0 + FLT_EPSILON) {
         return DBL_MAX;
     }

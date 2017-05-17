@@ -1066,7 +1066,7 @@ static dispatch_once_t sharedDispatchToken;
             }
         
             //consider skipping cancelation if the expected time left to download the image is < timeToExceed
-            if (timeToExceed > 0 && downloadTask && [downloadTask expectedSecondsLeftToComplete] < timeToExceed) {
+            if (timeToExceed > 0 && downloadTask && [downloadTask estimatedTimeRemaining] < timeToExceed) {
                 [strongSelf unlock];
                 return;
             }
