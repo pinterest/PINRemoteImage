@@ -1162,7 +1162,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
         usleep(100000);
     } while (YES);
     
-    [self.imageManager cancelTaskWithUUID:downloadIdentifier ifExpectedToExceedTimeInterval:1 storeResumeData:NO];
+    [self.imageManager cancelTaskWithUUID:downloadIdentifier whenEstimatedTimeRemainingExceeds:1 storeResumeData:NO];
     //wait a bit for cancelation request to go through
     usleep(100000);
 
@@ -1188,7 +1188,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
         usleep(100000);
     } while (YES);
     
-    [self.imageManager cancelTaskWithUUID:downloadIdentifier ifExpectedToExceedTimeInterval:[self timeoutTimeInterval] storeResumeData:NO];
+    [self.imageManager cancelTaskWithUUID:downloadIdentifier whenEstimatedTimeRemainingExceeds:[self timeoutTimeInterval] storeResumeData:NO];
     
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }

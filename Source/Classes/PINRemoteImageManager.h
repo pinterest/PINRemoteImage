@@ -559,7 +559,7 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  cache and used to resume the download if the same URL is attempted to be downloaded in the future.
  */
 
-- (void)cancelTaskWithUUID:(nonnull NSUUID *)UUID ifExpectedToExceedTimeInterval:(NSTimeInterval)timeToExceed storeResumeData:(BOOL)storeResumeData;
+- (void)cancelTaskWithUUID:(nonnull NSUUID *)UUID whenEstimatedTimeRemainingExceeds:(NSTimeInterval)timeToExceed storeResumeData:(BOOL)storeResumeData;
 
 /**
  Set the priority of a download task. Since there is only one task per download, the priority of the download task will always be the last priority this method was called with.

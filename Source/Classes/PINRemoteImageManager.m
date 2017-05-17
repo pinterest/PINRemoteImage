@@ -1041,10 +1041,10 @@ static dispatch_once_t sharedDispatchToken;
 
 - (void)cancelTaskWithUUID:(nonnull NSUUID *)UUID storeResumeData:(BOOL)storeResumeData
 {
-    [self cancelTaskWithUUID:UUID ifExpectedToExceedTimeInterval:0 storeResumeData:storeResumeData];
+    [self cancelTaskWithUUID:UUID whenEstimatedTimeRemainingExceeds:0 storeResumeData:storeResumeData];
 }
 
-- (void)cancelTaskWithUUID:(nonnull NSUUID *)UUID ifExpectedToExceedTimeInterval:(NSTimeInterval)timeToExceed storeResumeData:(BOOL)storeResumeData
+- (void)cancelTaskWithUUID:(nonnull NSUUID *)UUID whenEstimatedTimeRemainingExceeds:(NSTimeInterval)timeToExceed storeResumeData:(BOOL)storeResumeData
 {
     if (UUID == nil) {
         return;
