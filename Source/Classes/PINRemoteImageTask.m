@@ -113,11 +113,10 @@
 
 - (BOOL)cancelWithUUID:(NSUUID *)UUID resume:(PINResume **)resume
 {
-    BOOL noMoreCompletions = NO;
-    [self removeCallbackWithUUID:UUID];
-    if ([self.callbackBlocks count] == 0) {
-        noMoreCompletions = YES;
-    }
+    __block BOOL noMoreCompletions;
+    [self.lock lockWithBlock:^{
+        noMoreCompletions = [self __locked_cancelWithUUID:UUID resume:resume];
+    }];
     return noMoreCompletions;
 }
 

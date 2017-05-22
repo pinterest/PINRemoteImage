@@ -19,6 +19,7 @@
 @interface PINRemoteImageDownloadTask ()
 {
     PINProgressiveImage *_progressImage;
+    PINResume *_resume;
 }
 
 @end
@@ -101,10 +102,10 @@
             [self.manager.urlSessionTaskQueue removeDownloadTaskFromQueue:_progressImage.dataTask];
             [_progressImage.dataTask cancel];
             
-            if (resume && _ifRange && _totalBytes > 0) {
+            if (resume && _ifRange && _progressImage.dataTask.countOfBytesExpectedToReceive > 0) {
                 NSData *progressData = _progressImage.data;
                 if (progressData.length > 0) {
-                    *resume = [PINResume resumeData:progressData ifRange:_ifRange totalBytes:_totalBytes];
+                    *resume = [PINResume resumeData:progressData ifRange:_ifRange totalBytes:_progressImage.dataTask.countOfBytesExpectedToReceive];
                 }
             }
             
@@ -149,7 +150,10 @@
                                                    resultType:(PINRemoteImageResultType)resultType
                                                          UUID:(nullable NSUUID *)UUID
 {
-    NSUInteger bytesSavedByResuming = self.resume.resumeData.length;
+    __block NSUInteger bytesSavedByResuming;
+    [self.lock lockWithBlock:^{
+        bytesSavedByResuming = _resume.resumeData.length;
+    }];
     return [PINRemoteImageManagerResult imageResultWithImage:image
                                    alternativeRepresentation:alternativeRepresentation
                                                requestLength:requestLength
@@ -211,13 +215,15 @@
         if (httpResponse.statusCode == 206) {
             __block PINResume *resume;
             [self.lock lockWithBlock:^{
-                resume = self.resume;
+                resume = _resume;
             }];
             
             [self updateData:resume.resumeData isResume:YES expectedBytes:resume.totalBytes];
         } else {
             //Check if there's resume data and we didn't get back a 206, get rid of it
-            self.resume = nil;
+            [self.lock lockWithBlock:^{
+                _resume = nil;
+            }];
         }
         
         // Check to see if the server supports resume
@@ -236,7 +242,6 @@
             if (ifRange.length > 0) {
                 [self.lock lockWithBlock:^{
                     _ifRange = ifRange;
-                    _totalBytes = httpResponse.expectedContentLength;
                 }];
             }
         }

@@ -17,8 +17,6 @@
 
 @property (nonatomic, strong, nullable) NSURL *URL;
 @property (nonatomic, copy, nullable) NSString *ifRange;
-@property (nonatomic, assign) long long totalBytes;
-@property (nonatomic, strong, nullable) PINResume *resume;
 @property (nonatomic, copy, readonly, nullable) NSData *data;
 
 @property (nonatomic, assign) NSUInteger numberOfRetries;
