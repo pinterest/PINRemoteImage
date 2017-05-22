@@ -16,12 +16,19 @@
 
 #import "PINRemoteImageMacros.h"
 
+@class PINRemoteImageDownloadTask;
+
 /** An object which store the data of a downloading image and vends progressive scans **/
 @interface PINProgressiveImage : NSObject
 
 @property (atomic, copy, nonnull) NSArray *progressThresholds;
 @property (atomic, assign) CFTimeInterval estimatedRemainingTimeThreshold;
-@property (atomic, assign) CFTimeInterval startTime;
+@property (nonatomic, strong, readonly, nonnull) NSURLSessionDataTask * dataTask;
+@property (nonatomic, readonly) float bytesPerSecond;
+@property (nonatomic, readonly) CFTimeInterval estimatedRemainingTime;
+
+- (nonnull instancetype)init NS_UNAVAILABLE;
+- (nonnull instancetype)initWithDataTask:(nonnull NSURLSessionDataTask *)dataTask;
 
 - (void)updateProgressiveImageWithData:(nonnull NSData *)data expectedNumberOfBytes:(int64_t)expectedNumberOfBytes isResume:(BOOL)isResume;
 

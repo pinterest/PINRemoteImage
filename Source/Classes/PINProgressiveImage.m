@@ -13,9 +13,12 @@
 
 #import "PINRemoteImage.h"
 #import "PINImage+DecodedImage.h"
+#import "PINRemoteImageDownloadTask.h"
+#import "NSURLSessionTask+Timing.h"
 
 @interface PINProgressiveImage ()
 
+@property (nonatomic, strong) NSURLSessionDataTask *dataTask;
 @property (nonatomic, strong) NSMutableData *mutableData;
 @property (nonatomic, assign) int64_t expectedNumberOfBytes;
 @property (nonatomic, assign) CGImageSourceRef imageSource;
@@ -23,10 +26,9 @@
 @property (nonatomic, assign) BOOL isProgressiveJPEG;
 @property (nonatomic, assign) NSUInteger currentThreshold;
 @property (nonatomic, assign) NSUInteger startingBytes;
-@property (nonatomic, assign) float bytesPerSecond;
 @property (nonatomic, assign) NSUInteger scannedByte;
 @property (nonatomic, assign) NSInteger sosCount;
-@property (nonatomic, strong) NSLock *lock;
+@property (nonatomic, strong) PINRemoteLock *lock;
 #if DEBUG
 @property (nonatomic, assign) CFTimeInterval scanTime;
 #endif
@@ -37,20 +39,18 @@
 
 @synthesize progressThresholds = _progressThresholds;
 @synthesize estimatedRemainingTimeThreshold = _estimatedRemainingTimeThreshold;
-@synthesize startTime = _startTime;
 
-- (instancetype)init
+- (nonnull instancetype)initWithDataTask:(nonnull NSURLSessionDataTask *)dataTask
 {
     if (self = [super init]) {
-        self.lock = [[NSLock alloc] init];
-        self.lock.name = @"PINProgressiveImage";
+        self.lock = [[PINRemoteLock alloc] initWithName:@"PINProgressiveImage"];
         
+        _dataTask = dataTask;
         _imageSource = CGImageSourceCreateIncremental(NULL);;
         self.size = CGSizeZero;
         self.isProgressiveJPEG = NO;
         self.currentThreshold = 0;
         self.progressThresholds = @[@0.00, @0.35, @0.65];
-        self.startTime = CACurrentMediaTime();
         self.estimatedRemainingTimeThreshold = -1;
         self.sosCount = 0;
         self.scannedByte = 0;
@@ -74,9 +74,12 @@
 
 - (void)setProgressThresholds:(NSArray *)progressThresholds
 {
-    [self.lock lock];
-        _progressThresholds = [progressThresholds copy];
-    [self.lock unlock];
+    // There's no reason to set an empty progress thresholds array, instead don't use the progressive feature
+    if (progressThresholds.count > 0) {
+        [self.lock lock];
+            _progressThresholds = [progressThresholds copy];
+        [self.lock unlock];
+    }
 }
 
 - (NSArray *)progressThresholds
@@ -102,19 +105,56 @@
     return estimatedRemainingTimeThreshold;
 }
 
-- (void)setStartTime:(CFTimeInterval)startTime
+- (float)bytesPerSecond
 {
-    [self.lock lock];
-        _startTime = startTime;
-    [self.lock unlock];
+    __block float bytesPerSecond;
+    [self.lock lockWithBlock:^{
+        bytesPerSecond = [self __locked_bytesPerSecond];
+    }];
+    return bytesPerSecond;
 }
 
-- (CFTimeInterval)startTime
+- (float)__locked_bytesPerSecond
 {
-    [self.lock lock];
-        CFTimeInterval startTime = _startTime;
-    [self.lock unlock];
-    return startTime;
+    NSAssert(_dataTask.PIN_startTime != 0, @"Start time needs to be set by now.");
+    CFTimeInterval endTime = CACurrentMediaTime();
+    if (_dataTask.PIN_endTime != 0) {
+        endTime = _dataTask.PIN_endTime;
+    }
+    CFTimeInterval taskLength = endTime - _dataTask.PIN_startTime;
+    int64_t downloadedBytes = _dataTask.countOfBytesReceived;
+    
+    if (taskLength == 0) {
+        return 0;
+    }
+    
+    return downloadedBytes / taskLength;
+}
+
+- (CFTimeInterval)estimatedRemainingTime
+{
+    __block CFTimeInterval estimatedRemainingTime;
+    [self.lock lockWithBlock:^{
+        estimatedRemainingTime = [self __locked_estimatedRemainingTime];
+    }];
+    return estimatedRemainingTime;
+}
+
+- (CFTimeInterval)__locked_estimatedRemainingTime
+{
+    if (_dataTask.countOfBytesExpectedToReceive == NSURLSessionTransferSizeUnknown) {
+        return MAXFLOAT;
+    }
+    NSUInteger remainingBytes = (NSUInteger)_dataTask.countOfBytesExpectedToReceive - (NSUInteger)_dataTask.countOfBytesReceived;
+    if (remainingBytes == 0) {
+        return 0;
+    }
+    
+    float bytesPerSecond = [self __locked_bytesPerSecond];
+    if (bytesPerSecond == 0) {
+        return MAXFLOAT;
+    }
+    return remainingBytes / bytesPerSecond;
 }
 
 - (void)updateProgressiveImageWithData:(nonnull NSData *)data expectedNumberOfBytes:(int64_t)expectedNumberOfBytes isResume:(BOOL)isResume
@@ -171,7 +211,7 @@
             return nil;
         }
         
-        if (_estimatedRemainingTimeThreshold > 0 && self.estimatedRemainingTime < _estimatedRemainingTimeThreshold) {
+        if (_estimatedRemainingTimeThreshold > 0 && [self __locked_estimatedRemainingTime] < _estimatedRemainingTimeThreshold) {
             [self.lock unlock];
             return nil;
         }
@@ -289,35 +329,6 @@
 - (BOOL)hasCompletedFirstScan
 {
     return self.sosCount >= 2;
-}
-
-//Must be called within lock
-- (float)bytesPerSecond
-{
-    CFTimeInterval length = CACurrentMediaTime() - _startTime;
-    if (length == 0) {
-        return 0;
-    }
-    return (self.mutableData.length - self.startingBytes) / length;
-}
-
-//Must be called within lock
-- (CFTimeInterval)estimatedRemainingTime
-{
-    if (self.expectedNumberOfBytes < 0) {
-        return MAXFLOAT;
-    }
-    
-    NSUInteger remainingBytes = (NSUInteger)self.expectedNumberOfBytes - self.mutableData.length;
-    if (remainingBytes == 0) {
-        return 0;
-    }
-    
-    float bytesPerSecond = self.bytesPerSecond;
-    if (bytesPerSecond == 0) {
-        return MAXFLOAT;
-    }
-    return remainingBytes / self.bytesPerSecond;
 }
 
 //Must be called within lock
