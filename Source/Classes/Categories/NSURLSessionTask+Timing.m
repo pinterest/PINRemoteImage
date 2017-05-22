@@ -78,7 +78,9 @@
             @autoreleasepool {
                 //remove state observer
                 PINURLSessionTaskObserver *observer = objc_getAssociatedObject((__bridge id)obj, @selector(PIN_setupSessionTaskObserver));
-                [(__bridge id)obj removeObserver:observer forKeyPath:@"state"];
+                if (observer) {
+                    [(__bridge id)obj removeObserver:observer forKeyPath:@"state"];
+                }
             }
             
             //casting original implementation is necessary to ensure ARC doesn't attempt to retain during dealloc
