@@ -141,11 +141,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (NSURL *)progressiveURL
 {
-<<<<<<< HEAD
     return [NSURL URLWithString:@"https://s-media-cache-ak0.pinimg.com/1200x/80/03/1b/80031b76573a358ed4fed5de391b6d36.jpg"];
-=======
-    return [NSURL URLWithString:@"https://s-media-cache-ak0.pinimg.com/750x/80/03/1b/80031b76573a358ed4fed5de391b6d36.jpg"];
->>>>>>> Refactors downloading and fixes download start time.
 }
 
 - (NSArray <NSURL *> *)bigURLs
