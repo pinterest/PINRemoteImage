@@ -1118,7 +1118,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
                                   renderedImageQualityGreater = YES;
                               }
                                  completion:^(PINRemoteImageManagerResult * _Nonnull result) {
-                                     XCTAssert(renderedImageQualityGreater, @"Rendered image quality should non-zero and be greater than resume length.");
+                                     XCTAssert(renderedImageQualityGreater, @"Rendered image quality should non-zero and be greater than resume length. resume data length: %f total: %f", resume.resumeData.length, resume.totalBytes);
                                      XCTAssert(result.image && result.error == nil, @"Image not downloaded");
                                      //Wait a second for disk storage.
                                      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
