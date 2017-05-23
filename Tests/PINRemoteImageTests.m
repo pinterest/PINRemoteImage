@@ -1102,28 +1102,25 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     dispatch_semaphore_wait(semaphore, [self timeout]);
     
     PINResume *resume = [self.imageManager.cache objectFromDiskForKey:[self.imageManager resumeCacheKeyForURL:[self progressiveURL]]];
+    XCTAssert(resume.resumeData.length > 0, @"Resume should have > 0 data length");
     
-    //Make sure cancel is processed before kicking off download again
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self.imageManager downloadImageWithURL:[self progressiveURL]
-                                        options:PINRemoteImageManagerDownloadOptionsNone
-                                  progressImage:^(PINRemoteImageManagerResult * _Nonnull result) {
-                                      // We expect renderedImageQualitySame to be true because we want an initial progress callback on a resumed
-                                      // download. Otherwise, a canceled download which had already rendered progress, may not render progress again
-                                      // until completed.
-                                      if (resume.resumeData.length > 0 && result.renderedImageQuality >= ((CGFloat)resume.resumeData.length / resume.totalBytes)) {
-                                          renderedImageQualityGreater = YES;
-                                      }
-                                  }
-                                     completion:^(PINRemoteImageManagerResult * _Nonnull result) {
-                                         XCTAssert(renderedImageQualityGreater, @"Rendered image quality should non-zero and be greater than resume length.");
-                                         XCTAssert(result.image && result.error == nil, @"Image not downloaded");
-                                         //Wait a second for disk storage.
-                                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                                             dispatch_semaphore_signal(semaphore);
-                                         });
-                                     }];
-    });
+    [self.imageManager downloadImageWithURL:[self progressiveURL]
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                              progressImage:^(PINRemoteImageManagerResult * _Nonnull result) {
+                                  // We expect renderedImageQualitySame to be true because we want an initial progress callback on a resumed
+                                  // download. Otherwise, a canceled download which had already rendered progress, may not render progress again
+                                  // until completed.
+                                  XCTAssert(result.renderedImageQuality >= ((CGFloat)resume.resumeData.length / resume.totalBytes), @"expected renderedImageQuality (%f) to be greater or equal to progress (%f)", result.renderedImageQuality, (CGFloat)resume.resumeData.length / resume.totalBytes);
+                                  renderedImageQualityGreater = YES;
+                              }
+                                 completion:^(PINRemoteImageManagerResult * _Nonnull result) {
+                                     XCTAssert(renderedImageQualityGreater, @"Rendered image quality should non-zero and be greater than resume length.");
+                                     XCTAssert(result.image && result.error == nil, @"Image not downloaded");
+                                     //Wait a second for disk storage.
+                                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                                         dispatch_semaphore_signal(semaphore);
+                                     });
+                                 }];
     
     dispatch_semaphore_wait(semaphore, [self timeout]);
     
