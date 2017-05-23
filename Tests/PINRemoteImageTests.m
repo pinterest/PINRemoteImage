@@ -54,7 +54,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 @interface PINRemoteImage_Tests : XCTestCase <PINURLSessionManagerDelegate>
 
 @property (nonatomic, strong) PINRemoteImageManager *imageManager;
-@property (nonatomic, strong) NSData *data;
+@property (nonatomic, strong) NSMutableData *data;
 @property (nonatomic, strong) NSURLSessionTask *task;
 @property (nonatomic, strong) NSError *error;
 
@@ -163,7 +163,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (void)didReceiveData:(NSData *)data forTask:(NSURLSessionTask *)task
 {
-    self.data = data;
+    [self.data appendData:data];
     self.task = task;
 }
 
@@ -176,6 +176,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 - (void)setUp
 {
     [super setUp];
+    self.data = [[NSMutableData alloc] init];
     // Put setup code here. This method is called before the invocation of each test method in the class.
     self.imageManager = [[PINRemoteImageManager alloc] init];
 }
@@ -923,6 +924,9 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 		aHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
 		[expectation fulfill];
 	}];
+    
+    //Wait for async authentication challenge setter to complete
+    usleep(10000);
 	
 	[self.imageManager downloadImageWithURL:[NSURL URLWithString:@"https://media-cache-ec0.pinimg.com/600x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"]
 									options:PINRemoteImageManagerDownloadOptionsNone
