@@ -102,7 +102,7 @@
             [self.manager.urlSessionTaskQueue removeDownloadTaskFromQueue:_progressImage.dataTask];
             [_progressImage.dataTask cancel];
             
-            if (resume && _ifRange && _progressImage.dataTask.countOfBytesExpectedToReceive > 0) {
+            if (resume && _ifRange && _progressImage.dataTask.countOfBytesExpectedToReceive > 0 && _progressImage.dataTask.countOfBytesExpectedToReceive != NSURLSessionTransferSizeUnknown) {
                 NSData *progressData = _progressImage.data;
                 if (progressData.length > 0) {
                     *resume = [PINResume resumeData:progressData ifRange:_ifRange totalBytes:_progressImage.dataTask.countOfBytesExpectedToReceive];
