@@ -549,10 +549,16 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     XCTAssert(object == nil, @"image should not be in cache");
     
     [self.imageManager prefetchImageWithURL:[self JPEGURL]];
-    sleep([self timeoutTimeInterval]);
     
-    object = [[self.imageManager cache] objectFromMemoryForKey:key];
-    XCTAssert(object, @"image was not prefetched or was not stored in cache");
+    XCTestExpectation *expectation = [self expectationWithDescription:@"image was prefetched into cache"];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        while ([[self.imageManager cache] objectFromMemoryForKey:key] == nil) {
+            usleep(10000);
+        }
+        [expectation fulfill];
+    });
+
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
 - (void)testUIImageView
