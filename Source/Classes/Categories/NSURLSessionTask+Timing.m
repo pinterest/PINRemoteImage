@@ -17,6 +17,7 @@
 @property (atomic, assign) CFTimeInterval endTime;
 
 - (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithTask:(NSURLSessionTask *)task NS_DESIGNATED_INITIALIZER;
 
 @end
 
@@ -27,6 +28,7 @@
     if (self = [super init]) {
         _startTime = 0;
         _endTime = 0;
+        [task addObserver:self forKeyPath:@"state" options:0 context:nil];
     }
     return self;
 }
