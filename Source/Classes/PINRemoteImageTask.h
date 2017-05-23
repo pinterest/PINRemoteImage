@@ -7,17 +7,27 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <PINOperation/PINOperation.h>
 
 #import "PINRemoteImageCallbacks.h"
 #import "PINRemoteImageManager.h"
 #import "PINRemoteImageMacros.h"
+#import "PINRemoteLock.h"
+#import "PINResume.h"
 
 @interface PINRemoteImageTask : NSObject
 
-@property (nonatomic, strong, nonnull) NSMutableDictionary<NSUUID *, PINRemoteImageCallbacks *> *callbackBlocks;
+@property (nonatomic, strong, readonly, nonnull) PINRemoteLock *lock;
+
+@property (nonatomic, copy, readonly, nonnull) NSDictionary<NSUUID *, PINRemoteImageCallbacks *> *callbackBlocks;
+
+@property (nonatomic, weak, nullable) PINRemoteImageManager *manager;
 #if PINRemoteImageLogging
 @property (nonatomic, copy, nullable) NSString *key;
 #endif
+
+- (_Nonnull instancetype)init NS_UNAVAILABLE;
+- (_Nonnull instancetype)initWithManager:(nonnull PINRemoteImageManager *)manager NS_DESIGNATED_INITIALIZER;
 
 - (void)addCallbacksWithCompletionBlock:(nonnull PINRemoteImageManagerImageCompletion)completionBlock
                      progressImageBlock:(nullable PINRemoteImageManagerImageCompletion)progressImageBlock
@@ -26,15 +36,14 @@
 
 - (void)removeCallbackWithUUID:(nonnull NSUUID *)UUID;
 
-- (void)callCompletionsWithQueue:(nonnull dispatch_queue_t)queue
-                          remove:(BOOL)remove
-                       withImage:(nullable PINImage *)image
+- (void)callCompletionsWithImage:(nullable PINImage *)image
        alternativeRepresentation:(nullable id)alternativeRepresentation
                           cached:(BOOL)cached
-                           error:(nullable NSError *)error;
+                           error:(nullable NSError *)error
+                          remove:(BOOL)remove;
 
 //returns YES if no more attached completionBlocks
-- (BOOL)cancelWithUUID:(nonnull NSUUID *)UUID manager:(nullable PINRemoteImageManager *)manager;
+- (BOOL)cancelWithUUID:(nonnull NSUUID *)UUID resume:(PINResume * _Nullable * _Nullable)resume;
 
 - (void)setPriority:(PINRemoteImageManagerPriority)priority;
 

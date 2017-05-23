@@ -10,6 +10,7 @@
 
 #import "PINURLSessionManager.h"
 #import "PINRemoteLock.h"
+#import "NSURLSessionTask+Timing.h"
 
 @interface PINRemoteImageDownloadQueue ()
 {
@@ -76,6 +77,7 @@
         
         [self scheduleDownloadsIfNeeded];
     }];
+    [dataTask PIN_setupSessionTaskObserver];
     
     [self setQueuePriority:priority forTask:dataTask addIfNecessary:YES];
     
@@ -104,6 +106,7 @@
             NSURLSessionDataTask *task = [queue firstObject];
             [queue removeObjectAtIndex:0];
             [task resume];
+            
             
             [_runningTasks addObject:task];
         }

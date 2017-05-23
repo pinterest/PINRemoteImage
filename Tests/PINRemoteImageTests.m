@@ -179,13 +179,13 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     self.data = [[NSMutableData alloc] init];
     // Put setup code here. This method is called before the invocation of each test method in the class.
     self.imageManager = [[PINRemoteImageManager alloc] init];
+    [self.imageManager.cache removeAllObjects];
 }
 
 - (void)tearDown
 {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     //clear disk cache
-    [self.imageManager.cache removeAllObjects];
     self.imageManager = nil;
     [super tearDown];
 }
@@ -1091,10 +1091,11 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 - (void)testResume
 {
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    __weak typeof(self) weakSelf = self;
+    
+    weakify(self);
     [self.imageManager setEstimatedRemainingTimeThresholdForProgressiveDownloads:0.001 completion:^{
-        typeof(weakSelf) strongSelf = weakSelf;
-        [strongSelf.imageManager setProgressiveRendersMaxProgressiveRenderSize:CGSizeMake(10000, 10000) completion:^{
+        strongify(self);
+        [self.imageManager setProgressiveRendersMaxProgressiveRenderSize:CGSizeMake(10000, 10000) completion:^{
             dispatch_semaphore_signal(semaphore);
         }];
     }];

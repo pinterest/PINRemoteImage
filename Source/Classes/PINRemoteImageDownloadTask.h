@@ -6,24 +6,30 @@
 //
 //
 
+#import <PINOperation/PINOperation.h>
+
+#import "PINRemoteImageManager+Private.h"
 #import "PINRemoteImageTask.h"
 #import "PINProgressiveImage.h"
 #import "PINResume.h"
 
 @interface PINRemoteImageDownloadTask : PINRemoteImageTask
 
-@property (nonatomic, strong, nullable) NSURLSessionDataTask *urlSessionTask;
-@property (nonatomic, assign) CFTimeInterval sessionTaskStartTime;
-@property (nonatomic, assign) CFTimeInterval sessionTaskEndTime;
-@property (nonatomic, assign) BOOL hasProgressBlocks;
+@property (nonatomic, strong, nullable) NSURL *URL;
 @property (nonatomic, copy, nullable) NSString *ifRange;
-@property (nonatomic, assign) long long totalBytes;
-@property (nonatomic, strong, nullable) PINResume *resume;
-@property (nonatomic, strong, nullable) PINProgressiveImage *progressImage;
+@property (nonatomic, copy, readonly, nullable) NSData *data;
 
 @property (nonatomic, assign) NSUInteger numberOfRetries;
+@property (nonatomic, readonly) float bytesPerSecond;
+@property (nonatomic, readonly) CFTimeInterval estimatedRemainingTime;
 
-- (void)callProgressDownloadWithQueue:(nonnull dispatch_queue_t)queue completedBytes:(int64_t)completedBytes totalBytes:(int64_t)totalBytes;
-- (void)callProgressImageWithQueue:(nonnull dispatch_queue_t)queue withImage:(nonnull PINImage *)image renderedImageQuality:(CGFloat)renderedImageQuality;
+- (void)scheduleDownloadWithRequest:(nonnull NSURLRequest *)request
+                             resume:(nullable PINResume *)resume
+                          skipRetry:(BOOL)skipRetry
+                           priority:(PINRemoteImageManagerPriority)priority
+                  completionHandler:(nonnull PINRemoteImageManagerDataCompletion)completionHandler;
+
+- (void)didReceiveData:(nonnull NSData *)data;
+- (void)didReceiveResponse:(nonnull NSURLResponse *)response;
 
 @end
