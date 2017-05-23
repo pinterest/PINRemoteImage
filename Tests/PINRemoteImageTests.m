@@ -1117,8 +1117,11 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     dispatch_semaphore_wait(semaphore, [self timeout]);
     
     PINResume *resume = [self.imageManager.cache objectFromDiskForKey:[self.imageManager resumeCacheKeyForURL:[self progressiveURL]]];
-    XCTAssert(resume.resumeData.length < resume.totalBytes, @"Total bytes should always be less than resume data length.");
     XCTAssert(resume.resumeData.length > 0, @"Resume should have > 0 data length");
+
+    //Shorten resume data to improve reliability of test (expect to get progressive render callback before download completes.
+    resume = [PINResume resumeData:[resume.resumeData subdataWithRange:NSMakeRange(0, 10)] ifRange:resume.ifRange totalBytes:resume.totalBytes];
+    [self.imageManager.cache setObjectOnDisk:resume forKey:[self.imageManager resumeCacheKeyForURL:[self progressiveURL]]];
     
     [self.imageManager downloadImageWithURL:[self progressiveURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
