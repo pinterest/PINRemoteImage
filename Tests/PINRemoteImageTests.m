@@ -1108,6 +1108,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     dispatch_semaphore_wait(semaphore, [self timeout]);
     
     PINResume *resume = [self.imageManager.cache objectFromDiskForKey:[self.imageManager resumeCacheKeyForURL:[self progressiveURL]]];
+    XCTAssert(resume.resumeData.length < resume.totalBytes, @"Total bytes should always be less than resume data length.");
     XCTAssert(resume.resumeData.length > 0, @"Resume should have > 0 data length");
     
     [self.imageManager downloadImageWithURL:[self progressiveURL]
@@ -1116,7 +1117,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
                                   // We expect renderedImageQualitySame to be true because we want an initial progress callback on a resumed
                                   // download. Otherwise, a canceled download which had already rendered progress, may not render progress again
                                   // until completed.
-                                  XCTAssert(result.renderedImageQuality >= ((CGFloat)resume.resumeData.length / resume.totalBytes), @"expected renderedImageQuality (%f) to be greater or equal to progress (%f)", result.renderedImageQuality, (CGFloat)resume.resumeData.length / resume.totalBytes);
+                                  XCTAssert(result.renderedImageQuality + FLT_EPSILON >= ((CGFloat)resume.resumeData.length / resume.totalBytes), @"expected renderedImageQuality (%f) to be greater or equal to progress (%f)", result.renderedImageQuality, (CGFloat)resume.resumeData.length / resume.totalBytes);
                                   renderedImageQualityGreater = YES;
                               }
                                  completion:^(PINRemoteImageManagerResult * _Nonnull result) {
