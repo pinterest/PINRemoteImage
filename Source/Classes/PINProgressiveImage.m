@@ -175,7 +175,7 @@
         }
         [self.mutableData appendData:data];
         
-        while ([self hasCompletedFirstScan] == NO && self.scannedByte < self.mutableData.length) {
+        while ([self __locked_hasCompletedFirstScan] == NO && self.scannedByte < self.mutableData.length) {
     #if DEBUG
             CFTimeInterval start = CACurrentMediaTime();
     #endif
@@ -183,7 +183,7 @@
             if (startByte > 0) {
                 startByte--;
             }
-            if ([self scanForSOSinData:self.mutableData startByte:startByte scannedByte:&_scannedByte]) {
+            if ([self __locked_scanForSOSinData:self.mutableData startByte:startByte scannedByte:&_scannedByte]) {
                 self.sosCount++;
             }
     #if DEBUG
@@ -216,7 +216,7 @@
             return nil;
         }
         
-        if ([self hasCompletedFirstScan] == NO) {
+        if ([self __locked_hasCompletedFirstScan] == NO) {
             [self.lock unlock];
             return nil;
         }
@@ -274,7 +274,7 @@
             CGImageRef image = CGImageSourceCreateImageAtIndex(self.imageSource, 0, NULL);
             if (image) {
                 if (blurred) {
-                    currentImage = [self postProcessImage:[PINImage imageWithCGImage:image] withProgress:progress];
+                    currentImage = [self __locked_postProcessImage:[PINImage imageWithCGImage:image] withProgress:progress];
                 } else {
                     currentImage = [PINImage imageWithCGImage:image];
                 }
@@ -299,8 +299,7 @@
 
 #pragma mark - private
 
-//Must be called within lock
-- (BOOL)scanForSOSinData:(NSData *)data startByte:(NSUInteger)startByte scannedByte:(NSUInteger *)scannedByte
+- (BOOL)__locked_scanForSOSinData:(NSData *)data startByte:(NSUInteger)startByte scannedByte:(NSUInteger *)scannedByte
 {
     //check if we have a complete scan
     Byte scanMarker[2];
@@ -325,15 +324,13 @@
     return NO;
 }
 
-//Must be called within lock
-- (BOOL)hasCompletedFirstScan
+- (BOOL)__locked_hasCompletedFirstScan
 {
     return self.sosCount >= 2;
 }
 
-//Must be called within lock
 //Heavily cribbed from https://developer.apple.com/library/ios/samplecode/UIImageEffects/Listings/UIImageEffects_UIImageEffects_m.html#//apple_ref/doc/uid/DTS40013396-UIImageEffects_UIImageEffects_m-DontLinkElementID_9
-- (PINImage *)postProcessImage:(PINImage *)inputImage withProgress:(float)progress
+- (PINImage *)__locked_postProcessImage:(PINImage *)inputImage withProgress:(float)progress
 {
     PINImage *outputImage = nil;
     CGImageRef inputImageRef = CGImageRetain(inputImage.CGImage);
