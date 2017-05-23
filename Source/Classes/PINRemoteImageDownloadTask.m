@@ -96,7 +96,7 @@
 {
     __block BOOL noMoreCompletions;
     [self.lock lockWithBlock:^{
-        noMoreCompletions = [super __locked_cancelWithUUID:UUID resume:resume];
+        noMoreCompletions = [super l_cancelWithUUID:UUID resume:resume];
         
         if (noMoreCompletions) {
             [self.manager.urlSessionTaskQueue removeDownloadTaskFromQueue:_progressImage.dataTask];
@@ -181,7 +181,7 @@
     __block BOOL hasProgressBlocks = NO;
     [self.lock lockWithBlock:^{
         progressImage = _progressImage;
-        [[self __locked_callbackBlocks] enumerateKeysAndObjectsUsingBlock:^(NSUUID *UUID, PINRemoteImageCallbacks *callback, BOOL *stop) {
+        [[self l_callbackBlocks] enumerateKeysAndObjectsUsingBlock:^(NSUUID *UUID, PINRemoteImageCallbacks *callback, BOOL *stop) {
             if (callback.progressImageBlock) {
                 hasProgressBlocks = YES;
                 *stop = YES;
@@ -255,7 +255,7 @@
                   completionHandler:(PINRemoteImageManagerDataCompletion)completionHandler
 {
     [self.lock lockWithBlock:^{
-        if (_progressImage != nil || [self __locked_callbackBlocks].count == 0 || _numberOfRetries > 0) {
+        if (_progressImage != nil || [self l_callbackBlocks].count == 0 || _numberOfRetries > 0) {
             return;
         }
         _resume = resume;
@@ -315,7 +315,7 @@
                             PINLog(@"Retrying download of %@ in %d seconds.", URL, delay);
                             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                                 [self.lock lockWithBlock:^{
-                                    if (_progressImage == nil && [self __locked_callbackBlocks].count > 0) {
+                                    if (_progressImage == nil && [self l_callbackBlocks].count > 0) {
                                         //If completionBlocks.count == 0, we've canceled before we were even able to start.
                                         //If there was an error, do not attempt to use resume data
                                         [self scheduleDownloadWithRequest:request resume:nil skipRetry:skipRetry priority:priority completionHandler:completionHandler];

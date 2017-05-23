@@ -55,11 +55,11 @@
 - (void)removeCallbackWithUUID:(NSUUID *)UUID
 {
     [self.lock lockWithBlock:^{
-        [self __locked_removeCallbackWithUUID:UUID];
+        [self l_removeCallbackWithUUID:UUID];
     }];
 }
 
-- (void)__locked_removeCallbackWithUUID:(NSUUID *)UUID
+- (void)l_removeCallbackWithUUID:(NSUUID *)UUID
 {
     [_callbackBlocks removeObjectForKey:UUID];
 }
@@ -115,15 +115,15 @@
 {
     __block BOOL noMoreCompletions;
     [self.lock lockWithBlock:^{
-        noMoreCompletions = [self __locked_cancelWithUUID:UUID resume:resume];
+        noMoreCompletions = [self l_cancelWithUUID:UUID resume:resume];
     }];
     return noMoreCompletions;
 }
 
-- (BOOL)__locked_cancelWithUUID:(NSUUID *)UUID resume:(PINResume **)resume
+- (BOOL)l_cancelWithUUID:(NSUUID *)UUID resume:(PINResume **)resume
 {
     BOOL noMoreCompletions = NO;
-    [self __locked_removeCallbackWithUUID:UUID];
+    [self l_removeCallbackWithUUID:UUID];
     if ([_callbackBlocks count] == 0) {
         noMoreCompletions = YES;
     }
@@ -150,7 +150,7 @@
                                                         UUID:UUID];
 }
 
-- (NSMutableDictionary *)__locked_callbackBlocks
+- (NSMutableDictionary *)l_callbackBlocks
 {
     return _callbackBlocks;
 }

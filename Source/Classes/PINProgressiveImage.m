@@ -109,12 +109,12 @@
 {
     __block float bytesPerSecond;
     [self.lock lockWithBlock:^{
-        bytesPerSecond = [self __locked_bytesPerSecond];
+        bytesPerSecond = [self l_bytesPerSecond];
     }];
     return bytesPerSecond;
 }
 
-- (float)__locked_bytesPerSecond
+- (float)l_bytesPerSecond
 {
     NSAssert(_dataTask.PIN_startTime != 0, @"Start time needs to be set by now.");
     CFTimeInterval endTime = CACurrentMediaTime();
@@ -135,12 +135,12 @@
 {
     __block CFTimeInterval estimatedRemainingTime;
     [self.lock lockWithBlock:^{
-        estimatedRemainingTime = [self __locked_estimatedRemainingTime];
+        estimatedRemainingTime = [self l_estimatedRemainingTime];
     }];
     return estimatedRemainingTime;
 }
 
-- (CFTimeInterval)__locked_estimatedRemainingTime
+- (CFTimeInterval)l_estimatedRemainingTime
 {
     if (_dataTask.countOfBytesExpectedToReceive == NSURLSessionTransferSizeUnknown) {
         return MAXFLOAT;
@@ -150,7 +150,7 @@
         return 0;
     }
     
-    float bytesPerSecond = [self __locked_bytesPerSecond];
+    float bytesPerSecond = [self l_bytesPerSecond];
     if (bytesPerSecond == 0) {
         return MAXFLOAT;
     }
@@ -175,7 +175,7 @@
         }
         [self.mutableData appendData:data];
         
-        while ([self __locked_hasCompletedFirstScan] == NO && self.scannedByte < self.mutableData.length) {
+        while ([self l_hasCompletedFirstScan] == NO && self.scannedByte < self.mutableData.length) {
     #if DEBUG
             CFTimeInterval start = CACurrentMediaTime();
     #endif
@@ -183,7 +183,7 @@
             if (startByte > 0) {
                 startByte--;
             }
-            if ([self __locked_scanForSOSinData:self.mutableData startByte:startByte scannedByte:&_scannedByte]) {
+            if ([self l_scanForSOSinData:self.mutableData startByte:startByte scannedByte:&_scannedByte]) {
                 self.sosCount++;
             }
     #if DEBUG
@@ -211,12 +211,12 @@
             return nil;
         }
         
-        if (_estimatedRemainingTimeThreshold > 0 && [self __locked_estimatedRemainingTime] < _estimatedRemainingTimeThreshold) {
+        if (_estimatedRemainingTimeThreshold > 0 && [self l_estimatedRemainingTime] < _estimatedRemainingTimeThreshold) {
             [self.lock unlock];
             return nil;
         }
         
-        if ([self __locked_hasCompletedFirstScan] == NO) {
+        if ([self l_hasCompletedFirstScan] == NO) {
             [self.lock unlock];
             return nil;
         }
@@ -274,7 +274,7 @@
             CGImageRef image = CGImageSourceCreateImageAtIndex(self.imageSource, 0, NULL);
             if (image) {
                 if (blurred) {
-                    currentImage = [self __locked_postProcessImage:[PINImage imageWithCGImage:image] withProgress:progress];
+                    currentImage = [self l_postProcessImage:[PINImage imageWithCGImage:image] withProgress:progress];
                 } else {
                     currentImage = [PINImage imageWithCGImage:image];
                 }
@@ -299,7 +299,7 @@
 
 #pragma mark - private
 
-- (BOOL)__locked_scanForSOSinData:(NSData *)data startByte:(NSUInteger)startByte scannedByte:(NSUInteger *)scannedByte
+- (BOOL)l_scanForSOSinData:(NSData *)data startByte:(NSUInteger)startByte scannedByte:(NSUInteger *)scannedByte
 {
     //check if we have a complete scan
     Byte scanMarker[2];
@@ -324,13 +324,13 @@
     return NO;
 }
 
-- (BOOL)__locked_hasCompletedFirstScan
+- (BOOL)l_hasCompletedFirstScan
 {
     return self.sosCount >= 2;
 }
 
 //Heavily cribbed from https://developer.apple.com/library/ios/samplecode/UIImageEffects/Listings/UIImageEffects_UIImageEffects_m.html#//apple_ref/doc/uid/DTS40013396-UIImageEffects_UIImageEffects_m-DontLinkElementID_9
-- (PINImage *)__locked_postProcessImage:(PINImage *)inputImage withProgress:(float)progress
+- (PINImage *)l_postProcessImage:(PINImage *)inputImage withProgress:(float)progress
 {
     PINImage *outputImage = nil;
     CGImageRef inputImageRef = CGImageRetain(inputImage.CGImage);

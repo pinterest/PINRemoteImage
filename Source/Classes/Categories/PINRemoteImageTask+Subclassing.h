@@ -10,7 +10,7 @@
 
 @interface PINRemoteImageTask (Subclassing)
 
-- (nonnull NSMutableDictionary *)__locked_callbackBlocks;
-- (BOOL)__locked_cancelWithUUID:(nonnull NSUUID *)UUID resume:(PINResume * _Nullable * _Nullable)resume;
+- (nonnull NSMutableDictionary *)l_callbackBlocks;
+- (BOOL)l_cancelWithUUID:(nonnull NSUUID *)UUID resume:(PINResume * _Nullable * _Nullable)resume;
 
 @end
