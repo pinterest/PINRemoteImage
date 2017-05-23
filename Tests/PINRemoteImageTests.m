@@ -15,6 +15,7 @@
 #import <PINCache/PINCache.h>
 
 #import "PINResume.h"
+#import "PINRemoteImageDownloadTask.h"
 
 #if USE_FLANIMATED_IMAGE
 #import <FLAnimatedImage/FLAnimatedImage.h>
@@ -41,6 +42,9 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 - (void)addTaskBPS:(float)bytesPerSecond endDate:(NSDate *)endDate;
 - (void)setCurrentBytesPerSecond:(float)currentBPS;
 - (NSString *)resumeCacheKeyForURL:(NSURL *)url;
+- (nullable PINRemoteImageTask *)_locked_taskForUUID:(NSUUID *)uuid key:(NSString * _Nullable * _Nullable)outKey;
+- (void)lockOnMainThread;
+- (void)unlock;
 
 @end
 
@@ -1159,6 +1163,56 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     NSData *nonResumedImageData = [self.imageManager.cache objectFromDiskForKey:[self.imageManager cacheKeyForURL:[self progressiveURL] processorKey:nil]];
     
     XCTAssert([nonResumedImageData isEqualToData:resumedImageData], @"Resumed image data and non resumed image data should be the same.");
+}
+
+- (void)testExpectedTimeLeftCancelation
+{
+    NSUUID *downloadIdentifier = [self.imageManager downloadImageWithURL:[[self bigURLs] firstObject] completion:^(PINRemoteImageManagerResult * _Nonnull result) {
+        XCTAssert(NO, @"image not canceled");
+    }];
+    
+    //Set the download start time to 'a long time ago' to trick the system into thinking the bps is really low.
+    do {
+        [self.imageManager lockOnMainThread];
+            PINRemoteImageDownloadTask *downloadTask = (PINRemoteImageDownloadTask *)[self.imageManager _locked_taskForUUID:downloadIdentifier key:nil];
+            if (downloadTask.sessionTaskStartTime > 0) {
+                downloadTask.sessionTaskStartTime = 1;
+                [self.imageManager unlock];
+                break;
+            }
+        [self.imageManager unlock];
+        usleep(100000);
+    } while (YES);
+    
+    [self.imageManager cancelTaskWithUUID:downloadIdentifier whenEstimatedTimeRemainingExceeds:1 storeResumeData:NO];
+    //wait a bit for cancelation request to go through
+    usleep(100000);
+
+    [self.imageManager lockOnMainThread];
+    XCTAssertNil([self.imageManager _locked_taskForUUID:downloadIdentifier key:nil], @"Download should have been canceled");
+    [self.imageManager unlock];
+    
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Download image"];
+    downloadIdentifier = [self.imageManager downloadImageWithURL:[[self bigURLs] firstObject] completion:^(PINRemoteImageManagerResult * _Nonnull result) {
+        [expectation fulfill];
+    }];
+    
+    //Wait until the download has started, if it hasn't, time to finish download is considered infinite.
+    do {
+        [self.imageManager lockOnMainThread];
+        PINRemoteImageDownloadTask *downloadTask = (PINRemoteImageDownloadTask *)[self.imageManager _locked_taskForUUID:downloadIdentifier key:nil];
+        if (downloadTask.urlSessionTask.countOfBytesReceived > 0) {
+            [self.imageManager unlock];
+            break;
+        }
+        [self.imageManager unlock];
+        usleep(100000);
+    } while (YES);
+    
+    [self.imageManager cancelTaskWithUUID:downloadIdentifier whenEstimatedTimeRemainingExceeds:[self timeoutTimeInterval] storeResumeData:NO];
+    
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
 @end

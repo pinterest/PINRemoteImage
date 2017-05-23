@@ -21,6 +21,8 @@
 {
     if (self = [super init]) {
         _numberOfRetries = 0;
+        _sessionTaskStartTime = 0;
+        _sessionTaskEndTime = 0;
     }
     return self;
 }
@@ -111,6 +113,23 @@
                                                   resultType:resultType
                                                         UUID:UUID
                                         bytesSavedByResuming:bytesSavedByResuming];
+}
+
+- (CFTimeInterval)estimatedTimeRemaining
+{
+    if (self.sessionTaskStartTime == 0) {
+        return DBL_MAX;
+    }
+    if (self.sessionTaskEndTime > 0) {
+        return 0;
+    }
+    CFTimeInterval elapsedTime = CACurrentMediaTime() - self.sessionTaskStartTime;
+    float bytesPerSecond = self.urlSessionTask.countOfBytesReceived / elapsedTime;
+    if (bytesPerSecond < 0 + FLT_EPSILON) {
+        return DBL_MAX;
+    }
+    int64_t bytesLeft = self.urlSessionTask.countOfBytesExpectedToReceive - self.urlSessionTask.countOfBytesReceived;
+    return (CFTimeInterval)(bytesLeft / bytesPerSecond);
 }
 
 @end
