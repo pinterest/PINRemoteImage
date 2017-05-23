@@ -1090,8 +1090,17 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (void)testResume
 {
-    __block BOOL renderedImageQualityGreater = NO;
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    __weak typeof(self) weakSelf = self;
+    [self.imageManager setEstimatedRemainingTimeThresholdForProgressiveDownloads:0.001 completion:^{
+        typeof(weakSelf) strongSelf = weakSelf;
+        [strongSelf.imageManager setProgressiveRendersMaxProgressiveRenderSize:CGSizeMake(10000, 10000) completion:^{
+            dispatch_semaphore_signal(semaphore);
+        }];
+    }];
+    dispatch_semaphore_wait(semaphore, [self timeout]);
+    
+    __block BOOL renderedImageQualityGreater = NO;
     [self.imageManager downloadImageWithURL:[self progressiveURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                               progressImage:^(PINRemoteImageManagerResult * _Nonnull result) {
