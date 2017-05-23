@@ -1018,7 +1018,7 @@ static dispatch_once_t sharedDispatchToken;
                 [strongSelf.canceledTasks addObject:UUID];
             }
             
-            if ([taskToEvaluate cancelWithUUID:UUID resume:storeResumeData ? &resume : nil]) {
+            if ([taskToEvaluate cancelWithUUID:UUID resume:storeResumeData ? &resume : NULL]) {
                 [strongSelf.tasks removeObjectForKey:taskKey];
             }
         [strongSelf unlock];

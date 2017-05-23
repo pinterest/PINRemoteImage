@@ -8,9 +8,13 @@
 
 #import "PINRemoteImageTask.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface PINRemoteImageTask (Subclassing)
 
-- (nonnull NSMutableDictionary *)l_callbackBlocks;
-- (BOOL)l_cancelWithUUID:(nonnull NSUUID *)UUID resume:(PINResume * _Nullable * _Nullable)resume;
+- (NSMutableDictionary *)l_callbackBlocks;
+- (BOOL)l_cancelWithUUID:(NSUUID *)UUID resume:(PINResume * _Nullable * _Nullable)resume;
 
 @end
+
+NS_ASSUME_NONNULL_END

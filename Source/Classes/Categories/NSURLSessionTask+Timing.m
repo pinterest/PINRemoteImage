@@ -12,16 +12,11 @@
 #import <QuartzCore/QuartzCore.h>
 
 @interface PINURLSessionTaskObserver : NSObject
-{
-    id selfCopy;
-}
 
 @property (atomic, assign) CFTimeInterval startTime;
 @property (atomic, assign) CFTimeInterval endTime;
-@property (nonatomic, weak, readonly) NSURLSessionTask *task;
 
 - (instancetype)init NS_UNAVAILABLE;
-- (instancetype)initWithTask:(NSURLSessionTask *)task NS_DESIGNATED_INITIALIZER;
 
 @end
 
@@ -30,10 +25,8 @@
 - (instancetype)initWithTask:(NSURLSessionTask *)task
 {
     if (self = [super init]) {
-        _task = task;
         _startTime = 0;
         _endTime = 0;
-        [_task addObserver:self forKeyPath:@"state" options:0 context:nil];
     }
     return self;
 }
