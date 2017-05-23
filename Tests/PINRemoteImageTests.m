@@ -54,7 +54,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 @interface PINRemoteImage_Tests : XCTestCase <PINURLSessionManagerDelegate>
 
 @property (nonatomic, strong) PINRemoteImageManager *imageManager;
-@property (nonatomic, strong) NSData *data;
+@property (nonatomic, strong) NSMutableData *data;
 @property (nonatomic, strong) NSURLSessionTask *task;
 @property (nonatomic, strong) NSError *error;
 
@@ -141,7 +141,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (NSURL *)progressiveURL
 {
-    return [NSURL URLWithString:@"https://s-media-cache-ak0.pinimg.com/564x/80/03/1b/80031b76573a358ed4fed5de391b6d36.jpg"];
+    return [NSURL URLWithString:@"https://s-media-cache-ak0.pinimg.com/1200x/80/03/1b/80031b76573a358ed4fed5de391b6d36.jpg"];
 }
 
 - (NSArray <NSURL *> *)bigURLs
@@ -163,7 +163,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (void)didReceiveData:(NSData *)data forTask:(NSURLSessionTask *)task
 {
-    self.data = data;
+    [self.data appendData:data];
     self.task = task;
 }
 
@@ -176,6 +176,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 - (void)setUp
 {
     [super setUp];
+    self.data = [[NSMutableData alloc] init];
     // Put setup code here. This method is called before the invocation of each test method in the class.
     self.imageManager = [[PINRemoteImageManager alloc] init];
 }
@@ -256,11 +257,11 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     [self.imageManager setValue:@"Custom Request Header 2" forHTTPHeaderField:@"X-Custom-Request-Header-2"];
     [self.imageManager setValue:nil forHTTPHeaderField:@"X-Custom-Request-Header-2"];
     self.imageManager.sessionManager.delegate = self;
-    [self.imageManager downloadImageWithURL:[self headersURL]
+    [self.imageManager downloadImageWithURL:[self progressiveURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
                                  {
-                                     NSDictionary *headers = [[NSJSONSerialization JSONObjectWithData:self.data options:NSJSONReadingMutableContainers error:nil] valueForKey:@"headers"];
+                                     NSDictionary *headers = [self.task.originalRequest allHTTPHeaderFields];
                                      XCTAssert([headers[@"X-Custom-Header"] isEqualToString:@"Should not be overrided"]);
                                      XCTAssert([headers[@"X-Custom-Request-Header"] isEqualToString:@"Custom Request Header"]);
                                      XCTAssert(headers[@"X-Custom-Request-Header-2"] == nil);
@@ -549,10 +550,16 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     XCTAssert(object == nil, @"image should not be in cache");
     
     [self.imageManager prefetchImageWithURL:[self JPEGURL]];
-    sleep([self timeoutTimeInterval]);
     
-    object = [[self.imageManager cache] objectFromMemoryForKey:key];
-    XCTAssert(object, @"image was not prefetched or was not stored in cache");
+    XCTestExpectation *expectation = [self expectationWithDescription:@"image was prefetched into cache"];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        while ([[self.imageManager cache] objectFromMemoryForKey:key] == nil) {
+            usleep(10000);
+        }
+        [expectation fulfill];
+    });
+
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
 - (void)testUIImageView
@@ -917,10 +924,15 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 		aHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
 		[expectation fulfill];
 	}];
+    
+    //Wait for async authentication challenge setter to complete
+    sleep(1);
 	
 	[self.imageManager downloadImageWithURL:[NSURL URLWithString:@"https://media-cache-ec0.pinimg.com/600x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"]
 									options:PINRemoteImageManagerDownloadOptionsNone
-								 completion:nil];
+                                 completion:^(PINRemoteImageManagerResult * _Nonnull result) {
+                                     XCTAssert(NO, @"should not complete without hitting auth challenge.");
+                                 }];
 	
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
@@ -1078,8 +1090,17 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (void)testResume
 {
-    __block BOOL renderedImageQualityGreater = NO;
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    __weak typeof(self) weakSelf = self;
+    [self.imageManager setEstimatedRemainingTimeThresholdForProgressiveDownloads:0.001 completion:^{
+        typeof(weakSelf) strongSelf = weakSelf;
+        [strongSelf.imageManager setProgressiveRendersMaxProgressiveRenderSize:CGSizeMake(10000, 10000) completion:^{
+            dispatch_semaphore_signal(semaphore);
+        }];
+    }];
+    dispatch_semaphore_wait(semaphore, [self timeout]);
+    
+    __block BOOL renderedImageQualityGreater = NO;
     [self.imageManager downloadImageWithURL:[self progressiveURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                               progressImage:^(PINRemoteImageManagerResult * _Nonnull result) {
@@ -1096,28 +1117,29 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     dispatch_semaphore_wait(semaphore, [self timeout]);
     
     PINResume *resume = [self.imageManager.cache objectFromDiskForKey:[self.imageManager resumeCacheKeyForURL:[self progressiveURL]]];
+    XCTAssert(resume.resumeData.length > 0, @"Resume should have > 0 data length");
+
+    //Shorten resume data to improve reliability of test (expect to get progressive render callback before download completes.
+    resume = [PINResume resumeData:[resume.resumeData subdataWithRange:NSMakeRange(0, 10)] ifRange:resume.ifRange totalBytes:resume.totalBytes];
+    [self.imageManager.cache setObjectOnDisk:resume forKey:[self.imageManager resumeCacheKeyForURL:[self progressiveURL]]];
     
-    //Make sure cancel is processed before kicking off download again
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self.imageManager downloadImageWithURL:[self progressiveURL]
-                                        options:PINRemoteImageManagerDownloadOptionsNone
-                                  progressImage:^(PINRemoteImageManagerResult * _Nonnull result) {
-                                      // We expect renderedImageQualitySame to be true because we want an initial progress callback on a resumed
-                                      // download. Otherwise, a canceled download which had already rendered progress, may not render progress again
-                                      // until completed.
-                                      if (resume.resumeData.length > 0 && result.renderedImageQuality >= ((CGFloat)resume.resumeData.length / resume.totalBytes)) {
-                                          renderedImageQualityGreater = YES;
-                                      }
-                                  }
-                                     completion:^(PINRemoteImageManagerResult * _Nonnull result) {
-                                         XCTAssert(renderedImageQualityGreater, @"Rendered image quality should non-zero and be greater than resume length.");
-                                         XCTAssert(result.image && result.error == nil, @"Image not downloaded");
-                                         //Wait a second for disk storage.
-                                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                                             dispatch_semaphore_signal(semaphore);
-                                         });
-                                     }];
-    });
+    [self.imageManager downloadImageWithURL:[self progressiveURL]
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                              progressImage:^(PINRemoteImageManagerResult * _Nonnull result) {
+                                  // We expect renderedImageQualitySame to be true because we want an initial progress callback on a resumed
+                                  // download. Otherwise, a canceled download which had already rendered progress, may not render progress again
+                                  // until completed.
+                                  XCTAssert(result.renderedImageQuality + FLT_EPSILON >= ((CGFloat)resume.resumeData.length / resume.totalBytes), @"expected renderedImageQuality (%f) to be greater or equal to progress (%f)", result.renderedImageQuality, (CGFloat)resume.resumeData.length / resume.totalBytes);
+                                  renderedImageQualityGreater = YES;
+                              }
+                                 completion:^(PINRemoteImageManagerResult * _Nonnull result) {
+                                     XCTAssert(renderedImageQualityGreater, @"Rendered image quality should non-zero and be greater than resume length. resume data length: %lu total: %lld", (unsigned long)resume.resumeData.length, resume.totalBytes);
+                                     XCTAssert(result.image && result.error == nil, @"Image not downloaded");
+                                     //Wait a second for disk storage.
+                                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                                         dispatch_semaphore_signal(semaphore);
+                                     });
+                                 }];
     
     dispatch_semaphore_wait(semaphore, [self timeout]);
     
