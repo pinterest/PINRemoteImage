@@ -257,11 +257,11 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     [self.imageManager setValue:@"Custom Request Header 2" forHTTPHeaderField:@"X-Custom-Request-Header-2"];
     [self.imageManager setValue:nil forHTTPHeaderField:@"X-Custom-Request-Header-2"];
     self.imageManager.sessionManager.delegate = self;
-    [self.imageManager downloadImageWithURL:[self headersURL]
+    [self.imageManager downloadImageWithURL:[self progressiveURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
                                  {
-                                     NSDictionary *headers = [[NSJSONSerialization JSONObjectWithData:self.data options:NSJSONReadingMutableContainers error:nil] valueForKey:@"headers"];
+                                     NSDictionary *headers = [self.task.originalRequest allHTTPHeaderFields];
                                      XCTAssert([headers[@"X-Custom-Header"] isEqualToString:@"Should not be overrided"]);
                                      XCTAssert([headers[@"X-Custom-Request-Header"] isEqualToString:@"Custom Request Header"]);
                                      XCTAssert(headers[@"X-Custom-Request-Header-2"] == nil);
