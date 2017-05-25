@@ -96,6 +96,16 @@
 {
     __block BOOL noMoreCompletions;
     [self.lock lockWithBlock:^{
+        if (resume) {
+            //consider skipping cancelation if there's a request for resume data and the time to start the connection is greater than
+            //the time remaining to download.
+            NSTimeInterval timeToFirstByte = [self.manager.sessionManager weightedTimeToFirstByteForHost:_progressImage.dataTask.originalRequest.URL.host];
+            if (_progressImage.estimatedRemainingTime <= timeToFirstByte) {
+                noMoreCompletions = NO;
+                return;
+            }
+        }
+        
         noMoreCompletions = [super l_cancelWithUUID:UUID resume:resume];
         
         if (noMoreCompletions) {

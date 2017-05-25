@@ -35,6 +35,8 @@ typedef void (^PINURLSessionDataTaskCompletion)(NSURLSessionTask * _Nonnull task
 
 @property (atomic, weak, nullable) id <PINURLSessionManagerDelegate> delegate;
 
+- (NSTimeInterval)weightedTimeToFirstByteForHost:(nonnull NSString *)host;
+
 #if DEBUG
 - (void)concurrentDownloads:(void (^_Nullable)(NSUInteger concurrentDownloads))concurrentDownloadsCompletion;
 #endif

@@ -11,6 +11,9 @@
 NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
 
 @interface PINURLSessionManager () <NSURLSessionDelegate, NSURLSessionDataDelegate>
+{
+    NSCache *_timeToFirstByteCache;
+}
 
 @property (nonatomic, strong) NSLock *sessionManagerLock;
 @property (nonatomic, strong) NSURLSession *session;
@@ -35,6 +38,9 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
         self.session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:self.operationQueue];
         self.completions = [[NSMutableDictionary alloc] init];
         self.delegateQueues = [[NSMutableDictionary alloc] init];
+        
+        _timeToFirstByteCache = [[NSCache alloc] init];
+        _timeToFirstByteCache.countLimit = 25;
     }
     return self;
 }
@@ -185,6 +191,60 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
             completionHandler(task, error);
         }
     });
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didFinishCollectingMetrics:(NSURLSessionTaskMetrics *)metrics
+{
+    NSDate *requestStart = [NSDate distantFuture];
+    NSDate *firstByte = [NSDate distantPast];
+    
+    BOOL valid = YES;
+    
+    for (NSURLSessionTaskTransactionMetrics *metric in metrics.transactionMetrics) {
+        if (metric.requestStartDate == nil || metric.responseStartDate == nil || metric.responseEndDate == nil) {
+            //Only evaluate requests which completed their first byte.
+            valid = NO;
+            break;
+        }
+        if ([requestStart compare:metric.requestStartDate] != NSOrderedAscending) {
+            requestStart = metric.requestStartDate;
+        }
+        if ([firstByte compare:metric.responseStartDate] != NSOrderedDescending) {
+            firstByte = metric.responseStartDate;
+        }
+    }
+    
+    if (valid) {
+        [self storeTimeToFirstByte:[firstByte timeIntervalSinceDate:requestStart] forHost:task.originalRequest.URL.host];
+    }
+}
+
+- (void)storeTimeToFirstByte:(NSTimeInterval)timeToFirstByte forHost:(NSString *)host
+{
+    [self lock];
+        NSNumber *existingTimeToFirstByte = [_timeToFirstByteCache objectForKey:host];
+        if (existingTimeToFirstByte) {
+            //We're obviously seriously weighting the latest result by doing this. Seems reasonable in
+            //possibly changing network conditions.
+            existingTimeToFirstByte = @( (timeToFirstByte + [existingTimeToFirstByte doubleValue]) / 2.0 );
+        } else {
+            existingTimeToFirstByte = [NSNumber numberWithDouble:timeToFirstByte];
+        }
+        [_timeToFirstByteCache setObject:existingTimeToFirstByte forKey:host];
+    [self unlock];
+}
+
+- (NSTimeInterval)weightedTimeToFirstByteForHost:(NSString *)host
+{
+    NSTimeInterval timeToFirstByte;
+    [self lock];
+        timeToFirstByte = [[_timeToFirstByteCache objectForKey:host] doubleValue];
+        if (timeToFirstByte <= 0 + DBL_EPSILON) {
+            //return 0 if we're not sure.
+            timeToFirstByte = 0;
+        }
+    [self unlock];
+    return timeToFirstByte;
 }
 
 #if DEBUG
