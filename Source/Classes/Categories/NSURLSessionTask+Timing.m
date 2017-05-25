@@ -12,12 +12,10 @@
 #import <QuartzCore/QuartzCore.h>
 
 static NSString * const kPINURLSessionTaskStateKey = @"state";
-static NSString * const kPINURLSessionTaskResponseKey = @"response";
 
 @interface PINURLSessionTaskObserver : NSObject
 
 @property (atomic, assign) CFTimeInterval startTime;
-@property (atomic, assign) CFTimeInterval timeOfFirstByte;
 @property (atomic, assign) CFTimeInterval endTime;
 
 - (instancetype)init NS_UNAVAILABLE;
@@ -33,7 +31,6 @@ static NSString * const kPINURLSessionTaskResponseKey = @"response";
         _startTime = 0;
         _endTime = 0;
         [task addObserver:self forKeyPath:kPINURLSessionTaskStateKey options:0 context:nil];
-        [task addObserver:self forKeyPath:kPINURLSessionTaskResponseKey options:0 context:nil];
     }
     return self;
 }
@@ -41,7 +38,6 @@ static NSString * const kPINURLSessionTaskResponseKey = @"response";
 - (void)removeObservers:(NSURLSessionTask *)task
 {
     [task removeObserver:self forKeyPath:kPINURLSessionTaskStateKey];
-    [task removeObserver:self forKeyPath:kPINURLSessionTaskResponseKey];
 }
 
 
@@ -65,12 +61,6 @@ static NSString * const kPINURLSessionTaskResponseKey = @"response";
                 
             default:
                 break;
-        }
-    } else if ([keyPath isEqualToString:kPINURLSessionTaskResponseKey]) {
-        if (task.response != nil) {
-            NSAssert(self.startTime != 0, @"Expect that task has started.");
-            NSAssert(self.endTime == 0, @"Expect that task has not completed.");
-            self.timeOfFirstByte = CACurrentMediaTime();
         }
     }
 }
