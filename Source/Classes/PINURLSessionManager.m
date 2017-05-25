@@ -201,7 +201,7 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
     BOOL valid = YES;
     
     for (NSURLSessionTaskTransactionMetrics *metric in metrics.transactionMetrics) {
-        if (metric.requestStartDate == nil || metric.responseStartDate == nil || metric.responseEndDate == nil) {
+        if (metric.requestStartDate == nil || metric.responseStartDate == nil) {
             //Only evaluate requests which completed their first byte.
             valid = NO;
             break;
