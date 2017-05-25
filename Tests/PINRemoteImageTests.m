@@ -258,6 +258,10 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     [self.imageManager setValue:@"Custom Request Header 2" forHTTPHeaderField:@"X-Custom-Request-Header-2"];
     [self.imageManager setValue:nil forHTTPHeaderField:@"X-Custom-Request-Header-2"];
     self.imageManager.sessionManager.delegate = self;
+    
+    //sleep for a moment so values have a chance to asynchronously set.
+    usleep(10000);
+    
     [self.imageManager downloadImageWithURL:[self progressiveURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
@@ -1178,16 +1182,19 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     dispatch_semaphore_wait(semaphore, [self timeout]);
     
     XCTestExpectation *progressExpectation = [self expectationWithDescription:@"progress is rendered"];
-    progressExpectation.assertForOverFulfill = NO;
     
     [self.imageManager.sessionManager storeTimeToFirstByte:0 forHost:[[self progressiveURL] host]];
     
+    __block BOOL canceled = NO;
     [self.imageManager downloadImageWithURL:[self progressiveURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                               progressImage:^(PINRemoteImageManagerResult * _Nonnull result) {
-                                  [self.imageManager cancelTaskWithUUID:result.UUID storeResumeData:YES];
-                                  [progressExpectation fulfill];
-                                  dispatch_semaphore_signal(semaphore);
+                                  if (canceled == NO) {
+                                      canceled = YES;
+                                      [self.imageManager cancelTaskWithUUID:result.UUID storeResumeData:YES];
+                                      [progressExpectation fulfill];
+                                      dispatch_semaphore_signal(semaphore);
+                                  }
                               }
                                  completion:^(PINRemoteImageManagerResult * _Nonnull result) {
                                      XCTAssert(result.image == nil, @"should not complete download: %@", result);
@@ -1195,17 +1202,23 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     
     dispatch_semaphore_wait(semaphore, [self timeout]);
     
-    XCTestExpectation *progress2Expectation = [self expectationWithDescription:@"progress is rendered"];
-    progress2Expectation.assertForOverFulfill = NO;
+    //Remove any progress
+    [self.imageManager.cache removeObjectForKey:[self.imageManager resumeCacheKeyForURL:[self progressiveURL]]];
+    
+    XCTestExpectation *progress2Expectation = [self expectationWithDescription:@"progress 2 is rendered"];
     XCTestExpectation *completedExpectation = [self expectationWithDescription:@"image is completed"];
     
     [self.imageManager.sessionManager storeTimeToFirstByte:10 forHost:[[self progressiveURL] host]];
     
+    canceled = NO;
     [self.imageManager downloadImageWithURL:[self progressiveURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                               progressImage:^(PINRemoteImageManagerResult * _Nonnull result) {
-                                  [self.imageManager cancelTaskWithUUID:result.UUID storeResumeData:YES];
-                                  [progress2Expectation fulfill];
+                                  if (canceled == NO) {
+                                      canceled = YES;
+                                      [self.imageManager cancelTaskWithUUID:result.UUID storeResumeData:YES];
+                                      [progress2Expectation fulfill];
+                                  }
                               }
                                  completion:^(PINRemoteImageManagerResult * _Nonnull result) {
                                      [completedExpectation fulfill];
