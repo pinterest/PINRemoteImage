@@ -198,13 +198,10 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
     NSDate *requestStart = [NSDate distantFuture];
     NSDate *firstByte = [NSDate distantPast];
     
-    BOOL valid = YES;
-    
     for (NSURLSessionTaskTransactionMetrics *metric in metrics.transactionMetrics) {
         if (metric.requestStartDate == nil || metric.responseStartDate == nil) {
             //Only evaluate requests which completed their first byte.
-            valid = NO;
-            break;
+            return;
         }
         if ([requestStart compare:metric.requestStartDate] != NSOrderedAscending) {
             requestStart = metric.requestStartDate;
@@ -214,36 +211,32 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
         }
     }
     
-    if (valid) {
-        [self storeTimeToFirstByte:[firstByte timeIntervalSinceDate:requestStart] forHost:task.originalRequest.URL.host];
-    }
+    [self storeTimeToFirstByte:[firstByte timeIntervalSinceDate:requestStart] forHost:task.originalRequest.URL.host];
 }
 
+/* We don't bother locking around the timeToFirstByteCache because NSCache itself is
+ threadsafe and we're not concerned about dropping or overwriting a result. */
 - (void)storeTimeToFirstByte:(NSTimeInterval)timeToFirstByte forHost:(NSString *)host
 {
-    [self lock];
-        NSNumber *existingTimeToFirstByte = [_timeToFirstByteCache objectForKey:host];
-        if (existingTimeToFirstByte) {
-            //We're obviously seriously weighting the latest result by doing this. Seems reasonable in
-            //possibly changing network conditions.
-            existingTimeToFirstByte = @( (timeToFirstByte + [existingTimeToFirstByte doubleValue]) / 2.0 );
-        } else {
-            existingTimeToFirstByte = [NSNumber numberWithDouble:timeToFirstByte];
-        }
-        [_timeToFirstByteCache setObject:existingTimeToFirstByte forKey:host];
-    [self unlock];
+    NSNumber *existingTimeToFirstByte = [_timeToFirstByteCache objectForKey:host];
+    if (existingTimeToFirstByte) {
+        //We're obviously seriously weighting the latest result by doing this. Seems reasonable in
+        //possibly changing network conditions.
+        existingTimeToFirstByte = @( (timeToFirstByte + [existingTimeToFirstByte doubleValue]) / 2.0 );
+    } else {
+        existingTimeToFirstByte = [NSNumber numberWithDouble:timeToFirstByte];
+    }
+    [_timeToFirstByteCache setObject:existingTimeToFirstByte forKey:host];
 }
 
 - (NSTimeInterval)weightedTimeToFirstByteForHost:(NSString *)host
 {
     NSTimeInterval timeToFirstByte;
-    [self lock];
-        timeToFirstByte = [[_timeToFirstByteCache objectForKey:host] doubleValue];
-        if (timeToFirstByte <= 0 + DBL_EPSILON) {
-            //return 0 if we're not sure.
-            timeToFirstByte = 0;
-        }
-    [self unlock];
+    timeToFirstByte = [[_timeToFirstByteCache objectForKey:host] doubleValue];
+    if (timeToFirstByte <= 0 + DBL_EPSILON) {
+        //return 0 if we're not sure.
+        timeToFirstByte = 0;
+    }
     return timeToFirstByte;
 }
 
