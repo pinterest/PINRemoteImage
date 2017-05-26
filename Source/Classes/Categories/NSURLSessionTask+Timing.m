@@ -11,6 +11,8 @@
 #import <objc/runtime.h>
 #import <QuartzCore/QuartzCore.h>
 
+static NSString * const kPINURLSessionTaskStateKey = @"state";
+
 @interface PINURLSessionTaskObserver : NSObject
 
 @property (atomic, assign) CFTimeInterval startTime;
@@ -28,30 +30,38 @@
     if (self = [super init]) {
         _startTime = 0;
         _endTime = 0;
-        [task addObserver:self forKeyPath:@"state" options:0 context:nil];
+        [task addObserver:self forKeyPath:kPINURLSessionTaskStateKey options:0 context:nil];
     }
     return self;
 }
 
+- (void)removeObservers:(NSURLSessionTask *)task
+{
+    [task removeObserver:self forKeyPath:kPINURLSessionTaskStateKey];
+}
+
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
 {
     NSURLSessionTask *task = (NSURLSessionTask *)object;
-    switch (task.state) {
-        case NSURLSessionTaskStateRunning:
-            if (self.startTime == 0) {
-                self.startTime = CACurrentMediaTime();
-            }
-            break;
-
-        case NSURLSessionTaskStateCompleted:
-            NSAssert(self.startTime != 0, @"Expect that task was started before it's completed.");
-            if (self.endTime == 0) {
-                self.endTime = CACurrentMediaTime();
-            }
-            break;
-            
-        default:
-            break;
+    if ([keyPath isEqualToString:kPINURLSessionTaskStateKey]) {
+        switch (task.state) {
+            case NSURLSessionTaskStateRunning:
+                if (self.startTime == 0) {
+                    self.startTime = CACurrentMediaTime();
+                }
+                break;
+                
+            case NSURLSessionTaskStateCompleted:
+                NSAssert(self.startTime > 0, @"Expect that task was started before it's completed.");
+                if (self.endTime == 0) {
+                    self.endTime = CACurrentMediaTime();
+                }
+                break;
+                
+            default:
+                break;
+        }
     }
 }
 
@@ -74,7 +84,7 @@
                 //remove state observer
                 PINURLSessionTaskObserver *observer = objc_getAssociatedObject((__bridge id)obj, @selector(PIN_setupSessionTaskObserver));
                 if (observer) {
-                    [(__bridge id)obj removeObserver:observer forKeyPath:@"state"];
+                    [observer removeObservers:(__bridge NSURLSessionTask *)obj];
                 }
             }
             

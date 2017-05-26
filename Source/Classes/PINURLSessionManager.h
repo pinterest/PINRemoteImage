@@ -35,6 +35,14 @@ typedef void (^PINURLSessionDataTaskCompletion)(NSURLSessionTask * _Nonnull task
 
 @property (atomic, weak, nullable) id <PINURLSessionManagerDelegate> delegate;
 
+/*
+ Returns a weighted average of time to first byte for the specified host.
+ More specifically, we get the time to first byte for every task that completes
+ and add it to an existing average: newAverage = (existingAverage + newTimeToFirstByte / 2)
+ This is all done on a per host basis.
+ */
+- (NSTimeInterval)weightedTimeToFirstByteForHost:(nonnull NSString *)host;
+
 #if DEBUG
 - (void)concurrentDownloads:(void (^_Nullable)(NSUInteger concurrentDownloads))concurrentDownloadsCompletion;
 #endif
