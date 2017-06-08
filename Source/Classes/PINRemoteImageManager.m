@@ -99,6 +99,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
   // Necesarry to have a strong reference to _defaultAlternateRepresentationProvider because _alternateRepProvider is __weak
   PINAlternateRepresentationProvider *_defaultAlternateRepresentationProvider;
   __weak PINAlternateRepresentationProvider *_alternateRepProvider;
+  NSURLSessionConfiguration *_sessionConfiguration;
 
 }
 
@@ -180,11 +181,12 @@ static dispatch_once_t sharedDispatchToken;
             self.cache = [self defaultImageCache];
         }
         
-        configuration = [configuration copy];
-        if (!configuration) {
-            configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+        _sessionConfiguration = [configuration copy];
+        if (!_sessionConfiguration) {
+            _sessionConfiguration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+            _sessionConfiguration.timeoutIntervalForRequest = PINRemoteImageManagerDefaultTimeout;
         }
-        configuration.HTTPMaximumConnectionsPerHost = PINRemoteImageHTTPMaximumConnectionsPerHost;
+        _sessionConfiguration.HTTPMaximumConnectionsPerHost = PINRemoteImageHTTPMaximumConnectionsPerHost;
         
         _callbackQueue = dispatch_queue_create("PINRemoteImageManagerCallbackQueue", DISPATCH_QUEUE_CONCURRENT);
         _lock = [[PINRemoteLock alloc] initWithName:@"PINRemoteImageManager"];
@@ -196,8 +198,7 @@ static dispatch_once_t sharedDispatchToken;
         self.sessionManager.delegate = self;
         
         self.estimatedRemainingTimeThreshold = 0.1;
-        self.timeout = PINRemoteImageManagerDefaultTimeout;
-        
+      
         _highQualityBPSThreshold = 500000;
         _lowQualityBPSThreshold = 50000; // approximately edge speeds
         _shouldUpgradeLowQualityImages = NO;
@@ -853,7 +854,7 @@ static dispatch_once_t sharedDispatchToken;
 {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                                       timeoutInterval:self.timeout];
+                                                       timeoutInterval:_sessionConfiguration.timeoutIntervalForRequest];
     
     NSMutableDictionary *headers = [self.httpHeaderFields mutableCopy];
     
@@ -878,7 +879,7 @@ static dispatch_once_t sharedDispatchToken;
 {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                                       timeoutInterval:self.timeout];
+                                                       timeoutInterval:_sessionConfiguration.timeoutIntervalForRequest];
     
     NSMutableDictionary *headers = [self.httpHeaderFields mutableCopy];
     

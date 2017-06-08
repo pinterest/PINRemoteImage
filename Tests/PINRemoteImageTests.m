@@ -15,10 +15,15 @@
 #import <PINCache/PINCache.h>
 
 #import "PINResume.h"
+#import "PINRemoteImageDownloadTask.h"
+
+#import <objc/runtime.h>
 
 #if USE_FLANIMATED_IMAGE
 #import <FLAnimatedImage/FLAnimatedImage.h>
 #endif
+
+static BOOL requestRetried = NO;
 
 static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 	switch (info) {
@@ -30,6 +35,28 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 			return NO;
 	}
 }
+
+@interface PINRemoteImageDownloadTask (Private)
+
+- (void)scheduleDownloadWithRequest:(NSURLRequest *)request
+                             resume:(PINResume *)resume
+                          skipRetry:(BOOL)skipRetry
+                           priority:(PINRemoteImageManagerPriority)priority
+                            isRetry:(BOOL)isRetry
+                  completionHandler:(PINRemoteImageManagerDataCompletion)completionHandler;
+
+@end
+
+@interface PINRemoteImageDownloadTask (Swizzled)
+
+- (void)swizzled_scheduleDownloadWithRequest:(NSURLRequest *)request
+                                      resume:(PINResume *)resume
+                                   skipRetry:(BOOL)skipRetry
+                                    priority:(PINRemoteImageManagerPriority)priority
+                                     isRetry:(BOOL)isRetry
+                           completionHandler:(PINRemoteImageManagerDataCompletion)completionHandler;
+
+@end
 
 #if DEBUG
 @interface PINRemoteImageManager ()
@@ -1225,6 +1252,66 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
                                  }];
     
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
+- (void)testRetry
+{
+  NSURLSessionConfiguration *config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+  PINRemoteImageManager *manager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:config];
+  
+  //Do nasty swizzling to test this
+  SEL originalSelector = @selector(scheduleDownloadWithRequest:resume:skipRetry:priority:isRetry:completionHandler:);
+  SEL swizzledSelector = @selector(swizzled_scheduleDownloadWithRequest:resume:skipRetry:priority:isRetry:completionHandler:);
+  
+  Method originalMethod = class_getInstanceMethod([PINRemoteImageDownloadTask class], originalSelector);
+  Method swizzledMethod = class_getInstanceMethod([PINRemoteImageDownloadTask class], swizzledSelector);
+  
+  BOOL added = class_addMethod([PINRemoteImageDownloadTask class], originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
+  if (added) {
+    class_replaceMethod([PINRemoteImageDownloadTask class], swizzledSelector, method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod));
+  } else {
+    method_exchangeImplementations(originalMethod, swizzledMethod);
+  }
+  
+  dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+  __block BOOL requestFinished = NO;
+  [manager downloadImageWithURL:[self progressiveURL] completion:^(PINRemoteImageManagerResult * _Nonnull result) {
+    XCTAssert(result.image && result.error == nil, @"Should not have resulted in an error");
+    requestFinished = YES;
+    dispatch_semaphore_signal(semaphore);
+  }];
+  
+  dispatch_semaphore_wait(semaphore, [self timeout]);
+  
+  XCTAssert(requestFinished, @"Request should have finished before timeout");
+  XCTAssert(requestRetried, @"Request should have been retried.");
+  
+  method_exchangeImplementations(originalMethod, swizzledMethod);
+}
+
+@end
+
+@implementation PINRemoteImageDownloadTask (Swizzled)
+
+- (void)swizzled_scheduleDownloadWithRequest:(NSURLRequest *)request
+                                      resume:(PINResume *)resume
+                                   skipRetry:(BOOL)skipRetry
+                                    priority:(PINRemoteImageManagerPriority)priority
+                                     isRetry:(BOOL)isRetry
+                           completionHandler:(PINRemoteImageManagerDataCompletion)completionHandler
+{
+    static BOOL requestModified = NO;
+    NSMutableURLRequest *modifiedRequest = nil;
+    if (requestModified == NO) {
+      requestModified = YES;
+      modifiedRequest = [request mutableCopy];
+      [modifiedRequest setTimeoutInterval:0.00001];
+    } else {
+      modifiedRequest = [request mutableCopy];
+      [modifiedRequest setTimeoutInterval:30];
+      requestRetried = YES;
+    }
+    [self swizzled_scheduleDownloadWithRequest:modifiedRequest resume:resume skipRetry:skipRetry priority:priority isRetry:isRetry completionHandler:completionHandler];
 }
 
 @end
