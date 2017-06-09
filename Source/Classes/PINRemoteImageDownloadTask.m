@@ -258,14 +258,24 @@
     }
 }
 
+- (void)scheduleDownloadWithRequest:(nonnull NSURLRequest *)request
+                             resume:(nullable PINResume *)resume
+                          skipRetry:(BOOL)skipRetry
+                           priority:(PINRemoteImageManagerPriority)priority
+                  completionHandler:(nonnull PINRemoteImageManagerDataCompletion)completionHandler
+{
+  [self scheduleDownloadWithRequest:request resume:resume skipRetry:skipRetry priority:priority isRetry:NO completionHandler:completionHandler];
+}
+
 - (void)scheduleDownloadWithRequest:(NSURLRequest *)request
                              resume:(PINResume *)resume
                           skipRetry:(BOOL)skipRetry
                            priority:(PINRemoteImageManagerPriority)priority
+                            isRetry:(BOOL)isRetry
                   completionHandler:(PINRemoteImageManagerDataCompletion)completionHandler
 {
     [self.lock lockWithBlock:^{
-        if (_progressImage != nil || [self l_callbackBlocks].count == 0 || _numberOfRetries > 0) {
+        if (_progressImage != nil || [self l_callbackBlocks].count == 0 || (isRetry == NO && _numberOfRetries > 0)) {
             return;
         }
         _resume = resume;
@@ -324,13 +334,7 @@
                             int64_t delay = powf(PINRemoteImageRetryDelayBase, newNumberOfRetries);
                             PINLog(@"Retrying download of %@ in %d seconds.", URL, delay);
                             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                                [self.lock lockWithBlock:^{
-                                    if (_progressImage == nil && [self l_callbackBlocks].count > 0) {
-                                        //If completionBlocks.count == 0, we've canceled before we were even able to start.
-                                        //If there was an error, do not attempt to use resume data
-                                        [self scheduleDownloadWithRequest:request resume:nil skipRetry:skipRetry priority:priority completionHandler:completionHandler];
-                                    }
-                                }];
+                              [self scheduleDownloadWithRequest:request resume:nil skipRetry:skipRetry priority:priority isRetry:YES completionHandler:completionHandler];
                             });
                             return;
                         }

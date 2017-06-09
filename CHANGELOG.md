@@ -1,8 +1,10 @@
 ## master
 * Add your own contributions to the next release on the line below this with your name.
+- [fixed] Fixes a deadlock in the retry system. [garrettmoon](https://github.com/garrettmoon)
+- [new] PINRemoteImageManager now respects the request timout value of session configuration. [garrettmoon](https://github.com/garrettmoon)
 
 ## 3.0.0 Beta 10
-- [new] Added support (in iOS 10) for skipping cancelation if the estimated amount of time to complete the download is less than the average time to first byte for a host. [#364](https://github.com/pinterest/PINRemoteImage/pull/364) [garrettmoon](http://github.com/garrettmoon)
+- [new] Added support (in iOS 10) for skipping cancelation if the estimated amount of time to complete the download is less than the average time to first byte for a host. [#364](https://github.com/pinterest/PINRemoteImage/pull/364) [garrettmoon](https://github.com/garrettmoon)
 - [fixed] Fixes an issue where PINResume would assert because the server didn't return an expected content length.
 - [fixed] Fixed bytes per second on download tasks (which could affect if an image is progressively rendered) [#360](https://github.com/pinterest/PINRemoteImage/pull/360) [garrettmoon](https://github.com/garrettmoon)
 - [new] Added request configuration handler to allow customizing HTTP headers per request [#355](https://github.com/pinterest/PINRemoteImage/pull/355) [zachwaugh](https://github.com/zachwaugh)
