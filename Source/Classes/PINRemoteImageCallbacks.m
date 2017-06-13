@@ -10,10 +10,12 @@
 
 @implementation PINRemoteImageCallbacks
 
-- (void)setCompletionBlock:(PINRemoteImageManagerImageCompletion)completionBlock
+- (instancetype)init
 {
-    _completionBlock = [completionBlock copy];
-    self.requestTime = CACurrentMediaTime();
+  if (self = [super init]) {
+    _requestTime = CACurrentMediaTime();
+  }
+  return self;
 }
 
 @end
