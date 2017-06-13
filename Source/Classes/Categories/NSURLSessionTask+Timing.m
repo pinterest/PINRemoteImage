@@ -53,8 +53,8 @@ static NSString * const kPINURLSessionTaskStateKey = @"state";
                 break;
                 
             case NSURLSessionTaskStateCompleted:
-                NSAssert(self.startTime > 0, @"Expect that task was started before it's completed.");
-                if (self.endTime == 0) {
+                // Don't set endTime if task was never started.
+                if (self.startTime > 0 && self.endTime == 0) {
                     self.endTime = CACurrentMediaTime();
                 }
                 break;
