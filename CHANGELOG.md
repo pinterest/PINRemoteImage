@@ -1,6 +1,7 @@
 ## master
 * Add your own contributions to the next release on the line below this with your name.
 - [fixed] Fixes a deadlock in the retry system. [garrettmoon](https://github.com/garrettmoon)
+- [fixed] Fixes a threadsafety issue in accessing callbacks. [garrettmoon](https://github.com/garrettmoon)
 - [new] PINRemoteImageManager now respects the request timout value of session configuration. [garrettmoon](https://github.com/garrettmoon)
 
 ## 3.0.0 Beta 10

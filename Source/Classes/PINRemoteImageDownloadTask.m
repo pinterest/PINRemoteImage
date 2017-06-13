@@ -53,8 +53,6 @@
         PINRemoteImageManagerProgressDownload progressDownloadBlock = callback.progressDownloadBlock;
         if (progressDownloadBlock != nil) {
             PINLog(@"calling progress for UUID: %@ key: %@", UUID, key);
-            //The code run asynchronously below is *not* guaranteed to be run in the manager's lock!
-            //All access to the callbacks and self should be done outside the block below!
             dispatch_async(self.manager.callbackQueue, ^
             {
                 progressDownloadBlock(completedBytes, totalBytes);
