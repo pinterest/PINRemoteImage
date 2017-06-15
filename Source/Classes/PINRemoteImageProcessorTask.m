@@ -16,8 +16,8 @@
 {
     BOOL noMoreCompletions = [super cancelWithUUID:UUID resume:resume];
     [self.lock lockWithBlock:^{
-        if (noMoreCompletions && self.downloadTaskUUID) {
-            [self.manager cancelTaskWithUUID:self.downloadTaskUUID];
+        if (noMoreCompletions && _downloadTaskUUID) {
+            [self.manager cancelTaskWithUUID:_downloadTaskUUID];
             _downloadTaskUUID = nil;
         }
     }];
