@@ -1,5 +1,6 @@
 ## master
 * Add your own contributions to the next release on the line below this with your name.
+- [fixed] Fixes a deadlock with canceling processor tasks [#374](https://github.com/pinterest/PINRemoteImage/pull/374) [zachwaugh](https://github.com/zachwaugh)
 - [fixed] Fixes a deadlock in the retry system. [garrettmoon](https://github.com/garrettmoon)
 - [new] PINRemoteImageManager now respects the request timout value of session configuration. [garrettmoon](https://github.com/garrettmoon)
 - [new] Added support (in iOS 10) for skipping cancelation if the estimated amount of time to complete the download is less than the average time to first byte for a host. [#364](https://github.com/pinterest/PINRemoteImage/pull/364) [garrettmoon](http://github.com/garrettmoon)
