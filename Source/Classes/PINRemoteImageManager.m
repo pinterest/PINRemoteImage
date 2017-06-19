@@ -245,7 +245,7 @@ static dispatch_once_t sharedDispatchToken;
             return [NSKeyedUnarchiver unarchiveObjectWithData:data];
         }
         return data;
-    } fileExtension:nil];
+    }];
 #else
     return [[PINRemoteImageBasicCache alloc] init];
 #endif
