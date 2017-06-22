@@ -757,7 +757,7 @@ static dispatch_once_t sharedDispatchToken;
         PINRemoteImageDownloadTask *task = [self.tasks objectForKey:key];
     [self unlock];
     
-    weakify(self)
+    PINWeakify(self)
     [task scheduleDownloadWithRequest:[self requestWithURL:url key:key]
                                resume:resume
                             skipRetry:(options & PINRemoteImageManagerDownloadOptionsSkipRetry)
@@ -766,7 +766,7 @@ static dispatch_once_t sharedDispatchToken;
     {
         [_concurrentOperationQueue addOperation:^
         {
-            strongify(self)
+            PINStrongify(self)
             NSError *remoteImageError = error;
             PINImage *image = nil;
             id alternativeRepresentation = nil;

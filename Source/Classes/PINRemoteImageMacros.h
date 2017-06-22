@@ -45,9 +45,9 @@
 #define PINNSURLSessionTaskSupportsPriority (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber10_10)
 #endif
 
-#define weakify(var) __weak typeof(var) PINWeak_##var = var;
+#define PINWeakify(var) __weak typeof(var) PINWeak_##var = var;
 
-#define strongify(var)                                                                                           \
+#define PINStrongify(var)                                                                                           \
 _Pragma("clang diagnostic push") _Pragma("clang diagnostic ignored \"-Wshadow\"") __strong typeof(var) var = \
 PINWeak_##var;                                                                                           \
 _Pragma("clang diagnostic pop")

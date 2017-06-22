@@ -200,9 +200,9 @@
     
     if (hasProgressBlocks) {
         if (PINNSOperationSupportsBlur) {
-            weakify(self);
+            PINWeakify(self);
             [self.manager.concurrentOperationQueue addOperation:^{
-                strongify(self);
+                PINStrongify(self);
                 CGFloat renderedImageQuality = 1.0;
                 PINImage *image = [progressImage currentImageBlurred:self.manager.shouldBlurProgressive maxProgressiveRenderSize:self.manager.maxProgressiveRenderSize renderedImageQuality:&renderedImageQuality];
                 if (image) {
