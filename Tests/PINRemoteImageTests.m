@@ -1124,9 +1124,9 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 {
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     
-    weakify(self);
+    PINWeakify(self);
     [self.imageManager setEstimatedRemainingTimeThresholdForProgressiveDownloads:0.001 completion:^{
-        strongify(self);
+        PINStrongify(self);
         [self.imageManager setProgressiveRendersMaxProgressiveRenderSize:CGSizeMake(10000, 10000) completion:^{
             dispatch_semaphore_signal(semaphore);
         }];
@@ -1199,9 +1199,9 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     //Test that images aren't canceled if the cost of resuming is high (i.e. time to first byte is longer than the time left to download)
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     
-    weakify(self);
+    PINWeakify(self);
     [self.imageManager setEstimatedRemainingTimeThresholdForProgressiveDownloads:0.001 completion:^{
-        strongify(self);
+        PINStrongify(self);
         [self.imageManager setProgressiveRendersMaxProgressiveRenderSize:CGSizeMake(10000, 10000) completion:^{
             dispatch_semaphore_signal(semaphore);
         }];
