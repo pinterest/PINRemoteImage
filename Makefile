@@ -25,4 +25,4 @@ carthage:
 	carthage update --no-use-binaries --no-build
 	carthage build --no-skip-current
 	
-all: test carthage lint analyze
+all: carthage test lint analyze
