@@ -75,7 +75,7 @@ Pod::Spec.new do |s|
   
   s.subspec "PINCache" do |pc|
     pc.dependency 'PINRemoteImage/Core'    
-  	pc.dependency 'PINCache', '=3.0.1-beta.4'
+  	pc.dependency 'PINCache', '=3.0.1-beta.5'
   	pc.source_files = 'Source/Classes/PINCache/*.{h,m}'
   end
   
