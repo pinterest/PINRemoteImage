@@ -689,7 +689,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
         return [NSKeyedArchiver archivedDataWithRootObject:object];
     } deserializer:^id<NSCoding> _Nonnull(NSData * _Nonnull data, NSString * _Nonnull key) {
         return [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    } fileExtension:nil];
+    }];
     
     [tempDiskCache setObject:@"invalid" forKey:[self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil]];
     
