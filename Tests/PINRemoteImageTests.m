@@ -309,10 +309,10 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 {
   XCTestExpectation *expectation = [self expectationWithDescription:@"Headers returned in image download result"];
   [self.imageManager downloadImageWithURL:[self JPEGURL] completion:^(PINRemoteImageManagerResult * _Nonnull result) {
-    NSDictionary *headers = [(NSHTTPURLResponse *)result.response allHeaderFields];
-    XCTAssert(headers != nil, @"Expected headers back");
-    
-    [expectation fulfill];
+      NSDictionary *headers = [(NSHTTPURLResponse *)result.response allHeaderFields];
+      XCTAssert(headers != nil, @"Expected headers back");
+      
+      [expectation fulfill];
   }];
   [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
