@@ -76,6 +76,7 @@
 - (void)callCompletionsWithImage:(PINImage *)image
        alternativeRepresentation:(id)alternativeRepresentation
                           cached:(BOOL)cached
+                        response:(NSURLResponse *)response
                            error:(NSError *)error
                           remove:(BOOL)remove;
 {
@@ -98,9 +99,10 @@
                 completionBlock([self imageResultWithImage:image
                                  alternativeRepresentation:alternativeRepresentation
                                              requestLength:CACurrentMediaTime() - requestTime
-                                                     error:error
                                                 resultType:result
-                                                      UUID:UUID]);
+                                                      UUID:UUID
+                                                  response:response
+                                                     error:error]);
             });
         }
         if (remove) {
@@ -136,16 +138,18 @@
 - (nonnull PINRemoteImageManagerResult *)imageResultWithImage:(nullable PINImage *)image
                                     alternativeRepresentation:(nullable id)alternativeRepresentation
                                                 requestLength:(NSTimeInterval)requestLength
-                                                        error:(nullable NSError *)error
                                                    resultType:(PINRemoteImageResultType)resultType
                                                          UUID:(nullable NSUUID *)UUID
+                                                     response:(NSURLResponse *)response
+                                                        error:(nullable NSError *)error
 {
     return [PINRemoteImageManagerResult imageResultWithImage:image
                                    alternativeRepresentation:alternativeRepresentation
                                                requestLength:requestLength
-                                                       error:error
                                                   resultType:resultType
-                                                        UUID:UUID];
+                                                        UUID:UUID
+                                                    response:response
+                                                       error:error];
 }
 
 - (NSMutableDictionary *)l_callbackBlocks

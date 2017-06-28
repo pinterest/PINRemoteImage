@@ -39,6 +39,7 @@
 - (void)callCompletionsWithImage:(nullable PINImage *)image
        alternativeRepresentation:(nullable id)alternativeRepresentation
                           cached:(BOOL)cached
+                        response:(nullable NSURLResponse *)response
                            error:(nullable NSError *)error
                           remove:(BOOL)remove;
 
@@ -50,8 +51,9 @@
 - (nonnull PINRemoteImageManagerResult *)imageResultWithImage:(nullable PINImage *)image
                                     alternativeRepresentation:(nullable id)alternativeRepresentation
                                                 requestLength:(NSTimeInterval)requestLength
-                                                        error:(nullable NSError *)error
                                                    resultType:(PINRemoteImageResultType)resultType
-                                                         UUID:(nullable NSUUID *)uuid;
+                                                         UUID:(nullable NSUUID *)uuid
+                                                     response:(nullable NSURLResponse *)response
+                                                        error:(nullable NSError *)error;
 
 @end

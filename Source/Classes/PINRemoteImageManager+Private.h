@@ -11,7 +11,7 @@
 
 #import "PINRemoteImageDownloadQueue.h"
 
-typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error);
+typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse *response, NSError *error);
 
 @interface PINRemoteImageManager (private)
 

@@ -191,7 +191,6 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (void)didReceiveData:(NSData *)data forTask:(NSURLSessionTask *)task
 {
-    [self.data appendData:data];
     self.task = task;
 }
 
@@ -204,7 +203,6 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 - (void)setUp
 {
     [super setUp];
-    self.data = [[NSMutableData alloc] init];
     // Put setup code here. This method is called before the invocation of each test method in the class.
     self.imageManager = [[PINRemoteImageManager alloc] init];
     [self.imageManager.cache removeAllObjects];
@@ -260,45 +258,20 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     configuration.HTTPAdditionalHeaders = @{ @"X-Custom-Header" : @"Custom Header Value" };
     self.imageManager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:configuration];
     self.imageManager.sessionManager.delegate = self;
+  
+    //sleep for a moment so values have a chance to asynchronously set.
+    usleep(10000);
+  
     [self.imageManager downloadImageWithURL:[self headersURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
      {
-         NSDictionary *headers = [[NSJSONSerialization JSONObjectWithData:self.data options:NSJSONReadingMutableContainers error:nil] valueForKey:@"headers"];
+         NSDictionary *headers = [self.task.currentRequest allHTTPHeaderFields];
          
          XCTAssert([headers[@"X-Custom-Header"] isEqualToString:@"Custom Header Value"]);
          
          [expectation fulfill];
      }];
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
-}
-
-- (void)testCustomRequestHeaderIsAddedToImageRequests
-{
-    XCTestExpectation *expectation = [self expectationWithDescription:@"Custom request header was added to image request"];
-    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    configuration.HTTPAdditionalHeaders = @{ @"X-Custom-Header" : @"Custom Header Value" };
-    
-    self.imageManager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:configuration];
-    [self.imageManager setValue:@"Should not be overrided" forHTTPHeaderField:@"X-Custom-Header"];
-    [self.imageManager setValue:@"Custom Request Header" forHTTPHeaderField:@"X-Custom-Request-Header"];
-    [self.imageManager setValue:@"Custom Request Header 2" forHTTPHeaderField:@"X-Custom-Request-Header-2"];
-    [self.imageManager setValue:nil forHTTPHeaderField:@"X-Custom-Request-Header-2"];
-    self.imageManager.sessionManager.delegate = self;
-    
-    //sleep for a moment so values have a chance to asynchronously set.
-    usleep(10000);
-    
-    [self.imageManager downloadImageWithURL:[self progressiveURL]
-                                    options:PINRemoteImageManagerDownloadOptionsNone
-                                 completion:^(PINRemoteImageManagerResult *result)
-                                 {
-                                     NSDictionary *headers = [self.task.originalRequest allHTTPHeaderFields];
-                                     XCTAssert([headers[@"X-Custom-Header"] isEqualToString:@"Should not be overrided"]);
-                                     XCTAssert([headers[@"X-Custom-Request-Header"] isEqualToString:@"Custom Request Header"]);
-                                     XCTAssert(headers[@"X-Custom-Request-Header-2"] == nil);
-                                     [expectation fulfill];
-                                 }];
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
@@ -314,19 +287,34 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
         [mutableRequest setValue:@"Custom Header 2 Value" forHTTPHeaderField:@"X-Custom-Header-2"];
         return mutableRequest;
     }];
-    
+  
+    //sleep for a moment so values have a chance to asynchronously set.
+    usleep(10000);
+  
     self.imageManager.sessionManager.delegate = self;
     [self.imageManager downloadImageWithURL:[self headersURL]
                                     options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult *result)
      {
-         NSDictionary *headers = [[NSJSONSerialization JSONObjectWithData:self.data options:NSJSONReadingMutableContainers error:nil] valueForKey:@"headers"];
+         NSDictionary *headers = [self.task.currentRequest allHTTPHeaderFields];
          XCTAssert([headers[@"X-Custom-Header"] isEqualToString:@"Custom Header Value"]);
          XCTAssert([headers[@"X-Custom-Header-2"] isEqualToString:@"Custom Header 2 Value"]);
 
          [expectation fulfill];
      }];
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
+- (void)testResponseHeadersReturned
+{
+  XCTestExpectation *expectation = [self expectationWithDescription:@"Headers returned in image download result"];
+  [self.imageManager downloadImageWithURL:[self JPEGURL] completion:^(PINRemoteImageManagerResult * _Nonnull result) {
+    NSDictionary *headers = [(NSHTTPURLResponse *)result.response allHeaderFields];
+    XCTAssert(headers != nil, @"Expected headers back");
+    
+    [expectation fulfill];
+  }];
+  [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
 - (void)testSkipFLAnimatedImageDownload
