@@ -10,29 +10,50 @@
 
 `PINCache` and `PINDiskCache` accept any object conforming to [NSCoding](https://developer.apple.com/library/ios/#documentation/Cocoa/Reference/Foundation/Protocols/NSCoding_Protocol/Reference/Reference.html). Put things in like this:
 
+**Objective-C**
 ```objective-c
 UIImage *img = [[UIImage alloc] initWithData:data scale:[[UIScreen mainScreen] scale]];
 [[PINCache sharedCache] setObject:img forKey:@"image" block:nil]; // returns immediately
 ```
+**Swift**
+```swift
+let img = UIImage(data: data, scale:UIScreen.main.scale)
+PINCache.shared().setObject(img, forKey: "img")
+```
 
 Get them back out like this:
 
-```objective-c
-[[PINCache sharedCache] objectForKey:@"image"
-                              block:^(PINCache *cache, NSString *key, id object) {
-                                  UIImage *image = (UIImage *)object;
-                                  NSLog(@"image scale: %f", image.scale);
-                              }];
+**Objective-C**
+```objc
+[[PINCache sharedCache] objectForKeyAsync:@"image" block:^(PINCache *cache, NSString *key, id object) {
+    UIImage *image = (UIImage *)object;
+    NSLog(@"image scale: %f", image.scale);
+}];
+```
+**Swift**
+```swift
+PINCache.shared().object(forKey: "image") { (cache, key, object) in
+    if let image = object as? UIImage {
+        print("image scale: %f", image.scale)
+    }
+}
 ```
 
 Both `PINMemoryCache` and PINDiskCache use locks to protect reads and writes. `PINCache` coordinates them so that objects added to memory are available immediately to other threads while being written to disk safely in the background. Both caches are public properties of `PINCache`, so it's easy to manipulate one or the other separately if necessary.
 
 Collections work too. Thanks to the magic of `NSKeyedArchiver`, objects repeated in a collection only occupy the space of one on disk:
 
+**Objective-C**
 ```objective-c
 NSArray *images = @[ image, image, image ];
 [[PINCache sharedCache] setObject:images forKey:@"images"];
 NSLog(@"3 for the price of 1: %d", [[[PINCache sharedCache] diskCache] byteCount]);
+```
+**Swift**
+```swift
+let images = [image, image, image]
+PINCache.shared.setObject(images, forKey: "images")
+print("3 for the prices of 1: %d", PINCache.shared.diskCache.byteCount)
 ```
 
 ## Installation

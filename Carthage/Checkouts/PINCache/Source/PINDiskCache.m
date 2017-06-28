@@ -43,6 +43,9 @@ static PINOperationDataCoalescingBlock PINDiskTrimmingDateCoalescingBlock = ^id(
     
     PINDiskCacheSerializerBlock _serializer;
     PINDiskCacheDeserializerBlock _deserializer;
+    
+    PINDiskCacheKeyEncoderBlock _keyEncoder;
+    PINDiskCacheKeyDecoderBlock _keyDecoder;
 }
 
 @property (copy, nonatomic) NSString *name;
@@ -81,24 +84,19 @@ static NSURL *_sharedTrashURL;
 
 - (instancetype)initWithName:(NSString *)name
 {
-    return [self initWithName:name fileExtension:nil];
+    return [self initWithName:name rootPath:[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]];
 }
 
-- (instancetype)initWithName:(NSString *)name fileExtension:(NSString *)fileExtension
+- (instancetype)initWithName:(NSString *)name rootPath:(NSString *)rootPath
 {
-    return [self initWithName:name rootPath:[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0] fileExtension:fileExtension];
+    return [self initWithName:name rootPath:rootPath serializer:nil deserializer:nil];
 }
 
-- (instancetype)initWithName:(NSString *)name rootPath:(NSString *)rootPath fileExtension:(NSString *)fileExtension
-{
-    return [self initWithName:name rootPath:rootPath serializer:nil deserializer:nil fileExtension:fileExtension];
-}
-
-- (instancetype)initWithName:(NSString *)name rootPath:(NSString *)rootPath serializer:(PINDiskCacheSerializerBlock)serializer deserializer:(PINDiskCacheDeserializerBlock)deserializer fileExtension:(NSString *)fileExtension
+- (instancetype)initWithName:(NSString *)name rootPath:(NSString *)rootPath serializer:(PINDiskCacheSerializerBlock)serializer deserializer:(PINDiskCacheDeserializerBlock)deserializer
 {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    return [self initWithName:name rootPath:rootPath serializer:serializer deserializer:deserializer fileExtension:fileExtension operationQueue:[PINOperationQueue sharedOperationQueue]];
+    return [self initWithName:name rootPath:rootPath serializer:serializer deserializer:deserializer operationQueue:[PINOperationQueue sharedOperationQueue]];
 #pragma clang diagnostic pop
 }
 
@@ -106,10 +104,16 @@ static NSURL *_sharedTrashURL;
                     rootPath:(NSString *)rootPath
                   serializer:(PINDiskCacheSerializerBlock)serializer
                 deserializer:(PINDiskCacheDeserializerBlock)deserializer
-               fileExtension:(NSString *)fileExtension
               operationQueue:(PINOperationQueue *)operationQueue
 {
-  return [self initWithName:name prefix:PINDiskCachePrefix rootPath:rootPath serializer:serializer deserializer:deserializer fileExtension:fileExtension operationQueue:operationQueue];
+  return [self initWithName:name
+                     prefix:PINDiskCachePrefix
+                   rootPath:rootPath
+                 serializer:serializer
+               deserializer:deserializer
+                 keyEncoder:nil
+                 keyDecoder:nil
+             operationQueue:operationQueue];
 }
 
 - (instancetype)initWithName:(NSString *)name
@@ -117,22 +121,23 @@ static NSURL *_sharedTrashURL;
                     rootPath:(NSString *)rootPath
                   serializer:(PINDiskCacheSerializerBlock)serializer
                 deserializer:(PINDiskCacheDeserializerBlock)deserializer
-               fileExtension:(NSString *)fileExtension
+                  keyEncoder:(PINDiskCacheKeyEncoderBlock)keyEncoder
+                  keyDecoder:(PINDiskCacheKeyDecoderBlock)keyDecoder
               operationQueue:(PINOperationQueue *)operationQueue
 {
     if (!name)
         return nil;
     
-    if ((serializer && !deserializer) ||
-        (!serializer && deserializer)){
-        @throw [NSException exceptionWithName:@"Must initialize with a both serializer and deserializer" reason:@"PINDiskCache must be initialized with a serializer and deserializer." userInfo:nil];
-        return nil;
-    }
+
+    NSAssert(((!serializer && !deserializer) || (serializer && deserializer)),
+             @"PINDiskCache must be initialized with a serializer AND deserializer.");
+    
+    NSAssert(((!keyEncoder && !keyDecoder) || (keyEncoder && keyDecoder)),
+              @"PINDiskCache must be initialized with a encoder AND decoder.");
     
     if (self = [super init]) {
         _name = [name copy];
         _prefix = [prefix copy];
-        _fileExtension = [fileExtension copy];
         _operationQueue = operationQueue;
         _instanceLock = [[NSConditionLock alloc] initWithCondition:PINDiskCacheConditionNotReady];
         _willAddObjectBlock = nil;
@@ -166,6 +171,19 @@ static NSURL *_sharedTrashURL;
             _deserializer = [deserializer copy];
         } else {
             _deserializer = self.defaultDeserializer;
+        }
+        
+        //setup key encoder/decoder
+        if(keyEncoder) {
+            _keyEncoder = [keyEncoder copy];
+        } else {
+            _keyEncoder = self.defaultKeyEncoder;
+        }
+        
+        if(keyDecoder) {
+            _keyDecoder = [keyDecoder copy];
+        } else {
+            _keyDecoder = self.defaultKeyDecoder;
         }
 
         //we don't want to do anything without setting up the disk cache, but we also don't want to block init, it can take a while to initialize. This must *not* be done on _operationQueue because other operations added may hold the lock and fill up the queue.
@@ -226,73 +244,78 @@ static NSURL *_sharedTrashURL;
 
 - (NSString *)encodedString:(NSString *)string
 {
-    if (![string length]) {
-        return @"";
-    }
-    
-    if ([string respondsToSelector:@selector(stringByAddingPercentEncodingWithAllowedCharacters:)]) {
-        NSString *encodedString = [string stringByAddingPercentEncodingWithAllowedCharacters:[[NSCharacterSet characterSetWithCharactersInString:@".:/%"] invertedSet]];
-        if (self.fileExtension.length > 0) {
-            return [encodedString stringByAppendingPathExtension:self.fileExtension];
-        }
-        else {
-            return encodedString;
-        }
-    }
-    else {
-        CFStringRef static const charsToEscape = CFSTR(".:/%");
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        CFStringRef escapedString = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                            (__bridge CFStringRef)string,
-                                                                            NULL,
-                                                                            charsToEscape,
-                                                                            kCFStringEncodingUTF8);
-#pragma clang diagnostic pop
-        
-        if (self.fileExtension.length > 0) {
-            return [(__bridge_transfer NSString *)escapedString stringByAppendingPathExtension:self.fileExtension];
-        }
-        else {
-            return (__bridge_transfer NSString *)escapedString;
-        }
-    }
+    return _keyEncoder(string);
 }
 
 - (NSString *)decodedString:(NSString *)string
 {
-    if (![string length]) {
-        return @"";
-    }
-    
-    if ([string respondsToSelector:@selector(stringByRemovingPercentEncoding)]) {
-        return [string stringByRemovingPercentEncoding];
-    }
-    else {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        CFStringRef unescapedString = CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
-                                                                                              (__bridge CFStringRef)string,
-                                                                                              CFSTR(""),
-                                                                                              kCFStringEncodingUTF8);
-#pragma clang diagnostic pop
-        return (__bridge_transfer NSString *)unescapedString;
-    }
+    return _keyDecoder(string);
 }
 
--(PINDiskCacheSerializerBlock) defaultSerializer
+- (PINDiskCacheSerializerBlock)defaultSerializer
 {
     return ^NSData*(id<NSCoding> object, NSString *key){
         return [NSKeyedArchiver archivedDataWithRootObject:object];
     };
 }
 
--(PINDiskCacheDeserializerBlock) defaultDeserializer
+- (PINDiskCacheDeserializerBlock)defaultDeserializer
 {
     return ^id(NSData * data, NSString *key){
         return [NSKeyedUnarchiver unarchiveObjectWithData:data];
     };
 }
+
+- (PINDiskCacheKeyEncoderBlock)defaultKeyEncoder
+{
+    return ^NSString *(NSString *decodedKey) {
+        if (![decodedKey length]) {
+            return @"";
+        }
+        
+        if ([decodedKey respondsToSelector:@selector(stringByAddingPercentEncodingWithAllowedCharacters:)]) {
+            NSString *encodedString = [decodedKey stringByAddingPercentEncodingWithAllowedCharacters:[[NSCharacterSet characterSetWithCharactersInString:@".:/%"] invertedSet]];
+            return encodedString;
+        }
+        else {
+            CFStringRef static const charsToEscape = CFSTR(".:/%");
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+            CFStringRef escapedString = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                                                (__bridge CFStringRef)decodedKey,
+                                                                                NULL,
+                                                                                charsToEscape,
+                                                                                kCFStringEncodingUTF8);
+#pragma clang diagnostic pop
+            
+            return (__bridge_transfer NSString *)escapedString;
+        }
+    };
+}
+
+- (PINDiskCacheKeyEncoderBlock)defaultKeyDecoder
+{
+    return ^NSString *(NSString *encodedKey) {
+        if (![encodedKey length]) {
+            return @"";
+        }
+        
+        if ([encodedKey respondsToSelector:@selector(stringByRemovingPercentEncoding)]) {
+            return [encodedKey stringByRemovingPercentEncoding];
+        }
+        else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+            CFStringRef unescapedString = CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
+                                                                                                  (__bridge CFStringRef)encodedKey,
+                                                                                                  CFSTR(""),
+                                                                                                  kCFStringEncodingUTF8);
+#pragma clang diagnostic pop
+            return (__bridge_transfer NSString *)unescapedString;
+        }
+    };
+}
+
 
 #pragma mark - Private Trash Methods -
 
