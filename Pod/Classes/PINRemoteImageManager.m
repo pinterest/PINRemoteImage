@@ -139,7 +139,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
 @property (nonatomic, assign) float lowQualityBPSThreshold;
 @property (nonatomic, assign) BOOL shouldUpgradeLowQualityImages;
 @property (nonatomic, copy) PINRemoteImageManagerAuthenticationChallenge authenticationChallengeHandler;
-@property (nonatomic, copy) id<PINRequestRetryStrategy> (^retryStrategyCreationBlock)();
+@property (nonatomic, copy) id<PINRequestRetryStrategy> (^retryStrategyCreationBlock)(void);
 #if DEBUG
 @property (nonatomic, assign) float currentBPS;
 @property (nonatomic, assign) BOOL overrideBPS;
@@ -755,7 +755,7 @@ static dispatch_once_t sharedDispatchToken;
 {
     [self lock];
         PINRemoteImageDownloadTask *task = [self.tasks objectForKey:key];
-        if (task.urlSessionTaskOperation == nil && task.callbackBlocks.count > 0 && task.numberOfRetries == 0) {
+        if (task.urlSessionTaskOperation == nil && task.callbackBlocks.count > 0 && task.retryStrategy.numberOfRetries == 0) {
             //If completionBlocks.count == 0, we've canceled before we were even able to start.
             CFTimeInterval startTime = CACurrentMediaTime();
             PINDataTaskOperation *urlSessionTaskOperation = [self sessionTaskWithURL:url key:key options:options priority:priority];
@@ -1063,12 +1063,12 @@ static dispatch_once_t sharedDispatchToken;
     }];
 }
 
-- (void)setRetryStrategyCreationBlock:(id<PINRequestRetryStrategy> (^)())retryStrategyCreationBlock {
+- (void)setRetryStrategyCreationBlock:(id<PINRequestRetryStrategy> (^)(void))retryStrategyCreationBlock {
     __weak typeof(self) weakSelf = self;
     [_concurrentOperationQueue pin_addOperationWithQueuePriority:PINRemoteImageManagerPriorityHigh block:^{
         typeof(self) strongSelf = weakSelf;
         [strongSelf lock];
-        self.retryStrategyCreationBlock = retryStrategyCreationBlock;
+        _retryStrategyCreationBlock = retryStrategyCreationBlock;
         [strongSelf unlock];
     }];
 }

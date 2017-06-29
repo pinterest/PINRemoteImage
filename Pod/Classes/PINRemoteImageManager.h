@@ -492,6 +492,6 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  
  @param retryStrategyCreationBlock a block which should create new instance of PINRequestRetryStrategy when called.
  */
-- (void)setRetryStrategyCreationBlock:(id<PINRequestRetryStrategy> (^)())retryStrategyCreationBlock;
+- (void)setRetryStrategyCreationBlock:(_Nonnull id<PINRequestRetryStrategy> (^_Nonnull)(void))retryStrategyCreationBlock;
 
 @end

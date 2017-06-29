@@ -17,6 +17,7 @@
 - (BOOL)shouldRetryWithError:(NSError *)error;
 - (int)nextDelay;
 - (void)incrementRetryCount;
+- (int)numberOfRetries;
 
 @end
 

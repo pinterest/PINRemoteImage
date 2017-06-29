@@ -30,12 +30,18 @@
     return self;
 }
 
+- (int)numberOfRetries
+{
+    return self.retryCount;
+}
+
 - (BOOL)shouldRetryWithError:(NSError *)error
 {
     if (error == nil || ![[self class] retriableError:error] ||
         self.retryCount > self.retryMaxCount) {
         return NO;
     }
+    return YES;
 }
 
 - (int)nextDelay
