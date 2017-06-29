@@ -3,6 +3,7 @@
 - [fixed] Fixes a deadlock with canceling processor tasks [#374](https://github.com/pinterest/PINRemoteImage/pull/374) [zachwaugh](https://github.com/zachwaugh)
 - [fixed] Fixes a deadlock in the retry system. [garrettmoon](https://github.com/garrettmoon)
 - [fixed] Fixes a threadsafety issue in accessing callbacks. [garrettmoon](https://github.com/garrettmoon)
+- [fixed] Fixes a crash with resumed downloads when a key is long. [garrettmoon](https://github.com/garrettmoon)
 - [new] PINRemoteImageManager now respects the request timeout value of session configuration. [garrettmoon](https://github.com/garrettmoon)
 - [new] Updated to latest PINCache beta 5. [garrettmoon](https://github.com/garrettmoon)
 - [new] Added support for getting NSURLResponse from a PINRemoteImageManagerResult object. [garrettmoon](https://github.com/garrettmoon)

@@ -1517,9 +1517,6 @@ static dispatch_once_t sharedDispatchToken;
     if (processorKey.length > 0) {
         cacheKey = [cacheKey stringByAppendingFormat:@"-<%@>", processorKey];
     }
-    if (resume) {
-        cacheKey = [PINRemoteImageCacheKeyResumePrefix stringByAppendingString:cacheKey];
-    }
 
     //PINDiskCache uses this key as the filename of the file written to disk
     //Due to the current filesystem used in Darwin, this name must be limited to 255 chars.
@@ -1541,6 +1538,10 @@ static dispatch_once_t sharedDispatchToken;
             [hexString appendFormat:@"%02lx", (unsigned long)digest[i]];
         }
         cacheKey = [hexString copy];
+    }
+    //The resume key must not be hashed, it is used to decide whether or not to decode from the disk cache.
+    if (resume) {
+      cacheKey = [PINRemoteImageCacheKeyResumePrefix stringByAppendingString:cacheKey];
     }
 
     return cacheKey;
