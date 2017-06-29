@@ -197,10 +197,12 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
 /**
  * Sets a custom header to be included in every request. Headers set from this method will override any header from NSURLSessionConfiguration.
  *
+ * @deprecated Use NSURLSessionConfiguration.HTTPAdditionalHeaders instead
  * @param value A value for the header. Pass in nil to remove a previously set value.
  * @param header A string field for header.
+
  */
-- (void)setValue:(nullable NSString *)value forHTTPHeaderField:(nullable NSString *)header;
+- (void)setValue:(nullable NSString *)value forHTTPHeaderField:(nullable NSString *)header __attribute__((deprecated));
 
 /**
  Sets the Request Configuration Block.
