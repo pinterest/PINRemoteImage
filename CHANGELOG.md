@@ -1,5 +1,7 @@
 ## master
 * Add your own contributions to the next release on the line below this with your name.
+
+## 3.0.0 Beta 11
 - [fixed] Fixes a deadlock with canceling processor tasks [#374](https://github.com/pinterest/PINRemoteImage/pull/374) [zachwaugh](https://github.com/zachwaugh)
 - [fixed] Fixes a deadlock in the retry system. [garrettmoon](https://github.com/garrettmoon)
 - [fixed] Fixes a threadsafety issue in accessing callbacks. [garrettmoon](https://github.com/garrettmoon)
