@@ -153,11 +153,13 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  @param configuration The configuration used to create the PINRemoteImageManager.
  @param alternativeRepDelegate a delegate which conforms to the PINRemoteImageManagerAlternateRepresentationProvider protocol. Provide a delegate if you want to have non image results. @see PINRemoteImageManagerAlternateRepresentationProvider for an example.
  @param imageCache  Optional delegate which conforms to the PINRemoteImageCaching protocol. Provide a delegate if you want to control image caching. By default, image manager will use most appropriate implementation available (based on PINCache or NSCache, depending on subspec)@see PINRemoteImageBasicCache for an example.
+ @param retryStrategyCreationBlock Optional custom retry strategy when request will fail. If nil passed, default exponential retry strategy will be used.
  @return A PINRemoteImageManager with the specified configuration.
  */
 - (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)configuration
                    alternativeRepresentationProvider:(nullable id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepDelegate
-                                          imageCache:(nullable id<PINRemoteImageCaching>)imageCache NS_DESIGNATED_INITIALIZER;
+                                          imageCache:(nullable id<PINRemoteImageCaching>)imageCache
+                          retryStrategyCreationBlock:(_Nonnull id<PINRequestRetryStrategy> (^_Nullable)(void))retryStrategyCreationBlock NS_DESIGNATED_INITIALIZER;
 
 
 /**

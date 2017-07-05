@@ -194,11 +194,14 @@ static dispatch_once_t sharedDispatchToken;
 
 - (instancetype)initWithSessionConfiguration:(NSURLSessionConfiguration *)configuration alternativeRepresentationProvider:(id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepProvider
 {
-    return [self initWithSessionConfiguration:configuration alternativeRepresentationProvider:nil imageCache:nil];
+    return [self initWithSessionConfiguration:configuration alternativeRepresentationProvider:nil imageCache:nil retryStrategyCreationBlock:nil];
 }
 
-- (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)configuration alternativeRepresentationProvider:(nullable id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepProvider
+- (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)configuration
+                   alternativeRepresentationProvider:(nullable id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepProvider
+
                                           imageCache:(nullable id<PINRemoteImageCaching>)imageCache
+                          retryStrategyCreationBlock:(_Nonnull id<PINRequestRetryStrategy> (^_Nullable)(void))retryStrategyCreationBlock
 {
     if (self = [super init]) {
         
@@ -243,11 +246,20 @@ static dispatch_once_t sharedDispatchToken;
             alternateRepProvider = _defaultAlternateRepresentationProvider;
         }
         _alternateRepProvider = alternateRepProvider;
-        [self setRetryStrategyCreationBlock:^id<PINRequestRetryStrategy>{
-            return [[PINRequestExponentialRetryStrategy alloc] initWithRetryMaxCount:PINRemoteImageMaxRetries delayBase:PINRemoteImageRetryDelayBase];
-        }];
+        if (retryStrategyCreationBlock) {
+            _retryStrategyCreationBlock = retryStrategyCreationBlock;
+        } else {
+            __weak typeof(self) weakSelf = self;
+            _retryStrategyCreationBlock = ^id<PINRequestRetryStrategy>{
+                return [weakSelf defaultRetryStrategy];
+            };
+        }
     }
     return self;
+}
+
+- (id<PINRequestRetryStrategy>)defaultRetryStrategy {
+    return [[PINRequestExponentialRetryStrategy alloc] initWithRetryMaxCount:PINRemoteImageMaxRetries delayBase:PINRemoteImageRetryDelayBase];
 }
 
 - (id<PINRemoteImageCaching>)defaultImageCache
