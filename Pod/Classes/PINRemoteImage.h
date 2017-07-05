@@ -16,5 +16,6 @@
 #import "PINRemoteImageManagerResult.h"
 #import "PINProgressiveImage.h"
 #import "PINURLSessionManager.h"
+#import "PINRequestRetryStrategy.h"
 
 #endif

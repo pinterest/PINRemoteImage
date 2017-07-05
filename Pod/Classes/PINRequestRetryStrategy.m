@@ -23,7 +23,7 @@
 - (instancetype)initWithRetryMaxCount:(int)retryMaxCount delayBase:(int)delayBase
 {
     if (self = [super init]) {
-        _retryCount = 0;
+        _retryCount = 1;
         _retryMaxCount = retryMaxCount;
         _delayBase = delayBase;
     }

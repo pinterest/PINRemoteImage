@@ -13,6 +13,7 @@
 #import <PINRemoteImage/PINImageView+PINRemoteImage.h>
 #import <PINRemoteImage/PINRemoteImageCaching.h>
 #import <PINCache/PINCache.h>
+#import <PINRemoteImage/PINRequestRetryStrategy.h>
 
 #if USE_FLANIMATED_IMAGE
 #import <FLAnimatedImage/FLAnimatedImage.h>
@@ -926,6 +927,30 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 		 [expectation fulfill];
 	 }];
 	[self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
+- (void)testExponentialRetryStrategy
+{
+    PINRequestExponentialRetryStrategy *exponentialRetryStrategy = [[PINRequestExponentialRetryStrategy alloc] initWithRetryMaxCount:3 delayBase:2];
+    
+    NSError *retryableError = [NSError errorWithDomain:PINURLErrorDomain code:501 userInfo:@{}];
+    NSError *nonRetryableError1 = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorUnsupportedURL userInfo:@{}];
+    NSError *nonRetryableError2 = [NSError errorWithDomain:PINRemoteImageManagerErrorDomain code:0 userInfo:@{}];
+    XCTAssertTrue([exponentialRetryStrategy shouldRetryWithError:retryableError], @"Retryable error");
+    XCTAssertFalse([exponentialRetryStrategy shouldRetryWithError:nonRetryableError1], @"Non retryable error");
+    XCTAssertFalse([exponentialRetryStrategy shouldRetryWithError:nonRetryableError2], @"Non retryable error");
+    
+    XCTAssertEqual([exponentialRetryStrategy nextDelay], 2, @"First delay, exponential strategy");
+    
+    [exponentialRetryStrategy incrementRetryCount];
+    XCTAssertEqual([exponentialRetryStrategy nextDelay], 4, @"Second delay, exponential strategy");
+    
+    [exponentialRetryStrategy incrementRetryCount];
+    XCTAssertEqual([exponentialRetryStrategy nextDelay], 8, @"Third delay, exponential strategy");
+
+    [exponentialRetryStrategy incrementRetryCount];
+    XCTAssertFalse([exponentialRetryStrategy shouldRetryWithError:retryableError], @"Retry max count reached");
+    
 }
 
 @end
