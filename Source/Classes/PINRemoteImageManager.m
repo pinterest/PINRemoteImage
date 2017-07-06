@@ -80,7 +80,7 @@ float dataTaskPriorityWithImageManagerPriority(PINRemoteImageManagerPriority pri
 NSString * const PINRemoteImageManagerErrorDomain = @"PINRemoteImageManagerErrorDomain";
 NSString * const PINRemoteImageCacheKey = @"cacheKey";
 NSString * const PINRemoteImageCacheKeyResumePrefix = @"R-";
-typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error);
+typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse *response, NSError *error);
 
 @interface PINTaskQOS : NSObject
 
@@ -638,7 +638,7 @@ static dispatch_once_t sharedDispatchToken;
                       if (found) {
                           if (valid) {
                               typeof(self) strongSelf = weakSelf;
-                              [strongSelf callCompletionsWithKey:key image:image alternativeRepresentation:alternativeRepresentation cached:YES error:nil finalized:YES];
+                              [strongSelf callCompletionsWithKey:key image:image alternativeRepresentation:alternativeRepresentation cached:YES response:nil error:nil finalized:YES];
                           } else {
                               //Remove completion and try again
                               typeof(self) strongSelf = weakSelf;
@@ -729,8 +729,8 @@ static dispatch_once_t sharedDispatchToken;
                                                 code:PINRemoteImageManagerErrorFailedToProcessImage
                                             userInfo:nil];
                 }
-                [strongSelf callCompletionsWithKey:key image:image alternativeRepresentation:nil cached:NO error:error finalized:NO];
-                
+                [strongSelf callCompletionsWithKey:key image:image alternativeRepresentation:nil cached:NO response:result.response error:error finalized:NO];
+              
                 if (error == nil && image != nil) {
                     BOOL saveAsJPEG = (options & PINRemoteImageManagerSaveProcessedImageAsJPEG) != 0;
                     NSData *diskData = nil;
@@ -743,7 +743,7 @@ static dispatch_once_t sharedDispatchToken;
                     [strongSelf materializeAndCacheObject:image cacheInDisk:diskData additionalCost:processCost url:url key:key options:options outImage:nil outAltRep:nil];
                 }
                 
-                [strongSelf callCompletionsWithKey:key image:image alternativeRepresentation:nil cached:NO error:error finalized:YES];
+                [strongSelf callCompletionsWithKey:key image:image alternativeRepresentation:nil cached:NO response:result.response error:error finalized:YES];
             } else {
                 if (error == nil) {
                     error = [NSError errorWithDomain:PINRemoteImageManagerErrorDomain
@@ -751,7 +751,7 @@ static dispatch_once_t sharedDispatchToken;
                                             userInfo:nil];
                 }
 
-                [strongSelf callCompletionsWithKey:key image:nil alternativeRepresentation:nil cached:NO error:error finalized:YES];
+                [strongSelf callCompletionsWithKey:key image:nil alternativeRepresentation:nil cached:NO response:result.response error:error finalized:YES];
             }
         }];
         task.downloadTaskUUID = downloadTaskUUID;
@@ -778,7 +778,7 @@ static dispatch_once_t sharedDispatchToken;
                                resume:resume
                             skipRetry:(options & PINRemoteImageManagerDownloadOptionsSkipRetry)
                              priority:priority
-                    completionHandler:^(NSData *data, NSError *error)
+                    completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
     {
         [_concurrentOperationQueue addOperation:^
         {
@@ -798,7 +798,7 @@ static dispatch_once_t sharedDispatchToken;
                                                     userInfo:nil];
              }
              
-             [self callCompletionsWithKey:key image:image alternativeRepresentation:alternativeRepresentation cached:NO error:remoteImageError finalized:YES];
+            [self callCompletionsWithKey:key image:image alternativeRepresentation:alternativeRepresentation cached:NO response:response error:remoteImageError finalized:YES];
          } withPriority:operationPriorityWithImageManagerPriority(priority)];
     }];
 }
@@ -843,21 +843,18 @@ static dispatch_once_t sharedDispatchToken;
                                         code:NSURLErrorUnsupportedURL
                                     userInfo:@{ NSLocalizedDescriptionKey : @"unsupported URL" }];
         }
+        PINRemoteImageManagerResult *result = [PINRemoteImageManagerResult imageResultWithImage:image
+                                                                      alternativeRepresentation:alternativeRepresentation
+                                                                                  requestLength:0
+                                                                                     resultType:resultType
+                                                                                           UUID:nil
+                                                                                       response:nil
+                                                                                          error:error];
         if (allowEarlyReturn && [NSThread isMainThread]) {
-            completion([PINRemoteImageManagerResult imageResultWithImage:image
-                                               alternativeRepresentation:alternativeRepresentation
-                                                           requestLength:0
-                                                                   error:error
-                                                              resultType:resultType
-                                                                    UUID:nil]);
+            completion(result);
         } else {
             dispatch_async(self.callbackQueue, ^{
-                completion([PINRemoteImageManagerResult imageResultWithImage:image
-                                                   alternativeRepresentation:alternativeRepresentation
-                                                               requestLength:0
-                                                                       error:error
-                                                                  resultType:resultType
-                                                                        UUID:nil]);
+                completion(result);
             });
         }
         return YES;
@@ -948,7 +945,7 @@ static dispatch_once_t sharedDispatchToken;
                                         userInfo:nil];
             }
             
-            completion(data, error);
+            completion(data, response, error);
         }
     }];
     
@@ -959,11 +956,17 @@ static dispatch_once_t sharedDispatchToken;
     return dataTask;
 }
 
-- (void)callCompletionsWithKey:(NSString *)key image:(PINImage *)image alternativeRepresentation:(id)alternativeRepresentation cached:(BOOL)cached error:(NSError *)error finalized:(BOOL)finalized
+- (void)callCompletionsWithKey:(NSString *)key
+                         image:(PINImage *)image
+     alternativeRepresentation:(id)alternativeRepresentation
+                        cached:(BOOL)cached
+                      response:(NSURLResponse *)response
+                         error:(NSError *)error
+                     finalized:(BOOL)finalized
 {
     [self lock];
         PINRemoteImageDownloadTask *task = [self.tasks objectForKey:key];
-        [task callCompletionsWithImage:image alternativeRepresentation:alternativeRepresentation cached:cached error:error remove:!finalized];
+        [task callCompletionsWithImage:image alternativeRepresentation:alternativeRepresentation cached:cached response:response error:error remove:!finalized];
         if (finalized) {
             [self.tasks removeObjectForKey:key];
         }
@@ -1143,9 +1146,10 @@ static dispatch_once_t sharedDispatchToken;
             completion([PINRemoteImageManagerResult imageResultWithImage:image
                                                alternativeRepresentation:alternativeRepresentation
                                                            requestLength:CACurrentMediaTime() - requestTime
-                                                                   error:error
                                                               resultType:PINRemoteImageResultTypeCache
-                                                                    UUID:nil]);
+                                                                    UUID:nil
+                                                                response:nil
+                                                                   error:error]);
         });
     }];
 }
@@ -1186,9 +1190,10 @@ static dispatch_once_t sharedDispatchToken;
     return [PINRemoteImageManagerResult imageResultWithImage:image
                                    alternativeRepresentation:alternativeRepresentation
                                                requestLength:CACurrentMediaTime() - requestTime
-                                                       error:error
                                                   resultType:PINRemoteImageResultTypeMemoryCache
-                                                        UUID:nil];
+                                                        UUID:nil
+                                                    response:nil
+                                                       error:error];
 }
 
 #pragma mark - Session Task Blocks
@@ -1538,9 +1543,6 @@ static dispatch_once_t sharedDispatchToken;
     if (processorKey.length > 0) {
         cacheKey = [cacheKey stringByAppendingFormat:@"-<%@>", processorKey];
     }
-    if (resume) {
-        cacheKey = [PINRemoteImageCacheKeyResumePrefix stringByAppendingString:cacheKey];
-    }
 
     //PINDiskCache uses this key as the filename of the file written to disk
     //Due to the current filesystem used in Darwin, this name must be limited to 255 chars.
@@ -1562,6 +1564,10 @@ static dispatch_once_t sharedDispatchToken;
             [hexString appendFormat:@"%02lx", (unsigned long)digest[i]];
         }
         cacheKey = [hexString copy];
+    }
+    //The resume key must not be hashed, it is used to decide whether or not to decode from the disk cache.
+    if (resume) {
+      cacheKey = [PINRemoteImageCacheKeyResumePrefix stringByAppendingString:cacheKey];
     }
 
     return cacheKey;

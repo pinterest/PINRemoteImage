@@ -81,9 +81,10 @@
                 progressImageBlock([PINRemoteImageManagerResult imageResultWithImage:image
                                                            alternativeRepresentation:nil
                                                                        requestLength:CACurrentMediaTime() - requestTime
-                                                                               error:nil
                                                                           resultType:PINRemoteImageResultTypeProgress
                                                                                 UUID:UUID
+                                                                            response:nil
+                                                                               error:nil
                                                                 renderedImageQuality:renderedImageQuality]);
            });
         }
@@ -157,6 +158,7 @@
                                                         error:(nullable NSError *)error
                                                    resultType:(PINRemoteImageResultType)resultType
                                                          UUID:(nullable NSUUID *)UUID
+                                                     response:(nonnull NSURLResponse *)response
 {
     __block NSUInteger bytesSavedByResuming;
     [self.lock lockWithBlock:^{
@@ -165,9 +167,10 @@
     return [PINRemoteImageManagerResult imageResultWithImage:image
                                    alternativeRepresentation:alternativeRepresentation
                                                requestLength:requestLength
-                                                       error:error
                                                   resultType:resultType
                                                         UUID:UUID
+                                                    response:response
+                                                       error:error
                                         bytesSavedByResuming:bytesSavedByResuming];
 }
 
@@ -333,7 +336,7 @@
                         return;
                     }
                     
-                    completionHandler(data, error);
+                    completionHandler(data, response, error);
                 }
             }];
         }]];
