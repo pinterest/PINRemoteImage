@@ -1,0 +1,376 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		78699F481C668C8E0044C9E9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78699F471C668C8E0044C9E9 /* AppDelegate.swift */; };
+		78699F4C1C668C8E0044C9E9 /* ProgressiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78699F4B1C668C8E0044C9E9 /* ProgressiveViewController.swift */; };
+		78699F4F1C668C8E0044C9E9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 78699F4D1C668C8E0044C9E9 /* Main.storyboard */; };
+		78699F511C668C8E0044C9E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 78699F501C668C8E0044C9E9 /* Assets.xcassets */; };
+		78699F591C669AC70044C9E9 /* ProcessingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78699F581C669AC70044C9E9 /* ProcessingViewController.swift */; };
+		78699F5B1C66A5A90044C9E9 /* DegradedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78699F5A1C66A5A90044C9E9 /* DegradedViewController.swift */; };
+		78699F5D1C66A7E20044C9E9 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78699F5C1C66A7E20044C9E9 /* CollectionViewController.swift */; };
+		78699F5F1C66A8610044C9E9 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78699F5E1C66A8610044C9E9 /* CollectionViewCell.swift */; };
+		8711EE2CA5977BA3B86E1B62 /* Pods_PINRemoteImage_tvOSExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C82D54FC041E5BDD75901E15 /* Pods_PINRemoteImage_tvOSExample.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		093C3E4AE850337BCD0D2FE6 /* Pods-PINRemoteImage.tvOSExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage.tvOSExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage.tvOSExample/Pods-PINRemoteImage.tvOSExample.debug.xcconfig"; sourceTree = "<group>"; };
+		78699F441C668C8E0044C9E9 /* PINRemoteImage.tvOSExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PINRemoteImage.tvOSExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		78699F471C668C8E0044C9E9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		78699F4B1C668C8E0044C9E9 /* ProgressiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressiveViewController.swift; sourceTree = "<group>"; };
+		78699F4E1C668C8E0044C9E9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		78699F501C668C8E0044C9E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		78699F521C668C8E0044C9E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		78699F581C669AC70044C9E9 /* ProcessingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProcessingViewController.swift; sourceTree = "<group>"; };
+		78699F5A1C66A5A90044C9E9 /* DegradedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DegradedViewController.swift; sourceTree = "<group>"; };
+		78699F5C1C66A7E20044C9E9 /* CollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
+		78699F5E1C66A8610044C9E9 /* CollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
+		AAF1AB8C026DF61369E568CC /* Pods-PINRemoteImage.tvOSExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage.tvOSExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage.tvOSExample/Pods-PINRemoteImage.tvOSExample.release.xcconfig"; sourceTree = "<group>"; };
+		C82D54FC041E5BDD75901E15 /* Pods_PINRemoteImage_tvOSExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PINRemoteImage_tvOSExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		78699F411C668C8E0044C9E9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8711EE2CA5977BA3B86E1B62 /* Pods_PINRemoteImage_tvOSExample.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		717A14585C13E19AFD257717 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C82D54FC041E5BDD75901E15 /* Pods_PINRemoteImage_tvOSExample.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		78699F3B1C668C8E0044C9E9 = {
+			isa = PBXGroup;
+			children = (
+				78699F461C668C8E0044C9E9 /* PINRemoteImage.tvOSExample */,
+				78699F451C668C8E0044C9E9 /* Products */,
+				91B09A3FE05D54DA24016146 /* Pods */,
+				717A14585C13E19AFD257717 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		78699F451C668C8E0044C9E9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				78699F441C668C8E0044C9E9 /* PINRemoteImage.tvOSExample.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		78699F461C668C8E0044C9E9 /* PINRemoteImage.tvOSExample */ = {
+			isa = PBXGroup;
+			children = (
+				78699F501C668C8E0044C9E9 /* Assets.xcassets */,
+				78699F521C668C8E0044C9E9 /* Info.plist */,
+				78699F471C668C8E0044C9E9 /* AppDelegate.swift */,
+				78699F4D1C668C8E0044C9E9 /* Main.storyboard */,
+				78699F4B1C668C8E0044C9E9 /* ProgressiveViewController.swift */,
+				78699F581C669AC70044C9E9 /* ProcessingViewController.swift */,
+				78699F5A1C66A5A90044C9E9 /* DegradedViewController.swift */,
+				78699F5C1C66A7E20044C9E9 /* CollectionViewController.swift */,
+				78699F5E1C66A8610044C9E9 /* CollectionViewCell.swift */,
+			);
+			path = PINRemoteImage.tvOSExample;
+			sourceTree = "<group>";
+		};
+		91B09A3FE05D54DA24016146 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				093C3E4AE850337BCD0D2FE6 /* Pods-PINRemoteImage.tvOSExample.debug.xcconfig */,
+				AAF1AB8C026DF61369E568CC /* Pods-PINRemoteImage.tvOSExample.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		78699F431C668C8E0044C9E9 /* PINRemoteImage.tvOSExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 78699F551C668C8E0044C9E9 /* Build configuration list for PBXNativeTarget "PINRemoteImage.tvOSExample" */;
+			buildPhases = (
+				FA9E035135C48FB08841B4A3 /* [CP] Check Pods Manifest.lock */,
+				78699F401C668C8E0044C9E9 /* Sources */,
+				78699F411C668C8E0044C9E9 /* Frameworks */,
+				78699F421C668C8E0044C9E9 /* Resources */,
+				8B150830C60182EB93A19C74 /* [CP] Embed Pods Frameworks */,
+				CC3C0E4279D9CD7BF5C64E5D /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PINRemoteImage.tvOSExample;
+			productName = PINRemoteImage.tvOSExample;
+			productReference = 78699F441C668C8E0044C9E9 /* PINRemoteImage.tvOSExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		78699F3C1C668C8E0044C9E9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0720;
+				LastUpgradeCheck = 0720;
+				TargetAttributes = {
+					78699F431C668C8E0044C9E9 = {
+						CreatedOnToolsVersion = 7.2.1;
+					};
+				};
+			};
+			buildConfigurationList = 78699F3F1C668C8E0044C9E9 /* Build configuration list for PBXProject "PINRemoteImage.tvOSExample" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 78699F3B1C668C8E0044C9E9;
+			productRefGroup = 78699F451C668C8E0044C9E9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				78699F431C668C8E0044C9E9 /* PINRemoteImage.tvOSExample */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		78699F421C668C8E0044C9E9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				78699F511C668C8E0044C9E9 /* Assets.xcassets in Resources */,
+				78699F4F1C668C8E0044C9E9 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8B150830C60182EB93A19C74 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PINRemoteImage.tvOSExample/Pods-PINRemoteImage.tvOSExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CC3C0E4279D9CD7BF5C64E5D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PINRemoteImage.tvOSExample/Pods-PINRemoteImage.tvOSExample-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FA9E035135C48FB08841B4A3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		78699F401C668C8E0044C9E9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				78699F5D1C66A7E20044C9E9 /* CollectionViewController.swift in Sources */,
+				78699F4C1C668C8E0044C9E9 /* ProgressiveViewController.swift in Sources */,
+				78699F591C669AC70044C9E9 /* ProcessingViewController.swift in Sources */,
+				78699F5F1C66A8610044C9E9 /* CollectionViewCell.swift in Sources */,
+				78699F481C668C8E0044C9E9 /* AppDelegate.swift in Sources */,
+				78699F5B1C66A5A90044C9E9 /* DegradedViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		78699F4D1C668C8E0044C9E9 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				78699F4E1C668C8E0044C9E9 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		78699F531C668C8E0044C9E9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = appletvos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.1;
+			};
+			name = Debug;
+		};
+		78699F541C668C8E0044C9E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		78699F561C668C8E0044C9E9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 093C3E4AE850337BCD0D2FE6 /* Pods-PINRemoteImage.tvOSExample.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				INFOPLIST_FILE = PINRemoteImage.tvOSExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.PINRemoteImage-tvOSExample";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Debug;
+		};
+		78699F571C668C8E0044C9E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AAF1AB8C026DF61369E568CC /* Pods-PINRemoteImage.tvOSExample.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				INFOPLIST_FILE = PINRemoteImage.tvOSExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.PINRemoteImage-tvOSExample";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		78699F3F1C668C8E0044C9E9 /* Build configuration list for PBXProject "PINRemoteImage.tvOSExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				78699F531C668C8E0044C9E9 /* Debug */,
+				78699F541C668C8E0044C9E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		78699F551C668C8E0044C9E9 /* Build configuration list for PBXNativeTarget "PINRemoteImage.tvOSExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				78699F561C668C8E0044C9E9 /* Debug */,
+				78699F571C668C8E0044C9E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 78699F3C1C668C8E0044C9E9 /* Project object */;
+}

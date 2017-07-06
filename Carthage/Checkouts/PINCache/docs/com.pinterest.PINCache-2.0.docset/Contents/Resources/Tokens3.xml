@@ -1,0 +1,1066 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/PINMemoryCache.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/PINMemoryCache</TokenIdentifier>
+			<Abstract type="html">PINMemoryCache is a fast, thread safe key/value store similar to NSCache. On iOS it will clear itself
+automatically to reduce memory usage when the app receives a memory warning or goes into the background.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+            
+			
+			<NodeRef refid="3"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setConcurrentQueue:</TokenIdentifier>
+			<Abstract type="html">A concurrent queue on which all callbacks are called. It is exposed here so that it can be set to
+target some other queue, such as a global concurrent queue with a priority other than the default.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) dispatch_queue_t concurrentQueue</Declaration>
+			
+			
+			<Anchor>//api/name/concurrentQueue</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/concurrentQueue</TokenIdentifier>
+			<Abstract type="html">A concurrent queue on which all callbacks are called. It is exposed here so that it can be set to
+target some other queue, such as a global concurrent queue with a priority other than the default.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) dispatch_queue_t concurrentQueue</Declaration>
+			
+			
+			<Anchor>//api/name/concurrentQueue</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINMemoryCache/concurrentQueue</TokenIdentifier>
+			<Abstract type="html">A concurrent queue on which all callbacks are called. It is exposed here so that it can be set to
+target some other queue, such as a global concurrent queue with a priority other than the default.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) dispatch_queue_t concurrentQueue</Declaration>
+			
+			
+			<Anchor>//api/name/concurrentQueue</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setTotalCost:</TokenIdentifier>
+			<Abstract type="html">The total accumulated cost.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSUInteger totalCost</Declaration>
+			
+			
+			<Anchor>//api/name/totalCost</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/totalCost</TokenIdentifier>
+			<Abstract type="html">The total accumulated cost.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSUInteger totalCost</Declaration>
+			
+			
+			<Anchor>//api/name/totalCost</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINMemoryCache/totalCost</TokenIdentifier>
+			<Abstract type="html">The total accumulated cost.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSUInteger totalCost</Declaration>
+			
+			
+			<Anchor>//api/name/totalCost</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setCostLimit:</TokenIdentifier>
+			<Abstract type="html">The maximum cost allowed to accumulate before objects begin to be removed with trimToCostByDate:.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) NSUInteger costLimit</Declaration>
+			
+			
+			<Anchor>//api/name/costLimit</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/costLimit</TokenIdentifier>
+			<Abstract type="html">The maximum cost allowed to accumulate before objects begin to be removed with trimToCostByDate:.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) NSUInteger costLimit</Declaration>
+			
+			
+			<Anchor>//api/name/costLimit</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINMemoryCache/costLimit</TokenIdentifier>
+			<Abstract type="html">The maximum cost allowed to accumulate before objects begin to be removed with trimToCostByDate:.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) NSUInteger costLimit</Declaration>
+			
+			
+			<Anchor>//api/name/costLimit</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setAgeLimit:</TokenIdentifier>
+			<Abstract type="html">The maximum number of seconds an object is allowed to exist in the cache. Setting this to a value
+greater than 0.0 will start a recurring GCD timer with the same period that calls trimToDate:.
+Setting it back to 0.0 will stop the timer. Defaults to 0.0.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) NSTimeInterval ageLimit</Declaration>
+			
+			
+			<Anchor>//api/name/ageLimit</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/ageLimit</TokenIdentifier>
+			<Abstract type="html">The maximum number of seconds an object is allowed to exist in the cache. Setting this to a value
+greater than 0.0 will start a recurring GCD timer with the same period that calls trimToDate:.
+Setting it back to 0.0 will stop the timer. Defaults to 0.0.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) NSTimeInterval ageLimit</Declaration>
+			
+			
+			<Anchor>//api/name/ageLimit</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINMemoryCache/ageLimit</TokenIdentifier>
+			<Abstract type="html">The maximum number of seconds an object is allowed to exist in the cache. Setting this to a value
+greater than 0.0 will start a recurring GCD timer with the same period that calls trimToDate:.
+Setting it back to 0.0 will stop the timer. Defaults to 0.0.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) NSTimeInterval ageLimit</Declaration>
+			
+			
+			<Anchor>//api/name/ageLimit</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setTtlCache:</TokenIdentifier>
+			<Abstract type="html">If ttlCache is YES, the cache behaves like a ttlCache. This means that once an object enters the
+cache, it only lives as long as self.ageLimit. This has the following implications:
+- Accessing an object in the cache does not extend that object&apos;s lifetime in the cache
+- When attempting to access an object in the cache that has lived longer than self.ageLimit,
+the cache will behave as if the object does not exist</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign, getter=isTTLCache) BOOL ttlCache</Declaration>
+			
+			
+			<Anchor>//api/name/ttlCache</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/isTTLCache</TokenIdentifier>
+			<Abstract type="html">If ttlCache is YES, the cache behaves like a ttlCache. This means that once an object enters the
+cache, it only lives as long as self.ageLimit. This has the following implications:
+- Accessing an object in the cache does not extend that object&apos;s lifetime in the cache
+- When attempting to access an object in the cache that has lived longer than self.ageLimit,
+the cache will behave as if the object does not exist</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign, getter=isTTLCache) BOOL ttlCache</Declaration>
+			
+			
+			<Anchor>//api/name/ttlCache</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINMemoryCache/ttlCache</TokenIdentifier>
+			<Abstract type="html">If ttlCache is YES, the cache behaves like a ttlCache. This means that once an object enters the
+cache, it only lives as long as self.ageLimit. This has the following implications:
+- Accessing an object in the cache does not extend that object&apos;s lifetime in the cache
+- When attempting to access an object in the cache that has lived longer than self.ageLimit,
+the cache will behave as if the object does not exist</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign, getter=isTTLCache) BOOL ttlCache</Declaration>
+			
+			
+			<Anchor>//api/name/ttlCache</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setRemoveAllObjectsOnMemoryWarning:</TokenIdentifier>
+			<Abstract type="html">When YES on iOS the cache will remove all objects when the app receives a memory warning.
+Defaults to YES.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) BOOL removeAllObjectsOnMemoryWarning</Declaration>
+			
+			
+			<Anchor>//api/name/removeAllObjectsOnMemoryWarning</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/removeAllObjectsOnMemoryWarning</TokenIdentifier>
+			<Abstract type="html">When YES on iOS the cache will remove all objects when the app receives a memory warning.
+Defaults to YES.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) BOOL removeAllObjectsOnMemoryWarning</Declaration>
+			
+			
+			<Anchor>//api/name/removeAllObjectsOnMemoryWarning</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINMemoryCache/removeAllObjectsOnMemoryWarning</TokenIdentifier>
+			<Abstract type="html">When YES on iOS the cache will remove all objects when the app receives a memory warning.
+Defaults to YES.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) BOOL removeAllObjectsOnMemoryWarning</Declaration>
+			
+			
+			<Anchor>//api/name/removeAllObjectsOnMemoryWarning</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setRemoveAllObjectsOnEnteringBackground:</TokenIdentifier>
+			<Abstract type="html">When YES on iOS the cache will remove all objects when the app enters the background.
+Defaults to YES.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) BOOL removeAllObjectsOnEnteringBackground</Declaration>
+			
+			
+			<Anchor>//api/name/removeAllObjectsOnEnteringBackground</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/removeAllObjectsOnEnteringBackground</TokenIdentifier>
+			<Abstract type="html">When YES on iOS the cache will remove all objects when the app enters the background.
+Defaults to YES.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) BOOL removeAllObjectsOnEnteringBackground</Declaration>
+			
+			
+			<Anchor>//api/name/removeAllObjectsOnEnteringBackground</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINMemoryCache/removeAllObjectsOnEnteringBackground</TokenIdentifier>
+			<Abstract type="html">When YES on iOS the cache will remove all objects when the app enters the background.
+Defaults to YES.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (assign) BOOL removeAllObjectsOnEnteringBackground</Declaration>
+			
+			
+			<Anchor>//api/name/removeAllObjectsOnEnteringBackground</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setWillAddObjectBlock:</TokenIdentifier>
+			<Abstract type="html">A block to be executed just before an object is added to the cache. This block will be excuted within
+a lock, i.e. all reads and writes are suspended for the duration of the block.
+Calling synchronous methods on the cache within this callback will likely cause a deadlock.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheObjectBlock __nullable willAddObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/willAddObjectBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/willAddObjectBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just before an object is added to the cache. This block will be excuted within
+a lock, i.e. all reads and writes are suspended for the duration of the block.
+Calling synchronous methods on the cache within this callback will likely cause a deadlock.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheObjectBlock __nullable willAddObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/willAddObjectBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINMemoryCache/willAddObjectBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just before an object is added to the cache. This block will be excuted within
+a lock, i.e. all reads and writes are suspended for the duration of the block.
+Calling synchronous methods on the cache within this callback will likely cause a deadlock.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheObjectBlock __nullable willAddObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/willAddObjectBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setWillRemoveObjectBlock:</TokenIdentifier>
+			<Abstract type="html">A block to be executed just before an object is removed from the cache. This block will be excuted
+within a lock, i.e. all reads and writes are suspended for the duration of the block.
+Calling synchronous methods on the cache within this callback will likely cause a deadlock.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheObjectBlock __nullable willRemoveObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/willRemoveObjectBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/willRemoveObjectBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just before an object is removed from the cache. This block will be excuted
+within a lock, i.e. all reads and writes are suspended for the duration of the block.
+Calling synchronous methods on the cache within this callback will likely cause a deadlock.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheObjectBlock __nullable willRemoveObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/willRemoveObjectBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINMemoryCache/willRemoveObjectBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just before an object is removed from the cache. This block will be excuted
+within a lock, i.e. all reads and writes are suspended for the duration of the block.
+Calling synchronous methods on the cache within this callback will likely cause a deadlock.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheObjectBlock __nullable willRemoveObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/willRemoveObjectBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setWillRemoveAllObjectsBlock:</TokenIdentifier>
+			<Abstract type="html">A block to be executed just before all objects are removed from the cache as a result of removeAllObjects:.
+This block will be excuted within a lock, i.e. all reads and writes are suspended for the duration of the block.
+Calling synchronous methods on the cache within this callback will likely cause a deadlock.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheBlock __nullable willRemoveAllObjectsBlock</Declaration>
+			
+			
+			<Anchor>//api/name/willRemoveAllObjectsBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/willRemoveAllObjectsBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just before all objects are removed from the cache as a result of removeAllObjects:.
+This block will be excuted within a lock, i.e. all reads and writes are suspended for the duration of the block.
+Calling synchronous methods on the cache within this callback will likely cause a deadlock.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheBlock __nullable willRemoveAllObjectsBlock</Declaration>
+			
+			
+			<Anchor>//api/name/willRemoveAllObjectsBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINMemoryCache/willRemoveAllObjectsBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just before all objects are removed from the cache as a result of removeAllObjects:.
+This block will be excuted within a lock, i.e. all reads and writes are suspended for the duration of the block.
+Calling synchronous methods on the cache within this callback will likely cause a deadlock.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheBlock __nullable willRemoveAllObjectsBlock</Declaration>
+			
+			
+			<Anchor>//api/name/willRemoveAllObjectsBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setDidAddObjectBlock:</TokenIdentifier>
+			<Abstract type="html">A block to be executed just after an object is added to the cache. This block will be excuted within
+a lock, i.e. all reads and writes are suspended for the duration of the block.
+Calling synchronous methods on the cache within this callback will likely cause a deadlock.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheObjectBlock __nullable didAddObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didAddObjectBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/didAddObjectBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just after an object is added to the cache. This block will be excuted within
+a lock, i.e. all reads and writes are suspended for the duration of the block.
+Calling synchronous methods on the cache within this callback will likely cause a deadlock.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheObjectBlock __nullable didAddObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didAddObjectBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINMemoryCache/didAddObjectBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just after an object is added to the cache. This block will be excuted within
+a lock, i.e. all reads and writes are suspended for the duration of the block.
+Calling synchronous methods on the cache within this callback will likely cause a deadlock.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheObjectBlock __nullable didAddObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didAddObjectBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setDidRemoveObjectBlock:</TokenIdentifier>
+			<Abstract type="html">A block to be executed just after an object is removed from the cache. This block will be excuted
+within a lock, i.e. all reads and writes are suspended for the duration of the block.
+Calling synchronous methods on the cache within this callback will likely cause a deadlock.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheObjectBlock __nullable didRemoveObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didRemoveObjectBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/didRemoveObjectBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just after an object is removed from the cache. This block will be excuted
+within a lock, i.e. all reads and writes are suspended for the duration of the block.
+Calling synchronous methods on the cache within this callback will likely cause a deadlock.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheObjectBlock __nullable didRemoveObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didRemoveObjectBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINMemoryCache/didRemoveObjectBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just after an object is removed from the cache. This block will be excuted
+within a lock, i.e. all reads and writes are suspended for the duration of the block.
+Calling synchronous methods on the cache within this callback will likely cause a deadlock.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheObjectBlock __nullable didRemoveObjectBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didRemoveObjectBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setDidRemoveAllObjectsBlock:</TokenIdentifier>
+			<Abstract type="html">A block to be executed just after all objects are removed from the cache as a result of removeAllObjects:.
+This block will be excuted within a lock, i.e. all reads and writes are suspended for the duration of the block.
+Calling synchronous methods on the cache within this callback will likely cause a deadlock.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheBlock __nullable didRemoveAllObjectsBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didRemoveAllObjectsBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/didRemoveAllObjectsBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just after all objects are removed from the cache as a result of removeAllObjects:.
+This block will be excuted within a lock, i.e. all reads and writes are suspended for the duration of the block.
+Calling synchronous methods on the cache within this callback will likely cause a deadlock.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheBlock __nullable didRemoveAllObjectsBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didRemoveAllObjectsBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINMemoryCache/didRemoveAllObjectsBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed just after all objects are removed from the cache as a result of removeAllObjects:.
+This block will be excuted within a lock, i.e. all reads and writes are suspended for the duration of the block.
+Calling synchronous methods on the cache within this callback will likely cause a deadlock.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheBlock __nullable didRemoveAllObjectsBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didRemoveAllObjectsBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setDidReceiveMemoryWarningBlock:</TokenIdentifier>
+			<Abstract type="html">A block to be executed upon receiving a memory warning (iOS only) potentially in parallel with other blocks on the &lt;queue&gt;.
+This block will be executed regardless of the value of removeAllObjectsOnMemoryWarning. Defaults to nil.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheBlock __nullable didReceiveMemoryWarningBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didReceiveMemoryWarningBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/didReceiveMemoryWarningBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed upon receiving a memory warning (iOS only) potentially in parallel with other blocks on the &lt;queue&gt;.
+This block will be executed regardless of the value of removeAllObjectsOnMemoryWarning. Defaults to nil.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheBlock __nullable didReceiveMemoryWarningBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didReceiveMemoryWarningBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINMemoryCache/didReceiveMemoryWarningBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed upon receiving a memory warning (iOS only) potentially in parallel with other blocks on the &lt;queue&gt;.
+This block will be executed regardless of the value of removeAllObjectsOnMemoryWarning. Defaults to nil.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheBlock __nullable didReceiveMemoryWarningBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didReceiveMemoryWarningBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setDidEnterBackgroundBlock:</TokenIdentifier>
+			<Abstract type="html">A block to be executed when the app enters the background (iOS only) potentially in parallel with other blocks on the concurrentQueue.
+This block will be executed regardless of the value of removeAllObjectsOnEnteringBackground. Defaults to nil.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheBlock __nullable didEnterBackgroundBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didEnterBackgroundBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/didEnterBackgroundBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed when the app enters the background (iOS only) potentially in parallel with other blocks on the concurrentQueue.
+This block will be executed regardless of the value of removeAllObjectsOnEnteringBackground. Defaults to nil.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheBlock __nullable didEnterBackgroundBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didEnterBackgroundBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINMemoryCache/didEnterBackgroundBlock</TokenIdentifier>
+			<Abstract type="html">A block to be executed when the app enters the background (iOS only) potentially in parallel with other blocks on the concurrentQueue.
+This block will be executed regardless of the value of removeAllObjectsOnEnteringBackground. Defaults to nil.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>@property (copy) PINMemoryCacheBlock __nullable didEnterBackgroundBlock</Declaration>
+			
+			
+			<Anchor>//api/name/didEnterBackgroundBlock</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/PINMemoryCache/sharedCache</TokenIdentifier>
+			<Abstract type="html">A shared cache.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)sharedCache</Declaration>
+			
+			<ReturnValue><Abstract type="html">The shared singleton cache instance.</Abstract></ReturnValue>
+			<Anchor>//api/name/sharedCache</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/containsObjectForKey:block:</TokenIdentifier>
+			<Abstract type="html">This method determines whether an object is present for the given key in the cache. This method returns immediately
+and executes the passed block after the object is available, potentially in parallel with other blocks on the
+concurrentQueue.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/containsObjectForKey:</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (void)containsObjectForKey:(NSString *)key block:(PINMemoryCacheContainmentBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the object.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed concurrently after the containment check happened</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/containsObjectForKey:block:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/objectForKey:block:</TokenIdentifier>
+			<Abstract type="html">Retrieves the object for the specified key. This method returns immediately and executes the passed
+block after the object is available, potentially in parallel with other blocks on the concurrentQueue.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>- (void)objectForKey:(NSString *)key block:(nullable PINMemoryCacheObjectBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the requested object.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed concurrently when the object is available.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/objectForKey:block:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setObject:forKey:block:</TokenIdentifier>
+			<Abstract type="html">Stores an object in the cache for the specified key. This method returns immediately and executes the
+passed block after the object has been stored, potentially in parallel with other blocks on the concurrentQueue.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>- (void)setObject:(id)object forKey:(NSString *)key block:(nullable PINMemoryCacheObjectBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>object</Name>
+					<Abstract type="html">An object to store in the cache.</Abstract>
+				</Parameter><Parameter>
+					<Name>key</Name>
+					<Abstract type="html">A key to associate with the object. This string will be copied.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed concurrently after the object has been stored, or nil.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setObject:forKey:block:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setObject:forKey:withCost:block:</TokenIdentifier>
+			<Abstract type="html">Stores an object in the cache for the specified key and the specified cost. If the cost causes the total
+to go over the costLimit the cache is trimmed (oldest objects first). This method returns immediately
+and executes the passed block after the object has been stored, potentially in parallel with other blocks
+on the concurrentQueue.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>- (void)setObject:(id)object forKey:(NSString *)key withCost:(NSUInteger)cost block:(nullable PINMemoryCacheObjectBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>object</Name>
+					<Abstract type="html">An object to store in the cache.</Abstract>
+				</Parameter><Parameter>
+					<Name>key</Name>
+					<Abstract type="html">A key to associate with the object. This string will be copied.</Abstract>
+				</Parameter><Parameter>
+					<Name>cost</Name>
+					<Abstract type="html">An amount to add to the totalCost.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed concurrently after the object has been stored, or nil.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setObject:forKey:withCost:block:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/removeObjectForKey:block:</TokenIdentifier>
+			<Abstract type="html">Removes the object for the specified key. This method returns immediately and executes the passed
+block after the object has been removed, potentially in parallel with other blocks on the concurrentQueue.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>- (void)removeObjectForKey:(NSString *)key block:(nullable PINMemoryCacheObjectBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the object to be removed.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed concurrently after the object has been removed, or nil.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/removeObjectForKey:block:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/trimToDate:block:</TokenIdentifier>
+			<Abstract type="html">Removes all objects from the cache that have not been used since the specified date.
+This method returns immediately and executes the passed block after the cache has been trimmed,
+potentially in parallel with other blocks on the concurrentQueue.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>- (void)trimToDate:(NSDate *)date block:(nullable PINMemoryCacheBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>date</Name>
+					<Abstract type="html">Objects that haven&apos;t been accessed since this date are removed from the cache.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed concurrently after the cache has been trimmed, or nil.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/trimToDate:block:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/trimToCost:block:</TokenIdentifier>
+			<Abstract type="html">Removes objects from the cache, costliest objects first, until the totalCost is below the specified
+value. This method returns immediately and executes the passed block after the cache has been trimmed,
+potentially in parallel with other blocks on the concurrentQueue.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>- (void)trimToCost:(NSUInteger)cost block:(nullable PINMemoryCacheBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>cost</Name>
+					<Abstract type="html">The total accumulation allowed to remain after the cache has been trimmed.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed concurrently after the cache has been trimmed, or nil.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/trimToCost:block:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/trimToCostByDate:block:</TokenIdentifier>
+			<Abstract type="html">Removes objects from the cache, ordered by date (least recently used first), until the totalCost is below
+the specified value. This method returns immediately and executes the passed block after the cache has been
+trimmed, potentially in parallel with other blocks on the concurrentQueue.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>- (void)trimToCostByDate:(NSUInteger)cost block:(nullable PINMemoryCacheBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>cost</Name>
+					<Abstract type="html">The total accumulation allowed to remain after the cache has been trimmed.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed concurrently after the cache has been trimmed, or nil.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/trimToCostByDate:block:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/removeAllObjects:</TokenIdentifier>
+			<Abstract type="html">Removes all objects from the cache. This method returns immediately and executes the passed block after
+the cache has been cleared, potentially in parallel with other blocks on the concurrentQueue.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>- (void)removeAllObjects:(nullable PINMemoryCacheBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed concurrently after the cache has been cleared, or nil.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/removeAllObjects:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/enumerateObjectsWithBlock:completionBlock:</TokenIdentifier>
+			<Abstract type="html">Loops through all objects in the cache with reads and writes suspended. Calling serial methods which
+write to the cache inside block may be unsafe and may result in a deadlock. This method returns immediately.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>- (void)enumerateObjectsWithBlock:(PINMemoryCacheObjectBlock)block completionBlock:(nullable PINMemoryCacheBlock)completionBlock</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed for every object in the cache.</Abstract>
+				</Parameter><Parameter>
+					<Name>completionBlock</Name>
+					<Abstract type="html">An optional block to be executed concurrently when the enumeration is complete.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/enumerateObjectsWithBlock:completionBlock:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/containsObjectForKey:</TokenIdentifier>
+			<Abstract type="html">This method determines whether an object is present for the given key in the cache.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/containsObjectForKey:block:</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (BOOL)containsObjectForKey:(NSString *)key</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the object.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">YES if an object is present for the given key in the cache, otherwise NO.</Abstract></ReturnValue>
+			<Anchor>//api/name/containsObjectForKey:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/objectForKey:</TokenIdentifier>
+			<Abstract type="html">Retrieves the object for the specified key. This method blocks the calling thread until the
+object is available.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/objectForKey:block:</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (__nullable id)objectForKey:(nullable NSString *)key</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the object.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">The object for the specified key.</Abstract></ReturnValue>
+			<Anchor>//api/name/objectForKey:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setObject:forKey:</TokenIdentifier>
+			<Abstract type="html">Stores an object in the cache for the specified key. This method blocks the calling thread until the object
+has been set.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setObject:forKey:block:</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (void)setObject:(id)object forKey:(NSString *)key</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>object</Name>
+					<Abstract type="html">An object to store in the cache.</Abstract>
+				</Parameter><Parameter>
+					<Name>key</Name>
+					<Abstract type="html">A key to associate with the object. This string will be copied.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setObject:forKey:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/setObject:forKey:withCost:</TokenIdentifier>
+			<Abstract type="html">Stores an object in the cache for the specified key and the specified cost. If the cost causes the total
+to go over the costLimit the cache is trimmed (oldest objects first). This method blocks the calling thread
+until the object has been stored.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>- (void)setObject:(nullable id)object forKey:(nullable NSString *)key withCost:(NSUInteger)cost</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>object</Name>
+					<Abstract type="html">An object to store in the cache.</Abstract>
+				</Parameter><Parameter>
+					<Name>key</Name>
+					<Abstract type="html">A key to associate with the object. This string will be copied.</Abstract>
+				</Parameter><Parameter>
+					<Name>cost</Name>
+					<Abstract type="html">An amount to add to the totalCost.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setObject:forKey:withCost:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/removeObjectForKey:</TokenIdentifier>
+			<Abstract type="html">Removes the object for the specified key. This method blocks the calling thread until the object
+has been removed.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>- (void)removeObjectForKey:(nullable NSString *)key</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the object to be removed.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/removeObjectForKey:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/trimToDate:</TokenIdentifier>
+			<Abstract type="html">Removes all objects from the cache that have not been used since the specified date.
+This method blocks the calling thread until the cache has been trimmed.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>- (void)trimToDate:(nullable NSDate *)date</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>date</Name>
+					<Abstract type="html">Objects that haven&apos;t been accessed since this date are removed from the cache.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/trimToDate:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/trimToCost:</TokenIdentifier>
+			<Abstract type="html">Removes objects from the cache, costliest objects first, until the totalCost is below the specified
+value. This method blocks the calling thread until the cache has been trimmed.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>- (void)trimToCost:(NSUInteger)cost</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>cost</Name>
+					<Abstract type="html">The total accumulation allowed to remain after the cache has been trimmed.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/trimToCost:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/trimToCostByDate:</TokenIdentifier>
+			<Abstract type="html">Removes objects from the cache, ordered by date (least recently used first), until the totalCost is below
+the specified value. This method blocks the calling thread until the cache has been trimmed.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>- (void)trimToCostByDate:(NSUInteger)cost</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>cost</Name>
+					<Abstract type="html">The total accumulation allowed to remain after the cache has been trimmed.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/trimToCostByDate:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/removeAllObjects</TokenIdentifier>
+			<Abstract type="html">Removes all objects from the cache. This method blocks the calling thread until the cache has been cleared.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>- (void)removeAllObjects</Declaration>
+			
+			
+			<Anchor>//api/name/removeAllObjects</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINMemoryCache/enumerateObjectsWithBlock:</TokenIdentifier>
+			<Abstract type="html">Loops through all objects in the cache within a memory lock (reads and writes are suspended during the enumeration).
+This method blocks the calling thread until all objects have been enumerated.
+Calling synchronous methods on the cache within this callback will likely cause a deadlock.</Abstract>
+			<DeclaredIn>PINMemoryCache.h</DeclaredIn>
+			
+			<Declaration>- (void)enumerateObjectsWithBlock:(nullable PINMemoryCacheObjectBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed for every object in the cache.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/enumerateObjectsWithBlock:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

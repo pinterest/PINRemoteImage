@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Constants/PINOperationQueuePriority.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/c/tdef/PINOperationQueuePriority</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>PINOperationQueue.h</DeclaredIn>
+            
+			
+			<NodeRef refid="2"/>
+		</Token>
+		
+		
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINOperationQueuePriorityLow</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>PINOperationQueuePriorityLow</Declaration>
+            
+            <DeclaredIn>PINOperationQueue.h</DeclaredIn>
+            
+            <NodeRef refid="2"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINOperationQueuePriorityDefault</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>PINOperationQueuePriorityDefault</Declaration>
+            
+            <DeclaredIn>PINOperationQueue.h</DeclaredIn>
+            
+            <NodeRef refid="2"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINOperationQueuePriorityHigh</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>PINOperationQueuePriorityHigh</Declaration>
+            
+            <DeclaredIn>PINOperationQueue.h</DeclaredIn>
+            
+            <NodeRef refid="2"/>
+        </Token>
+        
+        
+	</File>
+</Tokens>

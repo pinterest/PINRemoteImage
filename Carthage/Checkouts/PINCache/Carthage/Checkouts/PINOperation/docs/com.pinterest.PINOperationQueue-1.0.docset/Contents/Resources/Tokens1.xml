@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Protocols/PINOperationReference.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intf/PINOperationReference</TokenIdentifier>
+			<Abstract type="html">Cancels all queued operations</Abstract>
+			<DeclaredIn>PINOperationQueue.h</DeclaredIn>
+            
+			
+			<NodeRef refid="1"/>
+		</Token>
+		
+		
+        
+        
+	</File>
+</Tokens>

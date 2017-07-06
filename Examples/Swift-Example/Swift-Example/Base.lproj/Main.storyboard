@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ISb-aI-c0R">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--WebP-->
+        <scene sceneID="5dI-NP-vgw">
+            <objects>
+                <viewController title="WebP" id="Wmo-YQ-k2e" customClass="WebPViewController" customModule="Swift_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="CTa-Kj-a7t"/>
+                        <viewControllerLayoutGuide type="bottom" id="V7u-6J-gg5"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="fAd-jN-Rmg">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2no-6v-rVz">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                                <animations/>
+                            </imageView>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="V7u-6J-gg5" firstAttribute="top" secondItem="2no-6v-rVz" secondAttribute="bottom" id="3OJ-wK-0yw"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="2no-6v-rVz" secondAttribute="trailing" constant="-20" id="AOU-cU-7IG"/>
+                            <constraint firstItem="2no-6v-rVz" firstAttribute="leading" secondItem="fAd-jN-Rmg" secondAttribute="leadingMargin" constant="-20" id="VhO-kd-YZY"/>
+                            <constraint firstItem="2no-6v-rVz" firstAttribute="top" secondItem="CTa-Kj-a7t" secondAttribute="bottom" constant="-20" id="kqm-uV-2eA"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="WebP" id="JTB-pd-vA2"/>
+                    <connections>
+                        <outlet property="imageView" destination="2no-6v-rVz" id="odO-4s-dA7"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hF5-Jw-dc4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="150" y="353"/>
+        </scene>
+        <!--Scroll-->
+        <scene sceneID="aMg-q1-oIG">
+            <objects>
+                <viewController title="Scroll" id="RzL-nA-Cos" customClass="ScrollViewController" customModule="Swift_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="wBP-Jh-hgg"/>
+                        <viewControllerLayoutGuide type="bottom" id="SZf-HV-f8n"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="dID-nJ-Vq1">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Scroll" id="Bp6-sm-hJO" userLabel="Scroll"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Vds-gq-4ZI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="176" y="-296"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="Ghk-dn-fPE">
+            <objects>
+                <tabBarController id="ISb-aI-c0R" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="rOU-q5-Yiu">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="RzL-nA-Cos" kind="relationship" relationship="viewControllers" id="p0X-CU-4eN"/>
+                        <segue destination="Wmo-YQ-k2e" kind="relationship" relationship="viewControllers" id="BhO-3w-kgM"/>
+                        <segue destination="bWQ-h6-6qu" kind="relationship" relationship="viewControllers" id="DEQ-Jj-Leq"/>
+                        <segue destination="SYQ-a4-zZl" kind="relationship" relationship="viewControllers" id="6vV-0i-mAN"/>
+                        <segue destination="UXX-m9-762" kind="relationship" relationship="viewControllers" id="mTG-sj-I2Z"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4JD-bk-9Ey" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-644" y="35"/>
+        </scene>
+        <!--Progressive-->
+        <scene sceneID="dHn-Dz-gw0">
+            <objects>
+                <viewController title="Progressive" id="bWQ-h6-6qu" customClass="ProgressiveViewController" customModule="Swift_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="oh1-fg-8zy"/>
+                        <viewControllerLayoutGuide type="bottom" id="wUF-9I-c05"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="876-ZK-gTh">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="V0J-QS-yT3">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                                <animations/>
+                            </imageView>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="wUF-9I-c05" firstAttribute="top" secondItem="V0J-QS-yT3" secondAttribute="bottom" id="3Ba-aO-cBY"/>
+                            <constraint firstItem="V0J-QS-yT3" firstAttribute="top" secondItem="oh1-fg-8zy" secondAttribute="bottom" constant="-20" id="6zG-ru-vDO"/>
+                            <constraint firstItem="V0J-QS-yT3" firstAttribute="leading" secondItem="876-ZK-gTh" secondAttribute="leadingMargin" constant="-20" id="Ddc-y5-lrS"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="V0J-QS-yT3" secondAttribute="trailing" constant="-20" id="xjB-pl-piS"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Progressive" id="689-9I-ueb"/>
+                    <connections>
+                        <outlet property="imageView" destination="V0J-QS-yT3" id="Ljz-Fb-m6r"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OsL-5w-txT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-744" y="1001"/>
+        </scene>
+        <!--Degraded-->
+        <scene sceneID="UIe-NJ-xjd">
+            <objects>
+                <viewController title="Degraded" id="SYQ-a4-zZl" customClass="DegradedViewController" customModule="Swift_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="R5z-ZH-ubB"/>
+                        <viewControllerLayoutGuide type="bottom" id="GwY-Zo-s44"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="62g-sk-AKj">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="SSd-8M-arg">
+                                <rect key="frame" x="20" y="20" width="560" height="531"/>
+                                <animations/>
+                            </imageView>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="SSd-8M-arg" secondAttribute="trailing" id="Jgb-fH-DAL"/>
+                            <constraint firstItem="SSd-8M-arg" firstAttribute="top" secondItem="R5z-ZH-ubB" secondAttribute="bottom" id="jH0-7h-jME"/>
+                            <constraint firstItem="SSd-8M-arg" firstAttribute="leading" secondItem="62g-sk-AKj" secondAttribute="leadingMargin" id="jnm-OF-wHV"/>
+                            <constraint firstItem="GwY-Zo-s44" firstAttribute="top" secondItem="SSd-8M-arg" secondAttribute="bottom" id="mKA-lX-6Cd"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Degraded" id="9cC-5l-2mh"/>
+                    <connections>
+                        <outlet property="imageView" destination="SSd-8M-arg" id="R00-LR-GYP"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Fp4-6K-2ot" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1202" y="683"/>
+        </scene>
+        <!--Processing-->
+        <scene sceneID="2g0-uJ-q6t">
+            <objects>
+                <viewController title="Processing" id="UXX-m9-762" customClass="ProcessingViewController" customModule="Swift_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="JQ8-1O-S79"/>
+                        <viewControllerLayoutGuide type="bottom" id="ZjW-kh-F2j"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="W7s-zC-793">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XLR-IB-JV2">
+                                <rect key="frame" x="0.0" y="25" width="600" height="551"/>
+                                <animations/>
+                            </imageView>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ZjW-kh-F2j" firstAttribute="top" secondItem="XLR-IB-JV2" secondAttribute="bottom" constant="-25" id="Asp-ko-ZEz"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="XLR-IB-JV2" secondAttribute="trailing" constant="-20" id="O76-Gs-lWd"/>
+                            <constraint firstItem="XLR-IB-JV2" firstAttribute="top" secondItem="JQ8-1O-S79" secondAttribute="bottom" constant="5" id="tC6-g4-vHv"/>
+                            <constraint firstItem="XLR-IB-JV2" firstAttribute="leading" secondItem="W7s-zC-793" secondAttribute="leadingMargin" constant="-20" id="y37-Jj-bef"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Processing" id="ose-6S-ct9"/>
+                    <connections>
+                        <outlet property="imageView" destination="XLR-IB-JV2" id="xVJ-Xo-AyP"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sRZ-nz-yvB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-148" y="1051"/>
+        </scene>
+    </scenes>
+</document>

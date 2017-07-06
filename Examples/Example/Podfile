@@ -1,0 +1,11 @@
+xcodeproj 'PINRemoteImage.xcodeproj'
+
+def shared_pods
+  pod "PINRemoteImage", :path => "../../"
+  pod "PINRemoteImage/WebP", :path => "../../"
+  pod "PINRemoteImage/PINCache", :path => "../../"
+end
+
+target 'PINRemoteImage' do
+  shared_pods
+end

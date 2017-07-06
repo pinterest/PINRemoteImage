@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DocSetNodes version="1.0">
+    <TOC>
+        <Node type="folder">
+            <Name>PINCache</Name>
+            <Path>index.html</Path>
+			<Subnodes>
+                
+				
+				<Node type="folder">
+					<Name>Classes</Name>
+					<Path>index.html</Path>
+					<Subnodes>
+						<NodeRef refid="1"/>
+						<NodeRef refid="2"/>
+						<NodeRef refid="3"/>
+						
+					</Subnodes>
+				</Node>
+				
+				
+                
+				<Node>
+					<Name>Protocols</Name>
+					<Path>index.html</Path>
+					<Subnodes>
+						<NodeRef refid="4"/>
+						
+					</Subnodes>
+				</Node>
+				
+                
+                
+                <Node>
+                    <Name>Blocks</Name>
+                    <Path>index.html</Path>
+                    <Subnodes>
+                        <NodeRef refid="5"/>
+                        <NodeRef refid="6"/>
+                        <NodeRef refid="7"/>
+                        <NodeRef refid="8"/>
+                        <NodeRef refid="9"/>
+                        <NodeRef refid="10"/>
+                        <NodeRef refid="11"/>
+                        
+                    </Subnodes>
+                </Node>
+                
+			</Subnodes>
+        </Node>
+    </TOC>
+	<Library>
+		
+		<Node id="1" type="file" documentType="reference">
+            <Name>PINCache</Name>
+            <Path>Classes/PINCache.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/PINCache.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/PINCache.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/PINCache.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/PINCache.html</Path>
+                    <Name>Class Methods</Name>
+                    <Anchor>class_methods</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/PINCache.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="2" type="file" documentType="reference">
+            <Name>PINDiskCache</Name>
+            <Path>Classes/PINDiskCache.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/PINDiskCache.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/PINDiskCache.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/PINDiskCache.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/PINDiskCache.html</Path>
+                    <Name>Class Methods</Name>
+                    <Anchor>class_methods</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/PINDiskCache.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="3" type="file" documentType="reference">
+            <Name>PINMemoryCache</Name>
+            <Path>Classes/PINMemoryCache.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/PINMemoryCache.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/PINMemoryCache.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/PINMemoryCache.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/PINMemoryCache.html</Path>
+                    <Name>Class Methods</Name>
+                    <Anchor>class_methods</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/PINMemoryCache.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		
+		
+        <Node id="4" type="file" documentType="reference">
+            <Name>PINCacheObjectSubscripting</Name>
+            <Path>Protocols/PINCacheObjectSubscripting.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Protocols/PINCacheObjectSubscripting.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Protocols/PINCacheObjectSubscripting.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Protocols/PINCacheObjectSubscripting.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		
+        
+        <Node id="5" type="file" documentType="reference">
+            <Name>PINCacheBlock</Name>
+            <Path>Blocks/PINCacheBlock.html</Path>
+            
+        </Node>
+        <Node id="6" type="file" documentType="reference">
+            <Name>PINCacheObjectBlock</Name>
+            <Path>Blocks/PINCacheObjectBlock.html</Path>
+            
+        </Node>
+        <Node id="7" type="file" documentType="reference">
+            <Name>PINDiskCacheBlock</Name>
+            <Path>Blocks/PINDiskCacheBlock.html</Path>
+            
+        </Node>
+        <Node id="8" type="file" documentType="reference">
+            <Name>PINDiskCacheFileURLBlock</Name>
+            <Path>Blocks/PINDiskCacheFileURLBlock.html</Path>
+            
+        </Node>
+        <Node id="9" type="file" documentType="reference">
+            <Name>PINDiskCacheObjectBlock</Name>
+            <Path>Blocks/PINDiskCacheObjectBlock.html</Path>
+            
+        </Node>
+        <Node id="10" type="file" documentType="reference">
+            <Name>PINMemoryCacheBlock</Name>
+            <Path>Blocks/PINMemoryCacheBlock.html</Path>
+            
+        </Node>
+        <Node id="11" type="file" documentType="reference">
+            <Name>PINMemoryCacheObjectBlock</Name>
+            <Path>Blocks/PINMemoryCacheObjectBlock.html</Path>
+            
+        </Node>
+        
+	</Library>
+</DocSetNodes>

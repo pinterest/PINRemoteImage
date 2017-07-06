@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DocSetNodes version="1.0">
+    <TOC>
+        <Node type="folder">
+            <Name>PINOperationQueue</Name>
+            <Path>index.html</Path>
+			<Subnodes>
+                
+				
+				
+                
+				<Node>
+					<Name>Protocols</Name>
+					<Path>index.html</Path>
+					<Subnodes>
+						<NodeRef refid="1"/>
+						
+					</Subnodes>
+				</Node>
+				
+                
+				<Node>
+					<Name>Constants</Name>
+					<Path>index.html</Path>
+					<Subnodes>
+						<NodeRef refid="2"/>
+						
+					</Subnodes>
+				</Node>
+				
+                
+                <Node>
+                    <Name>Blocks</Name>
+                    <Path>index.html</Path>
+                    <Subnodes>
+                        <NodeRef refid="3"/>
+                        
+                    </Subnodes>
+                </Node>
+                
+			</Subnodes>
+        </Node>
+    </TOC>
+	<Library>
+		
+		
+		
+        <Node id="1" type="file" documentType="reference">
+            <Name>PINOperationReference</Name>
+            <Path>Protocols/PINOperationReference.html</Path>
+            
+        </Node>
+		
+        <Node id="2" type="file" documentType="reference">
+            <Name>PINOperationQueuePriority</Name>
+            <Path>Constants/PINOperationQueuePriority.html</Path>
+            
+        </Node>
+		
+        <Node id="3" type="file" documentType="reference">
+            <Name>PINOperationBlock</Name>
+            <Path>Blocks/PINOperationBlock.html</Path>
+            
+        </Node>
+        
+	</Library>
+</DocSetNodes>
