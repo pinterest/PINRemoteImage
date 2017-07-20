@@ -230,7 +230,12 @@ static dispatch_once_t sharedDispatchToken;
     if ([pinDefaults integerForKey:kPINRemoteImageDiskCacheVersionKey] != kPINRemoteImageDiskCacheVersion) {
         //remove the old version of the disk cache
         NSURL *diskCacheURL = [PINDiskCache cacheURLWithRootPath:cacheURLRoot prefix:PINDiskCachePrefix name:kPINRemoteImageDiskCacheName];
-        [[NSFileManager defaultManager] removeItemAtURL:diskCacheURL error:nil];
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSURL *dstURL = [[fileManager temporaryDirectory] URLByAppendingPathComponent:kPINRemoteImageDiskCacheName];
+        [fileManager moveItemAtURL:diskCacheURL toURL:dstURL error:nil];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [fileManager removeItemAtURL:dstURL error:nil];
+        });
         [pinDefaults setInteger:kPINRemoteImageDiskCacheVersion forKey:kPINRemoteImageDiskCacheVersionKey];
     }
   
