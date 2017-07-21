@@ -104,7 +104,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (NSURL *)GIFURL
 {
-    return [NSURL URLWithString:@"https://s-media-cache-ak0.pinimg.com/originals/90/f5/77/90f577fc6abcd24f9a5f9f55b2d7482b.jpg"];
+    return [NSURL URLWithString:@"https://i.pinimg.com/originals/90/f5/77/90f577fc6abcd24f9a5f9f55b2d7482b.jpg"];
 }
 
 - (NSURL *)emptyURL
@@ -124,17 +124,17 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (NSURL *)JPEGURL_Small
 {
-    return [NSURL URLWithString:@"https://media-cache-ec0.pinimg.com/345x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"];
+    return [NSURL URLWithString:@"https://i.pinimg.com/345x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"];
 }
 
 - (NSURL *)JPEGURL_Medium
 {
-    return [NSURL URLWithString:@"https://media-cache-ec0.pinimg.com/600x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"];
+    return [NSURL URLWithString:@"https://i.pinimg.com/600x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"];
 }
 
 - (NSURL *)JPEGURL_Large
 {
-    return [NSURL URLWithString:@"https://media-cache-ec0.pinimg.com/750x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"];
+    return [NSURL URLWithString:@"https://i.pinimg.com/750x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"];
 }
 
 - (NSURL *)JPEGURL
@@ -169,7 +169,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (NSURL *)progressiveURL
 {
-    return [NSURL URLWithString:@"https://s-media-cache-ak0.pinimg.com/1200x/80/03/1b/80031b76573a358ed4fed5de391b6d36.jpg"];
+    return [NSURL URLWithString:@"https://i.pinimg.com/1200x/80/03/1b/80031b76573a358ed4fed5de391b6d36.jpg"];
 }
 
 - (NSArray <NSURL *> *)bigURLs
@@ -948,7 +948,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     //Wait for async authentication challenge setter to complete
     sleep(1);
 	
-	[self.imageManager downloadImageWithURL:[NSURL URLWithString:@"https://media-cache-ec0.pinimg.com/600x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"]
+	[self.imageManager downloadImageWithURL:[NSURL URLWithString:@"i.pinimg.com/600x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"]
 									options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult * _Nonnull result) {
                                      XCTAssert(NO, @"should not complete without hitting auth challenge.");
