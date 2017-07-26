@@ -1105,7 +1105,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     checkConcurrentDownloads();
     
     //Give this one a bit longer since these are big images.
-    [self waitForExpectationsWithTimeout:30 handler:nil];
+    [self waitForExpectationsWithTimeout:60 handler:nil];
 }
 
 - (void)testResume
