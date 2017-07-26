@@ -1,6 +1,8 @@
 ## master
 * Add your own contributions to the next release on the line below this with your name.
 
+- [new] Improve disk cache migration performance [#391](https://github.com/pinterest/PINRemoteImage/pull/391) [chuganzy](https://github.com/chuganzy)
+
 ## 3.0.0 Beta 11
 - [fixed] Fixes a deadlock with canceling processor tasks [#374](https://github.com/pinterest/PINRemoteImage/pull/374) [zachwaugh](https://github.com/zachwaugh)
 - [fixed] Fixes a deadlock in the retry system. [garrettmoon](https://github.com/garrettmoon)
