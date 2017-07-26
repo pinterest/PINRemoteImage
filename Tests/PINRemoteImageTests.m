@@ -948,7 +948,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     //Wait for async authentication challenge setter to complete
     sleep(1);
 	
-	[self.imageManager downloadImageWithURL:[NSURL URLWithString:@"i.pinimg.com/600x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"]
+	[self.imageManager downloadImageWithURL:[NSURL URLWithString:@"https://i.pinimg.com/600x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"]
 									options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult * _Nonnull result) {
                                      XCTAssert(NO, @"should not complete without hitting auth challenge.");
