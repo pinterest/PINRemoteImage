@@ -13,9 +13,6 @@
 #import "PINRemoteImageCallbacks.h"
 #import "PINRemoteLock.h"
 
-#define PINRemoteImageMaxRetries                       3
-#define PINRemoteImageRetryDelayBase                   4
-
 @interface PINRemoteImageDownloadTask ()
 {
     PINProgressiveImage *_progressImage;
@@ -320,7 +317,7 @@
                     __block BOOL retry = NO;
                     __block int64_t delay = 0;
                     [self.lock lockWithBlock:^{
-                        retry = [_retryStrategy shouldRetryWithError:error] && skipRetry == NO;
+                        retry = skipRetry == NO && [_retryStrategy shouldRetryWithError:error];
                         if (retry) {
                             // Clear out the exsiting progress image or else new data from retry will be appended
                             _progressImage = nil;

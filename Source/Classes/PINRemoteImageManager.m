@@ -168,13 +168,12 @@ static dispatch_once_t sharedDispatchToken;
 
 - (instancetype)initWithSessionConfiguration:(NSURLSessionConfiguration *)configuration alternativeRepresentationProvider:(id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepProvider
 {
-    return [self initWithSessionConfiguration:configuration alternativeRepresentationProvider:alternateRepProvider imageCache:nil retryStrategyCreationBlock:nil];
+    return [self initWithSessionConfiguration:configuration alternativeRepresentationProvider:alternateRepProvider imageCache:nil];
 }
 
 - (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)configuration
                    alternativeRepresentationProvider:(nullable id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepProvider
                                           imageCache:(nullable id<PINRemoteImageCaching>)imageCache
-                          retryStrategyCreationBlock:(_Nonnull id<PINRequestRetryStrategy> (^_Nullable)(void))retryStrategyCreationBlock
 {
     if (self = [super init]) {
         
@@ -216,14 +215,10 @@ static dispatch_once_t sharedDispatchToken;
             alternateRepProvider = _defaultAlternateRepresentationProvider;
         }
         _alternateRepProvider = alternateRepProvider;
-        if (retryStrategyCreationBlock) {
-            _retryStrategyCreationBlock = retryStrategyCreationBlock;
-        } else {
-            __weak typeof(self) weakSelf = self;
-            _retryStrategyCreationBlock = ^id<PINRequestRetryStrategy>{
-                return [weakSelf defaultRetryStrategy];
-            };
-        }
+        __weak typeof(self) weakSelf = self;
+        _retryStrategyCreationBlock = ^id<PINRequestRetryStrategy>{
+            return [weakSelf defaultRetryStrategy];
+        };
         _httpHeaderFields = [[NSMutableDictionary alloc] init];
     }
     return self;
