@@ -38,7 +38,7 @@
 - (BOOL)shouldRetryWithError:(NSError *)error
 {
     if (error == nil || ![[self class] retriableError:error] ||
-        self.retryCount > self.retryMaxCount) {
+        self.retryCount >= self.retryMaxCount) {
         return NO;
     }
     return YES;
