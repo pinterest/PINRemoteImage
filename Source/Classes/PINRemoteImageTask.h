@@ -22,6 +22,8 @@
 @property (nonatomic, copy, readonly, nonnull) NSDictionary<NSUUID *, PINRemoteImageCallbacks *> *callbackBlocks;
 
 @property (nonatomic, weak, nullable) PINRemoteImageManager *manager;
+
+@property (nonatomic, strong, nullable) id<PINRequestRetryStrategy> retryStrategy;
 #if PINRemoteImageLogging
 @property (nonatomic, copy, nullable) NSString *key;
 #endif

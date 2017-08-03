@@ -20,3 +20,4 @@
 #import "PINRemoteImageCaching.h"
 #import "PINProgressiveImage.h"
 #import "PINURLSessionManager.h"
+#import "PINRequestRetryStrategy.h"

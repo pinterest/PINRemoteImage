@@ -13,13 +13,11 @@
 #import "PINRemoteImageCallbacks.h"
 #import "PINRemoteLock.h"
 
-#define PINRemoteImageMaxRetries                       3
-#define PINRemoteImageRetryDelayBase                   4
-
 @interface PINRemoteImageDownloadTask ()
 {
     PINProgressiveImage *_progressImage;
     PINResume *_resume;
+    id<PINRequestRetryStrategy> _retryStrategy;
 }
 
 @end
@@ -29,7 +27,7 @@
 - (instancetype)initWithManager:(PINRemoteImageManager *)manager
 {
     if (self = [super initWithManager:manager]) {
-        _numberOfRetries = 0;
+        _retryStrategy = manager.retryStrategyCreationBlock();
     }
     return self;
 }
@@ -275,7 +273,7 @@
                   completionHandler:(PINRemoteImageManagerDataCompletion)completionHandler
 {
     [self.lock lockWithBlock:^{
-        if (_progressImage != nil || [self l_callbackBlocks].count == 0 || (isRetry == NO && _numberOfRetries > 0)) {
+        if (_progressImage != nil || [self l_callbackBlocks].count == 0 || (isRetry == NO && _retryStrategy.numberOfRetries > 0)) {
             return;
         }
         _resume = resume;
@@ -316,28 +314,23 @@
                                                 userInfo:nil];
                     }
                     
-                    if (error && [[self class] retriableError:error]) {
-                        //attempt to retry after delay
-                        __block BOOL retry = NO;
-                        __block NSUInteger newNumberOfRetries = 0;
-                        [self.lock lockWithBlock:^{
-                            if (_numberOfRetries < PINRemoteImageMaxRetries && skipRetry == NO) {
-                                retry = YES;
-                                newNumberOfRetries = ++_numberOfRetries;
-                                
-                                // Clear out the exsiting progress image or else new data from retry will be appended
-                                _progressImage = nil;
-                            }
-                        }];
-                        
+                    __block BOOL retry = NO;
+                    __block int64_t delay = 0;
+                    [self.lock lockWithBlock:^{
+                        retry = skipRetry == NO && [_retryStrategy shouldRetryWithError:error];
                         if (retry) {
-                            int64_t delay = powf(PINRemoteImageRetryDelayBase, newNumberOfRetries);
-                            PINLog(@"Retrying download of %@ in %d seconds.", URL, delay);
-                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                              [self scheduleDownloadWithRequest:request resume:nil skipRetry:skipRetry priority:priority isRetry:YES completionHandler:completionHandler];
-                            });
-                            return;
+                            // Clear out the exsiting progress image or else new data from retry will be appended
+                            _progressImage = nil;
+                            [_retryStrategy incrementRetryCount];
+                            delay = [_retryStrategy nextDelay];
                         }
+                    }];
+                    if (retry) {
+                        PINLog(@"Retrying download of %@ in %d seconds.", URL, delay);
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                            [self scheduleDownloadWithRequest:request resume:nil skipRetry:skipRetry priority:priority isRetry:YES completionHandler:completionHandler];
+                        });
+                        return;
                     }
                     
                     completionHandler(data, response, error);

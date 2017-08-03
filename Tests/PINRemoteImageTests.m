@@ -13,6 +13,7 @@
 #import <PINRemoteImage/PINImageView+PINRemoteImage.h>
 #import <PINRemoteImage/PINRemoteImageCaching.h>
 #import <PINCache/PINCache.h>
+#import <PINRemoteImage/PINRequestRetryStrategy.h>
 
 #import "PINResume.h"
 #import "PINRemoteImageDownloadTask.h"
@@ -1063,6 +1064,33 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 		 [expectation fulfill];
 	 }];
 	[self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
+- (void)testExponentialRetryStrategy
+{
+    PINRequestExponentialRetryStrategy *exponentialRetryStrategy = [[PINRequestExponentialRetryStrategy alloc] initWithRetryMaxCount:3 delayBase:2];
+    
+    NSError *retryableError = [NSError errorWithDomain:PINURLErrorDomain code:501 userInfo:@{}];
+    NSError *nonRetryableError1 = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorUnsupportedURL userInfo:@{}];
+    NSError *nonRetryableError2 = [NSError errorWithDomain:PINRemoteImageManagerErrorDomain code:0 userInfo:@{}];
+    XCTAssertTrue([exponentialRetryStrategy shouldRetryWithError:retryableError], @"Retryable error");
+    XCTAssertFalse([exponentialRetryStrategy shouldRetryWithError:nonRetryableError1], @"Non retryable error");
+    XCTAssertFalse([exponentialRetryStrategy shouldRetryWithError:nonRetryableError2], @"Non retryable error");
+    
+    
+    XCTAssertTrue([exponentialRetryStrategy shouldRetryWithError:retryableError], @"Original request failed");
+    [exponentialRetryStrategy incrementRetryCount];
+    XCTAssertEqual([exponentialRetryStrategy nextDelay], 2, @"First delay, exponential strategy");
+    
+    XCTAssertTrue([exponentialRetryStrategy shouldRetryWithError:retryableError], @"First retry failed");
+    [exponentialRetryStrategy incrementRetryCount];
+    XCTAssertEqual([exponentialRetryStrategy nextDelay], 4, @"Second delay, exponential strategy");
+    
+    XCTAssertTrue([exponentialRetryStrategy shouldRetryWithError:retryableError], @"Second retry failed");
+    [exponentialRetryStrategy incrementRetryCount];
+    XCTAssertEqual([exponentialRetryStrategy nextDelay], 8, @"Third delay, exponential strategy");
+    
+    XCTAssertFalse([exponentialRetryStrategy shouldRetryWithError:retryableError], @"Third retry failed");
 }
 
 - (void)testMaximumNumberOfDownloads

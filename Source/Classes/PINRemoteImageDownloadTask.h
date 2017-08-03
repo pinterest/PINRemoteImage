@@ -19,7 +19,6 @@
 @property (nonatomic, copy, nullable) NSString *ifRange;
 @property (nonatomic, copy, readonly, nullable) NSData *data;
 
-@property (nonatomic, assign) NSUInteger numberOfRetries;
 @property (nonatomic, readonly) float bytesPerSecond;
 @property (nonatomic, readonly) CFTimeInterval estimatedRemainingTime;
 

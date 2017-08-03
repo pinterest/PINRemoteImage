@@ -180,6 +180,8 @@
 		68F0EA931CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 68F0EA8F1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m */; };
 		68F0EA941CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 68F0EA901CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.h */; };
 		68F0EA951CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 68F0EA911CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.m */; };
+		926E01631F0DFEE100874D01 /* PINRequestRetryStrategy.h in Headers */ = {isa = PBXBuildFile; fileRef = 926E015C1F0DFCAE00874D01 /* PINRequestRetryStrategy.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		926E01641F0DFEE800874D01 /* PINRequestRetryStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 926E015D1F0DFCAE00874D01 /* PINRequestRetryStrategy.m */; };
 		9DD47F9C1C699F4B00F12CA0 /* PINButton+PINRemoteImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DD47F981C699F4B00F12CA0 /* PINButton+PINRemoteImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9DD47F9D1C699F4B00F12CA0 /* PINButton+PINRemoteImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DD47F991C699F4B00F12CA0 /* PINButton+PINRemoteImage.m */; };
 		9DD47F9E1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DD47F9A1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -473,6 +475,8 @@
 		68F0EA8F1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINAlternateRepresentationProvider.m; sourceTree = "<group>"; };
 		68F0EA901CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageMemoryContainer.h; sourceTree = "<group>"; };
 		68F0EA911CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageMemoryContainer.m; sourceTree = "<group>"; };
+		926E015C1F0DFCAE00874D01 /* PINRequestRetryStrategy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PINRequestRetryStrategy.h; sourceTree = "<group>"; };
+		926E015D1F0DFCAE00874D01 /* PINRequestRetryStrategy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PINRequestRetryStrategy.m; sourceTree = "<group>"; };
 		9DD47F981C699F4B00F12CA0 /* PINButton+PINRemoteImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PINButton+PINRemoteImage.h"; sourceTree = "<group>"; };
 		9DD47F991C699F4B00F12CA0 /* PINButton+PINRemoteImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PINButton+PINRemoteImage.m"; sourceTree = "<group>"; };
 		9DD47F9A1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PINImageView+PINRemoteImage.h"; sourceTree = "<group>"; };
@@ -831,6 +835,8 @@
 				F1B918F81BCF23C800710963 /* PINRemoteImageManagerResult.m */,
 				F1B918FD1BCF23C800710963 /* PINURLSessionManager.h */,
 				F1B918FE1BCF23C900710963 /* PINURLSessionManager.m */,
+				926E015C1F0DFCAE00874D01 /* PINRequestRetryStrategy.h */,
+				926E015D1F0DFCAE00874D01 /* PINRequestRetryStrategy.m */,
 			);
 			name = Public;
 			path = Classes;
@@ -982,6 +988,7 @@
 				6818C2721E551DA800875DB7 /* color_cache.h in Headers */,
 				6818C1661E551CC600875DB7 /* decode.h in Headers */,
 				6818C1FE1E551D1D00875DB7 /* neon.h in Headers */,
+				926E01631F0DFEE100874D01 /* PINRequestRetryStrategy.h in Headers */,
 				6818C1691E551CC600875DB7 /* extras.h in Headers */,
 				686D48D01ED38FC0003DB4C2 /* PINRemoteImageTask+Subclassing.h in Headers */,
 				6818C1671E551CC600875DB7 /* demux.h in Headers */,
@@ -1166,6 +1173,7 @@
 				68F0EA931CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m in Sources */,
 				F1B919071BCF23C900710963 /* FLAnimatedImageView+PINRemoteImage.m in Sources */,
 				6818C1FA1E551D1D00875DB7 /* lossless.c in Sources */,
+				926E01641F0DFEE800874D01 /* PINRequestRetryStrategy.m in Sources */,
 				6818C1D51E551D1D00875DB7 /* argb_mips_dsp_r2.c in Sources */,
 				6818C1F61E551D1D00875DB7 /* lossless_enc.c in Sources */,
 				6818C1D61E551D1D00875DB7 /* argb_sse2.c in Sources */,

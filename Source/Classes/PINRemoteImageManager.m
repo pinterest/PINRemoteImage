@@ -23,7 +23,9 @@
 #import "PINURLSessionManager.h"
 #import "PINRemoteImageMemoryContainer.h"
 #import "PINRemoteImageCaching.h"
+#import "PINRequestRetryStrategy.h"
 #import "PINRemoteImageDownloadQueue.h"
+#import "PINRequestRetryStrategy.h"
 
 #import "NSData+ImageDetectors.h"
 #import "PINImage+DecodedImage.h"
@@ -119,6 +121,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse 
 @property (nonatomic, assign) float lowQualityBPSThreshold;
 @property (nonatomic, assign) BOOL shouldUpgradeLowQualityImages;
 @property (nonatomic, copy) PINRemoteImageManagerAuthenticationChallenge authenticationChallengeHandler;
+@property (nonatomic, copy) id<PINRequestRetryStrategy> (^retryStrategyCreationBlock)(void);
 @property (nonatomic, copy) PINRemoteImageManagerRequestConfigurationHandler requestConfigurationHandler;
 @property (nonatomic, strong) NSMutableDictionary <NSString *, NSString *> *httpHeaderFields;
 #if DEBUG
@@ -212,9 +215,17 @@ static dispatch_once_t sharedDispatchToken;
             alternateRepProvider = _defaultAlternateRepresentationProvider;
         }
         _alternateRepProvider = alternateRepProvider;
+        __weak typeof(self) weakSelf = self;
+        _retryStrategyCreationBlock = ^id<PINRequestRetryStrategy>{
+            return [weakSelf defaultRetryStrategy];
+        };
         _httpHeaderFields = [[NSMutableDictionary alloc] init];
     }
     return self;
+}
+
+- (id<PINRequestRetryStrategy>)defaultRetryStrategy {
+    return [[PINRequestExponentialRetryStrategy alloc] initWithRetryMaxCount:3 delayBase:4];
 }
 
 - (id<PINRemoteImageCaching>)defaultImageCache
@@ -1070,6 +1081,16 @@ static dispatch_once_t sharedDispatchToken;
                 PINRemoteImageCallbacks *callbacks = task.callbackBlocks[UUID];
                 callbacks.progressImageBlock = progressImageCallback;
             }
+        [strongSelf unlock];
+    } withPriority:PINOperationQueuePriorityHigh];
+}
+
+- (void)setRetryStrategyCreationBlock:(id<PINRequestRetryStrategy> (^)(void))retryStrategyCreationBlock {
+    __weak typeof(self) weakSelf = self;
+    [_concurrentOperationQueue addOperation:^{
+        typeof(self) strongSelf = weakSelf;
+        [strongSelf lock];
+        _retryStrategyCreationBlock = retryStrategyCreationBlock;
         [strongSelf unlock];
     } withPriority:PINOperationQueuePriorityHigh];
 }
