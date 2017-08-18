@@ -1055,7 +1055,7 @@ static dispatch_once_t sharedDispatchToken;
     
     if ((PINRemoteImageManagerDownloadOptionsSkipEarlyCheck & options) == NO && [NSThread isMainThread]) {
         PINRemoteImageManagerResult *result = [self synchronousImageFromCacheWithURL:url processorKey:processorKey cacheKey:cacheKey options:options];
-        if (result.image && result.error) {
+        if (result.image && result.error == nil) {
             completion((result));
             return;
         }
