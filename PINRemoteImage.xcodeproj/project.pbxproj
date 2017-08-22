@@ -815,7 +815,7 @@
 		F165DFD61BD021E30008C6E8 /* Public */ = {
 			isa = PBXGroup;
 			children = (
-				F1B918E41BCF23C800710963 /* Image Categories */,
+				F1B918E41BCF23C800710963 /* ImageCategories */,
 				CC4243F61E62051900FD6517 /* Categories */,
 				68CA92801DB19C06008BECE2 /* PINCache */,
 				F1B918EF1BCF23C800710963 /* PINRemoteImage.h */,
@@ -921,7 +921,7 @@
 			path = Categories;
 			sourceTree = "<group>";
 		};
-		F1B918E41BCF23C800710963 /* Image Categories */ = {
+		F1B918E41BCF23C800710963 /* ImageCategories */ = {
 			isa = PBXGroup;
 			children = (
 				F1B918E51BCF23C800710963 /* FLAnimatedImageView+PINRemoteImage.h */,
@@ -931,7 +931,7 @@
 				9DD47F9A1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h */,
 				9DD47F9B1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.m */,
 			);
-			path = "Image Categories";
+			path = ImageCategories;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
