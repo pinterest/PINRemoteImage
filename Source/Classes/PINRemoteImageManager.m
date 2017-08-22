@@ -780,6 +780,17 @@ static dispatch_once_t sharedDispatchToken;
                              priority:priority
                     completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
     {
+        //404 http response may have image data
+        BOOL hasDefaultImage = NO;
+        if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+          NSHTTPURLResponse* urlResponse = (NSHTTPURLResponse*)response;
+          if (urlResponse.statusCode == 404
+              && [urlResponse.allHeaderFields[@"content-type"] rangeOfString:@"image"].location != NSNotFound) {
+            hasDefaultImage = YES;
+            error = nil;
+          }
+        }
+
         [_concurrentOperationQueue addOperation:^
         {
             PINStrongify(self)
@@ -787,17 +798,17 @@ static dispatch_once_t sharedDispatchToken;
             PINImage *image = nil;
             id alternativeRepresentation = nil;
              
-            if (remoteImageError == nil) {
+            if (remoteImageError == nil || hasDefaultImage) {
                  //stores the object in the caches
                  [self materializeAndCacheObject:data cacheInDisk:data additionalCost:0 url:url key:key options:options outImage:&image outAltRep:&alternativeRepresentation];
              }
-             
+
              if (error == nil && image == nil && alternativeRepresentation == nil) {
                  remoteImageError = [NSError errorWithDomain:PINRemoteImageManagerErrorDomain
                                                         code:PINRemoteImageManagerErrorFailedToDecodeImage
                                                     userInfo:nil];
              }
-             
+
             [self callCompletionsWithKey:key image:image alternativeRepresentation:alternativeRepresentation cached:NO response:response error:remoteImageError finalized:YES];
          } withPriority:operationPriorityWithImageManagerPriority(priority)];
     }];
