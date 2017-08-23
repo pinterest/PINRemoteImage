@@ -35,7 +35,7 @@ Pod::Spec.new do |s|
     cs.osx.deployment_target = osx_deployment
     cs.source_files = 'Source/Classes/**/*.{h,m}'
     cs.public_header_files = 'Source/Classes/**/*.h'
-    cs.exclude_files = 'Source/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h', 'Source/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m','Source/Classes/PINCache/*.{h,m}'
+    cs.exclude_files = 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.h', 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.m','Source/Classes/PINCache/*.{h,m}'
     cs.frameworks = 'ImageIO', 'Accelerate'
   end
   
@@ -60,7 +60,7 @@ Pod::Spec.new do |s|
   s.subspec "FLAnimatedImage" do |fs|
     fs.platforms = "ios"
     fs.dependency 'PINRemoteImage/Core'
-    fs.source_files = 'Source/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h', 'Source/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m'
+    fs.source_files = 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.h', 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.m'
     fs.dependency 'FLAnimatedImage', '>= 1.0'
   end
 
