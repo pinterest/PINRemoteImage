@@ -404,11 +404,11 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     PINRemoteImageManager *manager = [[PINRemoteImageManager alloc] init];
     NSURL *url = [self imageFrom404URL];
     [manager downloadImageWithURL:url completion:^(PINRemoteImageManagerResult * _Nonnull result) {
-      XCTAssertNotNil(result.image);
-      [expectation fulfill];
+        XCTAssertNotNil(result.image);
+        [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
-      XCTAssertNil(error);
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval]  handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error);
     }];
 }
 
