@@ -171,6 +171,7 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
     if (!error && [task.response isKindOfClass:[NSHTTPURLResponse class]]) {
         NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
         NSInteger statusCode = [response statusCode];
+        //If a 404 response contains an image, we treat it as a successful request and return the image
         BOOL recoverable = [self responseRecoverableFrom404:response];
         if (statusCode >= 400 && recoverable == NO) {
             error = [NSError errorWithDomain:PINURLErrorDomain
