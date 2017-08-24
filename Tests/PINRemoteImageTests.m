@@ -188,6 +188,14 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     return bigURLs;
 }
 
+- (NSURL *)imageFrom404URL
+{
+    NSString *base64EncodedUrl = @"aHR0cHM6Ly9pLnl0aW1nLmNvbS92aS9PRzlRbW9jNGVZcy9tcWRlZmF1bHQuanBn";
+    NSData *nsdataFromBase64String = [[NSData alloc] initWithBase64EncodedString:base64EncodedUrl options:0];
+    NSString *base64Decoded = [[NSString alloc] initWithData:nsdataFromBase64String encoding:NSUTF8StringEncoding];
+    return [[NSURL alloc] initWithString:base64Decoded];
+}
+
 #pragma mark - <PINURLSessionManagerDelegate>
 
 - (void)didReceiveData:(NSData *)data forTask:(NSURLSessionTask *)task
@@ -388,6 +396,20 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
          [expectation fulfill];
      }];
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
+- (void)testHTTPResponse404WithData
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:@"image from 404 response should set correctly"];
+    PINRemoteImageManager *manager = [[PINRemoteImageManager alloc] init];
+    NSURL *url = [self imageFrom404URL];
+    [manager downloadImageWithURL:url completion:^(PINRemoteImageManagerResult * _Nonnull result) {
+        XCTAssertNotNil(result.image);
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval]  handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error);
+    }];
 }
 
 - (void)testErrorOnNilURLDownload

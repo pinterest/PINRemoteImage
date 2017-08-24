@@ -169,8 +169,11 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
     }
     
     if (!error && [task.response isKindOfClass:[NSHTTPURLResponse class]]) {
-        NSInteger statusCode = [(NSHTTPURLResponse *)task.response statusCode];
-        if (statusCode >= 400) {
+        NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
+        NSInteger statusCode = [response statusCode];
+        //If a 404 response contains an image, we treat it as a successful request and return the image
+        BOOL recoverable = [self responseRecoverableFrom404:response];
+        if (statusCode >= 400 && recoverable == NO) {
             error = [NSError errorWithDomain:PINURLErrorDomain
                                         code:statusCode
                                     userInfo:@{NSLocalizedDescriptionKey : @"HTTP Error Response."}];
@@ -212,6 +215,12 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
     }
     
     [self storeTimeToFirstByte:[firstByte timeIntervalSinceDate:requestStart] forHost:task.originalRequest.URL.host];
+}
+
+- (BOOL)responseRecoverableFrom404:(NSHTTPURLResponse*)response
+{
+    return response.statusCode == 404
+            && [response.allHeaderFields[@"content-type"] rangeOfString:@"image"].location != NSNotFound;
 }
 
 /* We don't bother locking around the timeToFirstByteCache because NSCache itself is
