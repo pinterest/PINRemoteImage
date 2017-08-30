@@ -1244,6 +1244,19 @@ static dispatch_once_t sharedDispatchToken;
                     progressImage:(PINRemoteImageManagerImageCompletion)progressImage
                        completion:(PINRemoteImageManagerImageCompletion)completion
 {
+    return [self downloadImageWithURLs:urls
+                               options:options
+                         progressImage:progressImage
+                      progressDownload:nil
+                            completion:completion];
+}
+
+- (nullable NSUUID *)downloadImageWithURLs:(nonnull NSArray <NSURL *> *)urls
+                                   options:(PINRemoteImageManagerDownloadOptions)options
+                             progressImage:(nullable PINRemoteImageManagerImageCompletion)progressImage
+                          progressDownload:(nullable PINRemoteImageManagerProgressDownload)progressDownload
+                                completion:(nullable PINRemoteImageManagerImageCompletion)completion
+{
     NSUUID *UUID = [NSUUID UUID];
     if (urls.count <= 1) {
         NSURL *url = [urls firstObject];
@@ -1253,7 +1266,7 @@ static dispatch_once_t sharedDispatchToken;
                       processorKey:nil
                          processor:nil
                      progressImage:progressImage
-                  progressDownload:nil
+                  progressDownload:progressDownload
                         completion:completion
                          inputUUID:UUID];
         return UUID;
@@ -1322,7 +1335,7 @@ static dispatch_once_t sharedDispatchToken;
                             processorKey:nil
                                processor:nil
                            progressImage:progressImage
-                        progressDownload:nil
+                        progressDownload:progressDownload
                               completion:^(PINRemoteImageManagerResult *result) {
                                   typeof(self) strongSelf = weakSelf;
                                   //clean out any lower quality images from the cache

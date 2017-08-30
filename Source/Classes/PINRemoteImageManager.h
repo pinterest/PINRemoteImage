@@ -441,7 +441,7 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  
  Unless setShouldUpgradeLowQualityImages is set to YES, this method checks the cache for all URLs and returns the highest quality version stored. It is possible though unlikely for a cached image to not be returned if it is still being cached while a call is made to this method and if network conditions have changed. See source for more details.
  
- @param urls An array of NSURLs of increasing size.
+ @param urls An array of NSURLs of increasing cost to download.
  @param options PINRemoteImageManagerDownloadOptions options with which to fetch the image.
  @param progressImage PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.
@@ -451,6 +451,25 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
 - (nullable NSUUID *)downloadImageWithURLs:(nonnull NSArray <NSURL *> *)urls
                                    options:(PINRemoteImageManagerDownloadOptions)options
                              progressImage:(nullable PINRemoteImageManagerImageCompletion)progressImage
+                                completion:(nullable PINRemoteImageManagerImageCompletion)completion;
+
+/**
+ Download or retrieve from cache one of the images found at the urls in the passed in array based on current network performance. URLs should be sorted from lowest quality image URL to highest. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).
+ 
+ Unless setShouldUpgradeLowQualityImages is set to YES, this method checks the cache for all URLs and returns the highest quality version stored. It is possible though unlikely for a cached image to not be returned if it is still being cached while a call is made to this method and if network conditions have changed. See source for more details.
+ 
+ @param urls An array of NSURLs of increasing cost to download.
+ @param options PINRemoteImageManagerDownloadOptions options with which to fetch the image.
+ @param progressImage PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.
+ @param progressDownload PINRemoteImageManagerDownloadProgress block which will be called to update progress in bytes of the image download. NOTE: For performance reasons, this block is not called on the main thread every time, if you need to update your UI ensure that you dispatch to the main thread first.
+ @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.
+ 
+ @return An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).
+ */
+- (nullable NSUUID *)downloadImageWithURLs:(nonnull NSArray <NSURL *> *)urls
+                                   options:(PINRemoteImageManagerDownloadOptions)options
+                             progressImage:(nullable PINRemoteImageManagerImageCompletion)progressImage
+                          progressDownload:(nullable PINRemoteImageManagerProgressDownload)progressDownload
                                 completion:(nullable PINRemoteImageManagerImageCompletion)completion;
 
 
