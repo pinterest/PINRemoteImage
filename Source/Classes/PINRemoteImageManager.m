@@ -1192,10 +1192,10 @@ static dispatch_once_t sharedDispatchToken;
         return UUID;
     }
     
-    __weak typeof(self) weakSelf = self;
+    PINWeakify(self);
     [self.concurrentOperationQueue addOperation:^{
         __block NSInteger highestQualityDownloadedIdx = -1;
-        typeof(self) strongSelf = weakSelf;
+        PINStrongify(self);
         
         //check for the highest quality image already in cache. It's possible that an image is in the process of being
         //cached when this is being run. In which case two things could happen:
@@ -1206,12 +1206,12 @@ static dispatch_once_t sharedDispatchToken;
         //      the task will still exist and our callback will be attached. In this case, no detrimental behavior will have
         //      occurred.
         [urls enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSURL *url, NSUInteger idx, BOOL *stop) {
-            typeof(self) strongSelf = weakSelf;
-            BlockAssert([url isKindOfClass:[NSURL class]], @"url must be of type URL");
-            NSString *cacheKey = [strongSelf cacheKeyForURL:url processorKey:nil];
+            PINStrongify(self);
+            NSAssert([url isKindOfClass:[NSURL class]], @"url must be of type URL");
+            NSString *cacheKey = [self cacheKeyForURL:url processorKey:nil];
             
             //we don't actually need the object, just need to know it exists so that we can request it later
-            BOOL hasObject = [strongSelf.cache objectExistsForKey:cacheKey];
+            BOOL hasObject = [self.cache objectExistsForKey:cacheKey];
             
             if (hasObject) {
                 highestQualityDownloadedIdx = idx;
@@ -1219,16 +1219,20 @@ static dispatch_once_t sharedDispatchToken;
             }
         }];
         
-        NSUInteger desiredImageURLIdx = [strongSelf appropriateImageIdxForURLsGivenHistoricalNetworkConditions:urls];
+        [self lock];
+            float highQualityQPSThreshold = [self highQualityBPSThreshold];
+            float lowQualityQPSThreshold = [self lowQualityBPSThreshold];
+            BOOL shouldUpgradeLowQualityImages = [self shouldUpgradeLowQualityImages];
+        [self unlock];
+        
+        NSUInteger desiredImageURLIdx = [PINSpeedRecorder appropriateImageIdxForURLsGivenHistoricalNetworkConditions:urls
+                                                                                              lowQualityQPSThreshold:lowQualityQPSThreshold
+                                                                                             highQualityQPSThreshold:highQualityQPSThreshold];
         
         NSUInteger downloadIdx;
         //if the highest quality already downloaded is less than what currentBPS would dictate and shouldUpgrade is
         //set, download the new higher quality image. If no image has been cached, download the image dictated by
         //current bps
-        
-        [strongSelf lock];
-            BOOL shouldUpgradeLowQualityImages = [strongSelf shouldUpgradeLowQualityImages];
-        [strongSelf unlock];
         
         if ((highestQualityDownloadedIdx < desiredImageURLIdx && shouldUpgradeLowQualityImages) || highestQualityDownloadedIdx == -1) {
             downloadIdx = desiredImageURLIdx;
@@ -1238,7 +1242,7 @@ static dispatch_once_t sharedDispatchToken;
         
         NSURL *downloadURL = [urls objectAtIndex:downloadIdx];
         
-        [strongSelf downloadImageWithURL:downloadURL
+        [self downloadImageWithURL:downloadURL
                                  options:options
                                 priority:PINRemoteImageManagerPriorityDefault
                             processorKey:nil
@@ -1246,10 +1250,10 @@ static dispatch_once_t sharedDispatchToken;
                            progressImage:progressImage
                         progressDownload:progressDownload
                               completion:^(PINRemoteImageManagerResult *result) {
-                                  typeof(self) strongSelf = weakSelf;
+                                  PINStrongify(self)
                                   //clean out any lower quality images from the cache
                                   for (NSInteger idx = downloadIdx - 1; idx >= 0; idx--) {
-                                      [[strongSelf cache] removeObjectForKey:[strongSelf cacheKeyForURL:[urls objectAtIndex:idx] processorKey:nil]];
+                                      [[self cache] removeObjectForKey:[self cacheKeyForURL:[urls objectAtIndex:idx] processorKey:nil]];
                                   }
                                   
                                   if (completion) {
@@ -1259,43 +1263,6 @@ static dispatch_once_t sharedDispatchToken;
                                inputUUID:UUID];
     } withPriority:PINOperationQueuePriorityDefault];
     return UUID;
-}
-
-- (NSUInteger)appropriateImageIdxForURLsGivenHistoricalNetworkConditions:(NSArray <NSURL *> *)urls
-{
-    float currentBytesPerSecond = [[PINSpeedRecorder sharedRecorder] currentBytesPerSecond];
-    [self lock];
-        float highQualityQPSThreshold = [self highQualityBPSThreshold];
-        float lowQualityQPSThreshold = [self lowQualityBPSThreshold];
-    [self unlock];
-    
-    NSUInteger desiredImageURLIdx;
-    
-    if (currentBytesPerSecond == -1) {
-        // Base it on reachability
-        switch ([[PINSpeedRecorder sharedRecorder] connectionStatus]) {
-            case PINSpeedRecorderConnectionStatusWiFi:
-                desiredImageURLIdx = urls.count - 1;
-                break;
-            
-            case PINSpeedRecorderConnectionStatusWWAN:
-            case PINSpeedRecorderConnectionStatusNotReachable:
-                desiredImageURLIdx = 0;
-                break;
-        }
-    } else {
-        if (currentBytesPerSecond >= highQualityQPSThreshold) {
-            desiredImageURLIdx = urls.count - 1;
-        } else if (currentBytesPerSecond <= lowQualityQPSThreshold) {
-            desiredImageURLIdx = 0;
-        } else if (urls.count == 2) {
-            desiredImageURLIdx = roundf((currentBytesPerSecond - lowQualityQPSThreshold) / ((highQualityQPSThreshold - lowQualityQPSThreshold) / (float)(urls.count - 1)));
-        } else {
-            desiredImageURLIdx = ceilf((currentBytesPerSecond - lowQualityQPSThreshold) / ((highQualityQPSThreshold - lowQualityQPSThreshold) / (float)(urls.count - 2)));
-        }
-    }
-    
-    return desiredImageURLIdx;
 }
 
 #pragma mark - Caching

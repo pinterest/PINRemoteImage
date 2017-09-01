@@ -189,6 +189,41 @@ static const NSUInteger kMaxRecordedTasks = 5;
     return connectionStatus;
 }
 
++ (NSUInteger)appropriateImageIdxForURLsGivenHistoricalNetworkConditions:(NSArray <NSURL *> *)urls
+                                                  lowQualityQPSThreshold:(float)lowQualityQPSThreshold
+                                                 highQualityQPSThreshold:(float)highQualityQPSThreshold
+{
+    float currentBytesPerSecond = [[PINSpeedRecorder sharedRecorder] currentBytesPerSecond];
+    
+    NSUInteger desiredImageURLIdx;
+    
+    if (currentBytesPerSecond == -1) {
+        // Base it on reachability
+        switch ([[PINSpeedRecorder sharedRecorder] connectionStatus]) {
+            case PINSpeedRecorderConnectionStatusWiFi:
+                desiredImageURLIdx = urls.count - 1;
+                break;
+                
+            case PINSpeedRecorderConnectionStatusWWAN:
+            case PINSpeedRecorderConnectionStatusNotReachable:
+                desiredImageURLIdx = 0;
+                break;
+        }
+    } else {
+        if (currentBytesPerSecond >= highQualityQPSThreshold) {
+            desiredImageURLIdx = urls.count - 1;
+        } else if (currentBytesPerSecond <= lowQualityQPSThreshold) {
+            desiredImageURLIdx = 0;
+        } else if (urls.count == 2) {
+            desiredImageURLIdx = roundf((currentBytesPerSecond - lowQualityQPSThreshold) / ((highQualityQPSThreshold - lowQualityQPSThreshold) / (float)(urls.count - 1)));
+        } else {
+            desiredImageURLIdx = ceilf((currentBytesPerSecond - lowQualityQPSThreshold) / ((highQualityQPSThreshold - lowQualityQPSThreshold) / (float)(urls.count - 2)));
+        }
+    }
+    
+    return desiredImageURLIdx;
+}
+
 @end
 
 @implementation PINTaskQOS

@@ -17,6 +17,9 @@ typedef enum : NSUInteger {
 @interface PINSpeedRecorder : NSObject
 
 + (PINSpeedRecorder *)sharedRecorder;
++ (NSUInteger)appropriateImageIdxForURLsGivenHistoricalNetworkConditions:(NSArray <NSURL *> *)urls
+                                                  lowQualityQPSThreshold:(float)lowQualityQPSThreshold
+                                                 highQualityQPSThreshold:(float)highQualityQPSThreshold;
 
 - (void)addTaskBPS:(float)bytesPerSecond endDate:(NSDate *)endDate;
 - (float)currentBytesPerSecond;
