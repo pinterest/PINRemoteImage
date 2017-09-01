@@ -17,6 +17,7 @@
 
 #import "PINResume.h"
 #import "PINRemoteImageDownloadTask.h"
+#import "PINSpeedRecorder.h"
 
 #import <objc/runtime.h>
 
@@ -65,9 +66,6 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 @property (nonatomic, strong) PINURLSessionManager *sessionManager;
 @property (nonatomic, readonly) NSUInteger totalDownloads;
 
-- (float)currentBytesPerSecond;
-- (void)addTaskBPS:(float)bytesPerSecond endDate:(NSDate *)endDate;
-- (void)setCurrentBytesPerSecond:(float)currentBPS;
 - (NSString *)resumeCacheKeyForURL:(NSURL *)url;
 
 @end
@@ -821,21 +819,21 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     XCTestExpectation *finishExpectation = [self expectationWithDescription:@"Finished testing off the main thread."];
     //currentBytesPerSecond is not public, should not be called on the main queue
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        XCTAssert([self.imageManager currentBytesPerSecond] == -1, @"Without any tasks added, should be -1");
-        [self.imageManager addTaskBPS:100 endDate:[NSDate dateWithTimeIntervalSinceNow:-61]];
-        XCTAssert([self.imageManager currentBytesPerSecond] == -1, @"With only old task, should be -1");
-        [self.imageManager addTaskBPS:100 endDate:[NSDate date]];
-        XCTAssert([self isFloat:[self.imageManager currentBytesPerSecond] equalToFloat:100.0f], @"One task should be same as added task");
-        [self.imageManager addTaskBPS:50 endDate:[NSDate dateWithTimeIntervalSinceNow:-30]];
-        XCTAssert([self isFloat:[self.imageManager currentBytesPerSecond] equalToFloat:75.0f], @"Two tasks should be average of both tasks");
-        [self.imageManager addTaskBPS:100 endDate:[NSDate dateWithTimeIntervalSinceNow:-61]];
-        XCTAssert([self isFloat:[self.imageManager currentBytesPerSecond] equalToFloat:75.0f], @"Old task shouldn't be counted");
-        [self.imageManager addTaskBPS:50 endDate:[NSDate date]];
-        [self.imageManager addTaskBPS:50 endDate:[NSDate date]];
-        [self.imageManager addTaskBPS:50 endDate:[NSDate date]];
-        [self.imageManager addTaskBPS:50 endDate:[NSDate date]];
-        [self.imageManager addTaskBPS:50 endDate:[NSDate date]];
-        XCTAssert([self isFloat:[self.imageManager currentBytesPerSecond] equalToFloat:50.0f], @"Only last 5 tasks should be used");
+        XCTAssert([[PINSpeedRecorder sharedRecorder] currentBytesPerSecond] == -1, @"Without any tasks added, should be -1");
+        [[PINSpeedRecorder sharedRecorder] addTaskBPS:100 endDate:[NSDate dateWithTimeIntervalSinceNow:-61]];
+        XCTAssert([[PINSpeedRecorder sharedRecorder] currentBytesPerSecond] == -1, @"With only old task, should be -1");
+        [[PINSpeedRecorder sharedRecorder] addTaskBPS:100 endDate:[NSDate date]];
+        XCTAssert([self isFloat:[[PINSpeedRecorder sharedRecorder] currentBytesPerSecond] equalToFloat:100.0f], @"One task should be same as added task");
+        [[PINSpeedRecorder sharedRecorder] addTaskBPS:50 endDate:[NSDate dateWithTimeIntervalSinceNow:-30]];
+        XCTAssert([self isFloat:[[PINSpeedRecorder sharedRecorder] currentBytesPerSecond] equalToFloat:75.0f], @"Two tasks should be average of both tasks");
+        [[PINSpeedRecorder sharedRecorder] addTaskBPS:100 endDate:[NSDate dateWithTimeIntervalSinceNow:-61]];
+        XCTAssert([self isFloat:[[PINSpeedRecorder sharedRecorder] currentBytesPerSecond] equalToFloat:75.0f], @"Old task shouldn't be counted");
+        [[PINSpeedRecorder sharedRecorder] addTaskBPS:50 endDate:[NSDate date]];
+        [[PINSpeedRecorder sharedRecorder] addTaskBPS:50 endDate:[NSDate date]];
+        [[PINSpeedRecorder sharedRecorder] addTaskBPS:50 endDate:[NSDate date]];
+        [[PINSpeedRecorder sharedRecorder] addTaskBPS:50 endDate:[NSDate date]];
+        [[PINSpeedRecorder sharedRecorder] addTaskBPS:50 endDate:[NSDate date]];
+        XCTAssert([self isFloat:[[PINSpeedRecorder sharedRecorder] currentBytesPerSecond] equalToFloat:50.0f], @"Only last 5 tasks should be used");
         [finishExpectation fulfill];
     });
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
@@ -874,7 +872,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     // So, wait until it's actually in the cache.
     [self waitForImageWithURLToBeCached:[self JPEGURL_Large]];
     
-    [self.imageManager setCurrentBytesPerSecond:5];
+    [[PINSpeedRecorder sharedRecorder] setCurrentBytesPerSecond:5];
     [self.imageManager downloadImageWithURLs:@[[self JPEGURL_Small], [self JPEGURL_Medium], [self JPEGURL_Large]]
                                      options:PINRemoteImageManagerDownloadOptionsNone
                                progressImage:nil
@@ -900,7 +898,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     
     [self waitForImageWithURLToBeCached:[self JPEGURL_Small]];
     
-    [self.imageManager setCurrentBytesPerSecond:100];
+    [[PINSpeedRecorder sharedRecorder] setCurrentBytesPerSecond:100];
     [self.imageManager downloadImageWithURLs:@[[self JPEGURL_Small], [self JPEGURL_Medium], [self JPEGURL_Large]]
                                      options:PINRemoteImageManagerDownloadOptionsNone
                                progressImage:nil
@@ -917,7 +915,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     
-    [self.imageManager setCurrentBytesPerSecond:7];
+    [[PINSpeedRecorder sharedRecorder] setCurrentBytesPerSecond:7];
     [self.imageManager downloadImageWithURLs:@[[self JPEGURL_Small], [self JPEGURL_Medium], [self JPEGURL_Large]]
                                      options:PINRemoteImageManagerDownloadOptionsNone
                                progressImage:nil
@@ -935,7 +933,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
         if ([[self.imageManager cache] objectFromMemoryForKey:key] == nil) {
             break;
         }
-        sleep(50);
+        usleep(100);
     }
     XCTAssert(
         [[self.imageManager cache] objectFromMemoryForKey:[self.imageManager cacheKeyForURL:[self JPEGURL_Small] processorKey:nil]] == nil, @"Small image should have been removed from cache");
@@ -946,7 +944,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     
-    [self.imageManager setCurrentBytesPerSecond:7];
+    [[PINSpeedRecorder sharedRecorder] setCurrentBytesPerSecond:7];
     [self.imageManager downloadImageWithURLs:@[[self JPEGURL_Small], [self JPEGURL_Large]]
                                      options:PINRemoteImageManagerDownloadOptionsNone
                                progressImage:nil

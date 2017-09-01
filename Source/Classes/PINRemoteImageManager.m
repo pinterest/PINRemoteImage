@@ -20,12 +20,13 @@
 #import "PINRemoteImageProcessorTask.h"
 #import "PINRemoteImageDownloadTask.h"
 #import "PINResume.h"
-#import "PINURLSessionManager.h"
 #import "PINRemoteImageMemoryContainer.h"
 #import "PINRemoteImageCaching.h"
 #import "PINRequestRetryStrategy.h"
 #import "PINRemoteImageDownloadQueue.h"
 #import "PINRequestRetryStrategy.h"
+#import "PINSpeedRecorder.h"
+#import "PINURLSessionManager.h"
 
 #import "NSData+ImageDetectors.h"
 #import "PINImage+DecodedImage.h"
@@ -82,15 +83,6 @@ NSString * const PINRemoteImageCacheKey = @"cacheKey";
 NSString * const PINRemoteImageCacheKeyResumePrefix = @"R-";
 typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse *response, NSError *error);
 
-@interface PINTaskQOS : NSObject
-
-- (instancetype)initWithBPS:(float)bytesPerSecond endDate:(NSDate *)endDate;
-
-@property (nonatomic, strong) NSDate *endDate;
-@property (nonatomic, assign) float bytesPerSecond;
-
-@end
-
 @interface PINRemoteImageManager () <PINURLSessionManagerDelegate>
 {
   dispatch_queue_t _callbackQueue;
@@ -116,7 +108,6 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse 
 @property (nonatomic, strong) dispatch_queue_t callbackQueue;
 @property (nonatomic, strong) PINOperationQueue *concurrentOperationQueue;
 @property (nonatomic, strong) PINRemoteImageDownloadQueue *urlSessionTaskQueue;
-@property (nonatomic, strong) NSMutableArray <PINTaskQOS *> *taskQOS;
 @property (nonatomic, assign) float highQualityBPSThreshold;
 @property (nonatomic, assign) float lowQualityBPSThreshold;
 @property (nonatomic, assign) BOOL shouldUpgradeLowQualityImages;
@@ -125,8 +116,6 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse 
 @property (nonatomic, copy) PINRemoteImageManagerRequestConfigurationHandler requestConfigurationHandler;
 @property (nonatomic, strong) NSMutableDictionary <NSString *, NSString *> *httpHeaderFields;
 #if DEBUG
-@property (nonatomic, assign) float currentBPS;
-@property (nonatomic, assign) BOOL overrideBPS;
 @property (nonatomic, assign) NSUInteger totalDownloads;
 #endif
 
@@ -208,7 +197,6 @@ static dispatch_once_t sharedDispatchToken;
         _maxProgressiveRenderSize = CGSizeMake(1024, 1024);
         self.tasks = [[NSMutableDictionary alloc] init];
         self.canceledTasks = [[NSHashTable alloc] initWithOptions:NSHashTableWeakMemory capacity:5];
-        self.taskQOS = [[NSMutableArray alloc] initWithCapacity:5];
         
         if (alternateRepProvider == nil) {
             _defaultAlternateRepresentationProvider = [[PINAlternateRepresentationProvider alloc] init];
@@ -1164,85 +1152,30 @@ static dispatch_once_t sharedDispatchToken;
         
         float bytesPerSecond = task.bytesPerSecond;
         if (bytesPerSecond) {
-            [self addTaskBPS:task.bytesPerSecond endDate:[NSDate date]];
+            [[PINSpeedRecorder sharedRecorder] addTaskBPS:task.bytesPerSecond endDate:[NSDate date]];
         }
     }
 }
 
 #pragma mark - QOS
 
-- (float)currentBytesPerSecond
-{
-    [self lock];
-    #if DEBUG
-        if (self.overrideBPS) {
-            float currentBPS = self.currentBPS;
-            [self unlock];
-            return currentBPS;
-        }
-    #endif
-        
-        const NSTimeInterval validThreshold = 60.0;
-        __block NSUInteger count = 0;
-        __block float bps = 0;
-        __block BOOL valid = NO;
-        
-        NSDate *threshold = [NSDate dateWithTimeIntervalSinceNow:-validThreshold];
-        [self.taskQOS enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(PINTaskQOS *taskQOS, NSUInteger idx, BOOL *stop) {
-            if ([taskQOS.endDate compare:threshold] == NSOrderedAscending) {
-                *stop = YES;
-                return;
-            }
-            valid = YES;
-            count++;
-            bps += taskQOS.bytesPerSecond;
-            
-        }];
-    [self unlock];
-    
-    if (valid == NO) {
-        return -1;
-    }
-    
-    return bps / (float)count;
-}
-
-- (void)addTaskBPS:(float)bytesPerSecond endDate:(NSDate *)endDate
-{
-    //if bytesPerSecond is less than or equal to zero, ignore.
-    if (bytesPerSecond <= 0) {
-        return;
-    }
-    
-    [self lock];
-        if (self.taskQOS.count >= 5) {
-            [self.taskQOS removeObjectAtIndex:0];
-        }
-        
-        PINTaskQOS *taskQOS = [[PINTaskQOS alloc] initWithBPS:bytesPerSecond endDate:endDate];
-        
-        [self.taskQOS addObject:taskQOS];
-        [self.taskQOS sortUsingComparator:^NSComparisonResult(PINTaskQOS *obj1, PINTaskQOS *obj2) {
-            return [obj1.endDate compare:obj2.endDate];
-        }];
-    
-    [self unlock];
-}
-
-#if DEBUG
-- (void)setCurrentBytesPerSecond:(float)currentBPS
-{
-    [self lockOnMainThread];
-        _overrideBPS = YES;
-        _currentBPS = currentBPS;
-    [self unlock];
-}
-#endif
-
 - (NSUUID *)downloadImageWithURLs:(NSArray <NSURL *> *)urls
                           options:(PINRemoteImageManagerDownloadOptions)options
                     progressImage:(PINRemoteImageManagerImageCompletion)progressImage
                        completion:(PINRemoteImageManagerImageCompletion)completion
+{
+    return [self downloadImageWithURLs:urls
+                               options:options
+                         progressImage:progressImage
+                      progressDownload:nil
+                            completion:completion];
+}
+
+- (nullable NSUUID *)downloadImageWithURLs:(nonnull NSArray <NSURL *> *)urls
+                                   options:(PINRemoteImageManagerDownloadOptions)options
+                             progressImage:(nullable PINRemoteImageManagerImageCompletion)progressImage
+                          progressDownload:(nullable PINRemoteImageManagerProgressDownload)progressDownload
+                                completion:(nullable PINRemoteImageManagerImageCompletion)completion
 {
     NSUUID *UUID = [NSUUID UUID];
     if (urls.count <= 1) {
@@ -1253,16 +1186,16 @@ static dispatch_once_t sharedDispatchToken;
                       processorKey:nil
                          processor:nil
                      progressImage:progressImage
-                  progressDownload:nil
+                  progressDownload:progressDownload
                         completion:completion
                          inputUUID:UUID];
         return UUID;
     }
     
-    __weak typeof(self) weakSelf = self;
+    PINWeakify(self);
     [self.concurrentOperationQueue addOperation:^{
         __block NSInteger highestQualityDownloadedIdx = -1;
-        typeof(self) strongSelf = weakSelf;
+        PINStrongify(self);
         
         //check for the highest quality image already in cache. It's possible that an image is in the process of being
         //cached when this is being run. In which case two things could happen:
@@ -1273,12 +1206,12 @@ static dispatch_once_t sharedDispatchToken;
         //      the task will still exist and our callback will be attached. In this case, no detrimental behavior will have
         //      occurred.
         [urls enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSURL *url, NSUInteger idx, BOOL *stop) {
-            typeof(self) strongSelf = weakSelf;
-            BlockAssert([url isKindOfClass:[NSURL class]], @"url must be of type URL");
-            NSString *cacheKey = [strongSelf cacheKeyForURL:url processorKey:nil];
+            PINStrongify(self);
+            NSAssert([url isKindOfClass:[NSURL class]], @"url must be of type URL");
+            NSString *cacheKey = [self cacheKeyForURL:url processorKey:nil];
             
             //we don't actually need the object, just need to know it exists so that we can request it later
-            BOOL hasObject = [strongSelf.cache objectExistsForKey:cacheKey];
+            BOOL hasObject = [self.cache objectExistsForKey:cacheKey];
             
             if (hasObject) {
                 highestQualityDownloadedIdx = idx;
@@ -1286,28 +1219,21 @@ static dispatch_once_t sharedDispatchToken;
             }
         }];
         
-        float currentBytesPerSecond = [strongSelf currentBytesPerSecond];
-        [strongSelf lock];
-            float highQualityQPSThreshold = [strongSelf highQualityBPSThreshold];
-            float lowQualityQPSThreshold = [strongSelf lowQualityBPSThreshold];
-            BOOL shouldUpgradeLowQualityImages = [strongSelf shouldUpgradeLowQualityImages];
-        [strongSelf unlock];
+        [self lock];
+            float highQualityQPSThreshold = [self highQualityBPSThreshold];
+            float lowQualityQPSThreshold = [self lowQualityBPSThreshold];
+            BOOL shouldUpgradeLowQualityImages = [self shouldUpgradeLowQualityImages];
+        [self unlock];
         
-        NSUInteger desiredImageURLIdx;
-        if (currentBytesPerSecond == -1 || currentBytesPerSecond >= highQualityQPSThreshold) {
-            desiredImageURLIdx = urls.count - 1;
-        } else if (currentBytesPerSecond <= lowQualityQPSThreshold) {
-            desiredImageURLIdx = 0;
-        } else if (urls.count == 2) {
-            desiredImageURLIdx = roundf((currentBytesPerSecond - lowQualityQPSThreshold) / ((highQualityQPSThreshold - lowQualityQPSThreshold) / (float)(urls.count - 1)));
-        } else {
-            desiredImageURLIdx = ceilf((currentBytesPerSecond - lowQualityQPSThreshold) / ((highQualityQPSThreshold - lowQualityQPSThreshold) / (float)(urls.count - 2)));
-        }
+        NSUInteger desiredImageURLIdx = [PINSpeedRecorder appropriateImageIdxForURLsGivenHistoricalNetworkConditions:urls
+                                                                                              lowQualityQPSThreshold:lowQualityQPSThreshold
+                                                                                             highQualityQPSThreshold:highQualityQPSThreshold];
         
         NSUInteger downloadIdx;
         //if the highest quality already downloaded is less than what currentBPS would dictate and shouldUpgrade is
         //set, download the new higher quality image. If no image has been cached, download the image dictated by
         //current bps
+        
         if ((highestQualityDownloadedIdx < desiredImageURLIdx && shouldUpgradeLowQualityImages) || highestQualityDownloadedIdx == -1) {
             downloadIdx = desiredImageURLIdx;
         } else {
@@ -1316,18 +1242,18 @@ static dispatch_once_t sharedDispatchToken;
         
         NSURL *downloadURL = [urls objectAtIndex:downloadIdx];
         
-        [strongSelf downloadImageWithURL:downloadURL
+        [self downloadImageWithURL:downloadURL
                                  options:options
                                 priority:PINRemoteImageManagerPriorityDefault
                             processorKey:nil
                                processor:nil
                            progressImage:progressImage
-                        progressDownload:nil
+                        progressDownload:progressDownload
                               completion:^(PINRemoteImageManagerResult *result) {
-                                  typeof(self) strongSelf = weakSelf;
+                                  PINStrongify(self)
                                   //clean out any lower quality images from the cache
                                   for (NSInteger idx = downloadIdx - 1; idx >= 0; idx--) {
-                                      [[strongSelf cache] removeObjectForKey:[strongSelf cacheKeyForURL:[urls objectAtIndex:idx] processorKey:nil]];
+                                      [[self cache] removeObjectForKey:[self cacheKeyForURL:[urls objectAtIndex:idx] processorKey:nil]];
                                   }
                                   
                                   if (completion) {
@@ -1592,18 +1518,5 @@ static dispatch_once_t sharedDispatchToken;
     return totalDownloads;
 }
 #endif
-
-@end
-
-@implementation PINTaskQOS
-
-- (instancetype)initWithBPS:(float)bytesPerSecond endDate:(NSDate *)endDate
-{
-    if (self = [super init]) {
-        self.endDate = endDate;
-        self.bytesPerSecond = bytesPerSecond;
-    }
-    return self;
-}
 
 @end
