@@ -194,7 +194,8 @@ __weak UIImageView *weakImageView = self.imageView;
 
 ### Set some limits
 ```
-PINCache *cache = [[PINRemoteImageManager sharedImageManager] cache];
+// cache is an instance of PINCache as long as you haven't overridden defaultImageCache
+PINCache *cache = (PINCache *)[[PINRemoteImageManager sharedImageManager] cache];
 // Max memory cost is based on number of pixels, we estimate the size of one hundred 600x600 images as our max memory image cache.
 [[cache memoryCache] setCostLimit:600 * 600 * 100 * [[UIScreen mainScreen] scale]];
 
