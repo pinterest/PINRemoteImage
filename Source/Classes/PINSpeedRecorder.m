@@ -194,7 +194,6 @@ static const NSUInteger kMaxRecordedTasks = 5;
                                                  highQualityQPSThreshold:(float)highQualityQPSThreshold
 {
     float currentBytesPerSecond = [[PINSpeedRecorder sharedRecorder] currentBytesPerSecond];
-    NSLog(@"bps: %f", currentBytesPerSecond);
     
     NSUInteger desiredImageURLIdx;
     
@@ -220,10 +219,6 @@ static const NSUInteger kMaxRecordedTasks = 5;
         } else {
             desiredImageURLIdx = ceilf((currentBytesPerSecond - lowQualityQPSThreshold) / ((highQualityQPSThreshold - lowQualityQPSThreshold) / (float)(urls.count - 2)));
         }
-    }
-    
-    if (desiredImageURLIdx < urls.count - 1) {
-        NSLog(@"downloading low quality image.");
     }
     
     return desiredImageURLIdx;
