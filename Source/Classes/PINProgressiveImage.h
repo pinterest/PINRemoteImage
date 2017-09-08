@@ -54,7 +54,7 @@
  Returns bytes per second adjusted by subtracting subtraction from the task length before calculation.
  Useful when you want something like bytesPerSecond discounting the time to first byte.
  
- @param subtraction an amount to be subtracted from task length befor calculation.
+ @param subtraction An amount to be subtracted from task length before calculation.
  @return float The adjusted bytes per second.
  */
 - (float)adjustedBytesPerSecond:(CFTimeInterval)subtraction;
