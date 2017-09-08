@@ -20,6 +20,7 @@
 @property (nonatomic, copy, readonly, nullable) NSData *data;
 
 @property (nonatomic, readonly) float bytesPerSecond;
+@property (nonatomic, readonly) float startAdjustedBytesPerSecond;
 @property (nonatomic, readonly) CFTimeInterval estimatedRemainingTime;
 
 - (void)scheduleDownloadWithRequest:(nonnull NSURLRequest *)request
