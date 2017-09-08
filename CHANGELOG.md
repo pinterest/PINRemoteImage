@@ -1,4 +1,6 @@
 ## master
+
+## 3.0.0 Beta 12
 * Add your own contributions to the next release on the line below this with your name.
 - [new] Added a way to specify custom retry logic when network error happens [#386](https://github.com/pinterest/PINRemoteImage/pull/386)
 
