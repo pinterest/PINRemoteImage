@@ -33,21 +33,30 @@
 - (void)updateProgressiveImageWithData:(nonnull NSData *)data expectedNumberOfBytes:(int64_t)expectedNumberOfBytes isResume:(BOOL)isResume;
 
 /**
- Returns the latest image based on thresholds, returns nil if no new image is generated
+ Returns the latest image based on thresholds, returns nil if no new image is generated.
  
- @param blurred A boolean to indicate if the image should be blurred
- @param maxProgressiveRenderSize the maximum dimensions at which to apply a blur. If an image exceeds either the height
+ @param blurred A boolean to indicate if the image should be blurred.
+ @param maxProgressiveRenderSize The maximum dimensions at which to apply a blur. If an image exceeds either the height.
  or width of this dimension, the image will *not* be blurred regardless of the blurred parameter.
- @param renderedImageQuality Value between 0 and 1. Computed by dividing the received number of bytes by the expected number of bytes
- @return PINImage a progressive scan of the image or nil if a new one has not been generated
+ @param renderedImageQuality Value between 0 and 1. Computed by dividing the received number of bytes by the expected number of bytes.
+ @return PINImage A progressive scan of the image or nil if a new one has not been generated.
  */
 - (nullable PINImage *)currentImageBlurred:(BOOL)blurred maxProgressiveRenderSize:(CGSize)maxProgressiveRenderSize renderedImageQuality:(nonnull out CGFloat *)renderedImageQuality;
 
 /**
  Returns the current data for the image.
  
- @return NSData the current data for the image
+ @return NSData The current data for the image.
  */
 - (nullable NSData *)data;
+
+/**
+ Returns bytes per second adjusted by subtracting subtraction from the task length before calculation.
+ Useful when you want something like bytesPerSecond discounting the time to first byte.
+ 
+ @param subtraction An amount to be subtracted from task length before calculation.
+ @return float The adjusted bytes per second.
+ */
+- (float)adjustedBytesPerSecond:(CFTimeInterval)subtraction;
 
 @end

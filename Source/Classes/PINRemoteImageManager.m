@@ -1150,9 +1150,9 @@ static dispatch_once_t sharedDispatchToken;
             PINRemoteImageDownloadTask *task = [self.tasks objectForKey:cacheKey];
         [self unlock];
         
-        float bytesPerSecond = task.bytesPerSecond;
+        float bytesPerSecond = task.startAdjustedBytesPerSecond;
         if (bytesPerSecond) {
-            [[PINSpeedRecorder sharedRecorder] addTaskBPS:task.bytesPerSecond endDate:[NSDate date]];
+            [[PINSpeedRecorder sharedRecorder] addTaskBPS:bytesPerSecond endDate:[NSDate date]];
         }
     }
 }

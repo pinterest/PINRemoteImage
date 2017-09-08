@@ -128,6 +128,31 @@
     return downloadedBytes / taskLength;
 }
 
+- (float)adjustedBytesPerSecond:(CFTimeInterval)subtraction
+{
+    __block float bytesPerSecond;
+    [self.lock lockWithBlock:^{
+        bytesPerSecond = [self l_adjustedBytesPerSecond:subtraction];
+    }];
+    return bytesPerSecond;
+}
+
+- (float)l_adjustedBytesPerSecond:(CFTimeInterval)subtraction
+{
+    NSAssert(_dataTask.PIN_startTime != 0, @"Start time needs to be set by now.");
+    NSAssert(_dataTask.PIN_endTime != 0, @"End time must be set for startAdjustedBytesPerSecond to be valid.");
+    CFTimeInterval endTime = _dataTask.PIN_endTime;
+    CFTimeInterval taskLength = endTime - _dataTask.PIN_startTime;
+    taskLength -= subtraction;
+    int64_t downloadedBytes = _dataTask.countOfBytesReceived;
+    
+    if (taskLength == 0) {
+        return 0;
+    }
+    
+    return downloadedBytes / taskLength;
+}
+
 - (CFTimeInterval)estimatedRemainingTime
 {
     __block CFTimeInterval estimatedRemainingTime;

@@ -370,6 +370,11 @@
     return self.progressImage.bytesPerSecond;
 }
 
+- (float)startAdjustedBytesPerSecond
+{
+    return [self.progressImage adjustedBytesPerSecond:[self.manager.sessionManager weightedTimeToFirstByteForHost:_progressImage.dataTask.originalRequest.URL.absoluteString]];
+}
+
 - (CFTimeInterval)estimatedRemainingTime
 {
     return self.progressImage.estimatedRemainingTime;
