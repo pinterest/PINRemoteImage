@@ -1,7 +1,7 @@
 ## master
+* Add your own contributions to the next release on the line below this with your name.
 
 ## 3.0.0 Beta 12
-* Add your own contributions to the next release on the line below this with your name.
 - [new] Added a way to specify custom retry logic when network error happens [#386](https://github.com/pinterest/PINRemoteImage/pull/386)
 
 - [new] Improve disk cache migration performance [#391](https://github.com/pinterest/PINRemoteImage/pull/391) [chuganzy](https://github.com/chuganzy), [#394](https://github.com/pinterest/PINRemoteImage/pull/394) [nguyenhuy](https://github.com/nguyenhuy)
