@@ -1,5 +1,6 @@
 ## master
 * Add your own contributions to the next release on the line below this with your name.
+- [new] Added back tvOS support through a new target [#408](https://github.com/pinterest/PINRemoteImage/pull/408) [jverdi](https://github.com/jverdi)
 
 ## 3.0.0 Beta 12
 - [new] Added a way to specify custom retry logic when network error happens [#386](https://github.com/pinterest/PINRemoteImage/pull/386)
