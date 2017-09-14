@@ -110,6 +110,20 @@ static int CompareValues(uint32_t a, uint32_t b, const char* output_str) {
   return 1;
 }
 
+static int CompareBackgroundColor(uint32_t bg1, uint32_t bg2, int premultiply) {
+  if (premultiply) {
+    const int alpha1 = (bg1 >> 24) & 0xff;
+    const int alpha2 = (bg2 >> 24) & 0xff;
+    if (alpha1 == 0 && alpha2 == 0) return 1;
+  }
+  if (bg1 != bg2) {
+    fprintf(stderr, "Background color mismatch: 0x%08x vs 0x%08x\n",
+            bg1, bg2);
+    return 0;
+  }
+  return 1;
+}
+
 // Note: As long as frame durations and reconstructed frames are identical, it
 // is OK for other aspects like offsets, dispose/blend method to vary.
 static int CompareAnimatedImagePair(const AnimatedImage* const img1,
@@ -131,8 +145,8 @@ static int CompareAnimatedImagePair(const AnimatedImage* const img1,
   if (is_multi_frame_image) {  // Checks relevant for multi-frame images only.
     ok = CompareValues(img1->loop_count, img2->loop_count,
                        "Loop count mismatch") && ok;
-    ok = CompareValues(img1->bgcolor, img2->bgcolor,
-                       "Background color mismatch") && ok;
+    ok = CompareBackgroundColor(img1->bgcolor, img2->bgcolor,
+                                premultiply) && ok;
   }
 
   for (i = 0; i < img1->num_frames; ++i) {

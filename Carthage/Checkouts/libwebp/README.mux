@@ -1,7 +1,7 @@
 ﻿          __   __  ____  ____  ____  __ __  _     __ __
          /  \\/  \/  _ \/  _ \/  _ \/  \  \/ \___/_ / _\
          \       /   __/  _  \   __/      /  /  (_/  /__
-          \__\__/\_____/_____/__/  \__//_/\_____/__/___/v0.3.1
+          \__\__/\_____/_____/__/  \__//_/\_____/__/___/v0.4.0
 
 
 Description:
@@ -25,6 +25,8 @@ A list of options is available using the -help command line flag:
 > webpmux -help
 Usage: webpmux -get GET_OPTIONS INPUT -o OUTPUT
        webpmux -set SET_OPTIONS INPUT -o OUTPUT
+       webpmux -duration DURATION_OPTIONS [-duration ...]
+               INPUT -o OUTPUT
        webpmux -strip STRIP_OPTIONS INPUT -o OUTPUT
        webpmux -frame FRAME_OPTIONS [-frame...] [-loop LOOP_COUNT]
                [-bgcolor BACKGROUND_COLOR] -o OUTPUT
@@ -47,6 +49,17 @@ SET_OPTIONS:
    where:    'file.icc' contains the ICC profile to be set,
              'file.exif' contains the EXIF metadata to be set
              'file.xmp' contains the XMP metadata to be set
+
+DURATION_OPTIONS:
+ Set duration of selected frames:
+   duration            set duration for each frames
+   duration,frame      set duration of a particular frame
+   duration,start,end  set duration of frames in the
+                        interval [start,end])
+   where: 'duration' is the duration in milliseconds
+          'start' is the start frame index
+          'end' is the inclusive end frame index
+           The special 'end' value '0' means: last frame.
 
 STRIP_OPTIONS:
  Strip color profile/metadata:

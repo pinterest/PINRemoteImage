@@ -14,6 +14,7 @@
 #import "NSData+ImageDetectors.h"
 #import "PINAlternateRepresentationProvider.h"
 #import "PINAnimatedImage.h"
+#import "PINWebPAnimatedImage.h"
 #import "PINRemoteImageManager.h"
 #import "PINRemoteImageCategoryManager.h"
 #import "PINRemoteImageManagerResult.h"
