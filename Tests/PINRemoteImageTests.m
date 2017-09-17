@@ -78,7 +78,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 @end
 #endif
 
-@interface PINRemoteImage_Tests : XCTestCase <PINURLSessionManagerDelegate, PINRemoteImageManagerAlternateRepresentationProvider>
+@interface PINRemoteImage_Tests : XCTestCase <PINURLSessionManagerDelegate>
 
 @property (nonatomic, strong) PINRemoteImageManager *imageManager;
 @property (nonatomic, strong) NSMutableData *data;
@@ -166,11 +166,6 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 - (NSURL *)transparentWebPURL
 {
     return [NSURL URLWithString:@"https://www.gstatic.com/webp/gallery3/4_webp_ll.webp"];
-}
-
-- (NSURL *)animatedWebPURL
-{
-    return [NSURL URLWithString:@"https://res.cloudinary.com/demo/image/upload/fl_awebp/bored_animation.webp"];
 }
 
 - (NSURL *)veryLongURL
@@ -1324,33 +1319,6 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
   XCTAssert(requestRetried, @"Request should have been retried.");
   
   method_exchangeImplementations(originalMethod, swizzledMethod);
-}
-
-#pragma mark - Animated Images
-
-- (void)testWebpAnimatedImages
-{
-    XCTestExpectation *expectation =  [self expectationWithDescription:@"Result should be downloaded"];
-    PINRemoteImageManager *imageManager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:nil
-                                                                    alternativeRepresentationProvider:self];
-    [imageManager downloadImageWithURL:[self animatedWebPURL]
-                                    options:PINRemoteImageManagerDownloadOptionsNone
-                                 completion:^(PINRemoteImageManagerResult *result)
-    {
-        XCTAssertNotNil(result.alternativeRepresentation, @"alternative representation should be non-nil.");
-        XCTAssertNil(result.image, @"image should not be returned.");
-        
-        [[PINWebPAnimatedImage alloc] initWithAnimatedImageData:result.alternativeRepresentation];
-        
-        [expectation fulfill];
-    }];
-    
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
-}
-
-- (id)alternateRepresentationWithData:(NSData *)data options:(PINRemoteImageManagerDownloadOptions)options
-{
-    return data;
 }
 
 @end

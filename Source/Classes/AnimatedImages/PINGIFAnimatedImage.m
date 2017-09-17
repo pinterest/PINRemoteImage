@@ -1,29 +1,23 @@
 //
-//  PINAnimatedImage.m
+//  PINGIFAnimatedImage.m
 //  Pods
 //
 //  Created by Garrett Moon on 3/18/16.
 //
 //
 
-#import "PINAnimatedImage.h"
+#import "PINGIFAnimatedImage.h"
 
 #import "PINRemoteLock.h"
-#import "PINAnimatedImageManager.h"
+#import "PINGIFAnimatedImageManager.h"
 
-NSString *kPINAnimatedImageErrorDomain = @"kPINAnimatedImageErrorDomain";
-
-const Float32 kPINAnimatedImageDefaultDuration = 0.1;
+#import "NSData+ImageDetectors.h"
 
 static const size_t kPINAnimatedImageBitsPerComponent = 8;
 
-const NSTimeInterval kPINAnimatedImageDisplayRefreshRate = 60.0;
-//http://nullsleep.tumblr.com/post/16524517190/animated-gif-minimum-frame-delay-browser
-const Float32 kPINAnimatedImageMinimumDuration = 1 / kPINAnimatedImageDisplayRefreshRate;
-
 @class PINSharedAnimatedImage;
 
-@interface PINAnimatedImage ()
+@interface PINGIFAnimatedImage ()
 {
   PINRemoteLock *_completionLock;
   PINRemoteLock *_dataLock;
@@ -37,7 +31,7 @@ const Float32 kPINAnimatedImageMinimumDuration = 1 / kPINAnimatedImageDisplayRef
 
 @end
 
-@implementation PINAnimatedImage
+@implementation PINGIFAnimatedImage
 
 - (instancetype)init
 {
@@ -47,12 +41,12 @@ const Float32 kPINAnimatedImageMinimumDuration = 1 / kPINAnimatedImageDisplayRef
 - (instancetype)initWithAnimatedImageData:(NSData *)animatedImageData
 {
   if (self = [super init]) {
-    _completionLock = [[PINRemoteLock alloc] initWithName:@"PINAnimatedImage completion lock"];
-    _dataLock = [[PINRemoteLock alloc] initWithName:@"PINAnimatedImage data lock"];
+    _completionLock = [[PINRemoteLock alloc] initWithName:@"PINGIFAnimatedImage completion lock"];
+    _dataLock = [[PINRemoteLock alloc] initWithName:@"PINGIFAnimatedImage data lock"];
     
     NSAssert(animatedImageData != nil, @"animatedImageData must not be nil.");
     
-    [[PINAnimatedImageManager sharedManager] animatedPathForImageData:animatedImageData infoCompletion:^(PINImage *coverImage, PINSharedAnimatedImage *shared) {
+    [[PINGIFAnimatedImageManager sharedManager] animatedPathForImageData:animatedImageData infoCompletion:^(PINImage *coverImage, PINSharedAnimatedImage *shared) {
       self.sharedAnimatedImage = shared;
       self.infoCompleted = YES;
       
@@ -342,48 +336,6 @@ void releaseData(void *data, const void *imageData, size_t size)
   }];
 }
 
-- (NSUInteger)frameInterval
-{
-  return MAX(self.minimumFrameInterval * kPINAnimatedImageDisplayRefreshRate, 1);
-}
-
-//Credit to FLAnimatedImage ( https://github.com/Flipboard/FLAnimatedImage ) for display link interval calculations
-- (NSTimeInterval)minimumFrameInterval
-{
-  const NSTimeInterval kGreatestCommonDivisorPrecision = 2.0 / kPINAnimatedImageMinimumDuration;
-  
-  // Scales the frame delays by `kGreatestCommonDivisorPrecision`
-  // then converts it to an UInteger for in order to calculate the GCD.
-  NSUInteger scaledGCD = lrint(self.durations[0] * kGreatestCommonDivisorPrecision);
-  for (NSUInteger durationIdx = 0; durationIdx < self.frameCount; durationIdx++) {
-    Float32 duration = self.durations[durationIdx];
-    scaledGCD = gcd(lrint(duration * kGreatestCommonDivisorPrecision), scaledGCD);
-  }
-  
-  // Reverse to scale to get the value back into seconds.
-  return (scaledGCD / kGreatestCommonDivisorPrecision);
-}
-
-//Credit to FLAnimatedImage ( https://github.com/Flipboard/FLAnimatedImage ) for display link interval calculations
-static NSUInteger gcd(NSUInteger a, NSUInteger b)
-{
-  // http://en.wikipedia.org/wiki/Greatest_common_divisor
-  if (a < b) {
-    return gcd(b, a);
-  } else if (a == b) {
-    return b;
-  }
-  
-  while (true) {
-    NSUInteger remainder = a % b;
-    if (remainder == 0) {
-      return b;
-    }
-    a = b;
-    b = remainder;
-  }
-}
-
 @end
 
 @implementation PINSharedAnimatedImage
@@ -432,7 +384,7 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
   if (maps.count > 0) {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
       //ignore errors
-      [[NSFileManager defaultManager] removeItemAtPath:[PINAnimatedImageManager filePathWithTemporaryDirectory:[PINAnimatedImageManager temporaryDirectory] UUID:UUID count:0] error:nil];
+      [[NSFileManager defaultManager] removeItemAtPath:[PINGIFAnimatedImageManager filePathWithTemporaryDirectory:[PINGIFAnimatedImageManager temporaryDirectory] UUID:UUID count:0] error:nil];
       for (PINSharedAnimatedImageFile *file in maps) {
         [[NSFileManager defaultManager] removeItemAtPath:file.path error:nil];
       }
@@ -446,7 +398,7 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
   __block PINImage *coverImage = nil;
   [_coverImageLock lockWithBlock:^{
     if (_coverImage == nil) {
-      CGImageRef imageRef = [PINAnimatedImage imageAtIndex:0 inMemoryMap:self.maps[0].memoryMappedData width:(UInt32)self.width height:(UInt32)self.height bitsPerPixel:(UInt32)self.bitsPerPixel bitmapInfo:self.bitmapInfo];
+      CGImageRef imageRef = [PINGIFAnimatedImage imageAtIndex:0 inMemoryMap:self.maps[0].memoryMappedData width:(UInt32)self.width height:(UInt32)self.height bitsPerPixel:(UInt32)self.bitsPerPixel bitmapInfo:self.bitmapInfo];
 #if PIN_TARGET_IOS
       coverImage = [UIImage imageWithCGImage:imageRef];
 #elif PIN_TARGET_MAC
@@ -519,7 +471,7 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
   //local variable shenanigans due to weak ivar _memoryMappedData
   NSData *memoryMappedData = [NSData dataWithContentsOfFile:self.path options:NSDataReadingMappedAlways error:&error];
   if (error) {
-#if PINAnimatedImageDebug
+#if PINGIFAnimatedImageDebug
     NSLog(@"Could not memory map data: %@", error);
 #endif
   } else {

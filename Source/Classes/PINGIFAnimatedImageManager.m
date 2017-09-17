@@ -1,12 +1,12 @@
 //
-//  PINAnimatedImageManager.m
+//  PINGIFAnimatedImageManager.m
 //  Pods
 //
 //  Created by Garrett Moon on 4/5/16.
 //
 //
 
-#import "PINAnimatedImageManager.h"
+#import "PINGIFAnimatedImageManager.h"
 
 #import <ImageIO/ImageIO.h>
 #if PIN_TARGET_IOS
@@ -33,7 +33,7 @@ typedef NS_ENUM(NSUInteger, PINAnimatedImageManagerCondition) {
   PINAnimatedImageManagerConditionReady = 1,
 };
 
-@interface PINAnimatedImageManager ()
+@interface PINGIFAnimatedImageManager ()
 {
   NSConditionLock *_lock;
 }
@@ -45,14 +45,14 @@ typedef NS_ENUM(NSUInteger, PINAnimatedImageManagerCondition) {
 
 @end
 
-@implementation PINAnimatedImageManager
+@implementation PINGIFAnimatedImageManager
 
 + (void)load
 {
-  if (self == [PINAnimatedImageManager class]) {
+  if (self == [PINGIFAnimatedImageManager class]) {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kCleanupAfterStartupDelay * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
       //This forces a cleanup of files
-      [PINAnimatedImageManager sharedManager];
+      [PINGIFAnimatedImageManager sharedManager];
     });
   }
 }
@@ -60,9 +60,9 @@ typedef NS_ENUM(NSUInteger, PINAnimatedImageManagerCondition) {
 + (instancetype)sharedManager
 {
   static dispatch_once_t onceToken;
-  static PINAnimatedImageManager *sharedManager;
+  static PINGIFAnimatedImageManager *sharedManager;
   dispatch_once(&onceToken, ^{
-    sharedManager = [[PINAnimatedImageManager alloc] init];
+    sharedManager = [[PINGIFAnimatedImageManager alloc] init];
   });
   return sharedManager;
 }
@@ -85,9 +85,9 @@ typedef NS_ENUM(NSUInteger, PINAnimatedImageManagerCondition) {
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
       [_lock lockWhenCondition:PINAnimatedImageManagerConditionNotReady];
-        [PINAnimatedImageManager cleanupFiles];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:[PINAnimatedImageManager temporaryDirectory]] == NO) {
-          [[NSFileManager defaultManager] createDirectoryAtPath:[PINAnimatedImageManager temporaryDirectory] withIntermediateDirectories:YES attributes:nil error:nil];
+        [PINGIFAnimatedImageManager cleanupFiles];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[PINGIFAnimatedImageManager temporaryDirectory]] == NO) {
+          [[NSFileManager defaultManager] createDirectoryAtPath:[PINGIFAnimatedImageManager temporaryDirectory] withIntermediateDirectories:YES attributes:nil error:nil];
         }
       [_lock unlockWithCondition:PINAnimatedImageManagerConditionReady];
     });
@@ -104,7 +104,7 @@ typedef NS_ENUM(NSUInteger, PINAnimatedImageManagerCondition) {
                                                       object:nil
                                                        queue:nil
                                                   usingBlock:^(NSNotification * _Nonnull note) {
-                                                    [PINAnimatedImageManager cleanupFiles];
+                                                    [PINGIFAnimatedImageManager cleanupFiles];
                                                   }];
   }
   return self;
@@ -112,7 +112,7 @@ typedef NS_ENUM(NSUInteger, PINAnimatedImageManagerCondition) {
 
 + (void)cleanupFiles
 {
-  [[NSFileManager defaultManager] removeItemAtPath:[PINAnimatedImageManager temporaryDirectory] error:nil];
+  [[NSFileManager defaultManager] removeItemAtPath:[PINGIFAnimatedImageManager temporaryDirectory] error:nil];
 }
 
 - (void)animatedPathForImageData:(NSData *)animatedImageData infoCompletion:(PINAnimatedImageSharedReady)infoCompletion completion:(PINAnimatedImageDecodedPath)completion
@@ -169,7 +169,7 @@ typedef NS_ENUM(NSUInteger, PINAnimatedImageManagerCondition) {
   
     if (startProcessing) {
       dispatch_async(self.serialProcessingQueue, ^{
-        [[self class] processAnimatedImage:animatedImageData temporaryDirectory:[PINAnimatedImageManager temporaryDirectory] infoCompletion:^(PINImage *coverImage, NSUUID *UUID, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, size_t width, size_t height, size_t bitsPerPixel, UInt32 bitmapInfo) {
+        [[self class] processAnimatedImage:animatedImageData temporaryDirectory:[PINGIFAnimatedImageManager temporaryDirectory] infoCompletion:^(PINImage *coverImage, NSUUID *UUID, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, size_t width, size_t height, size_t bitsPerPixel, UInt32 bitmapInfo) {
           __block NSArray *infoCompletions = nil;
           __block PINSharedAnimatedImage *sharedAnimatedImage = nil;
           [_lock lockWhenCondition:PINAnimatedImageManagerConditionReady];
@@ -262,12 +262,12 @@ ERROR;}) \
   UInt32 frameCountForFile = 0;
   Float32 *durations = NULL;
   
-#if PINAnimatedImageDebug
+#if PINGIFAnimatedImageDebug
   CFTimeInterval start = CACurrentMediaTime();
 #endif
   
   if (fileHandle && PROCESSING_ERROR == nil) {
-    dispatch_queue_t diskWriteQueue = dispatch_queue_create("PINAnimatedImage disk write queue", DISPATCH_QUEUE_SERIAL);
+    dispatch_queue_t diskWriteQueue = dispatch_queue_create("PINGIFAnimatedImage disk write queue", DISPATCH_QUEUE_SERIAL);
     dispatch_group_t diskGroup = dispatch_group_create();
     
     CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)animatedImageData,
@@ -434,7 +434,7 @@ ERROR;}) \
     } @finally {}
   }
   
-#if PINAnimatedImageDebug
+#if PINGIFAnimatedImageDebug
   CFTimeInterval interval = CACurrentMediaTime() - start;
   NSLog(@"Encoding and write time: %f", interval);
 #endif
@@ -510,7 +510,7 @@ ERROR;}) \
 }
 
 /**
- PINAnimatedImage file header
+ PINGIFAnimatedImage file header
  
  Header:
  [version] 2 bytes
@@ -544,7 +544,7 @@ ERROR;}) \
 }
 
 /**
- PINAnimatedImage frame file
+ PINGIFAnimatedImage frame file
  [frame count(in file)] 4 bytes
  [frame(s)]
  

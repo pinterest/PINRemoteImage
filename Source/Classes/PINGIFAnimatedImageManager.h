@@ -1,5 +1,5 @@
 //
-//  PINAnimatedImageManager.h
+//  PINGIFAnimatedImageManager.h
 //  Pods
 //
 //  Created by Garrett Moon on 4/5/16.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PINAnimatedImage.h"
+#import "PINGIFAnimatedImage.h"
 #import "PINRemoteImageMacros.h"
 
 @class PINRemoteLock;
@@ -18,7 +18,7 @@
 typedef void(^PINAnimatedImageSharedReady)(PINImage *coverImage, PINSharedAnimatedImage *shared);
 typedef void(^PINAnimatedImageDecodedPath)(BOOL finished, NSString *path, NSError *error);
 
-@interface PINAnimatedImageManager : NSObject
+@interface PINGIFAnimatedImageManager : NSObject
 
 + (instancetype)sharedManager;
 + (NSString *)temporaryDirectory;
@@ -33,7 +33,7 @@ typedef void(^PINAnimatedImageDecodedPath)(BOOL finished, NSString *path, NSErro
   PINRemoteLock *_coverImageLock;
 }
 
-//This is intentionally atomic. PINAnimatedImageManager must be able to add entries
+//This is intentionally atomic. PINGIFAnimatedImageManager must be able to add entries
 //and clients must be able to read them concurrently.
 @property (atomic, strong, readwrite) NSArray <PINSharedAnimatedImageFile *> *maps;
 

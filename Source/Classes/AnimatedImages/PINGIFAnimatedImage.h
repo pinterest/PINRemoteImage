@@ -1,5 +1,5 @@
 //
-//  PINAnimatedImage.h
+//  PINGIFAnimatedImage.h
 //  Pods
 //
 //  Created by Garrett Moon on 3/18/16.
@@ -14,74 +14,27 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
+#import "PINAnimatedImage.h"
 #import "PINRemoteImageMacros.h"
 
-#define PINAnimatedImageDebug  0
-
-extern NSString *kPINAnimatedImageErrorDomain;
+#define PINGIFAnimatedImageDebug  0
 
 /**
- PINAnimatedImage decoding and processing errors.
- */
-typedef NS_ENUM(NSUInteger, PINAnimatedImageError) {
-  /** No error, yay! */
-  PINAnimatedImageErrorNoError = 0,
-  /** Could not create a necessary file. */
-  PINAnimatedImageErrorFileCreationError,
-  /** Could not get a file handle to the necessary file. */
-  PINAnimatedImageErrorFileHandleError,
-  /** Could not decode the image. */
-  PINAnimatedImageErrorImageFrameError,
-  /** Could not memory map the file. */
-  PINAnimatedImageErrorMappingError,
-  /** File write error */
-  PINAnimatedImageErrorFileWrite,
-};
-
-/**
- The processing status of the animated image.
- */
-typedef NS_ENUM(NSUInteger, PINAnimatedImageStatus) {
-  /** No work has been done. */
-  PINAnimatedImageStatusUnprocessed = 0,
-  /** Info about the animated image and the cover image are available. */
-  PINAnimatedImageStatusInfoProcessed,
-  /** At least one set of frames has been decoded to a file. It's safe to start playback. */
-  PINAnimatedImageStatusFirstFileProcessed,
-  /** The entire animated image has been processed. */
-  PINAnimatedImageStatusProcessed,
-  /** Processing was canceled. */
-  PINAnimatedImageStatusCanceled,
-  /** There was an error in processing. */
-  PINAnimatedImageStatusError,
-};
-
-extern const Float32 kPINAnimatedImageDefaultDuration;
-extern const Float32 kPINAnimatedImageMinimumDuration;
-extern const NSTimeInterval kPINAnimatedImageDisplayRefreshRate;
-
-/**
- Called when the cover image of an animatedImage is ready.
- */
-typedef void(^PINAnimatedImageInfoReady)(PINImage *coverImage);
-
-
-/**
- PINAnimatedImage is a class which decodes GIFs to memory mapped files on disk. Like PINRemoteImageManager,
- it will only decode a GIF one time, regardless of the number of the number of PINAnimatedImages created with
+ PINGIFAnimatedImage is a class which decodes GIFs to memory mapped files on disk. Like PINRemoteImageManager,
+ it will only decode a GIF one time, regardless of the number of the number of PINGIFAnimatedImages created with
  the same NSData.
  
- PINAnimatedImage's are also decoded chunks at a time, writing each chunk to a separate file. This allows callback
+ PINGIFAnimatedImage's are also decoded chunks at a time, writing each chunk to a separate file. This allows callback
  and playback to start before the GIF is completely decoded. If a frame is requested beyond what has been processed,
  nil will be returned. Because a fileReady is called on each chunk completion, you can pause playback if you hit a nil
  frame until you receive another fileReady call.
  
- Internally, PINAnimatedImage attempts to keep only the files it needs open – the last file associated with the requested
+ Internally, PINGIFAnimatedImage attempts to keep only the files it needs open – the last file associated with the requested
  frame and the one after (to prime).
  
- It's important to note that until infoCompletion is called, it is unsafe to access many of the methods on PINAnimatedImage.
+ It's important to note that until infoCompletion is called, it is unsafe to access many of the methods on PINGIFAnimatedImage.
  */
-@interface PINAnimatedImage : NSObject
+@interface PINGIFAnimatedImage : PINAnimatedImage <PINAnimatedImage>
 
 - (instancetype)initWithAnimatedImageData:(NSData *)animatedImageData NS_DESIGNATED_INITIALIZER;
 
@@ -122,12 +75,6 @@ typedef void(^PINAnimatedImageInfoReady)(PINImage *coverImage);
  @warning Access to this property before status == PINAnimatedImageStatusInfoProcessed is undefined.
  */
 @property (nonatomic, readonly) CFTimeInterval totalDuration;
-/**
- The number of frames to play per second * display refresh rate (defined as 60 which appears to be true on iOS). You probably want to 
- set this value on a displayLink.
- @warning Access to this property before status == PINAnimatedImageStatusInfoProcessed is undefined.
- */
-@property (nonatomic, readonly) NSUInteger frameInterval;
 /**
  The number of times to loop the animated image. Returns 0 if looping should occur infinitely.
  @warning Access to this property before status == PINAnimatedImageStatusInfoProcessed is undefined.

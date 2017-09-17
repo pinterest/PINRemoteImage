@@ -1,8 +1,8 @@
 //
-//  PINWebPAnimatedImage.h
+//  PINCachedAnimatedImage.h
 //  PINRemoteImage
 //
-//  Created by Garrett Moon on 9/14/17.
+//  Created by Garrett Moon on 9/17/17.
 //  Copyright © 2017 Pinterest. All rights reserved.
 //
 
@@ -16,18 +16,23 @@
 
 #import "PINRemoteImageMacros.h"
 
-@interface PINWebPAnimatedImage : NSObject
+/**
+ Called when the cover image of an animatedImage is ready.
+ */
+typedef void(^PINAnimatedImageInfoReady)(PINImage *coverImage);
+
+@protocol PINAnimatedImage;
+
+@interface PINCachedAnimatedImage : NSObject
 
 - (instancetype)init NS_UNAVAILABLE;
-- (instancetype)initWithAnimatedImageData:(NSData *)animatedImageData NS_DESIGNATED_INITIALIZER;
-
-@property (nonatomic, readwrite) void (^coverImageReadyCallback)(PINImage *coverImage);
+- (instancetype)initWithAnimatedImage:(id <PINAnimatedImage>)animatedImage NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithAnimatedImageData:(NSData *)animatedImageData;
 
 /**
- @abstract Returns whether the supplied data contains a supported animated image format.
- @param data the data to check if contains a supported animated image.
+ @abstract A block which receives the cover image. Should be called when the objects cover image is ready.
  */
-- (BOOL)isDataSupported:(NSData *)data;
+@property (nonatomic, readwrite) PINAnimatedImageInfoReady coverImageReadyCallback;
 
 /**
  @abstract Return the objects's cover image.
@@ -78,6 +83,5 @@
  @abstract Clear any cached data. Called when playback is paused.
  */
 - (void)clearAnimatedImageCache;
-
 
 @end
