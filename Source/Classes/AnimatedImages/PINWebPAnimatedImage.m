@@ -111,13 +111,11 @@ static void releaseData(void *info, const void *data, size_t size)
         uint8_t *data = NULL;
         int pixelLength = 0;
         
-        int frameWidth;
-        int frameHeight;
         if (_hasAlpha) {
-            data = WebPDecodeRGBA(iter.fragment.bytes, iter.fragment.size, &frameWidth, &frameHeight);
+            data = WebPDecodeRGBA(iter.fragment.bytes, iter.fragment.size, NULL, NULL);
             pixelLength = 4;
         } else {
-            data = WebPDecodeRGB(iter.fragment.bytes, iter.fragment.size, &frameWidth, &frameHeight);
+            data = WebPDecodeRGB(iter.fragment.bytes, iter.fragment.size, NULL, NULL);
             pixelLength = 3;
         }
         
@@ -134,11 +132,11 @@ static void releaseData(void *info, const void *data, size_t size)
             }
             
             CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
-            imageRef = CGImageCreate(frameWidth,
-                                     frameHeight,
+            imageRef = CGImageCreate(iter.width,
+                                     iter.height,
                                      8,
                                      8 * pixelLength,
-                                     pixelLength * frameWidth,
+                                     pixelLength * iter.width,
                                      colorSpaceRef,
                                      bitmapInfo,
                                      provider,
@@ -146,8 +144,8 @@ static void releaseData(void *info, const void *data, size_t size)
                                      NO,
                                      renderingIntent);
             
-            if (frameWidth != _width || frameHeight != _height) {
-                // Canvas size is different, we need to copy to canvas :/
+            if (iter.x_offset != 0 || iter.y_offset != 0 || iter.width != _width || iter.height != _height) {
+                // Canvas size is different, we need to copy to a canvas :/
                 CGContextRef context = CGBitmapContextCreate(NULL,
                                                              _width,
                                                              _height,
@@ -156,7 +154,7 @@ static void releaseData(void *info, const void *data, size_t size)
                                                              colorSpaceRef,
                                                              _hasAlpha ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNone);
                 
-                CGContextDrawImage(context, CGRectMake(iter.x_offset, _height - frameHeight - iter.y_offset, frameWidth, frameHeight), imageRef);
+                CGContextDrawImage(context, CGRectMake(iter.x_offset, _height - iter.height - iter.y_offset, iter.width, iter.height), imageRef);
                 CGImageRelease(imageRef);
                 
                 imageRef = CGBitmapContextCreateImage(context);
