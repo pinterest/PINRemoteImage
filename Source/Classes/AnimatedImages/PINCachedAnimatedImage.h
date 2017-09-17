@@ -8,20 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#if PIN_TARGET_IOS
-#import <UIKit/UIKit.h>
-#elif PIN_TARGET_MAC
-#import <Cocoa/Cocoa.h>
-#endif
-
-#import "PINRemoteImageMacros.h"
-
-/**
- Called when the cover image of an animatedImage is ready.
- */
-typedef void(^PINAnimatedImageInfoReady)(PINImage *coverImage);
-
-@protocol PINAnimatedImage;
+#import "PINAnimatedImage.h"
 
 @interface PINCachedAnimatedImage : NSObject
 

@@ -13,7 +13,7 @@
 
 static void releaseData(void *info, const void *data, size_t size)
 {
-    free((void *)data);
+    WebPFree((void *)data);
 }
 
 @implementation PINImage (PINWebP)

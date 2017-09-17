@@ -15,7 +15,21 @@ const NSTimeInterval kPINAnimatedImageDisplayRefreshRate = 60.0;
 const Float32 kPINAnimatedImageMinimumDuration = 1 / kPINAnimatedImageDisplayRefreshRate;
 const Float32 kPINAnimatedImageDefaultDuration = 0.1;
 
+@interface PINAnimatedImage ()
+{
+    CFTimeInterval _totalDuration;
+}
+@end
+
 @implementation PINAnimatedImage
+
+- (instancetype)init
+{
+    if (self = [super init]) {
+        _totalDuration = -1;
+    }
+    return self;
+}
 
 - (CFTimeInterval)durationAtIndex:(NSUInteger)index
 {
@@ -27,6 +41,19 @@ const Float32 kPINAnimatedImageDefaultDuration = 0.1;
 {
     NSAssert(NO, @"Must be overridden by subclass");
     return 0;
+}
+
+
+- (CFTimeInterval)totalDuration
+{
+    if (_totalDuration == -1) {
+        _totalDuration = 0;
+        for (NSUInteger idx = 0; idx < self.frameCount; idx++) {
+            _totalDuration += [self durationAtIndex:idx];
+        }
+    }
+
+    return _totalDuration;
 }
 
 - (NSUInteger)frameInterval

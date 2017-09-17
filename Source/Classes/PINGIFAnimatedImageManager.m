@@ -262,7 +262,7 @@ ERROR;}) \
   UInt32 frameCountForFile = 0;
   Float32 *durations = NULL;
   
-#if PINGIFAnimatedImageDebug
+#if PINMemMapAnimatedImageDebug
   CFTimeInterval start = CACurrentMediaTime();
 #endif
   
@@ -434,7 +434,7 @@ ERROR;}) \
     } @finally {}
   }
   
-#if PINGIFAnimatedImageDebug
+#if PINMemMapAnimatedImageDebug
   CFTimeInterval interval = CACurrentMediaTime() - start;
   NSLog(@"Encoding and write time: %f", interval);
 #endif

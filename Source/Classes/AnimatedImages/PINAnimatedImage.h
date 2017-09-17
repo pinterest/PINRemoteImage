@@ -7,7 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreGraphics/CoreGraphics.h>
+
+#if PIN_TARGET_IOS
+#import <UIKit/UIKit.h>
+#elif PIN_TARGET_MAC
+#import <Cocoa/Cocoa.h>
+#endif
+
+#import "PINRemoteImageMacros.h"
 
 extern NSString *kPINAnimatedImageErrorDomain;
 
@@ -51,6 +58,11 @@ extern const Float32 kPINAnimatedImageDefaultDuration;
 extern const Float32 kPINAnimatedImageMinimumDuration;
 extern const NSTimeInterval kPINAnimatedImageDisplayRefreshRate;
 
+/**
+ Called when the cover image of an animatedImage is ready.
+ */
+typedef void(^PINAnimatedImageInfoReady)(PINImage *coverImage);
+
 @protocol PINAnimatedImage;
 
 @interface PINAnimatedImage : NSObject
@@ -68,6 +80,11 @@ extern const NSTimeInterval kPINAnimatedImageDisplayRefreshRate;
  @warning *Must be overridden by subclass
  */
 @property (nonatomic, readonly) size_t frameCount;
+
+/**
+ @abstract Return the total duration of the animated image's playback.
+ */
+@property (nonatomic, readonly) CFTimeInterval totalDuration;
 
 /**
  The number of frames to play per second * display refresh rate (defined as 60 which appears to be true on iOS). You probably want to

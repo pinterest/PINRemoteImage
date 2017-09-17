@@ -43,12 +43,29 @@
 {
     if (self = [super init]) {
         _animatedImage = animatedImage;
+        
+        // dispatch later so that blocks can be set after init this runloop
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            if (self.coverImageReadyCallback) {
+                self.coverImageReadyCallback(self.coverImage);
+            }
+            if (self.playbackReadyCallback) {
+                self.playbackReadyCallback();
+            }
+        });
     }
     return self;
 }
 
 - (PINImage *)coverImage
 {
+    if (_coverImage == nil) {
+#if PIN_TARGET_IOS
+        _coverImage = [UIImage imageWithCGImage:[_animatedImage imageAtIndex:0]];
+#elif PIN_TARGET_MAC
+        _coverImage = [[NSImage alloc] initWithCGImage:[_animatedImage imageAtIndex:0] size:CGSizeMake(self.width, self.height)];
+#endif
+    }
     return _coverImage;
 }
 

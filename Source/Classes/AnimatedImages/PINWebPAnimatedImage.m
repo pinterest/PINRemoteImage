@@ -21,7 +21,6 @@
     WebPDemuxer *_demux;
     uint32_t _width;
     uint32_t _height;
-    uint32_t _flags;
     BOOL _hasAlpha;
     size_t _frameCount;
     size_t _loopCount;
@@ -33,7 +32,7 @@
 
 static void releaseData(void *info, const void *data, size_t size)
 {
-    free((void *)data);
+    WebPFree((void *)data);
 }
 
 @implementation PINWebPAnimatedImage
@@ -51,15 +50,19 @@ static void releaseData(void *info, const void *data, size_t size)
             _height = WebPDemuxGetI(_demux, WEBP_FF_CANVAS_HEIGHT);
             _frameCount = WebPDemuxGetI(_demux, WEBP_FF_FRAME_COUNT);
             _loopCount = WebPDemuxGetI(_demux, WEBP_FF_LOOP_COUNT);
-            _flags = WebPDemuxGetI(_demux, WEBP_FF_FORMAT_FLAGS);
-            _hasAlpha = _flags & ALPHA_FLAG;
+            uint32_t flags = WebPDemuxGetI(_demux, WEBP_FF_FORMAT_FLAGS);
+            _hasAlpha = flags & ALPHA_FLAG;
             _durations = malloc(sizeof(CFTimeInterval) * _frameCount);
             
             // Iterate over the frames to gather duration
             WebPIterator iter;
             if (WebPDemuxGetFrame(_demux, 1, &iter)) {
                 do {
-                    _durations[iter.frame_num - 1] = iter.duration;
+                    CFTimeInterval duration = iter.duration / 1000.0;
+                    if (duration < kPINAnimatedImageMinimumDuration) {
+                        duration = kPINAnimatedImageDefaultDuration;
+                    }
+                    _durations[iter.frame_num - 1] = duration;
                 } while (WebPDemuxNextFrame(&iter));
                 WebPDemuxReleaseIterator(&iter);
             }
@@ -97,18 +100,6 @@ static void releaseData(void *info, const void *data, size_t size)
     return _durations[index];
 }
 
-- (CFTimeInterval)totalDuration
-{
-    static CFTimeInterval totalDuration = 0;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        for (NSUInteger idx = 0; idx < _frameCount; idx++) {
-            totalDuration += _durations[idx];
-        }
-    });
-    return totalDuration;
-}
-
 - (CGImageRef)imageAtIndex:(NSUInteger)index
 {
     WebPIterator iter;
@@ -120,11 +111,13 @@ static void releaseData(void *info, const void *data, size_t size)
         uint8_t *data = NULL;
         int pixelLength = 0;
         
+        int frameWidth;
+        int frameHeight;
         if (_hasAlpha) {
-            data = WebPDecodeRGBA(iter.fragment.bytes, iter.fragment.size, NULL, NULL);
+            data = WebPDecodeRGBA(iter.fragment.bytes, iter.fragment.size, &frameWidth, &frameHeight);
             pixelLength = 4;
         } else {
-            data = WebPDecodeRGB(iter.fragment.bytes, iter.fragment.size, NULL, NULL);
+            data = WebPDecodeRGB(iter.fragment.bytes, iter.fragment.size, &frameWidth, &frameHeight);
             pixelLength = 3;
         }
         
@@ -141,11 +134,11 @@ static void releaseData(void *info, const void *data, size_t size)
             }
             
             CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
-            imageRef = CGImageCreate(_width,
-                                     _height,
+            imageRef = CGImageCreate(frameWidth,
+                                     frameHeight,
                                      8,
                                      8 * pixelLength,
-                                     pixelLength * _width,
+                                     pixelLength * frameWidth,
                                      colorSpaceRef,
                                      bitmapInfo,
                                      provider,
@@ -153,7 +146,27 @@ static void releaseData(void *info, const void *data, size_t size)
                                      NO,
                                      renderingIntent);
             
-            CFAutorelease(imageRef);
+            if (frameWidth != _width || frameHeight != _height) {
+                // Canvas size is different, we need to copy to canvas :/
+                CGContextRef context = CGBitmapContextCreate(NULL,
+                                                             _width,
+                                                             _height,
+                                                             8,
+                                                             0,
+                                                             colorSpaceRef,
+                                                             _hasAlpha ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNone);
+                
+                CGContextDrawImage(context, CGRectMake(iter.x_offset, _height - frameHeight - iter.y_offset, frameWidth, frameHeight), imageRef);
+                CGImageRelease(imageRef);
+                
+                imageRef = CGBitmapContextCreateImage(context);
+                CGContextRelease(context);
+            }
+            
+            if (imageRef) {
+                CFAutorelease(imageRef);
+            }
+            
             CGColorSpaceRelease(colorSpaceRef);
             CGDataProviderRelease(provider);
         }
