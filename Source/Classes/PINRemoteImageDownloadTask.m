@@ -298,11 +298,11 @@
                 NSError *error = remoteError;
 #if PINRemoteImageLogging
                 if (error && error.code != NSURLErrorCancelled) {
-                    PINLog(@"Failed downloading image: %@ with error: %@", url, error);
+                    PINLog(@"Failed downloading image: %@ with error: %@", request.URL, error);
                 } else if (error == nil && response.expectedContentLength == 0) {
-                    PINLog(@"image is empty at URL: %@", url);
+                    PINLog(@"image is empty at URL: %@", request.URL);
                 } else {
-                    PINLog(@"Finished downloading image: %@", url);
+                    PINLog(@"Finished downloading image: %@", request.URL);
                 }
 #endif
                 
@@ -327,7 +327,7 @@
                         }
                     }];
                     if (retry) {
-                        PINLog(@"Retrying download of %@ in %d seconds.", URL, delay);
+                        PINLog(@"Retrying download of %@ in %lld seconds.", request.URL, delay);
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                             [self scheduleDownloadWithRequest:request resume:nil skipRetry:skipRetry priority:priority isRetry:YES completionHandler:completionHandler];
                         });

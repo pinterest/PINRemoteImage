@@ -104,6 +104,16 @@
     return _loopCount;
 }
 
+- (uint32_t)width
+{
+    return _width;
+}
+
+- (uint32_t)height
+{
+    return _height;
+}
+
 - (NSError *)error
 {
     return _error;

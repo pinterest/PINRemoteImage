@@ -98,6 +98,16 @@ typedef void(^PINAnimatedImageInfoReady)(PINImage *coverImage);
 @protocol PINAnimatedImage
 
 /**
+ @abstract the native width of the animated image.
+ */
+@property (nonatomic, readonly) uint32_t width;
+
+/**
+ @abstract the native height of the animated image.
+ */
+@property (nonatomic, readonly) uint32_t height;
+
+/**
  @abstract Return the total duration of the animated image's playback.
  */
 @property (nonatomic, readonly) CFTimeInterval totalDuration;
