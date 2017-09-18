@@ -232,7 +232,7 @@
         return 4;
     } else {
         // Oooph, lets just try to get ahead of things by one.
-        return 1;
+        return 2;
     }
 }
 
