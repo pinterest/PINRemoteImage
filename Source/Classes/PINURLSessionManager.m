@@ -7,6 +7,7 @@
 //
 
 #import "PINURLSessionManager.h"
+#import "NSURLSessionTask+Timing.h"
 
 NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
 
@@ -179,6 +180,9 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
                                     userInfo:@{NSLocalizedDescriptionKey : @"HTTP Error Response."}];
         }
     }
+    
+    [task PIN_updateEndTime];
+    
     __weak typeof(self) weakSelf = self;
     dispatch_async(delegateQueue, ^{
         typeof(self) strongSelf = weakSelf;

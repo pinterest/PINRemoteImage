@@ -10,7 +10,8 @@
 
 @interface NSURLSessionTask (Timing)
 
-- (void)PIN_setupSessionTaskObserver;
+- (void)PIN_updateStartTime;
+- (void)PIN_updateEndTime;
 - (CFTimeInterval)PIN_startTime;
 - (CFTimeInterval)PIN_endTime;
 

@@ -77,7 +77,6 @@
         
         [self scheduleDownloadsIfNeeded];
     }];
-    [dataTask PIN_setupSessionTaskObserver];
     
     [self setQueuePriority:priority forTask:dataTask addIfNecessary:YES];
     
@@ -106,7 +105,7 @@
             NSURLSessionDataTask *task = [queue firstObject];
             [queue removeObjectAtIndex:0];
             [task resume];
-            
+            [task PIN_updateStartTime];
             
             [_runningTasks addObject:task];
         }
