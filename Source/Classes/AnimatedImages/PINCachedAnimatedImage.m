@@ -131,6 +131,14 @@ static const NSUInteger kFramesToRenderForLargeFrames = 4;
     __block CGImageRef imageRef;
     [_lock lockWithBlock:^{
         imageRef = (__bridge CGImageRef)[_frameCache objectForKey:@(index)];
+     
+        // Retain and autorelease while we have the lock, another thread could remove it from the cache
+        // and allow it to be released.
+        if (imageRef) {
+            CGImageRetain(imageRef);
+            CFAutorelease(imageRef);
+        }
+        
         _playhead = index;
         if (imageRef == NULL) {
             PINLog(@"cache miss, aww.");
