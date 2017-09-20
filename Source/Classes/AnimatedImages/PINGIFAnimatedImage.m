@@ -126,6 +126,7 @@
 
 - (CGImageRef)imageAtIndex:(NSUInteger)index
 {
+    // I believe this is threadsafe as CGImageSource *seems* immutable…
     CGImageRef imageRef =
         CGImageSourceCreateImageAtIndex(_imageSource,
                                         index,

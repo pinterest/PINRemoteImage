@@ -14,17 +14,22 @@
 #import "PINWebPAnimatedImage.h"
 #endif
 
+#import <PINOperation/PINOperationQueue.h>
 #import "NSData+ImageDetectors.h"
+
+static const NSUInteger kFramesToRenderForLargeFrames = 4;
 
 @interface PINCachedAnimatedImage ()
 {
+    // Since _animatedImage is set on init it is thread-safe
     id <PINAnimatedImage> _animatedImage;
+    
     PINImage *_coverImage;
     PINAnimatedImageInfoReady _coverImageReadyCallback;
     dispatch_block_t _playbackReadyCallback;
     NSMutableDictionary *_frameCache;
     NSInteger _playbackReady; // Number of frames to cache until playback is ready
-    dispatch_queue_t _cachingQueue;
+    PINOperationQueue *_cachingQueue;
     
     NSUInteger _playhead;
     BOOL _notifyOnReady;
@@ -53,22 +58,19 @@
     if (self = [super init]) {
         _animatedImage = animatedImage;
         _frameCache = [[NSMutableDictionary alloc] init];
-        _playbackReady = -1;
+        _playbackReady = 0;
         _playhead = 0;
         _notifyOnReady = YES;
         _cachedOrCachingFrames = [[NSMutableIndexSet alloc] init];
         _lock = [[PINRemoteLock alloc] initWithName:@"PINCachedAnimatedImage Lock"];
-        //TODO consider using a PINOperationQueue
-        _cachingQueue = dispatch_queue_create("PINCachedAnimatedImage Caching Queue", DISPATCH_QUEUE_CONCURRENT);
+        
+        _cachingQueue = [[PINOperationQueue alloc] initWithMaxConcurrentOperations:kFramesToRenderForLargeFrames];
         
         // dispatch later so that blocks can be set after init this runloop
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            _playbackReady = 0;
+            [self imageAtIndex:0];
             if (self.coverImageReadyCallback) {
                 self.coverImageReadyCallback(self.coverImage);
-            }
-            if (self.playbackReadyCallback) {
-                self.playbackReadyCallback();
             }
         });
     }
@@ -77,18 +79,23 @@
 
 - (PINImage *)coverImage
 {
-    if (_coverImage == nil) {
+    __block PINImage *coverImage = nil;
+    [_lock lockWithBlock:^{
+        if (_coverImage == nil) {
 #if PIN_TARGET_IOS
-        _coverImage = [UIImage imageWithCGImage:[_animatedImage imageAtIndex:0]];
+            _coverImage = [UIImage imageWithCGImage:[_animatedImage imageAtIndex:0]];
 #elif PIN_TARGET_MAC
-        _coverImage = [[NSImage alloc] initWithCGImage:[_animatedImage imageAtIndex:0] size:CGSizeMake(self.width, self.height)];
+            _coverImage = [[NSImage alloc] initWithCGImage:[_animatedImage imageAtIndex:0] size:CGSizeMake(self.width, self.height)];
 #endif
-    }
-    return _coverImage;
+        }
+        coverImage = _coverImage;
+    }];
+    return coverImage;
 }
 
 - (BOOL)coverImageReady
 {
+    // The cover image is always 'ready'
     return YES;
 }
 
@@ -138,14 +145,17 @@
 
 - (void)updateCache
 {
-    dispatch_async(_cachingQueue, ^{
+    //TODO look into silencing retain cycle warning :/
+    PINWeakify(self);
+    [_cachingQueue addOperation:^{
+        PINStrongify(self);
         // Kick off, in order, caching frames which need to be cached
         __block NSRange endKeepRange;
         __block NSRange beginningKeepRange;
         
         NSUInteger framesToCache = [self framesToCache];
         
-        [_lock lockWithBlock:^{
+        [self->_lock lockWithBlock:^{
             // find the range of frames we want to keep
             endKeepRange = NSMakeRange(_playhead, framesToCache);
             beginningKeepRange = NSMakeRange(NSNotFound, 0);
@@ -167,20 +177,20 @@
                     }
                 }
             }
+            
+            NSMutableIndexSet *removedFrames = [[NSMutableIndexSet alloc] init];
+            PINLog(@"Checking if frames need removing: %lu", _cachedOrCachingFrames.count);
+            [self->_cachedOrCachingFrames enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+                if (NSLocationInRange(idx, endKeepRange) == NO &&
+                    (beginningKeepRange.location == NSNotFound || NSLocationInRange(idx, beginningKeepRange))) {
+                    [removedFrames addIndex:idx];
+                    [self->_frameCache removeObjectForKey:@(idx)];
+                    PINLog(@"Removing: %lu", (unsigned long)idx);
+                }
+            }];
+            [self->_cachedOrCachingFrames removeIndexes:removedFrames];
         }];
-        
-        NSMutableIndexSet *removedFrames = [[NSMutableIndexSet alloc] init];
-        PINLog(@"Checking if frames need removing: %lu", _cachedOrCachingFrames.count);
-        [_cachedOrCachingFrames enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
-            if (NSLocationInRange(idx, endKeepRange) == NO &&
-                (beginningKeepRange.location == NSNotFound || NSLocationInRange(idx, beginningKeepRange))) {
-                [removedFrames addIndex:idx];
-                [_frameCache removeObjectForKey:@(idx)];
-                PINLog(@"Removing: %lu", (unsigned long)idx);
-            }
-        }];
-        [_cachedOrCachingFrames removeIndexes:removedFrames];
-    });
+    }];
 }
 
 - (void)l_cacheFrame:(NSUInteger)frameIndex
@@ -189,22 +199,26 @@
         PINLog(@"Requesting: %lu", (unsigned long)frameIndex);
         [_cachedOrCachingFrames addIndex:frameIndex];
         _playbackReady++;
-        dispatch_async(_cachingQueue, ^{
-            CGImageRef imageRef = [_animatedImage imageAtIndex:frameIndex];
+        
+        //TODO instead of weakify / strongify, silence warning, we know what we're doing
+        PINWeakify(self);
+        [_cachingQueue addOperation:^{
+            PINStrongify(self);
+            CGImageRef imageRef = [self->_animatedImage imageAtIndex:frameIndex];
             PINLog(@"Generating: %lu", (unsigned long)frameIndex);
 
             __block dispatch_block_t notify = nil;
-            [_lock lockWithBlock:^{
-                [_frameCache setObject:(__bridge id _Nonnull)(imageRef) forKey:@(frameIndex)];
-                _playbackReady--;
-                NSAssert(_playbackReady >= 0, @"playback ready is less than zero, something is wrong :(");
+            [self->_lock lockWithBlock:^{
+                [self->_frameCache setObject:(__bridge id _Nonnull)(imageRef) forKey:@(frameIndex)];
+                self->_playbackReady--;
+                NSAssert(self->_playbackReady >= 0, @"playback ready is less than zero, something is wrong :(");
                 
                 PINLog(@"Frames left: %ld", (long)_playbackReady);
                 
-                if (_playbackReady == 0 && _notifyOnReady) {
-                    _notifyOnReady = NO;
-                    if (_playbackReadyCallback) {
-                        notify = _playbackReadyCallback;
+                if (self->_playbackReady == 0 && self->_notifyOnReady) {
+                    self->_notifyOnReady = NO;
+                    if (self->_playbackReadyCallback) {
+                        notify = self->_playbackReadyCallback;
                     }
                 }
             }];
@@ -212,7 +226,7 @@
             if (notify) {
                 notify();
             }
-        });
+        }];
     }
 }
 
@@ -229,7 +243,7 @@
         return _animatedImage.frameCount;
     } else if (frameCost < totalBytes / 1000 ) {
         // If the cost of a frame is less than 1000th of physical memory, cache 4 frames to smooth animation.
-        return 4;
+        return kFramesToRenderForLargeFrames;
     } else {
         // Oooph, lets just try to get ahead of things by one.
         return 2;
@@ -243,27 +257,43 @@
 
 - (BOOL)playbackReady
 {
-    return _playbackReady == 0;
+    __block BOOL playbackReady = NO;
+    [_lock lockWithBlock:^{
+        playbackReady = _playbackReady == 0;
+    }];
+    return playbackReady;
 }
 
 - (dispatch_block_t)playbackReadyCallback
 {
-    return _playbackReadyCallback;
+    __block dispatch_block_t playbackReadyCallback = nil;
+    [_lock lockWithBlock:^{
+        playbackReadyCallback = _playbackReadyCallback;
+    }];
+    return playbackReadyCallback;
 }
 
 - (void)setPlaybackReadyCallback:(dispatch_block_t)playbackReadyCallback
 {
-    _playbackReadyCallback = playbackReadyCallback;
+    [_lock lockWithBlock:^{
+        _playbackReadyCallback = playbackReadyCallback;
+    }];
 }
 
 - (PINAnimatedImageInfoReady)coverImageReadyCallback
 {
-    return _coverImageReadyCallback;
+    __block PINAnimatedImageInfoReady coverImageReadyCallback;
+    [_lock lockWithBlock:^{
+        coverImageReadyCallback = _coverImageReadyCallback;
+    }];
+    return coverImageReadyCallback;
 }
 
 - (void)setCoverImageReadyCallback:(PINAnimatedImageInfoReady)coverImageReadyCallback
 {
-    _coverImageReadyCallback = coverImageReadyCallback;
+    [_lock lockWithBlock:^{
+        _coverImageReadyCallback = coverImageReadyCallback;
+    }];
 }
 
 /**
@@ -271,7 +301,12 @@
  */
 - (void)clearAnimatedImageCache
 {
-    
+    [_lock lockWithBlock:^{
+        [_cachedOrCachingFrames enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+            [_frameCache removeObjectForKey:@(idx)];
+        }];
+        [_cachedOrCachingFrames removeAllIndexes];
+    }];
 }
 
 @end

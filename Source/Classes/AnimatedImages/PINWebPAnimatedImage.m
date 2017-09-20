@@ -112,6 +112,7 @@ static void releaseData(void *info, const void *data, size_t size)
 
 - (CGImageRef)imageAtIndex:(NSUInteger)index
 {
+    // This all *appears* to be threadsafe as I believe demux is immutable…
     WebPIterator iter;
     CGImageRef imageRef = NULL;
     if (WebPDemuxGetFrame(_demux, (int)index, &iter)) {
