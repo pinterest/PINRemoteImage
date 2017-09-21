@@ -12,6 +12,7 @@
 #import "PINRemoteImage.h"
 #import "PINRemoteImageCallbacks.h"
 #import "PINRemoteLock.h"
+#import "PINSpeedRecorder.h"
 
 @interface PINRemoteImageDownloadTask ()
 {
@@ -95,7 +96,7 @@
         if (resume) {
             //consider skipping cancelation if there's a request for resume data and the time to start the connection is greater than
             //the time remaining to download.
-            NSTimeInterval timeToFirstByte = [self.manager.sessionManager weightedTimeToFirstByteForHost:_progressImage.dataTask.originalRequest.URL.host];
+            NSTimeInterval timeToFirstByte = [[PINSpeedRecorder sharedRecorder] weightedTimeToFirstByteForHost:_progressImage.dataTask.currentRequest.URL.host];
             if (_progressImage.estimatedRemainingTime <= timeToFirstByte) {
                 noMoreCompletions = NO;
                 return;
@@ -363,16 +364,6 @@
         return NO;
     }
     return YES;
-}
-
-- (float)bytesPerSecond
-{
-    return self.progressImage.bytesPerSecond;
-}
-
-- (float)startAdjustedBytesPerSecond
-{
-    return [self.progressImage adjustedBytesPerSecond:[self.manager.sessionManager weightedTimeToFirstByteForHost:_progressImage.dataTask.originalRequest.URL.absoluteString]];
 }
 
 - (CFTimeInterval)estimatedRemainingTime

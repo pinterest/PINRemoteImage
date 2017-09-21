@@ -24,7 +24,6 @@
 @property (atomic, copy, nonnull) NSArray *progressThresholds;
 @property (atomic, assign) CFTimeInterval estimatedRemainingTimeThreshold;
 @property (nonatomic, strong, readonly, nonnull) NSURLSessionDataTask * dataTask;
-@property (nonatomic, readonly) float bytesPerSecond;
 @property (nonatomic, readonly) CFTimeInterval estimatedRemainingTime;
 
 - (nonnull instancetype)init NS_UNAVAILABLE;
@@ -49,14 +48,5 @@
  @return NSData The current data for the image.
  */
 - (nullable NSData *)data;
-
-/**
- Returns bytes per second adjusted by subtracting subtraction from the task length before calculation.
- Useful when you want something like bytesPerSecond discounting the time to first byte.
- 
- @param subtraction An amount to be subtracted from task length before calculation.
- @return float The adjusted bytes per second.
- */
-- (float)adjustedBytesPerSecond:(CFTimeInterval)subtraction;
 
 @end

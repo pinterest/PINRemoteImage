@@ -13,8 +13,6 @@
 
 #import "PINRemoteLock.h"
 
-static const NSUInteger kMaxRecordedTasks = 5;
-
 @interface PINTaskQOS : NSObject
 
 - (instancetype)initWithBPS:(float)bytesPerSecond endDate:(NSDate *)endDate;
@@ -24,8 +22,20 @@ static const NSUInteger kMaxRecordedTasks = 5;
 
 @end
 
+@interface PINSpeedMeasurement : NSObject
+
+// Storing the count of each measurement allows for bias adjustment in exponentially
+// weighted average.
+@property (nonatomic, assign) NSUInteger count;
+@property (nonatomic, assign) float bytesPerSecond;
+@property (nonatomic, assign) float startAdjustedBytesPerSecond;
+@property (nonatomic, assign) CFTimeInterval timeToFirstByte;
+
+@end
+
 @interface PINSpeedRecorder ()
 {
+    NSCache *_speedMeasurements;
     NSMutableArray <PINTaskQOS *> *_taskQOS;
     SCNetworkReachabilityRef _reachability;
 #if DEBUG
@@ -55,7 +65,8 @@ static const NSUInteger kMaxRecordedTasks = 5;
 {
     if (self = [super init]) {
         _lock = [[PINRemoteLock alloc] initWithName:@"PINSpeedRecorder lock"];
-        _taskQOS = [[NSMutableArray alloc] initWithCapacity:kMaxRecordedTasks];
+        _speedMeasurements = [[NSCache alloc] init];
+        _speedMeasurements.countLimit = 25;
         
         struct sockaddr_in zeroAddress;
         bzero(&zeroAddress, sizeof(zeroAddress));
@@ -66,69 +77,113 @@ static const NSUInteger kMaxRecordedTasks = 5;
     return self;
 }
 
-- (void)addTaskBPS:(float)bytesPerSecond endDate:(NSDate *)endDate
+- (void)processMetrics:(NSURLSessionTaskMetrics *)metrics forTask:(NSURLSessionTask *)task host:(NSString *)host
 {
-    //if bytesPerSecond is less than or equal to zero, ignore.
-    if (bytesPerSecond <= 0) {
-        return;
+    NSDate *requestStart = [NSDate distantFuture];
+    NSDate *firstByte = [NSDate distantFuture];
+    NSDate *requestEnd = [NSDate distantPast];
+    int64_t contentLength = task.countOfBytesReceived;
+    
+    for (NSURLSessionTaskTransactionMetrics *metric in metrics.transactionMetrics) {
+        if (metric.requestStartDate == nil || metric.responseStartDate == nil) {
+            //Only evaluate requests which completed their first byte.
+            return;
+        }
+        if ([requestStart compare:metric.requestStartDate] != NSOrderedAscending) {
+            requestStart = metric.requestStartDate;
+        }
+        if ([firstByte compare:metric.responseStartDate] != NSOrderedAscending) {
+            firstByte = metric.responseStartDate;
+        }
+        if ([requestEnd compare:metric.responseEndDate] != NSOrderedDescending) {
+            requestEnd = metric.responseEndDate;
+        }
     }
     
+    if ([requestStart isEqual:[NSDate distantFuture]] || [firstByte isEqual:[NSDate distantFuture]] || [requestEnd isEqual:[NSDate distantPast]] || contentLength == 0) {
+        return;
+    }
+
+    PINSpeedMeasurement *measurement = [[PINSpeedMeasurement alloc] init];
+    measurement.count = 1;
+    measurement.bytesPerSecond = contentLength / [requestEnd timeIntervalSinceDate:requestStart];
+    measurement.startAdjustedBytesPerSecond = contentLength / [requestEnd timeIntervalSinceDate:firstByte];
+    measurement.timeToFirstByte = [firstByte timeIntervalSinceDate:requestStart];
+    
+    [self updateSpeedsForHost:host
+               bytesPerSecond:contentLength / [requestEnd timeIntervalSinceDate:requestStart]
+  startAdjustedBytesPerSecond:contentLength / [requestEnd timeIntervalSinceDate:firstByte]
+              timeToFirstByte:[firstByte timeIntervalSinceDate:requestStart]];
+}
+
+- (void)resetMeasurements
+{
     [self.lock lockWithBlock:^{
-        if (_taskQOS.count >= kMaxRecordedTasks) {
-            [_taskQOS removeObjectAtIndex:0];
-        }
-        
-        PINTaskQOS *taskQOS = [[PINTaskQOS alloc] initWithBPS:bytesPerSecond endDate:endDate];
-        
-        [_taskQOS addObject:taskQOS];
-        [_taskQOS sortUsingComparator:^NSComparisonResult(PINTaskQOS *obj1, PINTaskQOS *obj2) {
-            return [obj1.endDate compare:obj2.endDate];
-        }];
+        [_speedMeasurements removeAllObjects];
     }];
 }
 
-- (float)currentBytesPerSecond
+- (void)updateSpeedsForHost:(NSString *)host bytesPerSecond:(float)bytesPerSecond startAdjustedBytesPerSecond:(float)startAdjustedBytesPerSecond timeToFirstByte:(float)timeToFirstByte
 {
-    __block NSUInteger count = 0;
-    __block float bps = 0;
-    __block BOOL valid = NO;
+    [self.lock lockWithBlock:^{
+        PINSpeedMeasurement *measurement = [_speedMeasurements objectForKey:host];
+        if (measurement == nil) {
+            measurement = [[PINSpeedMeasurement alloc] init];
+            measurement.count = 0;
+            measurement.bytesPerSecond = bytesPerSecond;
+            measurement.startAdjustedBytesPerSecond = startAdjustedBytesPerSecond;
+            measurement.timeToFirstByte = timeToFirstByte;
+            [_speedMeasurements setObject:measurement forKey:host];
+        } else {
+            const double bpsBeta = 0.8;
+            const double ttfbBeta = 0.8;
+            measurement.count++;
+            measurement.bytesPerSecond = (measurement.bytesPerSecond * bpsBeta) + ((1.0 - bpsBeta) * bytesPerSecond);
+            measurement.startAdjustedBytesPerSecond = (measurement.startAdjustedBytesPerSecond * bpsBeta) + ((1.0 - bpsBeta) * startAdjustedBytesPerSecond);
+            measurement.timeToFirstByte = (measurement.timeToFirstByte * ttfbBeta) + ((1.0 - ttfbBeta) * timeToFirstByte);
+        }
+    }];
+}
+
+- (float)weightedAdjustedBytesPerSecondForHost:(NSString *)host
+{
+    __block float startAdjustedBytesPerSecond = -1;
     [self.lock lockWithBlock:^{
 #if DEBUG
         if (_overrideBPS) {
-            bps = _currentBPS;
-            count = 1;
-            valid = YES;
+            startAdjustedBytesPerSecond = _currentBPS;
             return;
         }
 #endif
-        
-        const NSTimeInterval validThreshold = 60.0;
-        
-        NSDate *threshold = [NSDate dateWithTimeIntervalSinceNow:-validThreshold];
-        [_taskQOS enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(PINTaskQOS *taskQOS, NSUInteger idx, BOOL *stop) {
-            if ([taskQOS.endDate compare:threshold] == NSOrderedAscending) {
-                *stop = YES;
-                return;
-            }
-            valid = YES;
-            count++;
-            bps += taskQOS.bytesPerSecond;
-            
-        }];
+        PINSpeedMeasurement *measurement = [_speedMeasurements objectForKey:host];
+        if (measurement == 0) {
+            startAdjustedBytesPerSecond = -1;
+            return;
+        }
+        startAdjustedBytesPerSecond = measurement.startAdjustedBytesPerSecond;
     }];
-    
-    if (valid == NO) {
-        return -1;
-    }
-    
-    return bps / (float)count;
+    return startAdjustedBytesPerSecond;
+}
+
+- (NSTimeInterval)weightedTimeToFirstByteForHost:(NSString *)host
+{
+    __block NSTimeInterval timeToFirstByte = 0;
+    [self.lock lockWithBlock:^{
+        PINSpeedMeasurement *measurement = [_speedMeasurements objectForKey:host];
+        timeToFirstByte = measurement.timeToFirstByte;
+    }];
+    return timeToFirstByte;
 }
 
 #if DEBUG
 - (void)setCurrentBytesPerSecond:(float)currentBPS
 {
     [self.lock lockWithBlock:^{
-        _overrideBPS = YES;
+        if (currentBPS == -1) {
+            _overrideBPS = NO;
+        } else {
+            _overrideBPS = YES;
+        }
         _currentBPS = currentBPS;
     }];
 }
@@ -193,7 +248,7 @@ static const NSUInteger kMaxRecordedTasks = 5;
                                                   lowQualityQPSThreshold:(float)lowQualityQPSThreshold
                                                  highQualityQPSThreshold:(float)highQualityQPSThreshold
 {
-    float currentBytesPerSecond = [[PINSpeedRecorder sharedRecorder] currentBytesPerSecond];
+    float currentBytesPerSecond = [[PINSpeedRecorder sharedRecorder] weightedAdjustedBytesPerSecondForHost:[[urls firstObject] host]];
     
     NSUInteger desiredImageURLIdx;
     
@@ -226,15 +281,6 @@ static const NSUInteger kMaxRecordedTasks = 5;
 
 @end
 
-@implementation PINTaskQOS
-
-- (instancetype)initWithBPS:(float)bytesPerSecond endDate:(NSDate *)endDate
-{
-    if (self = [super init]) {
-        self.endDate = endDate;
-        self.bytesPerSecond = bytesPerSecond;
-    }
-    return self;
-}
+@implementation PINSpeedMeasurement
 
 @end
