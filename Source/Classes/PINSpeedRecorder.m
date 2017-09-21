@@ -13,15 +13,6 @@
 
 #import "PINRemoteLock.h"
 
-@interface PINTaskQOS : NSObject
-
-- (instancetype)initWithBPS:(float)bytesPerSecond endDate:(NSDate *)endDate;
-
-@property (nonatomic, strong) NSDate *endDate;
-@property (nonatomic, assign) float bytesPerSecond;
-
-@end
-
 @interface PINSpeedMeasurement : NSObject
 
 // Storing the count of each measurement allows for bias adjustment in exponentially
@@ -35,8 +26,7 @@
 
 @interface PINSpeedRecorder ()
 {
-    NSCache *_speedMeasurements;
-    NSMutableArray <PINTaskQOS *> *_taskQOS;
+    NSCache <NSString *, PINSpeedMeasurement *>*_speedMeasurements;
     SCNetworkReachabilityRef _reachability;
 #if DEBUG
     BOOL _overrideBPS;
@@ -77,7 +67,7 @@
     return self;
 }
 
-- (void)processMetrics:(NSURLSessionTaskMetrics *)metrics forTask:(NSURLSessionTask *)task host:(NSString *)host
+- (void)processMetrics:(NSURLSessionTaskMetrics *)metrics forTask:(NSURLSessionTask *)task
 {
     NSDate *requestStart = [NSDate distantFuture];
     NSDate *firstByte = [NSDate distantFuture];
@@ -89,28 +79,17 @@
             //Only evaluate requests which completed their first byte.
             return;
         }
-        if ([requestStart compare:metric.requestStartDate] != NSOrderedAscending) {
-            requestStart = metric.requestStartDate;
-        }
-        if ([firstByte compare:metric.responseStartDate] != NSOrderedAscending) {
-            firstByte = metric.responseStartDate;
-        }
-        if ([requestEnd compare:metric.responseEndDate] != NSOrderedDescending) {
-            requestEnd = metric.responseEndDate;
-        }
+        
+        requestStart = [requestStart earlierDate:metric.requestStartDate];
+        firstByte = [firstByte earlierDate:metric.responseStartDate];
+        requestEnd = [requestEnd laterDate:metric.responseEndDate];
     }
     
     if ([requestStart isEqual:[NSDate distantFuture]] || [firstByte isEqual:[NSDate distantFuture]] || [requestEnd isEqual:[NSDate distantPast]] || contentLength == 0) {
         return;
     }
-
-    PINSpeedMeasurement *measurement = [[PINSpeedMeasurement alloc] init];
-    measurement.count = 1;
-    measurement.bytesPerSecond = contentLength / [requestEnd timeIntervalSinceDate:requestStart];
-    measurement.startAdjustedBytesPerSecond = contentLength / [requestEnd timeIntervalSinceDate:firstByte];
-    measurement.timeToFirstByte = [firstByte timeIntervalSinceDate:requestStart];
     
-    [self updateSpeedsForHost:host
+    [self updateSpeedsForHost:task.currentRequest.URL.host
                bytesPerSecond:contentLength / [requestEnd timeIntervalSinceDate:requestStart]
   startAdjustedBytesPerSecond:contentLength / [requestEnd timeIntervalSinceDate:firstByte]
               timeToFirstByte:[firstByte timeIntervalSinceDate:requestStart]];
