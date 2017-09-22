@@ -51,8 +51,8 @@ typedef void(^PINAnimatedImageDecodedPath)(BOOL finished, NSString *path, NSErro
                          totalDuration:(CFTimeInterval)totalDuration
                              loopCount:(size_t)loopCount
                             frameCount:(size_t)frameCount
-                                 width:(size_t)width
-                                height:(size_t)height
+                                 width:(uint32_t)width
+                                height:(uint32_t)height
                           bitsPerPixel:(size_t)bitsPerPixel
                             bitmapInfo:(CGBitmapInfo)bitmapInfo;
 
@@ -61,8 +61,8 @@ typedef void(^PINAnimatedImageDecodedPath)(BOOL finished, NSString *path, NSErro
 @property (nonatomic, readonly) CFTimeInterval totalDuration;
 @property (nonatomic, readonly) size_t loopCount;
 @property (nonatomic, readonly) size_t frameCount;
-@property (nonatomic, readonly) size_t width;
-@property (nonatomic, readonly) size_t height;
+@property (nonatomic, readonly) uint32_t width;
+@property (nonatomic, readonly) uint32_t height;
 @property (nonatomic, readonly) size_t bitsPerPixel;
 @property (nonatomic, readonly) CGBitmapInfo bitmapInfo;
 

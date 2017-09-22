@@ -272,7 +272,7 @@ void releaseData(void *data, const void *imageData, size_t size)
   return self.sharedAnimatedImage.frameCount;
 }
 
-- (uint8_t)width
+- (uint32_t)width
 {
   NSAssert([self infoReady], @"info must be ready");
   return self.sharedAnimatedImage.width;
@@ -351,7 +351,7 @@ void releaseData(void *data, const void *imageData, size_t size)
   return self;
 }
 
-- (void)setInfoProcessedWithCoverImage:(PINImage *)coverImage UUID:(NSUUID *)UUID durations:(Float32 *)durations totalDuration:(CFTimeInterval)totalDuration loopCount:(size_t)loopCount frameCount:(size_t)frameCount width:(size_t)width height:(size_t)height bitsPerPixel:(size_t)bitsPerPixel bitmapInfo:(CGBitmapInfo)bitmapInfo
+- (void)setInfoProcessedWithCoverImage:(PINImage *)coverImage UUID:(NSUUID *)UUID durations:(Float32 *)durations totalDuration:(CFTimeInterval)totalDuration loopCount:(size_t)loopCount frameCount:(size_t)frameCount width:(uint32_t)width height:(uint32_t)height bitsPerPixel:(size_t)bitsPerPixel bitmapInfo:(CGBitmapInfo)bitmapInfo
 {
   NSAssert(_status == PINAnimatedImageStatusUnprocessed, @"Status should be unprocessed.");
   [_coverImageLock lockWithBlock:^{

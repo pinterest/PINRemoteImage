@@ -158,20 +158,12 @@ static const NSUInteger kFramesToRenderForLargeFrames = 4;
     [_cachingQueue addOperation:^{
         PINStrongify(self);
         // Kick off, in order, caching frames which need to be cached
-        __block NSRange endKeepRange;
-        __block NSRange beginningKeepRange;
+        NSRange endKeepRange;
+        NSRange beginningKeepRange;
         
-        NSUInteger framesToCache = [self framesToCache];
+        [self getKeepRanges:&endKeepRange beginningKeepRange:&beginningKeepRange];
         
         [self->_lock lockWithBlock:^{
-            // find the range of frames we want to keep
-            endKeepRange = NSMakeRange(_playhead, framesToCache);
-            beginningKeepRange = NSMakeRange(NSNotFound, 0);
-            if (NSMaxRange(endKeepRange) > _animatedImage.frameCount) {
-                beginningKeepRange = NSMakeRange(0, NSMaxRange(endKeepRange) - _animatedImage.frameCount);
-                endKeepRange.length = _animatedImage.frameCount - _playhead;
-            }
-            
             for (NSUInteger idx = endKeepRange.location; idx < NSMaxRange(endKeepRange); idx++) {
                 if ([_cachedOrCachingFrames containsIndex:idx] == NO) {
                     [self l_cacheFrame:idx];
@@ -185,19 +177,58 @@ static const NSUInteger kFramesToRenderForLargeFrames = 4;
                     }
                 }
             }
-            
-            NSMutableIndexSet *removedFrames = [[NSMutableIndexSet alloc] init];
-            PINLog(@"Checking if frames need removing: %lu", _cachedOrCachingFrames.count);
-            [self->_cachedOrCachingFrames enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
-                if (NSLocationInRange(idx, endKeepRange) == NO &&
-                    (beginningKeepRange.location == NSNotFound || NSLocationInRange(idx, beginningKeepRange))) {
-                    [removedFrames addIndex:idx];
-                    [self->_frameCache removeObjectForKey:@(idx)];
-                    PINLog(@"Removing: %lu", (unsigned long)idx);
-                }
-            }];
-            [self->_cachedOrCachingFrames removeIndexes:removedFrames];
         }];
+    }];
+    
+    [_cachingQueue addOperation:^{
+        PINStrongify(self);
+        [self cleanupFrames];
+    }];
+}
+
+- (void)getKeepRanges:(nonnull out NSRange *)endKeepRangeIn beginningKeepRange:(nonnull out NSRange *)beginningKeepRangeIn
+{
+    __block NSRange endKeepRange;
+    __block NSRange beginningKeepRange;
+    
+    NSUInteger framesToCache = [self framesToCache];
+    
+    [self->_lock lockWithBlock:^{
+        // find the range of frames we want to keep
+        endKeepRange = NSMakeRange(_playhead, framesToCache);
+        beginningKeepRange = NSMakeRange(NSNotFound, 0);
+        if (NSMaxRange(endKeepRange) > _animatedImage.frameCount) {
+            beginningKeepRange = NSMakeRange(0, NSMaxRange(endKeepRange) - _animatedImage.frameCount);
+            endKeepRange.length = _animatedImage.frameCount - _playhead;
+        }
+    }];
+    
+    if (endKeepRangeIn) {
+        *endKeepRangeIn = endKeepRange;
+    }
+    if (beginningKeepRangeIn) {
+        *beginningKeepRangeIn = beginningKeepRange;
+    }
+}
+
+- (void)cleanupFrames
+{
+    NSRange endKeepRange;
+    NSRange beginningKeepRange;
+    [self getKeepRanges:&endKeepRange beginningKeepRange:&beginningKeepRange];
+    
+    [_lock lockWithBlock:^{
+        NSMutableIndexSet *removedFrames = [[NSMutableIndexSet alloc] init];
+        PINLog(@"Checking if frames need removing: %lu", _cachedOrCachingFrames.count);
+        [_cachedOrCachingFrames enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+            if (NSLocationInRange(idx, endKeepRange) == NO &&
+                (beginningKeepRange.location == NSNotFound || NSLocationInRange(idx, beginningKeepRange))) {
+                [removedFrames addIndex:idx];
+                [self->_frameCache removeObjectForKey:@(idx)];
+                PINLog(@"Removing: %lu", (unsigned long)idx);
+            }
+        }];
+        [_cachedOrCachingFrames removeIndexes:removedFrames];
     }];
 }
 
