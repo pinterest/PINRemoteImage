@@ -21,7 +21,7 @@ static const NSUInteger maxFileSize = 50000000; //max file size in bytes
 static const Float32 maxFileDuration = 1; //max duration of a file in seconds
 static const NSUInteger kCleanupAfterStartupDelay = 10; //clean up files after 10 seconds if it hasn't been done.
 
-typedef void(^PINAnimatedImageInfoProcessed)(PINImage *coverImage, NSUUID *UUID, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, uint32_t width, uint32_t height, size_t bitsPerPixel, UInt32 bitmapInfo);
+typedef void(^PINAnimatedImageInfoProcessed)(PINImage *coverImage, NSUUID *UUID, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, UInt32 width, UInt32 height, size_t bitsPerPixel, UInt32 bitmapInfo);
 
 BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status);
 BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
