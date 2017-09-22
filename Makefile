@@ -1,5 +1,5 @@
-PLATFORM="platform=iOS Simulator,OS=11.0,name=iPhone 7"
-SDK="iphonesimulator11.0"
+PLATFORM="platform=iOS Simulator,name=iPhone 7"
+SDK="iphonesimulator"
 SHELL=/bin/bash -o pipefail
 
 .PHONY: all lint test carthage analyze
