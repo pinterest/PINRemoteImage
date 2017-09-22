@@ -1141,22 +1141,6 @@ static dispatch_once_t sharedDispatchToken;
     [task didReceiveData:data];
 }
 
-- (void)didCompleteTask:(NSURLSessionTask *)task withError:(NSError *)error
-{
-    if (error == nil && [task isKindOfClass:[NSURLSessionDataTask class]]) {
-        NSURLSessionDataTask *dataTask = (NSURLSessionDataTask *)task;
-        [self lock];
-            NSString *cacheKey = [NSURLProtocol propertyForKey:PINRemoteImageCacheKey inRequest:dataTask.originalRequest];
-            PINRemoteImageDownloadTask *task = [self.tasks objectForKey:cacheKey];
-        [self unlock];
-        
-        float bytesPerSecond = task.startAdjustedBytesPerSecond;
-        if (bytesPerSecond) {
-            [[PINSpeedRecorder sharedRecorder] addTaskBPS:bytesPerSecond endDate:[NSDate date]];
-        }
-    }
-}
-
 #pragma mark - QOS
 
 - (NSUUID *)downloadImageWithURLs:(NSArray <NSURL *> *)urls
