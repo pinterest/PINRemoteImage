@@ -108,6 +108,11 @@ typedef void(^PINAnimatedImageInfoReady)(PINImage *coverImage);
 @property (nonatomic, readonly) uint32_t height;
 
 /**
+ @abstract number of bytes per frame.
+ */
+@property (nonatomic, readonly) uint32_t bytesPerFrame;
+
+/**
  @abstract Return the total duration of the animated image's playback.
  */
 @property (nonatomic, readonly) CFTimeInterval totalDuration;

@@ -18,6 +18,12 @@
 #import "NSData+ImageDetectors.h"
 
 static const NSUInteger kFramesToRenderForLargeFrames = 4;
+static const NSUInteger kFramesToRenderMinimum = 2;
+
+static const CFTimeInterval kSecondsAfterMemWarningToMinimumCache = 1;
+static const CFTimeInterval kSecondsAfterMemWarningToLargeCache = 5;
+static const CFTimeInterval kSecondsAfterMemWarningToAllCache = 10;
+static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
 
 @interface PINCachedAnimatedImage ()
 {
@@ -36,6 +42,10 @@ static const NSUInteger kFramesToRenderForLargeFrames = 4;
     NSMutableIndexSet *_cachedOrCachingFrames;
     PINRemoteLock *_lock;
 }
+
+@property (atomic, strong) NSDate *lastMemoryWarning;
+@property (atomic, assign) BOOL weAreTheProblem;
+
 @end
 
 @implementation PINCachedAnimatedImage
@@ -63,6 +73,16 @@ static const NSUInteger kFramesToRenderForLargeFrames = 4;
         _notifyOnReady = YES;
         _cachedOrCachingFrames = [[NSMutableIndexSet alloc] init];
         _lock = [[PINRemoteLock alloc] initWithName:@"PINCachedAnimatedImage Lock"];
+        
+        _lastMemoryWarning = [NSDate distantPast];
+        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidReceiveMemoryWarningNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+            NSDate *now = [NSDate date];
+            if (-[self.lastMemoryWarning timeIntervalSinceDate:now] < kSecondsBetweenMemoryWarnings) {
+                self.weAreTheProblem = YES;
+            }
+            self.lastMemoryWarning = now;
+            [self cleanupFrames];
+        }];
         
         _cachingQueue = [[PINOperationQueue alloc] initWithMaxConcurrentOperations:kFramesToRenderForLargeFrames];
         
@@ -131,18 +151,23 @@ static const NSUInteger kFramesToRenderForLargeFrames = 4;
     __block CGImageRef imageRef;
     [_lock lockWithBlock:^{
         imageRef = (__bridge CGImageRef)[_frameCache objectForKey:@(index)];
-     
+        
+        _playhead = index;
+        if (imageRef == NULL) {
+            if ([self framesToCache] == 0) {
+                // We're not caching so we should just generate the frame.
+                imageRef = [_animatedImage imageAtIndex:index];
+            } else {
+                PINLog(@"cache miss, aww.");
+                _notifyOnReady = YES;
+            }
+        }
+        
         // Retain and autorelease while we have the lock, another thread could remove it from the cache
         // and allow it to be released.
         if (imageRef) {
             CGImageRetain(imageRef);
             CFAutorelease(imageRef);
-        }
-        
-        _playhead = index;
-        if (imageRef == NULL) {
-            PINLog(@"cache miss, aww.");
-            _notifyOnReady = YES;
         }
     }];
     
@@ -153,32 +178,35 @@ static const NSUInteger kFramesToRenderForLargeFrames = 4;
 
 - (void)updateCache
 {
-    //TODO look into silencing retain cycle warning :/
     PINWeakify(self);
-    [_cachingQueue addOperation:^{
-        PINStrongify(self);
-        // Kick off, in order, caching frames which need to be cached
-        NSRange endKeepRange;
-        NSRange beginningKeepRange;
-        
-        [self getKeepRanges:&endKeepRange beginningKeepRange:&beginningKeepRange];
-        
-        [self->_lock lockWithBlock:^{
-            for (NSUInteger idx = endKeepRange.location; idx < NSMaxRange(endKeepRange); idx++) {
-                if ([_cachedOrCachingFrames containsIndex:idx] == NO) {
-                    [self l_cacheFrame:idx];
-                }
-            }
+    
+    // skip if we don't have any frames to cache
+    if ([self framesToCache] > 0) {
+        [_cachingQueue addOperation:^{
+            PINStrongify(self);
+            // Kick off, in order, caching frames which need to be cached
+            NSRange endKeepRange;
+            NSRange beginningKeepRange;
             
-            if (beginningKeepRange.location != NSNotFound) {
-                for (NSUInteger idx = beginningKeepRange.location; idx < NSMaxRange(beginningKeepRange); idx++) {
+            [self getKeepRanges:&endKeepRange beginningKeepRange:&beginningKeepRange];
+            
+            [self->_lock lockWithBlock:^{
+                for (NSUInteger idx = endKeepRange.location; idx < NSMaxRange(endKeepRange); idx++) {
                     if ([_cachedOrCachingFrames containsIndex:idx] == NO) {
                         [self l_cacheFrame:idx];
                     }
                 }
-            }
+                
+                if (beginningKeepRange.location != NSNotFound) {
+                    for (NSUInteger idx = beginningKeepRange.location; idx < NSMaxRange(beginningKeepRange); idx++) {
+                        if ([_cachedOrCachingFrames containsIndex:idx] == NO) {
+                            [self l_cacheFrame:idx];
+                        }
+                    }
+                }
+            }];
         }];
-    }];
+    }
     
     [_cachingQueue addOperation:^{
         PINStrongify(self);
@@ -273,20 +301,34 @@ static const NSUInteger kFramesToRenderForLargeFrames = 4;
 - (NSUInteger)framesToCache
 {
     NSUInteger totalBytes = [NSProcessInfo processInfo].physicalMemory;
+    NSUInteger framesToCache = 0;
     
-    // TODO See if the image actually has alpha and take that into account? Delegate to the
-    // image to return frame size?
-    NSUInteger frameCost = _animatedImage.height * _animatedImage.width * 4;
+    NSUInteger frameCost = _animatedImage.bytesPerFrame;
     if (frameCost * _animatedImage.frameCount < totalBytes / 250) {
         // If the total number of bytes takes up less than a 250th of total memory, lets just cache 'em all.
-        return _animatedImage.frameCount;
-    } else if (frameCost < totalBytes / 1000 ) {
+        framesToCache = _animatedImage.frameCount;
+    } else if (frameCost < totalBytes / 1000) {
         // If the cost of a frame is less than 1000th of physical memory, cache 4 frames to smooth animation.
-        return kFramesToRenderForLargeFrames;
-    } else {
+        framesToCache = kFramesToRenderForLargeFrames;
+    } else if (frameCost < totalBytes / 500) {
         // Oooph, lets just try to get ahead of things by one.
-        return 2;
+        framesToCache = kFramesToRenderMinimum;
+    } else {
+        // No caching :(
+        framesToCache = 0;
     }
+    
+    // If it's been less than 5 seconds, we're not caching
+    CFTimeInterval timeSinceLastWarning = -[self.lastMemoryWarning timeIntervalSinceNow];
+    if (self.weAreTheProblem || timeSinceLastWarning < kSecondsAfterMemWarningToMinimumCache) {
+        framesToCache = 0;
+    } else if (timeSinceLastWarning < kSecondsAfterMemWarningToLargeCache) {
+        framesToCache = MIN(framesToCache, kFramesToRenderMinimum);
+    } else if (timeSinceLastWarning < kSecondsAfterMemWarningToAllCache) {
+        framesToCache = MIN(framesToCache, kFramesToRenderForLargeFrames);
+    }
+    
+    return framesToCache;
 }
 
 - (CFTimeInterval)durationAtIndex:(NSUInteger)index

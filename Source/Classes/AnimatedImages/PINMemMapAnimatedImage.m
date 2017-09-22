@@ -284,6 +284,12 @@ void releaseData(void *data, const void *imageData, size_t size)
   return self.sharedAnimatedImage.height;
 }
 
+- (uint32_t)bytesPerFrame
+{
+    NSAssert([self infoReady], @"info must be ready");
+    return self.sharedAnimatedImage.width * self.sharedAnimatedImage.height * 3;
+}
+
 - (NSError *)error
 {
   return self.sharedAnimatedImage.error;

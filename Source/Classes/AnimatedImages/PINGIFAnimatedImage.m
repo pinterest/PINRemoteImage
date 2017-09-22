@@ -114,6 +114,11 @@
     return _height;
 }
 
+- (uint32_t)bytesPerFrame
+{
+    return _width * _height * 3;
+}
+
 - (NSError *)error
 {
     return _error;

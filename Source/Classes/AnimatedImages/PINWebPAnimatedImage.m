@@ -100,6 +100,11 @@ static void releaseData(void *info, const void *data, size_t size)
     return _height;
 }
 
+- (uint32_t)bytesPerFrame
+{
+    return _width * _height * (_hasAlpha ? 4 : 3);
+}
+
 - (NSError *)error
 {
     return _error;
