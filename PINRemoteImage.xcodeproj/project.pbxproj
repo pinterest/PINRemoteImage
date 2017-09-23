@@ -35,109 +35,6 @@
 		139D4FE21F672B0D00DE64E0 /* PINRemoteImageDownloadQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B1F2801E679D7A00ED87C4 /* PINRemoteImageDownloadQueue.m */; };
 		139D4FE31F672B0D00DE64E0 /* PINResume.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B7E3B11E736C73000FC887 /* PINResume.m */; };
 		139D4FE41F672B0D00DE64E0 /* PINSpeedRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6860CB071F578287005E886E /* PINSpeedRecorder.m */; };
-		139D4FE51F672B3C00DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FE61F672B3C00DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FE81F672B3C00DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FE91F672B3C00DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FEA1F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FEB1F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FEC1F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FEE1F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FEF1F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FF11F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FF31F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FF41F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FF51F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FF71F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FF81F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FF91F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FFA1F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FFB1F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FFC1F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FFD1F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FFE1F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D4FFF1F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50001F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50011F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50031F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50051F672B4300DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50061F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50071F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50081F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50091F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D500A1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D500B1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D500C1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D500E1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D500F1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50101F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50111F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50121F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50131F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50141F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50151F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50161F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50171F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50181F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50191F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D501A1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D501C1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D501D1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D501E1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D501F1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50201F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50211F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50221F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50231F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50241F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50251F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50261F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50271F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50281F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50291F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D502A1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D502B1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D502C1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D502D1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D502E1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D502F1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50341F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50351F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50361F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50371F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50381F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50391F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D503A1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D503B1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D503C1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D503D1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D503E1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D503F1F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50401F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50421F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50431F672B5900DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50441F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50461F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50491F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D504A1F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D504B1F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D504C1F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D504D1F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D504E1F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50501F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50521F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50551F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50571F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50591F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D505C1F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D505E1F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50601F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50621F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50641F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50661F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D50681F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D506A1F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		139D506C1F672B6700DE64E0 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		139D50781F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
 		139D50791F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
 		139D507A1F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
@@ -306,7 +203,7 @@
 		68774F971F6B089D008748B0 /* yuv.c in Sources */ = {isa = PBXBuildFile; fileRef = 68774F521F6B089D008748B0 /* yuv.c */; };
 		68774F981F6B089D008748B0 /* yuv.h in Headers */ = {isa = PBXBuildFile; fileRef = 68774F531F6B089D008748B0 /* yuv.h */; };
 		68774FB71F6B08B2008748B0 /* alpha_enc.c in Sources */ = {isa = PBXBuildFile; fileRef = 68774F9A1F6B08B2008748B0 /* alpha_enc.c */; };
-		68774FB81F6B08B2008748B0 /* analysis_enc.c in Sources */ = {isa = PBXBuildFile; fileRef = 68774F9B1F6B08B2008748B0 /* analysis_enc.c */; };
+		68774FB81F6B08B2008748B0 /* analysis_enc.c in Sources */ = {isa = PBXBuildFile; fileRef = 68774F9B1F6B08B2008748B0 /* analysis_enc.c */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		68774FB91F6B08B2008748B0 /* backward_references_enc.c in Sources */ = {isa = PBXBuildFile; fileRef = 68774F9C1F6B08B2008748B0 /* backward_references_enc.c */; };
 		68774FBA1F6B08B2008748B0 /* backward_references_enc.h in Headers */ = {isa = PBXBuildFile; fileRef = 68774F9D1F6B08B2008748B0 /* backward_references_enc.h */; };
 		68774FBB1F6B08B2008748B0 /* config_enc.c in Sources */ = {isa = PBXBuildFile; fileRef = 68774F9E1F6B08B2008748B0 /* config_enc.c */; };
@@ -447,7 +344,7 @@
 		68D734781F75FE2C00B9C95D /* muxinternal.c in Sources */ = {isa = PBXBuildFile; fileRef = 68774FD91F6B08C7008748B0 /* muxinternal.c */; };
 		68D734791F75FE2C00B9C95D /* muxread.c in Sources */ = {isa = PBXBuildFile; fileRef = 68774FDA1F6B08C7008748B0 /* muxread.c */; };
 		68D7347A1F75FE3400B9C95D /* alpha_enc.c in Sources */ = {isa = PBXBuildFile; fileRef = 68774F9A1F6B08B2008748B0 /* alpha_enc.c */; };
-		68D7347B1F75FE3400B9C95D /* analysis_enc.c in Sources */ = {isa = PBXBuildFile; fileRef = 68774F9B1F6B08B2008748B0 /* analysis_enc.c */; };
+		68D7347B1F75FE3400B9C95D /* analysis_enc.c in Sources */ = {isa = PBXBuildFile; fileRef = 68774F9B1F6B08B2008748B0 /* analysis_enc.c */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		68D7347C1F75FE3400B9C95D /* backward_references_enc.c in Sources */ = {isa = PBXBuildFile; fileRef = 68774F9C1F6B08B2008748B0 /* backward_references_enc.c */; };
 		68D7347D1F75FE3400B9C95D /* backward_references_enc.h in Headers */ = {isa = PBXBuildFile; fileRef = 68774F9D1F6B08B2008748B0 /* backward_references_enc.h */; };
 		68D7347E1F75FE3400B9C95D /* config_enc.c in Sources */ = {isa = PBXBuildFile; fileRef = 68774F9E1F6B08B2008748B0 /* config_enc.c */; };
@@ -1876,68 +1773,30 @@
 				68D734521F75FDEA00B9C95D /* PINGIFAnimatedImage.m in Sources */,
 				139D4FE41F672B0D00DE64E0 /* PINSpeedRecorder.m in Sources */,
 				68D734541F75FE2100B9C95D /* bit_reader_utils.c in Sources */,
-				139D4FE51F672B3C00DE64E0 /* (null) in Sources */,
-				139D4FE61F672B3C00DE64E0 /* (null) in Sources */,
 				68D734D01F75FE3C00B9C95D /* rescaler_sse2.c in Sources */,
 				68D734CC1F75FE3C00B9C95D /* rescaler_mips_dsp_r2.c in Sources */,
-				139D4FE81F672B3C00DE64E0 /* (null) in Sources */,
-				139D4FE91F672B3C00DE64E0 /* (null) in Sources */,
-				139D4FEA1F672B4300DE64E0 /* (null) in Sources */,
-				139D4FEB1F672B4300DE64E0 /* (null) in Sources */,
-				139D4FEC1F672B4300DE64E0 /* (null) in Sources */,
-				139D4FEE1F672B4300DE64E0 /* (null) in Sources */,
 				68D734901F75FE3400B9C95D /* syntax_enc.c in Sources */,
-				139D4FEF1F672B4300DE64E0 /* (null) in Sources */,
 				68D7349B1F75FE3C00B9C95D /* alpha_processing.c in Sources */,
-				139D4FF11F672B4300DE64E0 /* (null) in Sources */,
 				68D734A01F75FE3C00B9C95D /* cost_mips_dsp_r2.c in Sources */,
-				139D4FF31F672B4300DE64E0 /* (null) in Sources */,
 				68D734DE1F75FE4500B9C95D /* alpha_dec.c in Sources */,
 				68D7348A1F75FE3400B9C95D /* picture_enc.c in Sources */,
 				68D7346B1F75FE2100B9C95D /* utils.c in Sources */,
-				139D4FF41F672B4300DE64E0 /* (null) in Sources */,
 				68D734741F75FE2C00B9C95D /* anim_encode.c in Sources */,
 				68D734761F75FE2C00B9C95D /* muxedit.c in Sources */,
-				139D4FF51F672B4300DE64E0 /* (null) in Sources */,
-				139D4FF71F672B4300DE64E0 /* (null) in Sources */,
 				68D734D71F75FE3C00B9C95D /* yuv_mips_dsp_r2.c in Sources */,
-				139D4FF81F672B4300DE64E0 /* (null) in Sources */,
-				139D4FF91F672B4300DE64E0 /* (null) in Sources */,
-				139D4FFA1F672B4300DE64E0 /* (null) in Sources */,
-				139D4FFB1F672B4300DE64E0 /* (null) in Sources */,
-				139D4FFC1F672B4300DE64E0 /* (null) in Sources */,
-				139D4FFD1F672B4300DE64E0 /* (null) in Sources */,
 				68D734A81F75FE3C00B9C95D /* dec_msa.c in Sources */,
-				139D4FFE1F672B4300DE64E0 /* (null) in Sources */,
 				68D7347C1F75FE3400B9C95D /* backward_references_enc.c in Sources */,
-				139D4FFF1F672B4300DE64E0 /* (null) in Sources */,
 				68D7345D1F75FE2100B9C95D /* huffman_encode_utils.c in Sources */,
 				68D734B61F75FE3C00B9C95D /* filters_mips_dsp_r2.c in Sources */,
 				68D734BD1F75FE3C00B9C95D /* lossless_enc_mips32.c in Sources */,
-				139D50001F672B4300DE64E0 /* (null) in Sources */,
-				139D50011F672B4300DE64E0 /* (null) in Sources */,
 				68D7345B1F75FE2100B9C95D /* filters_utils.c in Sources */,
-				139D50031F672B4300DE64E0 /* (null) in Sources */,
 				68D734B91F75FE3C00B9C95D /* filters_sse2.c in Sources */,
-				139D50051F672B4300DE64E0 /* (null) in Sources */,
 				68D734A41F75FE3C00B9C95D /* cpu.c in Sources */,
-				139D50061F672B5900DE64E0 /* (null) in Sources */,
-				139D50071F672B5900DE64E0 /* (null) in Sources */,
 				68D734E71F75FE4500B9C95D /* vp8_dec.c in Sources */,
 				68D734C11F75FE3C00B9C95D /* lossless_enc_sse41.c in Sources */,
 				68D734C41F75FE3C00B9C95D /* lossless_msa.c in Sources */,
-				139D50081F672B5900DE64E0 /* (null) in Sources */,
-				139D50091F672B5900DE64E0 /* (null) in Sources */,
-				139D500A1F672B5900DE64E0 /* (null) in Sources */,
-				139D500B1F672B5900DE64E0 /* (null) in Sources */,
-				139D500C1F672B5900DE64E0 /* (null) in Sources */,
-				139D500E1F672B5900DE64E0 /* (null) in Sources */,
 				68D734961F75FE3400B9C95D /* webp_enc.c in Sources */,
 				68D7344C1F75FDCF00B9C95D /* PINAnimatedImage.m in Sources */,
-				139D500F1F672B5900DE64E0 /* (null) in Sources */,
-				139D50101F672B5900DE64E0 /* (null) in Sources */,
-				139D50111F672B5900DE64E0 /* (null) in Sources */,
-				139D50121F672B5900DE64E0 /* (null) in Sources */,
 				68D734941F75FE3400B9C95D /* vp8l_enc.c in Sources */,
 				68D734A51F75FE3C00B9C95D /* dec_clip_tables.c in Sources */,
 				68D734581F75FE2100B9C95D /* color_cache_utils.c in Sources */,
@@ -1947,126 +1806,61 @@
 				68D734B51F75FE3C00B9C95D /* enc.c in Sources */,
 				68D734B81F75FE3C00B9C95D /* filters_neon.c in Sources */,
 				68D734E61F75FE4500B9C95D /* tree_dec.c in Sources */,
-				139D50131F672B5900DE64E0 /* (null) in Sources */,
 				68D734DA1F75FE3C00B9C95D /* yuv.c in Sources */,
 				68D7348E1F75FE3400B9C95D /* predictor_enc.c in Sources */,
-				139D50141F672B5900DE64E0 /* (null) in Sources */,
 				68D734791F75FE2C00B9C95D /* muxread.c in Sources */,
-				139D50151F672B5900DE64E0 /* (null) in Sources */,
-				139D50161F672B5900DE64E0 /* (null) in Sources */,
 				68D734AB1F75FE3C00B9C95D /* dec_sse41.c in Sources */,
 				68D734AA1F75FE3C00B9C95D /* dec_sse2.c in Sources */,
 				68D734EC1F75FE4500B9C95D /* webp_dec.c in Sources */,
-				139D50171F672B5900DE64E0 /* (null) in Sources */,
-				139D50181F672B5900DE64E0 /* (null) in Sources */,
-				139D50191F672B5900DE64E0 /* (null) in Sources */,
 				68D734651F75FE2100B9C95D /* random_utils.c in Sources */,
-				139D501A1F672B5900DE64E0 /* (null) in Sources */,
 				68D734A11F75FE3C00B9C95D /* cost_mips32.c in Sources */,
 				68D734921F75FE3400B9C95D /* tree_enc.c in Sources */,
 				68D7349E1F75FE3C00B9C95D /* argb.c in Sources */,
-				139D501C1F672B5900DE64E0 /* (null) in Sources */,
 				68D734911F75FE3400B9C95D /* token_enc.c in Sources */,
-				139D501D1F672B5900DE64E0 /* (null) in Sources */,
 				68D734E01F75FE4500B9C95D /* buffer_dec.c in Sources */,
 				68D7348C1F75FE3400B9C95D /* picture_rescale_enc.c in Sources */,
 				68D734991F75FE3C00B9C95D /* alpha_processing_sse2.c in Sources */,
 				68D734A71F75FE3C00B9C95D /* dec_mips32.c in Sources */,
-				139D501E1F672B5900DE64E0 /* (null) in Sources */,
 				68D734D61F75FE3C00B9C95D /* upsampling.c in Sources */,
-				139D501F1F672B5900DE64E0 /* (null) in Sources */,
 				68D7347E1F75FE3400B9C95D /* config_enc.c in Sources */,
 				68D734611F75FE2100B9C95D /* quant_levels_dec_utils.c in Sources */,
-				139D50201F672B5900DE64E0 /* (null) in Sources */,
-				139D50211F672B5900DE64E0 /* (null) in Sources */,
 				68D7347B1F75FE3400B9C95D /* analysis_enc.c in Sources */,
 				68D734EA1F75FE4500B9C95D /* vp8l_dec.c in Sources */,
-				139D50221F672B5900DE64E0 /* (null) in Sources */,
-				139D50231F672B5900DE64E0 /* (null) in Sources */,
-				139D50241F672B5900DE64E0 /* (null) in Sources */,
-				139D50251F672B5900DE64E0 /* (null) in Sources */,
 				68D7344E1F75FDDB00B9C95D /* PINCachedAnimatedImage.m in Sources */,
-				139D50261F672B5900DE64E0 /* (null) in Sources */,
 				68D734D31F75FE3C00B9C95D /* upsampling_msa.c in Sources */,
-				139D50271F672B5900DE64E0 /* (null) in Sources */,
 				68D734BA1F75FE3C00B9C95D /* filters.c in Sources */,
-				139D50281F672B5900DE64E0 /* (null) in Sources */,
 				68D734671F75FE2100B9C95D /* rescaler_utils.c in Sources */,
 				68D734831F75FE3400B9C95D /* filter_enc.c in Sources */,
 				68D7348D1F75FE3400B9C95D /* picture_tools_enc.c in Sources */,
 				68D734981F75FE3C00B9C95D /* alpha_processing_neon.c in Sources */,
 				68D734BF1F75FE3C00B9C95D /* lossless_enc_neon.c in Sources */,
-				139D50291F672B5900DE64E0 /* (null) in Sources */,
-				139D502A1F672B5900DE64E0 /* (null) in Sources */,
 				68D734E51F75FE4500B9C95D /* quant_dec.c in Sources */,
 				68D734AC1F75FE3C00B9C95D /* dec.c in Sources */,
-				139D502B1F672B5900DE64E0 /* (null) in Sources */,
 				68D734C71F75FE3C00B9C95D /* lossless.c in Sources */,
 				68D734E21F75FE4500B9C95D /* frame_dec.c in Sources */,
-				139D502C1F672B5900DE64E0 /* (null) in Sources */,
-				139D502D1F672B5900DE64E0 /* (null) in Sources */,
-				139D502E1F672B5900DE64E0 /* (null) in Sources */,
 				68D734D81F75FE3C00B9C95D /* yuv_mips32.c in Sources */,
 				68D734B21F75FE3C00B9C95D /* enc_neon.c in Sources */,
 				68D7349C1F75FE3C00B9C95D /* argb_mips_dsp_r2.c in Sources */,
 				68D734C61F75FE3C00B9C95D /* lossless_sse2.c in Sources */,
-				139D502F1F672B5900DE64E0 /* (null) in Sources */,
-				139D50341F672B5900DE64E0 /* (null) in Sources */,
-				139D50351F672B5900DE64E0 /* (null) in Sources */,
-				139D50361F672B5900DE64E0 /* (null) in Sources */,
 				68D734691F75FE2100B9C95D /* thread_utils.c in Sources */,
-				139D50371F672B5900DE64E0 /* (null) in Sources */,
-				139D50381F672B5900DE64E0 /* (null) in Sources */,
-				139D50391F672B5900DE64E0 /* (null) in Sources */,
 				68D7349A1F75FE3C00B9C95D /* alpha_processing_sse41.c in Sources */,
-				139D503A1F672B5900DE64E0 /* (null) in Sources */,
 				68D7348F1F75FE3400B9C95D /* quant_enc.c in Sources */,
 				68D734D21F75FE3C00B9C95D /* upsampling_mips_dsp_r2.c in Sources */,
-				139D503B1F672B5900DE64E0 /* (null) in Sources */,
-				139D503C1F672B5900DE64E0 /* (null) in Sources */,
-				139D503D1F672B5900DE64E0 /* (null) in Sources */,
-				139D503E1F672B5900DE64E0 /* (null) in Sources */,
-				139D503F1F672B5900DE64E0 /* (null) in Sources */,
 				68D734C01F75FE3C00B9C95D /* lossless_enc_sse2.c in Sources */,
-				139D50401F672B5900DE64E0 /* (null) in Sources */,
-				139D50421F672B5900DE64E0 /* (null) in Sources */,
-				139D50431F672B5900DE64E0 /* (null) in Sources */,
 				68D734AE1F75FE3C00B9C95D /* enc_avx2.c in Sources */,
-				139D50441F672B6700DE64E0 /* (null) in Sources */,
-				139D50461F672B6700DE64E0 /* (null) in Sources */,
-				139D50491F672B6700DE64E0 /* (null) in Sources */,
-				139D504A1F672B6700DE64E0 /* (null) in Sources */,
-				139D504B1F672B6700DE64E0 /* (null) in Sources */,
 				68D734E31F75FE4500B9C95D /* idec_dec.c in Sources */,
-				139D504C1F672B6700DE64E0 /* (null) in Sources */,
-				139D504D1F672B6700DE64E0 /* (null) in Sources */,
 				68D734841F75FE3400B9C95D /* frame_enc.c in Sources */,
 				68D734891F75FE3400B9C95D /* picture_csp_enc.c in Sources */,
 				68D734C31F75FE3C00B9C95D /* lossless_mips_dsp_r2.c in Sources */,
-				139D504E1F672B6700DE64E0 /* (null) in Sources */,
-				139D50501F672B6700DE64E0 /* (null) in Sources */,
 				68D734D91F75FE3C00B9C95D /* yuv_sse2.c in Sources */,
 				68D7349D1F75FE3C00B9C95D /* argb_sse2.c in Sources */,
-				139D50521F672B6700DE64E0 /* (null) in Sources */,
 				68D734CD1F75FE3C00B9C95D /* rescaler_mips32.c in Sources */,
-				139D50551F672B6700DE64E0 /* (null) in Sources */,
-				139D50571F672B6700DE64E0 /* (null) in Sources */,
-				139D50591F672B6700DE64E0 /* (null) in Sources */,
 				68D734CF1F75FE3C00B9C95D /* rescaler_neon.c in Sources */,
 				68D7348B1F75FE3400B9C95D /* picture_psnr_enc.c in Sources */,
 				68D734A91F75FE3C00B9C95D /* dec_neon.c in Sources */,
-				139D505C1F672B6700DE64E0 /* (null) in Sources */,
-				139D505E1F672B6700DE64E0 /* (null) in Sources */,
-				139D50601F672B6700DE64E0 /* (null) in Sources */,
-				139D50621F672B6700DE64E0 /* (null) in Sources */,
 				68D734631F75FE2100B9C95D /* quant_levels_utils.c in Sources */,
-				139D50641F672B6700DE64E0 /* (null) in Sources */,
-				139D50661F672B6700DE64E0 /* (null) in Sources */,
-				139D50681F672B6700DE64E0 /* (null) in Sources */,
 				68D734CE1F75FE3C00B9C95D /* rescaler_msa.c in Sources */,
 				68D734A21F75FE3C00B9C95D /* cost_sse2.c in Sources */,
-				139D506A1F672B6700DE64E0 /* (null) in Sources */,
-				139D506C1F672B6700DE64E0 /* (null) in Sources */,
 				68D734B71F75FE3C00B9C95D /* filters_msa.c in Sources */,
 				68D734871F75FE3400B9C95D /* iterator_enc.c in Sources */,
 				68D734D51F75FE3C00B9C95D /* upsampling_sse2.c in Sources */,
