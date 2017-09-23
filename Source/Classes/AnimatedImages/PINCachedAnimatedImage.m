@@ -23,7 +23,9 @@ static const NSUInteger kFramesToRenderMinimum = 2;
 static const CFTimeInterval kSecondsAfterMemWarningToMinimumCache = 1;
 static const CFTimeInterval kSecondsAfterMemWarningToLargeCache = 5;
 static const CFTimeInterval kSecondsAfterMemWarningToAllCache = 10;
+#if PIN_TARGET_IOS
 static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
+#endif
 
 @interface PINCachedAnimatedImage ()
 {
@@ -74,6 +76,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
         _cachedOrCachingFrames = [[NSMutableIndexSet alloc] init];
         _lock = [[PINRemoteLock alloc] initWithName:@"PINCachedAnimatedImage Lock"];
         
+#if PIN_TARGET_IOS
         _lastMemoryWarning = [NSDate distantPast];
         [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidReceiveMemoryWarningNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
             NSDate *now = [NSDate date];
@@ -83,6 +86,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
             self.lastMemoryWarning = now;
             [self cleanupFrames];
         }];
+#endif
         
         _cachingQueue = [[PINOperationQueue alloc] initWithMaxConcurrentOperations:kFramesToRenderForLargeFrames];
         
@@ -105,7 +109,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
 #if PIN_TARGET_IOS
             _coverImage = [UIImage imageWithCGImage:[_animatedImage imageAtIndex:0]];
 #elif PIN_TARGET_MAC
-            _coverImage = [[NSImage alloc] initWithCGImage:[_animatedImage imageAtIndex:0] size:CGSizeMake(self.width, self.height)];
+            _coverImage = [[NSImage alloc] initWithCGImage:[_animatedImage imageAtIndex:0] size:CGSizeMake(_animatedImage.width, _animatedImage.height)];
 #endif
         }
         coverImage = _coverImage;
@@ -300,7 +304,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
 // Returns the number of frames that should be cached
 - (NSUInteger)framesToCache
 {
-    NSUInteger totalBytes = [NSProcessInfo processInfo].physicalMemory;
+    unsigned long long totalBytes = [NSProcessInfo processInfo].physicalMemory;
     NSUInteger framesToCache = 0;
     
     NSUInteger frameCost = _animatedImage.bytesPerFrame;
