@@ -37,7 +37,8 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
     dispatch_block_t _playbackReadyCallback;
     NSMutableDictionary *_frameCache;
     NSInteger _playbackReady; // Number of frames to cache until playback is ready
-    PINOperationQueue *_cachingQueue;
+    PINOperationQueue *_operationQueue;
+    dispatch_queue_t _cachingQueue;
     
     NSUInteger _playhead;
     BOOL _notifyOnReady;
@@ -90,7 +91,8 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
         }];
 #endif
         
-        _cachingQueue = [[PINOperationQueue alloc] initWithMaxConcurrentOperations:kFramesToRenderForLargeFrames];
+        _operationQueue = [[PINOperationQueue alloc] initWithMaxConcurrentOperations:kFramesToRenderForLargeFrames];
+        _cachingQueue = dispatch_queue_create("Caching Queue", DISPATCH_QUEUE_SERIAL);
         
         // dispatch later so that blocks can be set after init this runloop
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -188,7 +190,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
     
     // skip if we don't have any frames to cache
     if ([self framesToCache] > 0) {
-        [_cachingQueue addOperation:^{
+        [_operationQueue addOperation:^{
             PINStrongify(self);
             // Kick off, in order, caching frames which need to be cached
             NSRange endKeepRange;
@@ -214,7 +216,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
         }];
     }
     
-    [_cachingQueue addOperation:^{
+    [_operationQueue addOperation:^{
         PINStrongify(self);
         [self cleanupFrames];
     }];
@@ -255,8 +257,11 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
         NSMutableIndexSet *removedFrames = [[NSMutableIndexSet alloc] init];
         PINLog(@"Checking if frames need removing: %lu", _cachedOrCachingFrames.count);
         [_cachedOrCachingFrames enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
-            if (NSLocationInRange(idx, endKeepRange) == NO &&
-                (beginningKeepRange.location == NSNotFound || NSLocationInRange(idx, beginningKeepRange))) {
+            BOOL shouldKeepFrame = NSLocationInRange(idx, endKeepRange);
+            if (beginningKeepRange.location != NSNotFound) {
+                shouldKeepFrame |= NSLocationInRange(idx, beginningKeepRange);
+            }
+            if (shouldKeepFrame == NO) {
                 [removedFrames addIndex:idx];
                 [self->_frameCache removeObjectForKey:@(idx)];
                 PINLog(@"Removing: %lu", (unsigned long)idx);
@@ -273,14 +278,10 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
         [_cachedOrCachingFrames addIndex:frameIndex];
         _playbackReady++;
         
-        //TODO instead of weakify / strongify, silence warning, we know what we're doing
-        PINWeakify(self);
-        [_cachingQueue addOperation:^{
-            PINStrongify(self);
+        dispatch_async(_cachingQueue, ^{
             CGImageRef imageRef = [self->_animatedImage imageAtIndex:frameIndex];
             PINLog(@"Generating: %lu", (unsigned long)frameIndex);
 
-            __block dispatch_block_t notify = nil;
             [self->_lock lockWithBlock:^{
                 [self->_frameCache setObject:(__bridge id _Nonnull)(imageRef) forKey:@(frameIndex)];
                 self->_playbackReady--;
@@ -288,18 +289,18 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
                 
                 PINLog(@"Frames left: %ld", (long)_playbackReady);
                 
+                dispatch_block_t notify = nil;
                 if (self->_playbackReady == 0 && self->_notifyOnReady) {
                     self->_notifyOnReady = NO;
                     if (self->_playbackReadyCallback) {
                         notify = self->_playbackReadyCallback;
+                        [_operationQueue addOperation:^{
+                            notify();
+                        }];
                     }
                 }
             }];
-            
-            if (notify) {
-                notify();
-            }
-        }];
+        });
     }
 }
 
