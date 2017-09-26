@@ -78,7 +78,9 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
         
 #if PIN_TARGET_IOS
         _lastMemoryWarning = [NSDate distantPast];
+        PINWeakify(self);
         [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidReceiveMemoryWarningNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+            PINStrongify(self);
             NSDate *now = [NSDate date];
             if (-[self.lastMemoryWarning timeIntervalSinceDate:now] < kSecondsBetweenMemoryWarnings) {
                 self.weAreTheProblem = YES;
