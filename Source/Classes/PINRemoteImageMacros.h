@@ -11,7 +11,7 @@
 #define PIN_TARGET_IOS (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_TV)
 #define PIN_TARGET_MAC (TARGET_OS_MAC)
 
-#define PINRemoteImageLogging                0
+#define PINRemoteImageLogging                1
 #if PINRemoteImageLogging
 #define PINLog(args...) NSLog(args)
 #else

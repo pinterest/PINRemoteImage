@@ -303,7 +303,7 @@ void releaseData(void *data, const void *imageData, size_t size)
   return self.sharedAnimatedImage.status;
 }
 
-- (CGImageRef)imageAtIndex:(NSUInteger)index
+- (nullable CGImageRef)imageAtIndex:(NSUInteger)index cacheProvider:(nullable id<PINCachedAnimatedFrameProvider>)cacheProvider
 {
   return [self imageAtIndex:index
          inSharedImageFiles:self.sharedAnimatedImage.maps

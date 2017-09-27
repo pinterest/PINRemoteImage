@@ -27,7 +27,7 @@ static const CFTimeInterval kSecondsAfterMemWarningToAllCache = 10;
 static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
 #endif
 
-@interface PINCachedAnimatedImage ()
+@interface PINCachedAnimatedImage () <PINCachedAnimatedFrameProvider>
 {
     // Since _animatedImage is set on init it is thread-safe
     id <PINAnimatedImage> _animatedImage;
@@ -110,11 +110,14 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
     __block PINImage *coverImage = nil;
     [_lock lockWithBlock:^{
         if (_coverImage == nil) {
+            CGImageRef coverImageRef = [_animatedImage imageAtIndex:0 cacheProvider:self];
+            if (coverImageRef) {
 #if PIN_TARGET_IOS
-            _coverImage = [UIImage imageWithCGImage:[_animatedImage imageAtIndex:0]];
+                _coverImage = [UIImage imageWithCGImage:coverImageRef];
 #elif PIN_TARGET_MAC
-            _coverImage = [[NSImage alloc] initWithCGImage:[_animatedImage imageAtIndex:0] size:CGSizeMake(_animatedImage.width, _animatedImage.height)];
+                _coverImage = [[NSImage alloc] initWithCGImage:coverImageRef size:CGSizeMake(_animatedImage.width, _animatedImage.height)];
 #endif
+            }
         }
         coverImage = _coverImage;
     }];
@@ -157,6 +160,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
 - (CGImageRef)imageAtIndex:(NSUInteger)index
 {
     __block CGImageRef imageRef;
+    __block BOOL cachingDisabled = NO;
     [_lock lockWithBlock:^{
         imageRef = (__bridge CGImageRef)[_frameCache objectForKey:@(index)];
         
@@ -164,7 +168,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
         if (imageRef == NULL) {
             if ([self framesToCache] == 0) {
                 // We're not caching so we should just generate the frame.
-                imageRef = [_animatedImage imageAtIndex:index];
+                cachingDisabled = YES;
             } else {
                 PINLog(@"cache miss, aww.");
                 _notifyOnReady = YES;
@@ -179,7 +183,11 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
         }
     }];
     
-    [self updateCache];
+    if (cachingDisabled && imageRef == NULL) {
+        imageRef = [_animatedImage imageAtIndex:index cacheProvider:self];
+    } else {
+        [self updateCache];
+    }
 
     return imageRef;
 }
@@ -279,27 +287,29 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
         _playbackReady++;
         
         dispatch_async(_cachingQueue, ^{
-            CGImageRef imageRef = [self->_animatedImage imageAtIndex:frameIndex];
+            CGImageRef imageRef = [self->_animatedImage imageAtIndex:frameIndex cacheProvider:self];
             PINLog(@"Generating: %lu", (unsigned long)frameIndex);
 
-            [self->_lock lockWithBlock:^{
-                [self->_frameCache setObject:(__bridge id _Nonnull)(imageRef) forKey:@(frameIndex)];
-                self->_playbackReady--;
-                NSAssert(self->_playbackReady >= 0, @"playback ready is less than zero, something is wrong :(");
-                
-                PINLog(@"Frames left: %ld", (long)_playbackReady);
-                
-                dispatch_block_t notify = nil;
-                if (self->_playbackReady == 0 && self->_notifyOnReady) {
-                    self->_notifyOnReady = NO;
-                    if (self->_playbackReadyCallback) {
-                        notify = self->_playbackReadyCallback;
-                        [_operationQueue addOperation:^{
-                            notify();
-                        }];
+            if (imageRef) {
+                [self->_lock lockWithBlock:^{
+                    [self->_frameCache setObject:(__bridge id _Nonnull)(imageRef) forKey:@(frameIndex)];
+                    self->_playbackReady--;
+                    NSAssert(self->_playbackReady >= 0, @"playback ready is less than zero, something is wrong :(");
+                    
+                    PINLog(@"Frames left: %ld", (long)_playbackReady);
+                    
+                    dispatch_block_t notify = nil;
+                    if (self->_playbackReady == 0 && self->_notifyOnReady) {
+                        self->_notifyOnReady = NO;
+                        if (self->_playbackReadyCallback) {
+                            notify = self->_playbackReadyCallback;
+                            [_operationQueue addOperation:^{
+                                notify();
+                            }];
+                        }
                     }
-                }
-            }];
+                }];
+            }
         });
     }
 }
@@ -307,6 +317,8 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
 // Returns the number of frames that should be cached
 - (NSUInteger)framesToCache
 {
+    // DO NOT COMMIT!
+    return 0;
     unsigned long long totalBytes = [NSProcessInfo processInfo].physicalMemory;
     NSUInteger framesToCache = 0;
     
@@ -395,6 +407,21 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
         }];
         [_cachedOrCachingFrames removeAllIndexes];
     }];
+}
+
+# pragma mark - PINCachedAnimatedFrameProvider
+
+- (CGImageRef)cachedFrameImageAtIndex:(NSUInteger)index
+{
+    __block CGImageRef imageRef;
+    [_lock lockWithBlock:^{
+        imageRef = (__bridge CGImageRef)[_frameCache objectForKey:@(index)];
+        if (imageRef) {
+            CGImageRetain(imageRef);
+            CFAutorelease(imageRef);
+        }
+    }];
+    return imageRef;
 }
 
 @end

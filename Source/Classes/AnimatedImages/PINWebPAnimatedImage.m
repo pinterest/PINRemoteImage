@@ -19,6 +19,7 @@
     NSData *_animatedImageData;
     WebPData _underlyingData;
     WebPDemuxer *_demux;
+    CGImageRef previousFrame;
     uint32_t _width;
     uint32_t _height;
     BOOL _hasAlpha;
@@ -115,53 +116,116 @@ static void releaseData(void *info, const void *data, size_t size)
     return _durations[index];
 }
 
-- (CGImageRef)imageAtIndex:(NSUInteger)index
+- (CGImageRef)createCanvasWithPreviousFrame:(CGImageRef)previousFrame image:(CGImageRef)image atRect:(CGRect)rect
 {
-    // This all *appears* to be threadsafe as I believe demux is immutable…
-    WebPIterator iter;
+    CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(NULL,
+                                                 _width,
+                                                 _height,
+                                                 8,
+                                                 0,
+                                                 colorSpaceRef,
+                                                 _hasAlpha ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNone);
+    
+    if (previousFrame) {
+        CGContextDrawImage(context, CGRectMake(0, 0, _width, _height), previousFrame);
+    }
+    
+    if (image) {
+        CGContextDrawImage(context, CGRectMake(rect.origin.x, _height - rect.size.height - rect.origin.y, rect.size.width, rect.size.height), image);
+    }
+    
+    CGImageRef canvas = CGBitmapContextCreateImage(context);
+    CGContextRelease(context);
+    CGColorSpaceRelease(colorSpaceRef);
+    
+    return canvas;
+}
+
+- (CGImageRef)createRawImageWithIterator:(WebPIterator)iterator
+{
     CGImageRef imageRef = NULL;
-    if (WebPDemuxGetFrame(_demux, (int)index, &iter)) {
-        // ... (Consume 'iter'; e.g. Decode 'iter.fragment' with WebPDecode(),
-        // ... and get other frame properties like width, height, offsets etc.
-        // ... see 'struct WebPIterator' below for more info).
-        uint8_t *data = NULL;
-        int pixelLength = 0;
+    uint8_t *data = NULL;
+    int pixelLength = 0;
+    
+    if (iterator.has_alpha) {
+        data = WebPDecodeRGBA(iterator.fragment.bytes, iterator.fragment.size, NULL, NULL);
+        pixelLength = 4;
+    } else {
+        data = WebPDecodeRGB(iterator.fragment.bytes, iterator.fragment.size, NULL, NULL);
+        pixelLength = 3;
+    }
+    
+    if (data) {
+        CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, data, _width * _height * pixelLength, releaseData);
         
-        if (_hasAlpha) {
-            data = WebPDecodeRGBA(iter.fragment.bytes, iter.fragment.size, NULL, NULL);
-            pixelLength = 4;
+        CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+        CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
+        
+        if (iterator.has_alpha) {
+            bitmapInfo |= kCGImageAlphaLast;
         } else {
-            data = WebPDecodeRGB(iter.fragment.bytes, iter.fragment.size, NULL, NULL);
-            pixelLength = 3;
+            bitmapInfo |= kCGImageAlphaNone;
         }
         
-        if (data) {
-            CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, data, _width * _height * pixelLength, releaseData);
-            
-            CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
-            CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
-            
-            if (_hasAlpha) {
-                bitmapInfo |= kCGImageAlphaLast;
+        CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
+        imageRef = CGImageCreate(iterator.width,
+                                 iterator.height,
+                                 8,
+                                 8 * pixelLength,
+                                 pixelLength * iterator.width,
+                                 colorSpaceRef,
+                                 bitmapInfo,
+                                 provider,
+                                 NULL,
+                                 NO,
+                                 renderingIntent);
+        
+        CGColorSpaceRelease(colorSpaceRef);
+        CGDataProviderRelease(provider);
+    }
+    
+    return imageRef;
+}
+
+- (CGImageRef)imageAtIndex:(NSUInteger)index cacheProvider:(nullable id<PINCachedAnimatedFrameProvider>)cacheProvider
+{
+    PINLog(@"Drawing webp image at index: %lu", (unsigned long)index);
+    // This all *appears* to be threadsafe as I believe demux is immutable…
+    WebPIterator iterator, previousIterator;
+    
+    if (index > 0) {
+        if (WebPDemuxGetFrame(_demux, (int)index, &previousIterator) == NO) {
+            return nil;
+        }
+    }
+    if (WebPDemuxGetFrame(_demux, (int)index + 1, &iterator) == NO) {
+        return nil;
+    }
+    
+    BOOL isKeyFrame = [self isKeyFrame:&iterator previousIterator:&previousIterator];
+    
+    CGImageRef imageRef = [self createRawImageWithIterator:iterator];
+    CGImageRef canvas = NULL;
+    
+    if (imageRef) {
+        if (isKeyFrame) {
+            // If the current frame is a keyframe, we can just copy it into a blank
+            // canvas.
+            if (iterator.x_offset == 0 && iterator.y_offset == 0 && iterator.width == _width && iterator.height == _height) {
+                // Output will be the same size as the canvas, just return it directly.
+                canvas = CGImageRetain(imageRef);
             } else {
-                bitmapInfo |= kCGImageAlphaNone;
+                canvas = [self createCanvasWithPreviousFrame:nil image:imageRef atRect:CGRectMake(iterator.x_offset, iterator.y_offset, iterator.width, iterator.height)];
             }
-            
-            CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
-            imageRef = CGImageCreate(iter.width,
-                                     iter.height,
-                                     8,
-                                     8 * pixelLength,
-                                     pixelLength * iter.width,
-                                     colorSpaceRef,
-                                     bitmapInfo,
-                                     provider,
-                                     NULL,
-                                     NO,
-                                     renderingIntent);
-            
-            if (iter.x_offset != 0 || iter.y_offset != 0 || iter.width != _width || iter.height != _height) {
-                // Canvas size is different, we need to copy to a canvas :/
+        } else {
+            // If we have a cached image provider, try to get the last frame from them
+            CGImageRef previousFrame = [cacheProvider cachedFrameImageAtIndex:index - 1];
+            if (previousFrame) {
+                canvas = [self createCanvasWithPreviousFrame:previousFrame image:imageRef atRect:CGRectMake(iterator.x_offset, iterator.y_offset, iterator.width, iterator.height)];
+            } else {
+                // Sadly, we need to draw *all* the frames from the previous key frame previousIterator to the current one :(
+                CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
                 CGContextRef context = CGBitmapContextCreate(NULL,
                                                              _width,
                                                              _height,
@@ -170,24 +234,81 @@ static void releaseData(void *info, const void *data, size_t size)
                                                              colorSpaceRef,
                                                              _hasAlpha ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNone);
                 
-                CGContextDrawImage(context, CGRectMake(iter.x_offset, _height - iter.height - iter.y_offset, iter.width, iter.height), imageRef);
-                CGImageRelease(imageRef);
+                while (previousIterator.frame_num < iterator.frame_num) {
+                    CGImageRef previousFrame = [self createRawImageWithIterator:previousIterator];
+                    if (previousFrame) {
+                        CGContextDrawImage(context, CGRectMake(previousIterator.x_offset, _height - previousIterator.height - previousIterator.y_offset, previousIterator.width, iterator.height), previousFrame);
+                        CGImageRelease(previousFrame);
+                        WebPDemuxNextFrame(&previousIterator);
+                    }
+                }
                 
-                imageRef = CGBitmapContextCreateImage(context);
+                canvas = CGBitmapContextCreateImage(context);
                 CGContextRelease(context);
+                CGColorSpaceRelease(colorSpaceRef);
             }
-            
-            if (imageRef) {
-                CFAutorelease(imageRef);
-            }
-            
-            CGColorSpaceRelease(colorSpaceRef);
-            CGDataProviderRelease(provider);
         }
-        WebPDemuxReleaseIterator(&iter);
     }
     
-    return imageRef;
+    WebPDemuxReleaseIterator(&iterator);
+    if (index > 0) {
+        WebPDemuxReleaseIterator(&previousIterator);
+    }
+    
+    if (canvas) {
+        CFAutorelease(canvas);
+    }
+    if (imageRef) {
+        CGImageRelease(imageRef);
+    }
+    
+    return canvas;
+}
+
+// Checks to see if the iterator is a 'key frame' without taking previous frames into
+// account.
+- (BOOL)helperIsKeyFrame:(WebPIterator *)iterator
+{
+    if (iterator->frame_num == 1) {
+        //The first frame is always a key frame
+        return YES;
+    } else if ((iterator->has_alpha == NO || iterator->blend_method == WEBP_MUX_NO_BLEND) && iterator->width == _width && iterator->height == _height) {
+        //If the current frame has no alpha, or we're instructed not to blend, just make sure this fills the canvas.
+        return YES;
+    }
+    return NO;
+}
+
+// Checks if the iterator is at a 'key frame' and rewinds previousIterator back to the last
+// key frame if it's not. If this frame *is* a keyframe, the previousIterator's position is undefined.
+// This takes previous frames into account to determine if the current frame is key.
+- (BOOL)isKeyFrame:(WebPIterator *)iterator previousIterator:(WebPIterator *)previousIterator
+{
+    if ([self helperIsKeyFrame:iterator]) {
+        // Check if we're a key frame regardless of previous frame.
+        return YES;
+    }
+    
+    BOOL previousFrameMadeThisKeyFrame = previousIterator->dispose_method == WEBP_MUX_DISPOSE_BACKGROUND;
+    BOOL foundKeyframe = NO;
+    while (foundKeyframe == NO) {
+        if ([self helperIsKeyFrame:previousIterator] ||
+            (previousIterator->dispose_method == WEBP_MUX_DISPOSE_BACKGROUND && previousIterator->width == _width && previousIterator->height == _height)) {
+            foundKeyframe = YES;
+        } else {
+            // we need to rewind previous back to see if it was a keyframe
+            WebPDemuxPrevFrame(previousIterator);
+            if (previousIterator->dispose_method == WEBP_MUX_DISPOSE_BACKGROUND) {
+                // need to check previous frame
+                continue;
+            } else {
+                previousFrameMadeThisKeyFrame = NO;
+                continue;
+            }
+        }
+    }
+        
+    return previousFrameMadeThisKeyFrame;
 }
 
 @end

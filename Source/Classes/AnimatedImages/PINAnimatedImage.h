@@ -16,7 +16,7 @@
 
 #import "PINRemoteImageMacros.h"
 
-extern NSString *kPINAnimatedImageErrorDomain;
+extern NSString * _Nonnull kPINAnimatedImageErrorDomain;
 
 /**
  PINAnimatedImage decoding and processing errors.
@@ -61,7 +61,7 @@ extern const NSTimeInterval kPINAnimatedImageDisplayRefreshRate;
 /**
  Called when the cover image of an animatedImage is ready.
  */
-typedef void(^PINAnimatedImageInfoReady)(PINImage *coverImage);
+typedef void(^PINAnimatedImageInfoReady)(PINImage * _Nonnull coverImage);
 
 @protocol PINAnimatedImage;
 
@@ -92,6 +92,14 @@ typedef void(^PINAnimatedImageInfoReady)(PINImage *coverImage);
  @warning Access to this property before status == PINAnimatedImageStatusInfoProcessed is undefined.
  */
 @property (nonatomic, readonly) NSUInteger frameInterval;
+
+@end
+
+@protocol PINCachedAnimatedFrameProvider
+
+@required
+
+- (nullable CGImageRef)cachedFrameImageAtIndex:(NSUInteger)index;
 
 @end
 
@@ -131,13 +139,14 @@ typedef void(^PINAnimatedImageInfoReady)(PINImage *coverImage);
 /**
  @abstract Return any error that has occured. Playback will be paused if this returns non-nil.
  */
-@property (nonatomic, readonly) NSError *error;
+@property (nonatomic, readonly, nullable) NSError *error;
 
 /**
  @abstract Return the image at a given index.
  */
-- (CGImageRef)imageAtIndex:(NSUInteger)index;
+- (nullable CGImageRef)imageAtIndex:(NSUInteger)index cacheProvider:(nullable id<PINCachedAnimatedFrameProvider>)cacheProvider;
 /**
+ 
  @abstract Return the duration at a given index.
  */
 - (CFTimeInterval)durationAtIndex:(NSUInteger)index;

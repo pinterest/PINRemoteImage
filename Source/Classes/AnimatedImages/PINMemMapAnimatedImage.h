@@ -93,9 +93,10 @@
 /**
  The image at the frame index passed in.
  @param index The index of the frame to retrieve.
+ @param cacheProvider An optional cache provider. Unneccesary to pass into this class.
  @warning Access to this property before status == PINAnimatedImageStatusInfoProcessed is undefined.
  */
-- (CGImageRef)imageAtIndex:(NSUInteger)index;
+- (CGImageRef)imageAtIndex:(NSUInteger)index cacheProvider:(id<PINCachedAnimatedFrameProvider>)cacheProvider;
 /**
  The duration of the frame of the passed in index.
  @param index The index of the frame to retrieve the duration it should be shown for.

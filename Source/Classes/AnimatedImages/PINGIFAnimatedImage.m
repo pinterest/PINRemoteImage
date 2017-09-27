@@ -129,7 +129,7 @@
     return _durations[index];
 }
 
-- (CGImageRef)imageAtIndex:(NSUInteger)index
+- (CGImageRef)imageAtIndex:(NSUInteger)index cacheProvider:(nullable id<PINCachedAnimatedFrameProvider>)cacheProvider
 {
     // I believe this is threadsafe as CGImageSource *seems* immutable…
     CGImageRef imageRef =
