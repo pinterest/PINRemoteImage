@@ -317,8 +317,6 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
 // Returns the number of frames that should be cached
 - (NSUInteger)framesToCache
 {
-    // DO NOT COMMIT!
-    return 0;
     unsigned long long totalBytes = [NSProcessInfo processInfo].physicalMemory;
     NSUInteger framesToCache = 0;
     
