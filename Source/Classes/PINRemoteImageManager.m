@@ -753,9 +753,12 @@ static dispatch_once_t sharedDispatchToken;
                progressImage:(PINRemoteImageManagerImageCompletion)progressImage
                         UUID:(NSUUID *)UUID
 {
-    NSString *resumeKey = [self resumeCacheKeyForURL:url];
-    PINResume *resume = [self.cache objectFromDiskForKey:resumeKey];
-    [self.cache removeObjectForKey:resumeKey completion:nil];
+    PINResume *resume = nil;
+    if (options & PINRemoteImageManagerDownloadOptionsIgnoreCache == NO) {
+        NSString *resumeKey = [self resumeCacheKeyForURL:url];
+        resume = [self.cache objectFromDiskForKey:resumeKey];
+        [self.cache removeObjectForKey:resumeKey completion:nil];
+    }
     
     [self lock];
         PINRemoteImageDownloadTask *task = [self.tasks objectForKey:key];
