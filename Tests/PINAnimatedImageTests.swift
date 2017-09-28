@@ -51,7 +51,7 @@ class PINAnimatedImageTests: XCTestCase, PINRemoteImageManagerAlternateRepresent
             var totalDuration : CFTimeInterval = 0
             XCTAssert(frameCount > 1, "Frame count should be greater than 1")
             for frameIdx in 0 ..< frameCount {
-                XCTAssertNotNil(animatedImage.image(at: UInt(frameIdx)))
+                XCTAssertNotNil(animatedImage.image(at: UInt(frameIdx), cacheProvider: nil))
                 totalDuration += animatedImage.duration(at: UInt(frameIdx))
             }
             XCTAssert(animatedImage.totalDuration > 0, "Total duration should be greater than 0")
