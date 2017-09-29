@@ -131,7 +131,7 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
 #if PIN_TARGET_IOS
     return [UIImage imageWithCGImage:[self pin_decodedImageRefWithCGImageRef:imageRef] scale:1.0 orientation:orientation];
 #elif PIN_TARGET_MAC
-    return [[NSImage alloc] initWithCGImage:[self pin_decodedImageRefWithCGImageRef:imageRef] size:imageSize];
+    return [[NSImage alloc] initWithCGImage:[self pin_decodedImageRefWithCGImageRef:imageRef] size:NSZeroSize];
 #endif
 }
 
