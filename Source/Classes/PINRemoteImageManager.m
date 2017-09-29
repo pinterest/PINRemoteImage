@@ -754,7 +754,7 @@ static dispatch_once_t sharedDispatchToken;
                         UUID:(NSUUID *)UUID
 {
     PINResume *resume = nil;
-    if (options & PINRemoteImageManagerDownloadOptionsIgnoreCache == NO) {
+    if ((options & PINRemoteImageManagerDownloadOptionsIgnoreCache) == NO) {
         NSString *resumeKey = [self resumeCacheKeyForURL:url];
         resume = [self.cache objectFromDiskForKey:resumeKey];
         [self.cache removeObjectForKey:resumeKey completion:nil];
