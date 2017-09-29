@@ -15,6 +15,8 @@
 #import <CoreServices/CoreServices.h>
 #endif
 
+#import "PINImage+DecodedImage.h"
+
 @interface PINGIFAnimatedImage ()
 {
     NSData *_animatedImageData;
@@ -138,7 +140,9 @@
                                         (CFDictionaryRef)@{(__bridge NSString *)kCGImageSourceShouldCache:
                                                                (__bridge NSNumber *)kCFBooleanFalse});
     if (imageRef) {
-        CFAutorelease(imageRef);
+        CGImageRef decodedImageRef = [PINImage pin_decodedImageRefWithCGImageRef:imageRef];
+        CGImageRelease(imageRef);
+        imageRef = decodedImageRef;
     }
     
     return imageRef;
