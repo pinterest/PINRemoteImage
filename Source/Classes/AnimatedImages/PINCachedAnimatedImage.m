@@ -400,6 +400,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
 - (void)clearAnimatedImageCache
 {
     [_lock lockWithBlock:^{
+        _coverImage = nil;
         [_cachedOrCachingFrames enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
             [_frameCache removeObjectForKey:@(idx)];
         }];
