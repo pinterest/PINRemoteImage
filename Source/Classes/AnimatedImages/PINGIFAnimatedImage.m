@@ -70,11 +70,11 @@
     NSDictionary *frameProperties = (__bridge_transfer NSDictionary *)CGImageSourceCopyPropertiesAtIndex(source, index, nil);
     // use unclamped delay time before delay time before default
     NSNumber *unclamedDelayTime = frameProperties[(__bridge NSString *)kCGImagePropertyGIFDictionary][(__bridge NSString *)kCGImagePropertyGIFUnclampedDelayTime];
-    if (unclamedDelayTime) {
+    if (unclamedDelayTime != nil) {
         frameDuration = [unclamedDelayTime floatValue];
     } else {
         NSNumber *delayTime = frameProperties[(__bridge NSString *)kCGImagePropertyGIFDictionary][(__bridge NSString *)kCGImagePropertyGIFDelayTime];
-        if (delayTime) {
+        if (delayTime != nil) {
             frameDuration = [delayTime floatValue];
         }
     }

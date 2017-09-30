@@ -116,7 +116,7 @@ static void releaseData(void *info, const void *data, size_t size)
     return _durations[index];
 }
 
-- (CGImageRef)createCanvasWithPreviousFrame:(CGImageRef)previousFrame image:(CGImageRef)image atRect:(CGRect)rect
+- (CGImageRef)canvasWithPreviousFrame:(CGImageRef)previousFrame image:(CGImageRef)image atRect:(CGRect)rect
 {
     CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate(NULL,
@@ -136,13 +136,16 @@ static void releaseData(void *info, const void *data, size_t size)
     }
     
     CGImageRef canvas = CGBitmapContextCreateImage(context);
+    if (canvas) {
+        CFAutorelease(canvas);
+    }
     CGContextRelease(context);
     CGColorSpaceRelease(colorSpaceRef);
     
     return canvas;
 }
 
-- (CGImageRef)createRawImageWithIterator:(WebPIterator)iterator
+- (CGImageRef)rawImageWithIterator:(WebPIterator)iterator
 {
     CGImageRef imageRef = NULL;
     uint8_t *data = NULL;
@@ -185,6 +188,10 @@ static void releaseData(void *info, const void *data, size_t size)
         CGDataProviderRelease(provider);
     }
     
+    if (imageRef) {
+        CFAutorelease(imageRef);
+    }
+    
     return imageRef;
 }
 
@@ -203,9 +210,9 @@ static void releaseData(void *info, const void *data, size_t size)
         return nil;
     }
     
-    BOOL isKeyFrame = [self isKeyFrame:&iterator previousIterator:&previousIterator];
+    BOOL isKeyFrame = [self isKeyFrame:&iterator previousIterator:(index > 0) ? &previousIterator : nil];
     
-    CGImageRef imageRef = [self createRawImageWithIterator:iterator];
+    CGImageRef imageRef = [self rawImageWithIterator:iterator];
     CGImageRef canvas = NULL;
     
     if (imageRef) {
@@ -214,15 +221,15 @@ static void releaseData(void *info, const void *data, size_t size)
             // canvas.
             if (iterator.x_offset == 0 && iterator.y_offset == 0 && iterator.width == _width && iterator.height == _height) {
                 // Output will be the same size as the canvas, just return it directly.
-                canvas = CGImageRetain(imageRef);
+                canvas = imageRef;
             } else {
-                canvas = [self createCanvasWithPreviousFrame:nil image:imageRef atRect:CGRectMake(iterator.x_offset, iterator.y_offset, iterator.width, iterator.height)];
+                canvas = [self canvasWithPreviousFrame:nil image:imageRef atRect:CGRectMake(iterator.x_offset, iterator.y_offset, iterator.width, iterator.height)];
             }
         } else {
             // If we have a cached image provider, try to get the last frame from them
             CGImageRef previousFrame = [cacheProvider cachedFrameImageAtIndex:index - 1];
             if (previousFrame) {
-                canvas = [self createCanvasWithPreviousFrame:previousFrame image:imageRef atRect:CGRectMake(iterator.x_offset, iterator.y_offset, iterator.width, iterator.height)];
+                canvas = [self canvasWithPreviousFrame:previousFrame image:imageRef atRect:CGRectMake(iterator.x_offset, iterator.y_offset, iterator.width, iterator.height)];
             } else {
                 // Sadly, we need to draw *all* the frames from the previous key frame previousIterator to the current one :(
                 CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
@@ -235,15 +242,17 @@ static void releaseData(void *info, const void *data, size_t size)
                                                              _hasAlpha ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNone);
                 
                 while (previousIterator.frame_num < iterator.frame_num) {
-                    CGImageRef previousFrame = [self createRawImageWithIterator:previousIterator];
+                    CGImageRef previousFrame = [self rawImageWithIterator:previousIterator];
                     if (previousFrame) {
                         CGContextDrawImage(context, CGRectMake(previousIterator.x_offset, _height - previousIterator.height - previousIterator.y_offset, previousIterator.width, iterator.height), previousFrame);
-                        CGImageRelease(previousFrame);
                         WebPDemuxNextFrame(&previousIterator);
                     }
                 }
                 
                 canvas = CGBitmapContextCreateImage(context);
+                if (canvas) {
+                    CFAutorelease(canvas);
+                }
                 CGContextRelease(context);
                 CGColorSpaceRelease(colorSpaceRef);
             }
@@ -253,13 +262,6 @@ static void releaseData(void *info, const void *data, size_t size)
     WebPDemuxReleaseIterator(&iterator);
     if (index > 0) {
         WebPDemuxReleaseIterator(&previousIterator);
-    }
-    
-    if (canvas) {
-        CFAutorelease(canvas);
-    }
-    if (imageRef) {
-        CGImageRelease(imageRef);
     }
     
     return canvas;
