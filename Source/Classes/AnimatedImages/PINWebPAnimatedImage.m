@@ -230,7 +230,7 @@ static void releaseData(void *info, const void *data, size_t size)
             CGImageRef previousFrame = [cacheProvider cachedFrameImageAtIndex:index - 1];
             if (previousFrame) {
                 canvas = [self canvasWithPreviousFrame:previousFrame image:imageRef atRect:CGRectMake(iterator.x_offset, iterator.y_offset, iterator.width, iterator.height)];
-            } else {
+            } else if (index > 0) {
                 // Sadly, we need to draw *all* the frames from the previous key frame previousIterator to the current one :(
                 CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
                 CGContextRef context = CGBitmapContextCreate(NULL,
@@ -289,6 +289,10 @@ static void releaseData(void *info, const void *data, size_t size)
     if ([self helperIsKeyFrame:iterator]) {
         // Check if we're a key frame regardless of previous frame.
         return YES;
+    }
+    
+    if (previousIterator == nil) {
+        return NO;
     }
     
     BOOL previousFrameMadeThisKeyFrame = previousIterator->dispose_method == WEBP_MUX_DISPOSE_BACKGROUND;
