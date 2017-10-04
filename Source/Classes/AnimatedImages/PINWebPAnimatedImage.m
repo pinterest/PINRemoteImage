@@ -76,7 +76,8 @@ static void releaseData(void *info, const void *data, size_t size)
 {
     if (_demux) {
         WebPDemuxDelete(_demux);
-    } if (_durations) {
+    }
+    if (_durations) {
         free(_durations);
     }
 }

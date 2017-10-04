@@ -24,7 +24,7 @@
  it will only decode a GIF one time, regardless of the number of the number of PINMemMapAnimatedImages created with
  the same NSData.
  
- PINGAnimatedImage's are also decoded chunks at a time, writing each chunk to a separate file. This allows callback
+ PINMemMapAnimatedImage's are also decoded chunks at a time, writing each chunk to a separate file. This allows callback
  and playback to start before the GIF is completely decoded. If a frame is requested beyond what has been processed,
  nil will be returned. Because a fileReady is called on each chunk completion, you can pause playback if you hit a nil
  frame until you receive another fileReady call.
