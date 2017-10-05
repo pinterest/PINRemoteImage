@@ -1,3 +1,31 @@
+- 1/26/2017: version 0.6.0
+  * lossless performance and compression improvements
+  * miscellaneous performance improvements (SSE2, NEON, MSA)
+  * webpmux gained a -duration option allowing for frame timing modification
+  * new img2webp utility allowing a sequence of images to be converted to
+    animated webp
+  * API changes:
+    - libwebp:
+      WebPPictureSharpARGBToYUVA
+      WebPPlaneDistortion
+    - libwebpmux / gif2webp:
+      WebPAnimEncoderOptions: kmax <= 0 now disables keyframes, kmax == 1
+                              forces all keyframes. See mux.h and the gif2webp
+                              manpage for details.
+
+- 12/13/2016: version 0.5.2
+  This is a binary compatible release.
+  This release covers CVE-2016-8888 and CVE-2016-9085.
+  * further security related hardening in the tools; fixes to
+    gif2webp/AnimEncoder (issues #310, #314, #316, #322), cwebp/libwebp (issue
+    #312)
+  * full libwebp (encoder & decoder) iOS framework; libwebpdecoder
+    WebP.framework renamed to WebPDecoder.framework (issue #307)
+  * CMake support for Android Studio (2.2)
+  * miscellaneous build related fixes (issue #306, #313)
+  * miscellaneous documentation improvements (issue #225)
+  * minor lossy encoder fixes and improvements
+
 - 6/14/2016: version 0.5.1
   This is a binary compatible release.
   * miscellaneous bug fixes (issues #280, #289)

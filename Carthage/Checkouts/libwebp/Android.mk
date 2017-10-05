@@ -1,6 +1,7 @@
 LOCAL_PATH := $(call my-dir)
 
 WEBP_CFLAGS := -Wall -DANDROID -DHAVE_MALLOC_H -DHAVE_PTHREAD -DWEBP_USE_THREAD
+WEBP_CFLAGS += -fvisibility=hidden
 
 ifeq ($(APP_OPTIM),release)
   WEBP_CFLAGS += -finline-functions -ffast-math \
@@ -21,16 +22,16 @@ else
 endif
 
 dec_srcs := \
-    src/dec/alpha.c \
-    src/dec/buffer.c \
-    src/dec/frame.c \
-    src/dec/idec.c \
-    src/dec/io.c \
-    src/dec/quant.c \
-    src/dec/tree.c \
-    src/dec/vp8.c \
-    src/dec/vp8l.c \
-    src/dec/webp.c \
+    src/dec/alpha_dec.c \
+    src/dec/buffer_dec.c \
+    src/dec/frame_dec.c \
+    src/dec/idec_dec.c \
+    src/dec/io_dec.c \
+    src/dec/quant_dec.c \
+    src/dec/tree_dec.c \
+    src/dec/vp8_dec.c \
+    src/dec/vp8l_dec.c \
+    src/dec/webp_dec.c \
 
 demux_srcs := \
     src/demux/anim_decode.c \
@@ -39,6 +40,7 @@ demux_srcs := \
 dsp_dec_srcs := \
     src/dsp/alpha_processing.c \
     src/dsp/alpha_processing_mips_dsp_r2.c \
+    src/dsp/alpha_processing_neon.$(NEON) \
     src/dsp/alpha_processing_sse2.c \
     src/dsp/alpha_processing_sse41.c \
     src/dsp/argb.c \
@@ -55,18 +57,23 @@ dsp_dec_srcs := \
     src/dsp/dec_sse41.c \
     src/dsp/filters.c \
     src/dsp/filters_mips_dsp_r2.c \
+    src/dsp/filters_msa.c \
+    src/dsp/filters_neon.$(NEON) \
     src/dsp/filters_sse2.c \
     src/dsp/lossless.c \
     src/dsp/lossless_mips_dsp_r2.c \
+    src/dsp/lossless_msa.c \
     src/dsp/lossless_neon.$(NEON) \
     src/dsp/lossless_sse2.c \
     src/dsp/rescaler.c \
     src/dsp/rescaler_mips32.c \
     src/dsp/rescaler_mips_dsp_r2.c \
+    src/dsp/rescaler_msa.c \
     src/dsp/rescaler_neon.$(NEON) \
     src/dsp/rescaler_sse2.c \
     src/dsp/upsampling.c \
     src/dsp/upsampling_mips_dsp_r2.c \
+    src/dsp/upsampling_msa.c \
     src/dsp/upsampling_neon.$(NEON) \
     src/dsp/upsampling_sse2.c \
     src/dsp/yuv.c \
@@ -83,39 +90,42 @@ dsp_enc_srcs := \
     src/dsp/enc_avx2.c \
     src/dsp/enc_mips32.c \
     src/dsp/enc_mips_dsp_r2.c \
+    src/dsp/enc_msa.c \
     src/dsp/enc_neon.$(NEON) \
     src/dsp/enc_sse2.c \
     src/dsp/enc_sse41.c \
     src/dsp/lossless_enc.c \
     src/dsp/lossless_enc_mips32.c \
     src/dsp/lossless_enc_mips_dsp_r2.c \
+    src/dsp/lossless_enc_msa.c \
     src/dsp/lossless_enc_neon.$(NEON) \
     src/dsp/lossless_enc_sse2.c \
     src/dsp/lossless_enc_sse41.c \
 
 enc_srcs := \
-    src/enc/alpha.c \
-    src/enc/analysis.c \
-    src/enc/backward_references.c \
-    src/enc/config.c \
-    src/enc/cost.c \
-    src/enc/delta_palettization.c \
-    src/enc/filter.c \
-    src/enc/frame.c \
-    src/enc/histogram.c \
-    src/enc/iterator.c \
-    src/enc/near_lossless.c \
-    src/enc/picture.c \
-    src/enc/picture_csp.c \
-    src/enc/picture_psnr.c \
-    src/enc/picture_rescale.c \
-    src/enc/picture_tools.c \
-    src/enc/quant.c \
-    src/enc/syntax.c \
-    src/enc/token.c \
-    src/enc/tree.c \
-    src/enc/vp8l.c \
-    src/enc/webpenc.c \
+    src/enc/alpha_enc.c \
+    src/enc/analysis_enc.c \
+    src/enc/backward_references_enc.c \
+    src/enc/config_enc.c \
+    src/enc/cost_enc.c \
+    src/enc/delta_palettization_enc.c \
+    src/enc/filter_enc.c \
+    src/enc/frame_enc.c \
+    src/enc/histogram_enc.c \
+    src/enc/iterator_enc.c \
+    src/enc/near_lossless_enc.c \
+    src/enc/picture_enc.c \
+    src/enc/picture_csp_enc.c \
+    src/enc/picture_psnr_enc.c \
+    src/enc/picture_rescale_enc.c \
+    src/enc/picture_tools_enc.c \
+    src/enc/predictor_enc.c \
+    src/enc/quant_enc.c \
+    src/enc/syntax_enc.c \
+    src/enc/token_enc.c \
+    src/enc/tree_enc.c \
+    src/enc/vp8l_enc.c \
+    src/enc/webp_enc.c \
 
 mux_srcs := \
     src/mux/anim_encode.c \
@@ -124,20 +134,20 @@ mux_srcs := \
     src/mux/muxread.c \
 
 utils_dec_srcs := \
-    src/utils/bit_reader.c \
-    src/utils/color_cache.c \
-    src/utils/filters.c \
-    src/utils/huffman.c \
-    src/utils/quant_levels_dec.c \
-    src/utils/random.c \
-    src/utils/rescaler.c \
-    src/utils/thread.c \
+    src/utils/bit_reader_utils.c \
+    src/utils/color_cache_utils.c \
+    src/utils/filters_utils.c \
+    src/utils/huffman_utils.c \
+    src/utils/quant_levels_dec_utils.c \
+    src/utils/random_utils.c \
+    src/utils/rescaler_utils.c \
+    src/utils/thread_utils.c \
     src/utils/utils.c \
 
 utils_enc_srcs := \
-    src/utils/bit_writer.c \
-    src/utils/huffman_encode.c \
-    src/utils/quant_levels.c \
+    src/utils/bit_writer_utils.c \
+    src/utils/huffman_encode_utils.c \
+    src/utils/quant_levels_utils.c \
 
 ################################################################################
 # libwebpdecoder
@@ -247,7 +257,9 @@ endif
 
 ################################################################################
 
-include $(LOCAL_PATH)/examples/Android.mk
+WEBP_SRC_PATH := $(LOCAL_PATH)
+include $(WEBP_SRC_PATH)/imageio/Android.mk
+include $(WEBP_SRC_PATH)/examples/Android.mk
 
 ifeq ($(USE_CPUFEATURES),yes)
   $(call import-module,android/cpufeatures)

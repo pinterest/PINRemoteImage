@@ -12,8 +12,8 @@
 #import <PINRemoteImage/PINURLSessionManager.h>
 #import <PINRemoteImage/PINImageView+PINRemoteImage.h>
 #import <PINRemoteImage/PINRemoteImageCaching.h>
-#import <PINCache/PINCache.h>
 #import <PINRemoteImage/PINRequestRetryStrategy.h>
+#import <PINCache/PINCache.h>
 
 #import "PINResume.h"
 #import "PINRemoteImageDownloadTask.h"

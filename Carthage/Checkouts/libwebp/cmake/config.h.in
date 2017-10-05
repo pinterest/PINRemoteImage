@@ -103,9 +103,6 @@
 /* Enable experimental code */
 #cmakedefine WEBP_EXPERIMENTAL_FEATURES 1
 
-/* Define to 1 to force aligned memory operations */
-#cmakedefine WEBP_FORCE_ALIGNED 1
-
 /* Set to 1 if AVX2 is supported */
 #cmakedefine WEBP_HAVE_AVX2 1
 

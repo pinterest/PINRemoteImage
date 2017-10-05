@@ -26,7 +26,8 @@
 #include <gif_lib.h>
 #include "webp/encode.h"
 #include "webp/mux.h"
-#include "./example_util.h"
+#include "../examples/example_util.h"
+#include "../imageio/imageio_util.h"
 #include "./gifdec.h"
 
 //------------------------------------------------------------------------------
@@ -359,6 +360,8 @@ int main(int argc, const char *argv[]) {
         if (DGifGetExtension(gif, &extension, &data) == GIF_ERROR) {
           goto End;
         }
+        if (data == NULL) continue;
+
         switch (extension) {
           case COMMENT_EXT_FUNC_CODE: {
             break;  // Do nothing for now.
@@ -499,7 +502,7 @@ int main(int argc, const char *argv[]) {
   }
 
   if (out_file != NULL) {
-    if (!ExUtilWriteFile(out_file, webp_data.bytes, webp_data.size)) {
+    if (!ImgIoUtilWriteFile(out_file, webp_data.bytes, webp_data.size)) {
       fprintf(stderr, "Error writing output file: %s\n", out_file);
       goto End;
     }

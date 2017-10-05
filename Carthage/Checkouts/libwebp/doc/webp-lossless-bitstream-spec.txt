@@ -429,6 +429,11 @@ int8 ColorTransformDelta(int8 t, int8 c) {
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+A conversion from the 8-bit unsigned representation (uint8) to the 8-bit
+signed one (int8) is required before calling ColorTransformDelta().
+It should be performed using 8-bit two's complement (that is: uint8 range
+\[128-255\] is mapped to the \[-128, -1\] range of its converted int8 value).
+
 The multiplication is to be done using more precision (with at least
 16-bit dynamics). The sign extension property of the shift operation
 does not matter here: only the lowest 8 bits are used from the result,

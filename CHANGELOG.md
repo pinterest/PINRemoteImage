@@ -1,5 +1,6 @@
 ## master
 * Add your own contributions to the next release on the line below this with your name.
+- [new] Support for webp and improved support for GIFs. [garrettmoon](https://github.com/garrettmoon)
 - [new] Added back tvOS support through a new target [#408](https://github.com/pinterest/PINRemoteImage/pull/408) [jverdi](https://github.com/jverdi)
 - [refactor] Refactor out KVO on NSURLSessionTask to avoid Apple crashes. [#410](htts://github.com/garrettmoon)
 
