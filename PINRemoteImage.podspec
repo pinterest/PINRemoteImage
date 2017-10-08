@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "PINRemoteImage"
-  s.version          = "3.0.0-beta.12"
+  s.version          = "3.0.0-beta.13"
   s.summary          = "A thread safe, performant, feature rich image fetcher"
   s.homepage         = "https://github.com/pinterest/PINRemoteImage"
   s.license          = 'Apache 2.0'
@@ -75,7 +75,7 @@ Pod::Spec.new do |s|
   
   s.subspec "PINCache" do |pc|
     pc.dependency 'PINRemoteImage/Core'    
-  	pc.dependency 'PINCache', '=3.0.1-beta.5'
+  	pc.dependency 'PINCache', '=3.0.1-beta.6'
   	pc.source_files = 'Source/Classes/PINCache/*.{h,m}'
   end
   

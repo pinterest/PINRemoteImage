@@ -21,7 +21,7 @@ typedef enum : NSUInteger {
                                                   lowQualityQPSThreshold:(float)lowQualityQPSThreshold
                                                  highQualityQPSThreshold:(float)highQualityQPSThreshold;
 
-- (void)processMetrics:(NSURLSessionTaskMetrics *)metrics forTask:(NSURLSessionTask *)task;
+- (void)processMetrics:(NSURLSessionTaskMetrics *)metrics forTask:(NSURLSessionTask *)task NS_AVAILABLE(10_12, 10_0);
 
 /*
  Returns a weighted average of the bytes per second of a transfer with the time to first byte subtracted.

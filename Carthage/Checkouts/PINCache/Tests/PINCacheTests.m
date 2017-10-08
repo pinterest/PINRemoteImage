@@ -18,6 +18,8 @@ const NSTimeInterval PINCacheTestBlockTimeout = 20.0;
 
 @interface PINDiskCache()
 
+@property (assign, nonatomic) BOOL diskStateKnown;
+
 + (dispatch_queue_t)sharedTrashQueue;
 - (NSString *)encodedString:(NSString *)string;
 
@@ -503,7 +505,7 @@ const NSTimeInterval PINCacheTestBlockTimeout = 20.0;
     __block NSUInteger enumCount = 0;
 
     self.cache.memoryCache.didReceiveMemoryWarningBlock = ^(PINMemoryCache *cache) {
-        [cache enumerateObjectsWithBlockAsync:^(PINMemoryCache *cache, NSString *key, id object) {
+        [cache enumerateObjectsWithBlockAsync:^(PINMemoryCache *cache, NSString *key, id object, BOOL *stop) {
             @synchronized (self) {
                 enumCount++;
             }
@@ -543,7 +545,7 @@ const NSTimeInterval PINCacheTestBlockTimeout = 20.0;
 
     __block NSUInteger enumCount = 0;
 
-    [self.cache.diskCache enumerateObjectsWithBlockAsync:^(NSString *key, NSURL *fileURL) {
+    [self.cache.diskCache enumerateObjectsWithBlockAsync:^(NSString *key, NSURL *fileURL, BOOL *stop) {
         @synchronized (self) {
             enumCount++;
         }
@@ -589,54 +591,149 @@ const NSTimeInterval PINCacheTestBlockTimeout = 20.0;
 - (void)testAgeLimit
 {
     [self.cache removeAllObjects];
-    NSString *key = @"key";
-    self.cache[key] = [self image];
+    NSString *key1 = @"key1";
+    NSString *key2 = @"key2";
+    self.cache[key1] = [self image];
+    self.cache[key2] = [self image];
     [self.cache.memoryCache setAgeLimit:60];
     [self.cache.diskCache setAgeLimit:60];
     
     dispatch_group_t group = dispatch_group_create();
     
-    __block id memObj = nil;
-    __block id diskObj = nil;
+    __block id memObj1 = nil;
+    __block id diskObj1 = nil;
+    __block id memObj2 = nil;
+    __block id diskObj2 = nil;
     
     dispatch_group_enter(group);
-    [self.cache.memoryCache objectForKeyAsync:key completion:^(PINMemoryCache *cache, NSString *key, id object) {
-        memObj = object;
+    [self.cache.memoryCache objectForKeyAsync:key1 completion:^(PINMemoryCache *cache, NSString *key, id object) {
+        memObj1 = object;
         dispatch_group_leave(group);
     }];
     
     dispatch_group_enter(group);
-    [self.cache.diskCache objectForKeyAsync:key completion:^(PINDiskCache *cache, NSString *key, id<NSCoding> object) {
-        diskObj = object;
+    [self.cache.memoryCache objectForKeyAsync:key2 completion:^(PINMemoryCache *cache, NSString *key, id object) {
+        memObj2 = object;
+        dispatch_group_leave(group);
+    }];
+    
+    dispatch_group_enter(group);
+    [self.cache.diskCache objectForKeyAsync:key1 completion:^(PINDiskCache *cache, NSString *key, id<NSCoding> object) {
+        diskObj1 = object;
+        dispatch_group_leave(group);
+    }];
+    
+    dispatch_group_enter(group);
+    [self.cache.diskCache objectForKeyAsync:key2 completion:^(PINDiskCache *cache, NSString *key, id<NSCoding> object) {
+        diskObj2 = object;
         dispatch_group_leave(group);
     }];
     
     dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
     
-    XCTAssert(memObj != nil, @"should still be in memory cache");
-    XCTAssert(diskObj != nil, @"should still be in disk cache");
-  
-    [self.cache.memoryCache setAgeLimit:1];
-    [self.cache.diskCache setAgeLimit:1];
+    XCTAssert(memObj1 != nil, @"should still be in memory cache");
+    XCTAssert(diskObj1 != nil, @"should still be in disk cache");
+    XCTAssert(memObj2 != nil, @"should still be in memory cache");
+    XCTAssert(diskObj2 != nil, @"should still be in disk cache");
+    
+    //Set them again, but separate it out.
+    self.cache[key1] = [self image];
+    sleep(2);
+    self.cache[key2] = [self image];
   
     sleep(2);
     
+    [self.cache.memoryCache setAgeLimit:3.5];
+    [self.cache.diskCache setAgeLimit:3.5];
+    
+    sleep(1);
+    
     dispatch_group_enter(group);
-    [self.cache.memoryCache objectForKeyAsync:key completion:^(PINMemoryCache *cache, NSString *key, id object) {
-        memObj = object;
+    [self.cache.memoryCache objectForKeyAsync:key1 completion:^(PINMemoryCache *cache, NSString *key, id object) {
+        memObj1 = object;
         dispatch_group_leave(group);
     }];
     
     dispatch_group_enter(group);
-    [self.cache.diskCache objectForKeyAsync:key completion:^(PINDiskCache *cache, NSString *key, id<NSCoding> object) {
-        diskObj = object;
+    [self.cache.memoryCache objectForKeyAsync:key2 completion:^(PINMemoryCache *cache, NSString *key, id object) {
+        memObj2 = object;
+        dispatch_group_leave(group);
+    }];
+    
+    dispatch_group_enter(group);
+    [self.cache.diskCache objectForKeyAsync:key1 completion:^(PINDiskCache *cache, NSString *key, id<NSCoding> object) {
+        diskObj1 = object;
+        dispatch_group_leave(group);
+    }];
+    
+    dispatch_group_enter(group);
+    [self.cache.diskCache objectForKeyAsync:key2 completion:^(PINDiskCache *cache, NSString *key, id<NSCoding> object) {
+        diskObj2 = object;
         dispatch_group_leave(group);
     }];
     
     dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
     
-    XCTAssert(memObj == nil, @"should not be in memory cache");
-    XCTAssert(diskObj == nil, @"should not be in disk cache");
+    XCTAssert(memObj1 == nil, @"should not be in memory cache");
+    XCTAssert(diskObj1 == nil, @"should not be in disk cache");
+    XCTAssert(memObj2 != nil, @"should be in memory cache");
+    XCTAssert(diskObj2 != nil, @"should be in disk cache");
+}
+
+- (void)testByteLimit
+{
+    [self.cache removeAllObjects];
+    NSString *key = @"key";
+    self.cache[key] = [self image];
+    
+    // Below is the size it's actually on disk.
+    [self.cache.diskCache setByteLimit:983040];
+    
+    // ensure the object is returned
+    XCTAssert([self.cache.diskCache objectForKey:key] != nil, @"object should be stored");
+    
+    [self.cache.diskCache setByteLimit:1];
+    
+    // wait for disk cache to be trimmed
+    sleep(2);
+    
+    XCTAssert([self.cache.diskCache objectForKey:key] == nil, @"object should be cleared");
+    
+    // check to see if it's actually deleted
+    [self.cache.diskCache synchronouslyLockFileAccessWhileExecutingBlock:^(id<PINCaching>  _Nonnull cache) {
+        NSError *error = nil;
+        NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:self.cache.diskCache.cacheURL
+                                                          includingPropertiesForKeys:@[]
+                                                                             options:0
+                                                                               error:&error];
+        XCTAssertNil(error);
+        XCTAssert(contents.count == 0);
+    }];
+}
+
+- (void)testDiskReadingAfterCacheInit
+{
+    NSString *cacheName = @"testDiskReadingAfterCacheInit";
+    PINDiskCache *diskCache = [[PINDiskCache alloc] initWithName:cacheName];
+    [diskCache removeAllObjects];
+    
+    // store a bunch of objects
+    for (NSUInteger idx = 0; idx < 1000; idx++) {
+        NSData *tmpData = [[@(idx) stringValue] dataUsingEncoding:NSUTF8StringEncoding];
+        [diskCache setObject:tmpData forKey:[@(idx) stringValue]];
+    }
+    
+    // Create a new instance, it'll have to look on disk to startup.
+    diskCache = nil;
+    diskCache = [[PINDiskCache alloc] initWithName:cacheName];
+    
+    // Check to see if we can get an object before the disk state is known.
+    XCTAssertNotNil([diskCache objectForKey:[@(999) stringValue]]);
+    XCTAssertFalse(diskCache.diskStateKnown);
+    
+    sleep(5);
+    
+    XCTAssertTrue(diskCache.diskStateKnown);
 }
 
 #if TARGET_OS_IPHONE && !TARGET_OS_SIMULATOR
@@ -759,14 +856,14 @@ const NSTimeInterval PINCacheTestBlockTimeout = 20.0;
     // With the TTL cache enabled, we expect enumerating over the caches to yield 0 objects
     NSUInteger expectedObjCount = 0;
     __block NSUInteger objCount = 0;
-    [self.cache.diskCache enumerateObjectsWithBlock:^(NSString * _Nonnull key, NSURL * _Nullable fileURL) {
+    [self.cache.diskCache enumerateObjectsWithBlock:^(NSString * _Nonnull key, NSURL * _Nullable fileURL, BOOL *stop) {
       objCount++;
     }];
 
     XCTAssertEqual(objCount, expectedObjCount, @"Expected %lu objects in the cache", (unsigned long)expectedObjCount);
 
     objCount = 0;
-    [self.cache.memoryCache enumerateObjectsWithBlock:^(PINMemoryCache *cache, NSString *key, id _Nullable object) {
+    [self.cache.memoryCache enumerateObjectsWithBlock:^(PINMemoryCache *cache, NSString *key, id _Nullable object, BOOL *stop) {
       objCount++;
     }];
 
@@ -785,14 +882,14 @@ const NSTimeInterval PINCacheTestBlockTimeout = 20.0;
     // With the TTL cache disabled, we expect enumerating over the caches to yield 1 object each, since the 2nd cache clearing hasn't happened yet
     expectedObjCount = 1;
     objCount = 0;
-    [self.cache.diskCache enumerateObjectsWithBlock:^(NSString * _Nonnull key, NSURL * _Nullable fileURL) {
+    [self.cache.diskCache enumerateObjectsWithBlock:^(NSString * _Nonnull key, NSURL * _Nullable fileURL, BOOL *stop) {
       objCount++;
     }];
 
     XCTAssertEqual(objCount, expectedObjCount, @"Expected %lu objects in the cache", (unsigned long)expectedObjCount);
 
     objCount = 0;
-    [self.cache.memoryCache enumerateObjectsWithBlock:^(PINMemoryCache * _Nonnull cache, NSString * _Nonnull key, id  _Nullable object) {
+    [self.cache.memoryCache enumerateObjectsWithBlock:^(PINMemoryCache * _Nonnull cache, NSString * _Nonnull key, id  _Nullable object, BOOL *stop) {
       objCount++;
     }];
 
@@ -877,7 +974,7 @@ const NSTimeInterval PINCacheTestBlockTimeout = 20.0;
     
     testCache = [[PINDiskCache alloc] initWithName:cacheName];
     //This should not return until *after* disk cache directory has been created
-    [testCache objectForKey:@"some bogus key"];
+    [testCache setObject:@"some bogus object" forKey:@"some bogus key"];
     XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:[testCacheURL path]]);
 }
 

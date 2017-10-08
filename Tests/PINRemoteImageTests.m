@@ -955,9 +955,10 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 - (void)testAuthentication
 {
 	XCTestExpectation *expectation = [self expectationWithDescription:@"Authentification challenge was called"];
-	
+    __block BOOL authHit = NO;
 	[self.imageManager setAuthenticationChallenge:^(NSURLSessionTask *task, NSURLAuthenticationChallenge *challenge, PINRemoteImageManagerAuthenticationChallengeCompletionHandler aHandler) {
 		aHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
+        authHit = YES;
 		[expectation fulfill];
 	}];
     
@@ -967,7 +968,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 	[self.imageManager downloadImageWithURL:[NSURL URLWithString:@"https://i.pinimg.com/600x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"]
 									options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult * _Nonnull result) {
-                                     XCTAssert(NO, @"should not complete without hitting auth challenge.");
+                                     XCTAssert(authHit, @"should not complete without hitting auth challenge.");
                                  }];
 	
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];

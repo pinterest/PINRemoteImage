@@ -90,13 +90,9 @@ static NSString * const PINCacheSharedName = @"PINCacheShared";
     if (!key || !block) {
         return;
     }
-    
-    __weak PINCache *weakSelf = self;
   
-    [self.operationQueue addOperation:^{
-        PINCache *strongSelf = weakSelf;
-        
-        BOOL containsObject = [strongSelf containsObjectForKey:key];
+    [self.operationQueue scheduleOperation:^{
+        BOOL containsObject = [self containsObjectForKey:key];
         block(containsObject);
     }];
 }
@@ -109,37 +105,21 @@ static NSString * const PINCacheSharedName = @"PINCacheShared";
     if (!key || !block)
         return;
     
-    __weak PINCache *weakSelf = self;
-    
-    [self.operationQueue addOperation:^{
-        PINCache *strongSelf = weakSelf;
-        if (!strongSelf)
-            return;
-        [strongSelf->_memoryCache objectForKeyAsync:key completion:^(PINMemoryCache *memoryCache, NSString *memoryCacheKey, id memoryCacheObject) {
-            PINCache *strongSelf = weakSelf;
-            if (!strongSelf)
-                return;
-            
+    [self.operationQueue scheduleOperation:^{
+        [self->_memoryCache objectForKeyAsync:key completion:^(PINMemoryCache *memoryCache, NSString *memoryCacheKey, id memoryCacheObject) {
             if (memoryCacheObject) {
                 // Update file modification date. TODO: make this a separate method?
-                [strongSelf->_diskCache fileURLForKeyAsync:memoryCacheKey completion:^(NSString * _Nonnull key, NSURL * _Nullable fileURL) {}];
-                [strongSelf->_operationQueue addOperation:^{
-                    PINCache *strongSelf = weakSelf;
-                    if (strongSelf)
-                        block(strongSelf, memoryCacheKey, memoryCacheObject);
+                [self->_diskCache fileURLForKeyAsync:memoryCacheKey completion:^(NSString * _Nonnull key, NSURL * _Nullable fileURL) {}];
+                [self->_operationQueue scheduleOperation:^{
+                    block(self, memoryCacheKey, memoryCacheObject);
                 }];
             } else {
-                [strongSelf->_diskCache objectForKeyAsync:memoryCacheKey completion:^(PINDiskCache *diskCache, NSString *diskCacheKey, id <NSCoding> diskCacheObject) {
-                    PINCache *strongSelf = weakSelf;
-                    if (!strongSelf)
-                        return;
+                [self->_diskCache objectForKeyAsync:memoryCacheKey completion:^(PINDiskCache *diskCache, NSString *diskCacheKey, id <NSCoding> diskCacheObject) {
                     
-                    [strongSelf->_memoryCache setObjectAsync:diskCacheObject forKey:diskCacheKey completion:nil];
+                    [self->_memoryCache setObjectAsync:diskCacheObject forKey:diskCacheKey completion:nil];
                     
-                    [strongSelf->_operationQueue addOperation:^{
-                        PINCache *strongSelf = weakSelf;
-                        if (strongSelf)
-                            block(strongSelf, diskCacheKey, diskCacheObject);
+                    [self->_operationQueue scheduleOperation:^{
+                        block(self, diskCacheKey, diskCacheObject);
                     }];
                 }];
             }

@@ -195,7 +195,9 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didFinishCollectingMetrics:(NSURLSessionTaskMetrics *)metrics
 {
-    [[PINSpeedRecorder sharedRecorder] processMetrics:metrics forTask:task];
+    if (@available(iOS 10.0, macOS 10.12, *)) {
+        [[PINSpeedRecorder sharedRecorder] processMetrics:metrics forTask:task];
+    }
 }
 
 - (BOOL)responseRecoverableFrom404:(NSHTTPURLResponse*)response

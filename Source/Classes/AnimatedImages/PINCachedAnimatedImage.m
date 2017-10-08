@@ -194,12 +194,9 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
 
 - (void)updateCache
 {
-    PINWeakify(self);
-    
     // skip if we don't have any frames to cache
     if ([self framesToCache] > 0) {
-        [_operationQueue addOperation:^{
-            PINStrongify(self);
+        [_operationQueue scheduleOperation:^{
             // Kick off, in order, caching frames which need to be cached
             NSRange endKeepRange;
             NSRange beginningKeepRange;
@@ -224,8 +221,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
         }];
     }
     
-    [_operationQueue addOperation:^{
-        PINStrongify(self);
+    [_operationQueue scheduleOperation:^{
         [self cleanupFrames];
     }];
 }
@@ -303,7 +299,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
                         self->_notifyOnReady = NO;
                         if (self->_playbackReadyCallback) {
                             notify = self->_playbackReadyCallback;
-                            [_operationQueue addOperation:^{
+                            [_operationQueue scheduleOperation:^{
                                 notify();
                             }];
                         }
