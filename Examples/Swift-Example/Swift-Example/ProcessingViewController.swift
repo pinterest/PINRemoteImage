@@ -16,7 +16,7 @@ class ProcessingViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let url = URL(string: "https://s-media-cache-ak0.pinimg.com/736x/5b/c6/c5/5bc6c5387ff6f104fd642f2b375efba3.jpg")
+        let url = URL(string: "https://i.pinimg.com/736x/5b/c6/c5/5bc6c5387ff6f104fd642f2b375efba3.jpg")
         
         imageView.pin_setImage(from: url, processorKey: "rounded") { (result, unsafePointer) -> UIImage? in
             
