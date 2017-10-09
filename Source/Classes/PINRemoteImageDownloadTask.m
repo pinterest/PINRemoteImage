@@ -89,11 +89,13 @@
     }];
 }
 
-- (BOOL)cancelWithUUID:(NSUUID *)UUID resume:(PINResume * _Nullable * _Nullable)resume
+- (BOOL)cancelWithUUID:(NSUUID *)UUID resume:(PINResume **)resume
 {
     __block BOOL noMoreCompletions;
+    __block PINResume *strongResume;
+    BOOL hasResume = resume != nil;
     [self.lock lockWithBlock:^{
-        if (resume) {
+        if (hasResume) {
             //consider skipping cancelation if there's a request for resume data and the time to start the connection is greater than
             //the time remaining to download.
             NSTimeInterval timeToFirstByte = [[PINSpeedRecorder sharedRecorder] weightedTimeToFirstByteForHost:_progressImage.dataTask.currentRequest.URL.host];
@@ -103,16 +105,16 @@
             }
         }
         
-        noMoreCompletions = [super l_cancelWithUUID:UUID resume:resume];
+        noMoreCompletions = [super l_cancelWithUUID:UUID];
         
         if (noMoreCompletions) {
             [self.manager.urlSessionTaskQueue removeDownloadTaskFromQueue:_progressImage.dataTask];
             [_progressImage.dataTask cancel];
             
-            if (resume && _ifRange && _progressImage.dataTask.countOfBytesExpectedToReceive > 0 && _progressImage.dataTask.countOfBytesExpectedToReceive != NSURLSessionTransferSizeUnknown) {
+            if (hasResume && _ifRange && _progressImage.dataTask.countOfBytesExpectedToReceive > 0 && _progressImage.dataTask.countOfBytesExpectedToReceive != NSURLSessionTransferSizeUnknown) {
                 NSData *progressData = _progressImage.data;
                 if (progressData.length > 0) {
-                    *resume = [PINResume resumeData:progressData ifRange:_ifRange totalBytes:_progressImage.dataTask.countOfBytesExpectedToReceive];
+                    strongResume = [PINResume resumeData:progressData ifRange:_ifRange totalBytes:_progressImage.dataTask.countOfBytesExpectedToReceive];
                 }
             }
             
@@ -125,13 +127,17 @@
 #endif
     }];
     
+    if (hasResume) {
+        *resume = strongResume;
+    }
+    
     return noMoreCompletions;
 }
 
 - (void)setPriority:(PINRemoteImageManagerPriority)priority
 {
     [super setPriority:priority];
-    if (PINNSURLSessionTaskSupportsPriority) {
+    if (@available(iOS 8.0, macOS 10.10, tvOS 9.0, watchOS 2.0, *)) {
         [self.lock lockWithBlock:^{
             if (_progressImage.dataTask) {
                 _progressImage.dataTask.priority = dataTaskPriorityWithImageManagerPriority(priority);
@@ -202,9 +208,7 @@
     
     if (hasProgressBlocks) {
         if (PINNSOperationSupportsBlur) {
-            PINWeakify(self);
-            [self.manager.concurrentOperationQueue addOperation:^{
-                PINStrongify(self);
+            [self.manager.concurrentOperationQueue scheduleOperation:^{
                 CGFloat renderedImageQuality = 1.0;
                 PINImage *image = [progressImage currentImageBlurred:self.manager.shouldBlurProgressive maxProgressiveRenderSize:self.manager.maxProgressiveRenderSize renderedImageQuality:&renderedImageQuality];
                 if (image) {
@@ -294,7 +298,7 @@
                                                                                                                               priority:priority
                                                                                                                      completionHandler:^(NSURLResponse * _Nonnull response, NSError * _Nonnull remoteError)
         {
-            [self.manager.concurrentOperationQueue addOperation:^{
+            [self.manager.concurrentOperationQueue scheduleOperation:^{
                 NSError *error = remoteError;
 #if PINRemoteImageLogging
                 if (error && error.code != NSURLErrorCancelled) {
@@ -339,7 +343,7 @@
             }];
         }]];
         
-        if (PINNSURLSessionTaskSupportsPriority) {
+        if (@available(iOS 8.0, macOS 10.10, tvOS 9.0, watchOS 2.0, *)) {
             _progressImage.dataTask.priority = dataTaskPriorityWithImageManagerPriority(priority);
         }
     }];

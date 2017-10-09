@@ -12,7 +12,7 @@
 
 @synthesize downloadTaskUUID = _downloadTaskUUID;
 
-- (BOOL)cancelWithUUID:(NSUUID *)UUID resume:(PINResume * _Nullable * _Nullable)resume
+- (BOOL)cancelWithUUID:(NSUUID *)UUID resume:(PINResume **)resume
 {
     BOOL noMoreCompletions = [super cancelWithUUID:UUID resume:resume];
     [self.lock lockWithBlock:^{

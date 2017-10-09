@@ -82,8 +82,13 @@ static NSTimeInterval PINOperationGroupTestBlockTimeout = 20;
       }
     }];
   }
-  
+  __block BOOL completionBlockCalled = NO;
+  [group setCompletion:^{
+    completionBlockCalled = YES;
+  }];
+
   [group waitUntilComplete];
+  XCTAssert(completionBlockCalled, @"Completion block should have been called after waiting.");
   
   @synchronized (self) {
     XCTAssert(operationsRun == 100, @"All operations should be run");
