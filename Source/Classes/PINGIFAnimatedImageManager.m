@@ -462,7 +462,7 @@ ERROR;}) \
     }
   }
   
-  if (frameDuration < kPINAnimatedImageMinimumDuration) {
+  if (frameDuration < 1.0 / (Float32)[PINAnimatedImage maximumFramesPerSecond]) {
     frameDuration = kPINAnimatedImageDefaultDuration;
   }
   

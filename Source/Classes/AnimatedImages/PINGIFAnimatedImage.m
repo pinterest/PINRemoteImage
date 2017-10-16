@@ -79,7 +79,7 @@
         }
     }
     
-    if (frameDuration < kPINAnimatedImageMinimumDuration) {
+    if (frameDuration < (1.0 / [PINAnimatedImage maximumFramesPerSecond])) {
         frameDuration = kPINAnimatedImageDefaultDuration;
     }
     

@@ -10,9 +10,7 @@
 
 NSString *kPINAnimatedImageErrorDomain = @"kPINAnimatedImageErrorDomain";
 
-const NSTimeInterval kPINAnimatedImageDisplayRefreshRate = 60.0;
 //http://nullsleep.tumblr.com/post/16524517190/animated-gif-minimum-frame-delay-browser
-const Float32 kPINAnimatedImageMinimumDuration = 1 / kPINAnimatedImageDisplayRefreshRate;
 const Float32 kPINAnimatedImageDefaultDuration = 0.1;
 
 @interface PINAnimatedImage ()
@@ -22,6 +20,26 @@ const Float32 kPINAnimatedImageDefaultDuration = 0.1;
 @end
 
 @implementation PINAnimatedImage
+
++ (NSInteger)maximumFramesPerSecond
+{
+    static dispatch_once_t onceToken;
+    static NSInteger maximumFramesPerSecond = 60;
+    
+    dispatch_once(&onceToken, ^{
+#if PIN_TARGET_IOS
+        maximumFramesPerSecond = 0;
+        if (@available(iOS 10.3, *)) {
+            for (UIScreen *screen in [UIScreen screens]) {
+                if ([screen maximumFramesPerSecond] > maximumFramesPerSecond) {
+                    maximumFramesPerSecond = [screen maximumFramesPerSecond];
+                }
+            }
+        }
+#endif
+    });
+    return maximumFramesPerSecond;
+}
 
 - (instancetype)init
 {
@@ -58,13 +76,13 @@ const Float32 kPINAnimatedImageDefaultDuration = 0.1;
 
 - (NSUInteger)frameInterval
 {
-    return MAX(self.minimumFrameInterval * kPINAnimatedImageDisplayRefreshRate, 1);
+    return MAX(self.minimumFrameInterval * [PINAnimatedImage maximumFramesPerSecond], 1);
 }
 
 //Credit to FLAnimatedImage ( https://github.com/Flipboard/FLAnimatedImage ) for display link interval calculations
 - (NSTimeInterval)minimumFrameInterval
 {
-    const NSTimeInterval kGreatestCommonDivisorPrecision = 2.0 / kPINAnimatedImageMinimumDuration;
+    const NSTimeInterval kGreatestCommonDivisorPrecision = 2.0 / (1.0 / [PINAnimatedImage maximumFramesPerSecond]);
     
     // Scales the frame delays by `kGreatestCommonDivisorPrecision`
     // then converts it to an UInteger for in order to calculate the GCD.
@@ -78,23 +96,16 @@ const Float32 kPINAnimatedImageDefaultDuration = 0.1;
     return (scaledGCD / kGreatestCommonDivisorPrecision);
 }
 
-//Credit to FLAnimatedImage ( https://github.com/Flipboard/FLAnimatedImage ) for display link interval calculations
 static NSUInteger gcd(NSUInteger a, NSUInteger b)
 {
     // http://en.wikipedia.org/wiki/Greatest_common_divisor
-    if (a < b) {
-        return gcd(b, a);
-    } else if (a == b) {
-        return b;
-    }
-    
-    while (true) {
-        NSUInteger remainder = a % b;
-        if (remainder == 0) {
-            return b;
-        }
-        a = b;
-        b = remainder;
+    NSCAssert(a > 0 && b > 0, @"A and B must be greater than 0");
+    if (a == b) {
+        return a;
+    } else if (a > b) {
+        return gcd(a - b, b);
+    } else {
+        return gcd(a, b - a);
     }
 }
 

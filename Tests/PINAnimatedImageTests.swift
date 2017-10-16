@@ -30,6 +30,30 @@ class PINAnimatedImageTests: XCTestCase, PINRemoteImageManagerAlternateRepresent
         return URL.init(string: "https://res.cloudinary.com/demo/image/upload/fl_awebp/bored_animation.webp")
     }
     
+    func slowAnimatedGIFURL() -> URL? {
+        return URL.init(string: "https://i.pinimg.com/originals/1d/65/00/1d650041ad356b248139800bc84b7bce.gif")
+    }
+    
+    func testMinimumFrameInterval() {
+        let expectation =  self.expectation(description: "Result should be downloaded")
+        let imageManager = PINRemoteImageManager.init(sessionConfiguration: nil, alternativeRepresentationProvider: self)
+        imageManager.downloadImage(with: self.slowAnimatedGIFURL()!) { (result : PINRemoteImageManagerResult) in
+            guard let animatedData = result.alternativeRepresentation as? Data else {
+                XCTAssert(false, "alternativeRepresentation should be able to be coerced into data")
+                return
+            }
+            
+            guard let animatedImage = PINGIFAnimatedImage.init(animatedImageData: animatedData) else {
+                XCTAssert(false, "could not create GIF image")
+                return
+            }
+            
+            XCTAssert(animatedImage.frameInterval == 12, "Frame interval should be 12 because each frame is 0.2 seconds long. 60 / 12 = 5; 1 / 5 of a second is 0.2.")
+            expectation.fulfill()
+        }
+        self.waitForExpectations(timeout: self.timeoutInterval(), handler: nil)
+    }
+    
     func testWebpAnimatedImages() {
         let expectation =  self.expectation(description: "Result should be downloaded")
         let imageManager = PINRemoteImageManager.init(sessionConfiguration: nil, alternativeRepresentationProvider: self)
