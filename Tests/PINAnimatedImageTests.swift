@@ -87,6 +87,15 @@ class PINAnimatedImageTests: XCTestCase, PINRemoteImageManagerAlternateRepresent
         self.waitForExpectations(timeout: self.timeoutInterval(), handler: nil)
     }
     
+    func testGreatestCommonDivisor() {
+        XCTAssert(PINAnimatedImage.greatestCommonDevisor(1, b: 1) == 1)
+        XCTAssert(PINAnimatedImage.greatestCommonDevisor(2, b: 4) == 2)
+        XCTAssert(PINAnimatedImage.greatestCommonDevisor(4, b: 2) == 2)
+        XCTAssert(PINAnimatedImage.greatestCommonDevisor(18, b: 15) == 3)
+        XCTAssert(PINAnimatedImage.greatestCommonDevisor(42, b: 56) == 14)
+        XCTAssert(PINAnimatedImage.greatestCommonDevisor(12, b: 120) == 12)
+    }
+    
     func alternateRepresentation(with data: Data!, options: PINRemoteImageManagerDownloadOptions = []) -> Any! {
         return data
     }

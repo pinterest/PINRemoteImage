@@ -96,6 +96,8 @@ const Float32 kPINAnimatedImageDefaultDuration = 0.1;
     return (scaledGCD / kGreatestCommonDivisorPrecision);
 }
 
+// In practice, a recursive method should be fine because we're never looking for a really
+// large gcd.
 static NSUInteger gcd(NSUInteger a, NSUInteger b)
 {
     // http://en.wikipedia.org/wiki/Greatest_common_divisor
@@ -107,6 +109,12 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
     } else {
         return gcd(a, b - a);
     }
+}
+
+// Used only in testing
++ (NSUInteger)greatestCommonDevisor:(NSUInteger)a b:(NSUInteger)b
+{
+    return gcd(a, b);
 }
 
 @end
