@@ -23,7 +23,7 @@ static const NSUInteger kCleanupAfterStartupDelay = 10; //clean up files after 1
 
 typedef void(^PINAnimatedImageInfoProcessed)(PINImage *coverImage, NSUUID *UUID, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, UInt32 width, UInt32 height, size_t bitsPerPixel, UInt32 bitmapInfo);
 
-BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status);
+static BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status);
 BOOL PINStatusCoverImageCompleted(PINAnimatedImageStatus status) {
   return status == PINAnimatedImageStatusInfoProcessed || status == PINAnimatedImageStatusFirstFileProcessed || status == PINAnimatedImageStatusProcessed;
 }
