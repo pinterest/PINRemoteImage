@@ -21,8 +21,8 @@
 #include "webp/encode.h"
 #include "webp/mux_types.h"
 
-#define GIF_TRANSPARENT_COLOR 0x00ffffff
-#define GIF_WHITE_COLOR       0xffffffff
+#define GIF_TRANSPARENT_COLOR 0x00000000u
+#define GIF_WHITE_COLOR       0xffffffffu
 #define GIF_TRANSPARENT_MASK  0x01
 #define GIF_DISPOSE_MASK      0x07
 #define GIF_DISPOSE_SHIFT     2
@@ -48,7 +48,7 @@ void GIFGetBackgroundColor(const ColorMapObject* const color_map,
             "white background.\n");
   } else {
     const GifColorType color = color_map->Colors[bgcolor_index];
-    *bgcolor = (0xff        << 24)
+    *bgcolor = (0xffu       << 24)
              | (color.Red   << 16)
              | (color.Green <<  8)
              | (color.Blue  <<  0);
@@ -81,20 +81,27 @@ int GIFReadGraphicsExtension(const GifByteType* const buf, int* const duration,
   return 1;
 }
 
-static void Remap(const GifFileType* const gif, const uint8_t* const src,
-                  int len, int transparent_index, uint32_t* dst) {
+static int Remap(const GifFileType* const gif, const uint8_t* const src,
+                 int len, int transparent_index, uint32_t* dst) {
   int i;
   const GifColorType* colors;
   const ColorMapObject* const cmap =
       gif->Image.ColorMap ? gif->Image.ColorMap : gif->SColorMap;
-  if (cmap == NULL) return;
+  if (cmap == NULL) return 1;
+  if (cmap->Colors == NULL || cmap->ColorCount <= 0) return 0;
   colors = cmap->Colors;
 
   for (i = 0; i < len; ++i) {
-    const GifColorType c = colors[src[i]];
-    dst[i] = (src[i] == transparent_index) ? GIF_TRANSPARENT_COLOR
-           : c.Blue | (c.Green << 8) | (c.Red << 16) | (0xff << 24);
+    if (src[i] == transparent_index) {
+      dst[i] = GIF_TRANSPARENT_COLOR;
+    } else if (src[i] < cmap->ColorCount) {
+      const GifColorType c = colors[src[i]];
+      dst[i] = c.Blue | (c.Green << 8) | (c.Red << 16) | (0xffu << 24);
+    } else {
+      return 0;
+    }
   }
+  return 1;
 }
 
 int GIFReadFrame(GifFileType* const gif, int transparent_index,
@@ -103,11 +110,17 @@ int GIFReadFrame(GifFileType* const gif, int transparent_index,
   const GifImageDesc* const image_desc = &gif->Image;
   uint32_t* dst = NULL;
   uint8_t* tmp = NULL;
-  int ok = 0;
-  GIFFrameRect rect = {
+  const GIFFrameRect rect = {
       image_desc->Left, image_desc->Top, image_desc->Width, image_desc->Height
   };
+  const uint64_t memory_needed = 4 * rect.width * (uint64_t)rect.height;
+  int ok = 0;
   *gif_rect = rect;
+
+  if (memory_needed != (size_t)memory_needed || memory_needed > (4ULL << 32)) {
+    fprintf(stderr, "Image is too large (%d x %d).", rect.width, rect.height);
+    return 0;
+  }
 
   // Use a view for the sub-picture:
   if (!WebPPictureView(picture, rect.x_offset, rect.y_offset,
@@ -127,20 +140,21 @@ int GIFReadFrame(GifFileType* const gif, int transparent_index,
     const int interlace_jumps[]   = { 8, 8, 4, 2 };
     int pass;
     for (pass = 0; pass < 4; ++pass) {
-      int y;
-      for (y = interlace_offsets[pass]; y < rect.height;
-           y += interlace_jumps[pass]) {
+      const size_t stride = (size_t)sub_image.argb_stride;
+      int y = interlace_offsets[pass];
+      uint32_t* row = dst + y * stride;
+      const size_t jump = interlace_jumps[pass] * stride;
+      for (; y < rect.height; y += interlace_jumps[pass], row += jump) {
         if (DGifGetLine(gif, tmp, rect.width) == GIF_ERROR) goto End;
-        Remap(gif, tmp, rect.width, transparent_index,
-              dst + y * sub_image.argb_stride);
+        if (!Remap(gif, tmp, rect.width, transparent_index, row)) goto End;
       }
     }
   } else {  // Non-interlaced image.
     int y;
-    for (y = 0; y < rect.height; ++y) {
+    uint32_t* ptr = dst;
+    for (y = 0; y < rect.height; ++y, ptr += sub_image.argb_stride) {
       if (DGifGetLine(gif, tmp, rect.width) == GIF_ERROR) goto End;
-      Remap(gif, tmp, rect.width, transparent_index,
-            dst + y * sub_image.argb_stride);
+      if (!Remap(gif, tmp, rect.width, transparent_index, ptr)) goto End;
     }
   }
   ok = 1;
@@ -216,13 +230,11 @@ int GIFReadMetadata(GifFileType* const gif, GifByteType** const buf,
 
 static void ClearRectangle(WebPPicture* const picture,
                            int left, int top, int width, int height) {
-  int j;
-  for (j = top; j < top + height; ++j) {
-    uint32_t* const dst = picture->argb + j * picture->argb_stride;
-    int i;
-    for (i = left; i < left + width; ++i) {
-      dst[i] = GIF_TRANSPARENT_COLOR;
-    }
+  int i, j;
+  const size_t stride = picture->argb_stride;
+  uint32_t* dst = picture->argb + top * stride + left;
+  for (j = 0; j < height; ++j, dst += stride) {
+    for (i = 0; i < width; ++i) dst[i] = GIF_TRANSPARENT_COLOR;
   }
 }
 
@@ -246,29 +258,31 @@ void GIFDisposeFrame(GIFDisposeMethod dispose, const GIFFrameRect* const rect,
   if (dispose == GIF_DISPOSE_BACKGROUND) {
     GIFClearPic(curr_canvas, rect);
   } else if (dispose == GIF_DISPOSE_RESTORE_PREVIOUS) {
-    const int src_stride = prev_canvas->argb_stride;
-    const uint32_t* const src =
-        prev_canvas->argb + rect->x_offset + rect->y_offset * src_stride;
-    const int dst_stride = curr_canvas->argb_stride;
-    uint32_t* const dst =
-        curr_canvas->argb + rect->x_offset + rect->y_offset * dst_stride;
+    const size_t src_stride = prev_canvas->argb_stride;
+    const uint32_t* const src = prev_canvas->argb + rect->x_offset
+                              + rect->y_offset * src_stride;
+    const size_t dst_stride = curr_canvas->argb_stride;
+    uint32_t* const dst = curr_canvas->argb + rect->x_offset
+                        + rect->y_offset * dst_stride;
     assert(prev_canvas != NULL);
-    WebPCopyPlane((uint8_t*)src, 4 * src_stride, (uint8_t*)dst, 4 * dst_stride,
+    WebPCopyPlane((uint8_t*)src, (int)(4 * src_stride),
+                  (uint8_t*)dst, (int)(4 * dst_stride),
                   4 * rect->width, rect->height);
   }
 }
 
 void GIFBlendFrames(const WebPPicture* const src,
                     const GIFFrameRect* const rect, WebPPicture* const dst) {
-  int j;
+  int i, j;
+  const size_t src_stride = src->argb_stride;
+  const size_t dst_stride = dst->argb_stride;
   assert(src->width == dst->width && src->height == dst->height);
   for (j = rect->y_offset; j < rect->y_offset + rect->height; ++j) {
-    int i;
     for (i = rect->x_offset; i < rect->x_offset + rect->width; ++i) {
-      const uint32_t src_pixel = src->argb[j * src->argb_stride + i];
+      const uint32_t src_pixel = src->argb[j * src_stride + i];
       const int src_alpha = src_pixel >> 24;
       if (src_alpha != 0) {
-        dst->argb[j * dst->argb_stride + i] = src_pixel;
+        dst->argb[j * dst_stride + i] = src_pixel;
       }
     }
   }

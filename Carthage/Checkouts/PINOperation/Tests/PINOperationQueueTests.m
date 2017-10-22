@@ -18,6 +18,7 @@ static NSTimeInterval PINOperationQueueTestBlockTimeout = 20;
 
 @end
 
+static const NSUInteger PINOperationQueueTestsLowestMaxOperations = 1;
 static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
 
 @implementation PINOperationQueueTests
@@ -48,7 +49,7 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
   
   for (NSUInteger count = 0; count < operationCount; count++) {
     dispatch_group_enter(group);
-    [self.queue addOperation:^{
+    [self.queue scheduleOperation:^{
       dispatch_group_leave(group);
     } withPriority:PINOperationQueuePriorityDefault];
   }
@@ -69,7 +70,7 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
       };
       
       [weakOperationPointers addPointer:(__bridge void * _Nullable)(operation)];
-      [self.queue addOperation:operation withPriority:PINOperationQueuePriorityDefault];
+      [self.queue scheduleOperation:operation withPriority:PINOperationQueuePriorityDefault];
     }
   }
   
@@ -93,7 +94,7 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
 
   __weak PINOperationQueueTests *weakSelf = self;
   for (NSUInteger count = 0; count < operationCount; count++) {
-    [self.queue addOperation:^{
+    [self.queue scheduleOperation:^{
       __strong PINOperationQueueTests *strongSelf = weakSelf;
       @synchronized (strongSelf) {
         operationsRun += 1;
@@ -113,12 +114,12 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
   __block NSInteger operationsRun = 0;
   for (NSUInteger count = 0; count < operationCount; count++) {
     __weak PINOperationQueueTests *weakSelf = self;
-    [self.queue addOperation:^{
+    [self.queue scheduleOperation:^{
       __strong PINOperationQueueTests *strongSelf = weakSelf;
       @synchronized (strongSelf) {
         operationsRun += 1;
       }
-      [strongSelf.queue addOperation:^{
+      [strongSelf.queue scheduleOperation:^{
         __strong PINOperationQueueTests *strongSelf = weakSelf;
         @synchronized (strongSelf) {
           operationsRun += 1;
@@ -144,7 +145,7 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
 #pragma clang diagnostic ignored "-Warc-retain-cycles"
   for (NSUInteger count = 0; count < operationCount; count++) {
     dispatch_group_enter(group);
-    [queue addOperation:^{
+    [queue scheduleOperation:^{
       @synchronized (self) {
         runningOperationCount++;
         if (runningOperationCount == maxOperations) {
@@ -175,6 +176,12 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
   [self helperConfirmMaxOperations:PINOperationQueueTestsMaxOperations queue:self.queue];
 }
 
+- (void)testMaximumNumberOfConcurrentOperationsIsOne
+{
+  self.queue = [[PINOperationQueue alloc] initWithMaxConcurrentOperations:PINOperationQueueTestsLowestMaxOperations];
+  [self helperConfirmMaxOperations:PINOperationQueueTestsLowestMaxOperations queue:self.queue];
+}
+
 //We expect operations to run in priority order when added in that order as well
 - (void)testPriority
 {
@@ -196,7 +203,7 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
 #pragma clang diagnostic ignored "-Warc-retain-cycles"
   for (NSUInteger count = 0; count < highOperationCount; count++) {
     dispatch_group_enter(group);
-    [self.queue addOperation:^{
+    [self.queue scheduleOperation:^{
       usleep(10000);
       @synchronized (self) {
         ++highOperationComplete;
@@ -209,7 +216,7 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
   
   for (NSUInteger count = 0; count < defaultOperationCount; count++) {
     dispatch_group_enter(group);
-    [self.queue addOperation:^{
+    [self.queue scheduleOperation:^{
       usleep(10000);
       @synchronized (self) {
         ++defaultOperationComplete;
@@ -222,7 +229,7 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
   
   for (NSUInteger count = 0; count < lowOperationCount; count++) {
     dispatch_group_enter(group);
-    [self.queue addOperation:^{
+    [self.queue scheduleOperation:^{
       usleep(10000);
       @synchronized (self) {
         ++lowOperationComplete;
@@ -247,7 +254,7 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-retain-cycles"
   for (NSUInteger count = 0; count < PINOperationQueueTestsMaxOperations + 1; count++) {
-    [self.queue addOperation:^{
+    [self.queue scheduleOperation:^{
       [self recursivelyAddOperation];
     } withPriority:PINOperationQueuePriorityHigh];
   }
@@ -255,7 +262,7 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
   
   for (NSUInteger count = 0; count < operationCount; count++) {
     dispatch_group_enter(group);
-    [self.queue addOperation:^{
+    [self.queue scheduleOperation:^{
       dispatch_group_leave(group);
     } withPriority:PINOperationQueuePriorityLow];
   }
@@ -268,7 +275,7 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
 {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-retain-cycles"
-  [self.queue addOperation:^{
+  [self.queue scheduleOperation:^{
     [self recursivelyAddOperation];
   } withPriority:PINOperationQueuePriorityHigh];
 #pragma clang diagnostic pop
@@ -278,14 +285,14 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
 {
   const NSUInteger sleepTime = 100000;
   for (NSUInteger count = 0; count < PINOperationQueueTestsMaxOperations + 1; count++) {
-    [self.queue addOperation:^{
+    [self.queue scheduleOperation:^{
       usleep(sleepTime);
     } withPriority:PINOperationQueuePriorityDefault];
   }
   
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-retain-cycles"
-  id <PINOperationReference> operation = [self.queue addOperation:^{
+  id <PINOperationReference> operation = [self.queue scheduleOperation:^{
     XCTAssertTrue(NO, @"operation should have been canceled");
   } withPriority:PINOperationQueuePriorityDefault];
 #pragma clang diagnostics pop
@@ -307,7 +314,7 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
 #pragma clang diagnostic ignored "-Warc-retain-cycles"
   for (NSUInteger count = 0; count < defaultOperationCount; count++) {
     dispatch_group_enter(group);
-    [self.queue addOperation:^{
+    [self.queue scheduleOperation:^{
       usleep(100);
       @synchronized (self) {
         ++defaultOperationComplete;
@@ -317,7 +324,7 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
   }
   
   dispatch_group_enter(group);
-  id <PINOperationReference> operation = [self.queue addOperation:^{
+  id <PINOperationReference> operation = [self.queue scheduleOperation:^{
     @synchronized (self) {
       //Make sure we're less than defaultOperationCount - PINOperationQueueTestsMaxOperations because this operation could start even while the others are running even
       //if started last.
@@ -352,7 +359,7 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
     // Fill up the queue with dummy operations so we have time to add real ones without them being unexpectedly executed
     for (NSUInteger i = 0; i < PINOperationQueueTestsMaxOperations * 2; i++) {
         dispatch_group_enter(group);
-        [self.queue addOperation:^{
+        [self.queue scheduleOperation:^{
             usleep(1000);
             dispatch_group_leave(group);
         }];
@@ -384,7 +391,7 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
             dispatch_group_leave(group);
         };
         
-        [self.queue addOperation:operation
+        [self.queue scheduleOperation:operation
                     withPriority:PINOperationQueuePriorityLow
                       identifier:identifier
                   coalescingData:nil
@@ -414,7 +421,7 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
     // Fill up the queue with dummy operations so we have time to add real ones without them being unexpectedly executed
     for (NSUInteger i = 0; i < PINOperationQueueTestsMaxOperations * 2; i++) {
         dispatch_group_enter(group);
-        [self.queue addOperation:^{
+        [self.queue scheduleOperation:^{
             usleep(1000);
             dispatch_group_leave(group);
         }];
@@ -439,7 +446,7 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
             dispatch_group_leave(group);
         };
         
-        [self.queue addOperation:operation
+        [self.queue scheduleOperation:operation
                     withPriority:PINOperationQueuePriorityLow
                       identifier:@"Identifier"
                   coalescingData:nil
@@ -465,7 +472,7 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
     // Fill up the queue with dummy operations so we have time to add real ones without them being unexpectedly executed
     for (NSUInteger i = 0; i < PINOperationQueueTestsMaxOperations * 2; i++) {
         dispatch_group_enter(group);
-        [self.queue addOperation:^{
+        [self.queue scheduleOperation:^{
             usleep(1000);
             dispatch_group_leave(group);
         }];
@@ -487,7 +494,7 @@ static const NSUInteger PINOperationQueueTestsMaxOperations = 5;
             dispatch_group_leave(group);
         };
         
-        [self.queue addOperation:operation
+        [self.queue scheduleOperation:operation
                     withPriority:PINOperationQueuePriorityLow
                       identifier:@"Identifier"
                   coalescingData:data

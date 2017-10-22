@@ -1,5 +1,5 @@
 .\"                                      Hey, EMACS: -*- nroff -*-
-.TH CWEBP 1 "June 23, 2016"
+.TH CWEBP 1 "January 20, 2017"
 .SH NAME
 cwebp \- compress an image file to a WebP file
 .SH SYNOPSIS
@@ -117,15 +117,15 @@ or without alpha).
 .TP
 .BI \-size " int
 Specify a target size (in bytes) to try and reach for the compressed output.
-Compressor will make several pass of partial encoding in order to get as
+The compressor will make several passes of partial encoding in order to get as
 close as possible to this target. If both \fB\-size\fP and \fB\-psnr\fP
-as used, \fB\-size\fP value will prevail.
+are used, \fB\-size\fP value will prevail.
 .TP
 .BI \-psnr " float
 Specify a target PSNR (in dB) to try and reach for the compressed output.
-Compressor will make several pass of partial encoding in order to get as
+The compressor will make several passes of partial encoding in order to get as
 close as possible to this target. If both \fB\-size\fP and \fB\-psnr\fP
-as used, \fB\-size\fP value will prevail.
+are used, \fB\-size\fP value will prevail.
 .TP
 .BI \-pass " int
 Set a maximum number of passes to use during the dichotomy used by
@@ -166,12 +166,16 @@ Use strong filtering (if filtering is being used thanks to the
 Disable strong filtering (if filtering is being used thanks to the
 \fB\-f\fP option) and use simple filtering instead.
 .TP
+.B \-sharp_yuv
+Use more accurate and sharper RGB->YUV conversion if needed. Note that this
+process is slower than the default 'fast' RGB->YUV conversion.
+.TP
 .BI \-sns " int
 Specify the amplitude of the spatial noise shaping. Spatial noise shaping
 (or \fBsns\fP for short) refers to a general collection of built\-in algorithms
 used to decide which area of the picture should use relatively less bits,
 and where else to better transfer these bits. The possible range goes from
-0 (algorithm is off) to 100 (the maximal effect). The default value is 80.
+0 (algorithm is off) to 100 (the maximal effect). The default value is 50.
 .TP
 .BI \-segments " int
 Change the number of partitions to use during the segmentation of the
@@ -222,7 +226,7 @@ Report encoding progress in percent.
 Do not print anything.
 .TP
 .B \-short
-Only print brief information (output file size and PSNR) for testing purpose.
+Only print brief information (output file size and PSNR) for testing purposes.
 .TP
 .BI \-map " int
 Output additional ASCII\-map of encoding information. Possible map values

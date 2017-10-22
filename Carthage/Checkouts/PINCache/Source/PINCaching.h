@@ -25,6 +25,12 @@ typedef void (^PINCacheBlock)(id<PINCaching> cache);
 typedef void (^PINCacheObjectBlock)(id<PINCaching> cache, NSString *key, id _Nullable object);
 
 /**
+ A callback block used for enumeration which provides the cache, key and object as arguments plus a stop flag that
+ may be flipped by the caller.
+ */
+typedef void (^PINCacheObjectEnumerationBlock)(id<PINCaching> cache, NSString *key, id _Nullable object, BOOL *stop);
+
+/**
  A callback block which provides a BOOL value as argument
  */
 typedef void (^PINCacheObjectContainmentBlock)(BOOL containsObject);

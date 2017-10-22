@@ -6,7 +6,7 @@
 //
 //
 
-#ifdef PIN_WEBP
+#if PIN_WEBP
 
 #if PIN_TARGET_IOS
 #import <UIKit/UIKit.h>

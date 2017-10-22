@@ -96,19 +96,20 @@ model {
         c {
           source {
             srcDir "src/dec"
-            include "alpha.c"
-            include "buffer.c"
-            include "frame.c"
-            include "idec.c"
-            include "io.c"
-            include "quant.c"
-            include "tree.c"
-            include "vp8.c"
-            include "vp8l.c"
-            include "webp.c"
+            include "alpha_dec.c"
+            include "buffer_dec.c"
+            include "frame_dec.c"
+            include "idec_dec.c"
+            include "io_dec.c"
+            include "quant_dec.c"
+            include "tree_dec.c"
+            include "vp8_dec.c"
+            include "vp8l_dec.c"
+            include "webp_dec.c"
             srcDir "src/dsp"
             include "alpha_processing.c"
             include "alpha_processing_mips_dsp_r2.c"
+            include "alpha_processing_neon.$NEON"
             include "alpha_processing_sse2.c"
             include "alpha_processing_sse41.c"
             include "argb.c"
@@ -125,18 +126,23 @@ model {
             include "dec_sse41.c"
             include "filters.c"
             include "filters_mips_dsp_r2.c"
+            include "filters_msa.c"
+            include "filters_neon.$NEON"
             include "filters_sse2.c"
             include "lossless.c"
             include "lossless_mips_dsp_r2.c"
+            include "lossless_msa.c"
             include "lossless_neon.$NEON"
             include "lossless_sse2.c"
             include "rescaler.c"
             include "rescaler_mips32.c"
             include "rescaler_mips_dsp_r2.c"
+            include "rescaler_msa.c"
             include "rescaler_neon.$NEON"
             include "rescaler_sse2.c"
             include "upsampling.c"
             include "upsampling_mips_dsp_r2.c"
+            include "upsampling_msa.c"
             include "upsampling_neon.$NEON"
             include "upsampling_sse2.c"
             include "yuv.c"
@@ -144,15 +150,14 @@ model {
             include "yuv_mips_dsp_r2.c"
             include "yuv_sse2.c"
             srcDir "src/utils"
-            include "ans.c"
-            include "bit_reader.c"
-            include "color_cache.c"
-            include "filters.c"
-            include "huffman.c"
-            include "quant_levels_dec.c"
-            include "random.c"
-            include "rescaler.c"
-            include "thread.c"
+            include "bit_reader_utils.c"
+            include "color_cache_utils.c"
+            include "filters_utils.c"
+            include "huffman_utils.c"
+            include "quant_levels_dec_utils.c"
+            include "random_utils.c"
+            include "rescaler_utils.c"
+            include "thread_utils.c"
             include "utils.c"
             srcDir "src/dsp"
             include "cost.c"
@@ -163,42 +168,45 @@ model {
             include "enc_avx2.c"
             include "enc_mips32.c"
             include "enc_mips_dsp_r2.c"
+            include "enc_msa.c"
             include "enc_neon.$NEON"
             include "enc_sse2.c"
             include "enc_sse41.c"
             include "lossless_enc.c"
             include "lossless_enc_mips32.c"
             include "lossless_enc_mips_dsp_r2.c"
+            include "lossless_enc_msa.c"
             include "lossless_enc_neon.$NEON"
             include "lossless_enc_sse2.c"
             include "lossless_enc_sse41.c"
             srcDir "src/enc"
-            include "alpha.c"
-            include "analysis.c"
-            include "backward_references.c"
-            include "config.c"
-            include "cost.c"
-            include "delta_palettization.c"
-            include "filter.c"
-            include "frame.c"
-            include "histogram.c"
-            include "iterator.c"
-            include "near_lossless.c"
-            include "picture.c"
-            include "picture_csp.c"
-            include "picture_psnr.c"
-            include "picture_rescale.c"
-            include "picture_tools.c"
-            include "quant.c"
-            include "syntax.c"
-            include "token.c"
-            include "tree.c"
-            include "vp8l.c"
-            include "webpenc.c"
+            include "alpha_enc.c"
+            include "analysis_enc.c"
+            include "backward_references_enc.c"
+            include "config_enc.c"
+            include "cost_enc.c"
+            include "delta_palettization_enc.c"
+            include "filter_enc.c"
+            include "frame_enc.c"
+            include "histogram_enc.c"
+            include "iterator_enc.c"
+            include "near_lossless_enc.c"
+            include "picture_enc.c"
+            include "picture_csp_enc.c"
+            include "picture_psnr_enc.c"
+            include "picture_rescale_enc.c"
+            include "picture_tools_enc.c"
+            include "predictor_enc.c"
+            include "quant_enc.c"
+            include "syntax_enc.c"
+            include "token_enc.c"
+            include "tree_enc.c"
+            include "vp8l_enc.c"
+            include "webp_enc.c"
             srcDir "src/utils"
-            include "bit_writer.c"
-            include "huffman_encode.c"
-            include "quant_levels.c"
+            include "bit_writer_utils.c"
+            include "huffman_encode_utils.c"
+            include "quant_levels_utils.c"
           }
           exportedHeaders {
             srcDir "src"
@@ -250,7 +258,7 @@ model {
       }
     }
 
-    example_dec(NativeLibrarySpec) {
+    imageio_util(NativeLibrarySpec) {
       binaries {
         all {
           lib library: "webp", linkage: "static"
@@ -259,7 +267,23 @@ model {
       sources {
         c {
           source {
-            srcDir "./examples"
+            srcDir "./imageio"
+            include "imageio_util.c"
+          }
+        }
+      }
+    }
+
+    imagedec(NativeLibrarySpec) {
+      binaries {
+        all {
+          lib library: "webp", linkage: "static"
+        }
+      }
+      sources {
+        c {
+          source {
+            srcDir "./imageio"
             include "image_dec.c"
             include "jpegdec.c"
             include "metadata.c"
@@ -270,11 +294,30 @@ model {
         }
       }
     }
+
+    imageenc(NativeLibrarySpec) {
+      binaries {
+        all {
+          lib library: "webp", linkage: "static"
+          lib library: "imageio_util", linkage: "static"
+        }
+      }
+      sources {
+        c {
+          source {
+            srcDir "./imageio"
+            include "image_enc.c"
+          }
+        }
+      }
+    }
+
     cwebp(NativeExecutableSpec) {
       binaries {
         all {
           lib library: "example_util", linkage: "static"
-          lib library: "example_dec", linkage: "static"
+          lib library: "imagedec", linkage: "static"
+          lib library: "imageio_util", linkage: "static"
           lib library: "webp", linkage: "static"
         }
       }
@@ -292,6 +335,9 @@ model {
       binaries {
         all {
           lib library: "example_util", linkage: "static"
+          lib library: "imagedec", linkage: "static"
+          lib library: "imageenc", linkage: "static"
+          lib library: "imageio_util", linkage: "static"
           lib library: "webp"
         }
       }
@@ -309,6 +355,7 @@ model {
       binaries {
         all {
           lib library: "example_util", linkage: "static"
+          lib library: "imageio_util", linkage: "static"
           lib library: "webpmux", linkage: "static"
           lib library: "webp"
         }
@@ -318,6 +365,26 @@ model {
           source {
             srcDir "./examples"
             include "webpmux.c"
+          }
+        }
+      }
+    }
+
+    img2webp_example(NativeExecutableSpec) {
+      binaries {
+        all {
+          lib library: "example_util", linkage: "static"
+          lib library: "imagedec", linkage: "static"
+          lib library: "imageio_util", linkage: "static"
+          lib library: "webpmux", linkage: "static"
+          lib library: "webp"
+        }
+      }
+      sources {
+        c {
+          source {
+            srcDir "./examples"
+            include "img2webp.c"
           }
         }
       }

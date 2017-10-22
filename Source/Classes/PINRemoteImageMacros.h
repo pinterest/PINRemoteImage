@@ -25,10 +25,20 @@
 #define FLAnimatedImage NSObject
 #endif
 
-#if __has_include(<PINCache/PINCache.h>)
-#define USE_PINCACHE    1
-#else
-#define USE_PINCACHE    0
+#ifndef USE_PINCACHE
+    #if __has_include(<PINCache/PINCache.h>)
+    #define USE_PINCACHE    1
+    #else
+    #define USE_PINCACHE    0
+    #endif
+#endif
+
+#ifndef PIN_WEBP
+    #if __has_include("webp/decode.h")
+    #define PIN_WEBP    1
+    #else
+    #define PIN_WEBP    0
+    #endif
 #endif
 
 #if PIN_TARGET_IOS
@@ -36,7 +46,6 @@
 #define PINImageView UIImageView
 #define PINButton    UIButton
 #define PINNSOperationSupportsBlur (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber_iOS_8_0)
-#define PINNSURLSessionTaskSupportsPriority (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber_iOS_8_0)
 #elif PIN_TARGET_MAC
 #define PINImage     NSImage
 #define PINImageView NSImageView

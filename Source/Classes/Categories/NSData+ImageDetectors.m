@@ -8,6 +8,10 @@
 
 #import "NSData+ImageDetectors.h"
 
+#if PIN_WEBP
+#import "webp/demux.h"
+#endif
+
 @implementation NSData (PINImageDetectors)
 
 - (BOOL)pin_isGIF
@@ -24,7 +28,7 @@
     return NO;
 }
 
-#ifdef PIN_WEBP
+#if PIN_WEBP
 - (BOOL)pin_isWebP
 {
     const NSInteger length = 12;
@@ -38,6 +42,17 @@
     }
     return NO;
 }
+
+- (BOOL)pin_isAnimatedWebP
+{
+    WebPBitstreamFeatures features;
+    if (WebPGetFeatures([self bytes], [self length], &features) == VP8_STATUS_OK) {
+        return features.has_animation;
+    }
+    
+    return NO;
+}
+
 #endif
 
 @end

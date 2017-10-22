@@ -82,7 +82,7 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
     if ([data pin_isGIF]) {
         return [PINImage imageWithData:data];
     }
-#ifdef PIN_WEBP
+#if PIN_WEBP
     if ([data pin_isWebP]) {
         return [PINImage pin_imageWithWebPData:data];
     }
@@ -128,6 +128,15 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
 + (PINImage *)pin_decodedImageWithCGImageRef:(CGImageRef)imageRef orientation:(UIImageOrientation)orientation
 {
 #endif
+#if PIN_TARGET_IOS
+    return [UIImage imageWithCGImage:[self pin_decodedImageRefWithCGImageRef:imageRef] scale:1.0 orientation:orientation];
+#elif PIN_TARGET_MAC
+    return [[NSImage alloc] initWithCGImage:[self pin_decodedImageRefWithCGImageRef:imageRef] size:NSZeroSize];
+#endif
+}
+
++ (CGImageRef)pin_decodedImageRefWithCGImageRef:(CGImageRef)imageRef
+{
     BOOL opaque = YES;
     CGImageAlphaInfo alpha = CGImageGetAlphaInfo(imageRef);
     if (alpha == kCGImageAlphaFirst || alpha == kCGImageAlphaLast || alpha == kCGImageAlphaOnly || alpha == kCGImageAlphaPremultipliedFirst || alpha == kCGImageAlphaPremultipliedLast) {
@@ -148,30 +157,20 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
     
     CGColorSpaceRelease(colorspace);
     
-    PINImage *decodedImage = nil;
     if (ctx) {
         CGContextSetBlendMode(ctx, kCGBlendModeCopy);
         CGContextDrawImage(ctx, CGRectMake(0, 0, imageSize.width, imageSize.height), imageRef);
         
-        CGImageRef newImage = CGBitmapContextCreateImage(ctx);
-        
-#if PIN_TARGET_IOS
-        decodedImage = [UIImage imageWithCGImage:newImage scale:1.0 orientation:orientation];
-#elif PIN_TARGET_MAC
-        decodedImage = [[NSImage alloc] initWithCGImage:newImage size:imageSize];
-#endif
-        CGImageRelease(newImage);
+        CGImageRef decodedImageRef = CGBitmapContextCreateImage(ctx);
+        if (decodedImageRef) {
+            CFAutorelease(decodedImageRef);
+        }
         CGContextRelease(ctx);
+        return decodedImageRef;
         
-    } else {
-#if PIN_TARGET_IOS
-        decodedImage = [UIImage imageWithCGImage:imageRef scale:1.0 orientation:orientation];
-#elif PIN_TARGET_MAC
-        decodedImage = [[NSImage alloc] initWithCGImage:imageRef size:imageSize];
-#endif
     }
     
-    return decodedImage;
+    return imageRef;
 }
 
 #if PIN_TARGET_IOS

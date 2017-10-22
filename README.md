@@ -81,7 +81,7 @@ animatedImageView.pin_setImage(from: URL(string: "http://pinterest.com/flyingKit
 **Objective-C**
 ```objc
 UIImageView *imageView = [[UIImageView alloc] init];
-[self.imageView pin_setImageFromURL:[NSURL URLWithString:@"https://s-media-cache-ak0.pinimg.com/736x/5b/c6/c5/5bc6c5387ff6f104fd642f2b375efba3.jpg"] processorKey:@"rounded" processor:^UIImage *(PINRemoteImageManagerResult *result, NSUInteger *cost)
+[self.imageView pin_setImageFromURL:[NSURL URLWithString:@"https://i.pinimg.com/736x/5b/c6/c5/5bc6c5387ff6f104fd642f2b375efba3.jpg"] processorKey:@"rounded" processor:^UIImage *(PINRemoteImageManagerResult *result, NSUInteger *cost)
  {
      CGSize targetSize = CGSizeMake(200, 300);
      CGRect imageRect = CGRectMake(0, 0, targetSize.width, targetSize.height);
@@ -110,7 +110,7 @@ UIImageView *imageView = [[UIImageView alloc] init];
 **Swift**
 ```swift
 let imageView = FLAnimatedImageView()
-imageView.pin_setImage(from: URL(string: "https://s-media-cache-ak0.pinimg.com/736x/5b/c6/c5/5bc6c5387ff6f104fd642f2b375efba3.jpg")!, processorKey: "rounded")  { (result, unsafePointer) -> UIImage? in
+imageView.pin_setImage(from: URL(string: "https://i.pinimg.com/736x/5b/c6/c5/5bc6c5387ff6f104fd642f2b375efba3.jpg")!, processorKey: "rounded")  { (result, unsafePointer) -> UIImage? in
 
     guard let image = result.image else { return nil }
 
@@ -194,7 +194,8 @@ __weak UIImageView *weakImageView = self.imageView;
 
 ### Set some limits
 ```
-PINCache *cache = [[PINRemoteImageManager sharedImageManager] cache];
+// cache is an instance of PINCache as long as you haven't overridden defaultImageCache
+PINCache *cache = (PINCache *)[[PINRemoteImageManager sharedImageManager] cache];
 // Max memory cost is based on number of pixels, we estimate the size of one hundred 600x600 images as our max memory image cache.
 [[cache memoryCache] setCostLimit:600 * 600 * 100 * [[UIScreen mainScreen] scale]];
 

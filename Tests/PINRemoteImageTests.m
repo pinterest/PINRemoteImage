@@ -12,8 +12,8 @@
 #import <PINRemoteImage/PINURLSessionManager.h>
 #import <PINRemoteImage/PINImageView+PINRemoteImage.h>
 #import <PINRemoteImage/PINRemoteImageCaching.h>
-#import <PINCache/PINCache.h>
 #import <PINRemoteImage/PINRequestRetryStrategy.h>
+#import <PINCache/PINCache.h>
 
 #import "PINResume.h"
 #import "PINRemoteImageDownloadTask.h"
@@ -84,6 +84,13 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 @property (nonatomic, strong) NSMutableData *data;
 @property (nonatomic, strong) NSURLSessionTask *task;
 @property (nonatomic, strong) NSError *error;
+
+@end
+
+@interface PINSpeedRecorder ()
+
+- (void)resetMeasurements;
+- (void)updateSpeedsForHost:(NSString *)host bytesPerSecond:(float)bytesPerSecond startAdjustedBytesPerSecond:(float)startAdjustedBytesPerSecond timeToFirstByte:(float)timeToFirstByte;
 
 @end
 
@@ -168,7 +175,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (NSURL *)progressiveURL
 {
-    return [NSURL URLWithString:@"https://i.pinimg.com/1200x/80/03/1b/80031b76573a358ed4fed5de391b6d36.jpg"];
+    return [NSURL URLWithString:@"https://performancedemo.vir2al.ch/assets/img/progressive/thumb/spiez_sunset.jpg"];
 }
 
 - (NSArray <NSURL *> *)bigURLs
@@ -220,6 +227,8 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     //clear disk cache
     self.imageManager = nil;
+    [[PINSpeedRecorder sharedRecorder] setCurrentBytesPerSecond:-1];
+    [[PINSpeedRecorder sharedRecorder] resetMeasurements];
     [super tearDown];
 }
 
@@ -816,27 +825,13 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (void)testBytesPerSecond
 {
-    XCTestExpectation *finishExpectation = [self expectationWithDescription:@"Finished testing off the main thread."];
-    //currentBytesPerSecond is not public, should not be called on the main queue
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        XCTAssert([[PINSpeedRecorder sharedRecorder] currentBytesPerSecond] == -1, @"Without any tasks added, should be -1");
-        [[PINSpeedRecorder sharedRecorder] addTaskBPS:100 endDate:[NSDate dateWithTimeIntervalSinceNow:-61]];
-        XCTAssert([[PINSpeedRecorder sharedRecorder] currentBytesPerSecond] == -1, @"With only old task, should be -1");
-        [[PINSpeedRecorder sharedRecorder] addTaskBPS:100 endDate:[NSDate date]];
-        XCTAssert([self isFloat:[[PINSpeedRecorder sharedRecorder] currentBytesPerSecond] equalToFloat:100.0f], @"One task should be same as added task");
-        [[PINSpeedRecorder sharedRecorder] addTaskBPS:50 endDate:[NSDate dateWithTimeIntervalSinceNow:-30]];
-        XCTAssert([self isFloat:[[PINSpeedRecorder sharedRecorder] currentBytesPerSecond] equalToFloat:75.0f], @"Two tasks should be average of both tasks");
-        [[PINSpeedRecorder sharedRecorder] addTaskBPS:100 endDate:[NSDate dateWithTimeIntervalSinceNow:-61]];
-        XCTAssert([self isFloat:[[PINSpeedRecorder sharedRecorder] currentBytesPerSecond] equalToFloat:75.0f], @"Old task shouldn't be counted");
-        [[PINSpeedRecorder sharedRecorder] addTaskBPS:50 endDate:[NSDate date]];
-        [[PINSpeedRecorder sharedRecorder] addTaskBPS:50 endDate:[NSDate date]];
-        [[PINSpeedRecorder sharedRecorder] addTaskBPS:50 endDate:[NSDate date]];
-        [[PINSpeedRecorder sharedRecorder] addTaskBPS:50 endDate:[NSDate date]];
-        [[PINSpeedRecorder sharedRecorder] addTaskBPS:50 endDate:[NSDate date]];
-        XCTAssert([self isFloat:[[PINSpeedRecorder sharedRecorder] currentBytesPerSecond] equalToFloat:50.0f], @"Only last 5 tasks should be used");
-        [finishExpectation fulfill];
-    });
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+    NSString *host = @"none.com";
+
+    XCTAssert([[PINSpeedRecorder sharedRecorder] weightedAdjustedBytesPerSecondForHost:host] == -1, @"Without any tasks added, should be -1");
+    [[PINSpeedRecorder sharedRecorder] updateSpeedsForHost:host bytesPerSecond:100 startAdjustedBytesPerSecond:100 timeToFirstByte:0];
+    XCTAssert([self isFloat:[[PINSpeedRecorder sharedRecorder] weightedAdjustedBytesPerSecondForHost:host] equalToFloat:100.0f], @"One task should be same as added task");
+    [[PINSpeedRecorder sharedRecorder] updateSpeedsForHost:host bytesPerSecond:50 startAdjustedBytesPerSecond:50 timeToFirstByte:0];
+    XCTAssert([self isFloat:[[PINSpeedRecorder sharedRecorder] weightedAdjustedBytesPerSecondForHost:host] equalToFloat:90.0], @"Last task should be weighted");
 }
 
 - (void)testQOS
@@ -960,9 +955,10 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 - (void)testAuthentication
 {
 	XCTestExpectation *expectation = [self expectationWithDescription:@"Authentification challenge was called"];
-	
+    __block BOOL authHit = NO;
 	[self.imageManager setAuthenticationChallenge:^(NSURLSessionTask *task, NSURLAuthenticationChallenge *challenge, PINRemoteImageManagerAuthenticationChallengeCompletionHandler aHandler) {
 		aHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
+        authHit = YES;
 		[expectation fulfill];
 	}];
     
@@ -972,7 +968,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 	[self.imageManager downloadImageWithURL:[NSURL URLWithString:@"https://i.pinimg.com/600x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"]
 									options:PINRemoteImageManagerDownloadOptionsNone
                                  completion:^(PINRemoteImageManagerResult * _Nonnull result) {
-                                     XCTAssert(NO, @"should not complete without hitting auth challenge.");
+                                     XCTAssert(authHit, @"should not complete without hitting auth challenge.");
                                  }];
 	
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
@@ -1153,7 +1149,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     checkConcurrentDownloads();
     
     //Give this one a bit longer since these are big images.
-    [self waitForExpectationsWithTimeout:60 handler:nil];
+    [self waitForExpectationsWithTimeout:120 handler:nil];
 }
 
 - (void)testResume
@@ -1246,7 +1242,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     
     XCTestExpectation *progressExpectation = [self expectationWithDescription:@"progress is rendered"];
     
-    [self.imageManager.sessionManager storeTimeToFirstByte:0 forHost:[[self progressiveURL] host]];
+    [[PINSpeedRecorder sharedRecorder] updateSpeedsForHost:[[self progressiveURL] host] bytesPerSecond:0 startAdjustedBytesPerSecond:0 timeToFirstByte:0];
     
     __block BOOL canceled = NO;
     [self.imageManager downloadImageWithURL:[self progressiveURL]
@@ -1271,7 +1267,8 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     XCTestExpectation *progress2Expectation = [self expectationWithDescription:@"progress 2 is rendered"];
     XCTestExpectation *completedExpectation = [self expectationWithDescription:@"image is completed"];
     
-    [self.imageManager.sessionManager storeTimeToFirstByte:10 forHost:[[self progressiveURL] host]];
+    [[PINSpeedRecorder sharedRecorder] resetMeasurements];
+    [[PINSpeedRecorder sharedRecorder] updateSpeedsForHost:[[self progressiveURL] host] bytesPerSecond:100000 startAdjustedBytesPerSecond:100000 timeToFirstByte:10];
     
     canceled = NO;
     [self.imageManager downloadImageWithURL:[self progressiveURL]

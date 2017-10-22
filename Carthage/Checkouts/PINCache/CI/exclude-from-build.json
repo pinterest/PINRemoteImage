@@ -1,5 +1,6 @@
 [
   "^plans/",
   "^docs/",
+  "^README.md$",
   "^CI/exclude-from-build.json$"
 ]

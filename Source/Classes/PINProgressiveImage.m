@@ -14,7 +14,7 @@
 #import "PINRemoteImage.h"
 #import "PINImage+DecodedImage.h"
 #import "PINRemoteImageDownloadTask.h"
-#import "NSURLSessionTask+Timing.h"
+#import "PINSpeedRecorder.h"
 
 @interface PINProgressiveImage ()
 
@@ -105,29 +105,6 @@
     return estimatedRemainingTimeThreshold;
 }
 
-- (float)bytesPerSecond
-{
-    __block float bytesPerSecond;
-    [self.lock lockWithBlock:^{
-        bytesPerSecond = [self l_bytesPerSecond];
-    }];
-    return bytesPerSecond;
-}
-
-- (float)l_bytesPerSecond
-{
-    NSAssert(_dataTask.PIN_startTime != 0, @"Start time needs to be set by now.");
-    CFTimeInterval endTime = _dataTask.PIN_endTime ?: CACurrentMediaTime();
-    CFTimeInterval taskLength = endTime - _dataTask.PIN_startTime;
-    int64_t downloadedBytes = _dataTask.countOfBytesReceived;
-    
-    if (taskLength == 0) {
-        return 0;
-    }
-    
-    return downloadedBytes / taskLength;
-}
-
 - (CFTimeInterval)estimatedRemainingTime
 {
     __block CFTimeInterval estimatedRemainingTime;
@@ -147,8 +124,8 @@
         return 0;
     }
     
-    float bytesPerSecond = [self l_bytesPerSecond];
-    if (bytesPerSecond == 0) {
+    float bytesPerSecond = [[PINSpeedRecorder sharedRecorder] weightedAdjustedBytesPerSecondForHost:[_dataTask.currentRequest.URL host]];
+    if (bytesPerSecond == -1) {
         return MAXFLOAT;
     }
     return remainingBytes / bytesPerSecond;

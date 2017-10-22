@@ -177,7 +177,7 @@ PIN_SUBCLASSING_RESTRICTED
  @param block A block to be executed for every object in the cache.
  @param completionBlock An optional block to be executed concurrently when the enumeration is complete.
  */
-- (void)enumerateObjectsWithBlockAsync:(PINCacheObjectBlock)block completionBlock:(nullable PINCacheBlock)completionBlock;
+- (void)enumerateObjectsWithBlockAsync:(PINCacheObjectEnumerationBlock)block completionBlock:(nullable PINCacheBlock)completionBlock;
 
 #pragma mark - Synchronous Methods
 /// @name Synchronous Methods
@@ -212,7 +212,7 @@ PIN_SUBCLASSING_RESTRICTED
  Instead use the asynchronous version, <enumerateObjectsWithBlock:completionBlock:>.
  
  */
-- (void)enumerateObjectsWithBlock:(PIN_NOESCAPE PINCacheObjectBlock)block;
+- (void)enumerateObjectsWithBlock:(PIN_NOESCAPE PINCacheObjectEnumerationBlock)block;
 
 @end
 

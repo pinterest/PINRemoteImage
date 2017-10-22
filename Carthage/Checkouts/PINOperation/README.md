@@ -2,7 +2,7 @@
 
 [![CocoaPods](https://img.shields.io/cocoapods/v/PINOperation.svg)](http://cocoadocs.org/docsets/PINOperation/)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Build status](https://badge.buildkite.com/03e247305c96c3371f2ff2766e9c8c1efdd5fdb3a7eceaff43.svg?branch=master&style=flat)](https://buildkite.com/pinterest/pinoperation)
+[![Build status](https://badge.buildkite.com/665147e3b6852a9c1c3a3df3ced779c32bc6396ba69fee4b6e.svg?branch=master&style=flat)](https://buildkite.com/pinterest/pinoperation)
 
 ## Fast, concurrency-limited task queue for iOS and macOS.
 

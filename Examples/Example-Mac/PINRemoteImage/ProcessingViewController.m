@@ -34,7 +34,7 @@
 {
     [super viewWillAppear];
     
-    [self.imageView pin_setImageFromURL:[NSURL URLWithString:@"https://s-media-cache-ak0.pinimg.com/736x/5b/c6/c5/5bc6c5387ff6f104fd642f2b375efba3.jpg"] processorKey:@"rounded" processor:^NSImage *(PINRemoteImageManagerResult *result, NSUInteger *cost)
+    [self.imageView pin_setImageFromURL:[NSURL URLWithString:@"https://i.pinimg.com/736x/5b/c6/c5/5bc6c5387ff6f104fd642f2b375efba3.jpg"] processorKey:@"rounded" processor:^NSImage *(PINRemoteImageManagerResult *result, NSUInteger *cost)
      {
          NSImage *image = result.image;
          CGFloat radius = 7.0f;

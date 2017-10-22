@@ -1,10 +1,16 @@
 ## master
 * Add your own contributions to the next release on the line below this with your name.
-- [new] Added a way to specify custom retry logic when network error happens [#386](https://github.com/pinterest/PINRemoteImage/pull/386)
 
+## 3.0.0 Beta 13
+- [new] Support for webp and improved support for GIFs. [#411](https://github.com/pinterest/PINRemoteImage/pull/411) [garrettmoon](https://github.com/garrettmoon)
+- [new] Added back tvOS support through a new target [#408](https://github.com/pinterest/PINRemoteImage/pull/408) [jverdi](https://github.com/jverdi)
+- [refactor] Refactor out KVO on NSURLSessionTask to avoid Apple crashes. [#410](https://github.com/pinterest/PINRemoteImage/pull/410) [garrettmoon](https://github.com/garrettmoon)
+
+## 3.0.0 Beta 12
+- [new] Added a way to specify custom retry logic when network error happens [#386](https://github.com/pinterest/PINRemoteImage/pull/386)
 - [new] Improve disk cache migration performance [#391](https://github.com/pinterest/PINRemoteImage/pull/391) [chuganzy](https://github.com/chuganzy), [#394](https://github.com/pinterest/PINRemoteImage/pull/394) [nguyenhuy](https://github.com/nguyenhuy)
 - [new] Adds support for using cell vs. wifi in leau of speed for determing which URL to download if speed is unavailable. [garrettmoon](https://github.com/garrettmoon)
-
+- [new] Uses BPS minus time to first byte for deciding which of a set of URLs to download. [garrettmoon](https://github.com/garrettmoon)
 - [fixed] Fixes an edge case when image returned with 404 response, we now treat it as image instead of error [#399](https://github.com/pinterest/PINRemoteImage/pull/396) [maxwang](https://github.com/wsdwsd0829)
 
 ## 3.0.0 Beta 11

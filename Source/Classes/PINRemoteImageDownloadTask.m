@@ -12,6 +12,7 @@
 #import "PINRemoteImage.h"
 #import "PINRemoteImageCallbacks.h"
 #import "PINRemoteLock.h"
+#import "PINSpeedRecorder.h"
 
 @interface PINRemoteImageDownloadTask ()
 {
@@ -88,30 +89,32 @@
     }];
 }
 
-- (BOOL)cancelWithUUID:(NSUUID *)UUID resume:(PINResume * _Nullable * _Nullable)resume
+- (BOOL)cancelWithUUID:(NSUUID *)UUID resume:(PINResume **)resume
 {
     __block BOOL noMoreCompletions;
+    __block PINResume *strongResume;
+    BOOL hasResume = resume != nil;
     [self.lock lockWithBlock:^{
-        if (resume) {
+        if (hasResume) {
             //consider skipping cancelation if there's a request for resume data and the time to start the connection is greater than
             //the time remaining to download.
-            NSTimeInterval timeToFirstByte = [self.manager.sessionManager weightedTimeToFirstByteForHost:_progressImage.dataTask.originalRequest.URL.host];
+            NSTimeInterval timeToFirstByte = [[PINSpeedRecorder sharedRecorder] weightedTimeToFirstByteForHost:_progressImage.dataTask.currentRequest.URL.host];
             if (_progressImage.estimatedRemainingTime <= timeToFirstByte) {
                 noMoreCompletions = NO;
                 return;
             }
         }
         
-        noMoreCompletions = [super l_cancelWithUUID:UUID resume:resume];
+        noMoreCompletions = [super l_cancelWithUUID:UUID];
         
         if (noMoreCompletions) {
             [self.manager.urlSessionTaskQueue removeDownloadTaskFromQueue:_progressImage.dataTask];
             [_progressImage.dataTask cancel];
             
-            if (resume && _ifRange && _progressImage.dataTask.countOfBytesExpectedToReceive > 0 && _progressImage.dataTask.countOfBytesExpectedToReceive != NSURLSessionTransferSizeUnknown) {
+            if (hasResume && _ifRange && _progressImage.dataTask.countOfBytesExpectedToReceive > 0 && _progressImage.dataTask.countOfBytesExpectedToReceive != NSURLSessionTransferSizeUnknown) {
                 NSData *progressData = _progressImage.data;
                 if (progressData.length > 0) {
-                    *resume = [PINResume resumeData:progressData ifRange:_ifRange totalBytes:_progressImage.dataTask.countOfBytesExpectedToReceive];
+                    strongResume = [PINResume resumeData:progressData ifRange:_ifRange totalBytes:_progressImage.dataTask.countOfBytesExpectedToReceive];
                 }
             }
             
@@ -124,13 +127,17 @@
 #endif
     }];
     
+    if (hasResume) {
+        *resume = strongResume;
+    }
+    
     return noMoreCompletions;
 }
 
 - (void)setPriority:(PINRemoteImageManagerPriority)priority
 {
     [super setPriority:priority];
-    if (PINNSURLSessionTaskSupportsPriority) {
+    if (@available(iOS 8.0, macOS 10.10, tvOS 9.0, watchOS 2.0, *)) {
         [self.lock lockWithBlock:^{
             if (_progressImage.dataTask) {
                 _progressImage.dataTask.priority = dataTaskPriorityWithImageManagerPriority(priority);
@@ -201,9 +208,7 @@
     
     if (hasProgressBlocks) {
         if (PINNSOperationSupportsBlur) {
-            PINWeakify(self);
-            [self.manager.concurrentOperationQueue addOperation:^{
-                PINStrongify(self);
+            [self.manager.concurrentOperationQueue scheduleOperation:^{
                 CGFloat renderedImageQuality = 1.0;
                 PINImage *image = [progressImage currentImageBlurred:self.manager.shouldBlurProgressive maxProgressiveRenderSize:self.manager.maxProgressiveRenderSize renderedImageQuality:&renderedImageQuality];
                 if (image) {
@@ -293,15 +298,15 @@
                                                                                                                               priority:priority
                                                                                                                      completionHandler:^(NSURLResponse * _Nonnull response, NSError * _Nonnull remoteError)
         {
-            [self.manager.concurrentOperationQueue addOperation:^{
+            [self.manager.concurrentOperationQueue scheduleOperation:^{
                 NSError *error = remoteError;
 #if PINRemoteImageLogging
                 if (error && error.code != NSURLErrorCancelled) {
-                    PINLog(@"Failed downloading image: %@ with error: %@", url, error);
+                    PINLog(@"Failed downloading image: %@ with error: %@", request.URL, error);
                 } else if (error == nil && response.expectedContentLength == 0) {
-                    PINLog(@"image is empty at URL: %@", url);
+                    PINLog(@"image is empty at URL: %@", request.URL);
                 } else {
-                    PINLog(@"Finished downloading image: %@", url);
+                    PINLog(@"Finished downloading image: %@", request.URL);
                 }
 #endif
                 
@@ -326,7 +331,7 @@
                         }
                     }];
                     if (retry) {
-                        PINLog(@"Retrying download of %@ in %d seconds.", URL, delay);
+                        PINLog(@"Retrying download of %@ in %lld seconds.", request.URL, delay);
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                             [self scheduleDownloadWithRequest:request resume:nil skipRetry:skipRetry priority:priority isRetry:YES completionHandler:completionHandler];
                         });
@@ -338,7 +343,7 @@
             }];
         }]];
         
-        if (PINNSURLSessionTaskSupportsPriority) {
+        if (@available(iOS 8.0, macOS 10.10, tvOS 9.0, watchOS 2.0, *)) {
             _progressImage.dataTask.priority = dataTaskPriorityWithImageManagerPriority(priority);
         }
     }];
@@ -363,11 +368,6 @@
         return NO;
     }
     return YES;
-}
-
-- (float)bytesPerSecond
-{
-    return self.progressImage.bytesPerSecond;
 }
 
 - (CFTimeInterval)estimatedRemainingTime

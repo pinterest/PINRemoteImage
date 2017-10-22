@@ -9,3 +9,4 @@ Version: @PACKAGE_VERSION@
 Requires: libwebp >= 0.2.0
 Cflags: -I${includedir}
 Libs: -L${libdir} -lwebpmux
+Libs.private: -lm
