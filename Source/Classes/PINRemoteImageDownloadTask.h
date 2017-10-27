@@ -15,7 +15,7 @@
 
 @interface PINRemoteImageDownloadTask : PINRemoteImageTask
 
-@property (nonatomic, strong, nullable) NSURL *URL;
+@property (nonatomic, strong, nullable, readonly) NSURL *URL;
 @property (nonatomic, copy, nullable) NSString *ifRange;
 @property (nonatomic, copy, readonly, nullable) NSData *data;
 
