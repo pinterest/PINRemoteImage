@@ -55,7 +55,7 @@
 /**
  The current status of the animated image.
  */
-@property (nonatomic, assign, readwrite) PINAnimatedImageStatus status;
+@property (nonatomic, assign, readonly) PINAnimatedImageStatus status;
 
 /**
  A helper function which references status to check if the coverImage is ready.
