@@ -796,7 +796,7 @@ static dispatch_once_t sharedDispatchToken;
   if (url != nil) {
     NSString *key = [self cacheKeyForURL:url processorKey:processorKey];
     
-    PINRemoteImageManagerDownloadOptions options = PINRemoteImageManagerDownloadOptionsSkipDecode & PINRemoteImageManagerDownloadOptionsSkipEarlyCheck;
+    PINRemoteImageManagerDownloadOptions options = PINRemoteImageManagerDownloadOptionsSkipDecode | PINRemoteImageManagerDownloadOptionsSkipEarlyCheck;
     PINRemoteImageMemoryContainer *container = [[PINRemoteImageMemoryContainer alloc] init];
     container.data = data;
     
