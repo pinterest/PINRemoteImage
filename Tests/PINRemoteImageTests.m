@@ -1136,7 +1136,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     //I want this retain cycle
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-retain-cycles"
-    __block void (^checkConcurrentDownloads) ();
+    __block void (^checkConcurrentDownloads) (void);
     checkConcurrentDownloads = ^{
         usleep(10000);
         [self.imageManager.sessionManager concurrentDownloads:^(NSUInteger concurrentDownloads) {
