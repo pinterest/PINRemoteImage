@@ -463,7 +463,7 @@ ERROR;}) \
   }
     
     static dispatch_once_t onceToken;
-    Float32 maximumFrameDuration;
+    static Float32 maximumFrameDuration;
     dispatch_once(&onceToken, ^{
         maximumFrameDuration = 1.0 / [PINAnimatedImage maximumFramesPerSecond];
     });

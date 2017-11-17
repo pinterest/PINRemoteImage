@@ -60,8 +60,8 @@ static void releaseData(void *info, const void *data, size_t size)
             if (WebPDemuxGetFrame(_demux, 1, &iter)) {
                 do {
                     CFTimeInterval duration = iter.duration / 1000.0;
-                    CFTimeInterval maximumDuration;
                     static dispatch_once_t onceToken;
+                    static CFTimeInterval maximumDuration;
                     dispatch_once(&onceToken, ^{
                         maximumDuration = 1.0 / [PINAnimatedImage maximumFramesPerSecond];
                     });
