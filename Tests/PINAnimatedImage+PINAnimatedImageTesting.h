@@ -10,6 +10,6 @@
 
 @interface PINAnimatedImage (PINAnimatedImageTesting)
 
-+ (NSUInteger)greatestCommonDevisor:(NSUInteger)a b:(NSUInteger)b;
++ (NSUInteger)greatestCommonDivisorOfA:(NSUInteger)a andB:(NSUInteger)b;
 
 @end

@@ -461,8 +461,14 @@ ERROR;}) \
       frameDuration = [delayTime floatValue];
     }
   }
+    
+    static dispatch_once_t onceToken;
+    Float32 maximumFrameDuration;
+    dispatch_once(&onceToken, ^{
+        maximumFrameDuration = 1.0 / [PINAnimatedImage maximumFramesPerSecond];
+    });
   
-  if (frameDuration < 1.0 / (Float32)[PINAnimatedImage maximumFramesPerSecond]) {
+  if (frameDuration < maximumFrameDuration) {
     frameDuration = kPINAnimatedImageDefaultDuration;
   }
   
