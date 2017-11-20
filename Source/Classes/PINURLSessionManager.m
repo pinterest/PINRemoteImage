@@ -209,9 +209,18 @@ NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
 #if DEBUG
 - (void)concurrentDownloads:(void (^_Nullable)(NSUInteger concurrentDownloads))concurrentDownloadsCompletion
 {
-    [self.session getAllTasksWithCompletionHandler:^(NSArray<__kindof NSURLSessionTask *> * _Nonnull tasks) {
-        concurrentDownloadsCompletion(tasks.count);
-    }];
+    if (@available(macos 10.11, iOS 9.0, watchOS 2.0, tvOS 9.0,  *)) {
+        [self.session getAllTasksWithCompletionHandler:^(NSArray<__kindof NSURLSessionTask *> * _Nonnull tasks) {
+            concurrentDownloadsCompletion(tasks.count);
+        }];
+    } else {
+        [self.session getTasksWithCompletionHandler:^(NSArray<NSURLSessionDataTask *> * _Nonnull dataTasks,
+                                                      NSArray<NSURLSessionUploadTask *> * _Nonnull uploadTasks,
+                                                      NSArray<NSURLSessionDownloadTask *> * _Nonnull downloadTasks) {
+          NSUInteger total = dataTasks.count + uploadTasks.count + downloadTasks.count;
+          concurrentDownloadsCompletion(total);
+        }];
+    }
 }
 
 #endif
