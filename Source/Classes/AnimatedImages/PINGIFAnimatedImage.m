@@ -79,7 +79,13 @@
         }
     }
     
-    if (frameDuration < kPINAnimatedImageMinimumDuration) {
+    static dispatch_once_t onceToken;
+    static Float32 maximumFrameDuration;
+    dispatch_once(&onceToken, ^{
+        maximumFrameDuration = 1.0 / [PINAnimatedImage maximumFramesPerSecond];
+    });
+    
+    if (frameDuration < maximumFrameDuration) {
         frameDuration = kPINAnimatedImageDefaultDuration;
     }
     

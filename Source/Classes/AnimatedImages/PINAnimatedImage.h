@@ -55,8 +55,6 @@ typedef NS_ENUM(NSUInteger, PINAnimatedImageStatus) {
 };
 
 extern const Float32 kPINAnimatedImageDefaultDuration;
-extern const Float32 kPINAnimatedImageMinimumDuration;
-extern const NSTimeInterval kPINAnimatedImageDisplayRefreshRate;
 
 /**
  Called when the cover image of an animatedImage is ready.
@@ -66,6 +64,11 @@ typedef void(^PINAnimatedImageInfoReady)(PINImage * _Nonnull coverImage);
 @protocol PINAnimatedImage;
 
 @interface PINAnimatedImage : NSObject
+
+/**
+ @abstract The maximum number of frames per second supported.
+ */
++ (NSInteger)maximumFramesPerSecond;
 
 /**
  @abstract Return the duration at a given index.
