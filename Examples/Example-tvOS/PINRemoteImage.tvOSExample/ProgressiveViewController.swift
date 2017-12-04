@@ -23,17 +23,17 @@ class ProgressiveViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        if let url = NSURL(string: "https://i.pinimg.com/1200x/2e/0c/c5/2e0cc5d86e7b7cd42af225c29f21c37f.jpg") {
-            PINRemoteImageManager.sharedImageManager().setProgressThresholds([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], completion: nil)
-
-            imageView.pin_setImageFromURL(url)
-
+        if let url = URL(string: "https://i.pinimg.com/1200x/2e/0c/c5/2e0cc5d86e7b7cd42af225c29f21c37f.jpg") {
+            PINRemoteImageManager.shared().setProgressThresholds([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], completion: nil)
+            
+            imageView.pin_setImage(from: url)
+            
             var progress = [UIImage]()
-            PINRemoteImageManager.sharedImageManager().downloadImageWithURL(url,
-                options: .DownloadOptionsNone,
+            PINRemoteImageManager.shared().downloadImage(with: url,
+                options: [],
                 progressImage: { result in
                     if let image = result.image {
                         progress.append(image)

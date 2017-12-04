@@ -15,7 +15,7 @@ class DegradedViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        PINRemoteImageManager.sharedImageManager().setShouldUpgradeLowQualityImages(true, completion: nil)
+        PINRemoteImageManager.shared().setShouldUpgradeLowQualityImages(true, completion: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -23,13 +23,13 @@ class DegradedViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        imageView.pin_setImageFromURLs([
-            NSURL(string: "https://placekitten.com/101/101")!,
-            NSURL(string: "https://placekitten.com/401/401")!,
-            NSURL(string: "https://placekitten.com/801/801")!
+        imageView.pin_setImage(from: [
+            URL(string: "https://placekitten.com/101/101")!,
+            URL(string: "https://placekitten.com/401/401")!,
+            URL(string: "https://placekitten.com/801/801")!
         ])
     }
 }
