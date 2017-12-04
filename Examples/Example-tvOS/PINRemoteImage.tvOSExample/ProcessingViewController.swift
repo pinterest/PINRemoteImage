@@ -22,11 +22,11 @@ class ProcessingViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        if let url = NSURL(string: "https://i.pinimg.com/1200x/2e/0c/c5/2e0cc5d86e7b7cd42af225c29f21c37f.jpg") {
-            imageView.pin_setImageFromURL(url,
+        if let url = URL(string: "https://i.pinimg.com/1200x/2e/0c/c5/2e0cc5d86e7b7cd42af225c29f21c37f.jpg") {
+            imageView.pin_setImage(from: url,
                 processorKey: "rounded",
                 processor: { (result, cost) -> UIImage? in
                     if let image = result.image {
@@ -42,32 +42,32 @@ class ProcessingViewController: UIViewController {
                         let sizeMultiplier = max(widthMultiplier, heightMultiplier)
 
                         var drawRect = CGRect(x: 0, y: 0, width: image.size.width * sizeMultiplier, height: image.size.height * sizeMultiplier)
-                        if CGRectGetMaxX(drawRect) > CGRectGetMaxX(imageRect) {
-                            drawRect.origin.x -= (CGRectGetMaxX(drawRect) - CGRectGetMaxX(imageRect)) / 2.0;
+                        if drawRect.maxX > imageRect.maxX {
+                            drawRect.origin.x -= (drawRect.maxX - imageRect.maxX) / 2.0
                         }
-                        if CGRectGetMaxY(drawRect) > CGRectGetMaxY(imageRect) {
-                            drawRect.origin.y -= (CGRectGetMaxY(drawRect) - CGRectGetMaxY(imageRect)) / 2.0;
+                        if drawRect.maxY > imageRect.maxY {
+                            drawRect.origin.y -= (drawRect.maxY - imageRect.maxY) / 2.0
                         }
 
-                        image.drawInRect(drawRect)
+                        image.draw(in: drawRect)
 
-                        UIColor.redColor().setStroke()
+                        UIColor.red.setStroke()
                         bezierPath.lineWidth = 5.0
                         bezierPath.stroke()
 
-                        let ctx = UIGraphicsGetCurrentContext();
-                        CGContextSetBlendMode(ctx, .Overlay);
-                        CGContextSetAlpha(ctx, 0.5);
+                        let ctx = UIGraphicsGetCurrentContext()!
+                        ctx.setBlendMode(.overlay)
+                        ctx.setAlpha(0.5)
 
                         if let logo = UIImage(named: "white-pinterest-logo") {
-                            CGContextScaleCTM(ctx, 1.0, -1.0);
-                            CGContextTranslateCTM(ctx, 0.0, -drawRect.size.height);
-                            CGContextDrawImage(ctx, CGRect(x: 0, y: 0, width: logo.size.width, height: logo.size.height), logo.CGImage);
+                            ctx.scaleBy(x: 1.0, y: -1.0)
+                            ctx.translateBy(x: 0.0, y: -drawRect.size.height)
+                            logo.draw(in: CGRect(x: 0, y: 0, width: logo.size.width, height: logo.size.height))
                         }
 
-                        let processedImage = UIGraphicsGetImageFromCurrentImageContext();
-                        UIGraphicsEndImageContext();
-                        return processedImage;
+                        let processedImage = UIGraphicsGetImageFromCurrentImageContext()
+                        UIGraphicsEndImageContext()
+                        return processedImage
                     }
 
                     return nil
