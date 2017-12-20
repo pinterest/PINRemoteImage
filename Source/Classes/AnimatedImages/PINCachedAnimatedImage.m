@@ -36,7 +36,8 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
     PINAnimatedImageInfoReady _coverImageReadyCallback;
     dispatch_block_t _playbackReadyCallback;
     NSMutableDictionary *_frameCache;
-    NSInteger _playbackReady; // Number of frames to cache until playback is ready.
+    NSInteger _frameRenderCount; // Number of frames to cache until playback is ready.
+    BOOL _playbackReady;
     PINOperationQueue *_operationQueue;
     dispatch_queue_t _cachingQueue;
     
@@ -48,7 +49,9 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
 }
 
 @property (atomic, strong) NSDate *lastMemoryWarning;
-@property (atomic, assign) BOOL weAreTheProblem;
+
+// Set to YES if we continually see memory warnings after ramping up the number of cached frames.
+@property (atomic, assign) BOOL cachingFramesCausingMemoryWarnings;
 
 @end
 
@@ -72,7 +75,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
     if (self = [super init]) {
         _animatedImage = animatedImage;
         _frameCache = [[NSMutableDictionary alloc] init];
-        _playbackReady = 0;
+        _frameRenderCount = 0;
         _playhead = 0;
         _notifyOnReady = YES;
         _cachedOrCachingFrames = [[NSMutableIndexSet alloc] init];
@@ -85,7 +88,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
             PINStrongify(self);
             NSDate *now = [NSDate date];
             if (-[self.lastMemoryWarning timeIntervalSinceDate:now] < kSecondsBetweenMemoryWarnings) {
-                self.weAreTheProblem = YES;
+                self.cachingFramesCausingMemoryWarnings = YES;
             }
             self.lastMemoryWarning = now;
             [self cleanupFrames];
@@ -302,7 +305,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
     if ([_cachedOrCachingFrames containsIndex:frameIndex] == NO && _cacheCleared == NO) {
         PINLog(@"Requesting: %lu", (unsigned long)frameIndex);
         [_cachedOrCachingFrames addIndex:frameIndex];
-        _playbackReady++;
+        _frameRenderCount++;
         
         dispatch_async(_cachingQueue, ^{
             CGImageRef imageRef = [self->_animatedImage imageAtIndex:frameIndex cacheProvider:self];
@@ -317,13 +320,13 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
                         [self l_updateCoverImage:imageRef];
                     }
                     
-                    self->_playbackReady--;
-                    NSAssert(self->_playbackReady >= 0, @"playback ready is less than zero, something is wrong :(");
+                    self->_frameRenderCount--;
+                    NSAssert(self->_frameRenderCount >= 0, @"playback ready is less than zero, something is wrong :(");
                     
-                    PINLog(@"Frames left: %ld", (long)_playbackReady);
+                    PINLog(@"Frames left: %ld", (long)_frameRenderCount);
                     
                     dispatch_block_t notify = nil;
-                    if (self->_playbackReady == 0 && self->_notifyOnReady) {
+                    if (self->_frameRenderCount == 0 && self->_notifyOnReady) {
                         self->_notifyOnReady = NO;
                         if (self->_playbackReadyCallback) {
                             notify = self->_playbackReadyCallback;
@@ -361,7 +364,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
     
     // If it's been less than 5 seconds, we're not caching
     CFTimeInterval timeSinceLastWarning = -[self.lastMemoryWarning timeIntervalSinceNow];
-    if (self.weAreTheProblem || timeSinceLastWarning < kSecondsAfterMemWarningToMinimumCache) {
+    if (self.cachingFramesCausingMemoryWarnings || timeSinceLastWarning < kSecondsAfterMemWarningToMinimumCache) {
         framesToCache = 0;
     } else if (timeSinceLastWarning < kSecondsAfterMemWarningToLargeCache) {
         framesToCache = MIN(framesToCache, kFramesToRenderMinimum);
@@ -379,12 +382,13 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
 
 - (BOOL)playbackReady
 {
-    static BOOL playbackReady = NO;
-    if (playbackReady == NO) {
-        [_lock lockWithBlock:^{
-            playbackReady = _playbackReady == 0;
-        }];
-    }
+    __block BOOL playbackReady = NO;
+    [_lock lockWithBlock:^{
+        if (_playbackReady == NO) {
+            _playbackReady = _frameRenderCount == 0;
+        }
+        playbackReady = _playbackReady;
+    }];
     return playbackReady;
 }
 
