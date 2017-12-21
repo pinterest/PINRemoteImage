@@ -2,6 +2,7 @@
 * Add your own contributions to the next release on the line below this with your name.
 - [iOS11] Fix warnings [#428](https://github.com/pinterest/PINRemoteImage/pull/428) [Eke](https://github.com/Eke)
 - [new] Add support for higher frame rate devices to animated images. [#417](https://github.com/pinterest/PINRemoteImage/pull/417) [garrettmoon](https://github.com/garrettmoon)
+- [fixed] Fixes non-animated GIFs being delivered as an animated image. [#434](https://github.com/pinterest/PINRemoteImage/pull/434) [garrettmoon](https://github.com/garrettmoon)
 
 ## 3.0.0 Beta 13
 - [new] Support for webp and improved support for GIFs. [#411](https://github.com/pinterest/PINRemoteImage/pull/411) [garrettmoon](https://github.com/garrettmoon)
