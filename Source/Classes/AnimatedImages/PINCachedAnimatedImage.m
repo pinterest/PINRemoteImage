@@ -56,7 +56,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
 
 - (instancetype)initWithAnimatedImageData:(NSData *)animatedImageData
 {
-    if ([animatedImageData pin_isGIF]) {
+    if ([animatedImageData pin_isAnimatedGIF]) {
         return [self initWithAnimatedImage:[[PINGIFAnimatedImage alloc] initWithAnimatedImageData:animatedImageData]];
     }
 #if PIN_WEBP

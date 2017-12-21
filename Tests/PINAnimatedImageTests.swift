@@ -34,6 +34,10 @@ class PINAnimatedImageTests: XCTestCase, PINRemoteImageManagerAlternateRepresent
         return URL.init(string: "https://i.pinimg.com/originals/1d/65/00/1d650041ad356b248139800bc84b7bce.gif")
     }
     
+    func nonAnimatedGIFURL() -> URL? {
+        return URL.init(string: "http://ak-cache.legacy.net/legacy/images/fhlogo/7630fhlogo.gif")
+    }
+    
     func testMinimumFrameInterval() {
         let expectation =  self.expectation(description: "Result should be downloaded")
         let imageManager = PINRemoteImageManager.init(sessionConfiguration: nil, alternativeRepresentationProvider: self)
@@ -97,6 +101,35 @@ class PINAnimatedImageTests: XCTestCase, PINRemoteImageManagerAlternateRepresent
     }
     
     func alternateRepresentation(with data: Data!, options: PINRemoteImageManagerDownloadOptions = []) -> Any! {
-        return data
+        guard let nsdata = data as? NSData else {
+            return nil
+        }
+        if nsdata.pin_isAnimatedWebP() || nsdata.pin_isAnimatedGIF() {
+            return data
+        }
+        return nil
+    }
+    
+    func testIsAnimatedGIF() {
+        let animatedExpectation =  self.expectation(description: "Animated image should be downloaded")
+        let imageManager = PINRemoteImageManager.init(sessionConfiguration: nil, alternativeRepresentationProvider: self)
+        imageManager.downloadImage(with: self.slowAnimatedGIFURL()!) { (result : PINRemoteImageManagerResult) in
+            XCTAssert(result.image == nil)
+            guard let animatedData = result.alternativeRepresentation as? NSData else {
+                XCTAssert(false, "alternativeRepresentation should be able to be coerced into data")
+                return
+            }
+            
+            XCTAssert(animatedData.pin_isGIF() && animatedData.pin_isAnimatedGIF())
+            
+            animatedExpectation.fulfill()
+        }
+        
+        let nonAnimatedExpectation = self.expectation(description: "Non animated image should be downloaded")
+        imageManager.downloadImage(with: self.nonAnimatedGIFURL()!) { (result : PINRemoteImageManagerResult) in
+            XCTAssert(result.image != nil && result.alternativeRepresentation == nil)
+            nonAnimatedExpectation.fulfill()
+        }
+        self.waitForExpectations(timeout: self.timeoutInterval(), handler: nil)
     }
 }
