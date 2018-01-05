@@ -16,6 +16,7 @@
                                error:(NSError *)error
                           resultType:(PINRemoteImageResultType)resultType
                                 UUID:(NSUUID *)uuid
+                         urlResponse:(NSURLResponse *)response
 {
     return [self imageResultWithImage:image
                         animatedImage:animatedImage
@@ -23,6 +24,7 @@
                                 error:error
                            resultType:resultType
                                  UUID:uuid
+                          urlResponse:response
                  renderedImageQuality:1.0];
 }
 
@@ -32,6 +34,7 @@
                                error:(NSError *)error
                           resultType:(PINRemoteImageResultType)resultType
                                 UUID:(NSUUID *)uuid
+                         urlResponse:(NSURLResponse *)response
                 renderedImageQuality:(CGFloat)renderedImageQuality
 {
     return [[self alloc] initWithImage:image
@@ -40,6 +43,7 @@
                                  error:error
                             resultType:resultType
                                   UUID:uuid
+                           urlResponse:response
                   renderedImageQuality:renderedImageQuality];
 }
 
@@ -49,6 +53,7 @@
                         error:(NSError *)error
                    resultType:(PINRemoteImageResultType)resultType
                          UUID:(NSUUID *)uuid
+                  urlResponse:(NSURLResponse *)response
          renderedImageQuality:(CGFloat)renderedImageQuality
 {
     if (self = [super init]) {
@@ -59,6 +64,7 @@
         _resultType = resultType;
         _UUID = uuid;
         _renderedImageQuality = renderedImageQuality;
+        _response = response;
     }
     return self;
 }
@@ -79,6 +85,11 @@
     description = [description stringByAppendingString:[NSString stringWithFormat:@"UUID: %@", self.UUID]];
     description = [description stringByAppendingString:@"\n"];
     description = [description stringByAppendingString:[NSString stringWithFormat:@"UUID: %f", self.renderedImageQuality]];
+    if ([self.response isKindOfClass:[NSHTTPURLResponse class]]) {
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)self.response;
+        description = [description stringByAppendingString:@"\n"];
+        description = [description stringByAppendingString:[NSString stringWithFormat:@"Status Code: %d", httpResponse.statusCode]];
+    }
     return description;
 }
 

@@ -72,6 +72,7 @@
                                                                                error:nil
                                                                           resultType:PINRemoteImageResultTypeProgress
                                                                                 UUID:UUID
+                                                                         urlResponse:self.urlSessionTaskOperation.dataTask.response
                                                                 renderedImageQuality:renderedImageQuality]);
            });
         }

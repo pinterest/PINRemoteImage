@@ -562,7 +562,11 @@ static dispatch_once_t sharedDispatchToken;
                                     typeof(self) strongSelf = weakSelf;
                                     [strongSelf lock];
                                         PINRemoteImageTask *task = [strongSelf.tasks objectForKey:key];
-                                        [task callCompletionsWithQueue:strongSelf.callbackQueue remove:NO withImage:image animatedImage:animatedImage cached:YES error:nil];
+                                        NSURLResponse *urlResponse = nil;
+                                        if ([task isKindOfClass:[PINRemoteImageDownloadTask class]]) {
+                                            urlResponse = [(PINRemoteImageDownloadTask *)task urlSessionTaskOperation].dataTask.response;
+                                        }
+                                        [task callCompletionsWithQueue:strongSelf.callbackQueue remove:NO withImage:image animatedImage:animatedImage response: urlResponse cached:YES error:nil];
                                         [strongSelf.tasks removeObjectForKey:key];
                                     [strongSelf unlock];
                                 } else {
@@ -659,7 +663,7 @@ static dispatch_once_t sharedDispatchToken;
                 [strongSelf lock];
                     //call any completion blocks that are already set
                     PINRemoteImageProcessorTask *task = [strongSelf.tasks objectForKey:key];
-                    [task callCompletionsWithQueue:strongSelf.callbackQueue remove:YES withImage:image animatedImage:nil cached:NO error:error];
+                [task callCompletionsWithQueue:strongSelf.callbackQueue remove:YES withImage:image animatedImage:nil response:nil cached:NO error:error];
                 [strongSelf unlock];
                 
                 if (error == nil) {
@@ -688,7 +692,7 @@ static dispatch_once_t sharedDispatchToken;
                                   //call any completion blocks that were added while we were caching
                                   //and remove session task
                                   PINRemoteImageProcessorTask *task = [strongSelf.tasks objectForKey:key];
-                                  [task callCompletionsWithQueue:strongSelf.callbackQueue remove:NO withImage:image animatedImage:nil cached:NO error:nil];
+                                  [task callCompletionsWithQueue:strongSelf.callbackQueue remove:NO withImage:image animatedImage:nil response:nil cached:NO error:nil];
                                   [strongSelf.tasks removeObjectForKey:key];
                               [strongSelf unlock];
                           }];
@@ -703,7 +707,7 @@ static dispatch_once_t sharedDispatchToken;
                 [strongSelf lock];
                     //call any completion blocks that are already set
                     PINRemoteImageProcessorTask *task = [strongSelf.tasks objectForKey:key];
-                    [task callCompletionsWithQueue:strongSelf.callbackQueue remove:NO withImage:nil animatedImage:nil cached:NO error:error];
+                [task callCompletionsWithQueue:strongSelf.callbackQueue remove:NO withImage:nil animatedImage:nil response:nil cached:NO error:error];
                     [strongSelf.tasks removeObjectForKey:key];
                 [strongSelf unlock];
             }
@@ -765,7 +769,8 @@ static dispatch_once_t sharedDispatchToken;
                                                           requestLength:0
                                                                   error:error
                                                              resultType:resultType
-                                                                   UUID:nil]);
+                                                                   UUID:nil
+                                                             urlResponse:nil]);
         } else {
             dispatch_async(self.callbackQueue, ^{
                 completion([PINRemoteImageManagerResult imageResultWithImage:image
@@ -773,7 +778,8 @@ static dispatch_once_t sharedDispatchToken;
                                                               requestLength:0
                                                                       error:error
                                                                  resultType:resultType
-                                                                       UUID:nil]);
+                                                                       UUID:nil
+                                                                 urlResponse:nil]);
             });
         }
         return YES;
@@ -878,7 +884,7 @@ static dispatch_once_t sharedDispatchToken;
                 [strongSelf lock];
                     //call any completion blocks that are already set
                     PINRemoteImageDownloadTask *task = [strongSelf.tasks objectForKey:key];
-                    [task callCompletionsWithQueue:strongSelf.callbackQueue remove:YES withImage:image animatedImage:animatedImage cached:NO error:nil];
+                    [task callCompletionsWithQueue:strongSelf.callbackQueue remove:YES withImage:image animatedImage:animatedImage response:task.urlSessionTaskOperation.dataTask.response cached:NO error:nil];
                 [strongSelf unlock];
                 
                 id memoryCacheObject = image;
@@ -893,7 +899,7 @@ static dispatch_once_t sharedDispatchToken;
                         //call any completion blocks that were added while we were caching
                         //and remove session task
                         PINRemoteImageDownloadTask *task = [strongSelf.tasks objectForKey:key];
-                        [task callCompletionsWithQueue:strongSelf.callbackQueue remove:NO withImage:image animatedImage:animatedImage cached:NO error:nil];
+                        [task callCompletionsWithQueue:strongSelf.callbackQueue remove:NO withImage:image animatedImage:animatedImage response:task.urlSessionTaskOperation.dataTask.response cached:NO error:nil];
                         [strongSelf.tasks removeObjectForKey:key];
                     [strongSelf unlock];
                 };
@@ -914,7 +920,7 @@ static dispatch_once_t sharedDispatchToken;
                 [strongSelf lock];
                     typeof(self) strongSelf = weakSelf;
                     PINRemoteImageDownloadTask *task = [strongSelf.tasks objectForKey:key];
-                    [task callCompletionsWithQueue:strongSelf.callbackQueue remove:NO withImage:image animatedImage:animatedImage cached:NO error:remoteImageError];
+                    [task callCompletionsWithQueue:strongSelf.callbackQueue remove:NO withImage:image animatedImage:animatedImage response:task.urlSessionTaskOperation.dataTask.response cached:NO error:remoteImageError];
                     [strongSelf.tasks removeObjectForKey:key];
                 [strongSelf unlock];
             }
@@ -1139,7 +1145,8 @@ static dispatch_once_t sharedDispatchToken;
                                                            requestLength:CACurrentMediaTime() - requestTime
                                                                    error:error
                                                               resultType:PINRemoteImageResultTypeCache
-                                                                    UUID:nil]);
+                                                                    UUID:nil
+                                                             urlResponse:nil]);
         });
     }];
 }
@@ -1166,7 +1173,8 @@ static dispatch_once_t sharedDispatchToken;
                                                requestLength:CACurrentMediaTime() - requestTime
                                                        error:error
                                                   resultType:PINRemoteImageResultTypeMemoryCache
-                                                        UUID:nil];
+                                                        UUID:nil
+                                                 urlResponse:nil];
 }
 
 #pragma mark - Session Task Blocks
