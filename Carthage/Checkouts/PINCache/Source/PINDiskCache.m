@@ -297,22 +297,12 @@ static NSURL *_sharedTrashURL;
             return @"";
         }
         
-        if (@available(macOS 10.9, iOS 7.0, tvOS 9.0, watchOS 2.0, *)) {
-            NSString *encodedString = [decodedKey stringByAddingPercentEncodingWithAllowedCharacters:[[NSCharacterSet characterSetWithCharactersInString:@".:/%"] invertedSet]];
-            return encodedString;
-        } else {
-            CFStringRef static const charsToEscape = CFSTR(".:/%");
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-            CFStringRef escapedString = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                                (__bridge CFStringRef)decodedKey,
-                                                                                NULL,
-                                                                                charsToEscape,
-                                                                                kCFStringEncodingUTF8);
-#pragma clang diagnostic pop
-            
-            return (__bridge_transfer NSString *)escapedString;
-        }
+        static NSCharacterSet *allowedChars;
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            allowedChars = [NSCharacterSet characterSetWithCharactersInString:@".:/%"].invertedSet;
+        });
+        return [decodedKey stringByAddingPercentEncodingWithAllowedCharacters:allowedChars];
     };
 }
 
@@ -323,18 +313,7 @@ static NSURL *_sharedTrashURL;
             return @"";
         }
         
-        if (@available(macOS 10.9, iOS 7.0, tvOS 9.0, watchOS 2.0, *)) {
-            return [encodedKey stringByRemovingPercentEncoding];
-        } else {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-            CFStringRef unescapedString = CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
-                                                                                                  (__bridge CFStringRef)encodedKey,
-                                                                                                  CFSTR(""),
-                                                                                                  kCFStringEncodingUTF8);
-#pragma clang diagnostic pop
-            return (__bridge_transfer NSString *)unescapedString;
-        }
+        return [encodedKey stringByRemovingPercentEncoding];
     };
 }
 
