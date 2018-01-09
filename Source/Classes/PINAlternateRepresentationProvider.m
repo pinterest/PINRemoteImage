@@ -18,7 +18,7 @@
 - (id)alternateRepresentationWithData:(NSData *)data options:(PINRemoteImageManagerDownloadOptions)options
 {
 #if USE_FLANIMATED_IMAGE
-    if ([data pin_isGIF]) {
+    if ([data pin_isAnimatedGIF]) {
         return [FLAnimatedImage animatedImageWithGIFData:data];
     }
 #endif

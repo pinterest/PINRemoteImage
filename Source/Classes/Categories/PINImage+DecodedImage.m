@@ -79,9 +79,6 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
         return nil;
     }
     
-    if ([data pin_isGIF]) {
-        return [PINImage imageWithData:data];
-    }
 #if PIN_WEBP
     if ([data pin_isWebP]) {
         return [PINImage pin_imageWithWebPData:data];
