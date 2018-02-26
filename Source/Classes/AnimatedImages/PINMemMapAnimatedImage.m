@@ -50,10 +50,10 @@ static const size_t kPINAnimatedImageBitsPerComponent = 8;
       self.sharedAnimatedImage = shared;
       self.infoCompleted = YES;
       
-      [_completionLock lockWithBlock:^{
-        if (_infoCompletion) {
-          _infoCompletion(coverImage);
-          _infoCompletion = nil;
+      [self->_completionLock lockWithBlock:^{
+        if (self->_infoCompletion) {
+          self->_infoCompletion(coverImage);
+          self->_infoCompletion = nil;
         }
       }];
     } completion:^(BOOL completed, NSString *path, NSError *error) {
@@ -63,18 +63,18 @@ static const size_t kPINAnimatedImageBitsPerComponent = 8;
         success = YES;
       }
       
-      [_completionLock lockWithBlock:^{
-        if (_fileReady) {
-          _fileReady();
+      [self->_completionLock lockWithBlock:^{
+        if (self->_fileReady) {
+          self->_fileReady();
         }
       }];
       
       if (success) {
-        [_completionLock lockWithBlock:^{
-          if (_animatedImageReady) {
-            _animatedImageReady();
-            _fileReady = nil;
-            _animatedImageReady = nil;
+        [self->_completionLock lockWithBlock:^{
+          if (self->_animatedImageReady) {
+            self->_animatedImageReady();
+            self->_fileReady = nil;
+            self->_animatedImageReady = nil;
           }
         }];
       }
@@ -86,21 +86,21 @@ static const size_t kPINAnimatedImageBitsPerComponent = 8;
 - (void)setInfoCompletion:(PINAnimatedImageInfoReady)infoCompletion
 {
   [_completionLock lockWithBlock:^{
-    _infoCompletion = infoCompletion;
+    self->_infoCompletion = infoCompletion;
   }];
 }
 
 - (void)setAnimatedImageReady:(dispatch_block_t)animatedImageReady
 {
   [_completionLock lockWithBlock:^{
-    _animatedImageReady = animatedImageReady;
+    self->_animatedImageReady = animatedImageReady;
   }];
 }
 
 - (void)setFileReady:(dispatch_block_t)fileReady
 {
   [_completionLock lockWithBlock:^{
-    _fileReady = fileReady;
+    self->_fileReady = fileReady;
   }];
 }
 
@@ -133,10 +133,10 @@ void releaseData(void *data, const void *imageData, size_t size)
       __block NSData *memoryMappedData = nil;
       [_dataLock lockWithBlock:^{
         memoryMappedData = imageFile.memoryMappedData;
-        _currentData = memoryMappedData;
+        self->_currentData = memoryMappedData;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-          [_dataLock lockWithBlock:^{
-            _nextData = (fileIdx + 1 < imageFiles.count) ? imageFiles[fileIdx + 1].memoryMappedData : imageFiles[0].memoryMappedData;
+          [self->_dataLock lockWithBlock:^{
+            self->_nextData = (fileIdx + 1 < imageFiles.count) ? imageFiles[fileIdx + 1].memoryMappedData : imageFiles[0].memoryMappedData;
           }];
         });
       }];
@@ -337,8 +337,8 @@ void releaseData(void *data, const void *imageData, size_t size)
 - (void)clearAnimatedImageCache
 {
   [_dataLock lockWithBlock:^{
-    _currentData = nil;
-    _nextData = nil;
+    self->_currentData = nil;
+    self->_nextData = nil;
   }];
 }
 
@@ -361,7 +361,7 @@ void releaseData(void *data, const void *imageData, size_t size)
 {
   NSAssert(_status == PINAnimatedImageStatusUnprocessed, @"Status should be unprocessed.");
   [_coverImageLock lockWithBlock:^{
-    _coverImage = coverImage;
+    self->_coverImage = coverImage;
   }];
   _UUID = UUID;
   _durations = (Float32 *)malloc(sizeof(Float32) * frameCount);
@@ -403,16 +403,16 @@ void releaseData(void *data, const void *imageData, size_t size)
 {
   __block PINImage *coverImage = nil;
   [_coverImageLock lockWithBlock:^{
-    if (_coverImage == nil) {
+    if (self->_coverImage == nil) {
       CGImageRef imageRef = [PINMemMapAnimatedImage imageAtIndex:0 inMemoryMap:self.maps[0].memoryMappedData width:(UInt32)self.width height:(UInt32)self.height bitsPerPixel:(UInt32)self.bitsPerPixel bitmapInfo:self.bitmapInfo];
 #if PIN_TARGET_IOS
       coverImage = [UIImage imageWithCGImage:imageRef];
 #elif PIN_TARGET_MAC
       coverImage = [[NSImage alloc] initWithCGImage:imageRef size:CGSizeMake(self.width, self.height)];
 #endif
-      _coverImage = coverImage;
+      self->_coverImage = coverImage;
     } else {
-      coverImage = _coverImage;
+      coverImage = self->_coverImage;
     }
   }];
   
@@ -445,14 +445,14 @@ void releaseData(void *data, const void *imageData, size_t size)
 {
   __block UInt32 frameCount;
   [_lock lockWithBlock:^{
-    if (_frameCount == 0) {
-      NSData *memoryMappedData = _memoryMappedData;
+    if (self->_frameCount == 0) {
+      NSData *memoryMappedData = self->_memoryMappedData;
       if (memoryMappedData == nil) {
         memoryMappedData = [self loadMemoryMappedData];
       }
-      [memoryMappedData getBytes:&_frameCount range:NSMakeRange(0, sizeof(_frameCount))];
+      [memoryMappedData getBytes:&self->_frameCount range:NSMakeRange(0, sizeof(self->_frameCount))];
     }
-    frameCount = _frameCount;
+    frameCount = self->_frameCount;
   }];
   
   return frameCount;
@@ -462,7 +462,7 @@ void releaseData(void *data, const void *imageData, size_t size)
 {
   __block NSData *memoryMappedData;
   [_lock lockWithBlock:^{
-    memoryMappedData = _memoryMappedData;
+    memoryMappedData = self->_memoryMappedData;
     if (memoryMappedData == nil) {
       memoryMappedData = [self loadMemoryMappedData];
     }

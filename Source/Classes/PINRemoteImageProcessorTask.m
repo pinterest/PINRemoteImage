@@ -16,9 +16,9 @@
 {
     BOOL noMoreCompletions = [super cancelWithUUID:UUID resume:resume];
     [self.lock lockWithBlock:^{
-        if (noMoreCompletions && _downloadTaskUUID) {
-            [self.manager cancelTaskWithUUID:_downloadTaskUUID];
-            _downloadTaskUUID = nil;
+        if (noMoreCompletions && self->_downloadTaskUUID) {
+            [self.manager cancelTaskWithUUID:self->_downloadTaskUUID];
+            self->_downloadTaskUUID = nil;
         }
     }];
     return noMoreCompletions;
@@ -27,8 +27,8 @@
 - (void)setDownloadTaskUUID:(NSUUID *)downloadTaskUUID
 {
     [self.lock lockWithBlock:^{
-        NSAssert(_downloadTaskUUID == nil, @"downloadTaskUUID should be nil");
-        _downloadTaskUUID = downloadTaskUUID;
+        NSAssert(self->_downloadTaskUUID == nil, @"downloadTaskUUID should be nil");
+        self->_downloadTaskUUID = downloadTaskUUID;
     }];
 }
 
@@ -36,7 +36,7 @@
 {
     __block NSUUID *downloadTaskUUID;
     [self.lock lockWithBlock:^{
-        downloadTaskUUID = _downloadTaskUUID;
+        downloadTaskUUID = self->_downloadTaskUUID;
     }];
     return downloadTaskUUID;
 }
