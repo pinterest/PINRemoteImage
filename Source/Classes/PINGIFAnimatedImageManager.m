@@ -84,12 +84,12 @@ typedef NS_ENUM(NSUInteger, PINAnimatedImageManagerCondition) {
     _lock = [[NSConditionLock alloc] initWithCondition:PINAnimatedImageManagerConditionNotReady];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-      [_lock lockWhenCondition:PINAnimatedImageManagerConditionNotReady];
+      [self->_lock lockWhenCondition:PINAnimatedImageManagerConditionNotReady];
         [PINGIFAnimatedImageManager cleanupFiles];
         if ([[NSFileManager defaultManager] fileExistsAtPath:[PINGIFAnimatedImageManager temporaryDirectory]] == NO) {
           [[NSFileManager defaultManager] createDirectoryAtPath:[PINGIFAnimatedImageManager temporaryDirectory] withIntermediateDirectories:YES attributes:nil error:nil];
         }
-      [_lock unlockWithCondition:PINAnimatedImageManagerConditionReady];
+      [self->_lock unlockWithCondition:PINAnimatedImageManagerConditionReady];
     });
     
     _animatedImages = [[NSMapTable alloc] initWithKeyOptions:NSMapTableWeakMemory valueOptions:NSMapTableWeakMemory capacity:1];
@@ -120,7 +120,7 @@ typedef NS_ENUM(NSUInteger, PINAnimatedImageManagerCondition) {
   __block BOOL startProcessing = NO;
   __block PINSharedAnimatedImage *sharedAnimatedImage = nil;
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    [_lock lockWhenCondition:PINAnimatedImageManagerConditionReady];
+    [self->_lock lockWhenCondition:PINAnimatedImageManagerConditionReady];
       sharedAnimatedImage = [self.animatedImages objectForKey:animatedImageData];
       if (sharedAnimatedImage == nil) {
         sharedAnimatedImage = [[PINSharedAnimatedImage alloc] init];
@@ -165,19 +165,19 @@ typedef NS_ENUM(NSUInteger, PINAnimatedImageManagerCondition) {
           sharedAnimatedImage.completions = [sharedAnimatedImage.completions arrayByAddingObject:capturingCompletion];
         }
       }
-    [_lock unlockWithCondition:PINAnimatedImageManagerConditionReady];
+    [self->_lock unlockWithCondition:PINAnimatedImageManagerConditionReady];
   
     if (startProcessing) {
       dispatch_async(self.serialProcessingQueue, ^{
         [[self class] processAnimatedImage:animatedImageData temporaryDirectory:[PINGIFAnimatedImageManager temporaryDirectory] infoCompletion:^(PINImage *coverImage, NSUUID *UUID, Float32 *durations, CFTimeInterval totalDuration, size_t loopCount, size_t frameCount, UInt32 width, UInt32 height, size_t bitsPerPixel, UInt32 bitmapInfo) {
           __block NSArray *infoCompletions = nil;
           __block PINSharedAnimatedImage *sharedAnimatedImage = nil;
-          [_lock lockWhenCondition:PINAnimatedImageManagerConditionReady];
+          [self->_lock lockWhenCondition:PINAnimatedImageManagerConditionReady];
           sharedAnimatedImage = [self.animatedImages objectForKey:animatedImageData];
           [sharedAnimatedImage setInfoProcessedWithCoverImage:coverImage UUID:UUID durations:durations totalDuration:totalDuration loopCount:loopCount frameCount:frameCount width:width height:height bitsPerPixel:bitsPerPixel bitmapInfo:bitmapInfo];
           infoCompletions = sharedAnimatedImage.infoCompletions;
           sharedAnimatedImage.infoCompletions = @[];
-          [_lock unlockWithCondition:PINAnimatedImageManagerConditionReady];
+          [self->_lock unlockWithCondition:PINAnimatedImageManagerConditionReady];
           
           for (PINAnimatedImageSharedReady infoCompletion in infoCompletions) {
             infoCompletion(coverImage, sharedAnimatedImage);
@@ -185,7 +185,7 @@ typedef NS_ENUM(NSUInteger, PINAnimatedImageManagerCondition) {
         } decodedPath:^(BOOL finished, NSString *path, NSError *error) {
           __block NSArray *completions = nil;
           {
-            [_lock lockWhenCondition:PINAnimatedImageManagerConditionReady];
+            [self->_lock lockWhenCondition:PINAnimatedImageManagerConditionReady];
             PINSharedAnimatedImage *sharedAnimatedImage = [self.animatedImages objectForKey:animatedImageData];
             
             if (path && error == nil) {
@@ -208,7 +208,7 @@ typedef NS_ENUM(NSUInteger, PINAnimatedImageManagerCondition) {
                 sharedAnimatedImage.status = PINAnimatedImageStatusFirstFileProcessed;
               }
             }
-            [_lock unlockWithCondition:PINAnimatedImageManagerConditionReady];
+            [self->_lock unlockWithCondition:PINAnimatedImageManagerConditionReady];
           }
           
           for (PINAnimatedImageDecodedPath completion in completions) {

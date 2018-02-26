@@ -48,7 +48,7 @@
     completion.progressDownloadBlock = progressDownloadBlock;
     
     [self.lock lockWithBlock:^{
-        [_callbackBlocks setObject:completion forKey:UUID];
+        [self->_callbackBlocks setObject:completion forKey:UUID];
     }];
 }
 
@@ -68,7 +68,7 @@
 {
     __block NSDictionary *callbackBlocks;
     [self.lock lockWithBlock:^{
-        callbackBlocks = [_callbackBlocks copy];
+        callbackBlocks = [self->_callbackBlocks copy];
     }];
     return callbackBlocks;
 }

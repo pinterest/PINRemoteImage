@@ -71,7 +71,7 @@
     NSURLSessionDataTask *dataTask = [sessionManager dataTaskWithRequest:request completionHandler:^(NSURLSessionTask *task, NSError *error) {
         completionHandler(task.response, error);
         [self lock];
-            [_runningTasks removeObject:task];
+            [self->_runningTasks removeObject:task];
         [self unlock];
         
         [self scheduleDownloadsIfNeeded];

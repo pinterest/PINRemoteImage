@@ -765,7 +765,7 @@ static dispatch_once_t sharedDispatchToken;
                              priority:priority
                     completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
     {
-        [_concurrentOperationQueue scheduleOperation:^
+        [self->_concurrentOperationQueue scheduleOperation:^
         {
             NSError *remoteImageError = error;
             PINImage *image = nil;
@@ -993,7 +993,7 @@ static dispatch_once_t sharedDispatchToken;
 - (void)setRetryStrategyCreationBlock:(id<PINRequestRetryStrategy> (^)(void))retryStrategyCreationBlock {
     [_concurrentOperationQueue scheduleOperation:^{
         [self lock];
-            _retryStrategyCreationBlock = retryStrategyCreationBlock;
+            self->_retryStrategyCreationBlock = retryStrategyCreationBlock;
         [self unlock];
     } withPriority:PINOperationQueuePriorityHigh];
 }
