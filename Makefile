@@ -5,7 +5,7 @@ SHELL=/bin/bash -o pipefail
 .PHONY: all lint test carthage analyze
 
 lint:
-	pod lib lint
+	pod lib lint --allow-warnings
 	
 analyze:
 	xcodebuild clean analyze -destination ${PLATFORM} -sdk ${SDK} -project PINRemoteImage.xcodeproj -scheme PINRemoteImage \
