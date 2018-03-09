@@ -29,7 +29,7 @@ extern NSErrorDomain _Nonnull const PINRemoteImageManagerErrorDomain;
 /**
  Error codes returned by PINRemoteImage
  */
-NS_ERROR_ENUM(PINRemoteImageManagerErrorDomain) {
+typedef NS_ERROR_ENUM(PINRemoteImageManagerErrorDomain, PINRemoteImageManagerError) {
     /** The image failed to decode */
     PINRemoteImageManagerErrorFailedToDecodeImage = 1,
     /** The image could not be downloaded and therefore could not be processed */

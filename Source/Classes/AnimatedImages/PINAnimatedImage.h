@@ -23,7 +23,7 @@ extern NSErrorDomain const kPINAnimatedImageErrorDomain;
 /**
  PINAnimatedImage decoding and processing errors.
  */
-NS_ERROR_ENUM(kPINAnimatedImageErrorDomain) {
+typedef NS_ERROR_ENUM(kPINAnimatedImageErrorDomain, PINAnimatedImageErrorCode) {
     /** No error, yay! */
     PINAnimatedImageErrorNoError = 0,
     /** Could not create a necessary file. */
