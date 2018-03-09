@@ -78,7 +78,7 @@ float dataTaskPriorityWithImageManagerPriority(PINRemoteImageManagerPriority pri
     }
 }
 
-NSString * const PINRemoteImageManagerErrorDomain = @"PINRemoteImageManagerErrorDomain";
+NSErrorDomain const PINRemoteImageManagerErrorDomain = @"PINRemoteImageManagerErrorDomain";
 NSString * const PINRemoteImageCacheKey = @"cacheKey";
 NSString * const PINRemoteImageCacheKeyResumePrefix = @"R-";
 typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse *response, NSError *error);

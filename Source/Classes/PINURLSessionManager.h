@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString * __nonnull const PINURLErrorDomain;
+extern NSErrorDomain _Nonnull const PINURLErrorDomain;
 
 @protocol PINURLSessionManagerDelegate <NSObject>
 
