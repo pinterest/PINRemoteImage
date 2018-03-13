@@ -8,7 +8,7 @@
 
 #import "PINAnimatedImage.h"
 
-NSString *kPINAnimatedImageErrorDomain = @"kPINAnimatedImageErrorDomain";
+NSErrorDomain const kPINAnimatedImageErrorDomain = @"kPINAnimatedImageErrorDomain";
 
 //http://nullsleep.tumblr.com/post/16524517190/animated-gif-minimum-frame-delay-browser
 const Float32 kPINAnimatedImageDefaultDuration = 0.1;

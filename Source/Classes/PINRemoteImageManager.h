@@ -24,12 +24,12 @@
 
 @class PINRemoteImageManagerResult;
 
-extern NSString * __nonnull const PINRemoteImageManagerErrorDomain;
+extern NSErrorDomain _Nonnull const PINRemoteImageManagerErrorDomain;
 
 /**
  Error codes returned by PINRemoteImage
  */
-typedef NS_ENUM(NSUInteger, PINRemoteImageManagerError) {
+typedef NS_ERROR_ENUM(PINRemoteImageManagerErrorDomain, PINRemoteImageManagerError) {
     /** The image failed to decode */
     PINRemoteImageManagerErrorFailedToDecodeImage = 1,
     /** The image could not be downloaded and therefore could not be processed */

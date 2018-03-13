@@ -16,12 +16,14 @@
 
 #import "PINRemoteImageMacros.h"
 
-extern NSString * _Nonnull kPINAnimatedImageErrorDomain;
+NS_ASSUME_NONNULL_BEGIN
+
+extern NSErrorDomain const kPINAnimatedImageErrorDomain;
 
 /**
  PINAnimatedImage decoding and processing errors.
  */
-typedef NS_ENUM(NSUInteger, PINAnimatedImageError) {
+typedef NS_ERROR_ENUM(kPINAnimatedImageErrorDomain, PINAnimatedImageErrorCode) {
     /** No error, yay! */
     PINAnimatedImageErrorNoError = 0,
     /** Could not create a necessary file. */
@@ -155,3 +157,5 @@ typedef void(^PINAnimatedImageInfoReady)(PINImage * _Nonnull coverImage);
 - (CFTimeInterval)durationAtIndex:(NSUInteger)index;
 
 @end
+
+NS_ASSUME_NONNULL_END

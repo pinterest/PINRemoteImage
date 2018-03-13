@@ -10,7 +10,7 @@
 
 #import "PINSpeedRecorder.h"
 
-NSString * const PINURLErrorDomain = @"PINURLErrorDomain";
+NSErrorDomain const PINURLErrorDomain = @"PINURLErrorDomain";
 
 @interface PINURLSessionManager () <NSURLSessionDelegate, NSURLSessionDataDelegate>
 
