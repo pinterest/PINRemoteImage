@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   
   # Include optional FLAnimatedImage module
-  # s.default_subspecs = 'FLAnimatedImage'
+  s.default_subspecs = 'FLAnimatedImage'
   
   ### Subspecs
   s.subspec 'Core' do |cs|
@@ -56,7 +56,7 @@ Pod::Spec.new do |s|
     fs.platforms = "ios"
     fs.dependency 'PINRemoteImage/Core'
     fs.source_files = 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h', 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m'
-    fs.dependency 'https://github.com/arthrex/FLAnimatedImage' 
+    fs.dependency 'FLAnimatedImage', '>= 1.0'
   end
 
   s.subspec 'WebP' do |webp|
