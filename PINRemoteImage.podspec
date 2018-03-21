@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   
   # Include optional FLAnimatedImage module
-  s.default_subspecs = 'FLAnimatedImage'
+  # s.default_subspecs = 'FLAnimatedImage'
   
   ### Subspecs
   s.subspec 'Core' do |cs|
