@@ -52,12 +52,12 @@ Pod::Spec.new do |s|
     tvos.frameworks = 'UIKit'
   end
 
-  s.subspec "FLAnimatedImage" do |fs|
-    fs.platforms = "ios"
-    fs.dependency 'PINRemoteImage/Core'
-    fs.source_files = 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h', 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m'
-    fs.dependency 'FLAnimatedImage', :git => 'https://github.com/arthrex/FLAnimatedImage'
-  end
+  # s.subspec "FLAnimatedImage" do |fs|
+  #   fs.platforms = "ios"
+  #   fs.dependency 'PINRemoteImage/Core'
+  #   fs.source_files = 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h', 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m'
+  #   fs.dependency 'FLAnimatedImage'
+  # end
 
   s.subspec 'WebP' do |webp|
     webp.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) PIN_WEBP=1' }
