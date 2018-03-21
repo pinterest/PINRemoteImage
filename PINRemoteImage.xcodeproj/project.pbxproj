@@ -515,6 +515,20 @@
 			remoteGlobalIDString = CC0105C01E271A4000890935;
 			remoteInfo = "PINCache-tvOS";
 		};
+		3F49D3502062031800BEA04D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3F49D34C2062031800BEA04D /* FLAnimatedImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 92C9BC0C1B199DC500D79B06;
+			remoteInfo = FLAnimatedImage;
+		};
+		3F49D3562062035C00BEA04D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3F49D34C2062031800BEA04D /* FLAnimatedImage.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 92C9BC0B1B199DC500D79B06;
+			remoteInfo = FLAnimatedImage;
+		};
 		6818C2B71E564FF900875DB7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6818C2AE1E564FF900875DB7 /* PINCache.xcodeproj */;
@@ -597,6 +611,7 @@
 /* Begin PBXFileReference section */
 		139D3A5A1F67284400F82935 /* PINRemoteImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PINRemoteImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		139D3A621F67284400F82935 /* PINRemoteImage-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PINRemoteImage-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F49D34C2062031800BEA04D /* FLAnimatedImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FLAnimatedImage.xcodeproj; path = Carthage/Checkouts/FLAnimatedImage/FLAnimatedImage.xcodeproj; sourceTree = "<group>"; };
 		680B83C71ECE5F9D00210A55 /* PINRemoteImageManager+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PINRemoteImageManager+Private.h"; path = "../PINRemoteImageManager+Private.h"; sourceTree = "<group>"; };
 		6818C1541E551B5A00875DB7 /* PINCache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PINCache.framework; path = "Carthage/Checkouts/PINCache/build/Debug-iphoneos/PINCache.framework"; sourceTree = "<group>"; };
 		6818C1561E551BAB00875DB7 /* PINOperation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PINOperation.framework; path = "Carthage/Checkouts/PINOperation/build/Debug-iphoneos/PINOperation.framework"; sourceTree = "<group>"; };
@@ -872,6 +887,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3F49D34D2062031800BEA04D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3F49D3512062031800BEA04D /* FLAnimatedImage.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		6818C1531E551B5900875DB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1250,6 +1273,7 @@
 		F1B918C71BCF239200710963 = {
 			isa = PBXGroup;
 			children = (
+				3F49D34C2062031800BEA04D /* FLAnimatedImage.xcodeproj */,
 				6818C2AE1E564FF900875DB7 /* PINCache.xcodeproj */,
 				6818C15B1E551CA300875DB7 /* libwebp */,
 				F1B918D31BCF239200710963 /* PINRemoteImage */,
@@ -1597,6 +1621,7 @@
 			);
 			dependencies = (
 				6818C2C41E56500900875DB7 /* PBXTargetDependency */,
+				3F49D3572062035C00BEA04D /* PBXTargetDependency */,
 			);
 			name = PINRemoteImage;
 			productName = PINRemoteImage;
@@ -1642,6 +1667,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 3F49D34D2062031800BEA04D /* Products */;
+					ProjectRef = 3F49D34C2062031800BEA04D /* FLAnimatedImage.xcodeproj */;
+				},
+				{
 					ProductGroup = 6818C2AF1E564FF900875DB7 /* Products */;
 					ProjectRef = 6818C2AE1E564FF900875DB7 /* PINCache.xcodeproj */;
 				},
@@ -1657,6 +1686,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		3F49D3512062031800BEA04D /* FLAnimatedImage.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FLAnimatedImage.framework;
+			remoteRef = 3F49D3502062031800BEA04D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		6818C2B81E564FF900875DB7 /* PINCache.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -2055,6 +2091,11 @@
 			isa = PBXTargetDependency;
 			name = "PINCache-tvOS";
 			targetProxy = 139D50761F672B8800DE64E0 /* PBXContainerItemProxy */;
+		};
+		3F49D3572062035C00BEA04D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FLAnimatedImage;
+			targetProxy = 3F49D3562062035C00BEA04D /* PBXContainerItemProxy */;
 		};
 		6818C2C41E56500900875DB7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
