@@ -193,7 +193,7 @@
     if ([self updateWithProgressOnView:view] && processorKey.length <= 0 && processor == nil) {
         internalProgress = ^(PINRemoteImageManagerResult *result)
         {
-            void (^mainQueue)() = ^{
+            void (^mainQueue)(void) = ^{
                 //if result.UUID is nil, we returned immediately and want this result
                 NSUUID *currentUUID = [self downloadImageOperationUUIDOnView:view];
                 if (![currentUUID isEqual:result.UUID] && result.UUID != nil) {
@@ -221,7 +221,7 @@
     
     PINRemoteImageManagerImageCompletion internalCompletion = ^(PINRemoteImageManagerResult *result)
     {
-        void (^mainQueue)() = ^{
+        void (^mainQueue)(void) = ^{
             //if result.UUID is nil, we returned immediately and want this result
             NSUUID *currentUUID = [self downloadImageOperationUUIDOnView:view];
             if (![currentUUID isEqual:result.UUID] && result.UUID != nil) {
