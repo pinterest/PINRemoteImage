@@ -72,4 +72,6 @@ lineNumber:__LINE__ description:(desc), ##__VA_ARGS__]; \
 __PRAGMA_POP_NO_EXTRA_ARG_WARNINGS \
 } while(0);
 
+#define PINAssertMain() NSAssert([NSThread isMainThread], @"Expected to be on the main thread.");
+
 #endif /* PINRemoteImageMacros_h */

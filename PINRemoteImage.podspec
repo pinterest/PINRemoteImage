@@ -35,7 +35,7 @@ Pod::Spec.new do |s|
     cs.osx.deployment_target = osx_deployment
     cs.source_files = 'Source/Classes/**/*.{h,m}'
     cs.public_header_files = 'Source/Classes/**/*.h'
-    cs.exclude_files = 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.h', 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.m','Source/Classes/PINCache/*.{h,m}'
+    cs.exclude_files = 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.h', 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.m','Source/Classes/ImageCategories/PINAnimatedImageView+PINRemoteImage.m','Source/Classes/PINCache/*.{h,m}'
     cs.frameworks = 'ImageIO', 'Accelerate'
   end
   
