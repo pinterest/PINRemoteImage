@@ -15,9 +15,6 @@
 #endif
 
 #import "PINRemoteImageMacros.h"
-#if USE_FLANIMATED_IMAGE
-#import <FLAnimatedImage/FLAnimatedImage.h>
-#endif
 
 /** How the image was fetched. */
 typedef NS_ENUM(NSUInteger, PINRemoteImageResultType) {

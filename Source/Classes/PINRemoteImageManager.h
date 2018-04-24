@@ -48,7 +48,7 @@ typedef NS_ERROR_ENUM(PINRemoteImageManagerErrorDomain, PINRemoteImageManagerErr
 typedef NS_OPTIONS(NSUInteger, PINRemoteImageManagerDownloadOptions) {
     /** Download and process with default options (no other options set) */
     PINRemoteImageManagerDownloadOptionsNone = 0,
-    /** Set to disallow any alternate representations such as FLAnimatedImage */
+    /** Set to disallow any alternate representations such as Animated Images */
     PINRemoteImageManagerDisallowAlternateRepresentations = 1,
     /** Skip decoding the image before returning. This means smaller images returned, but images will be decoded on the main thread when set on an image view */
     PINRemoteImageManagerDownloadOptionsSkipDecode = 1 << 1,
@@ -98,7 +98,7 @@ typedef PINImage  * _Nullable(^PINRemoteImageManagerImageProcessor)(PINRemoteIma
 
 /**
  PINRemoteImageManager is the main workhorse of PINRemoteImage. It is unnecessary to access directly if you simply
- wish to download images and have them rendered in a UIImageView, UIButton or FLAnimatedImageView.
+ wish to download images and have them rendered in a UIImageView, UIButton or PINAnimatedImageView.
  
  However, if you wish to download images directly, this class is your guy / gal.
  
@@ -153,7 +153,7 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
 - (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)configuration;
 
 /**
- Create and return a PINRemoteImageManager with the specified configuration and alternative representation delegate. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. Specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc. If alternativeRepresentationProvider is nil, the default is used (and supports FLAnimatedImage).
+ Create and return a PINRemoteImageManager with the specified configuration and alternative representation delegate. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. Specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc. If alternativeRepresentationProvider is nil, the default is used (and supports PINAnimatedImageView).
  @param configuration The configuration used to create the PINRemoteImageManager.
  @param alternativeRepresentationProvider a delegate which conforms to the PINRemoteImageManagerAlternateRepresentationProvider protocol. Provide a delegate if you want to have non image results. @see PINRemoteImageManagerAlternateRepresentationProvider for an example.
  @return A PINRemoteImageManager with the specified configuration.
@@ -162,7 +162,7 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
                    alternativeRepresentationProvider:(nullable id <PINRemoteImageManagerAlternateRepresentationProvider>)alternativeRepresentationProvider;
 
 /**
- Create and return a PINRemoteImageManager with the specified configuration and alternative representation delegate. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. Specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc. If alternativeRepresentationProvider is nil, the default is used (and supports FLAnimatedImage).
+ Create and return a PINRemoteImageManager with the specified configuration and alternative representation delegate. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. Specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc. If alternativeRepresentationProvider is nil, the default is used (and supports PINAnimatedImageView).
  @param configuration The configuration used to create the PINRemoteImageManager.
  @param alternateRepDelegate a delegate which conforms to the PINRemoteImageManagerAlternateRepresentationProvider protocol. Provide a delegate if you want to have non image results. @see PINRemoteImageManagerAlternateRepresentationProvider for an example.
  @param imageCache  Optional delegate which conforms to the PINRemoteImageCaching protocol. Provide a delegate if you want to control image caching. By default, image manager will use most appropriate implementation available (based on PINCache or NSCache, depending on subspec)@see PINRemoteImageBasicCache for an example.
@@ -513,7 +513,7 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  @deprecated
  
  @param cacheKey NSString key to look up image in the cache.
- @param options options will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.
+ @param options options will be used to determine if the cached image should be decompressed or PINCachedAnimatedImages should be returned.
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache.
  */
 - (void)imageFromCacheWithCacheKey:(nonnull NSString *)cacheKey options:(PINRemoteImageManagerDownloadOptions)options completion:(nonnull PINRemoteImageManagerImageCompletion)completion __attribute__((deprecated));
@@ -523,7 +523,7 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  
  @param url NSURL that was used to download image
  @param processorKey An optional key to uniquely identify the processor used to post-process the downloaded image.
- @param options options will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.
+ @param options options will be used to determine if the cached image should be decompressed or PINCachedAnimatedImages should be returned.
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache.
  */
 - (void)imageFromCacheWithURL:(nonnull NSURL *)url processorKey:(nullable NSString *)processorKey options:(PINRemoteImageManagerDownloadOptions)options completion:(nonnull PINRemoteImageManagerImageCompletion)completion;
@@ -533,7 +533,7 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  @see synchronousImageFromCacheWithURL:processorKey:options:
  
  @param cacheKey NSString obtained from @c cacheKeyForURL:processorKey
- @param options options will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.
+ @param options options will be used to determine if the cached image should be decompressed or PINCachedAnimatedImages should be returned.
  
  @return A PINRemoteImageManagerResult
  */
@@ -544,7 +544,7 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  
  @param url NSURL that was used to download image
  @param processorKey An optional key to uniquely identify the processor used to post-process the downloaded image.
- @param options options will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.
+ @param options options will be used to determine if the cached image should be decompressed or PINCachedAnimatedImages should be returned.
  
  @return A PINRemoteImageManagerResult
  */

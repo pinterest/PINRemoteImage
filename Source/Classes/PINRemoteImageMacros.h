@@ -18,13 +18,6 @@
 #define PINLog(args...)
 #endif
 
-#if __has_include(<FLAnimatedImage/FLAnimatedImage.h>)
-#define USE_FLANIMATED_IMAGE    1
-#else
-#define USE_FLANIMATED_IMAGE    0
-#define FLAnimatedImage NSObject
-#endif
-
 #ifndef USE_PINCACHE
     #if __has_include(<PINCache/PINCache.h>)
     #define USE_PINCACHE    1

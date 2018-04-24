@@ -24,8 +24,7 @@ Pod::Spec.new do |s|
   s.tvos.deployment_target = tvos_deployment
   s.requires_arc = true
   
-  # Include optional FLAnimatedImage module
-  s.default_subspecs = 'FLAnimatedImage','PINCache'
+  s.default_subspecs = 'PINCache'
   
   ### Subspecs
   s.subspec 'Core' do |cs|
@@ -35,7 +34,7 @@ Pod::Spec.new do |s|
     cs.osx.deployment_target = osx_deployment
     cs.source_files = 'Source/Classes/**/*.{h,m}'
     cs.public_header_files = 'Source/Classes/**/*.h'
-    cs.exclude_files = 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.h', 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.m','Source/Classes/PINCache/*.{h,m}'
+    cs.exclude_files = 'Source/Classes/PINCache/*.{h,m}'
     cs.frameworks = 'ImageIO', 'Accelerate'
   end
   
@@ -55,13 +54,6 @@ Pod::Spec.new do |s|
   # The tvOS spec is no longer necessary, iOS should be used instead.
   s.subspec 'tvOS' do |tvos|
     tvos.dependency 'PINRemoteImage/iOS'
-  end
-
-  s.subspec "FLAnimatedImage" do |fs|
-    fs.platforms = "ios"
-    fs.dependency 'PINRemoteImage/Core'
-    fs.source_files = 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.h', 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.m'
-    fs.dependency 'FLAnimatedImage', '>= 1.0'
   end
 
   s.subspec 'WebP' do |webp|

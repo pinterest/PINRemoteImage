@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
+#import <PINRemoteImage/PINAnimatedImageView.h>
 #import <PINRemoteImage/PINRemoteImage.h>
 #import <PINRemoteImage/PINURLSessionManager.h>
 #import <PINRemoteImage/PINImageView+PINRemoteImage.h>
@@ -20,10 +21,6 @@
 #import "PINSpeedRecorder.h"
 
 #import <objc/runtime.h>
-
-#if USE_FLANIMATED_IMAGE
-#import <FLAnimatedImage/FLAnimatedImage.h>
-#endif
 
 static BOOL requestRetried = NO;
 
@@ -232,7 +229,6 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     [super tearDown];
 }
 
-#if USE_FLANIMATED_IMAGE
 - (void)testGIFDownload
 {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Download animatedImage"];
@@ -243,7 +239,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
         UIImage *outImage = result.image;
         id outAnimatedImage = result.alternativeRepresentation;
         
-        XCTAssert(outAnimatedImage && [outAnimatedImage isKindOfClass:[FLAnimatedImage class]], @"Failed downloading animatedImage or animatedImage is not an FLAnimatedImage.");
+        XCTAssert(outAnimatedImage && [outAnimatedImage isKindOfClass:[PINCachedAnimatedImage class]], @"Failed downloading animatedImage or animatedImage is not a PINCachedAnimatedImage.");
         XCTAssert(outImage == nil, @"Image is not nil.");
         
         [expectation fulfill];
@@ -251,7 +247,6 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
-#endif
 
 - (void)testInitWithNilConfiguration
 {
@@ -333,7 +328,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
   [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
-- (void)testSkipFLAnimatedImageDownload
+- (void)testSkipPINAnimatedImageDownload
 {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Download animated image"];
     [self.imageManager downloadImageWithURL:[self GIFURL]
@@ -394,7 +389,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
                                  completion:^(PINRemoteImageManagerResult *result)
      {
          UIImage *outImage = result.image;
-         FLAnimatedImage *outAnimatedImage = result.alternativeRepresentation;
+         PINCachedAnimatedImage *outAnimatedImage = result.alternativeRepresentation;
          
          XCTAssert(outImage && [outImage isKindOfClass:[UIImage class]], @"Failed downloading image or image is not a UIImage.");
          XCTAssert(CGSizeEqualToSize(outImage.size, CGSizeMake(16,16)), @"Failed decoding image, image size is wrong.");
@@ -627,12 +622,11 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
-#if USE_FLANIMATED_IMAGE
-- (void)testFLAnimatedImageView
+- (void)testPINAnimatedImageView
 {
     XCTestExpectation *imageSetExpectation = [self expectationWithDescription:@"animatedImageView did not have animated image set"];
-    FLAnimatedImageView *imageView = [[FLAnimatedImageView alloc] init];
-    __weak FLAnimatedImageView *weakImageView = imageView;
+    PINAnimatedImageView *imageView = [[PINAnimatedImageView alloc] init];
+    __weak PINAnimatedImageView *weakImageView = imageView;
     [imageView pin_setImageFromURL:[self GIFURL]
                         completion:^(PINRemoteImageManagerResult *result)
      {
@@ -642,7 +636,6 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
-#endif
 
 - (void)testEarlyReturn
 {
@@ -663,7 +656,6 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     XCTAssert(image != nil, @"image callback did not occur synchronously.");
 }
 
-#if USE_FLANIMATED_IMAGE
 - (void)testload
 {
     srand([[NSDate date] timeIntervalSince1970]);
@@ -696,7 +688,6 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     }
     XCTAssert(dispatch_group_wait(group, [self timeoutWithInterval:100]) == 0, @"Group timed out.");
 }
-#endif
 
 - (void)testInvalidObject
 {
