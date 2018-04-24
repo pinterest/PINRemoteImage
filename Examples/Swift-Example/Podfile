@@ -4,6 +4,6 @@
  use_frameworks!
 
 target 'Swift-Example' do
-	pod 'PINRemoteImage'
+	pod 'PINRemoteImage', :path => '../../'
 end
 
