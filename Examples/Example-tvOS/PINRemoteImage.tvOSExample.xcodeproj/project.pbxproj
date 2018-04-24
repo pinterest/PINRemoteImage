@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		689613C9208FBC6B00D2095C /* GIFViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689613C8208FBC6B00D2095C /* GIFViewController.swift */; };
+		689613CB208FBE3100D2095C /* WebPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689613CA208FBE3100D2095C /* WebPViewController.swift */; };
 		78699F481C668C8E0044C9E9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78699F471C668C8E0044C9E9 /* AppDelegate.swift */; };
 		78699F4C1C668C8E0044C9E9 /* ProgressiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78699F4B1C668C8E0044C9E9 /* ProgressiveViewController.swift */; };
 		78699F4F1C668C8E0044C9E9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 78699F4D1C668C8E0044C9E9 /* Main.storyboard */; };
@@ -20,6 +22,8 @@
 
 /* Begin PBXFileReference section */
 		093C3E4AE850337BCD0D2FE6 /* Pods-PINRemoteImage.tvOSExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage.tvOSExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage.tvOSExample/Pods-PINRemoteImage.tvOSExample.debug.xcconfig"; sourceTree = "<group>"; };
+		689613C8208FBC6B00D2095C /* GIFViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GIFViewController.swift; sourceTree = "<group>"; };
+		689613CA208FBE3100D2095C /* WebPViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebPViewController.swift; sourceTree = "<group>"; };
 		78699F441C668C8E0044C9E9 /* PINRemoteImage.tvOSExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PINRemoteImage.tvOSExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		78699F471C668C8E0044C9E9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		78699F4B1C668C8E0044C9E9 /* ProgressiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressiveViewController.swift; sourceTree = "<group>"; };
@@ -84,6 +88,8 @@
 				78699F5A1C66A5A90044C9E9 /* DegradedViewController.swift */,
 				78699F5C1C66A7E20044C9E9 /* CollectionViewController.swift */,
 				78699F5E1C66A8610044C9E9 /* CollectionViewCell.swift */,
+				689613C8208FBC6B00D2095C /* GIFViewController.swift */,
+				689613CA208FBE3100D2095C /* WebPViewController.swift */,
 			);
 			path = PINRemoteImage.tvOSExample;
 			sourceTree = "<group>";
@@ -172,9 +178,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-PINRemoteImage.tvOSExample/Pods-PINRemoteImage.tvOSExample-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/PINOperation/PINOperation.framework",
+				"${BUILT_PRODUCTS_DIR}/PINRemoteImage/PINRemoteImage.framework",
+				"${BUILT_PRODUCTS_DIR}/libwebp/libwebp.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PINOperation.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PINRemoteImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libwebp.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -202,13 +215,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PINRemoteImage.tvOSExample-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-            shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -218,10 +234,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				689613CB208FBE3100D2095C /* WebPViewController.swift in Sources */,
 				78699F5D1C66A7E20044C9E9 /* CollectionViewController.swift in Sources */,
 				78699F4C1C668C8E0044C9E9 /* ProgressiveViewController.swift in Sources */,
 				78699F591C669AC70044C9E9 /* ProcessingViewController.swift in Sources */,
 				78699F5F1C66A8610044C9E9 /* CollectionViewCell.swift in Sources */,
+				689613C9208FBC6B00D2095C /* GIFViewController.swift in Sources */,
 				78699F481C668C8E0044C9E9 /* AppDelegate.swift in Sources */,
 				78699F5B1C66A5A90044C9E9 /* DegradedViewController.swift in Sources */,
 			);
