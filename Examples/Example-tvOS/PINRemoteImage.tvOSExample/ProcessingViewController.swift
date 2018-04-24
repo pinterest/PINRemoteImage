@@ -60,9 +60,7 @@ class ProcessingViewController: UIViewController {
                         ctx.setAlpha(0.5)
 
                         if let logo = UIImage(named: "white-pinterest-logo") {
-//                            ctx.scaleBy(x: 1.0, y: -1.0)
-//                            ctx.translateBy(x: 0.0, y: -drawRect.size.height)
-                            logo.draw(in: CGRect(x: 0, y: 0, width: logo.size.width, height: logo.size.height))
+                            logo.draw(in: CGRect(x: 0, y: drawRect.size.height - logo.size.height, width: logo.size.width, height: logo.size.height))
                         }
 
                         let processedImage = UIGraphicsGetImageFromCurrentImageContext()
