@@ -8,6 +8,8 @@
 #import "PINAnimatedImageView.h"
 
 #import "PINRemoteLock.h"
+#import "PINDisplayLink.h"
+#import "PINImage+DecodedImage.h"
 
 // TODO pull this out
 @interface PINWeakProxy : NSProxy
@@ -25,7 +27,8 @@
 }
 
 @property (nonatomic, assign) CGImageRef frameImage;
-@property (nonatomic, strong) CADisplayLink *displayLink;
+@property (nonatomic, strong) PINDisplayLink *displayLink;
+
 @property (nonatomic, assign) CFTimeInterval lastDisplayLinkFire;
 
 @end
@@ -89,7 +92,7 @@
     
     if (animatedImage != nil) {
         PINWeakify(self);
-        animatedImage.coverImageReadyCallback = ^(UIImage *coverImage) {
+        animatedImage.coverImageReadyCallback = ^(PINImage *coverImage) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 PINStrongify(self);
                 // In this case the lock is already gone we have to call the unlocked version therefore
@@ -159,7 +162,7 @@
     [self checkIfShouldAnimate];
 }
 
-- (void)coverImageCompleted:(UIImage *)coverImage
+- (void)coverImageCompleted:(PINImage *)coverImage
 {
     PINAssertMain();
     BOOL setCoverImage = (_displayLink == nil) || _displayLink.paused;
@@ -169,7 +172,7 @@
     }
 }
 
-- (void)setCoverImage:(UIImage *)coverImage
+- (void)setCoverImage:(PINImage *)coverImage
 {
     PINAssertMain();
     if (_frameImage) {
@@ -194,6 +197,7 @@
 - (void)startAnimating
 {
     PINAssertMain();
+    
     if (_playbackPaused) {
         return;
     }
@@ -211,7 +215,7 @@
 
     if (_displayLink == nil) {
         _playHead = 0;
-        _displayLink = [CADisplayLink displayLinkWithTarget:[PINWeakProxy weakProxyWithTarget:self] selector:@selector(displayLinkFired:)];
+        _displayLink = [PINDisplayLink displayLinkWithTarget:[PINWeakProxy weakProxyWithTarget:self] selector:@selector(displayLinkFired:)];
         _displayLink.frameInterval = frameInterval;
         _lastSuccessfulFrameIndex = NSUIntegerMax;
         
@@ -233,11 +237,11 @@
 
 #pragma mark - Overrides
 
-- (UIImage *)image
+- (PINImage *)image
 {
     PINAssertMain();
     if (_animatedImage) {
-        return [UIImage imageWithCGImage:_frameImage];
+        return [PINImage imageWithCGImage:_frameImage];
     }
     return [super image];
 }
@@ -253,7 +257,7 @@
     return nil;
 }
 
-- (void)setImage:(UIImage *)image
+- (void)setImage:(PINImage *)image
 {
     PINAssertMain();
     if (image) {
@@ -269,6 +273,37 @@
     layer.contents = (__bridge id)[self imageRef];
 }
 
+#if PIN_TARGET_MAC
+
+- (void)_setImage:(PINImage *)image
+{
+    super.image = image;
+}
+
+- (void)setAlphaValue:(CGFloat)alphaValue
+{
+    [super setAlphaValue:alphaValue];
+    [self updateAnimationForPossibleVisibility];
+}
+
+- (void)viewDidMoveToWindow
+{
+    [super viewDidMoveToWindow];
+    [self updateAnimationForPossibleVisibility];
+}
+
+- (void)viewDidMoveToSuperview
+{
+    [super viewDidMoveToSuperview];
+    [self updateAnimationForPossibleVisibility];
+}
+#else
+- (void)setAlpha:(CGFloat)alpha
+{
+    [super setAlpha:alpha];
+    [self updateAnimationForPossibleVisibility];
+}
+
 - (void)didMoveToWindow
 {
     [super didMoveToWindow];
@@ -280,12 +315,7 @@
     [super didMoveToSuperview];
     [self updateAnimationForPossibleVisibility];
 }
-
-- (void)setAlpha:(CGFloat)alpha
-{
-    [super setAlpha:alpha];
-    [self updateAnimationForPossibleVisibility];
-}
+#endif
 
 - (void)setHidden:(BOOL)hidden
 {
@@ -297,7 +327,11 @@
 
 - (BOOL)canBeVisible
 {
+#if PIN_TARGET_MAC
+    return self.window && self.superview && self.isHidden == NO && self.alphaValue > 0.0;
+#else
     return self.window && self.superview && self.isHidden == NO && self.alpha > 0.0;
+#endif
 }
 
 - (void)updateAnimationForPossibleVisibility
@@ -305,32 +339,14 @@
     [self checkIfShouldAnimate];
 }
 
-+ (BOOL)displayLinkSupportsTargetTimestamp
-{
-    static dispatch_once_t onceToken;
-    static BOOL supportsTargetTimestamp;
-    dispatch_once(&onceToken, ^{
-        supportsTargetTimestamp = [[CADisplayLink class] instancesRespondToSelector:@selector(targetTimestamp)];
-    });
-    return supportsTargetTimestamp;
-}
-
-- (void)displayLinkFired:(CADisplayLink *)displayLink
+- (void)displayLinkFired:(PINDisplayLink *)displayLink
 {
     PINAssertMain();
     CFTimeInterval timeBetweenLastFire;
     if (_lastDisplayLinkFire == 0) {
         timeBetweenLastFire = 0;
     } else {
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_10_0
-        if ([[self class] displayLinkSupportsTargetTimestamp]){
-            timeBetweenLastFire = displayLink.targetTimestamp - displayLink.timestamp;
-        } else {
-            timeBetweenLastFire = CACurrentMediaTime() - self.lastDisplayLinkFire;
-        }
-#else
         timeBetweenLastFire = CACurrentMediaTime() - self.lastDisplayLinkFire;
-#endif
     }
     
     self.lastDisplayLinkFire = CACurrentMediaTime();
@@ -359,12 +375,16 @@
         displayLink.paused = YES;
         self.lastDisplayLinkFire = 0;
     } else {
-        [self.layer setNeedsDisplay];
         if (_frameImage) {
             CGImageRelease(_frameImage);
         }
         _frameImage = CGImageRetain(frameImage);
         _lastSuccessfulFrameIndex = frameIndex;
+#if PIN_TARGET_MAC
+        [self _setImage:[NSImage imageWithCGImage:_frameImage]];
+#else
+        [self.layer setNeedsDisplay];
+#endif
     }
 }
 

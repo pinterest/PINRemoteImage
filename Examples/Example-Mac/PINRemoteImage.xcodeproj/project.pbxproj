@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		42796FDA2C0B59B150630DA3 /* libPods-PINRemoteImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0141C54D0963FCEA0DB0381A /* libPods-PINRemoteImage.a */; };
+		689613C6208EA95800D2095C /* GIFViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689613C4208EA95800D2095C /* GIFViewController.m */; };
+		689613C7208EA95800D2095C /* GIFViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689613C5208EA95800D2095C /* GIFViewController.xib */; };
 		9D9328C51C3C60E700E1F1D3 /* PINViewWithBackgroundColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D9328C41C3C60E700E1F1D3 /* PINViewWithBackgroundColor.m */; };
 		9D9328C91C3D09BB00E1F1D3 /* WebPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D9328C71C3D09BB00E1F1D3 /* WebPViewController.m */; };
 		9D9328CA1C3D09BB00E1F1D3 /* WebPViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9D9328C81C3D09BB00E1F1D3 /* WebPViewController.xib */; };
@@ -30,6 +32,9 @@
 /* Begin PBXFileReference section */
 		0141C54D0963FCEA0DB0381A /* libPods-PINRemoteImage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PINRemoteImage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C7B3B480ECE116693899B73 /* Pods-PINRemoteImage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage/Pods-PINRemoteImage.debug.xcconfig"; sourceTree = "<group>"; };
+		689613C3208EA95800D2095C /* GIFViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GIFViewController.h; sourceTree = "<group>"; };
+		689613C4208EA95800D2095C /* GIFViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GIFViewController.m; sourceTree = "<group>"; };
+		689613C5208EA95800D2095C /* GIFViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GIFViewController.xib; sourceTree = "<group>"; };
 		9D9328C31C3C60E700E1F1D3 /* PINViewWithBackgroundColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINViewWithBackgroundColor.h; sourceTree = "<group>"; };
 		9D9328C41C3C60E700E1F1D3 /* PINViewWithBackgroundColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINViewWithBackgroundColor.m; sourceTree = "<group>"; };
 		9D9328C61C3D09BB00E1F1D3 /* WebPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebPViewController.h; sourceTree = "<group>"; };
@@ -137,6 +142,9 @@
 				9D9328D11C3D131900E1F1D3 /* ProcessingViewController.h */,
 				9D9328D21C3D131900E1F1D3 /* ProcessingViewController.m */,
 				9D9328D31C3D131900E1F1D3 /* ProcessingViewController.xib */,
+				689613C3208EA95800D2095C /* GIFViewController.h */,
+				689613C4208EA95800D2095C /* GIFViewController.m */,
+				689613C5208EA95800D2095C /* GIFViewController.xib */,
 			);
 			path = PINRemoteImage;
 			sourceTree = "<group>";
@@ -234,6 +242,7 @@
 				9D9328CA1C3D09BB00E1F1D3 /* WebPViewController.xib in Resources */,
 				9D9328D01C3D0C0D00E1F1D3 /* ScrollViewController.xib in Resources */,
 				9D97D09D1C3C4D960006C115 /* PINImageCollectionViewItemView.xib in Resources */,
+				689613C7208EA95800D2095C /* GIFViewController.xib in Resources */,
 				9DC09DC01C39AB0D00C6451E /* MainMenu.xib in Resources */,
 				9D9328D51C3D131900E1F1D3 /* ProcessingViewController.xib in Resources */,
 			);
@@ -278,13 +287,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PINRemoteImage-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -295,6 +307,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9D9328CF1C3D0C0D00E1F1D3 /* ScrollViewController.m in Sources */,
+				689613C6208EA95800D2095C /* GIFViewController.m in Sources */,
 				9D9328C91C3D09BB00E1F1D3 /* WebPViewController.m in Sources */,
 				9D9328E21C3D489400E1F1D3 /* Kitten.m in Sources */,
 				9D9328DE1C3D275D00E1F1D3 /* DegradedViewController.m in Sources */,

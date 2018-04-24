@@ -5,11 +5,15 @@
 //  Created by Garrett Moon on 4/17/18.
 //
 
+#if PIN_TARGET_IOS
 #import <UIKit/UIKit.h>
+#elif PIN_TARGET_MAC
+#import <Cocoa/Cocoa.h>
+#endif
 
 #import <PINRemoteImage/PINCachedAnimatedImage.h>
 
-@interface PINAnimatedImageView : UIImageView
+@interface PINAnimatedImageView : PINImageView
 
 - (instancetype)initWithAnimatedImage:(PINCachedAnimatedImage *)animatedImage NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithFrame:(CGRect)frame NS_DESIGNATED_INITIALIZER;

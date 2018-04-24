@@ -35,7 +35,7 @@ Pod::Spec.new do |s|
     cs.osx.deployment_target = osx_deployment
     cs.source_files = 'Source/Classes/**/*.{h,m}'
     cs.public_header_files = 'Source/Classes/**/*.h'
-    cs.exclude_files = 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.h', 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.m','Source/Classes/ImageCategories/PINAnimatedImageView+PINRemoteImage.m','Source/Classes/PINCache/*.{h,m}'
+    cs.exclude_files = 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.h', 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.m','Source/Classes/PINCache/*.{h,m}'
     cs.frameworks = 'ImageIO', 'Accelerate'
   end
   
@@ -65,6 +65,9 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'WebP' do |webp|
+    webp.ios.deployment_target = ios_deployment
+    webp.tvos.deployment_target = tvos_deployment
+    webp.osx.deployment_target = osx_deployment
     webp.xcconfig = {
         'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) PIN_WEBP=1', 
         'USER_HEADER_SEARCH_PATHS' => '$(inherited) $(SRCROOT)/libwebp/src'

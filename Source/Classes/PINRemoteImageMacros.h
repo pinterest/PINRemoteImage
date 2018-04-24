@@ -9,7 +9,7 @@
 #define PINRemoteImageMacros_h
 
 #define PIN_TARGET_IOS (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_TV)
-#define PIN_TARGET_MAC (TARGET_OS_MAC)
+#define PIN_TARGET_MAC TARGET_OS_OSX
 
 #define PINRemoteImageLogging                0
 #if PINRemoteImageLogging
