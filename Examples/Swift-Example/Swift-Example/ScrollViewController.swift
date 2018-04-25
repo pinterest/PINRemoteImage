@@ -113,7 +113,6 @@ class ScrollViewController: UIViewController, UICollectionViewDataSource, UIColl
         let dispatchGroup = DispatchGroup()
         if let bounds = collectionView?.bounds {
             var tmpKittens = [Kitten]()
-            let scale = UIScreen.main.scale
             
             DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async(group: dispatchGroup) { () -> Void in
             
@@ -130,8 +129,8 @@ class ScrollViewController: UIViewController, UICollectionViewDataSource, UIColl
                     var height = randKitten.size.height
                     
                     if width > (bounds.size.width) {
-                        height = bounds.size.height / scale / width * height
-                        width = bounds.size.width / scale / height * width
+                        height = height / (width / bounds.size.width)
+                        width = bounds.size.width
                     }
                     
                     var newKitten = Kitten(urlString: randKitten.imageUrl.absoluteString, size: CGSize(width: width, height: height))
