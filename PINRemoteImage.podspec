@@ -24,8 +24,7 @@ Pod::Spec.new do |s|
   s.tvos.deployment_target = tvos_deployment
   s.requires_arc = true
   
-  # Include optional FLAnimatedImage module
-  s.default_subspecs = 'FLAnimatedImage','PINCache'
+  s.default_subspecs = 'PINCache'
   
   ### Subspecs
   s.subspec 'Core' do |cs|
@@ -35,7 +34,7 @@ Pod::Spec.new do |s|
     cs.osx.deployment_target = osx_deployment
     cs.source_files = 'Source/Classes/**/*.{h,m}'
     cs.public_header_files = 'Source/Classes/**/*.h'
-    cs.exclude_files = 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.h', 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.m','Source/Classes/PINCache/*.{h,m}'
+    cs.exclude_files = 'Source/Classes/PINCache/*.{h,m}'
     cs.frameworks = 'ImageIO', 'Accelerate'
   end
   
@@ -57,14 +56,10 @@ Pod::Spec.new do |s|
     tvos.dependency 'PINRemoteImage/iOS'
   end
 
-  s.subspec "FLAnimatedImage" do |fs|
-    fs.platforms = "ios"
-    fs.dependency 'PINRemoteImage/Core'
-    fs.source_files = 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.h', 'Source/Classes/ImageCategories/FLAnimatedImageView+PINRemoteImage.m'
-    fs.dependency 'FLAnimatedImage', '>= 1.0'
-  end
-
   s.subspec 'WebP' do |webp|
+    webp.ios.deployment_target = ios_deployment
+    webp.tvos.deployment_target = tvos_deployment
+    webp.osx.deployment_target = osx_deployment
     webp.xcconfig = {
         'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) PIN_WEBP=1', 
         'USER_HEADER_SEARCH_PATHS' => '$(inherited) $(SRCROOT)/libwebp/src'

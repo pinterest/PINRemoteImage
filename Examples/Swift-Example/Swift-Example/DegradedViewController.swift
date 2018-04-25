@@ -19,8 +19,8 @@ class DegradedViewController: UIViewController {
         PINRemoteImageManager.shared().setShouldUpgradeLowQualityImages(true, completion: nil)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         imageView.pin_setImage(from: [
             URL(string: "https://placekitten.com/101/101")!,

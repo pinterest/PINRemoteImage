@@ -18,6 +18,7 @@
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
 		682C52611B584DD300B3B813 /* ProcessingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 682C52601B584DD300B3B813 /* ProcessingViewController.m */; };
 		682C52671B58515D00B3B813 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 682C52661B58515D00B3B813 /* Media.xcassets */; };
+		687666B920869C82001E825C /* GIFViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 687666B820869C82001E825C /* GIFViewController.m */; };
 		68B385081B557116004EB26F /* WebPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B385071B557116004EB26F /* WebPViewController.m */; };
 		68B3850B1B5572BF004EB26F /* ProgressiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B3850A1B5572BF004EB26F /* ProgressiveViewController.m */; };
 		68B3850E1B5577D4004EB26F /* DegradedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B3850D1B5577D4004EB26F /* DegradedViewController.m */; };
@@ -49,6 +50,8 @@
 		682C525F1B584DD300B3B813 /* ProcessingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProcessingViewController.h; sourceTree = "<group>"; };
 		682C52601B584DD300B3B813 /* ProcessingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProcessingViewController.m; sourceTree = "<group>"; };
 		682C52661B58515D00B3B813 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = PINRemoteImage/Media.xcassets; sourceTree = SOURCE_ROOT; };
+		687666B720869C82001E825C /* GIFViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GIFViewController.h; sourceTree = "<group>"; };
+		687666B820869C82001E825C /* GIFViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GIFViewController.m; sourceTree = "<group>"; };
 		68B385061B557116004EB26F /* WebPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebPViewController.h; sourceTree = "<group>"; };
 		68B385071B557116004EB26F /* WebPViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebPViewController.m; sourceTree = "<group>"; };
 		68B385091B5572BF004EB26F /* ProgressiveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressiveViewController.h; sourceTree = "<group>"; };
@@ -134,6 +137,8 @@
 				68B3850D1B5577D4004EB26F /* DegradedViewController.m */,
 				682C525F1B584DD300B3B813 /* ProcessingViewController.h */,
 				682C52601B584DD300B3B813 /* ProcessingViewController.m */,
+				687666B720869C82001E825C /* GIFViewController.h */,
+				687666B820869C82001E825C /* GIFViewController.m */,
 			);
 			path = PINRemoteImage;
 			sourceTree = "<group>";
@@ -289,13 +294,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PINRemoteImage-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -310,6 +318,7 @@
 				9D9328E51C3D4CC200E1F1D3 /* Kitten.m in Sources */,
 				6003F59E195388D20070C39A /* PINAppDelegate.m in Sources */,
 				682C52611B584DD300B3B813 /* ProcessingViewController.m in Sources */,
+				687666B920869C82001E825C /* GIFViewController.m in Sources */,
 				6003F5A7195388D20070C39A /* PINViewController.m in Sources */,
 				68B3850E1B5577D4004EB26F /* DegradedViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,

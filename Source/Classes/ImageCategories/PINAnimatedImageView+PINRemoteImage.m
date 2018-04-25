@@ -1,22 +1,22 @@
 //
-//  FLAnimatedImageView+PINRemoteImage.m
+//  PINAnimatedImageView+PINRemoteImage.m
 //  Pods
 //
-//  Created by Garrett Moon on 8/17/14.
-//
+//  Created by Garrett Moon on 4/19/18.
 //
 
-#import "FLAnimatedImageView+PINRemoteImage.h"
+#import "PINAnimatedImageView+PINRemoteImage.h"
 
-#if USE_FLANIMATED_IMAGE
-@implementation FLAnimatedImageView (PINRemoteImage)
+#import "PINAnimatedImage.h"
+
+@implementation PINAnimatedImageView (PINRemoteImage)
 
 - (void)pin_setImageFromURL:(NSURL *)url
 {
     [PINRemoteImageCategoryManager setImageOnView:self fromURL:url];
 }
 
-- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage
+- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(PINImage *)placeholderImage
 {
     [PINRemoteImageCategoryManager setImageOnView:self fromURL:url placeholderImage:placeholderImage];
 }
@@ -26,7 +26,7 @@
     [PINRemoteImageCategoryManager setImageOnView:self fromURL:url completion:completion];
 }
 
-- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion
+- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(PINImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion
 {
     [PINRemoteImageCategoryManager setImageOnView:self fromURL:url placeholderImage:placeholderImage completion:completion];
 }
@@ -36,7 +36,7 @@
     [PINRemoteImageCategoryManager setImageOnView:self fromURL:url processorKey:processorKey processor:processor];
 }
 
-- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor
+- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(PINImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor
 {
     [PINRemoteImageCategoryManager setImageOnView:self fromURL:url placeholderImage:placeholderImage processorKey:processorKey processor:processor];
 }
@@ -46,7 +46,7 @@
     [PINRemoteImageCategoryManager setImageOnView:self fromURL:url processorKey:processorKey processor:processor completion:completion];
 }
 
-- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor completion:(PINRemoteImageManagerImageCompletion)completion
+- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(PINImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor completion:(PINRemoteImageManagerImageCompletion)completion
 {
     [PINRemoteImageCategoryManager setImageOnView:self fromURLs:@[url] placeholderImage:placeholderImage processorKey:processorKey processor:processor completion:completion];
 }
@@ -56,12 +56,12 @@
     [PINRemoteImageCategoryManager setImageOnView:self fromURLs:urls];
 }
 
-- (void)pin_setImageFromURLs:(NSArray *)urls placeholderImage:(UIImage *)placeholderImage
+- (void)pin_setImageFromURLs:(NSArray *)urls placeholderImage:(PINImage *)placeholderImage
 {
     [PINRemoteImageCategoryManager setImageOnView:self fromURLs:urls placeholderImage:placeholderImage];
 }
 
-- (void)pin_setImageFromURLs:(NSArray *)urls placeholderImage:(UIImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion
+- (void)pin_setImageFromURLs:(NSArray *)urls placeholderImage:(PINImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion
 {
     [PINRemoteImageCategoryManager setImageOnView:self fromURLs:urls placeholderImage:placeholderImage completion:completion];
 }
@@ -91,19 +91,17 @@
     [PINRemoteImageCategoryManager setUpdateWithProgressOnView:updateWithProgress onView:self];
 }
 
-- (void)pin_setPlaceholderWithImage:(UIImage *)image
+- (void)pin_setPlaceholderWithImage:(PINImage *)image
 {
     self.image = image;
 }
 
 - (void)pin_updateUIWithRemoteImageManagerResult:(PINRemoteImageManagerResult *)result
 {
-    if (result.alternativeRepresentation && [result.alternativeRepresentation isKindOfClass:[FLAnimatedImage class]]) {
-        self.animatedImage = (FLAnimatedImage *)result.alternativeRepresentation;
-        [self setNeedsLayout];
+    if (result.alternativeRepresentation && [result.alternativeRepresentation isKindOfClass:[PINCachedAnimatedImage class]]) {
+        self.animatedImage = (PINCachedAnimatedImage *)result.alternativeRepresentation;
     } else if (result.image) {
         self.image = result.image;
-        [self setNeedsLayout];
     }
 }
 
@@ -111,7 +109,6 @@
 {
     self.animatedImage = nil;
     self.image = nil;
-    [self setNeedsLayout];
 }
 
 - (BOOL)pin_ignoreGIFs
@@ -120,5 +117,3 @@
 }
 
 @end
-
-#endif

@@ -13,8 +13,8 @@ class ProcessingViewController: UIViewController {
 
     @IBOutlet weak var imageView: UIImageView!
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         let url = URL(string: "https://i.pinimg.com/736x/5b/c6/c5/5bc6c5387ff6f104fd642f2b375efba3.jpg")
         

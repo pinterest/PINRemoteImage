@@ -11,9 +11,6 @@
 #import <PINRemoteImage/PINRemoteImage.h>
 #import <PINRemoteImage/PINImageView+PINRemoteImage.h>
 #import <PINRemoteImage/PINRemoteImageCaching.h>
-#if USE_FLANIMATED_IMAGE
-#import <FLAnimatedImage/FLAnimatedImageView.h>
-#endif
 
 #import "Kitten.h"
 

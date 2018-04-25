@@ -1,16 +1,15 @@
 //
 //  WebPViewController.swift
-//  Swift-Example
+//  PINRemoteImage.tvOSExample
 //
-//  Created by Marius Landwehr on 23.01.16.
-//  Copyright © 2016 Marius Landwehr. All rights reserved.
+//  Created by Garrett Moon on 4/24/18.
 //
 
 import UIKit
 import PINRemoteImage
 
 class WebPViewController: UIViewController {
-
+    
     @IBOutlet weak var imageView: UIImageView!
     
     override func viewWillAppear(_ animated: Bool) {

@@ -1,29 +1,27 @@
 //
-//  WebPViewController.m
+//  GIFViewController.m
 //  PINRemoteImage
 //
-//  Created by Garrett Moon on 7/14/15.
-//  Copyright (c) 2015 Garrett Moon. All rights reserved.
+//  Created by Garrett Moon on 4/17/18.
+//  Copyright © 2018 Garrett Moon. All rights reserved.
 //
 
-#import "WebPViewController.h"
+#import "GIFViewController.h"
 
 #import <PINRemoteImage/PINImageView+PINRemoteImage.h>
 
-@interface WebPViewController ()
+@interface GIFViewController ()
 
 @end
 
-@implementation WebPViewController
+@implementation GIFViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -31,7 +29,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.imageView pin_setImageFromURL:[NSURL URLWithString:@"https://github.com/samdutton/simpl/blob/master/picturetype/kittens.webp?raw=true"]];
+    [self.animatedImageView pin_setImageFromURL:[NSURL URLWithString:@"https://i.pinimg.com/originals/f5/23/f1/f523f141646b613f78566ba964208990.gif"]];
 }
 
 /*

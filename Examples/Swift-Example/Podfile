@@ -4,6 +4,7 @@
  use_frameworks!
 
 target 'Swift-Example' do
-	pod 'PINRemoteImage'
+	pod 'PINRemoteImage', :path => '../../'
+    pod 'PINRemoteImage/WebP', :path => '../../'
 end
 

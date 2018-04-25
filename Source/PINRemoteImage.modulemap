@@ -2,7 +2,7 @@ framework module PINRemoteImage {
     umbrella header "PINRemoteImage.h"
 
     textual header "PINRemoteImageMacros.h"
-    header "FLAnimatedImageView+PINRemoteImage.h"
+    header "PINAnimatedImageView+PINRemoteImage.h"
     header "PINButton+PINRemoteImage.h"
     header "PINImageView+PINRemoteImage.h"
 
