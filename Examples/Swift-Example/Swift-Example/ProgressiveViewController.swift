@@ -21,8 +21,8 @@ class ProgressiveViewController: UIViewController {
         imageView.pin_updateWithProgress = true
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
        
         guard let imageURL = URL(string: "https://i.pinimg.com/1200x/2e/0c/c5/2e0cc5d86e7b7cd42af225c29f21c37f.jpg") else {
             return

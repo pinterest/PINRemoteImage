@@ -28,9 +28,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+    [super viewWillAppear:animated];
     [self.imageView pin_setImageFromURL:[NSURL URLWithString:@"https://github.com/samdutton/simpl/blob/master/picturetype/kittens.webp?raw=true"]];
 }
 

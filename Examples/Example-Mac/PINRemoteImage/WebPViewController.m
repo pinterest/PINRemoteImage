@@ -28,9 +28,9 @@
 
 #pragma mark - NSViewController
 
-- (void)viewDidAppear
+- (void)viewWillAppear
 {
-    [super viewDidAppear];
+    [super viewWillAppear];
     
     [self.imageView pin_setImageFromURL:[NSURL URLWithString:@"https://github.com/samdutton/simpl/blob/master/picturetype/kittens.webp?raw=true"]];
 }

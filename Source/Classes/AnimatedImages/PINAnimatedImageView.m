@@ -242,10 +242,11 @@
 - (CGImageRef)imageRef
 {
     PINAssertMain();
+    PINImage *underlyingImage = nil;
     if (_animatedImage) {
         return _frameImage;
-    } else if ([super image]) {
-        return (CGImageRef)CFAutorelease(CFRetain([[super image] CGImage]));
+    } else if ((underlyingImage = [super image])) {
+        return (CGImageRef)CFAutorelease(CFRetain([underlyingImage CGImage]));
     }
     return nil;
 }

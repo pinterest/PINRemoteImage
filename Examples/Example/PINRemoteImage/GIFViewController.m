@@ -26,9 +26,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+    [super viewWillAppear:animated];
     [self.animatedImageView pin_setImageFromURL:[NSURL URLWithString:@"https://i.pinimg.com/originals/f5/23/f1/f523f141646b613f78566ba964208990.gif"]];
 }
 

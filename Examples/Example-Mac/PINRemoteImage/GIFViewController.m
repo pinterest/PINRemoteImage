@@ -18,8 +18,8 @@
 
 @implementation GIFViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)viewWillAppear {
+    [super viewWillAppear];
     [self.animatedImageView pin_setImageFromURL:[NSURL URLWithString:@"https://i.pinimg.com/originals/f5/23/f1/f523f141646b613f78566ba964208990.gif"]];
 }
 
