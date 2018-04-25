@@ -152,6 +152,15 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
 }
 
 #pragma mark - passthrough
+- (CGSize)size
+{
+    return CGSizeMake(_animatedImage.width, _animatedImage.height);
+}
+
+- (NSData *)data
+{
+    return _animatedImage.data;
+}
 
 - (CFTimeInterval)totalDuration
 {

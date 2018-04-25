@@ -111,6 +111,11 @@ typedef void(^PINAnimatedImageInfoReady)(PINImage * _Nonnull coverImage);
 @protocol PINAnimatedImage
 
 /**
+ @abstract the underlying data of the animated image if available.
+ */
+@property (nonatomic, readonly) NSData *data;
+
+/**
  @abstract the native width of the animated image.
  */
 @property (nonatomic, readonly) uint32_t width;
