@@ -245,7 +245,7 @@
     if (_animatedImage) {
         return _frameImage;
     } else if ([super image]) {
-        return (CGImageRef)CFAutorelease([[super image] CGImage]);
+        return (CGImageRef)CFAutorelease(CFRetain([[super image] CGImage]));
     }
     return nil;
 }
