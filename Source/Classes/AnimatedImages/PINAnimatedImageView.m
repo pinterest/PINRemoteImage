@@ -75,7 +75,7 @@
 - (void)setAnimatedImage:(PINCachedAnimatedImage *)animatedImage
 {
     PINAssertMain();
-    if (_animatedImage == animatedImage) {
+    if (_animatedImage == animatedImage && animatedImage.playbackReady) {
         return;
     }
     

@@ -87,6 +87,11 @@ static void releaseData(void *info, const void *data, size_t size)
     }
 }
 
+- (NSData *)data
+{
+    return _animatedImageData;
+}
+
 - (size_t)frameCount
 {
     return _frameCount;

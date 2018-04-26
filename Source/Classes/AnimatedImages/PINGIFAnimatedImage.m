@@ -102,6 +102,11 @@
     }
 }
 
+- (NSData *)data
+{
+    return _animatedImageData;
+}
+
 - (size_t)frameCount
 {
     return _frameCount;
