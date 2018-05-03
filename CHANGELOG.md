@@ -5,6 +5,7 @@
 - [removed] Removed support for FLAnimatedImage [#453](https://github.com/pinterest/PINRemoteImage/pull/453)
 - [new] Add support for higher frame rate devices to animated images. [#417](https://github.com/pinterest/PINRemoteImage/pull/417) [garrettmoon](https://github.com/garrettmoon)
 - [fixed] Fixes non-animated GIFs being delivered as an animated image. [#434](https://github.com/pinterest/PINRemoteImage/pull/434) [garrettmoon](https://github.com/garrettmoon)
+- [fixed] Fixes a bug where using PINRemoteImageBasicCache would cause images to be decoded on the main thread. [#457](https://github.com/pinterest/PINRemoteImage/pull/457) [kgaidis](https://github.com/kgaidis)
 - [cleanup] Remove unused code that supported iOS < 7. [#435](https://github.com/pinterest/PINRemoteImage/pull/435) [Adlai-Holler](https://github.com/Adlai-Holler)
 - [cleanup] Use NS_ERROR_ENUM to improve Swift import. [#440](https://github.com/pinterest/PINRemoteImage/pull/440) [Adlai-Holler](https://github.com/Adlai-Holler)
 
