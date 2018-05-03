@@ -16,6 +16,7 @@ extern NSErrorDomain _Nonnull const PINURLErrorDomain;
 - (void)didReceiveData:(nonnull NSData *)data forTask:(nonnull NSURLSessionTask *)task;
 
 @optional
+- (void)didCollectMetrics:(nonnull NSURLSessionTaskMetrics *)metrics forURL:(nonnull NSURL *)url;
 - (void)didReceiveResponse:(nonnull NSURLResponse *)response forTask:(nonnull NSURLSessionTask *)task;
 - (void)didReceiveAuthenticationChallenge:(nonnull NSURLAuthenticationChallenge *)challenge forTask:(nullable NSURLSessionTask *)task completionHandler:(nonnull void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential  * _Nullable credential))completionHandler;
 

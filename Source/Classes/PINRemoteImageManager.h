@@ -140,6 +140,12 @@ typedef NSURLRequest * _Nonnull(^PINRemoteImageManagerRequestConfigurationHandle
  */
 typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int64_t totalBytes);
 
+/**
+ Reports NSURLSessionTaskMetrics for download requests
+ 
+ */
+typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSessionTaskMetrics * __nonnull metrics);
+
 /** An image downloading, processing and caching manager. It uses the concept of download and processing tasks to ensure that even if multiple calls to download or process an image are made, it only occurs one time (unless an item is no longer in the cache). PINRemoteImageManager is backed by GCD and safe to access from multiple threads simultaneously. It ensures that images are decoded off the main thread so that animation performance isn't affected. None of its exposed methods allow for synchronous access. However, it is optimized to call completions on the calling thread if an item is in its memory cache. **/
 @interface PINRemoteImageManager : NSObject
 
@@ -300,7 +306,15 @@ typedef void(^PINRemoteImageManagerProgressDownload)(int64_t completedBytes, int
  @param completion Completion to be called once maxProgressiveRenderSize is set.
  */
 - (void)setProgressiveRendersMaxProgressiveRenderSize:(CGSize)maxProgressiveRenderSize
-                              completion:(nullable dispatch_block_t)completion;
+                                           completion:(nullable dispatch_block_t)completion;
+
+/**
+ Sets a metrics callback block to be called when NSURLSessionTaskMetrics are reported for downloads.
+ 
+ @warning PINRemoteImageManager will hold a strong reference to metricsCallback. Avoid retain cycles by using weak references in the block!
+ */
+- (void)setMetricsCallback:(nullable PINRemoteImageManagerMetrics)metricsCallback
+                completion:(nullable dispatch_block_t)completion;
 
 /**
  Prefetch an image at the given URL.
