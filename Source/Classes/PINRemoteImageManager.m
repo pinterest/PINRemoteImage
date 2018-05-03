@@ -111,6 +111,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse 
 @property (nonatomic, assign) float highQualityBPSThreshold;
 @property (nonatomic, assign) float lowQualityBPSThreshold;
 @property (nonatomic, assign) BOOL shouldUpgradeLowQualityImages;
+@property (nonatomic, strong) PINRemoteImageManagerMetrics metricsCallback;
 @property (nonatomic, copy) PINRemoteImageManagerAuthenticationChallenge authenticationChallengeHandler;
 @property (nonatomic, copy) id<PINRequestRetryStrategy> (^retryStrategyCreationBlock)(void);
 @property (nonatomic, copy) PINRemoteImageManagerRequestConfigurationHandler requestConfigurationHandler;
@@ -165,7 +166,6 @@ static dispatch_once_t sharedDispatchToken;
                                           imageCache:(nullable id<PINRemoteImageCaching>)imageCache
 {
     if (self = [super init]) {
-        
         if (imageCache) {
             self.cache = imageCache;
         } else {
@@ -425,6 +425,20 @@ static dispatch_once_t sharedDispatchToken;
         [strongSelf lock];
             strongSelf.shouldUpgradeLowQualityImages = shouldUpgradeLowQualityImages;
         [strongSelf unlock];
+        if (completion) {
+            completion();
+        }
+    });
+}
+
+- (void)setMetricsCallback:(nullable PINRemoteImageManagerMetrics)metricsCallback completion:(nullable dispatch_block_t)completion
+{
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        typeof(self) strongSelf = weakSelf;
+        [self lock];
+            strongSelf.metricsCallback = metricsCallback;
+        [self unlock];
         if (completion) {
             completion();
         }
@@ -1127,6 +1141,15 @@ static dispatch_once_t sharedDispatchToken;
         PINRemoteImageDownloadTask *task = [self.tasks objectForKey:cacheKey];
     [self unlock];
     [task didReceiveData:data];
+}
+
+- (void)didCollectMetrics:(nonnull NSURLSessionTaskMetrics *)metrics forURL:(nonnull NSURL *)url
+{
+    [self lock];
+        if (self.metricsCallback) {
+            self.metricsCallback(url, metrics);
+        }
+    [self unlock];
 }
 
 #pragma mark - QOS

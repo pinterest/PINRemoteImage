@@ -197,6 +197,23 @@ NSErrorDomain const PINURLErrorDomain = @"PINURLErrorDomain";
 {
     if (@available(iOS 10.0, macOS 10.12, *)) {
         [[PINSpeedRecorder sharedRecorder] processMetrics:metrics forTask:task];
+        
+        [self lock];
+            dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
+        [self unlock];
+        
+        NSAssert(delegateQueue != nil, @"There seems to be an issue in iOS 9 where this can be nil. If you can reliably reproduce hitting this, *please* open an issue: https://github.com/pinterest/PINRemoteImage/issues");
+        if (delegateQueue == nil) {
+            return;
+        }
+        
+        __weak typeof(self) weakSelf = self;
+        dispatch_async(delegateQueue, ^{
+            typeof(self) strongSelf = weakSelf;
+            if ([strongSelf.delegate respondsToSelector:@selector(didCollectMetrics:forURL:)]) {
+                [strongSelf.delegate didCollectMetrics:metrics forURL:task.originalRequest.URL];
+            }
+        });
     }
 }
 
