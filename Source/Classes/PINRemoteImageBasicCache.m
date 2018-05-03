@@ -46,7 +46,7 @@
 //******************************************************************************************************
 -(nullable id)objectFromDiskForKey:(NSString *)key
 {
-    return [self.cache objectForKey:key];
+    return nil;
 }
 
 -(void)objectFromDiskForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
@@ -55,28 +55,29 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if (completion) {
             typeof(self) strongSelf = weakSelf;
-            completion(strongSelf, key, [strongSelf.cache objectForKey:key]);
+            completion(strongSelf, key, nil);
         }
     });
 }
 
 -(void)setObjectOnDisk:(id)object forKey:(NSString *)key
 {
-    [self.cache setObject:object forKey:key];
-}
-
-- (BOOL)objectExistsForKey:(NSString *)key
-{
-    return [self.cache objectForKey:key] != nil;
+    
 }
 
 //******************************************************************************************************
 // Common methods, should apply to both in-memory and disk storage
 //******************************************************************************************************
+- (BOOL)objectExistsForKey:(NSString *)key
+{
+    return [self.cache objectForKey:key] != nil;
+}
+
 - (void)removeObjectForKey:(NSString *)key
 {
     [self.cache removeObjectForKey:key];
 }
+
 - (void)removeObjectForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
 {
     __weak typeof(self) weakSelf = self;

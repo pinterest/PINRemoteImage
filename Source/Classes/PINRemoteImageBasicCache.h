@@ -11,7 +11,8 @@
 
 /**
  *  Simplistic <PINRemoteImageCacheProtocol> wrapper based on NSCache.
- *  not persisting any data on disk
+ *
+ *  No data is persisted on disk. The disk cache methods are no-op.
  */
 @interface PINRemoteImageBasicCache : NSObject <PINRemoteImageCaching>
 
