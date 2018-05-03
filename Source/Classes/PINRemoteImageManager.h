@@ -578,8 +578,9 @@ typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSession
  Cancel a download. Canceling will only cancel the download if all other downloads are also canceled with their associated UUIDs. 
  Canceling *does not* guarantee that your completion will not be called. You can use the UUID provided on the result object to verify
  the completion you want called is being called.
- @param storeResumeData if YES and the server indicates it supports resuming downloads, downloaded data will be stored in the memory
+ @param storeResumeData if YES and the server indicates it supports resuming downloads, downloaded data will be stored in the disk
  cache and used to resume the download if the same URL is attempted to be downloaded in the future.
+ PINRemoteImageBasicCache does not support disk caching, use PINCache.
  */
 - (void)cancelTaskWithUUID:(nonnull NSUUID *)UUID storeResumeData:(BOOL)storeResumeData;
 
