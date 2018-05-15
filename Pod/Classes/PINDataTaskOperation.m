@@ -101,7 +101,11 @@ static inline NSString * PIKeyPathFromOperationState(PIDataTaskOperationState st
 
 - (BOOL)isFinished
 {
-    return self.state == PIDataTaskOperationStateFinished;
+    BOOL isFinished;
+    [self lock];
+    isFinished = (self.state == PIDataTaskOperationStateFinished);
+    [self unlock];
+    return isFinished;
 }
 
 - (void)finish
