@@ -3,8 +3,13 @@
 //  PINRemoteImage
 //
 
+#import <TargetConditionals.h>
+
 #ifndef PINRemoteImageMacros_h
 #define PINRemoteImageMacros_h
+
+#define PIN_TARGET_IOS (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_TV)
+#define PIN_TARGET_MAC (TARGET_OS_MAC)
 
 #define PINRemoteImageLogging                0
 #if PINRemoteImageLogging
@@ -20,11 +25,11 @@
 #define FLAnimatedImage NSObject
 #endif
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if PIN_TARGET_IOS
 #define PINImage     UIImage
 #define PINImageView UIImageView
 #define PINButton    UIButton
-#else
+#elif PIN_TARGET_MAC
 #define PINImage     NSImage
 #define PINImageView NSImageView
 #define PINButton    NSButton

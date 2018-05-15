@@ -1,0 +1,6 @@
+framework module PINRemoteImage {
+  umbrella header "PINRemoteImage-umbrella.h"
+
+  export *
+  module * { export * }
+}

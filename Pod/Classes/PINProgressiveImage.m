@@ -21,7 +21,6 @@
 @property (nonatomic, assign) CGImageSourceRef imageSource;
 @property (nonatomic, assign) CGSize size;
 @property (nonatomic, assign) BOOL isProgressiveJPEG;
-@property (nonatomic, strong) PINImage *cachedImage;
 @property (nonatomic, assign) NSUInteger currentThreshold;
 @property (nonatomic, assign) float bytesPerSecond;
 @property (nonatomic, assign) NSUInteger scannedByte;
@@ -153,7 +152,7 @@
     [self.lock unlock];
 }
 
-- (PINImage *)currentImageBlurred:(BOOL)blurred maxProgressiveRenderSize:(CGSize)maxProgressiveRenderSize
+- (PINImage *)currentImageBlurred:(BOOL)blurred maxProgressiveRenderSize:(CGSize)maxProgressiveRenderSize renderedImageQuality:(out CGFloat *)renderedImageQuality
 {
     [self.lock lock];
         if (self.imageSource == nil) {
@@ -234,6 +233,9 @@
                     currentImage = [PINImage imageWithCGImage:image];
                 }
                 CGImageRelease(image);
+                if (renderedImageQuality) {
+                    *renderedImageQuality = progress;
+                }
             }
         }
     
@@ -326,9 +328,9 @@
         return nil;
     }
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if PIN_TARGET_IOS
     CGFloat imageScale = inputImage.scale;
-#else
+#elif PIN_TARGET_MAC
     // TODO: What scale factor should be used here?
     CGFloat imageScale = [[NSScreen mainScreen] backingScaleFactor];
 #endif
@@ -343,15 +345,15 @@
     }
     
     CGContextRef ctx;
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if PIN_TARGET_IOS
     UIGraphicsBeginImageContextWithOptions(inputSize, YES, imageScale);
     ctx = UIGraphicsGetCurrentContext();
-#else
+#elif PIN_TARGET_MAC
     ctx = CGBitmapContextCreate(0, inputSize.width, inputSize.height, 8, 0, [NSColorSpace genericRGBColorSpace].CGColorSpace, kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little);
 #endif
     
     if (ctx) {
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if PIN_TARGET_IOS
         CGContextScaleCTM(ctx, 1.0, -1.0);
         CGContextTranslateCTM(ctx, 0, -inputSize.height);
 #endif
@@ -431,9 +433,9 @@
                     
                     // Cleanup
                     free(outputBuffer->data);
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if PIN_TARGET_IOS
                     outputImage = UIGraphicsGetImageFromCurrentImageContext();
-#else
+#elif PIN_TARGET_MAC
                     CGImageRef outputImageRef = CGBitmapContextCreateImage(ctx);
                     outputImage = [[NSImage alloc] initWithCGImage:outputImageRef size:inputSize];
                     CFRelease(outputImageRef);
@@ -453,7 +455,7 @@
         }
     }
     
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if PIN_TARGET_IOS
     UIGraphicsEndImageContext();
 #endif
 

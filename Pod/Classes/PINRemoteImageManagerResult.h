@@ -6,9 +6,11 @@
 //
 //
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#import <Foundation/Foundation.h>
+
+#if PIN_TARGET_IOS
 #import <UIKit/UIKit.h>
-#else
+#elif PIN_TARGET_MAC
 #import <Cocoa/Cocoa.h>
 #endif
 
@@ -39,12 +41,24 @@ typedef NS_ENUM(NSUInteger, PINRemoteImageResultType) {
 @property (nonatomic, readonly, strong, nullable) NSError *error;
 @property (nonatomic, readonly, assign) PINRemoteImageResultType resultType;
 @property (nonatomic, readonly, strong, nullable) NSUUID *UUID;
+@property (nonatomic, readonly, assign) CGFloat renderedImageQuality;
+@property (nonatomic, readonly, strong, nullable) NSURLResponse *response;
 
 + (nonnull instancetype)imageResultWithImage:(nullable PINImage *)image
                                animatedImage:(nullable FLAnimatedImage *)animatedImage
                                requestLength:(NSTimeInterval)requestLength
                                        error:(nullable NSError *)error
                                   resultType:(PINRemoteImageResultType)resultType
-                                        UUID:(nullable NSUUID *)uuid;
+                                        UUID:(nullable NSUUID *)uuid
+                                 urlResponse:(nullable NSURLResponse *)response;
+
++ (nonnull instancetype)imageResultWithImage:(nullable PINImage *)image
+                               animatedImage:(nullable FLAnimatedImage *)animatedImage
+                               requestLength:(NSTimeInterval)requestLength
+                                       error:(nullable NSError *)error
+                                  resultType:(PINRemoteImageResultType)resultType
+                                        UUID:(nullable NSUUID *)uuid
+                                 urlResponse:(nullable NSURLResponse *)response
+                        renderedImageQuality:(CGFloat)renderedImageQuality;
 
 @end

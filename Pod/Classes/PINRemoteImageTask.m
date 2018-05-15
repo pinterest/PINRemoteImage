@@ -47,6 +47,7 @@
                           remove:(BOOL)remove
                        withImage:(PINImage *)image
                    animatedImage:(FLAnimatedImage *)animatedImage
+                        response:(NSURLResponse *)response
                           cached:(BOOL)cached
                            error:(NSError *)error
 {
@@ -73,7 +74,8 @@
                                                                     requestLength:CACurrentMediaTime() - requestTime
                                                                             error:error
                                                                        resultType:result
-                                                                             UUID:UUID]);
+                                                                             UUID:UUID
+                                                                      urlResponse:response]);
             });
         }
         if (remove) {

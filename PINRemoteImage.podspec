@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "PINRemoteImage"
-  s.version          = "2.0.1"
+  s.version          = "2.1.4"
   s.summary          = "A thread safe, performant, feature rich image fetcher"
   s.homepage         = "https://github.com/pinterest/PINRemoteImage"
   s.license          = 'Apache 2.0'
@@ -19,6 +19,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = "6.0"
   s.osx.deployment_target = "10.8"
+  s.tvos.deployment_target = "9.0"
   s.requires_arc = true
   
   # Include optional FLAnimatedImage module
@@ -45,6 +46,12 @@ Pod::Spec.new do |s|
     cs.frameworks = 'Cocoa'
   end
 
+  s.subspec 'tvOS' do |tvos|
+    tvos.platforms = "tvos"
+    tvos.dependency 'PINRemoteImage/Core'
+    tvos.frameworks = 'UIKit'
+  end
+
   s.subspec "FLAnimatedImage" do |fs|
     fs.platforms = "ios"
     fs.dependency 'PINRemoteImage/Core'
@@ -53,7 +60,10 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'WebP' do |webp|
-    webp.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) PIN_WEBP=1' }
+    webp.xcconfig = {
+        'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) PIN_WEBP=1',
+        'USER_HEADER_SEARCH_PATHS' => '$(inherited) $(SRCROOT)/libwebp/src'
+    }
     webp.dependency 'PINRemoteImage/Core'
     webp.dependency 'libwebp'
   end

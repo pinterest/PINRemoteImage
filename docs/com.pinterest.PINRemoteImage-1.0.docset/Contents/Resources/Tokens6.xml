@@ -43,6 +43,16 @@
             <NodeRef refid="6"/>
         </Token>
         
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/PINRemoteImageManagerErrorInvalidItemInCache</TokenIdentifier>
+            <Abstract type="html">The image in the cache was invalid</Abstract>
+            <Declaration>PINRemoteImageManagerErrorInvalidItemInCache</Declaration>
+            
+            <DeclaredIn>PINRemoteImageManager.h</DeclaredIn>
+            
+            <NodeRef refid="6"/>
+        </Token>
+        
         
 	</File>
 </Tokens>
