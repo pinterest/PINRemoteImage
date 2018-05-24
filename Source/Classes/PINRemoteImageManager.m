@@ -185,7 +185,7 @@ static dispatch_once_t sharedDispatchToken;
         _concurrentOperationQueue = [[PINOperationQueue alloc] initWithMaxConcurrentOperations:[[NSProcessInfo processInfo] activeProcessorCount] * 2];
         _urlSessionTaskQueue = [PINRemoteImageDownloadQueue queueWithMaxConcurrentDownloads:10];
         
-        self.sessionManager = [[PINURLSessionManager alloc] initWithSessionConfiguration:configuration];
+        self.sessionManager = [[PINURLSessionManager alloc] initWithSessionConfiguration:_sessionConfiguration];
         self.sessionManager.delegate = self;
         
         self.estimatedRemainingTimeThreshold = 0.1;
