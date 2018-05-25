@@ -9,6 +9,7 @@
 - [fixed] Fixes a bug where using PINRemoteImageBasicCache would cause images to be decoded on the main thread. [#457](https://github.com/pinterest/PINRemoteImage/pull/457) [kgaidis](https://github.com/kgaidis)
 - [cleanup] Remove unused code that supported iOS < 7. [#435](https://github.com/pinterest/PINRemoteImage/pull/435) [Adlai-Holler](https://github.com/Adlai-Holler)
 - [cleanup] Use NS_ERROR_ENUM to improve Swift import. [#440](https://github.com/pinterest/PINRemoteImage/pull/440) [Adlai-Holler](https://github.com/Adlai-Holler)
+- [fixed] Fixes nil session manager configuration. [#460](https://github.com/pinterest/PINRemoteImage/pull/460) [garrettmoon](https://github.com/garrettmoon)
 
 ## 3.0.0 Beta 13
 - [new] Support for webp and improved support for GIFs. [#411](https://github.com/pinterest/PINRemoteImage/pull/411) [garrettmoon](https://github.com/garrettmoon)
