@@ -324,7 +324,7 @@
                     [self.lock lockWithBlock:^{
                         retry = skipRetry == NO && [self->_retryStrategy shouldRetryWithError:error];
                         if (retry) {
-                            // Clear out the exsiting progress image or else new data from retry will be appended
+                            // Clear out the existing progress image or else new data from retry will be appended
                             self->_progressImage = nil;
                             [self->_retryStrategy incrementRetryCount];
                             delay = [self->_retryStrategy nextDelay];

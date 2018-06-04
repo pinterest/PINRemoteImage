@@ -2,6 +2,13 @@
 
 * Add your own contributions to the next release on the line below this with your name.
 
+## 3.0.1 -- Beta 7
+- [fix] Fix up warnings and upgrade to PINOperation 1.1.1: [#213](https://github.com/pinterest/PINCache/pull/213)
+- [performance] Reduce locking churn in cleanup methods. [#212](https://github.com/pinterest/PINCache/pull/212)
+- [fix] Don't set file protection unless requested. [#220](https://github.com/pinterest/PINCache/pull/220)
+- [new] Add ability to set an object level TTL: [#209](https://github.com/pinterest/PINCache/pull/209)
+- [performance] Improve performance of age limit trimming: [#224](https://github.com/pinterest/PINCache/pull/224)
+
 ## 3.0.1 -- Beta 6
 - [fix] Add some sane limits to the disk cache: [#201]https://github.com/pinterest/PINCache/pull/201
 - [new] Update enumeration methods to allow a stop flag to be flipped by caller: [#204](https://github.com/pinterest/PINCache/pull/204)

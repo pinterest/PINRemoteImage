@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name          = 'PINCache'
-  s.version       = '3.0.1-beta.6'
+  s.version       = '3.0.1-beta.7'
   s.homepage      = 'https://github.com/pinterest/PINCache'
   s.summary       = 'Fast, thread safe, parallel object cache for iOS and OS X.'
   s.authors       = { 'Garrett Moon' => 'garrett@pinterest.com', 'Justin Ouellette' => 'jstn@tumblr.com' }
@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.frameworks    = 'Foundation'
   s.ios.weak_frameworks   = 'UIKit'
   s.osx.weak_frameworks   = 'AppKit'
-  s.ios.deployment_target = '5.0'
+  s.ios.deployment_target = '8.0'
   s.osx.deployment_target = '10.8'
   s.tvos.deployment_target = '9.0'
   s.watchos.deployment_target = '2.0'
@@ -22,7 +22,7 @@ EOS
   s.prefix_header_contents = pch_PIN
   s.subspec 'Core' do |sp|
       sp.source_files  = 'Source/*.{h,m}'
-      sp.dependency 'PINOperation', '~> 1.1.0'
+      sp.dependency 'PINOperation', '~> 1.1.1'
   end
   s.subspec 'Arc-exception-safe' do |sp|
       sp.dependency 'PINCache/Core'
