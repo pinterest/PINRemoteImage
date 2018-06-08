@@ -968,7 +968,6 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
     diskCachedObj = [cache objectFromDiskForKey:key];
     XCTAssert(diskCachedObj == nil, @"Image was not discarded from the disk cache");
-
     [NSDate stopMockingDate];
 
     // nonTransparentWebPURL includes the header "expires: <about 1 yr from now>"
@@ -987,6 +986,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
     diskCachedObj = [cache objectFromDiskForKey:key];
     XCTAssert(diskCachedObj == nil, @"Image #2 was not discarded from the disk cache");
+    [NSDate stopMockingDate];
 }
 
 - (void)testAuthentication

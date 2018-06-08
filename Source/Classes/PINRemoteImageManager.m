@@ -168,12 +168,12 @@ static dispatch_once_t sharedDispatchToken;
 {
     if (self = [super init]) {
         if (imageCache) {
-            self.isTtlCache = [imageCache respondsToSelector:@selector(setObjectforKey:withAgeLimit:)];
             self.cache = imageCache;
         } else {
             self.cache = [self defaultImageCache];
         }
-        
+        self.isTtlCache = [self.cache respondsToSelector:@selector(setObjectOnDisk:forKey:withAgeLimit:)];
+
         _sessionConfiguration = [configuration copy];
         if (!_sessionConfiguration) {
             _sessionConfiguration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
@@ -240,14 +240,13 @@ static dispatch_once_t sharedDispatchToken;
         [pinDefaults setInteger:kPINRemoteImageDiskCacheVersion forKey:kPINRemoteImageDiskCacheVersionKey];
     }
 
-    self.isTtlCache = YES;
     return [[PINCache alloc] initWithName:kPINRemoteImageDiskCacheName rootPath:cacheURLRoot serializer:^NSData * (id <NSCoding>  _Nonnull object, NSString * _Nonnull key) {
         id <NSCoding, NSObject> obj = (id <NSCoding, NSObject>)object;
         if ([key hasPrefix:PINRemoteImageCacheKeyResumePrefix]) {
             return [NSKeyedArchiver archivedDataWithRootObject:obj];
         }
         return (NSData *)object;
-    } deserializer:^id <NSCoding> _Nonnull(NSData *_Nonnull data, NSString *_Nonnull key) {
+    } deserializer:^id <NSCoding> _Nonnull(NSData * _Nonnull data, NSString * _Nonnull key) {
         if ([key hasPrefix:PINRemoteImageCacheKeyResumePrefix]) {
             return [NSKeyedUnarchiver unarchiveObjectWithData:data];
         }
@@ -832,6 +831,8 @@ static dispatch_once_t sharedDispatchToken;
                             }
 
                             date = [sRFC7231PreferredDateFormatter dateFromString:expires];
+
+                            // Invalid dates (notably "0") or dates in the past must not be cached (RFC7231 5.3)
                             maxAge = @((NSInteger) MAX(([date timeIntervalSinceNow]), 0));
                         }
                     }
@@ -1423,6 +1424,7 @@ static dispatch_once_t sharedDispatchToken;
             if (maxAge && _isTtlCache) {
                 [self.cache setObjectOnDisk:diskData forKey:key withAgeLimit:[maxAge integerValue]];
             } else {
+                // unset (nil) maxAge, or a cache that is not _isTtlCache behave as before (will use cache global ageLimit)
                 [self.cache setObjectOnDisk:diskData forKey:key];
             }
         }
