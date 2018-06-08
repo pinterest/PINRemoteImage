@@ -16,6 +16,7 @@
 #import <PINRemoteImage/PINRequestRetryStrategy.h>
 #import <PINCache/PINCache.h>
 
+#import "NSDate+PINCacheTests.h"
 #import "PINResume.h"
 #import "PINRemoteImageDownloadTask.h"
 #import "PINSpeedRecorder.h"
@@ -941,6 +942,51 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
          dispatch_semaphore_signal(semaphore);
      }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
+}
+
+- (void)testMaxAge
+{
+    id cache = self.imageManager.cache;
+    XCTAssert([cache isKindOfClass:[PINCache class]]);
+    PINCache *pinCache = (PINCache *)cache;
+    pinCache.diskCache.ageLimit = 0; // forever, which is more than 31536000 (which is about a yr fwiw)
+    XCTAssert(pinCache.diskCache.isTTLCache, @"Default imageManager did not use a ttl cache");
+
+    // JPEGURL_Small includes the header "Cache-Control: max-age=31536000, immutable"
+    // If that ever changes, this might start failing
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Fetching JPEGURL_Small"];
+    [self.imageManager downloadImageWithURL:[self JPEGURL_Small] completion:^(PINRemoteImageManagerResult *result) {
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+
+    NSString *key = [self.imageManager cacheKeyForURL:[self JPEGURL_Small] processorKey:nil];
+    id diskCachedObj = [cache objectFromDiskForKey:key];
+    XCTAssert(diskCachedObj != nil, @"Image was not found in the disk cache");
+
+    [NSDate startMockingDateWithDate:[NSDate dateWithTimeIntervalSinceNow:32000000]];
+
+    diskCachedObj = [cache objectFromDiskForKey:key];
+    XCTAssert(diskCachedObj == nil, @"Image was not discarded from the disk cache");
+
+    [NSDate stopMockingDate];
+
+    // nonTransparentWebPURL includes the header "expires: <about 1 yr from now>"
+    // If that ever changes, this might start failing
+    XCTestExpectation *expectation2 = [self expectationWithDescription:@"Fetching nonTransparentWebPURL"];
+    [self.imageManager downloadImageWithURL:[self nonTransparentWebPURL] completion:^(PINRemoteImageManagerResult *result) {
+        [expectation2 fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+
+    key = [self.imageManager cacheKeyForURL:[self nonTransparentWebPURL] processorKey:nil];
+    diskCachedObj = [cache objectFromDiskForKey:key];
+    XCTAssert(diskCachedObj != nil, @"Image #2 was not found in the disk cache");
+
+    [NSDate startMockingDateWithDate:[NSDate dateWithTimeIntervalSinceNow:32000000]];
+
+    diskCachedObj = [cache objectFromDiskForKey:key];
+    XCTAssert(diskCachedObj == nil, @"Image #2 was not discarded from the disk cache");
 }
 
 - (void)testAuthentication

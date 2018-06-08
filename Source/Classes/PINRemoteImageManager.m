@@ -116,6 +116,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse 
 @property (nonatomic, copy) id<PINRequestRetryStrategy> (^retryStrategyCreationBlock)(void);
 @property (nonatomic, copy) PINRemoteImageManagerRequestConfigurationHandler requestConfigurationHandler;
 @property (nonatomic, strong) NSMutableDictionary <NSString *, NSString *> *httpHeaderFields;
+@property(nonatomic, assign) BOOL isTtlCache;
 #if DEBUG
 @property (nonatomic, assign) NSUInteger totalDownloads;
 #endif
@@ -167,6 +168,7 @@ static dispatch_once_t sharedDispatchToken;
 {
     if (self = [super init]) {
         if (imageCache) {
+            self.isTtlCache = [imageCache respondsToSelector:@selector(setObjectforKey:withAgeLimit:)];
             self.cache = imageCache;
         } else {
             self.cache = [self defaultImageCache];
@@ -237,19 +239,20 @@ static dispatch_once_t sharedDispatchToken;
         });
         [pinDefaults setInteger:kPINRemoteImageDiskCacheVersion forKey:kPINRemoteImageDiskCacheVersionKey];
     }
-  
+
+    self.isTtlCache = YES;
     return [[PINCache alloc] initWithName:kPINRemoteImageDiskCacheName rootPath:cacheURLRoot serializer:^NSData * (id <NSCoding>  _Nonnull object, NSString * _Nonnull key) {
         id <NSCoding, NSObject> obj = (id <NSCoding, NSObject>)object;
         if ([key hasPrefix:PINRemoteImageCacheKeyResumePrefix]) {
             return [NSKeyedArchiver archivedDataWithRootObject:obj];
         }
         return (NSData *)object;
-    } deserializer:^id<NSCoding> _Nonnull(NSData * _Nonnull data, NSString * _Nonnull key) {
+    } deserializer:^id <NSCoding> _Nonnull(NSData *_Nonnull data, NSString *_Nonnull key) {
         if ([key hasPrefix:PINRemoteImageCacheKeyResumePrefix]) {
             return [NSKeyedUnarchiver unarchiveObjectWithData:data];
         }
         return data;
-    }];
+    } keyEncoder:nil keyDecoder:nil ttlCache:YES];
 #else
     return [[PINRemoteImageBasicCache alloc] init];
 #endif
@@ -784,13 +787,60 @@ static dispatch_once_t sharedDispatchToken;
             NSError *remoteImageError = error;
             PINImage *image = nil;
             id alternativeRepresentation = nil;
-             
+            __block NSNumber *maxAge = nil;
             if (remoteImageError == nil) {
-                 //stores the object in the caches
-                 [self materializeAndCacheObject:data cacheInDisk:data additionalCost:0 url:url key:key options:options outImage:&image outAltRep:&alternativeRepresentation];
+                if (_isTtlCache && !(options & PINRemoteImageManagerDownloadOptionsIgnoreCacheControlHeaders)) {
+                    // examine Cache-Control headers (https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
+                    if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+                        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+
+                        [[[httpResponse allHeaderFields][@"Cache-Control"] componentsSeparatedByString:@","] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            NSString *trimmed = [[(NSString *) obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] lowercaseString];
+
+                            if ([trimmed isEqualToString:@"no-store"] || [trimmed isEqualToString:@"must-revalidate"] || [trimmed isEqualToString:@"no-cache"]) {
+                                maxAge = @(0);
+                                *stop = YES;
+                            } else {
+                                // max-age
+                                NSArray<NSString *> *split = [trimmed componentsSeparatedByString:@"max-age="];
+                                if ([split count] == 2) {
+                                    maxAge = @([split[1] integerValue]);
+                                }
+                            }
+                        }];
+
+                        NSString *expires = nil;
+                        // If there is a Cache-Control header with the "max-age" directive in the response, the Expires header is ignored
+                        if (!maxAge && (expires = [httpResponse allHeaderFields][@"Expires"])) {
+                            // https://developer.apple.com/library/archive/qa/qa1480/_index.html
+
+                            static NSDateFormatter *sRFC7231PreferredDateFormatter;
+                            NSDate *date;
+
+                            // If the date formatters aren't already set up, do that now and cache them
+                            // for subsequent reuse.
+
+                            if (sRFC7231PreferredDateFormatter == nil) {
+                                NSLocale *enUSPOSIXLocale;
+
+                                sRFC7231PreferredDateFormatter = [[NSDateFormatter alloc] init];
+
+                                enUSPOSIXLocale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+
+                                [sRFC7231PreferredDateFormatter setLocale:enUSPOSIXLocale];
+                                [sRFC7231PreferredDateFormatter setDateFormat:@"E, d MMM yyyy HH:mm:ss Z"];
+                            }
+
+                            date = [sRFC7231PreferredDateFormatter dateFromString:expires];
+                            maxAge = @((NSInteger) MAX(([date timeIntervalSinceNow]), 0));
+                        }
+                    }
+                }
+                //stores the object in the caches
+                [self materializeAndCacheObject:data cacheInDisk:data additionalCost:0 maxAge:maxAge url:url key:key options:options outImage:&image outAltRep:&alternativeRepresentation];
              }
 
-             if (error == nil && image == nil && alternativeRepresentation == nil) {
+            if (error == nil && image == nil && alternativeRepresentation == nil) {
                  remoteImageError = [NSError errorWithDomain:PINRemoteImageManagerErrorDomain
                                                         code:PINRemoteImageManagerErrorFailedToDecodeImage
                                                     userInfo:nil];
@@ -1268,11 +1318,23 @@ static dispatch_once_t sharedDispatchToken;
     return [self materializeAndCacheObject:object cacheInDisk:nil additionalCost:0 url:url key:key options:options outImage:outImage outAltRep:outAlternateRepresentation];
 }
 
+- (BOOL)materializeAndCacheObject:(id)object
+                      cacheInDisk:(NSData *)diskData
+                   additionalCost:(NSUInteger)additionalCost
+                              url:(NSURL *)url
+                              key:(NSString *)key
+                          options:(PINRemoteImageManagerDownloadOptions)options
+                         outImage:(PINImage **)outImage
+                        outAltRep:(id *)outAlternateRepresentation {
+    return [self materializeAndCacheObject:object cacheInDisk:diskData additionalCost:additionalCost maxAge:nil url:url key:key options:options outImage:outImage outAltRep:outAlternateRepresentation];
+}
+
 //takes the object from the cache and returns an image or animated image.
 //if it's a non-alternative representation and skipDecode is not set it also decompresses the image.
 - (BOOL)materializeAndCacheObject:(id)object
                       cacheInDisk:(NSData *)diskData
                    additionalCost:(NSUInteger)additionalCost
+                           maxAge:(NSNumber *)maxAge
                               url:(NSURL *)url
                               key:(NSString *)key
                           options:(PINRemoteImageManagerDownloadOptions)options
@@ -1356,7 +1418,14 @@ static dispatch_once_t sharedDispatchToken;
     }
     
     if (diskData) {
-        [self.cache setObjectOnDisk:diskData forKey:key];
+        // maxAge of 0 is not stored at all
+        if (!(maxAge && [maxAge integerValue] == 0)) {
+            if (maxAge && _isTtlCache) {
+                [self.cache setObjectOnDisk:diskData forKey:key withAgeLimit:[maxAge integerValue]];
+            } else {
+                [self.cache setObjectOnDisk:diskData forKey:key];
+            }
+        }
     }
     
     if (outImage) {

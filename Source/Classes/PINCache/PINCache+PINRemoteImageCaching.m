@@ -47,6 +47,11 @@
     }];
 }
 
+-(void)setObjectOnDisk:(id)object forKey:(NSString *)key withAgeLimit:(NSTimeInterval)ageLimit
+{
+    [self.diskCache setObject:object forKey:key withAgeLimit:ageLimit];
+}
+
 -(void)setObjectOnDisk:(id)object forKey:(NSString *)key
 {
     [self.diskCache setObject:object forKey:key];

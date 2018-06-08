@@ -32,48 +32,6 @@
 		139D4FE21F672B0D00DE64E0 /* PINRemoteImageDownloadQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B1F2801E679D7A00ED87C4 /* PINRemoteImageDownloadQueue.m */; };
 		139D4FE31F672B0D00DE64E0 /* PINResume.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B7E3B11E736C73000FC887 /* PINResume.m */; };
 		139D4FE41F672B0D00DE64E0 /* PINSpeedRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6860CB071F578287005E886E /* PINSpeedRecorder.m */; };
-		139D50781F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50791F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D507A1F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D507B1F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D507C1F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D507D1F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D507E1F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D507F1F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50801F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50811F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50821F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50831F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50841F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50851F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50861F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50871F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50881F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50891F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D508A1F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D508B1F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D508C1F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D508D1F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D508E1F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D508F1F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50901F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50911F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50921F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50931F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50941F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50951F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50961F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50971F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50981F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50991F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D509A1F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D509B1F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D509C1F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D509D1F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D509E1F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D509F1F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50A01F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
-		139D50A11F672BAD00DE64E0 /* (null) in Headers */ = {isa = PBXBuildFile; };
 		139D50A31F672BBF00DE64E0 /* PINImage+ScaledImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 68A6B1DA1E5248BF003A92D1 /* PINImage+ScaledImage.h */; };
 		139D50A41F672BBF00DE64E0 /* PINImage+DecodedImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DD47FA01C699FDC00F12CA0 /* PINImage+DecodedImage.h */; };
 		139D50A51F672BBF00DE64E0 /* PINImage+WebP.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DD47FA21C699FDC00F12CA0 /* PINImage+WebP.h */; };
@@ -480,6 +438,7 @@
 		9DD47FA51C699FDC00F12CA0 /* PINImage+DecodedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DD47FA11C699FDC00F12CA0 /* PINImage+DecodedImage.m */; };
 		9DD47FA61C699FDC00F12CA0 /* PINImage+WebP.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DD47FA21C699FDC00F12CA0 /* PINImage+WebP.h */; };
 		9DD47FA71C699FDC00F12CA0 /* PINImage+WebP.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DD47FA31C699FDC00F12CA0 /* PINImage+WebP.m */; };
+		ACD28AB87FABF6BA3B9BF4E4 /* NSDate+PINCacheTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD28D963D79EEC14EE071CE /* NSDate+PINCacheTests.m */; };
 		F165DFD91BD0504A0008C6E8 /* PINRemoteImageMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = F165DFD81BD0504A0008C6E8 /* PINRemoteImageMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F1B918FF1BCF23C900710963 /* PINRemoteImageCategoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B918DC1BCF23C800710963 /* PINRemoteImageCategoryManager.m */; };
 		F1B919001BCF23C900710963 /* NSData+ImageDetectors.h in Headers */ = {isa = PBXBuildFile; fileRef = F1B918DE1BCF23C800710963 /* NSData+ImageDetectors.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -815,6 +774,8 @@
 		9DD47FA11C699FDC00F12CA0 /* PINImage+DecodedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PINImage+DecodedImage.m"; sourceTree = "<group>"; };
 		9DD47FA21C699FDC00F12CA0 /* PINImage+WebP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PINImage+WebP.h"; sourceTree = "<group>"; };
 		9DD47FA31C699FDC00F12CA0 /* PINImage+WebP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PINImage+WebP.m"; sourceTree = "<group>"; };
+		ACD288C6E6B13E6DA226D252 /* NSDate+PINCacheTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+PINCacheTests.h"; sourceTree = "<group>"; };
+		ACD28D963D79EEC14EE071CE /* NSDate+PINCacheTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+PINCacheTests.m"; sourceTree = "<group>"; };
 		F165DFD81BD0504A0008C6E8 /* PINRemoteImageMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageMacros.h; sourceTree = "<group>"; };
 		F1B918D11BCF239200710963 /* PINRemoteImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PINRemoteImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1B918D61BCF239200710963 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1136,6 +1097,8 @@
 				6864A9201F6D94AF007BB848 /* PINRemoteImageTests-Bridging-Header.h */,
 				683128F31F95045200D5B4A8 /* PINAnimatedImage+PINAnimatedImageTesting.h */,
 				683128F41F95045200D5B4A8 /* PINAnimatedImage+PINAnimatedImageTesting.m */,
+				ACD288C6E6B13E6DA226D252 /* NSDate+PINCacheTests.h */,
+				ACD28D963D79EEC14EE071CE /* NSDate+PINCacheTests.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -1375,12 +1338,8 @@
 				139D50B11F672BBF00DE64E0 /* PINResume.h in Headers */,
 				139D50B21F672BBF00DE64E0 /* PINSpeedRecorder.h in Headers */,
 				68D734E11F75FE4500B9C95D /* common_dec.h in Headers */,
-				139D50781F672BAD00DE64E0 /* (null) in Headers */,
-				139D50791F672BAD00DE64E0 /* (null) in Headers */,
 				68912D87208FDB4900F5FE0E /* PINRemoteWeakProxy.h in Headers */,
-				139D507A1F672BAD00DE64E0 /* (null) in Headers */,
 				68D7344F1F75FDDE00B9C95D /* PINWebPAnimatedImage.h in Headers */,
-				139D507B1F672BAD00DE64E0 /* (null) in Headers */,
 				68D734721F75FE2700B9C95D /* mux.h in Headers */,
 				68D734ED1F75FE4500B9C95D /* webpi_dec.h in Headers */,
 				68D734711F75FE2700B9C95D /* mux_types.h in Headers */,
@@ -1390,62 +1349,24 @@
 				68D734801F75FE3400B9C95D /* cost_enc.h in Headers */,
 				68D734531F75FE2100B9C95D /* bit_reader_inl_utils.h in Headers */,
 				68D734661F75FE2100B9C95D /* random_utils.h in Headers */,
-				139D507C1F672BAD00DE64E0 /* (null) in Headers */,
-				139D507D1F672BAD00DE64E0 /* (null) in Headers */,
-				139D507E1F672BAD00DE64E0 /* (null) in Headers */,
-				139D507F1F672BAD00DE64E0 /* (null) in Headers */,
-				139D50801F672BAD00DE64E0 /* (null) in Headers */,
 				68D734DF1F75FE4500B9C95D /* alphai_dec.h in Headers */,
 				689613E1208FD8B700D2095C /* PINAnimatedImageView.h in Headers */,
 				68D7344D1F75FDD600B9C95D /* PINCachedAnimatedImage.h in Headers */,
-				139D50811F672BAD00DE64E0 /* (null) in Headers */,
-				139D50821F672BAD00DE64E0 /* (null) in Headers */,
-				139D50831F672BAD00DE64E0 /* (null) in Headers */,
-				139D50841F672BAD00DE64E0 /* (null) in Headers */,
 				68D7349F1F75FE3C00B9C95D /* common_sse2.h in Headers */,
-				139D50851F672BAD00DE64E0 /* (null) in Headers */,
-				139D50861F672BAD00DE64E0 /* (null) in Headers */,
 				68D734571F75FE2100B9C95D /* bit_writer_utils.h in Headers */,
 				68D734701F75FE2700B9C95D /* format_constants.h in Headers */,
-				139D50871F672BAD00DE64E0 /* (null) in Headers */,
 				68D7347D1F75FE3400B9C95D /* backward_references_enc.h in Headers */,
 				68D734C91F75FE3C00B9C95D /* mips_macro.h in Headers */,
-				139D50881F672BAD00DE64E0 /* (null) in Headers */,
-				139D50891F672BAD00DE64E0 /* (null) in Headers */,
-				139D508A1F672BAD00DE64E0 /* (null) in Headers */,
-				139D508B1F672BAD00DE64E0 /* (null) in Headers */,
-				139D508C1F672BAD00DE64E0 /* (null) in Headers */,
 				68D734E81F75FE4500B9C95D /* vp8_dec.h in Headers */,
 				68D734821F75FE3400B9C95D /* delta_palettization_enc.h in Headers */,
 				68D734511F75FDE500B9C95D /* PINGIFAnimatedImage.h in Headers */,
 				68D734861F75FE3400B9C95D /* histogram_enc.h in Headers */,
-				139D508D1F672BAD00DE64E0 /* (null) in Headers */,
-				139D508E1F672BAD00DE64E0 /* (null) in Headers */,
-				139D508F1F672BAD00DE64E0 /* (null) in Headers */,
-				139D50901F672BAD00DE64E0 /* (null) in Headers */,
-				139D50911F672BAD00DE64E0 /* (null) in Headers */,
 				68D734601F75FE2100B9C95D /* huffman_utils.h in Headers */,
-				139D50921F672BAD00DE64E0 /* (null) in Headers */,
 				68D7346A1F75FE2100B9C95D /* thread_utils.h in Headers */,
 				68D734BB1F75FE3C00B9C95D /* lossless_common.h in Headers */,
-				139D50931F672BAD00DE64E0 /* (null) in Headers */,
-				139D50941F672BAD00DE64E0 /* (null) in Headers */,
 				68D734931F75FE3400B9C95D /* vp8i_enc.h in Headers */,
-				139D50951F672BAD00DE64E0 /* (null) in Headers */,
-				139D50961F672BAD00DE64E0 /* (null) in Headers */,
-				139D50971F672BAD00DE64E0 /* (null) in Headers */,
-				139D50981F672BAD00DE64E0 /* (null) in Headers */,
 				689613DB208FD89900D2095C /* PINAnimatedImageView+PINRemoteImage.h in Headers */,
-				139D50991F672BAD00DE64E0 /* (null) in Headers */,
-				139D509A1F672BAD00DE64E0 /* (null) in Headers */,
-				139D509B1F672BAD00DE64E0 /* (null) in Headers */,
-				139D509C1F672BAD00DE64E0 /* (null) in Headers */,
 				68D734AD1F75FE3C00B9C95D /* dsp.h in Headers */,
-				139D509D1F672BAD00DE64E0 /* (null) in Headers */,
-				139D509E1F672BAD00DE64E0 /* (null) in Headers */,
-				139D509F1F672BAD00DE64E0 /* (null) in Headers */,
-				139D50A01F672BAD00DE64E0 /* (null) in Headers */,
-				139D50A11F672BAD00DE64E0 /* (null) in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1901,6 +1822,7 @@
 				6864A9221F6D94AF007BB848 /* PINAnimatedImageTests.swift in Sources */,
 				68A0FC1C1E523434000B552D /* PINRemoteImageTests.m in Sources */,
 				683128F51F95045200D5B4A8 /* PINAnimatedImage+PINAnimatedImageTesting.m in Sources */,
+				ACD28AB87FABF6BA3B9BF4E4 /* NSDate+PINCacheTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
