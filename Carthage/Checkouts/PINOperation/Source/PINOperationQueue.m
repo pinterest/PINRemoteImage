@@ -291,10 +291,10 @@
   dispatch_async(_semaphoreQueue, ^{
     while (difference != 0) {
       if (difference > 0) {
-        dispatch_semaphore_signal(_concurrentSemaphore);
+        dispatch_semaphore_signal(self->_concurrentSemaphore);
         difference--;
       } else {
-        dispatch_semaphore_wait(_concurrentSemaphore, DISPATCH_TIME_FOREVER);
+        dispatch_semaphore_wait(self->_concurrentSemaphore, DISPATCH_TIME_FOREVER);
         difference++;
       }
     }
@@ -353,10 +353,10 @@
           for (dispatch_block_t completion in operation.completions) {
             completion();
           }
-          dispatch_group_leave(_group);
+          dispatch_group_leave(self->_group);
           
           [self lock];
-            _serialQueueBusy = NO;
+            self->_serialQueueBusy = NO;
           [self unlock];
           
           //see if there are any other operations
@@ -379,22 +379,22 @@
   }
   
   dispatch_async(_semaphoreQueue, ^{
-    dispatch_semaphore_wait(_concurrentSemaphore, DISPATCH_TIME_FOREVER);
+    dispatch_semaphore_wait(self->_concurrentSemaphore, DISPATCH_TIME_FOREVER);
     [self lock];
       PINOperation *operation = [self locked_nextOperationByPriority];
     [self unlock];
   
     if (operation) {
-      dispatch_async(_concurrentQueue, ^{
+      dispatch_async(self->_concurrentQueue, ^{
         operation.block(operation.data);
         for (dispatch_block_t completion in operation.completions) {
           completion();
         }
-        dispatch_group_leave(_group);
-        dispatch_semaphore_signal(_concurrentSemaphore);
+        dispatch_group_leave(self->_group);
+        dispatch_semaphore_signal(self->_concurrentSemaphore);
       });
     } else {
-      dispatch_semaphore_signal(_concurrentSemaphore);
+      dispatch_semaphore_signal(self->_concurrentSemaphore);
     }
   });
 }

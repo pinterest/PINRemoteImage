@@ -103,13 +103,12 @@ PIN_SUBCLASSING_RESTRICTED
                   serializer:(nullable PINDiskCacheSerializerBlock)serializer
                 deserializer:(nullable PINDiskCacheDeserializerBlock)deserializer;
 
-
 /**
  Multiple instances with the same name are *not* allowed and can *not* safely
  access the same data on disk. Also used to create the <diskCache>.
  Initializer allows you to override default NSKeyedArchiver/NSKeyedUnarchiver serialization for <diskCache>.
  You must provide both serializer and deserializer, or opt-out to default implementation providing nil values.
- 
+
  @see name
  @param name The name of the cache.
  @param rootPath The path of the cache on disk.
@@ -124,7 +123,31 @@ PIN_SUBCLASSING_RESTRICTED
                   serializer:(nullable PINDiskCacheSerializerBlock)serializer
                 deserializer:(nullable PINDiskCacheDeserializerBlock)deserializer
                   keyEncoder:(nullable PINDiskCacheKeyEncoderBlock)keyEncoder
-                  keyDecoder:(nullable PINDiskCacheKeyDecoderBlock)keyDecoder NS_DESIGNATED_INITIALIZER;
+                  keyDecoder:(nullable PINDiskCacheKeyDecoderBlock)keyDecoder;
+
+/**
+ Multiple instances with the same name are *not* allowed and can *not* safely
+ access the same data on disk. Also used to create the <diskCache>.
+ Initializer allows you to override default NSKeyedArchiver/NSKeyedUnarchiver serialization for <diskCache>.
+ You must provide both serializer and deserializer, or opt-out to default implementation providing nil values.
+ 
+ @see name
+ @param name The name of the cache.
+ @param rootPath The path of the cache on disk.
+ @param serializer   A block used to serialize object before writing to disk. If nil provided, default NSKeyedArchiver serialized will be used.
+ @param deserializer A block used to deserialize object read from disk. If nil provided, default NSKeyedUnarchiver serialized will be used.
+ @param keyEncoder A block used to encode key(filename). If nil provided, default url encoder will be used
+ @param keyDecoder A block used to decode key(filename). If nil provided, default url decoder will be used
+ @param ttlCache Whether or not the cache should behave as a TTL cache.
+ @result A new cache with the specified name.
+ */
+- (instancetype)initWithName:(nonnull NSString *)name
+                    rootPath:(nonnull NSString *)rootPath
+                  serializer:(nullable PINDiskCacheSerializerBlock)serializer
+                deserializer:(nullable PINDiskCacheDeserializerBlock)deserializer
+                  keyEncoder:(nullable PINDiskCacheKeyEncoderBlock)keyEncoder
+                  keyDecoder:(nullable PINDiskCacheKeyDecoderBlock)keyDecoder
+                    ttlCache:(BOOL)ttlCache NS_DESIGNATED_INITIALIZER;
 
 @end
 

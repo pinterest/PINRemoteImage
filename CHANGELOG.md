@@ -1,5 +1,6 @@
 ## master
 * Add your own contributions to the next release on the line below this with your name.
+- [new] Updated to latest PINCache beta 7. [wiseoldduck](https://github.com/wiseoldduck)
 - [iOS11] Fix warnings [#428](https://github.com/pinterest/PINRemoteImage/pull/428) [Eke](https://github.com/Eke)
 - [new / beta] Native Support for GIFs and animated WebP [#453](https://github.com/pinterest/PINRemoteImage/pull/453) [garrettmoon](https://github.com/garrettmoon)
 - [new] Add support for getting NSURLSessionMetrics back. [#456](https://github.com/pinterest/PINRemoteImage/pull/456) [garrettmoon](https://github.com/garrettmoon)

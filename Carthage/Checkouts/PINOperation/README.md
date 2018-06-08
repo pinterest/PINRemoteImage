@@ -31,7 +31,7 @@ Add the following line to your `Cartfile` and run `carthage update --platform io
 
 ## Requirements
 
-__PINOperation__ requires iOS 8.0 or OS X 10.10 and greater.
+__PINOperation__ requires iOS 5.0 or OS X 10.8 and greater.
 
 ## Contact
 
