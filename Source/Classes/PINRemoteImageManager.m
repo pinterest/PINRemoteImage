@@ -807,7 +807,8 @@ static dispatch_once_t sharedFormatterToken;
             id alternativeRepresentation = nil;
             __block NSNumber *maxAge = nil;
             if (remoteImageError == nil) {
-                if (_isTtlCache && !(options & PINRemoteImageManagerDownloadOptionsIgnoreCacheControlHeaders)) {
+                BOOL ignoreHeaders = (options & PINRemoteImageManagerDownloadOptionsIgnoreCacheControlHeaders) != 0;
+                if (_isTtlCache && !ignoreHeaders) {
                     // examine Cache-Control headers (https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
                     if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
                         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
