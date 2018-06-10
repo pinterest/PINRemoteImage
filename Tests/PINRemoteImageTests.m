@@ -944,7 +944,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
 }
 
-- (void)testMaxAge
+- (void)testCacheControlSupport
 {
     id cache = self.imageManager.cache;
     XCTAssert([cache isKindOfClass:[PINCache class]]);

@@ -62,10 +62,12 @@ typedef NS_OPTIONS(NSUInteger, PINRemoteImageManagerDownloadOptions) {
     PINRemoteImageManagerDownloadOptionsSkipRetry = 1 << 5,
     /**
      * Do not honor HTTP Cache-Control headers
-     * Currently PINRemoteImage will by default respect 'no-store', 'no-cache', 'max-age', 'Expires', and 'must-revalidate'. Set this flag to ignore those headers.
-     * TODO: Currently PINRemoteImage will re-download images that only must be re-validated. In the future this could be improved with revalidation behavior that stores ETag or Last-Modified values and only
-     * makes HEAD requests to see if these headers are unchanged.
-     * see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
+     * By default, PINRemoteImage will by default respect 'no-store', 'no-cache', 'max-age',
+     * 'Expires', and 'must-revalidate'. Set this flag to ignore those headers.
+     * TODO: Currently PINRemoteImage will re-download images that only must be re-validated. In the
+     * future this could be improved with revalidation behavior that stores ETag or Last-Modified
+     * values and only makes HEAD requests to see if these headers are unchanged.
+     * see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control and
      * https://tools.ietf.org/html/rfc7234*/
     PINRemoteImageManagerDownloadOptionsIgnoreCacheControlHeaders = 1 << 6
 };

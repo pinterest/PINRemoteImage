@@ -147,6 +147,25 @@ static dispatch_once_t sharedDispatchToken;
     });
 }
 
+static NSDateFormatter *sharedFormatter;
+static dispatch_once_t sharedFormatterToken;
+
++ (NSDateFormatter *)RFC7231PreferredDateFormatter
+{
+    dispatch_once(&sharedFormatterToken, ^{
+        NSLocale *enUSPOSIXLocale;
+
+        sharedFormatter = [[NSDateFormatter alloc] init];
+
+        enUSPOSIXLocale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+
+        [sharedFormatter setLocale:enUSPOSIXLocale];
+        [sharedFormatter setDateFormat:@"E, d MMM yyyy HH:mm:ss Z"];
+
+    });
+    return sharedFormatter;
+}
+
 - (instancetype)init
 {
     return [self initWithSessionConfiguration:nil];
@@ -793,51 +812,36 @@ static dispatch_once_t sharedDispatchToken;
                     if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
                         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
 
-                        [[[httpResponse allHeaderFields][@"Cache-Control"] componentsSeparatedByString:@","] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                            NSString *trimmed = [[(NSString *) obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] lowercaseString];
+                        NSDictionary *headerFields = [httpResponse allHeaderFields];
+                        for (NSString *component in [headerFields[@"Cache-Control"] componentsSeparatedByString:@","]) {
+                            NSString *trimmed = [[component stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] lowercaseString];
 
-                            if ([trimmed isEqualToString:@"no-store"] || [trimmed isEqualToString:@"must-revalidate"] || [trimmed isEqualToString:@"no-cache"]) {
+                            if ([trimmed isEqualToString:@"no-store"] || [trimmed isEqualToString:@"must-revalidate"] || [trimmed isEqualToString:@"no-cache"])
+                            {
                                 maxAge = @(0);
-                                *stop = YES;
+                                break;
                             } else {
                                 // max-age
                                 NSArray<NSString *> *split = [trimmed componentsSeparatedByString:@"max-age="];
-                                if ([split count] == 2) {
+                                if ([split count] == 2)
+                                {
                                     maxAge = @([split[1] integerValue]);
                                 }
                             }
-                        }];
+                        }
 
                         NSString *expires = nil;
-                        // If there is a Cache-Control header with the "max-age" directive in the response, the Expires header is ignored
-                        if (!maxAge && (expires = [httpResponse allHeaderFields][@"Expires"])) {
-                            // https://developer.apple.com/library/archive/qa/qa1480/_index.html
+                        // If there is a Cache-Control header with the "max-age" directive in the response, the Expires header is ignored.
+                        if (!maxAge && (expires = headerFields[@"Expires"])) {
 
-                            static NSDateFormatter *sRFC7231PreferredDateFormatter;
-                            NSDate *date;
-
-                            // If the date formatters aren't already set up, do that now and cache them
-                            // for subsequent reuse.
-
-                            if (sRFC7231PreferredDateFormatter == nil) {
-                                NSLocale *enUSPOSIXLocale;
-
-                                sRFC7231PreferredDateFormatter = [[NSDateFormatter alloc] init];
-
-                                enUSPOSIXLocale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
-
-                                [sRFC7231PreferredDateFormatter setLocale:enUSPOSIXLocale];
-                                [sRFC7231PreferredDateFormatter setDateFormat:@"E, d MMM yyyy HH:mm:ss Z"];
-                            }
-
-                            date = [sRFC7231PreferredDateFormatter dateFromString:expires];
+                            NSDate *date = [[PINRemoteImageManager RFC7231PreferredDateFormatter] dateFromString:expires];
 
                             // Invalid dates (notably "0") or dates in the past must not be cached (RFC7231 5.3)
                             maxAge = @((NSInteger) MAX(([date timeIntervalSinceNow]), 0));
                         }
                     }
                 }
-                //stores the object in the caches
+                // Stores the object in the cache.
                 [self materializeAndCacheObject:data cacheInDisk:data additionalCost:0 maxAge:maxAge url:url key:key options:options outImage:&image outAltRep:&alternativeRepresentation];
              }
 
@@ -1419,7 +1423,9 @@ static dispatch_once_t sharedDispatchToken;
     }
     
     if (diskData) {
-        // maxAge of 0 is not stored at all
+        // maxAge of 0 means that images should not be stored at all.
+        // There is no HTTP header that can be sent to indicate "infinite". However not setting a value at all, which in
+        // our case is represented by maxAge == nil, effectively means that.
         if (!(maxAge && [maxAge integerValue] == 0)) {
             if (maxAge && _isTtlCache) {
                 [self.cache setObjectOnDisk:diskData forKey:key withAgeLimit:[maxAge integerValue]];
