@@ -116,7 +116,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse 
 @property (nonatomic, copy) id<PINRequestRetryStrategy> (^retryStrategyCreationBlock)(void);
 @property (nonatomic, copy) PINRemoteImageManagerRequestConfigurationHandler requestConfigurationHandler;
 @property (nonatomic, strong) NSMutableDictionary <NSString *, NSString *> *httpHeaderFields;
-@property(nonatomic, assign) BOOL isTtlCache;
+@property (nonatomic, assign) BOOL isTtlCache;
 #if DEBUG
 @property (nonatomic, assign) NSUInteger totalDownloads;
 #endif
