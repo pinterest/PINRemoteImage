@@ -826,6 +826,11 @@ static dispatch_once_t sharedFormatterToken;
                                 NSArray<NSString *> *split = [trimmed componentsSeparatedByString:@"max-age="];
                                 if ([split count] == 2)
                                 {
+                                    // if the max-age provided is invalid (does not parse into an
+                                    // int), we wind up with 0 which will be treated as do-not-cache.
+                                    // This is the RFC defined behavior for a malformed "expires" header,
+                                    // and while I cannot find any explicit instruction of how to behave
+                                    // with a malformed "max-age" header, it seems like a reasonable approach.
                                     maxAge = @([split[1] integerValue]);
                                 }
                             }
