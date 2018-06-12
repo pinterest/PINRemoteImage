@@ -13,12 +13,12 @@
 //******************************************************************************************************
 // Memory cache methods
 //******************************************************************************************************
--(nullable id)objectFromMemoryForKey:(NSString *)key
+- (nullable id)objectFromMemoryForKey:(NSString *)key
 {
     return [self.memoryCache objectForKey:key];
 }
 
--(void)setObjectInMemory:(id)object forKey:(NSString *)key withCost:(NSUInteger)cost
+- (void)setObjectInMemory:(id)object forKey:(NSString *)key withCost:(NSUInteger)cost
 {
     [self.memoryCache setObject:object forKey:key withCost:cost];
 }
@@ -31,12 +31,12 @@
 //******************************************************************************************************
 // Disk cache methods
 //******************************************************************************************************
--(nullable id)objectFromDiskForKey:(NSString *)key
+- (nullable id)objectFromDiskForKey:(NSString *)key
 {
     return [self.diskCache objectForKey:key];
 }
 
--(void)objectFromDiskForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
+- (void)objectFromDiskForKey:(NSString *)key completion:(PINRemoteImageCachingObjectBlock)completion
 {
     __weak typeof(self) weakSelf = self;
     [self.diskCache objectForKeyAsync:key completion:^(PINDiskCache * _Nonnull cache, NSString * _Nonnull key, id<NSCoding>  _Nullable object) {
@@ -47,12 +47,12 @@
     }];
 }
 
--(void)setObjectOnDisk:(id)object forKey:(NSString *)key withAgeLimit:(NSTimeInterval)ageLimit
+- (void)setObjectOnDisk:(id)object forKey:(NSString *)key withAgeLimit:(NSTimeInterval)ageLimit
 {
     [self.diskCache setObject:object forKey:key withAgeLimit:ageLimit];
 }
 
--(void)setObjectOnDisk:(id)object forKey:(NSString *)key
+- (void)setObjectOnDisk:(id)object forKey:(NSString *)key
 {
     [self setObject:object forKey:key withAgeLimit:0];
 }
@@ -76,6 +76,16 @@
   } else {
     [self removeObjectForKeyAsync:key completion:nil];
   }
+}
+
+- (BOOL)diskCacheIsTTLCache
+{
+    return self.diskCache.isTTLCache;
+}
+
+- (BOOL)memoryCacheIsTTLCache
+{
+    return self.memoryCache.isTTLCache;
 }
 
 @end

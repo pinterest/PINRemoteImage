@@ -43,6 +43,8 @@ typedef void (^PINRemoteImageCachingObjectBlock)(id<PINRemoteImageCaching> cache
 
 - (void)removeObjectForKeyFromMemory:(NSString *)key;
 - (void)setObjectOnDisk:(id)object forKey:(NSString *)key withAgeLimit:(NSTimeInterval)ageLimit;
+- (BOOL)diskCacheIsTTLCache;
+- (BOOL)memoryCacheIsTTLCache;
 
 @end
 

@@ -206,10 +206,24 @@ typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSession
 
 /**
  The result of this method is assigned to self.cache in init. If you wish to provide a customized cache to the manager you can subclass PINRemoteImageManager and return a custom object, implementing PINRemoteImageCaching protocol from this method. Same effect could be achieved by using initWithSessionConfiguration:alternativeRepresentationProvider:imageCache: initializer.
+ @deprecated Use the class method +defaultImageCache
+ @warning This method is meant only for override. It will be called *once* by an instance of PINRemoteImageManager. The default implementation creates a new cache on every call. If you're looking to access the cache being used by an instance of PINRemoteImageManager, @c cache.
+ @return An instance of a object, implementing PINRemoteImageCaching protocol.
+ */
+- (nonnull id<PINRemoteImageCaching>)defaultImageCache __attribute__((deprecated));
+
+/**
+ The result of this method is assigned to self.cache in init. If you wish to provide a customized cache to the manager you can subclass PINRemoteImageManager and return a custom object, implementing PINRemoteImageCaching protocol from this method. Same effect could be achieved by using initWithSessionConfiguration:alternativeRepresentationProvider:imageCache: initializer.
   @warning This method is meant only for override. It will be called *once* by an instance of PINRemoteImageManager. The default implementation creates a new cache on every call. If you're looking to access the cache being used by an instance of PINRemoteImageManager, @c cache.
  @return An instance of a object, implementing PINRemoteImageCaching protocol.
  */
-- (nonnull id<PINRemoteImageCaching>)defaultImageCache;
++ (nonnull id<PINRemoteImageCaching>)defaultImageCache;
+
+/**
+ * If you want a Ttl (maxAge) image cache, you can pass the result of this method explicitly into the initWithSessionConfiguration:alternativeRepresentationProvider:imageCache: initializer.
+ * @return An instance of a object, implementing PINRemoteImageCaching protocol.
+ */
++ (nonnull id<PINRemoteImageCaching>)defaultImageTtlCache;
 
 /**
  * Sets a custom header to be included in every request. Headers set from this method will override any header from NSURLSessionConfiguration.
