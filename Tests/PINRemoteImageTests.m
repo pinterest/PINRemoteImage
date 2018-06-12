@@ -946,6 +946,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (void)testCacheControlSupport
 {
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     id cache = self.imageManager.cache;
     XCTAssert([cache isKindOfClass:[PINCache class]]);
     PINCache *pinCache = (PINCache *)cache;
@@ -954,39 +955,63 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
     // JPEGURL_Small includes the header "Cache-Control: max-age=31536000, immutable"
     // If that ever changes, this might start failing
-    XCTestExpectation *expectation = [self expectationWithDescription:@"Fetching JPEGURL_Small"];
     [self.imageManager downloadImageWithURL:[self JPEGURL_Small] completion:^(PINRemoteImageManagerResult *result) {
-        [expectation fulfill];
+        XCTAssert(result.resultType == PINRemoteImageResultTypeDownload, @"Expected PINRemoteImageResultTypeDownload(3), got %d", result.resultType);
+        dispatch_semaphore_signal(semaphore);
     }];
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
+    [pinCache.memoryCache removeAllObjects];
 
     NSString *key = [self.imageManager cacheKeyForURL:[self JPEGURL_Small] processorKey:nil];
     id diskCachedObj = [cache objectFromDiskForKey:key];
     XCTAssert(diskCachedObj != nil, @"Image was not found in the disk cache");
+    [self.imageManager downloadImageWithURL:[self JPEGURL_Small] completion:^(PINRemoteImageManagerResult *result) {
+        XCTAssert(result.resultType == PINRemoteImageResultTypeCache, @"Expected PINRemoteImageResultTypeCache(2), got %d", result.resultType);
+        dispatch_semaphore_signal(semaphore);
+    }];
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
+    [pinCache.memoryCache removeAllObjects];
 
     [NSDate startMockingDateWithDate:[NSDate dateWithTimeIntervalSinceNow:32000000]];
-
     diskCachedObj = [cache objectFromDiskForKey:key];
     XCTAssert(diskCachedObj == nil, @"Image was not discarded from the disk cache");
+    [self.imageManager downloadImageWithURL:[self JPEGURL_Small] completion:^(PINRemoteImageManagerResult *result) {
+        XCTAssert(result.resultType == PINRemoteImageResultTypeDownload, @"Expected PINRemoteImageResultTypeDownload(3), got %d", result.resultType);
+        dispatch_semaphore_signal(semaphore);
+    }];
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     [NSDate stopMockingDate];
+
 
     // nonTransparentWebPURL includes the header "expires: <about 1 yr from now>"
     // If that ever changes, this might start failing
-    XCTestExpectation *expectation2 = [self expectationWithDescription:@"Fetching nonTransparentWebPURL"];
     [self.imageManager downloadImageWithURL:[self nonTransparentWebPURL] completion:^(PINRemoteImageManagerResult *result) {
-        [expectation2 fulfill];
+        XCTAssert(result.resultType == PINRemoteImageResultTypeDownload, @"Expected PINRemoteImageResultTypeDownload(3), got %d", result.resultType);
+        dispatch_semaphore_signal(semaphore);
     }];
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
+    [pinCache.memoryCache removeAllObjects];
 
     key = [self.imageManager cacheKeyForURL:[self nonTransparentWebPURL] processorKey:nil];
     diskCachedObj = [cache objectFromDiskForKey:key];
-    XCTAssert(diskCachedObj != nil, @"Image #2 was not found in the disk cache");
+    XCTAssert(diskCachedObj != nil, @"Image was not found in the disk cache");
+    [self.imageManager downloadImageWithURL:[self nonTransparentWebPURL] completion:^(PINRemoteImageManagerResult *result) {
+        XCTAssert(result.resultType == PINRemoteImageResultTypeCache, @"Expected PINRemoteImageResultTypeCache(2), got %d", result.resultType);
+        dispatch_semaphore_signal(semaphore);
+    }];
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
+    [pinCache.memoryCache removeAllObjects];
 
     [NSDate startMockingDateWithDate:[NSDate dateWithTimeIntervalSinceNow:32000000]];
-
     diskCachedObj = [cache objectFromDiskForKey:key];
-    XCTAssert(diskCachedObj == nil, @"Image #2 was not discarded from the disk cache");
+    XCTAssert(diskCachedObj == nil, @"Image was not discarded from the disk cache");
+    [self.imageManager downloadImageWithURL:[self nonTransparentWebPURL] completion:^(PINRemoteImageManagerResult *result) {
+        XCTAssert(result.resultType == PINRemoteImageResultTypeDownload, @"Expected PINRemoteImageResultTypeDownload(3), got %d", result.resultType);
+        dispatch_semaphore_signal(semaphore);
+    }];
+    XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
     [NSDate stopMockingDate];
+
 }
 
 - (void)testAuthentication
