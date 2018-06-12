@@ -54,7 +54,7 @@
 
 -(void)setObjectOnDisk:(id)object forKey:(NSString *)key
 {
-    [self.diskCache setObject:object forKey:key];
+    [self setObject:object forKey:key withAgeLimit:0];
 }
 
 - (BOOL)objectExistsForKey:(NSString *)key

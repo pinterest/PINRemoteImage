@@ -116,7 +116,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse 
 @property (nonatomic, copy) id<PINRequestRetryStrategy> (^retryStrategyCreationBlock)(void);
 @property (nonatomic, copy) PINRemoteImageManagerRequestConfigurationHandler requestConfigurationHandler;
 @property (nonatomic, strong) NSMutableDictionary <NSString *, NSString *> *httpHeaderFields;
-@property (nonatomic, assign) BOOL isTtlCache;
+@property (nonatomic, readonly) BOOL isTtlCache;
 #if DEBUG
 @property (nonatomic, assign) NSUInteger totalDownloads;
 #endif
@@ -191,7 +191,7 @@ static dispatch_once_t sharedFormatterToken;
         } else {
             self.cache = [self defaultImageCache];
         }
-        self.isTtlCache = [self.cache respondsToSelector:@selector(setObjectOnDisk:forKey:withAgeLimit:)];
+        _isTtlCache = [self.cache respondsToSelector:@selector(setObjectOnDisk:forKey:withAgeLimit:)];
 
         _sessionConfiguration = [configuration copy];
         if (!_sessionConfiguration) {
@@ -832,6 +832,9 @@ static dispatch_once_t sharedFormatterToken;
                                     // and while I cannot find any explicit instruction of how to behave
                                     // with a malformed "max-age" header, it seems like a reasonable approach.
                                     maxAge = @([split[1] integerValue]);
+                                } else if ([split count] > 2) {
+                                    // very weird case "maxage=maxage=123"
+                                    maxAge = @(0);
                                 }
                             }
                         }
