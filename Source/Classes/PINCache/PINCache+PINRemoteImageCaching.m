@@ -18,6 +18,11 @@
     return [self.memoryCache objectForKey:key];
 }
 
+- (void)setObjectInMemory:(id)object forKey:(NSString *)key withCost:(NSUInteger)cost withAgeLimit:(NSTimeInterval)ageLimit
+{
+    [self.memoryCache setObject:object forKey:key withCost:cost ageLimit:ageLimit];
+}
+
 - (void)setObjectInMemory:(id)object forKey:(NSString *)key withCost:(NSUInteger)cost
 {
     [self.memoryCache setObject:object forKey:key withCost:cost];

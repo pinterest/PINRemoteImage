@@ -116,7 +116,8 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse 
 @property (nonatomic, copy) id<PINRequestRetryStrategy> (^retryStrategyCreationBlock)(void);
 @property (nonatomic, copy) PINRemoteImageManagerRequestConfigurationHandler requestConfigurationHandler;
 @property (nonatomic, strong) NSMutableDictionary <NSString *, NSString *> *httpHeaderFields;
-@property (nonatomic, readonly) BOOL cacheTTLIsEnabled;
+@property (nonatomic, readonly) BOOL diskCacheTTLIsEnabled;
+@property (nonatomic, readonly) BOOL memoryCacheTTLIsEnabled;
 #if DEBUG
 @property (nonatomic, assign) NSUInteger totalDownloads;
 #endif
@@ -197,10 +198,13 @@ static dispatch_once_t sharedFormatterToken;
             }
         }
 
-        _cacheTTLIsEnabled = ([self.cache respondsToSelector:@selector(setObjectOnDisk:forKey:withAgeLimit:)] &&
+        if ([self.cache respondsToSelector:@selector(setObjectOnDisk:forKey:withAgeLimit:)] &&
+                [self.cache respondsToSelector:@selector(setObjectInMemory:forKey:withCost:withAgeLimit:)] &&
                 [self.cache respondsToSelector:@selector(diskCacheIsTTLCache)] &&
-                [self.cache respondsToSelector:@selector(memoryCacheIsTTLCache)] &&
-                [self.cache diskCacheIsTTLCache]);
+                [self.cache respondsToSelector:@selector(memoryCacheIsTTLCache)]) {
+            _diskCacheTTLIsEnabled = [self.cache diskCacheIsTTLCache];
+            _memoryCacheTTLIsEnabled = [self.cache memoryCacheIsTTLCache];
+        }
 
         _sessionConfiguration = [configuration copy];
         if (!_sessionConfiguration) {
@@ -280,7 +284,7 @@ static dispatch_once_t sharedFormatterToken;
         [pinDefaults setInteger:kPINRemoteImageDiskCacheVersion forKey:kPINRemoteImageDiskCacheVersionKey];
     }
 
-    return [[PINCache alloc] initWithName:kPINRemoteImageDiskCacheName rootPath:cacheURLRoot serializer:^NSData * _Nonnull(id<NSCoding>  _Nonnull object, NSString * _Nonnull key) {
+    PINCache *pinCache = [[PINCache alloc] initWithName:kPINRemoteImageDiskCacheName rootPath:cacheURLRoot serializer:^NSData * _Nonnull(id<NSCoding>  _Nonnull object, NSString * _Nonnull key) {
         id <NSCoding, NSObject> obj = (id <NSCoding, NSObject>)object;
         if ([key hasPrefix:PINRemoteImageCacheKeyResumePrefix]) {
             return [NSKeyedArchiver archivedDataWithRootObject:obj];
@@ -292,6 +296,10 @@ static dispatch_once_t sharedFormatterToken;
         }
         return data;
     } keyEncoder:nil keyDecoder:nil ttlCache:enableTtl];
+    if (enableTtl) {
+        [pinCache.memoryCache setTtlCache:YES]; // https://github.com/pinterest/PINCache/issues/226
+    }
+    return pinCache;
 #else
     return [[PINRemoteImageBasicCache alloc] init];
 #endif
@@ -829,7 +837,7 @@ static dispatch_once_t sharedFormatterToken;
             __block NSNumber *maxAge = nil;
             if (remoteImageError == nil) {
                 BOOL ignoreHeaders = (options & PINRemoteImageManagerDownloadOptionsIgnoreCacheControlHeaders) != 0;
-                if (self.cacheTTLIsEnabled && !ignoreHeaders) {
+                if ((self.diskCacheTTLIsEnabled || self.memoryCacheTTLIsEnabled) && !ignoreHeaders) {
                     // examine Cache-Control headers (https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
                     if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
                         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
@@ -1438,30 +1446,34 @@ static dispatch_once_t sharedFormatterToken;
             }
         }
     }
-    
-    if (updateMemoryCache) {
-        [container.lock lockWithBlock:^{
-            NSUInteger cacheCost = additionalCost;
-            cacheCost += [container.data length];
-            CGImageRef imageRef = container.image.CGImage;
-            NSAssert(container.image == nil || imageRef != NULL, @"We only cache a decompressed image if we decompressed it ourselves. In that case, it should be backed by a CGImageRef.");
-            if (imageRef) {
-                cacheCost += CGImageGetHeight(imageRef) * CGImageGetBytesPerRow(imageRef);
-            }
-            [self.cache setObjectInMemory:container forKey:key withCost:cacheCost];
-        }];
-    }
-    
-    if (diskData) {
-        // maxAge set to 0 means that images should not be stored at all.
-        BOOL doNotCache = (maxAge != nil && [maxAge integerValue] == 0);
 
-        // There is no HTTP header that can be sent to indicate "infinite". However not setting a value at all, which in
-        // our case is represented by maxAge == nil, effectively means that.
-        BOOL cacheIndefinitely = (maxAge == nil);
+    // maxAge set to 0 means that images should not be stored at all.
+    BOOL doNotCache = (maxAge != nil && [maxAge integerValue] == 0);
 
-        if (!doNotCache) {
-            if (!self.cacheTTLIsEnabled || cacheIndefinitely) {
+    // There is no HTTP header that can be sent to indicate "infinite". However not setting a value at all, which in
+    // our case is represented by maxAge == nil, effectively means that.
+    BOOL cacheIndefinitely = (maxAge == nil);
+
+    if (!doNotCache) {
+        if (updateMemoryCache) {
+            [container.lock lockWithBlock:^{
+                NSUInteger cacheCost = additionalCost;
+                cacheCost += [container.data length];
+                CGImageRef imageRef = container.image.CGImage;
+                NSAssert(container.image == nil || imageRef != NULL, @"We only cache a decompressed image if we decompressed it ourselves. In that case, it should be backed by a CGImageRef.");
+                if (imageRef) {
+                    cacheCost += CGImageGetHeight(imageRef) * CGImageGetBytesPerRow(imageRef);
+                }
+                if (!self.memoryCacheTTLIsEnabled || cacheIndefinitely) {
+                    [self.cache setObjectInMemory:container forKey:key withCost:cacheCost];
+                } else {
+                    [self.cache setObjectInMemory:container forKey:key withCost:cacheCost withAgeLimit:[maxAge integerValue]];
+                }
+            }];
+        }
+
+        if (diskData) {
+            if (!self.diskCacheTTLIsEnabled || cacheIndefinitely) {
                 // with an unset (nil) maxAge, or a cache that is not _isTtlCache, behave as before (will use cache global behavior)
                 [self.cache setObjectOnDisk:diskData forKey:key];
             } else {
