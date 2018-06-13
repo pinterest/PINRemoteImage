@@ -60,6 +60,16 @@ typedef NS_OPTIONS(NSUInteger, PINRemoteImageManagerDownloadOptions) {
     PINRemoteImageManagerDownloadOptionsIgnoreCache = 1 << 4,
     /** Skip download retry */
     PINRemoteImageManagerDownloadOptionsSkipRetry = 1 << 5,
+    /**
+     * Do not honor HTTP Cache-Control headers
+     * By default, PINRemoteImage will by default respect 'no-store', 'no-cache', 'max-age',
+     * 'Expires', and 'must-revalidate'. Set this flag to ignore those headers.
+     * TODO: Currently PINRemoteImage will re-download images that only must be re-validated. In the
+     * future this could be improved with revalidation behavior that stores ETag or Last-Modified
+     * values and only makes HEAD requests to see if these headers are unchanged.
+     * see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control and
+     * https://tools.ietf.org/html/rfc7234*/
+    PINRemoteImageManagerDownloadOptionsIgnoreCacheControlHeaders = 1 << 6
 };
 
 /**
@@ -196,10 +206,24 @@ typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSession
 
 /**
  The result of this method is assigned to self.cache in init. If you wish to provide a customized cache to the manager you can subclass PINRemoteImageManager and return a custom object, implementing PINRemoteImageCaching protocol from this method. Same effect could be achieved by using initWithSessionConfiguration:alternativeRepresentationProvider:imageCache: initializer.
+ @deprecated Use the class method +defaultImageCache
+ @warning This method is meant only for override. It will be called *once* by an instance of PINRemoteImageManager. The default implementation creates a new cache on every call. If you're looking to access the cache being used by an instance of PINRemoteImageManager, @c cache.
+ @return An instance of a object, implementing PINRemoteImageCaching protocol.
+ */
+- (nonnull id<PINRemoteImageCaching>)defaultImageCache __attribute__((deprecated));
+
+/**
+ The result of this method is assigned to self.cache in init. If you wish to provide a customized cache to the manager you can subclass PINRemoteImageManager and return a custom object, implementing PINRemoteImageCaching protocol from this method. Same effect could be achieved by using initWithSessionConfiguration:alternativeRepresentationProvider:imageCache: initializer.
   @warning This method is meant only for override. It will be called *once* by an instance of PINRemoteImageManager. The default implementation creates a new cache on every call. If you're looking to access the cache being used by an instance of PINRemoteImageManager, @c cache.
  @return An instance of a object, implementing PINRemoteImageCaching protocol.
  */
-- (nonnull id<PINRemoteImageCaching>)defaultImageCache;
++ (nonnull id<PINRemoteImageCaching>)defaultImageCache;
+
+/**
+ * If you want a Ttl (maxAge) image cache, you can pass the result of this method explicitly into the initWithSessionConfiguration:alternativeRepresentationProvider:imageCache: initializer.
+ * @return An instance of a object, implementing PINRemoteImageCaching protocol.
+ */
++ (nonnull id<PINRemoteImageCaching>)defaultImageTtlCache;
 
 /**
  * Sets a custom header to be included in every request. Headers set from this method will override any header from NSURLSessionConfiguration.
