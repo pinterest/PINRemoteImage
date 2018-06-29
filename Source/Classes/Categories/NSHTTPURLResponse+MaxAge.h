@@ -8,5 +8,7 @@
 #import <Foundation/Foundation.h>
 
 @interface NSHTTPURLResponse (MaxAge)
+  
 - (NSNumber *)findMaxAge;
+
 @end
