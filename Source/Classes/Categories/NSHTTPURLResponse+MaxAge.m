@@ -28,7 +28,8 @@ static dispatch_once_t sharedFormatterToken;
     return sharedFormatter;
 }
 
-- (NSNumber *)findMaxAge {
+- (NSNumber *)findMaxAge 
+{
     NSDictionary * headerFields = [self allHeaderFields];
     NSNumber *maxAge = nil;
 
