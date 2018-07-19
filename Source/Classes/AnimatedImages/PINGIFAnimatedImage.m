@@ -36,6 +36,7 @@
 - (instancetype)initWithAnimatedImageData:(NSData *)animatedImageData
 {
     if (self = [super init]) {
+        _animatedImageData = animatedImageData;
         _imageSource =
             CGImageSourceCreateWithData((CFDataRef)animatedImageData,
                                         (CFDictionaryRef)@{(__bridge NSString *)kCGImageSourceTypeIdentifierHint:
