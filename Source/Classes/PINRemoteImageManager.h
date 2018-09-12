@@ -141,6 +141,13 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask * _
  */
 typedef NSURLRequest * _Nonnull(^PINRemoteImageManagerRequestConfigurationHandler)(NSURLRequest * __nonnull request);
 
+/**
+ URL configuration handler. Used to modify the url of a network request.
+ Useful for modifying url.
+ 
+ @param url The url of the request about to be executed
+ */
+typedef NSURL * __nullable(^PINRemoteImageManagerUrlConfigurationHandler)(NSURL * __nullable url);
 
 /**
  Handler called for many PINRemoteImage tasks providing the progress of the download.
@@ -241,6 +248,13 @@ typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSession
  @param configurationBlock A PINRemoteImageManagerRequestConfigurationHandler block.
  */
 - (void)setRequestConfiguration:(nullable PINRemoteImageManagerRequestConfigurationHandler)configurationBlock;
+
+/**
+ Sets the URL Configuration Block.
+ 
+ @param configurationBlock A PINRemoteImageManagerUrlConfigurationHandler block.
+ */
+- (void)setUrlConfiguration:(nullable PINRemoteImageManagerUrlConfigurationHandler)configurationBlock;
 
 /**
  Set the Authentication Challenge Block.

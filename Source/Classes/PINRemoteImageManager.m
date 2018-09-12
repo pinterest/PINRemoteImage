@@ -116,6 +116,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse 
 @property (nonatomic, copy) PINRemoteImageManagerAuthenticationChallenge authenticationChallengeHandler;
 @property (nonatomic, copy) id<PINRequestRetryStrategy> (^retryStrategyCreationBlock)(void);
 @property (nonatomic, copy) PINRemoteImageManagerRequestConfigurationHandler requestConfigurationHandler;
+@property (nonatomic, copy) PINRemoteImageManagerUrlConfigurationHandler urlConfigurationHandler;
 @property (nonatomic, strong) NSMutableDictionary <NSString *, NSString *> *httpHeaderFields;
 @property (nonatomic, readonly) BOOL diskCacheTTLIsEnabled;
 @property (nonatomic, readonly) BOOL memoryCacheTTLIsEnabled;
@@ -332,6 +333,16 @@ static dispatch_once_t sharedDispatchToken;
         typeof(self) strongSelf = weakSelf;
         [strongSelf lock];
             strongSelf.authenticationChallengeHandler = challengeBlock;
+        [strongSelf unlock];
+    });
+}
+
+- (void)setUrlConfiguration:(PINRemoteImageManagerUrlConfigurationHandler)configurationBlock {
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        typeof(self) strongSelf = weakSelf;
+        [strongSelf lock];
+        strongSelf.urlConfigurationHandler = configurationBlock;
         [strongSelf unlock];
     });
 }
@@ -596,6 +607,10 @@ static dispatch_once_t sharedDispatchToken;
         taskClass = [PINRemoteImageProcessorTask class];
     } else {
         taskClass = [PINRemoteImageDownloadTask class];
+    }
+    
+    if (_urlConfigurationHandler) {
+        url = _urlConfigurationHandler(url);
     }
     
     NSString *key = [self cacheKeyForURL:url processorKey:processorKey];
@@ -1091,6 +1106,11 @@ static dispatch_once_t sharedDispatchToken;
         }
     }
     
+    if (_urlConfigurationHandler) {
+        url = _urlConfigurationHandler(url);
+        cacheKey = [self cacheKeyForURL:url processorKey:processorKey];
+    }
+    
     [self objectForURL:url processorKey:processorKey key:cacheKey options:options completion:^(BOOL found, BOOL valid, PINImage *image, id alternativeRepresentation) {
         NSError *error = nil;
         if (valid == NO) {
@@ -1125,6 +1145,13 @@ static dispatch_once_t sharedDispatchToken;
 {
     CFTimeInterval requestTime = CACurrentMediaTime();
   
+    if (_urlConfigurationHandler) {
+        url = _urlConfigurationHandler(url);
+        if (url) {
+            cacheKey = [self cacheKeyForURL:url processorKey:processorKey];
+        }
+    }
+
     if (cacheKey == nil && url == nil) {
         return nil;
     }
