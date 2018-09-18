@@ -23,4 +23,9 @@
 @property (nullable, nonatomic, strong) NSString *animatedImageRunLoopMode;
 @property (nonatomic, assign, getter=isPlaybackPaused) BOOL playbackPaused;
 
+/**
+ @abstract Seek to a play head position of an animated image.
+ */
+- (void)seekToImageAtPlayHeadPosition:(CFTimeInterval)playHead;
+
 @end

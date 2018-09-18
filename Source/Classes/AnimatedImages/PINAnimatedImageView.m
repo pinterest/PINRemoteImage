@@ -397,4 +397,33 @@
     return frameIndex;
 }
 
+- (void)seekToImageAtPlayHeadPosition:(CFTimeInterval)playHead;
+{
+    PINAssertMain();
+    if (_playHead > self.animatedImage.totalDuration || _playHead < 0) {
+        return;
+    }
+    
+    _playHead = playHead;
+    
+    NSUInteger frameIndex = [self frameIndexAtPlayHeadPosition:playHead];
+    if (frameIndex == _lastSuccessfulFrameIndex) {
+        return;
+    }
+    CGImageRef frameImage = [self.animatedImage imageAtIndex:frameIndex];
+    
+    if (frameImage) {
+        if (_frameImage) {
+            CGImageRelease(_frameImage);
+        }
+        _frameImage = CGImageRetain(frameImage);
+        _lastSuccessfulFrameIndex = frameIndex;
+#if PIN_TARGET_MAC
+        [self _setImage:[NSImage imageWithCGImage:_frameImage]];
+#else
+        [self.layer setNeedsDisplay];
+#endif
+    }
+}
+
 @end
