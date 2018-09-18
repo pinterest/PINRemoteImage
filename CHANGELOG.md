@@ -1,5 +1,6 @@
 ## master
 * Add your own contributions to the next release on the line below this with your name.
+- [new] Add support for seeking in animated images. [#475](https://github.com/pinterest/PINRemoteImage/pull/475) [joshbeal](https://github.com/joshbeal)
 - [new] Respect Cache-Control and Expires headers if the cache supports TTL [#462](https://github.com/pinterest/PINRemoteImage/pull/462) [wiseoldduck](https://github.com/wiseoldduck)
 - [new] Updated to latest PINCache beta 7. [wiseoldduck](https://github.com/wiseoldduck)
 - [iOS11] Fix warnings [#428](https://github.com/pinterest/PINRemoteImage/pull/428) [Eke](https://github.com/Eke)
