@@ -81,13 +81,13 @@ float dataTaskPriorityWithImageManagerPriority(PINRemoteImageManagerPriority pri
     }
 }
 
-// Reference: https://github.com/TextureGroup/Texture/blob/5dd5611/Source/Private/ASInternalHelpers.m#L68
-BOOL PINRemoteImageManagerSubclassOverridesClassSelector(Class subclass, SEL selector)
+// Reference: https://github.com/TextureGroup/Texture/blob/5dd5611/Source/Private/ASInternalHelpers.m#L60
+BOOL PINRemoteImageManagerSubclassOverridesSelector(Class subclass, SEL selector)
 {
     Class superclass = [PINRemoteImageManager class];
     if (superclass == subclass) return NO; // Even if the class implements the selector, it doesn't override itself.
-    Method superclassMethod = class_getClassMethod(superclass, selector);
-    Method subclassMethod = class_getClassMethod(subclass, selector);
+    Method superclassMethod = class_getInstanceMethod(superclass, selector);
+    Method subclassMethod = class_getInstanceMethod(subclass, selector);
     return (superclassMethod != subclassMethod);
 }
 
@@ -183,13 +183,13 @@ static dispatch_once_t sharedDispatchToken;
     if (self = [super init]) {
         if (imageCache) {
             self.cache = imageCache;
-        } else if (PINRemoteImageManagerSubclassOverridesClassSelector([self class], @selector(defaultImageCache))) {
-            self.cache = [[self class] defaultImageCache];
-        } else {
+        } else if (PINRemoteImageManagerSubclassOverridesSelector([self class], @selector(defaultImageCache))) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
             self.cache = [self defaultImageCache];
 #pragma clang diagnostic pop
+        } else {
+            self.cache = [[self class] defaultImageCache];
         }
 
         if ([self.cache respondsToSelector:@selector(setObjectOnDisk:forKey:withAgeLimit:)] &&
@@ -245,6 +245,7 @@ static dispatch_once_t sharedDispatchToken;
 }
 
 - (id<PINRemoteImageCaching>)defaultImageCache {
+    NSAssert(NO, @"Assert should not have been reached");
     return [PINRemoteImageManager defaultImageCache];
 }
 
