@@ -11,6 +11,8 @@
 #import <CommonCrypto/CommonDigest.h>
 #import <PINOperation/PINOperation.h>
 
+#import <objc/runtime.h>
+
 #import "PINAlternateRepresentationProvider.h"
 #import "PINRemoteImage.h"
 #import "PINRemoteLock.h"
@@ -77,6 +79,16 @@ float dataTaskPriorityWithImageManagerPriority(PINRemoteImageManagerPriority pri
             return 1.0;
             break;
     }
+}
+
+// Reference: https://github.com/TextureGroup/Texture/blob/5dd5611/Source/Private/ASInternalHelpers.m#L68
+BOOL PINRemoteImageManagerSubclassOverridesClassSelector(Class subclass, SEL selector)
+{
+    Class superclass = [PINRemoteImageManager class];
+    if (superclass == subclass) return NO; // Even if the class implements the selector, it doesn't override itself.
+    Method superclassMethod = class_getClassMethod(superclass, selector);
+    Method subclassMethod = class_getClassMethod(subclass, selector);
+    return (superclassMethod != subclassMethod);
 }
 
 NSErrorDomain const PINRemoteImageManagerErrorDomain = @"PINRemoteImageManagerErrorDomain";
@@ -171,13 +183,13 @@ static dispatch_once_t sharedDispatchToken;
     if (self = [super init]) {
         if (imageCache) {
             self.cache = imageCache;
+        } else if (PINRemoteImageManagerSubclassOverridesClassSelector([self class], @selector(defaultImageCache))) {
+            self.cache = [[self class] defaultImageCache];
         } else {
-            if ([self.class respondsToSelector:@selector(defaultImageCache)]) {
-                self.cache = [[self class] defaultImageCache];
-            } else {
-                // deprecated
-                self.cache = [self defaultImageCache];
-            }
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+            self.cache = [self defaultImageCache];
+#pragma clang diagnostic pop
         }
 
         if ([self.cache respondsToSelector:@selector(setObjectOnDisk:forKey:withAgeLimit:)] &&
