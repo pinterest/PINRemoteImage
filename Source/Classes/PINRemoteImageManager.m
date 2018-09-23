@@ -245,7 +245,6 @@ static dispatch_once_t sharedDispatchToken;
 }
 
 - (id<PINRemoteImageCaching>)defaultImageCache {
-    NSAssert(NO, @"Assert should not have been reached");
     return [PINRemoteImageManager defaultImageCache];
 }
 
