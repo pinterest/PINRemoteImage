@@ -192,6 +192,8 @@ static dispatch_once_t sharedDispatchToken;
         if (!_sessionConfiguration) {
             _sessionConfiguration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
             _sessionConfiguration.timeoutIntervalForRequest = PINRemoteImageManagerDefaultTimeout;
+            _sessionConfiguration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
+            _sessionConfiguration.URLCache = nil;
         }
         _sessionConfiguration.HTTPMaximumConnectionsPerHost = PINRemoteImageHTTPMaximumConnectionsPerHost;
         
@@ -902,10 +904,8 @@ static dispatch_once_t sharedDispatchToken;
 
 - (NSURLRequest *)requestWithURL:(NSURL *)url key:(NSString *)key
 {
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url
-                                                           cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                                       timeoutInterval:_sessionConfiguration.timeoutIntervalForRequest];
-    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+
     NSMutableDictionary *headers = [self.httpHeaderFields mutableCopy];
     
     if (headers.count > 0) {

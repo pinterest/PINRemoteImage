@@ -1,6 +1,7 @@
 ## master
 * Add your own contributions to the next release on the line below this with your name.
-- [new] Respect Cache-Control and Expires headers if the cache supports TTL [#462](https://github.com/pinterest/PINRemoteImage/pull/462) [wiseoldduck](https://github.com/wiseoldduck)
+- [new] Allow use of NSURLCache via a custom NSURLSession [#477](https://github.com/pinterest/PINRemoteImage/pull/477) [wiseoldduck](https://github.com/wiseoldduck)
+- [new] Respect Cache-Control and Expires headers if the cache supports TTL. [#462](https://github.com/pinterest/PINRemoteImage/pull/462) [wiseoldduck](https://github.com/wiseoldduck)
 - [new] Updated to latest PINCache beta 7. [wiseoldduck](https://github.com/wiseoldduck)
 - [iOS11] Fix warnings [#428](https://github.com/pinterest/PINRemoteImage/pull/428) [Eke](https://github.com/Eke)
 - [new / beta] Native Support for GIFs and animated WebP [#453](https://github.com/pinterest/PINRemoteImage/pull/453) [garrettmoon](https://github.com/garrettmoon)
