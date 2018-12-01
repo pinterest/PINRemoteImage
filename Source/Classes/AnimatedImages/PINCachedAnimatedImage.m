@@ -109,46 +109,57 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
 - (PINImage *)coverImage
 {
     __block PINImage *coverImage = nil;
+    __block PINAnimatedImageInfoReady coverImageReadyCallback = nil;
     [_lock lockWithBlock:^{
         if (self->_coverImage == nil) {
             CGImageRef coverImageRef = [self->_animatedImage imageAtIndex:0 cacheProvider:self];
-            [self l_updateCoverImage:coverImageRef];
+            BOOL notifyCallback = [self _locked_updateCoverImage:coverImageRef];
+            coverImageReadyCallback = notifyCallback ? self->_coverImageReadyCallback : nil;
         }
         coverImage = self->_coverImage;
     }];
+    if (coverImageReadyCallback) {
+        coverImageReadyCallback(coverImage);
+    }
     return coverImage;
 }
 
-- (void)l_updateCoverImage:(CGImageRef)coverImageRef
+// Update _coverImage property and return if it should notify the callback
+- (BOOL)_locked_updateCoverImage:(CGImageRef)coverImageRef
 {
+    BOOL notifyCallback = NO;
     if (coverImageRef) {
-        BOOL notify = _coverImage == nil && coverImageRef != nil;
+        notifyCallback = (_coverImage == nil && coverImageRef != nil);
 #if PIN_TARGET_IOS
         _coverImage = [UIImage imageWithCGImage:coverImageRef];
 #elif PIN_TARGET_MAC
         _coverImage = [[NSImage alloc] initWithCGImage:coverImageRef size:CGSizeMake(_animatedImage.width, _animatedImage.height)];
 #endif
-        if (notify && _coverImageReadyCallback) {
-            _coverImageReadyCallback(_coverImage);
-        }
     } else {
         _coverImage = nil;
     }
+    return notifyCallback;
 }
 
 - (BOOL)coverImageReady
 {
-    __block BOOL coverImageReady = NO;
+    __block PINImage *coverImage = nil;
+    __block PINAnimatedImageInfoReady coverImageReadyCallback = nil;
     [_lock lockWithBlock:^{
         if (self->_coverImage == nil) {
             CGImageRef coverImageRef = (__bridge CGImageRef)[self->_frameCache objectForKey:@(0)];
             if (coverImageRef) {
-                [self l_updateCoverImage:coverImageRef];
+                BOOL notifyCallback = [self _locked_updateCoverImage:coverImageRef];
+                coverImageReadyCallback = notifyCallback ? self->_coverImageReadyCallback : nil;
             }
         }
-        coverImageReady = self->_coverImage != nil;
+
+        coverImage = self->_coverImage;
     }];
-    return coverImageReady;
+    if (coverImageReadyCallback) {
+        coverImageReadyCallback(coverImage);
+    }
+    return (coverImage != nil);
 }
 
 #pragma mark - passthrough
@@ -240,14 +251,14 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
             [self->_lock lockWithBlock:^{
                 for (NSUInteger idx = endKeepRange.location; idx < NSMaxRange(endKeepRange); idx++) {
                     if ([self->_cachedOrCachingFrames containsIndex:idx] == NO) {
-                        [self l_cacheFrame:idx];
+                        [self _locked_cacheFrame:idx];
                     }
                 }
                 
                 if (beginningKeepRange.location != NSNotFound) {
                     for (NSUInteger idx = beginningKeepRange.location; idx < NSMaxRange(beginningKeepRange); idx++) {
                         if ([self->_cachedOrCachingFrames containsIndex:idx] == NO) {
-                            [self l_cacheFrame:idx];
+                            [self _locked_cacheFrame:idx];
                         }
                     }
                 }
@@ -309,7 +320,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
     }];
 }
 
-- (void)l_cacheFrame:(NSUInteger)frameIndex
+- (void)_locked_cacheFrame:(NSUInteger)frameIndex
 {
     if ([_cachedOrCachingFrames containsIndex:frameIndex] == NO && _cacheCleared == NO) {
         PINLog(@"Requesting: %lu", (unsigned long)frameIndex);
@@ -321,12 +332,16 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
             PINLog(@"Generating: %lu", (unsigned long)frameIndex);
 
             if (imageRef) {
+                __block PINImage *coverImage = nil;
+                __block PINAnimatedImageInfoReady coverImageReadyCallback = nil;
                 [self->_lock lockWithBlock:^{
                     [self->_frameCache setObject:(__bridge id _Nonnull)(imageRef) forKey:@(frameIndex)];
                     
                     // Update the cover image
                     if (frameIndex == 0) {
-                        [self l_updateCoverImage:imageRef];
+                        BOOL notifyCallback = [self _locked_updateCoverImage:imageRef];
+                        coverImageReadyCallback = notifyCallback ? self->_coverImageReadyCallback : nil;
+                        coverImage = self->_coverImage;
                     }
                     
                     self->_frameRenderCount--;
@@ -345,6 +360,9 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
                         }
                     }
                 }];
+                if (coverImageReadyCallback) {
+                    coverImageReadyCallback(coverImage);
+                }
             }
         });
     }
