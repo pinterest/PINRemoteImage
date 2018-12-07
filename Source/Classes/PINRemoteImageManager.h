@@ -356,6 +356,15 @@ typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSession
 - (nullable NSUUID *)prefetchImageWithURL:(nonnull NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options;
 
 /**
+ Prefetch an image at the given URL with given options.
+ 
+ @param url NSURL where the image to prefetch resides.
+ @param options PINRemoteImageManagerDownloadOptions options with which to prefetch the image.
+ @param priority PINRemoteImageManagerPriority priority of the operation when to prefetch the image.
+ */
+- (nullable NSUUID *)prefetchImageWithURL:(nonnull NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options priority:(PINRemoteImageManagerPriority)priority;
+
+/**
  Prefetch images at the given URLs.
  
  @param urls An array of NSURLs where the images to prefetch reside.
@@ -369,6 +378,15 @@ typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSession
  @param options PINRemoteImageManagerDownloadOptions options with which to pefetch the image.
  */
 - (nonnull NSArray<NSUUID *> *)prefetchImagesWithURLs:(nonnull NSArray <NSURL *> *)urls options:(PINRemoteImageManagerDownloadOptions)options;
+
+/**
+ Prefetch images at the given URLs with given options.
+ 
+ @param urls An array of NSURLs where the images to prefetch reside.
+ @param options PINRemoteImageManagerDownloadOptions options with which to pefetch the image.
+ @param priority PINRemoteImageManagerPriority priority of the operation to prefetch the image.
+ */
+- (nonnull NSArray<NSUUID *> *)prefetchImagesWithURLs:(nonnull NSArray <NSURL *> *)urls options:(PINRemoteImageManagerDownloadOptions)options priority:(PINRemoteImageManagerPriority)priority;
 
 /**
  Download or retrieve from cache the image found at the url. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).
