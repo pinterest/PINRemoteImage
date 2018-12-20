@@ -959,9 +959,14 @@ static dispatch_once_t sharedDispatchToken;
 
 - (NSArray<NSUUID *> *)prefetchImagesWithURLs:(NSArray <NSURL *> *)urls options:(PINRemoteImageManagerDownloadOptions)options
 {
+    return [self prefetchImagesWithURLs:urls options:options priority:PINRemoteImageManagerPriorityLow];
+}
+
+- (NSArray<NSUUID *> *)prefetchImagesWithURLs:(NSArray <NSURL *> *)urls options:(PINRemoteImageManagerDownloadOptions)options priority:(PINRemoteImageManagerPriority)priority
+{
     NSMutableArray *tasks = [NSMutableArray arrayWithCapacity:urls.count];
     for (NSURL *url in urls) {
-        NSUUID *task = [self prefetchImageWithURL:url options:options];
+        NSUUID *task = [self prefetchImageWithURL:url options:options priority:priority];
         if (task != nil) {
             [tasks addObject:task];
         }
@@ -976,9 +981,14 @@ static dispatch_once_t sharedDispatchToken;
 
 - (NSUUID *)prefetchImageWithURL:(NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options
 {
+    return [self prefetchImageWithURL:url options:options priority:PINRemoteImageManagerPriorityLow];
+}
+
+- (NSUUID *)prefetchImageWithURL:(NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options priority:(PINRemoteImageManagerPriority)priority
+{
     return [self downloadImageWithURL:url
                               options:options
-                             priority:PINRemoteImageManagerPriorityLow
+                             priority:priority
                          processorKey:nil
                             processor:nil
                         progressImage:nil
