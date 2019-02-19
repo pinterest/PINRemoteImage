@@ -68,7 +68,9 @@
                                                priority:(PINRemoteImageManagerPriority)priority
                                       completionHandler:(PINRemoteImageDownloadCompletion)completionHandler
 {
-    NSURLSessionDataTask *dataTask = [sessionManager dataTaskWithRequest:request completionHandler:^(NSURLSessionTask *task, NSError *error) {
+    NSURLSessionDataTask *dataTask = [sessionManager dataTaskWithRequest:request
+                                                                priority:priority
+                                                       completionHandler:^(NSURLSessionTask *task, NSError *error) {
         completionHandler(task.response, error);
         [self lock];
             [self->_runningTasks removeObject:task];
@@ -104,7 +106,6 @@
             NSURLSessionDataTask *task = [queue firstObject];
             [queue removeObjectAtIndex:0];
             [task resume];
-            
             
             [_runningTasks addObject:task];
         }
