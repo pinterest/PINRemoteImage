@@ -171,8 +171,7 @@ static dispatch_once_t sharedDispatchToken;
     return [self initWithSessionConfiguration:configuration alternativeRepresentationProvider:nil];
 }
 
-- (instancetype)initWithSessionConfiguration:(NSURLSessionConfiguration *)configuration
-           alternativeRepresentationProvider:(id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepProvider
+- (instancetype)initWithSessionConfiguration:(NSURLSessionConfiguration *)configuration alternativeRepresentationProvider:(id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepProvider
 {
     return [self initWithSessionConfiguration:configuration alternativeRepresentationProvider:alternateRepProvider imageCache:nil];
 }
