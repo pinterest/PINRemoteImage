@@ -516,8 +516,8 @@ static dispatch_once_t sharedDispatchToken;
 {
     return [self downloadImageWithURL:url
                               options:options
-                             priority:PINRemoteImageManagerPriorityDefault
                         progressImage:progressImage
+                     progressDownload:nil
                            completion:completion];
 }
 
