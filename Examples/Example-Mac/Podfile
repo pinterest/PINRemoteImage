@@ -1,3 +1,5 @@
+platform :macos, 10.9
+
 target 'PINRemoteImage' do
   pod "PINRemoteImage/OSX", :path => "../../"
   pod "PINRemoteImage/WebP", :path => "../../"

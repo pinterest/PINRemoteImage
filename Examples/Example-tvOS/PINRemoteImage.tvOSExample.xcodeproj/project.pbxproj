@@ -115,7 +115,6 @@
 				78699F411C668C8E0044C9E9 /* Frameworks */,
 				78699F421C668C8E0044C9E9 /* Resources */,
 				8B150830C60182EB93A19C74 /* [CP] Embed Pods Frameworks */,
-				CC3C0E4279D9CD7BF5C64E5D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -178,7 +177,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-PINRemoteImage.tvOSExample/Pods-PINRemoteImage.tvOSExample-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-PINRemoteImage.tvOSExample/Pods-PINRemoteImage.tvOSExample-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/PINOperation/PINOperation.framework",
 				"${BUILT_PRODUCTS_DIR}/PINRemoteImage/PINRemoteImage.framework",
 				"${BUILT_PRODUCTS_DIR}/libwebp/libwebp.framework",
@@ -191,22 +190,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PINRemoteImage.tvOSExample/Pods-PINRemoteImage.tvOSExample-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		CC3C0E4279D9CD7BF5C64E5D /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PINRemoteImage.tvOSExample/Pods-PINRemoteImage.tvOSExample-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PINRemoteImage.tvOSExample/Pods-PINRemoteImage.tvOSExample-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FA9E035135C48FB08841B4A3 /* [CP] Check Pods Manifest.lock */ = {

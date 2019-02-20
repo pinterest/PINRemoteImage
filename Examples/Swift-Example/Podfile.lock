@@ -44,7 +44,6 @@ PODS:
 
 DEPENDENCIES:
   - PINRemoteImage (from `../../`)
-  - PINRemoteImage/PINCache (from `../../`)
   - PINRemoteImage/WebP (from `../../`)
 
 SPEC REPOS:
@@ -63,6 +62,6 @@ SPEC CHECKSUMS:
   PINOperation: a6219e6fc9db9c269eb7a7b871ac193bcf400aac
   PINRemoteImage: 81bbff853acc71c6de9e106e9e489a791b8bbb08
 
-PODFILE CHECKSUM: 8603c758d1ec2761662ed3deec9feba155b99cd4
+PODFILE CHECKSUM: a59d0c8bbae76419ecd87b8e4089d7dd00ea9e67
 
 COCOAPODS: 1.6.0

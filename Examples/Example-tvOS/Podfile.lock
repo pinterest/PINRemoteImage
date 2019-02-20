@@ -1,18 +1,55 @@
 PODS:
-  - PINRemoteImage/Core (3.0.0-beta.8)
-  - PINRemoteImage/iOS (3.0.0-beta.8):
+  - libwebp (1.0.2):
+    - libwebp/core (= 1.0.2)
+    - libwebp/dec (= 1.0.2)
+    - libwebp/demux (= 1.0.2)
+    - libwebp/dsp (= 1.0.2)
+    - libwebp/enc (= 1.0.2)
+    - libwebp/mux (= 1.0.2)
+    - libwebp/utils (= 1.0.2)
+    - libwebp/webp (= 1.0.2)
+  - libwebp/core (1.0.2):
+    - libwebp/webp
+  - libwebp/dec (1.0.2):
+    - libwebp/core
+  - libwebp/demux (1.0.2):
+    - libwebp/core
+  - libwebp/dsp (1.0.2):
+    - libwebp/core
+  - libwebp/enc (1.0.2):
+    - libwebp/core
+  - libwebp/mux (1.0.2):
+    - libwebp/core
+  - libwebp/utils (1.0.2):
+    - libwebp/core
+  - libwebp/webp (1.0.2)
+  - PINOperation (1.1.1)
+  - PINRemoteImage/Core (3.0.0-beta.14):
+    - PINOperation
+  - PINRemoteImage/iOS (3.0.0-beta.14):
+    - PINRemoteImage/Core
+  - PINRemoteImage/WebP (3.0.0-beta.14):
+    - libwebp
     - PINRemoteImage/Core
 
 DEPENDENCIES:
   - PINRemoteImage/iOS (from `../../`)
+  - PINRemoteImage/WebP (from `../../`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - libwebp
+    - PINOperation
 
 EXTERNAL SOURCES:
   PINRemoteImage:
-    :path: ../../
+    :path: "../../"
 
 SPEC CHECKSUMS:
-  PINRemoteImage: e2ed7a05206c1c290e2bcce587b301c33820d410
+  libwebp: b068a3bd7c45f7460f6715be7bed1a18fd5d6b48
+  PINOperation: a6219e6fc9db9c269eb7a7b871ac193bcf400aac
+  PINRemoteImage: 81bbff853acc71c6de9e106e9e489a791b8bbb08
 
-PODFILE CHECKSUM: 3ca0dcd328792561995daf845d89cfe8082d44c1
+PODFILE CHECKSUM: 97bb4190123d0210ff154e871c71a0d03aa7dbba
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.6.0

@@ -187,8 +187,6 @@
 				9DC09DAF1C39AB0D00C6451E /* Sources */,
 				9DC09DB01C39AB0D00C6451E /* Frameworks */,
 				9DC09DB11C39AB0D00C6451E /* Resources */,
-				16F443D310E08F018ED7D05A /* [CP] Copy Pods Resources */,
-				86B463CD99BA36A3184D5560 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -251,36 +249,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		16F443D310E08F018ED7D05A /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PINRemoteImage/Pods-PINRemoteImage-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		86B463CD99BA36A3184D5560 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PINRemoteImage/Pods-PINRemoteImage-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		8CFB37DD63603884BA1E041F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
