@@ -26,7 +26,7 @@
 @implementation PINRemoteImageDownloadQueue
 
 @synthesize maxNumberOfConcurrentDownloads = _maxNumberOfConcurrentDownloads;
-@synthesize usesNewDataTaskPriorityBehavior = _usesNewDataTaskPriorityBehavior;
+@synthesize shouldUseNewDataTaskPriorityBehavior = _shouldUseNewDataTaskPriorityBehavior;
 
 + (PINRemoteImageDownloadQueue *)queueWithMaxConcurrentDownloads:(NSUInteger)maxNumberOfConcurrentDownloads
                             shouldUseNewDataTaskPriorityBehavior:(BOOL)shouldUseNewDataTaskPriorityBehavior
@@ -40,7 +40,7 @@
 {
     if (self = [super init]) {
         _maxNumberOfConcurrentDownloads = maxNumberOfConcurrentDownloads;
-        _usesNewDataTaskPriorityBehavior = shouldUseNewDataTaskPriorityBehavior;
+        _shouldUseNewDataTaskPriorityBehavior = shouldUseNewDataTaskPriorityBehavior;
         
         _lock = [[PINRemoteLock alloc] initWithName:@"PINRemoteImageDownloadQueue Lock"];
         _highPriorityQueuedOperations = [[NSMutableOrderedSet alloc] init];
@@ -70,9 +70,9 @@
 
 - (BOOL)shouldUseNewDataTaskPriorityBehavior
 {
-    // _usesNewDataTaskPriorityBehavior is set during initialization and never changed
+    // _shouldUseNewDataTaskPriorityBehavior is set during initialization and never changed
     // so it can be accessed without locking
-    return _usesNewDataTaskPriorityBehavior;
+    return _shouldUseNewDataTaskPriorityBehavior;
 }
 
 - (NSURLSessionDataTask *)addDownloadWithSessionManager:(PINURLSessionManager *)sessionManager
@@ -81,7 +81,7 @@
                                       completionHandler:(PINRemoteImageDownloadCompletion)completionHandler
 {
     NSURLSessionDataTask *dataTask = [sessionManager dataTaskWithRequest:request
-                                                                priority:self.usesNewDataTaskPriorityBehavior ? priority : PINRemoteImageManagerPriorityDefault
+                                                                priority:self.shouldUseNewDataTaskPriorityBehavior ? priority : PINRemoteImageManagerPriorityDefault
                                                        completionHandler:^(NSURLSessionTask *task, NSError *error) {
                                                            completionHandler(task.response, error);
                                                            [self lock];
