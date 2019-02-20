@@ -19,11 +19,9 @@ typedef void (^PINRemoteImageDownloadCompletion)(NSURLResponse * _Nullable respo
 @interface PINRemoteImageDownloadQueue : NSObject
 
 @property (atomic, assign) NSUInteger maxNumberOfConcurrentDownloads;
-@property (atomic, assign, readonly) BOOL shouldUseNewDataTaskPriorityBehavior;
 
 - (instancetype)init NS_UNAVAILABLE;
-+ (PINRemoteImageDownloadQueue *)queueWithMaxConcurrentDownloads:(NSUInteger)maxNumberOfConcurrentDownloads
-                            shouldUseNewDataTaskPriorityBehavior:(BOOL)shouldUseNewDataTaskPriorityBehavior;
++ (PINRemoteImageDownloadQueue *)queueWithMaxConcurrentDownloads:(NSUInteger)maxNumberOfConcurrentDownloads;
 
 - (NSURLSessionDataTask *)addDownloadWithSessionManager:(PINURLSessionManager *)sessionManager
                                                 request:(NSURLRequest *)request

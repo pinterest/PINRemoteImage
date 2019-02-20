@@ -186,20 +186,7 @@ typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSession
  */
 - (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)configuration
                    alternativeRepresentationProvider:(nullable id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepDelegate
-                                          imageCache:(nullable id<PINRemoteImageCaching>)imageCache;
-
-/**
- Create and return a PINRemoteImageManager with the specified configuration and alternative representation delegate. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. Specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc. If alternativeRepresentationProvider is nil, the default is used (and supports PINAnimatedImageView).
- @param configuration The configuration used to create the PINRemoteImageManager.
- @param alternateRepDelegate a delegate which conforms to the PINRemoteImageManagerAlternateRepresentationProvider protocol. Provide a delegate if you want to have non image results. The manager maintains a weak reference to the delegate. @see PINRemoteImageManagerAlternateRepresentationProvider for an example.
- @param imageCache  Optional delegate which conforms to the PINRemoteImageCaching protocol. Provide a delegate if you want to control image caching. By default, image manager will use most appropriate implementation available (based on PINCache or NSCache, depending on subspec)@see PINRemoteImageBasicCache for an example.
- @param shouldUseNewDataTaskPriorityBehavior Previously the priority is set after a data task has been scheduled and potentially sent off. The new behavior sets it when the task is created.
- @return A PINRemoteImageManager with the specified configuration.
- */
-- (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)configuration
-                   alternativeRepresentationProvider:(nullable id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepDelegate
-                                          imageCache:(nullable id<PINRemoteImageCaching>)imageCache
-                shouldUseNewDataTaskPriorityBehavior:(BOOL)shouldUseNewDataTaskPriorityBehavior NS_DESIGNATED_INITIALIZER;
+                                          imageCache:(nullable id<PINRemoteImageCaching>)imageCache NS_DESIGNATED_INITIALIZER;
 
 /**
  Get the shared instance of PINRemoteImageManager
@@ -448,6 +435,23 @@ typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSession
  */
 - (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)url
                                   options:(PINRemoteImageManagerDownloadOptions)options
+                         progressDownload:(nullable PINRemoteImageManagerProgressDownload)progressDownload
+                               completion:(nullable PINRemoteImageManagerImageCompletion)completion;
+
+/**
+ Download or retrieve from cache the image found at the url and process it before calling completion. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).
+
+ @param url NSURL where the image to download resides.
+ @param options PINRemoteImageManagerDownloadOptions options with which to fetch the image.
+ @param priority PINRemoteImageManagerPriority which indicates the priority of the download task.
+ @param progressDownload PINRemoteImageManagerDownloadProgress block which will be called to update progress in bytes of the image download. NOTE: For performance reasons, this block is not called on the main thread every time, if you need to update your UI ensure that you dispatch to the main thread first.
+ @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.
+
+ @return An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).
+ */
+- (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)url
+                                  options:(PINRemoteImageManagerDownloadOptions)options
+                                 priority:(PINRemoteImageManagerPriority)priority
                          progressDownload:(nullable PINRemoteImageManagerProgressDownload)progressDownload
                                completion:(nullable PINRemoteImageManagerImageCompletion)completion;
 

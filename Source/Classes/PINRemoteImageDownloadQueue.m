@@ -26,22 +26,17 @@
 @implementation PINRemoteImageDownloadQueue
 
 @synthesize maxNumberOfConcurrentDownloads = _maxNumberOfConcurrentDownloads;
-@synthesize shouldUseNewDataTaskPriorityBehavior = _shouldUseNewDataTaskPriorityBehavior;
 
 + (PINRemoteImageDownloadQueue *)queueWithMaxConcurrentDownloads:(NSUInteger)maxNumberOfConcurrentDownloads
-                            shouldUseNewDataTaskPriorityBehavior:(BOOL)shouldUseNewDataTaskPriorityBehavior
 {
-    return [[PINRemoteImageDownloadQueue alloc] initWithMaxConcurrentDownloads:maxNumberOfConcurrentDownloads
-                                          shouldUseNewDataTaskPriorityBehavior:shouldUseNewDataTaskPriorityBehavior];
+    return [[PINRemoteImageDownloadQueue alloc] initWithMaxConcurrentDownloads:maxNumberOfConcurrentDownloads];
 }
 
 - (PINRemoteImageDownloadQueue *)initWithMaxConcurrentDownloads:(NSUInteger)maxNumberOfConcurrentDownloads
-                           shouldUseNewDataTaskPriorityBehavior:(BOOL)shouldUseNewDataTaskPriorityBehavior
 {
     if (self = [super init]) {
         _maxNumberOfConcurrentDownloads = maxNumberOfConcurrentDownloads;
-        _shouldUseNewDataTaskPriorityBehavior = shouldUseNewDataTaskPriorityBehavior;
-        
+
         _lock = [[PINRemoteLock alloc] initWithName:@"PINRemoteImageDownloadQueue Lock"];
         _highPriorityQueuedOperations = [[NSMutableOrderedSet alloc] init];
         _defaultPriorityQueuedOperations = [[NSMutableOrderedSet alloc] init];
@@ -68,20 +63,13 @@
     [self scheduleDownloadsIfNeeded];
 }
 
-- (BOOL)shouldUseNewDataTaskPriorityBehavior
-{
-    // _shouldUseNewDataTaskPriorityBehavior is set during initialization and never changed
-    // so it can be accessed without locking
-    return _shouldUseNewDataTaskPriorityBehavior;
-}
-
 - (NSURLSessionDataTask *)addDownloadWithSessionManager:(PINURLSessionManager *)sessionManager
                                                 request:(NSURLRequest *)request
                                                priority:(PINRemoteImageManagerPriority)priority
                                       completionHandler:(PINRemoteImageDownloadCompletion)completionHandler
 {
     NSURLSessionDataTask *dataTask = [sessionManager dataTaskWithRequest:request
-                                                                priority:self.shouldUseNewDataTaskPriorityBehavior ? priority : PINRemoteImageManagerPriorityDefault
+                                                                priority:priority
                                                        completionHandler:^(NSURLSessionTask *task, NSError *error) {
                                                            completionHandler(task.response, error);
                                                            [self lock];

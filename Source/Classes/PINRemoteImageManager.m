@@ -180,18 +180,6 @@ static dispatch_once_t sharedDispatchToken;
                    alternativeRepresentationProvider:(nullable id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepProvider
                                           imageCache:(nullable id<PINRemoteImageCaching>)imageCache
 {
-    return [self initWithSessionConfiguration:configuration
-            alternativeRepresentationProvider:alternateRepProvider
-                                   imageCache:imageCache
-         shouldUseNewDataTaskPriorityBehavior:NO];
-}
-
-- (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)configuration
-                   alternativeRepresentationProvider:(nullable id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepDelegate
-                                          imageCache:(nullable id<PINRemoteImageCaching>)imageCache
-                shouldUseNewDataTaskPriorityBehavior:(BOOL)shouldUseNewDataTaskPriorityBehavior
-{
-
     if (self = [super init]) {
         if (imageCache) {
             self.cache = imageCache;
@@ -225,8 +213,7 @@ static dispatch_once_t sharedDispatchToken;
         _lock = [[PINRemoteLock alloc] initWithName:@"PINRemoteImageManager"];
 
         _concurrentOperationQueue = [[PINOperationQueue alloc] initWithMaxConcurrentOperations:[[NSProcessInfo processInfo] activeProcessorCount] * 2];
-        _urlSessionTaskQueue = [PINRemoteImageDownloadQueue queueWithMaxConcurrentDownloads:10
-                                                       shouldUseNewDataTaskPriorityBehavior:shouldUseNewDataTaskPriorityBehavior];
+        _urlSessionTaskQueue = [PINRemoteImageDownloadQueue queueWithMaxConcurrentDownloads:10];
         
         self.sessionManager = [[PINURLSessionManager alloc] initWithSessionConfiguration:_sessionConfiguration];
         self.sessionManager.delegate = self;
@@ -530,12 +517,8 @@ static dispatch_once_t sharedDispatchToken;
     return [self downloadImageWithURL:url
                               options:options
                              priority:PINRemoteImageManagerPriorityDefault
-                         processorKey:nil
-                            processor:nil
                         progressImage:progressImage
-                     progressDownload:nil
-                           completion:completion
-                            inputUUID:nil];
+                           completion:completion];
 }
 
 - (NSUUID *)downloadImageWithURL:(NSURL *)url
@@ -546,6 +529,19 @@ static dispatch_once_t sharedDispatchToken;
     return [self downloadImageWithURL:url
                               options:options
                              priority:PINRemoteImageManagerPriorityDefault
+                     progressDownload:progressDownload
+                           completion:completion];
+}
+
+- (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)url
+                                  options:(PINRemoteImageManagerDownloadOptions)options
+                                 priority:(PINRemoteImageManagerPriority)priority
+                         progressDownload:(nullable PINRemoteImageManagerProgressDownload)progressDownload
+                               completion:(nullable PINRemoteImageManagerImageCompletion)completion;
+{
+    return [self downloadImageWithURL:url
+                              options:options
+                             priority:priority
                          processorKey:nil
                             processor:nil
                         progressImage:nil
@@ -596,14 +592,14 @@ static dispatch_once_t sharedDispatchToken;
                       completion:(PINRemoteImageManagerImageCompletion)completion
 {
     return [self downloadImageWithURL:url
-                          options:options
-                         priority:PINRemoteImageManagerPriorityDefault
-                     processorKey:processorKey
-                        processor:processor
-                    progressImage:nil
-                 progressDownload:progressDownload
-                       completion:completion
-                        inputUUID:nil];
+                              options:options
+                             priority:PINRemoteImageManagerPriorityDefault
+                         processorKey:processorKey
+                            processor:processor
+                        progressImage:nil
+                     progressDownload:progressDownload
+                           completion:completion
+                            inputUUID:nil];
 }
 
 - (NSUUID *)downloadImageWithURL:(NSURL *)url
