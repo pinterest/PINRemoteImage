@@ -14,6 +14,7 @@
 - [cleanup] Use NS_ERROR_ENUM to improve Swift import. [#440](https://github.com/pinterest/PINRemoteImage/pull/440) [Adlai-Holler](https://github.com/Adlai-Holler)
 - [fixed] Fixes nil session manager configuration. [#460](https://github.com/pinterest/PINRemoteImage/pull/460) [garrettmoon](https://github.com/garrettmoon)
 - [fixed] Fixes deprecated -defaultImageCache not being called if overridden. [479](https://github.com/pinterest/PINRemoteImage/pull/479) [nguyenhuy](https://github.com/nguyenhuy)
+- [new] Add a new API that allows a priority to be set when a new download task is scheduled. [#490](https://github.com/pinterest/PINRemoteImage/pull/490) [nguyenhuy](https://github.com/nguyenhuy)
 
 ## 3.0.0 Beta 13
 - [new] Support for webp and improved support for GIFs. [#411](https://github.com/pinterest/PINRemoteImage/pull/411) [garrettmoon](https://github.com/garrettmoon)

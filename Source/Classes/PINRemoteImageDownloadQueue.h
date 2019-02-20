@@ -18,7 +18,7 @@ typedef void (^PINRemoteImageDownloadCompletion)(NSURLResponse * _Nullable respo
 
 @interface PINRemoteImageDownloadQueue : NSObject
 
-@property (nonatomic, assign) NSUInteger maxNumberOfConcurrentDownloads;
+@property (atomic, assign) NSUInteger maxNumberOfConcurrentDownloads;
 
 - (instancetype)init NS_UNAVAILABLE;
 + (PINRemoteImageDownloadQueue *)queueWithMaxConcurrentDownloads:(NSUInteger)maxNumberOfConcurrentDownloads;
