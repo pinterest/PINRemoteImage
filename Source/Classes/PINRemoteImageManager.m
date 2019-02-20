@@ -528,26 +528,9 @@ static dispatch_once_t sharedDispatchToken;
 {
     return [self downloadImageWithURL:url
                               options:options
-                             priority:PINRemoteImageManagerPriorityDefault
-                     progressDownload:progressDownload
-                           completion:completion];
-}
-
-- (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)url
-                                  options:(PINRemoteImageManagerDownloadOptions)options
-                                 priority:(PINRemoteImageManagerPriority)priority
-                         progressDownload:(nullable PINRemoteImageManagerProgressDownload)progressDownload
-                               completion:(nullable PINRemoteImageManagerImageCompletion)completion;
-{
-    return [self downloadImageWithURL:url
-                              options:options
-                             priority:priority
-                         processorKey:nil
-                            processor:nil
                         progressImage:nil
                      progressDownload:progressDownload
-                           completion:completion
-                            inputUUID:nil];
+                           completion:completion];
 }
 
 - (NSUUID *)downloadImageWithURL:(NSURL *)url
@@ -559,6 +542,21 @@ static dispatch_once_t sharedDispatchToken;
     return [self downloadImageWithURL:url
                               options:options
                              priority:PINRemoteImageManagerPriorityDefault
+                        progressImage:progressImage
+                     progressDownload:progressDownload
+                           completion:completion];
+}
+
+- (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)url
+                                  options:(PINRemoteImageManagerDownloadOptions)options
+                                 priority:(PINRemoteImageManagerPriority)priority
+                            progressImage:(PINRemoteImageManagerImageCompletion)progressImage
+                         progressDownload:(nullable PINRemoteImageManagerProgressDownload)progressDownload
+                               completion:(nullable PINRemoteImageManagerImageCompletion)completion;
+{
+    return [self downloadImageWithURL:url
+                              options:options
+                             priority:priority
                          processorKey:nil
                             processor:nil
                         progressImage:progressImage
