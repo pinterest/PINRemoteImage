@@ -504,17 +504,6 @@ static dispatch_once_t sharedDispatchToken;
     });
 }
 
-- (void)enableNewDataTaskPriorityBehavior
-{
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        typeof(self) strongSelf = weakSelf;
-        [strongSelf lock];
-            [strongSelf.urlSessionTaskQueue enableNewDataTaskPriorityBehavior];
-        [strongSelf unlock];
-    });
-}
-
 - (NSUUID *)downloadImageWithURL:(NSURL *)url
                       completion:(PINRemoteImageManagerImageCompletion)completion
 {
