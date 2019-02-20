@@ -171,7 +171,8 @@ static dispatch_once_t sharedDispatchToken;
     return [self initWithSessionConfiguration:configuration alternativeRepresentationProvider:nil];
 }
 
-- (instancetype)initWithSessionConfiguration:(NSURLSessionConfiguration *)configuration alternativeRepresentationProvider:(id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepProvider
+- (instancetype)initWithSessionConfiguration:(NSURLSessionConfiguration *)configuration
+           alternativeRepresentationProvider:(id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepProvider
 {
     return [self initWithSessionConfiguration:configuration alternativeRepresentationProvider:alternateRepProvider imageCache:nil];
 }
@@ -180,6 +181,18 @@ static dispatch_once_t sharedDispatchToken;
                    alternativeRepresentationProvider:(nullable id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepProvider
                                           imageCache:(nullable id<PINRemoteImageCaching>)imageCache
 {
+    return [self initWithSessionConfiguration:configuration
+            alternativeRepresentationProvider:alternateRepProvider
+                                   imageCache:imageCache
+         shouldUseNewDataTaskPriorityBehavior:NO];
+}
+
+- (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)configuration
+                   alternativeRepresentationProvider:(nullable id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepDelegate
+                                          imageCache:(nullable id<PINRemoteImageCaching>)imageCache
+                shouldUseNewDataTaskPriorityBehavior:(BOOL)shouldUseNewDataTaskPriorityBehavior
+{
+
     if (self = [super init]) {
         if (imageCache) {
             self.cache = imageCache;
@@ -213,7 +226,8 @@ static dispatch_once_t sharedDispatchToken;
         _lock = [[PINRemoteLock alloc] initWithName:@"PINRemoteImageManager"];
 
         _concurrentOperationQueue = [[PINOperationQueue alloc] initWithMaxConcurrentOperations:[[NSProcessInfo processInfo] activeProcessorCount] * 2];
-        _urlSessionTaskQueue = [PINRemoteImageDownloadQueue queueWithMaxConcurrentDownloads:10];
+        _urlSessionTaskQueue = [PINRemoteImageDownloadQueue queueWithMaxConcurrentDownloads:10
+                                                       shouldUseNewDataTaskPriorityBehavior:shouldUseNewDataTaskPriorityBehavior];
         
         self.sessionManager = [[PINURLSessionManager alloc] initWithSessionConfiguration:_sessionConfiguration];
         self.sessionManager.delegate = self;
@@ -488,6 +502,17 @@ static dispatch_once_t sharedDispatchToken;
         if (completion) {
             completion();
         }
+    });
+}
+
+- (void)enableNewDataTaskPriorityBehavior
+{
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        typeof(self) strongSelf = weakSelf;
+        [strongSelf lock];
+            [strongSelf.urlSessionTaskQueue enableNewDataTaskPriorityBehavior];
+        [strongSelf unlock];
     });
 }
 
