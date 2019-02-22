@@ -430,6 +430,10 @@
 		68F0EA951CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 68F0EA911CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.m */; };
 		926E01631F0DFEE100874D01 /* PINRequestRetryStrategy.h in Headers */ = {isa = PBXBuildFile; fileRef = 926E015C1F0DFCAE00874D01 /* PINRequestRetryStrategy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		926E01641F0DFEE800874D01 /* PINRequestRetryStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 926E015D1F0DFCAE00874D01 /* PINRequestRetryStrategy.m */; };
+		938E98D52224775600029E4D /* PINRemoteImageManagerConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 939546BE2220AF84006031BB /* PINRemoteImageManagerConfiguration.h */; };
+		938E98DA2224775B00029E4D /* PINRemoteImageManagerConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 939546BF2220AF84006031BB /* PINRemoteImageManagerConfiguration.m */; };
+		939546C02220AF84006031BB /* PINRemoteImageManagerConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 939546BE2220AF84006031BB /* PINRemoteImageManagerConfiguration.h */; };
+		939546C12220AF84006031BB /* PINRemoteImageManagerConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 939546BF2220AF84006031BB /* PINRemoteImageManagerConfiguration.m */; };
 		9DD47F9C1C699F4B00F12CA0 /* PINButton+PINRemoteImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DD47F981C699F4B00F12CA0 /* PINButton+PINRemoteImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9DD47F9D1C699F4B00F12CA0 /* PINButton+PINRemoteImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DD47F991C699F4B00F12CA0 /* PINButton+PINRemoteImage.m */; };
 		9DD47F9E1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DD47F9A1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -767,6 +771,8 @@
 		68F0EA911CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageMemoryContainer.m; sourceTree = "<group>"; };
 		926E015C1F0DFCAE00874D01 /* PINRequestRetryStrategy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PINRequestRetryStrategy.h; sourceTree = "<group>"; };
 		926E015D1F0DFCAE00874D01 /* PINRequestRetryStrategy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PINRequestRetryStrategy.m; sourceTree = "<group>"; };
+		939546BE2220AF84006031BB /* PINRemoteImageManagerConfiguration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageManagerConfiguration.h; sourceTree = "<group>"; };
+		939546BF2220AF84006031BB /* PINRemoteImageManagerConfiguration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageManagerConfiguration.m; sourceTree = "<group>"; };
 		9DD47F981C699F4B00F12CA0 /* PINButton+PINRemoteImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PINButton+PINRemoteImage.h"; sourceTree = "<group>"; };
 		9DD47F991C699F4B00F12CA0 /* PINButton+PINRemoteImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PINButton+PINRemoteImage.m"; sourceTree = "<group>"; };
 		9DD47F9A1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PINImageView+PINRemoteImage.h"; sourceTree = "<group>"; };
@@ -1176,6 +1182,8 @@
 				F1B918DC1BCF23C800710963 /* PINRemoteImageCategoryManager.m */,
 				F1B918F51BCF23C800710963 /* PINRemoteImageManager.h */,
 				F1B918F61BCF23C800710963 /* PINRemoteImageManager.m */,
+				939546BE2220AF84006031BB /* PINRemoteImageManagerConfiguration.h */,
+				939546BF2220AF84006031BB /* PINRemoteImageManagerConfiguration.m */,
 				F1B918F71BCF23C800710963 /* PINRemoteImageManagerResult.h */,
 				F1B918F81BCF23C800710963 /* PINRemoteImageManagerResult.m */,
 				F1B918FD1BCF23C800710963 /* PINURLSessionManager.h */,
@@ -1328,6 +1336,7 @@
 				139D50A51F672BBF00DE64E0 /* PINImage+WebP.h in Headers */,
 				139D50A71F672BBF00DE64E0 /* PINRemoteImageTask+Subclassing.h in Headers */,
 				139D50A91F672BBF00DE64E0 /* PINRemoteImageCallbacks.h in Headers */,
+				938E98D52224775600029E4D /* PINRemoteImageManagerConfiguration.h in Headers */,
 				139D50AA1F672BBF00DE64E0 /* PINRemoteImageDownloadTask.h in Headers */,
 				68D734EB1F75FE4500B9C95D /* vp8li_dec.h in Headers */,
 				139D50AB1F672BBF00DE64E0 /* PINRemoteImageProcessorTask.h in Headers */,
@@ -1414,6 +1423,7 @@
 				F1B919001BCF23C900710963 /* NSData+ImageDetectors.h in Headers */,
 				687750111F6B08F7008748B0 /* color_cache_utils.h in Headers */,
 				F1B9191E1BCF23C900710963 /* PINURLSessionManager.h in Headers */,
+				939546C02220AF84006031BB /* PINRemoteImageManagerConfiguration.h in Headers */,
 				68774FDC1F6B08C7008748B0 /* animi.h in Headers */,
 				689613E0208FD8B700D2095C /* PINAnimatedImageView.h in Headers */,
 				687750271F6B2305008748B0 /* PINWebPAnimatedImage.h in Headers */,
@@ -1741,6 +1751,7 @@
 				68D734BE1F75FE3C00B9C95D /* lossless_enc_msa.c in Sources */,
 				68D734851F75FE3400B9C95D /* histogram_enc.c in Sources */,
 				68D734AF1F75FE3C00B9C95D /* enc_mips_dsp_r2.c in Sources */,
+				938E98DA2224775B00029E4D /* PINRemoteImageManagerConfiguration.m in Sources */,
 				68D734B51F75FE3C00B9C95D /* enc.c in Sources */,
 				68D734B81F75FE3C00B9C95D /* filters_neon.c in Sources */,
 				689613E7208FD90B00D2095C /* PINDisplayLink.m in Sources */,
@@ -1911,6 +1922,7 @@
 				68774FB81F6B08B2008748B0 /* analysis_enc.c in Sources */,
 				68774EFD1F6B0871008748B0 /* frame_dec.c in Sources */,
 				68774EFF1F6B0871008748B0 /* io_dec.c in Sources */,
+				939546C12220AF84006031BB /* PINRemoteImageManagerConfiguration.m in Sources */,
 				68774FCB1F6B08B2008748B0 /* predictor_enc.c in Sources */,
 				68774FC91F6B08B2008748B0 /* picture_rescale_enc.c in Sources */,
 				689613E6208FD90B00D2095C /* PINDisplayLink.m in Sources */,
