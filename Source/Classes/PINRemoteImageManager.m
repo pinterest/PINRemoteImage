@@ -174,23 +174,20 @@ static dispatch_once_t sharedDispatchToken;
 
 - (instancetype)initWithSessionConfiguration:(NSURLSessionConfiguration *)sessionConfiguration alternativeRepresentationProvider:(id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepProvider
 {
-    return [self initWithSessionConfiguration:sessionConfiguration alternativeRepresentationProvider:alternateRepProvider imageCache:nil];
-}
-
-- (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)sessionConfiguration
-                   alternativeRepresentationProvider:(nullable id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepProvider
-                                          imageCache:(nullable id<PINRemoteImageCaching>)imageCache
-{
-    PINRemoteImageManagerConfiguration *configuration = [[PINRemoteImageManagerConfiguration alloc] init];
-    return [self initWithSessionConfiguration:sessionConfiguration alternativeRepresentationProvider:alternateRepProvider imageCache:imageCache configuration:configuration];
+    return [self initWithSessionConfiguration:sessionConfiguration alternativeRepresentationProvider:alternateRepProvider imageCache:nil managerConfiguration:nil];
 }
 
 -(nonnull instancetype)initWithSessionConfiguration:(NSURLSessionConfiguration *)sessionConfiguration
                   alternativeRepresentationProvider:(id<PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepProvider
                                          imageCache:(id<PINRemoteImageCaching>)imageCache
-                                      configuration:(nonnull PINRemoteImageManagerConfiguration *)configuration
+                               managerConfiguration:(nullable PINRemoteImageManagerConfiguration *)managerConfiguration
 {
     if (self = [super init]) {
+        PINRemoteImageManagerConfiguration *configuration = managerConfiguration;
+        if (!configuration) {
+            configuration = [[PINRemoteImageManagerConfiguration alloc] init];
+        }
+        
         if (imageCache) {
             self.cache = imageCache;
         } else if (PINRemoteImageManagerSubclassOverridesSelector([self class], @selector(defaultImageCache))) {

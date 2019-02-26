@@ -1,8 +1,8 @@
 ## master
 * Add your own contributions to the next release on the line below this with your name.
+- [new] Add PINRemoteImageManagerConfiguration configuration object [#492](https://github.com/pinterest/PINRemoteImage/pull/492) [rqueue](https://github.com/rqueue)
 
 ## 3.0.0 Beta 14
-- [new] Add PINRemoteImageManagerConfiguration configuration object [#492](https://github.com/pinterest/PINRemoteImage/pull/492) [rqueue](https://github.com/rqueue)
 - [new] Allow use of NSURLCache via a custom NSURLSession [#477](https://github.com/pinterest/PINRemoteImage/pull/477) [wiseoldduck](https://github.com/wiseoldduck)
 - [new] Respect Cache-Control and Expires headers if the cache supports TTL. [#462](https://github.com/pinterest/PINRemoteImage/pull/462) [wiseoldduck](https://github.com/wiseoldduck)
 - [new] Updated to latest PINCache beta 7. [#461](https://github.com/pinterest/PINRemoteImage/pull/461) [wiseoldduck](https://github.com/wiseoldduck)

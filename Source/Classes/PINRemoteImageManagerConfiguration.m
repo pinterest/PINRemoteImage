@@ -20,7 +20,7 @@
         _shouldBlurProgressive = YES;
         _maxProgressiveRenderSize = CGSizeMake(1024, 1024);
         _highQualityBPSThreshold = 500000;
-        _lowQualityBPSThreshold = 500000; // approximately edge speed
+        _lowQualityBPSThreshold = 50000; // approximately edge speed
         _shouldUpgradeLowQualityImages = NO;
     }
     return self;
