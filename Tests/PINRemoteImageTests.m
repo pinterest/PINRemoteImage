@@ -946,7 +946,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (void)testCacheControlSupport
 {
-    self.imageManager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:nil alternativeRepresentationProvider:nil imageCache:[PINRemoteImageManager defaultImageTtlCache]];
+    self.imageManager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:nil alternativeRepresentationProvider:nil imageCache:[PINRemoteImageManager defaultImageTtlCache] managerConfiguration:nil];
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     id cache = self.imageManager.cache;
     XCTAssert([cache isKindOfClass:[PINCache class]]);
