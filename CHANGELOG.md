@@ -1,5 +1,7 @@
 ## master
-* Add your own contributions to the next release on the line below this with your name.
+* add your own contributions to the next release on the line below this with your name.
+
+## 3.0.0 Beta 15
 - [new] Add PINRemoteImageManagerConfiguration configuration object [#492](https://github.com/pinterest/PINRemoteImage/pull/492) [rqueue](https://github.com/rqueue)
 
 ## 3.0.0 Beta 14
