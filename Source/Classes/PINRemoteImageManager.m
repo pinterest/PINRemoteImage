@@ -177,6 +177,12 @@ static dispatch_once_t sharedDispatchToken;
     return [self initWithSessionConfiguration:sessionConfiguration alternativeRepresentationProvider:alternateRepProvider imageCache:nil managerConfiguration:nil];
 }
 
+- (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)sessionConfiguration
+                   alternativeRepresentationProvider:(nullable id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepDelegate
+                                          imageCache:(nullable id<PINRemoteImageCaching>)imageCache {
+    return [self initWithSessionConfiguration:sessionConfiguration alternativeRepresentationProvider:alternateRepDelegate imageCache:imageCache managerConfiguration:nil];
+}
+
 -(nonnull instancetype)initWithSessionConfiguration:(NSURLSessionConfiguration *)sessionConfiguration
                   alternativeRepresentationProvider:(id<PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepProvider
                                          imageCache:(id<PINRemoteImageCaching>)imageCache
