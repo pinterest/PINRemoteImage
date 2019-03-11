@@ -49,6 +49,12 @@ NSErrorDomain const PINURLErrorDomain = @"PINURLErrorDomain";
 }
 
 - (nonnull NSURLSessionDataTask *)dataTaskWithRequest:(nonnull NSURLRequest *)request
+                                    completionHandler:(nonnull PINURLSessionDataTaskCompletion)completionHandler {
+    return [self dataTaskWithRequest:request priority:PINRemoteImageManagerPriorityDefault
+                   completionHandler:completionHandler];
+}
+
+- (nonnull NSURLSessionDataTask *)dataTaskWithRequest:(nonnull NSURLRequest *)request
                                              priority:(PINRemoteImageManagerPriority)priority
                                     completionHandler:(nonnull PINURLSessionDataTaskCompletion)completionHandler
 {
