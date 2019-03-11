@@ -524,11 +524,37 @@ static dispatch_once_t sharedDispatchToken;
 
 - (NSUUID *)downloadImageWithURL:(NSURL *)url
                          options:(PINRemoteImageManagerDownloadOptions)options
+                    cacheOptions:(PINRemoteImageManagerCacheOptions)cacheOptions
+                      completion:(PINRemoteImageManagerImageCompletion)completion
+{
+    return [self downloadImageWithURL:url
+                              options:options
+                         cacheOptions:cacheOptions
+                        progressImage:nil
+                           completion:completion];
+}
+
+- (NSUUID *)downloadImageWithURL:(NSURL *)url
+                         options:(PINRemoteImageManagerDownloadOptions)options
                    progressImage:(PINRemoteImageManagerImageCompletion)progressImage
                       completion:(PINRemoteImageManagerImageCompletion)completion
 {
     return [self downloadImageWithURL:url
                               options:options
+                        progressImage:progressImage
+                     progressDownload:nil
+                           completion:completion];
+}
+
+- (NSUUID *)downloadImageWithURL:(NSURL *)url
+                         options:(PINRemoteImageManagerDownloadOptions)options
+                    cacheOptions:(PINRemoteImageManagerCacheOptions)cacheOptions
+                   progressImage:(PINRemoteImageManagerImageCompletion)progressImage
+                      completion:(PINRemoteImageManagerImageCompletion)completion
+{
+    return [self downloadImageWithURL:url
+                              options:options
+                         cacheOptions:cacheOptions
                         progressImage:progressImage
                      progressDownload:nil
                            completion:completion];
@@ -615,6 +641,65 @@ static dispatch_once_t sharedDispatchToken;
 
 - (NSUUID *)downloadImageWithURL:(NSURL *)url
                          options:(PINRemoteImageManagerDownloadOptions)options
+                    cacheOptions:(PINRemoteImageManagerCacheOptions)cacheOptions
+                   progressImage:(PINRemoteImageManagerImageCompletion)progressImage
+                progressDownload:(PINRemoteImageManagerProgressDownload)progressDownload
+                      completion:(PINRemoteImageManagerImageCompletion)completion
+{
+    return [self downloadImageWithURL:url
+                              options:options
+                         cacheOptions:cacheOptions
+                             priority:PINRemoteImageManagerPriorityDefault
+                        progressImage:progressImage
+                     progressDownload:progressDownload
+                           completion:completion];
+}
+
+- (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)url
+                                  options:(PINRemoteImageManagerDownloadOptions)options
+                             cacheOptions:(PINRemoteImageManagerCacheOptions)cacheOptions
+                                 priority:(PINRemoteImageManagerPriority)priority
+                            progressImage:(PINRemoteImageManagerImageCompletion)progressImage
+                         progressDownload:(nullable PINRemoteImageManagerProgressDownload)progressDownload
+                               completion:(nullable PINRemoteImageManagerImageCompletion)completion;
+{
+    return [self downloadImageWithURL:url
+                              options:options
+                         cacheOptions:cacheOptions
+                             priority:priority
+                         processorKey:nil
+                            processor:nil
+                        progressImage:progressImage
+                     progressDownload:progressDownload
+                           completion:completion
+                            inputUUID:nil];
+}
+
+- (NSUUID *)downloadImageWithURL:(NSURL *)url
+                         options:(PINRemoteImageManagerDownloadOptions)options
+                        priority:(PINRemoteImageManagerPriority)priority
+                    processorKey:(NSString *)processorKey
+                       processor:(PINRemoteImageManagerImageProcessor)processor
+                   progressImage:(PINRemoteImageManagerImageCompletion)progressImage
+                progressDownload:(PINRemoteImageManagerProgressDownload)progressDownload
+                      completion:(PINRemoteImageManagerImageCompletion)completion
+                       inputUUID:(NSUUID *)UUID
+{
+    return [self downloadImageWithURL:url
+                              options:options
+                         cacheOptions:PINRemoteImageManagerCacheOptionsMemory | PINRemoteImageManagerCacheOptionsDisk
+                             priority:PINRemoteImageManagerPriorityDefault
+                         processorKey:processorKey
+                            processor:processor
+                        progressImage:nil
+                     progressDownload:progressDownload
+                           completion:completion
+                            inputUUID:nil];
+}
+
+- (NSUUID *)downloadImageWithURL:(NSURL *)url
+                         options:(PINRemoteImageManagerDownloadOptions)options
+                    cacheOptions:(PINRemoteImageManagerCacheOptions)cacheOptions
                         priority:(PINRemoteImageManagerPriority)priority
                     processorKey:(NSString *)processorKey
                        processor:(PINRemoteImageManagerImageProcessor)processor
@@ -716,6 +801,7 @@ static dispatch_once_t sharedDispatchToken;
                              //Skip early check
                              [self downloadImageWithURL:url
                                                 options:options | PINRemoteImageManagerDownloadOptionsSkipEarlyCheck
+                                           cacheOptions:cacheOptions
                                                priority:priority
                                            processorKey:processorKey
                                               processor:processor
@@ -729,6 +815,7 @@ static dispatch_once_t sharedDispatchToken;
                              //continue processing
                              [self downloadImageWithURL:url
                                                 options:options
+                                           cacheOptions:cacheOptions
                                                priority:priority
                                                     key:key
                                               processor:processor
@@ -737,6 +824,7 @@ static dispatch_once_t sharedDispatchToken;
                              //continue downloading
                              [self downloadImageWithURL:url
                                                 options:options
+                                           cacheOptions:cacheOptions
                                                priority:priority
                                                     key:key
                                           progressImage:progressImage
@@ -753,6 +841,23 @@ static dispatch_once_t sharedDispatchToken;
 
 - (void)downloadImageWithURL:(NSURL *)url
                      options:(PINRemoteImageManagerDownloadOptions)options
+                    priority:(PINRemoteImageManagerPriority)priority
+                         key:(NSString *)key
+                   processor:(PINRemoteImageManagerImageProcessor)processor
+                        UUID:(NSUUID *)UUID
+{
+    [self downloadImageWithURL:url
+                       options:options
+                  cacheOptions:PINRemoteImageManagerCacheOptionsDisk | PINRemoteImageManagerCacheOptionsMemory
+                      priority:priority
+                           key:key
+                     processor:processor
+                          UUID:UUID];
+}
+
+- (void)downloadImageWithURL:(NSURL *)url
+                     options:(PINRemoteImageManagerDownloadOptions)options
+                cacheOptions:(PINRemoteImageManagerCacheOptions)cacheOptions
                     priority:(PINRemoteImageManagerPriority)priority
                          key:(NSString *)key
                    processor:(PINRemoteImageManagerImageProcessor)processor
@@ -803,7 +908,7 @@ static dispatch_once_t sharedDispatchToken;
                         diskData = PINImagePNGRepresentation(image);
                     }
                     
-                    [strongSelf materializeAndCacheObject:image cacheInDisk:diskData additionalCost:processCost url:url key:key options:options outImage:nil outAltRep:nil];
+                    [strongSelf materializeAndCacheObject:image cacheInDisk:diskData additionalCost:processCost url:url key:key options:options cacheOptions:cacheOptions outImage:nil outAltRep:nil];
                 }
                 
                 [strongSelf callCompletionsWithKey:key image:image alternativeRepresentation:nil cached:NO response:result.response error:error finalized:YES];
@@ -823,6 +928,23 @@ static dispatch_once_t sharedDispatchToken;
 
 - (void)downloadImageWithURL:(NSURL *)url
                      options:(PINRemoteImageManagerDownloadOptions)options
+                    priority:(PINRemoteImageManagerPriority)priority
+                         key:(NSString *)key
+               progressImage:(PINRemoteImageManagerImageCompletion)progressImage
+                        UUID:(NSUUID *)UUID
+{
+    [self downloadImageWithURL:url
+                       options:options
+                  cacheOptions:PINRemoteImageManagerCacheOptionsDisk | PINRemoteImageManagerCacheOptionsMemory
+                      priority:priority
+                           key:key
+                 progressImage:progressImage
+                          UUID:UUID];
+}
+
+- (void)downloadImageWithURL:(NSURL *)url
+                     options:(PINRemoteImageManagerDownloadOptions)options
+                cacheOptions:(PINRemoteImageManagerCacheOptions)cacheOptions
                     priority:(PINRemoteImageManagerPriority)priority
                          key:(NSString *)key
                progressImage:(PINRemoteImageManagerImageCompletion)progressImage
@@ -861,7 +983,7 @@ static dispatch_once_t sharedDispatchToken;
                     }
                 }
                 // Stores the object in the cache.
-                [self materializeAndCacheObject:data cacheInDisk:data additionalCost:0 maxAge:maxAge url:url key:key options:options outImage:&image outAltRep:&alternativeRepresentation];
+                [self materializeAndCacheObject:data cacheInDisk:data additionalCost:0 maxAge:maxAge url:url key:key options:options cacheOptions:cacheOptions outImage:&image outAltRep:&alternativeRepresentation];
              }
 
             if (error == nil && image == nil && alternativeRepresentation == nil) {
@@ -984,9 +1106,14 @@ static dispatch_once_t sharedDispatchToken;
 
 - (NSArray<NSUUID *> *)prefetchImagesWithURLs:(NSArray <NSURL *> *)urls options:(PINRemoteImageManagerDownloadOptions)options priority:(PINRemoteImageManagerPriority)priority
 {
+    return [self prefetchImagesWithURLs:urls options:options cacheOptions:PINRemoteImageManagerCacheOptionsMemory | PINRemoteImageManagerCacheOptionsDisk priority:priority];
+}
+
+- (NSArray<NSUUID *> *)prefetchImagesWithURLs:(NSArray <NSURL *> *)urls options:(PINRemoteImageManagerDownloadOptions)options cacheOptions:(PINRemoteImageManagerCacheOptions)cacheOptions priority:(PINRemoteImageManagerPriority)priority
+{
     NSMutableArray *tasks = [NSMutableArray arrayWithCapacity:urls.count];
     for (NSURL *url in urls) {
-        NSUUID *task = [self prefetchImageWithURL:url options:options priority:priority];
+        NSUUID *task = [self prefetchImageWithURL:url options:options cacheOptions:cacheOptions priority:priority];
         if (task != nil) {
             [tasks addObject:task];
         }
@@ -1008,6 +1135,20 @@ static dispatch_once_t sharedDispatchToken;
 {
     return [self downloadImageWithURL:url
                               options:options
+                             priority:priority
+                         processorKey:nil
+                            processor:nil
+                        progressImage:nil
+                     progressDownload:nil
+                           completion:nil
+                            inputUUID:nil];
+}
+
+- (NSUUID *)prefetchImageWithURL:(NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options cacheOptions:(PINRemoteImageManagerCacheOptions)cacheOptions priority:(PINRemoteImageManagerPriority)priority
+{
+    return [self downloadImageWithURL:url
+                              options:options
+                         cacheOptions:cacheOptions
                              priority:priority
                          processorKey:nil
                             processor:nil
@@ -1361,6 +1502,40 @@ static dispatch_once_t sharedDispatchToken;
     return [self materializeAndCacheObject:object cacheInDisk:diskData additionalCost:additionalCost maxAge:nil url:url key:key options:options outImage:outImage outAltRep:outAlternateRepresentation];
 }
 
+- (BOOL)materializeAndCacheObject:(id)object
+                      cacheInDisk:(NSData *)diskData
+                   additionalCost:(NSUInteger)additionalCost
+                              url:(NSURL *)url
+                              key:(NSString *)key
+                          options:(PINRemoteImageManagerDownloadOptions)options
+                     cacheOptions:(PINRemoteImageManagerCacheOptions)cacheOptions
+                         outImage:(PINImage **)outImage
+                        outAltRep:(id *)outAlternateRepresentation
+{
+    return [self materializeAndCacheObject:object cacheInDisk:diskData additionalCost:additionalCost maxAge:nil url:url key:key options:options cacheOptions:cacheOptions outImage:outImage outAltRep:outAlternateRepresentation];
+}
+
+- (BOOL)materializeAndCacheObject:(id)object
+                      cacheInDisk:(NSData *)diskData
+                   additionalCost:(NSUInteger)additionalCost
+                           maxAge:(NSNumber *)maxAge
+                              url:(NSURL *)url
+                              key:(NSString *)key
+                          options:(PINRemoteImageManagerDownloadOptions)options
+                         outImage:(PINImage **)outImage
+                        outAltRep:(id *)outAlternateRepresentation
+{
+    return [self materializeAndCacheObject:object
+                               cacheInDisk:diskData
+                            additionalCost:additionalCost
+                                    maxAge:nil
+                                       url:url
+                                       key:key
+                                   options:options
+                              cacheOptions:PINRemoteImageManagerCacheOptionsMemory | PINRemoteImageManagerCacheOptionsDisk
+                                  outImage:outImage
+                                 outAltRep:outAlternateRepresentation];
+}
 //takes the object from the cache and returns an image or animated image.
 //if it's a non-alternative representation and skipDecode is not set it also decompresses the image.
 - (BOOL)materializeAndCacheObject:(id)object
@@ -1370,6 +1545,7 @@ static dispatch_once_t sharedDispatchToken;
                               url:(NSURL *)url
                               key:(NSString *)key
                           options:(PINRemoteImageManagerDownloadOptions)options
+                     cacheOptions:(PINRemoteImageManagerCacheOptions)cacheOptions
                          outImage:(PINImage **)outImage
                         outAltRep:(id *)outAlternateRepresentation
 {
@@ -1444,7 +1620,8 @@ static dispatch_once_t sharedDispatchToken;
     BOOL cacheIndefinitely = (maxAge == nil);
 
     if (!doNotCache) {
-        if (updateMemoryCache) {
+        BOOL cacheInMemory = (cacheOptions & PINRemoteImageManagerCacheOptionsMemory) != 0;
+        if (cacheInMemory && updateMemoryCache) {
             [container.lock lockWithBlock:^{
                 NSUInteger cacheCost = additionalCost;
                 cacheCost += [container.data length];
@@ -1461,7 +1638,8 @@ static dispatch_once_t sharedDispatchToken;
             }];
         }
 
-        if (diskData) {
+        BOOL cacheInDisk = (cacheOptions & PINRemoteImageManagerCacheOptionsDisk) != 0;
+        if (cacheInDisk && diskData) {
             if (!self.diskCacheTTLIsEnabled || cacheIndefinitely) {
                 // with an unset (nil) maxAge, or a cache that is not _isTtlCache, behave as before (will use cache global behavior)
                 [self.cache setObjectOnDisk:diskData forKey:key];

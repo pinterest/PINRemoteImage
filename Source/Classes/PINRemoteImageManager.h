@@ -45,6 +45,17 @@ typedef NS_ERROR_ENUM(PINRemoteImageManagerErrorDomain, PINRemoteImageManagerErr
 };
 
 /**
+ Options with which to cache image in memory / disk / both
+ */
+typedef NS_OPTIONS(NSUInteger, PINRemoteImageManagerCacheOptions) {
+    PINRemoteImageManagerCacheOptionsNone = 0,
+    /** Store images only in disk */
+    PINRemoteImageManagerCacheOptionsDisk = 1,
+    /** Store images only in memory */
+    PINRemoteImageManagerCacheOptionsMemory = 1 << 1
+};
+
+/**
  Options with which to download and process images
  */
 typedef NS_OPTIONS(NSUInteger, PINRemoteImageManagerDownloadOptions) {
@@ -379,6 +390,16 @@ typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSession
 - (nullable NSUUID *)prefetchImageWithURL:(nonnull NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options priority:(PINRemoteImageManagerPriority)priority;
 
 /**
+ Prefetch an image at the given URL with given options.
+ 
+ @param url NSURL where the image to prefetch resides.
+ @param options PINRemoteImageManagerDownloadOptions options with which to prefetch the image.
+ @param cacheOptions PINRemoteImageManagerCacheOptions options with which cache to store into.
+ @param priority PINRemoteImageManagerPriority priority of the operation when to prefetch the image.
+ */
+- (nullable NSUUID *)prefetchImageWithURL:(nonnull NSURL *)url options:(PINRemoteImageManagerDownloadOptions)options cacheOptions:(PINRemoteImageManagerCacheOptions)cacheOptions priority:(PINRemoteImageManagerPriority)priority;
+
+/**
  Prefetch images at the given URLs.
  
  @param urls An array of NSURLs where the images to prefetch reside.
@@ -403,6 +424,16 @@ typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSession
 - (nonnull NSArray<NSUUID *> *)prefetchImagesWithURLs:(nonnull NSArray <NSURL *> *)urls options:(PINRemoteImageManagerDownloadOptions)options priority:(PINRemoteImageManagerPriority)priority;
 
 /**
+ Prefetch images at the given URLs with given options.
+ 
+ @param urls An array of NSURLs where the images to prefetch reside.
+ @param options PINRemoteImageManagerDownloadOptions options with which to pefetch the image.
+ @param cacheOptions PINRemoteImageManagerCacheOptions options with which cache to store into.
+ @param priority PINRemoteImageManagerPriority priority of the operation to prefetch the image.
+ */
+- (nonnull NSArray<NSUUID *> *)prefetchImagesWithURLs:(nonnull NSArray <NSURL *> *)urls options:(PINRemoteImageManagerDownloadOptions)options cacheOptions:(PINRemoteImageManagerCacheOptions)cacheOptions priority:(PINRemoteImageManagerPriority)priority;
+
+/**
  Download or retrieve from cache the image found at the url. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).
  
  @param url NSURL where the image to download resides.
@@ -421,6 +452,20 @@ typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSession
  */
 - (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)url
                                   options:(PINRemoteImageManagerDownloadOptions)options
+                               completion:(nullable PINRemoteImageManagerImageCompletion)completion;
+
+/**
+ Download or retrieve from cache the image found at the url. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).
+ 
+ @param url NSURL where the image to download resides.
+ @param options PINRemoteImageManagerDownloadOptions options with which to fetch the image.
+ @param cacheOptions PINRemoteImageManagerCacheOptions options with which cache to store into.
+ @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.
+ @return An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).
+ */
+- (nullable NSUUID *)downloadImageWithURL:(nonnull NSURL *)url
+                                  options:(PINRemoteImageManagerDownloadOptions)options
+                             cacheOptions:(PINRemoteImageManagerCacheOptions)cacheOptions
                                completion:(nullable PINRemoteImageManagerImageCompletion)completion;
 
 /**
