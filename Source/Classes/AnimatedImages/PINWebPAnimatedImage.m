@@ -171,7 +171,7 @@ static void releaseData(void *info, const void *data, size_t size)
     }
     
     if (data) {
-        CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, data, _width * _height * pixelLength, releaseData);
+        CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, data, iterator.width * iterator.height * pixelLength, releaseData);
         
         CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
         CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
