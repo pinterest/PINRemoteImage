@@ -32,6 +32,9 @@ typedef void (^PINURLSessionDataTaskCompletion)(NSURLSessionTask * _Nonnull task
 - (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)configuration;
 
 - (nonnull NSURLSessionDataTask *)dataTaskWithRequest:(nonnull NSURLRequest *)request
+                                    completionHandler:(nonnull PINURLSessionDataTaskCompletion)completionHandler;
+
+- (nonnull NSURLSessionDataTask *)dataTaskWithRequest:(nonnull NSURLRequest *)request
                                              priority:(PINRemoteImageManagerPriority)priority
                                     completionHandler:(nonnull PINURLSessionDataTaskCompletion)completionHandler;
 
