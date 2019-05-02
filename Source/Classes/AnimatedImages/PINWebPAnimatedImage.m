@@ -240,7 +240,7 @@ static void releaseData(void *info, const void *data, size_t size)
             // If we have a cached image provider, try to get the last frame from them
             CGImageRef previousFrame = [cacheProvider cachedFrameImageAtIndex:index - 1];
             if (previousFrame) {
-                canvas = [self canvasWithPreviousFrame:previousFrame image:imageRef atRect:CGRectMake(iterator.x_offset, iterator.y_offset, iterator.width, iterator.height)];
+                canvas = [self canvasWithPreviousFrame:nil image:imageRef atRect:CGRectMake(iterator.x_offset, iterator.y_offset, iterator.width, iterator.height)];
             } else if (index > 0) {
                 // Sadly, we need to draw *all* the frames from the previous key frame previousIterator to the current one :(
                 CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
