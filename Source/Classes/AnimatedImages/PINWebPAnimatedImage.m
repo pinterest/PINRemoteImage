@@ -14,6 +14,71 @@
 
 #import "webp/demux.h"
 
+@interface PINAnimatedWebPFrameInfo : NSObject <NSCopying>
+
+/**
+ * Each frame of an animated WebP may cover only a portion of the full image.
+ * `frameRect` records what portion of the image this frame covers
+ */
+@property (nonatomic, readonly) CGRect frameRect;
+
+/**
+ * If YES, this frame will be replaced with blank space when the next frame
+ * of the animation is rendered.
+ */
+@property (nonatomic, readonly) BOOL disposeToBackground;
+
+/**
+ * Whether transparent portions of this frame should be rendered on top of the
+ * previous frame
+ */
+@property (nonatomic, readonly) BOOL blendWithPreviousFrame;
+
+/**
+ * Whether the frame has alpha.
+ */
+@property (nonatomic, readonly) BOOL hasAlpha;
+
+/**
+ * Designated initializer.
+ */
+- (instancetype)initWithFrameRect:(CGRect)frameRect disposeToBackground:(BOOL)disposeToBackground blendWithPreviousFrame:(BOOL)blendWithPreviousFrame hasAlpha:(BOOL)hasAlpha;
+
+@end
+
+@implementation PINAnimatedWebPFrameInfo
+
+- (instancetype)initWithFrameRect:(CGRect)frameRect disposeToBackground:(BOOL)disposeToBackground blendWithPreviousFrame:(BOOL)blendWithPreviousFrame hasAlpha:(BOOL)hasAlpha
+{
+  if (self = [super init]) {
+    _frameRect = frameRect;
+    _disposeToBackground = disposeToBackground;
+    _blendWithPreviousFrame = blendWithPreviousFrame;
+    _hasAlpha = hasAlpha;
+  }
+
+  return self;
+}
+
+@synthesize frameRect = _frameRect;
+
+@synthesize disposeToBackground = _disposeToBackground;
+
+@synthesize blendWithPreviousFrame = _blendWithPreviousFrame;
+
+@synthesize hasAlpha = _hasAlpha;
+
+
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone
+{
+  // Immutable.
+  return self;
+}
+
+@end
+
 @interface PINWebPAnimatedImage ()
 {
     NSData *_animatedImageData;
@@ -27,6 +92,7 @@
     size_t _loopCount;
     CFTimeInterval *_durations;
     NSError *_error;
+    NSMutableArray<PINAnimatedWebPFrameInfo *> *_frameInfos;
 }
 
 @end
@@ -54,11 +120,30 @@ static void releaseData(void *info, const void *data, size_t size)
             uint32_t flags = WebPDemuxGetI(_demux, WEBP_FF_FORMAT_FLAGS);
             _hasAlpha = flags & ALPHA_FLAG;
             _durations = malloc(sizeof(CFTimeInterval) * _frameCount);
-            
+            _frameInfos = [[NSMutableArray alloc] init];
+
             // Iterate over the frames to gather duration
             WebPIterator iter;
             if (WebPDemuxGetFrame(_demux, 1, &iter)) {
                 do {
+                    CGRect frameRect = CGRectMake(iter.x_offset, iter.y_offset, iter.width, iter.height);
+                    // Ensure the frame rect doesn't exceed the image size. If it does, reduce the width/height appropriately
+                    if (CGRectGetMaxX(frameRect) > _width) {
+                      frameRect.size.width = _width - iter.x_offset;
+                    }
+                    if (CGRectGetMaxY(frameRect) > _height) {
+                      frameRect.size.height = _height - iter.y_offset;
+                    }
+                    BOOL disposeToBackground = (iter.dispose_method == WEBP_MUX_DISPOSE_BACKGROUND);
+                    BOOL blendWithPreviousFrame = (iter.blend_method == WEBP_MUX_BLEND);
+                    BOOL hasAlpha = iter.has_alpha;
+                    PINAnimatedWebPFrameInfo *frameInfo =
+                    [[PINAnimatedWebPFrameInfo alloc] initWithFrameRect:frameRect
+                                                    disposeToBackground:disposeToBackground
+                                                 blendWithPreviousFrame:blendWithPreviousFrame
+                                                               hasAlpha:hasAlpha];
+                    [_frameInfos addObject:frameInfo];
+
                     CFTimeInterval duration = iter.duration / 1000.0;
                     static dispatch_once_t onceToken;
                     static CFTimeInterval maximumDuration;
@@ -127,8 +212,10 @@ static void releaseData(void *info, const void *data, size_t size)
     return _durations[index];
 }
 
-- (CGImageRef)canvasWithPreviousFrame:(CGImageRef)previousFrame image:(CGImageRef)image atRect:(CGRect)rect
+- (CGImageRef)canvasWithPreviousFrame:(CGImageRef)previousFrame image:(CGImageRef)image atRect:(CGRect)rect atIndex:(NSUInteger)index
 {
+    PINAnimatedWebPFrameInfo *previousFrameInfo = index > 0 ? _frameInfos[index - 1] : nil;
+    PINAnimatedWebPFrameInfo *frameInfo = _frameInfos[index];
     CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate(NULL,
                                                  _width,
@@ -141,9 +228,22 @@ static void releaseData(void *info, const void *data, size_t size)
     if (previousFrame) {
         CGContextDrawImage(context, CGRectMake(0, 0, _width, _height), previousFrame);
     }
-    
+
+    if (previousFrameInfo.disposeToBackground) {
+      // Erase part of the previous image covered by the previous frame if it specified that it
+      // should be disposed.
+      CGContextClearRect(context, [self drawRectFromIteraterRect:previousFrameInfo.frameRect]);
+    }
+
+    CGRect drawRect = [self drawRectFromIteraterRect:rect];
+    // If the new frame specifies that it should not be blended with the previous image,
+    // clear the part of the image the new frame covers.
+    if (!frameInfo.blendWithPreviousFrame) {
+      CGContextClearRect(context, drawRect);
+    }
+
     if (image) {
-        CGContextDrawImage(context, CGRectMake(rect.origin.x, _height - rect.size.height - rect.origin.y, rect.size.width, rect.size.height), image);
+        CGContextDrawImage(context, drawRect, image);
     }
     
     CGImageRef canvas = CGBitmapContextCreateImage(context);
@@ -154,6 +254,10 @@ static void releaseData(void *info, const void *data, size_t size)
     CGColorSpaceRelease(colorSpaceRef);
     
     return canvas;
+}
+
+- (CGRect)drawRectFromIteraterRect:(CGRect)rect {
+    return CGRectMake(rect.origin.x, _height - rect.size.height - rect.origin.y, rect.size.width, rect.size.height);
 }
 
 - (CGImageRef)rawImageWithIterator:(WebPIterator)iterator
@@ -234,13 +338,16 @@ static void releaseData(void *info, const void *data, size_t size)
                 // Output will be the same size as the canvas, just return it directly.
                 canvas = imageRef;
             } else {
-                canvas = [self canvasWithPreviousFrame:nil image:imageRef atRect:CGRectMake(iterator.x_offset, iterator.y_offset, iterator.width, iterator.height)];
+                canvas = [self canvasWithPreviousFrame:nil image:imageRef atRect:CGRectMake(iterator.x_offset, iterator.y_offset, iterator.width, iterator.height) atIndex:index];
             }
         } else {
             // If we have a cached image provider, try to get the last frame from them
             CGImageRef previousFrame = [cacheProvider cachedFrameImageAtIndex:index - 1];
             if (previousFrame) {
-                canvas = [self canvasWithPreviousFrame:nil image:imageRef atRect:CGRectMake(iterator.x_offset, iterator.y_offset, iterator.width, iterator.height)];
+                if (![self frameRequiresBlendingWithPreviousFrame:index]) {
+                  previousFrame = imageRef;
+                }
+                canvas = [self canvasWithPreviousFrame:previousFrame image:imageRef atRect:CGRectMake(iterator.x_offset, iterator.y_offset, iterator.width, iterator.height) atIndex:index];
             } else if (index > 0) {
                 // Sadly, we need to draw *all* the frames from the previous key frame previousIterator to the current one :(
                 CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
@@ -276,6 +383,38 @@ static void releaseData(void *info, const void *data, size_t size)
     }
     
     return canvas;
+}
+
+- (BOOL)frameRequiresBlendingWithPreviousFrame:(NSUInteger)index
+{
+    if (index == 0) {
+      return NO;
+    }
+
+    CGRect imageRect = CGRectMake(0, 0, _width, _height);
+    PINAnimatedWebPFrameInfo *frameInfo = _frameInfos[index];
+    BOOL frameCoversImage = CGRectContainsRect(frameInfo.frameRect, imageRect);
+    // If this frame covers the full image, and doesn't require blending, or doesn't have any alpha,
+    // it does not require blending with the previous frame.
+    if (frameCoversImage && (!frameInfo.blendWithPreviousFrame || !frameInfo.hasAlpha)) {
+      return NO;
+    }
+
+    NSUInteger previousIndex = index - 1;
+    PINAnimatedWebPFrameInfo *previousFrameInfo = _frameInfos[previousIndex];
+    if (previousFrameInfo.disposeToBackground) {
+      // If the previous frame covers the full image, and will be cleared, we don't need to blend
+      if (CGRectContainsRect(previousFrameInfo.frameRect, imageRect)) {
+        return NO;
+      }
+      // If the previous frame will be cleared, and it doesn't require blending with previous frames, we don't need to blend
+      if ([self frameRequiresBlendingWithPreviousFrame:previousIndex] == NO) {
+        return NO;
+      }
+      return YES;
+    } else {
+      return YES;
+    }
 }
 
 // Checks to see if the iterator is a 'key frame' without taking previous frames into
