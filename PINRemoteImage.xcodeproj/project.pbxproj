@@ -442,8 +442,9 @@
 		9DD47FA51C699FDC00F12CA0 /* PINImage+DecodedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DD47FA11C699FDC00F12CA0 /* PINImage+DecodedImage.m */; };
 		9DD47FA61C699FDC00F12CA0 /* PINImage+WebP.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DD47FA21C699FDC00F12CA0 /* PINImage+WebP.h */; };
 		9DD47FA71C699FDC00F12CA0 /* PINImage+WebP.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DD47FA31C699FDC00F12CA0 /* PINImage+WebP.m */; };
+		A7343C5B228993D100972894 /* NSHTTPURLResponse+MaxAge.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD28EAE81695DDF84BB76B8 /* NSHTTPURLResponse+MaxAge.m */; };
+		A7343C60228993F400972894 /* NSHTTPURLResponse+MaxAge.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD28EAE81695DDF84BB76B8 /* NSHTTPURLResponse+MaxAge.m */; };
 		ACD28AB87FABF6BA3B9BF4E4 /* NSDate+PINCacheTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD28D963D79EEC14EE071CE /* NSDate+PINCacheTests.m */; };
-		ACD28B778E5CD2D044792D50 /* NSHTTPURLResponse+MaxAge.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD28EAE81695DDF84BB76B8 /* NSHTTPURLResponse+MaxAge.m */; };
 		F165DFD91BD0504A0008C6E8 /* PINRemoteImageMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = F165DFD81BD0504A0008C6E8 /* PINRemoteImageMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F1B918FF1BCF23C900710963 /* PINRemoteImageCategoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B918DC1BCF23C800710963 /* PINRemoteImageCategoryManager.m */; };
 		F1B919001BCF23C900710963 /* NSData+ImageDetectors.h in Headers */ = {isa = PBXBuildFile; fileRef = F1B918DE1BCF23C800710963 /* NSData+ImageDetectors.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1581,6 +1582,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = F1B918C71BCF239200710963;
@@ -1754,6 +1756,7 @@
 				938E98DA2224775B00029E4D /* PINRemoteImageManagerConfiguration.m in Sources */,
 				68D734B51F75FE3C00B9C95D /* enc.c in Sources */,
 				68D734B81F75FE3C00B9C95D /* filters_neon.c in Sources */,
+				A7343C60228993F400972894 /* NSHTTPURLResponse+MaxAge.m in Sources */,
 				689613E7208FD90B00D2095C /* PINDisplayLink.m in Sources */,
 				68D734E61F75FE4500B9C95D /* tree_dec.c in Sources */,
 				68D734DA1F75FE3C00B9C95D /* yuv.c in Sources */,
@@ -1839,7 +1842,6 @@
 				68A0FC1C1E523434000B552D /* PINRemoteImageTests.m in Sources */,
 				683128F51F95045200D5B4A8 /* PINAnimatedImage+PINAnimatedImageTesting.m in Sources */,
 				ACD28AB87FABF6BA3B9BF4E4 /* NSDate+PINCacheTests.m in Sources */,
-				ACD28B778E5CD2D044792D50 /* NSHTTPURLResponse+MaxAge.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1925,6 +1927,7 @@
 				939546C12220AF84006031BB /* PINRemoteImageManagerConfiguration.m in Sources */,
 				68774FCB1F6B08B2008748B0 /* predictor_enc.c in Sources */,
 				68774FC91F6B08B2008748B0 /* picture_rescale_enc.c in Sources */,
+				A7343C5B228993D100972894 /* NSHTTPURLResponse+MaxAge.m in Sources */,
 				689613E6208FD90B00D2095C /* PINDisplayLink.m in Sources */,
 				F1B918FF1BCF23C900710963 /* PINRemoteImageCategoryManager.m in Sources */,
 				68774F5D1F6B089D008748B0 /* cost_mips_dsp_r2.c in Sources */,
