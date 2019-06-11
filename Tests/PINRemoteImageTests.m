@@ -957,7 +957,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     // JPEGURL_Small includes the header "Cache-Control: max-age=31536000, immutable"
     // If that ever changes, this might start failing
     [self.imageManager downloadImageWithURL:[self JPEGURL_Small] completion:^(PINRemoteImageManagerResult *result) {
-        XCTAssert(result.resultType == PINRemoteImageResultTypeDownload, @"Expected PINRemoteImageResultTypeDownload(3), got %lu", result.resultType);
+        XCTAssert(result.resultType == PINRemoteImageResultTypeDownload, @"Expected PINRemoteImageResultTypeDownload(3), got %lu", (unsigned long)result.resultType);
         dispatch_semaphore_signal(semaphore);
     }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
@@ -966,7 +966,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     id diskCachedObj = [cache objectFromDiskForKey:key];
     XCTAssert(diskCachedObj != nil, @"Image was not found in the disk cache");
     [self.imageManager downloadImageWithURL:[self JPEGURL_Small] completion:^(PINRemoteImageManagerResult *result) {
-        XCTAssert(result.resultType == PINRemoteImageResultTypeMemoryCache, @"Expected PINRemoteImageResultTypeCache(2), got %lu", result.resultType);
+        XCTAssert(result.resultType == PINRemoteImageResultTypeMemoryCache, @"Expected PINRemoteImageResultTypeCache(2), got %lu", (unsigned long)result.resultType);
         dispatch_semaphore_signal(semaphore);
     }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
@@ -975,7 +975,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     diskCachedObj = [cache objectFromDiskForKey:key];
     XCTAssert(diskCachedObj == nil, @"Image was not discarded from the disk cache");
     [self.imageManager downloadImageWithURL:[self JPEGURL_Small] completion:^(PINRemoteImageManagerResult *result) {
-        XCTAssert(result.resultType == PINRemoteImageResultTypeDownload, @"Expected PINRemoteImageResultTypeDownload(3), got %lu", result.resultType);
+        XCTAssert(result.resultType == PINRemoteImageResultTypeDownload, @"Expected PINRemoteImageResultTypeDownload(3), got %lu", (unsigned long)result.resultType);
         dispatch_semaphore_signal(semaphore);
     }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
@@ -985,7 +985,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     // nonTransparentWebPURL includes the header "expires: <about 1 yr from now>"
     // If that ever changes, this might start failing
     [self.imageManager downloadImageWithURL:[self nonTransparentWebPURL] completion:^(PINRemoteImageManagerResult *result) {
-        XCTAssert(result.resultType == PINRemoteImageResultTypeDownload, @"Expected PINRemoteImageResultTypeDownload(3), got %lu", result.resultType);
+        XCTAssert(result.resultType == PINRemoteImageResultTypeDownload, @"Expected PINRemoteImageResultTypeDownload(3), got %lu", (unsigned long)result.resultType);
         dispatch_semaphore_signal(semaphore);
     }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
@@ -994,7 +994,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     diskCachedObj = [cache objectFromDiskForKey:key];
     XCTAssert(diskCachedObj != nil, @"Image was not found in the disk cache");
     [self.imageManager downloadImageWithURL:[self nonTransparentWebPURL] completion:^(PINRemoteImageManagerResult *result) {
-        XCTAssert(result.resultType == PINRemoteImageResultTypeMemoryCache, @"Expected PINRemoteImageResultTypeCache(2), got %lu", result.resultType);
+        XCTAssert(result.resultType == PINRemoteImageResultTypeMemoryCache, @"Expected PINRemoteImageResultTypeCache(2), got %lu", (unsigned long)result.resultType);
         dispatch_semaphore_signal(semaphore);
     }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
@@ -1003,7 +1003,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     diskCachedObj = [cache objectFromDiskForKey:key];
     XCTAssert(diskCachedObj == nil, @"Image was not discarded from the disk cache");
     [self.imageManager downloadImageWithURL:[self nonTransparentWebPURL] completion:^(PINRemoteImageManagerResult *result) {
-        XCTAssert(result.resultType == PINRemoteImageResultTypeDownload, @"Expected PINRemoteImageResultTypeDownload(3), got %lu", result.resultType);
+        XCTAssert(result.resultType == PINRemoteImageResultTypeDownload, @"Expected PINRemoteImageResultTypeDownload(3), got %lu", (unsigned long)result.resultType);
         dispatch_semaphore_signal(semaphore);
     }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
