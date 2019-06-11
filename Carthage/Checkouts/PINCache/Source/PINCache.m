@@ -73,7 +73,7 @@ static NSString * const PINCacheSharedName = @"PINCacheShared";
                                              keyDecoder:keyDecoder
                                          operationQueue:_operationQueue
                                                ttlCache:ttlCache];
-        _memoryCache = [[PINMemoryCache alloc] initWithOperationQueue:_operationQueue];
+        _memoryCache = [[PINMemoryCache alloc] initWithName:_name operationQueue:_operationQueue ttlCache:ttlCache];
     }
     return self;
 }

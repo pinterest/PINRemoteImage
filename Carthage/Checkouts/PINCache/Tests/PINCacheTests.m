@@ -24,6 +24,7 @@ const NSTimeInterval PINCacheTestBlockTimeout = 20.0;
 @property (strong, nonatomic) NSDictionary *metadata;
 
 + (dispatch_queue_t)sharedTrashQueue;
++ (NSURL *)sharedTrashURL;
 - (NSString *)encodedString:(NSString *)string;
 
 @end
@@ -114,14 +115,8 @@ const NSTimeInterval PINCacheTestBlockTimeout = 20.0;
 
 - (void)testDiskCacheURL
 {
-    // Wait for URL to be created
-    dispatch_group_t group = dispatch_group_create();
-    dispatch_group_enter(group);
-    [self.cache objectForKeyAsync:@"" completion:^(PINCache * _Nonnull cache, NSString * _Nonnull key, id  _Nullable object) {
-      dispatch_group_leave(group);
-    }];
-
-    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+    // Wait for URL to be created. We use enumerateObjectsWithBlock because it waits for a known disk state.
+    [self.cache.diskCache enumerateObjectsWithBlock:^(NSString * _Nonnull key, NSURL * _Nullable fileURL, BOOL * _Nonnull stop) {}];
     BOOL isDir = NO;
     BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:[self.cache.diskCache.cacheURL path] isDirectory:&isDir];
 
@@ -814,8 +809,8 @@ const NSTimeInterval PINCacheTestBlockTimeout = 20.0;
     PINDiskCache *diskCache = [[PINDiskCache alloc] initWithName:cacheName];
     [diskCache removeAllObjects];
     
-    // store a bunch of objects
-    for (NSUInteger idx = 0; idx < 1000; idx++) {
+    // Store a bunch of objects so it will take a long time to initialize.
+    for (NSUInteger idx = 0; idx < 5000; idx++) {
         NSData *tmpData = [[@(idx) stringValue] dataUsingEncoding:NSUTF8StringEncoding];
         [diskCache setObject:tmpData forKey:[@(idx) stringValue]];
     }
@@ -825,7 +820,7 @@ const NSTimeInterval PINCacheTestBlockTimeout = 20.0;
     diskCache = [[PINDiskCache alloc] initWithName:cacheName];
     
     // Check to see if we can get an object before the disk state is known.
-    XCTAssertNotNil([diskCache objectForKey:[@(999) stringValue]]);
+    XCTAssertNotNil([diskCache objectForKey:[@(1) stringValue]]);
     XCTAssertFalse(diskCache.diskStateKnown);
     
     sleep(5);
@@ -1241,6 +1236,9 @@ const NSTimeInterval PINCacheTestBlockTimeout = 20.0;
     testCache = [[PINDiskCache alloc] initWithName:cacheName];
     [testCache setTtlCacheSync:YES];
     [testCache setObject:[self image] forKey:key withAgeLimit:ageLimit];
+  
+    // The age limit is set asynchronously, *even* when we set the object synchronously.
+    sleep(1);
 
     // Re-initialize the cache, this should read the age limit for the object from the extended file system attributes.
     testCache = [[PINDiskCache alloc] initWithName:cacheName];
@@ -1311,12 +1309,12 @@ const NSTimeInterval PINCacheTestBlockTimeout = 20.0;
 {
     const NSUInteger fileCount = 100;
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *tempDirPath = NSTemporaryDirectory();
+    NSString *trashPath = [[PINDiskCache sharedTrashURL] path];
     
     dispatch_group_t group = dispatch_group_create();
     
     NSError *error = nil;
-    unsigned long long originalTempDirSize = [[fileManager attributesOfItemAtPath:tempDirPath error:&error] fileSize];
+    unsigned long long originalTempDirSize = [[fileManager attributesOfItemAtPath:trashPath error:&error] fileSize];
     XCTAssertNil(error);
     
     for (int i = 0; i < fileCount; i++) {
@@ -1328,17 +1326,14 @@ const NSTimeInterval PINCacheTestBlockTimeout = 20.0;
     [self.cache.diskCache removeAllObjectsAsync:^(PINDiskCache * _Nonnull cache) {
         // Temporary directory should be bigger now since the trash directory is still inside it
         NSError *error = nil;
-        unsigned long long tempDirSize = [[fileManager attributesOfItemAtPath:tempDirPath error:&error] fileSize];
+        unsigned long long tempDirSize = [[fileManager attributesOfItemAtPath:trashPath error:&error] fileSize];
         XCTAssertNil(error);
         XCTAssertLessThan(originalTempDirSize, tempDirSize);
         
-        // Temporary directory should get back to its original size at the end of the trash queue
+        // Temporary directory should be gone at the end of the trash queue.
         dispatch_group_enter(group);
         dispatch_async([PINDiskCache sharedTrashQueue], ^{
-            NSError *error = nil;
-            unsigned long long tempDirSize = [[fileManager attributesOfItemAtPath:tempDirPath error:&error] fileSize];
-            XCTAssertNil(error);
-            XCTAssertEqual(originalTempDirSize, tempDirSize);
+            XCTAssertFalse([fileManager fileExistsAtPath:trashPath isDirectory:NULL]);
             dispatch_group_leave(group);
         });
         
@@ -1373,6 +1368,12 @@ const NSTimeInterval PINCacheTestBlockTimeout = 20.0;
     NSString *encodedKey = [[testCache fileURLForKey:@"test_key"] lastPathComponent];
     XCTAssertEqualObjects(@"test_key", encodedKey, @"Encoded key should be equal to decoded one");
 
+}
+
+- (void)testTTLCacheIsSet {
+    PINCache *cache = [[PINCache alloc] initWithName:@"test" rootPath:PINDiskCachePrefix serializer:nil deserializer:nil keyEncoder:nil keyDecoder:nil ttlCache:YES];
+    XCTAssert(cache.diskCache.isTTLCache);
+    XCTAssert(cache.memoryCache.isTTLCache);
 }
 
 @end

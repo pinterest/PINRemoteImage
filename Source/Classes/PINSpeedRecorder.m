@@ -129,8 +129,8 @@
     __block float startAdjustedBytesPerSecond = -1;
     [self.lock lockWithBlock:^{
 #if DEBUG
-        if (_overrideBPS) {
-            startAdjustedBytesPerSecond = _currentBPS;
+        if (self->_overrideBPS) {
+            startAdjustedBytesPerSecond = self->_currentBPS;
             return;
         }
 #endif
@@ -159,11 +159,11 @@
 {
     [self.lock lockWithBlock:^{
         if (currentBPS == -1) {
-            _overrideBPS = NO;
+            self->_overrideBPS = NO;
         } else {
-            _overrideBPS = YES;
+            self->_overrideBPS = YES;
         }
-        _currentBPS = currentBPS;
+        self->_currentBPS = currentBPS;
     }];
 }
 #endif

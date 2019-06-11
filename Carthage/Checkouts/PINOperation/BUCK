@@ -1,8 +1,9 @@
 apple_library(
   name = 'PINOperation',
-  exported_headers = glob(['PINOperation/*.h']),
+  modular = True,
+  exported_headers = glob(['Source/*.h']),
   srcs =
-    glob(['PINOperation/*.m']),
+    glob(['Source/*.m']),
   preprocessor_flags = ['-fobjc-arc'],
   lang_preprocessor_flags = {
     'C': ['-std=gnu99'],

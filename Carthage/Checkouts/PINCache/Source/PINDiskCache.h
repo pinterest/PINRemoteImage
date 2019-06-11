@@ -249,8 +249,8 @@ PIN_SUBCLASSING_RESTRICTED
 - (instancetype)init NS_UNAVAILABLE;
 
 /**
- Multiple instances with the same name are allowed and can safely access
- the same data on disk thanks to the magic of seriality.
+ Multiple instances with the same name are *not* allowed as they would conflict
+ with each other.
  
  @see name
  @param name The name of the cache.
@@ -259,8 +259,8 @@ PIN_SUBCLASSING_RESTRICTED
 - (instancetype)initWithName:(nonnull NSString *)name;
 
 /**
- Multiple instances with the same name are allowed and can safely access
- the same data on disk thanks to the magic of seriality.
+ Multiple instances with the same name are *not* allowed as they would conflict
+ with each other.
  
  @see name
  @param name The name of the cache.

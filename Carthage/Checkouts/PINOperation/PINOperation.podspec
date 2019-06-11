@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name          = 'PINOperation'
-  s.version       = '1.1.1'
+  s.version       = '1.1.2'
   s.homepage      = 'https://github.com/pinterest/PINOperation'
   s.summary       = 'Fast, concurrency-limited task queue for iOS and OS X.'
   s.authors       = { 'Garrett Moon' => 'garrett@pinterest.com' }

@@ -310,7 +310,7 @@ static NSString * const PINMemoryCacheSharedName = @"PINMemoryCacheSharedName";
         if (shouldReschedule) {
             [self.operationQueue scheduleOperation:^{
                 [self trimToAgeLimitRecursively];
-            } withPriority:PINOperationQueuePriorityHigh];
+            } withPriority:PINOperationQueuePriorityLow];
         }
     });
 }
@@ -374,7 +374,7 @@ static NSString * const PINMemoryCacheSharedName = @"PINMemoryCacheSharedName";
         
         if (block)
             block(self, key, nil);
-    } withPriority:PINOperationQueuePriorityHigh];
+    } withPriority:PINOperationQueuePriorityLow];
 }
 
 - (void)trimToDateAsync:(NSDate *)trimDate completion:(PINCacheBlock)block
@@ -384,7 +384,7 @@ static NSString * const PINMemoryCacheSharedName = @"PINMemoryCacheSharedName";
         
         if (block)
             block(self);
-    } withPriority:PINOperationQueuePriorityHigh];
+    } withPriority:PINOperationQueuePriorityLow];
 }
 
 - (void)trimToCostAsync:(NSUInteger)cost completion:(PINCacheBlock)block
@@ -394,7 +394,7 @@ static NSString * const PINMemoryCacheSharedName = @"PINMemoryCacheSharedName";
         
         if (block)
             block(self);
-    } withPriority:PINOperationQueuePriorityHigh];
+    } withPriority:PINOperationQueuePriorityLow];
 }
 
 - (void)trimToCostByDateAsync:(NSUInteger)cost completion:(PINCacheBlock)block
@@ -404,7 +404,7 @@ static NSString * const PINMemoryCacheSharedName = @"PINMemoryCacheSharedName";
         
         if (block)
             block(self);
-    } withPriority:PINOperationQueuePriorityHigh];
+    } withPriority:PINOperationQueuePriorityLow];
 }
 
 - (void)removeExpiredObjectsAsync:(PINCacheBlock)block
@@ -414,7 +414,7 @@ static NSString * const PINMemoryCacheSharedName = @"PINMemoryCacheSharedName";
 
         if (block)
             block(self);
-    } withPriority:PINOperationQueuePriorityHigh];
+    } withPriority:PINOperationQueuePriorityLow];
 }
 
 - (void)removeAllObjectsAsync:(PINCacheBlock)block
@@ -424,7 +424,7 @@ static NSString * const PINMemoryCacheSharedName = @"PINMemoryCacheSharedName";
         
         if (block)
             block(self);
-    } withPriority:PINOperationQueuePriorityHigh];
+    } withPriority:PINOperationQueuePriorityLow];
 }
 
 - (void)enumerateObjectsWithBlockAsync:(PINCacheObjectEnumerationBlock)block completionBlock:(PINCacheBlock)completionBlock
@@ -434,7 +434,7 @@ static NSString * const PINMemoryCacheSharedName = @"PINMemoryCacheSharedName";
         
         if (completionBlock)
             completionBlock(self);
-    } withPriority:PINOperationQueuePriorityHigh];
+    } withPriority:PINOperationQueuePriorityLow];
 }
 
 #pragma mark - Public Synchronous Methods -
