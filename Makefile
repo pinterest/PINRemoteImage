@@ -23,6 +23,6 @@ test:
 	
 carthage:
 	carthage update --no-use-binaries --no-build
-	carthage build --no-skip-current
+	carthage build --no-use-binaries --no-skip-current
 	
 all: carthage test lint analyze
