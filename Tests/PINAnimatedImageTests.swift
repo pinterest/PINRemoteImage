@@ -101,7 +101,7 @@ class PINAnimatedImageTests: XCTestCase, PINRemoteImageManagerAlternateRepresent
     }
     
     func alternateRepresentation(with data: Data!, options: PINRemoteImageManagerDownloadOptions = []) -> Any! {
-        guard let nsdata = data as? NSData else {
+        guard let nsdata = data as NSData? else {
             return nil
         }
         if nsdata.pin_isAnimatedWebP() || nsdata.pin_isAnimatedGIF() {

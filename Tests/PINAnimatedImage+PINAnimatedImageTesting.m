@@ -7,7 +7,3 @@
 //
 
 #import "PINAnimatedImage+PINAnimatedImageTesting.h"
-
-@implementation PINAnimatedImage (PINAnimatedImageTesting)
-
-@end
