@@ -124,7 +124,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse 
 @property (nonatomic, assign) float highQualityBPSThreshold;
 @property (nonatomic, assign) float lowQualityBPSThreshold;
 @property (nonatomic, assign) BOOL shouldUpgradeLowQualityImages;
-@property (nonatomic, strong) PINRemoteImageManagerMetrics metricsCallback;
+@property (nonatomic, strong) PINRemoteImageManagerMetrics metricsCallback API_AVAILABLE(macosx(10.12), ios(10.0), watchos(3.0), tvos(10.0));
 @property (nonatomic, copy) PINRemoteImageManagerAuthenticationChallenge authenticationChallengeHandler;
 @property (nonatomic, copy) id<PINRequestRetryStrategy> (^retryStrategyCreationBlock)(void);
 @property (nonatomic, copy) PINRemoteImageManagerRequestConfigurationHandler requestConfigurationHandler;
@@ -292,9 +292,7 @@ static dispatch_once_t sharedDispatchToken;
         }
         return data;
     } keyEncoder:nil keyDecoder:nil ttlCache:enableTtl];
-    if (enableTtl) {
-        [pinCache.memoryCache setTtlCache:YES]; // https://github.com/pinterest/PINCache/issues/226
-    }
+
     return pinCache;
 #else
     return [[PINRemoteImageBasicCache alloc] init];
@@ -1212,7 +1210,7 @@ static dispatch_once_t sharedDispatchToken;
     [task didReceiveData:data];
 }
 
-- (void)didCollectMetrics:(nonnull NSURLSessionTaskMetrics *)metrics forURL:(nonnull NSURL *)url
+- (void)didCollectMetrics:(nonnull NSURLSessionTaskMetrics *)metrics forURL:(nonnull NSURL *)url API_AVAILABLE(macosx(10.12), ios(10.0), watchos(3.0), tvos(10.0))
 {
     [self lock];
         if (self.metricsCallback) {
