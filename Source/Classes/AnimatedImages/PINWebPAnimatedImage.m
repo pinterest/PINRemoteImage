@@ -25,6 +25,7 @@
     BOOL _hasAlpha;
     size_t _frameCount;
     size_t _loopCount;
+    UIColor *_backgroundColor;
     CFTimeInterval *_durations;
     NSError *_error;
 }
@@ -54,6 +55,11 @@ static void releaseData(void *info, const void *data, size_t size)
             uint32_t flags = WebPDemuxGetI(_demux, WEBP_FF_FORMAT_FLAGS);
             _hasAlpha = flags & ALPHA_FLAG;
             _durations = malloc(sizeof(CFTimeInterval) * _frameCount);
+            uint32_t backgroundColorInt = WebPDemuxGetI(_demux, WEBP_FF_BACKGROUND_COLOR);
+            _backgroundColor = [UIColor colorWithRed:(CGFloat)(((backgroundColorInt & 0xFF000000) >> 24)/255.0)
+                                               green:(CGFloat)(((backgroundColorInt & 0x00FF0000) >> 16)/255.0)
+                                                blue:(CGFloat)(((backgroundColorInt & 0x0000FF00) >> 8)/255.0)
+                                               alpha:(CGFloat)((backgroundColorInt & 0x000000FF)/255.0)];
             
             // Iterate over the frames to gather duration
             WebPIterator iter;
@@ -127,7 +133,13 @@ static void releaseData(void *info, const void *data, size_t size)
     return _durations[index];
 }
 
-- (CGImageRef)canvasWithPreviousFrame:(CGImageRef)previousFrame image:(CGImageRef)image atRect:(CGRect)rect
+- (CGImageRef)canvasWithPreviousFrame:(CGImageRef)previousFrame
+                    previousFrameRect:(CGRect)previousFrameRect
+                   clearPreviousFrame:(BOOL)clearPreviousFrame
+                      backgroundColor:(UIColor *)backgroundColor
+                                image:(CGImageRef)image
+                    clearCurrentFrame:(BOOL)clearCurrentFrame
+                               atRect:(CGRect)rect
 {
     CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate(NULL,
@@ -137,13 +149,23 @@ static void releaseData(void *info, const void *data, size_t size)
                                                  0,
                                                  colorSpaceRef,
                                                  _hasAlpha ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNone);
+    if (backgroundColor) {
+        CGContextSetFillColorWithColor(context, backgroundColor.CGColor);
+    }
     
     if (previousFrame) {
         CGContextDrawImage(context, CGRectMake(0, 0, _width, _height), previousFrame);
+        if (clearPreviousFrame) {
+            CGContextFillRect(context, previousFrameRect);
+        }
     }
     
     if (image) {
-        CGContextDrawImage(context, CGRectMake(rect.origin.x, _height - rect.size.height - rect.origin.y, rect.size.width, rect.size.height), image);
+        CGRect currentRect = CGRectMake(rect.origin.x, _height - rect.size.height - rect.origin.y, rect.size.width, rect.size.height);
+        if (clearCurrentFrame) {
+            CGContextFillRect(context, currentRect);
+        }
+        CGContextDrawImage(context, currentRect, image);
     }
     
     CGImageRef canvas = CGBitmapContextCreateImage(context);
@@ -234,13 +256,29 @@ static void releaseData(void *info, const void *data, size_t size)
                 // Output will be the same size as the canvas, just return it directly.
                 canvas = imageRef;
             } else {
-                canvas = [self canvasWithPreviousFrame:nil image:imageRef atRect:CGRectMake(iterator.x_offset, iterator.y_offset, iterator.width, iterator.height)];
+                canvas = [self canvasWithPreviousFrame:nil
+                                     previousFrameRect:CGRectZero
+                                    clearPreviousFrame:NO
+                                       backgroundColor:_backgroundColor
+                                                 image:imageRef
+                                     clearCurrentFrame:iterator.blend_method == WEBP_MUX_NO_BLEND
+                                                atRect:CGRectMake(iterator.x_offset, iterator.y_offset, iterator.width, iterator.height)];
             }
         } else {
             // If we have a cached image provider, try to get the last frame from them
             CGImageRef previousFrame = [cacheProvider cachedFrameImageAtIndex:index - 1];
             if (previousFrame) {
-                canvas = [self canvasWithPreviousFrame:previousFrame image:imageRef atRect:CGRectMake(iterator.x_offset, iterator.y_offset, iterator.width, iterator.height)];
+                // We need an iterator from the previous frame to dispose to background if
+                // necessary.
+                WebPDemuxReleaseIterator(&previousIterator);
+                WebPDemuxGetFrame(_demux, (int)index, &previousIterator);
+                CGRect previousFrameRect = CGRectMake(previousIterator.x_offset, _height - previousIterator.height - previousIterator.y_offset, previousIterator.width, iterator.height);
+                canvas = [self canvasWithPreviousFrame:previousFrame
+                                     previousFrameRect:previousFrameRect
+                                    clearPreviousFrame:previousIterator.dispose_method == WEBP_MUX_DISPOSE_BACKGROUND backgroundColor:_backgroundColor
+                                                 image:imageRef
+                                     clearCurrentFrame:iterator.blend_method == WEBP_MUX_NO_BLEND
+                                                atRect:CGRectMake(iterator.x_offset, iterator.y_offset, iterator.width, iterator.height)];
             } else if (index > 0) {
                 // Sadly, we need to draw *all* the frames from the previous key frame previousIterator to the current one :(
                 CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
@@ -251,11 +289,16 @@ static void releaseData(void *info, const void *data, size_t size)
                                                              0,
                                                              colorSpaceRef,
                                                              _hasAlpha ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNone);
+                CGContextSetFillColorWithColor(context, _backgroundColor.CGColor);
                 
                 while (previousIterator.frame_num < iterator.frame_num) {
                     CGImageRef previousFrame = [self rawImageWithIterator:previousIterator];
                     if (previousFrame) {
-                        CGContextDrawImage(context, CGRectMake(previousIterator.x_offset, _height - previousIterator.height - previousIterator.y_offset, previousIterator.width, iterator.height), previousFrame);
+                        CGRect previousFrameRect = CGRectMake(previousIterator.x_offset, _height - previousIterator.height - previousIterator.y_offset, previousIterator.width, iterator.height);
+                        CGContextDrawImage(context, previousFrameRect, previousFrame);
+                        if (previousIterator.dispose_method == WEBP_MUX_DISPOSE_BACKGROUND) {
+                          CGContextFillRect(context, previousFrameRect);
+                        }
                         WebPDemuxNextFrame(&previousIterator);
                     }
                 }
