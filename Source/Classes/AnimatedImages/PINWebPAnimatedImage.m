@@ -272,10 +272,11 @@ static void releaseData(void *info, const void *data, size_t size)
                 // necessary.
                 WebPDemuxReleaseIterator(&previousIterator);
                 WebPDemuxGetFrame(_demux, (int)index, &previousIterator);
-                CGRect previousFrameRect = CGRectMake(previousIterator.x_offset, _height - previousIterator.height - previousIterator.y_offset, previousIterator.width, iterator.height);
+                CGRect previousFrameRect = CGRectMake(previousIterator.x_offset, _height - previousIterator.height - previousIterator.y_offset, previousIterator.width, previousIterator.height);
                 canvas = [self canvasWithPreviousFrame:previousFrame
                                      previousFrameRect:previousFrameRect
-                                    clearPreviousFrame:previousIterator.dispose_method == WEBP_MUX_DISPOSE_BACKGROUND backgroundColor:_backgroundColor
+                                    clearPreviousFrame:previousIterator.dispose_method == WEBP_MUX_DISPOSE_BACKGROUND
+                                       backgroundColor:_backgroundColor
                                                  image:imageRef
                                      clearCurrentFrame:iterator.blend_method == WEBP_MUX_NO_BLEND
                                                 atRect:CGRectMake(iterator.x_offset, iterator.y_offset, iterator.width, iterator.height)];
@@ -291,18 +292,30 @@ static void releaseData(void *info, const void *data, size_t size)
                                                              _hasAlpha ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNone);
                 CGContextSetFillColorWithColor(context, _backgroundColor.CGColor);
                 
-                while (previousIterator.frame_num < iterator.frame_num) {
+                while (previousIterator.frame_num <= iterator.frame_num) {
                     CGImageRef previousFrame = [self rawImageWithIterator:previousIterator];
                     if (previousFrame) {
-                        CGRect previousFrameRect = CGRectMake(previousIterator.x_offset, _height - previousIterator.height - previousIterator.y_offset, previousIterator.width, iterator.height);
-                        CGContextDrawImage(context, previousFrameRect, previousFrame);
-                        if (previousIterator.dispose_method == WEBP_MUX_DISPOSE_BACKGROUND) {
-                          CGContextFillRect(context, previousFrameRect);
+                        CGRect previousFrameRect = CGRectMake(previousIterator.x_offset, _height - previousIterator.height - previousIterator.y_offset, previousIterator.width, previousIterator.height);
+                        if (previousIterator.blend_method == WEBP_MUX_NO_BLEND) {
+                            CGContextFillRect(context, previousFrameRect);
                         }
-                        WebPDemuxNextFrame(&previousIterator);
+                      
+                        if (previousIterator.frame_num == iterator.frame_num) {
+                            CGContextDrawImage(context, previousFrameRect, previousFrame);
+                            // We have to break here because we're not getting the next frame! Basically
+                            // the while loop is a sham and only here to illustrate what we want to iterate.
+                            break;
+                        } else {
+                            if (previousIterator.dispose_method == WEBP_MUX_DISPOSE_BACKGROUND) {
+                                CGContextFillRect(context, previousFrameRect);
+                            } else {
+                                CGContextDrawImage(context, previousFrameRect, previousFrame);
+                            }
+                            WebPDemuxNextFrame(&previousIterator);
+                        }
                     }
                 }
-                
+              
                 canvas = CGBitmapContextCreateImage(context);
                 if (canvas) {
                     CFAutorelease(canvas);
