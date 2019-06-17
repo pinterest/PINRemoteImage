@@ -25,7 +25,7 @@
     BOOL _hasAlpha;
     size_t _frameCount;
     size_t _loopCount;
-    UIColor *_backgroundColor;
+    CGColorRef _backgroundColor;
     CFTimeInterval *_durations;
     NSError *_error;
 }
@@ -55,11 +55,16 @@ static void releaseData(void *info, const void *data, size_t size)
             uint32_t flags = WebPDemuxGetI(_demux, WEBP_FF_FORMAT_FLAGS);
             _hasAlpha = flags & ALPHA_FLAG;
             _durations = malloc(sizeof(CFTimeInterval) * _frameCount);
+          
             uint32_t backgroundColorInt = WebPDemuxGetI(_demux, WEBP_FF_BACKGROUND_COLOR);
-            _backgroundColor = [UIColor colorWithRed:(CGFloat)(((backgroundColorInt & 0xFF000000) >> 24)/255.0)
-                                               green:(CGFloat)(((backgroundColorInt & 0x00FF0000) >> 16)/255.0)
-                                                blue:(CGFloat)(((backgroundColorInt & 0x0000FF00) >> 8)/255.0)
-                                               alpha:(CGFloat)((backgroundColorInt & 0x000000FF)/255.0)];
+            CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+            CGFloat components[4];
+            components[0] = (CGFloat)(((backgroundColorInt & 0xFF000000) >> 24)/255.0);
+            components[1] = (CGFloat)(((backgroundColorInt & 0x00FF0000) >> 16)/255.0);
+            components[2] = (CGFloat)(((backgroundColorInt & 0x0000FF00) >> 8)/255.0);
+            components[3] = (CGFloat)((backgroundColorInt & 0x000000FF)/255.0);
+            _backgroundColor = CGColorCreate(rgbColorSpace, components);
+            CGColorSpaceRelease(rgbColorSpace);
             
             // Iterate over the frames to gather duration
             WebPIterator iter;
@@ -90,6 +95,9 @@ static void releaseData(void *info, const void *data, size_t size)
     }
     if (_durations) {
         free(_durations);
+    }
+    if (_backgroundColor) {
+        CGColorRelease(_backgroundColor);
     }
 }
 
@@ -136,7 +144,7 @@ static void releaseData(void *info, const void *data, size_t size)
 - (CGImageRef)canvasWithPreviousFrame:(CGImageRef)previousFrame
                     previousFrameRect:(CGRect)previousFrameRect
                    clearPreviousFrame:(BOOL)clearPreviousFrame
-                      backgroundColor:(UIColor *)backgroundColor
+                      backgroundColor:(CGColorRef)backgroundColor
                                 image:(CGImageRef)image
                     clearCurrentFrame:(BOOL)clearCurrentFrame
                                atRect:(CGRect)rect
@@ -150,7 +158,7 @@ static void releaseData(void *info, const void *data, size_t size)
                                                  colorSpaceRef,
                                                  _hasAlpha ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNone);
     if (backgroundColor) {
-        CGContextSetFillColorWithColor(context, backgroundColor.CGColor);
+        CGContextSetFillColorWithColor(context, backgroundColor);
     }
     
     if (previousFrame) {
@@ -290,7 +298,7 @@ static void releaseData(void *info, const void *data, size_t size)
                                                              0,
                                                              colorSpaceRef,
                                                              _hasAlpha ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNone);
-                CGContextSetFillColorWithColor(context, _backgroundColor.CGColor);
+                CGContextSetFillColorWithColor(context, _backgroundColor);
                 
                 while (previousIterator.frame_num <= iterator.frame_num) {
                     CGImageRef previousFrame = [self rawImageWithIterator:previousIterator];
