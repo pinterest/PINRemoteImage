@@ -130,7 +130,7 @@
 
 - (uint32_t)bytesPerFrame
 {
-    return _width * _height * 3;
+    return _width * _height * 4;
 }
 
 - (NSError *)error
