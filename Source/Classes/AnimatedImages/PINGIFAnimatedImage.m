@@ -60,6 +60,8 @@
             for (NSUInteger frameIdx = 0; frameIdx < _frameCount; frameIdx++) {
                 _durations[frameIdx] = [PINGIFAnimatedImage frameDurationAtIndex:frameIdx source:_imageSource];
             }
+        } else {
+            return nil;
         }
     }
     return self;
