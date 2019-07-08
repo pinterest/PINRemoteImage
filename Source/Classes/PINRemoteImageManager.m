@@ -97,6 +97,32 @@ NSString * const PINRemoteImageCacheKey = @"cacheKey";
 NSString * const PINRemoteImageCacheKeyResumePrefix = @"R-";
 typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse *response, NSError *error);
 
+@interface PINRemoteImageWeakContainer : NSObject
+
+@property (nonatomic, readonly, weak) id target;
+
++ (PINRemoteImageWeakContainer *)weakContainerWithTarget:(id)target;
+- (instancetype)initWithTarget:(id)target;
+
+@end
+
+@implementation PINRemoteImageWeakContainer
+
++ (PINRemoteImageWeakContainer *)weakContainerWithTarget:(id)target
+{
+    return [[self alloc] initWithTarget:target];
+}
+
+- (instancetype)initWithTarget:(id)target
+{
+    if (self) {
+        _target = target;
+    }
+    return self;
+}
+
+@end
+
 @interface PINRemoteImageManager () <PINURLSessionManagerDelegate>
 {
   dispatch_queue_t _callbackQueue;
@@ -837,7 +863,7 @@ static dispatch_once_t sharedDispatchToken;
         PINRemoteImageDownloadTask *task = [self.tasks objectForKey:key];
     [self unlock];
     
-    [task scheduleDownloadWithRequest:[self requestWithURL:url key:key]
+    [task scheduleDownloadWithRequest:[self requestWithURL:url task:task]
                                resume:resume
                             skipRetry:(options & PINRemoteImageManagerDownloadOptionsSkipRetry)
                              priority:priority
@@ -932,7 +958,7 @@ static dispatch_once_t sharedDispatchToken;
     return NO;
 }
 
-- (NSURLRequest *)requestWithURL:(NSURL *)url key:(NSString *)key
+- (NSURLRequest *)requestWithURL:(NSURL *)url task:(PINRemoteImageTask *)task
 {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
 
@@ -946,7 +972,8 @@ static dispatch_once_t sharedDispatchToken;
         request = [_requestConfigurationHandler(request) mutableCopy];
     }
     
-    [NSURLProtocol setProperty:key forKey:PINRemoteImageCacheKey inRequest:request];
+    PINRemoteImageWeakContainer *container = [PINRemoteImageWeakContainer weakContainerWithTarget:task];
+    [NSURLProtocol setProperty:container forKey:PINRemoteImageCacheKey inRequest:request];
     
     return request;
 }
@@ -1208,8 +1235,8 @@ static dispatch_once_t sharedDispatchToken;
 - (void)didReceiveResponse:(nonnull NSURLResponse *)response forTask:(nonnull NSURLSessionTask *)dataTask
 {
     [self lock];
-        NSString *cacheKey = [NSURLProtocol propertyForKey:PINRemoteImageCacheKey inRequest:dataTask.originalRequest];
-        PINRemoteImageDownloadTask *task = [self.tasks objectForKey:cacheKey];
+        PINRemoteImageWeakContainer *container = [NSURLProtocol propertyForKey:PINRemoteImageCacheKey inRequest:dataTask.originalRequest];
+        PINRemoteImageDownloadTask *task = (PINRemoteImageDownloadTask *)container.target;
     [self unlock];
     [task didReceiveResponse:response];
 }
@@ -1217,8 +1244,8 @@ static dispatch_once_t sharedDispatchToken;
 - (void)didReceiveData:(NSData *)data forTask:(NSURLSessionTask *)dataTask
 {
     [self lock];
-        NSString *cacheKey = [NSURLProtocol propertyForKey:PINRemoteImageCacheKey inRequest:dataTask.originalRequest];
-        PINRemoteImageDownloadTask *task = [self.tasks objectForKey:cacheKey];
+        PINRemoteImageWeakContainer *container = [NSURLProtocol propertyForKey:PINRemoteImageCacheKey inRequest:dataTask.originalRequest];
+        PINRemoteImageDownloadTask *task = (PINRemoteImageDownloadTask *)container.target;
     [self unlock];
     [task didReceiveData:data];
 }
