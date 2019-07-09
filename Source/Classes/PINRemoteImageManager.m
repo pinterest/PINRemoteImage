@@ -219,8 +219,8 @@ static dispatch_once_t sharedDispatchToken;
             _sessionConfiguration.timeoutIntervalForRequest = PINRemoteImageManagerDefaultTimeout;
             _sessionConfiguration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
             _sessionConfiguration.URLCache = nil;
+            _sessionConfiguration.HTTPMaximumConnectionsPerHost = PINRemoteImageHTTPMaximumConnectionsPerHost;
         }
-        _sessionConfiguration.HTTPMaximumConnectionsPerHost = PINRemoteImageHTTPMaximumConnectionsPerHost;
         
         _callbackQueue = dispatch_queue_create("PINRemoteImageManagerCallbackQueue", DISPATCH_QUEUE_CONCURRENT);
         _lock = [[PINRemoteLock alloc] initWithName:@"PINRemoteImageManager"];
