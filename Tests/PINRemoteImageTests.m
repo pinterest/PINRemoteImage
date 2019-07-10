@@ -263,6 +263,25 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     XCTAssert([self.imageManager.sessionManager.session.configuration.HTTPAdditionalHeaders isEqualToDictionary:@{ @"Authorization" : @"Pinterest 123456" }]);
 }
 
+- (void)testSessionConfigurationOfHTTPMaximumConnectionsPerHost
+{
+    {
+        // User has custom `HTTPMaximumConnectionsPerHost`
+        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        configuration.HTTPMaximumConnectionsPerHost = 5;
+        self.imageManager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:configuration];
+        NSURLSessionConfiguration *sessionManagerConfiguration = self.imageManager.sessionManager.session.configuration;
+        XCTAssert(configuration.HTTPMaximumConnectionsPerHost == sessionManagerConfiguration.HTTPMaximumConnectionsPerHost);
+    }
+
+    {
+        // Using image manager provided `HTTPMaximumConnectionsPerHost` value
+        self.imageManager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:nil];
+        NSURLSessionConfiguration *sessionManagerConfiguration = self.imageManager.sessionManager.session.configuration;
+        XCTAssert(sessionManagerConfiguration.HTTPMaximumConnectionsPerHost == PINRemoteImageHTTPMaximumConnectionsPerHost);
+    }
+}
+
 - (void)testCustomHeaderIsAddedToImageRequests
 {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Custom header was added to image request"];
