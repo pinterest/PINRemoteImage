@@ -24,6 +24,7 @@
 #import <objc/runtime.h>
 
 static BOOL requestRetried = NO;
+extern NSString * const PINRemoteImageCacheKey;
 
 static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 	switch (info) {
@@ -59,6 +60,33 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 @end
 
 #if DEBUG
+
+@interface PINRemoteImageWeakContainer : NSObject
+
+@property (nonatomic, readonly, weak) id target;
+
++ (PINRemoteImageWeakContainer *)weakContainerWithTarget:(id)target;
+- (instancetype)initWithTarget:(id)target;
+
+@end
+
+@implementation PINRemoteImageWeakContainer
+
++ (PINRemoteImageWeakContainer *)weakContainerWithTarget:(id)target
+{
+    return [[self alloc] initWithTarget:target];
+}
+
+- (instancetype)initWithTarget:(id)target
+{
+    if (self) {
+        _target = target;
+    }
+    return self;
+}
+
+@end
+
 @interface PINRemoteImageManager ()
 
 @property (nonatomic, strong) PINURLSessionManager *sessionManager;
@@ -81,8 +109,10 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 @property (nonatomic, strong) PINRemoteImageManager *imageManager;
 @property (nonatomic, strong) NSMutableData *data;
 @property (nonatomic, strong) NSURLSessionTask *task;
+@property (nonatomic, strong) PINRemoteImageDownloadTask *firstDownloadTask;
+@property (nonatomic, strong) PINRemoteImageDownloadTask *secondDownloadTask;
 @property (nonatomic, strong) NSError *error;
-
+@property (nonatomic, strong) dispatch_semaphore_t semaphore;
 @end
 
 @interface PINSpeedRecorder ()
@@ -204,6 +234,18 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 - (void)didReceiveData:(NSData *)data forTask:(NSURLSessionTask *)task
 {
     self.task = task;
+    if (self.semaphore) {
+        PINRemoteImageWeakContainer *container = [NSURLProtocol propertyForKey:PINRemoteImageCacheKey inRequest:task.originalRequest];
+        PINRemoteImageTask *task = (PINRemoteImageDownloadTask *)container.target;
+        if (!self.firstDownloadTask) {
+            self.firstDownloadTask = (PINRemoteImageDownloadTask *)task;
+            dispatch_semaphore_signal(self.semaphore);
+        }
+        if (self.firstDownloadTask && self.firstDownloadTask != task && !self.secondDownloadTask) {
+            self.secondDownloadTask = (PINRemoteImageDownloadTask *)task;
+            dispatch_semaphore_signal(self.semaphore);
+        }
+    }
 }
 
 - (void)didCompleteTask:(NSURLSessionTask *)task withError:(NSError *)error
@@ -1379,6 +1421,27 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
   XCTAssert(requestRetried, @"Request should have been retried.");
   
   method_exchangeImplementations(originalMethod, swizzledMethod);
+}
+
+- (void)testDownloadTaskWhenReDownload
+{
+    self.semaphore = dispatch_semaphore_create(0);
+    self.imageManager = [[PINRemoteImageManager alloc] init];
+    self.imageManager.sessionManager.delegate = self;
+    
+    PINRemoteImageTask *firstTask = nil;
+    NSUUID *firstUUID = [self.imageManager downloadImageWithURL:[self transparentPNGURL] options:0 progressDownload:nil completion:nil];
+    dispatch_semaphore_wait(self.semaphore, [self timeout]);
+    firstTask = self.firstDownloadTask;
+
+    [self.imageManager cancelTaskWithUUID:firstUUID];
+    
+    PINRemoteImageTask *secondTask = nil;
+    [self.imageManager downloadImageWithURL:[self transparentPNGURL] options:0 progressDownload:nil completion:nil];
+    dispatch_semaphore_wait(self.semaphore, [self timeout]);
+    secondTask = self.secondDownloadTask;
+    
+    XCTAssert(firstTask != secondTask);
 }
 
 @end
