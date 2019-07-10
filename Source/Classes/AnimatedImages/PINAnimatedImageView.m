@@ -62,10 +62,12 @@
     _animatedImage = animatedImage;
     _animatedImageRunLoopMode = NSRunLoopCommonModes;
     
-    [self initializeAnimatedImage:animatedImage];
+    if (animatedImage) {
+        [self initializeAnimatedImage:animatedImage];
+    }
 }
 
-- (void)initializeAnimatedImage:(PINCachedAnimatedImage *)animatedImage
+- (void)initializeAnimatedImage:(nonnull PINCachedAnimatedImage *)animatedImage
 {
     PINWeakify(self);
     animatedImage.coverImageReadyCallback = ^(PINImage *coverImage) {
