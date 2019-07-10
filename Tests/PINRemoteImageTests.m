@@ -82,6 +82,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 @property (nonatomic, strong) NSMutableData *data;
 @property (nonatomic, strong) NSURLSessionTask *task;
 @property (nonatomic, strong) NSError *error;
+@property (nonatomic, strong) dispatch_semaphore_t sessionDidCompleteDelegateSemaphore;
 
 @end
 
@@ -210,6 +211,9 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 {
     self.task = task;
     self.error = error;
+    if (self.sessionDidCompleteDelegateSemaphore) {
+        dispatch_semaphore_signal(self.sessionDidCompleteDelegateSemaphore);
+    }
 }
 
 - (void)setUp
@@ -1379,6 +1383,16 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
   XCTAssert(requestRetried, @"Request should have been retried.");
   
   method_exchangeImplementations(originalMethod, swizzledMethod);
+}
+
+- (void)testURLSessionDidCompleteDelegate
+{
+    self.imageManager = [[PINRemoteImageManager alloc] init];
+    self.imageManager.sessionManager.delegate = self;
+    self.sessionDidCompleteDelegateSemaphore = dispatch_semaphore_create(0);
+    [self.imageManager downloadImageWithURL:[self transparentPNGURL] completion:nil];
+    long result = dispatch_semaphore_wait(self.sessionDidCompleteDelegateSemaphore, [self timeout]);
+    XCTAssert(result == 0);
 }
 
 @end
