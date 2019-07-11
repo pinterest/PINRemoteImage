@@ -697,6 +697,7 @@ static dispatch_once_t sharedDispatchToken;
             }
             [task addCallbacksWithCompletionBlock:completion progressImageBlock:progressImage progressDownloadBlock:progressDownload withUUID:UUID];
             [self.tasks setObject:task forKey:key];
+            // Relax :), task retain the UUID for us, it's ok to have a weak reference to UUID here.
             [self.UUIDs addObject:UUID];
         
             NSAssert(taskClass == [task class], @"Task class should be the same!");
