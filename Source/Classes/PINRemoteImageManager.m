@@ -285,6 +285,11 @@ static dispatch_once_t sharedDispatchToken;
     return [[PINRequestExponentialRetryStrategy alloc] initWithRetryMaxCount:3 delayBase:4];
 }
 
+- (void)dealloc
+{
+    [self.sessionManager invalidateSessionAndCancelTasks];
+}
+
 - (id<PINRemoteImageCaching>)defaultImageCache {
     return [PINRemoteImageManager defaultImageCache];
 }
