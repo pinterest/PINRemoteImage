@@ -211,6 +211,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 {
     self.task = task;
     self.error = error;
+    // Used for URLSessionDidCompleteDelegate test
     if (self.sessionDidCompleteDelegateSemaphore) {
         dispatch_semaphore_signal(self.sessionDidCompleteDelegateSemaphore);
     }
@@ -231,6 +232,9 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     self.imageManager = nil;
     [[PINSpeedRecorder sharedRecorder] setCurrentBytesPerSecond:-1];
     [[PINSpeedRecorder sharedRecorder] resetMeasurements];
+    if (self.sessionDidCompleteDelegateSemaphore) {
+        self.sessionDidCompleteDelegateSemaphore = nil;
+    }
     [super tearDown];
 }
 
