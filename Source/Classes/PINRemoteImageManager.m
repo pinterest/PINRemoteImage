@@ -141,6 +141,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse 
 @property (nonatomic, strong) PINURLSessionManager *sessionManager;
 @property (nonatomic, strong) NSMutableDictionary <NSString *, __kindof PINRemoteImageTask *> *tasks;
 @property (nonatomic, strong) NSHashTable <NSUUID *> *canceledTasks;
+@property (nonatomic, strong) NSHashTable <NSUUID *> *UUIDs;
 @property (nonatomic, strong) NSArray <NSNumber *> *progressThresholds;
 @property (nonatomic, assign) BOOL shouldBlurProgressive;
 @property (nonatomic, assign) CGSize maxProgressiveRenderSize;
@@ -266,6 +267,7 @@ static dispatch_once_t sharedDispatchToken;
         _maxProgressiveRenderSize = configuration.maxProgressiveRenderSize;
         self.tasks = [[NSMutableDictionary alloc] init];
         self.canceledTasks = [[NSHashTable alloc] initWithOptions:NSHashTableWeakMemory capacity:5];
+        self.UUIDs = [NSHashTable weakObjectsHashTable];
         
         if (alternateRepProvider == nil) {
             _defaultAlternateRepresentationProvider = [[PINAlternateRepresentationProvider alloc] init];
@@ -721,6 +723,8 @@ static dispatch_once_t sharedDispatchToken;
             }
             [task addCallbacksWithCompletionBlock:completion progressImageBlock:progressImage progressDownloadBlock:progressDownload withUUID:UUID];
             [self.tasks setObject:task forKey:key];
+            // Relax :), task retain the UUID for us, it's ok to have a weak reference to UUID here.
+            [self.UUIDs addObject:UUID];
         
             NSAssert(taskClass == [task class], @"Task class should be the same!");
         [self unlock];
@@ -1080,6 +1084,23 @@ static dispatch_once_t sharedDispatchToken;
         if (resume) {
             //store resume data away, only download tasks currently return resume data
             [self storeResumeData:resume forURL:[(PINRemoteImageDownloadTask *)taskToEvaluate URL]];
+        }
+    } withPriority:PINOperationQueuePriorityHigh];
+}
+
+- (void)cancelAllTasks
+{
+    [self cancelAllTasksAndStoreResumeData:NO];
+}
+
+- (void)cancelAllTasksAndStoreResumeData:(BOOL)storeResumeData
+{
+    [_concurrentOperationQueue scheduleOperation:^{
+        [self lock];
+            NSArray<NSUUID *> *uuidToTask = [self.UUIDs allObjects];
+        [self unlock];
+        for (NSUUID *uuid in uuidToTask) {
+            [self cancelTaskWithUUID:uuid storeResumeData:storeResumeData];
         }
     } withPriority:PINOperationQueuePriorityHigh];
 }

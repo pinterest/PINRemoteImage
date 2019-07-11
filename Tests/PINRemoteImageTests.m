@@ -25,6 +25,7 @@
 
 static BOOL requestRetried = NO;
 extern NSString * const PINRemoteImageCacheKey;
+static NSInteger canceledCount = 0;
 
 static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 	switch (info) {
@@ -93,6 +94,12 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 @property (nonatomic, readonly) NSUInteger totalDownloads;
 
 - (NSString *)resumeCacheKeyForURL:(NSURL *)url;
+
+@end
+
+@interface PINRemoteImageManager (Swizzled)
+
+- (void)swizzled_cancelTaskWithUUID:(nonnull NSUUID *)UUID storeResumeData:(BOOL)storeResumeData;
 
 @end
 
@@ -1465,6 +1472,58 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     secondTask = self.secondDownloadTask;
     
     XCTAssert(firstTask != secondTask);
+}
+
+- (void)testCancelAllTasks
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Cancel all tasks"];
+    dispatch_group_t group = dispatch_group_create();
+    
+    dispatch_group_enter(group);
+    [self.imageManager downloadImageWithURL:[self transparentPNGURL] options:0 progressDownload:^(int64_t completedBytes, int64_t totalBytes) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            dispatch_group_leave(group);
+        });
+    } completion:nil];
+    
+    dispatch_group_enter(group);
+    [self.imageManager downloadImageWithURL:[self progressiveURL] options:0 progressDownload:^(int64_t completedBytes, int64_t totalBytes) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            dispatch_group_leave(group);
+        });
+    } completion:nil];
+    
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        SEL originalSelector = @selector(cancelTaskWithUUID:storeResumeData:);
+        SEL swizzledSelector = @selector(swizzled_cancelTaskWithUUID:storeResumeData:);
+        
+        Method originalMethod = class_getInstanceMethod([PINRemoteImageManager class], originalSelector);
+        Method swizzledMethod = class_getInstanceMethod([PINRemoteImageManager class], swizzledSelector);
+        
+        method_exchangeImplementations(originalMethod, swizzledMethod);
+        
+        [self.imageManager cancelAllTasks];
+        
+        // Give manager 2 seconds to cancel all tasks
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            XCTAssert(canceledCount == 2);
+            [expectation fulfill];
+        });
+    });
+    dispatch_group_wait(group, [self timeout]);
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
+@end
+
+@implementation PINRemoteImageManager (Swizzled)
+
+- (void)swizzled_cancelTaskWithUUID:(nonnull NSUUID *)UUID storeResumeData:(BOOL)storeResumeData
+{
+    canceledCount++;
+    [self swizzled_cancelTaskWithUUID:UUID storeResumeData:storeResumeData];
 }
 
 @end
