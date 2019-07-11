@@ -145,7 +145,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (NSURL *)JPEGURL_Large
 {
-    return [NSURL URLWithString:@"https://i.pinimg.com/750x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"];
+    return [NSURL URLWithString:@"https://performancedemo.vir2al.ch/assets/img/baseline/thumb/balkon.jpg"];
 }
 
 - (NSURL *)JPEGURL
@@ -1411,7 +1411,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     dispatch_group_t group = dispatch_group_create();
     
     dispatch_group_enter(group);
-    [self.imageManager downloadImageWithURL:[self transparentPNGURL] options:0 progressDownload:^(int64_t completedBytes, int64_t totalBytes) {
+    [self.imageManager downloadImageWithURL:[self JPEGURL_Large] options:0 progressDownload:^(int64_t completedBytes, int64_t totalBytes) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             dispatch_group_leave(group);
