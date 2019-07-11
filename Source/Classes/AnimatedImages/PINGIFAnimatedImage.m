@@ -16,6 +16,7 @@
 #endif
 
 #import "PINImage+DecodedImage.h"
+#import "NSData+ImageDetectors.h"
 
 @interface PINGIFAnimatedImage ()
 {
@@ -43,7 +44,7 @@
                                                                (__bridge NSString *)kUTTypeGIF,
                                                            (__bridge NSString *)kCGImageSourceShouldCache:
                                                                (__bridge NSNumber *)kCFBooleanFalse});
-        if (_imageSource) {
+        if (_imageSource && [animatedImageData pin_isGIF]) {
             _frameCount = (uint32_t)CGImageSourceGetCount(_imageSource);
             NSDictionary *imageProperties = (__bridge_transfer NSDictionary *)CGImageSourceCopyProperties(_imageSource, nil);
             _loopCount = (uint32_t)[[[imageProperties objectForKey:(__bridge NSString *)kCGImagePropertyGIFDictionary]
@@ -60,6 +61,8 @@
             for (NSUInteger frameIdx = 0; frameIdx < _frameCount; frameIdx++) {
                 _durations[frameIdx] = [PINGIFAnimatedImage frameDurationAtIndex:frameIdx source:_imageSource];
             }
+        } else {
+            return nil;
         }
     }
     return self;
