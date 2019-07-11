@@ -660,6 +660,16 @@ typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSession
 - (void)cancelTaskWithUUID:(nonnull NSUUID *)UUID storeResumeData:(BOOL)storeResumeData;
 
 /**
+ Cancel all tasks.
+ */
+- (void)cancelAllTasks;
+
+/**
+ Cancel all tasks and store resume data if any task has.
+ */
+- (void)cancelAllTasksAndStoreResumeData:(BOOL)storeResumeData;
+
+/**
  Set the priority of a download task. Since there is only one task per download, the priority of the download task will always be the last priority this method was called with.
  
  @param priority priority to set on the task.
