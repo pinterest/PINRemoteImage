@@ -83,6 +83,8 @@ static void releaseData(void *info, const void *data, size_t size)
                 } while (WebPDemuxNextFrame(&iter));
                 WebPDemuxReleaseIterator(&iter);
             }
+        } else {
+            return nil;
         }
     }
     return self;

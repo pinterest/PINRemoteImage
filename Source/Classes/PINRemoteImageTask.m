@@ -13,7 +13,7 @@
 
 @interface PINRemoteImageTask ()
 {
-    NSMutableDictionary<NSUUID *, PINRemoteImageCallbacks *> *_callbackBlocks;
+    NSMutableDictionary<NSUUID *, PINRemoteImageCallbacks *> *_callbackBlocks; // We need to copy/retain `NSUUID`, because `PINRemoteImageManager` has a weak table `UUIDs` to store all UUIDs.
 }
 
 @end
