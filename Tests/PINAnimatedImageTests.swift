@@ -148,7 +148,7 @@ class PINAnimatedImageTests: XCTestCase, PINRemoteImageManagerAlternateRepresent
             let pinCachedAnimatedImage = PINGIFAnimatedImage(animatedImageData: animatedData as Data)!
             let bytesSize = UInt32((pinCachedAnimatedImage.image(at: 0, cacheProvider: nil)!.takeUnretainedValue() as CGImage).bytesPerRow) * pinCachedAnimatedImage.height
 
-            XCTAssert(pinCachedAnimatedImage.bytesPerFrame <= bytesSize)
+            XCTAssert(pinCachedAnimatedImage.bytesPerFrame == bytesSize)
             
             animatedExpectation.fulfill()
         }
