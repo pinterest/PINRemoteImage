@@ -234,6 +234,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 - (void)didReceiveData:(NSData *)data forTask:(NSURLSessionTask *)task
 {
     self.task = task;
+    // Used for DownloadTaskWhenReDownload test
     if (self.semaphore) {
         PINRemoteImageWeakContainer *container = [NSURLProtocol propertyForKey:PINRemoteImageCacheKey inRequest:task.originalRequest];
         PINRemoteImageTask *task = (PINRemoteImageDownloadTask *)container.target;
@@ -269,6 +270,11 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     self.imageManager = nil;
     [[PINSpeedRecorder sharedRecorder] setCurrentBytesPerSecond:-1];
     [[PINSpeedRecorder sharedRecorder] resetMeasurements];
+    if (self.semaphore) {
+        self.semaphore = nil;
+        self.firstDownloadTask = nil;
+        self.secondDownloadTask = nil;
+    }
     [super tearDown];
 }
 
