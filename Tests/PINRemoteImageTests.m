@@ -267,6 +267,23 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     XCTAssert([self.imageManager.sessionManager.session.configuration.HTTPAdditionalHeaders isEqualToDictionary:@{ @"Authorization" : @"Pinterest 123456" }]);
 }
 
+- (void)testURLSessionManagerDeallocated
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:@"URLSessionManager should be deallocated"];
+    __block __weak PINURLSessionManager *sessionManager = nil;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        PINRemoteImageManager *manager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:nil];
+        sessionManager = manager.sessionManager;
+    });
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        XCTAssert(sessionManager == nil);
+        [expectation fulfill];
+    });
+    
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
 - (void)testCustomHeaderIsAddedToImageRequests
 {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Custom header was added to image request"];
