@@ -3,6 +3,7 @@
 - [new] Add PINRemoteImageManagerConfiguration configuration object. [#492](https://github.com/pinterest/PINRemoteImage/pull/492) [rqueue](https://github.com/rqueue)
 - [fixed] Fixes blending in animated WebP images. [#507](https://github.com/pinterest/PINRemoteImage/pull/507) [garrettmoon](https://github.com/garrettmoon)
 - [fixed] Fixes support in PINAnimatedImageView for WebP animated images. [#507](https://github.com/pinterest/PINRemoteImage/pull/507) [garrettmoon](https://github.com/garrettmoon)
+- [new] Add cancel method for PINRemoteImageManager. [#509](https://github.com/pinterest/PINRemoteImage/pull/509) [zhongwuzw](https://github.com/zhongwuzw)
 
 ## 3.0.0 Beta 14
 - [fixed] Re-enable warnings check [#506](https://github.com/pinterest/PINRemoteImage/pull/506) [garrettmoon](https://github.com/garrettmoon)
