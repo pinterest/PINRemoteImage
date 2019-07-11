@@ -155,4 +155,13 @@ class PINAnimatedImageTests: XCTestCase, PINRemoteImageManagerAlternateRepresent
         
         self.waitForExpectations(timeout: self.timeoutInterval(), handler: nil)
     }
+  
+    func testInvalidAnimatedData() {
+        let data = "AA".data(using: .ascii)
+        let gifAnimatedImage = PINGIFAnimatedImage(animatedImageData: data)
+        XCTAssert(gifAnimatedImage == nil)
+        
+        let webpAnimatedImage = PINWebPAnimatedImage(animatedImageData: data)
+        XCTAssert(webpAnimatedImage == nil)
+    }
 }
