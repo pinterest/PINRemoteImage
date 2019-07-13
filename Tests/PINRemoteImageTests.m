@@ -184,6 +184,11 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     return [NSURL URLWithString:@"https://performancedemo.vir2al.ch/assets/img/progressive/thumb/spiez_sunset.jpg"];
 }
 
+- (NSURL *)progressiveURL2
+{
+    return [NSURL URLWithString:@"https://performancedemo.vir2al.ch/assets/img/baseline/thumb/balkon.jpg"];
+}
+
 - (NSArray <NSURL *> *)bigURLs
 {
     static dispatch_once_t onceToken;
@@ -1429,7 +1434,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     dispatch_group_t group = dispatch_group_create();
     
     dispatch_group_enter(group);
-    [self.imageManager downloadImageWithURL:[self transparentPNGURL] options:0 progressDownload:^(int64_t completedBytes, int64_t totalBytes) {
+    [self.imageManager downloadImageWithURL:[self progressiveURL2] options:0 progressDownload:^(int64_t completedBytes, int64_t totalBytes) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             dispatch_group_leave(group);
