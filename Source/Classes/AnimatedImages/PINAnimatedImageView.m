@@ -17,6 +17,7 @@
     CFTimeInterval _playHead;
     NSUInteger _playedLoops;
     NSUInteger _lastSuccessfulFrameIndex;
+    CFTimeInterval *_durations;
 }
 
 @property (nonatomic, assign) CGImageRef frameImage;
@@ -61,12 +62,17 @@
 {
     _animatedImage = animatedImage;
     _animatedImageRunLoopMode = NSRunLoopCommonModes;
+    _durations = NULL;
+    [self resetDurationsWithAnimatedImage:animatedImage];
 }
 
 - (void)dealloc
 {
     if (_frameImage) {
         CGImageRelease(_frameImage);
+    }
+    if (_durations) {
+        free(_durations);
     }
 }
 
@@ -84,6 +90,7 @@
     _animatedImage = animatedImage;
     
     if (animatedImage != nil) {
+        [self resetDurationsWithAnimatedImage:animatedImage];
         PINWeakify(self);
         animatedImage.coverImageReadyCallback = ^(PINImage *coverImage) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -382,19 +389,34 @@
     }
 }
 
+- (void)resetDurationsWithAnimatedImage:(nonnull PINCachedAnimatedImage *)animatedImage
+{
+    PINAssertMain();
+    if (_durations) {
+        free(_durations);
+    }
+    _durations = malloc(sizeof(CFTimeInterval) * animatedImage.frameCount);
+    CFTimeInterval sum = 0.0f;
+    for (int i = 0; i < animatedImage.frameCount; i++) {
+        sum += [animatedImage durationAtIndex:i];
+        _durations[i] = sum;
+    }
+}
+
 - (NSUInteger)frameIndexAtPlayHeadPosition:(CFTimeInterval)playHead
 {
     PINAssertMain();
-    NSUInteger frameIndex = 0;
-    for (NSUInteger durationIndex = 0; durationIndex < self.animatedImage.frameCount; durationIndex++) {
-        playHead -= [self.animatedImage durationAtIndex:durationIndex];
-        if (playHead < 0) {
-            return frameIndex;
-        }
-        frameIndex++;
-    }
+    int low = 0, high = (int)_animatedImage.frameCount - 1;
     
-    return frameIndex;
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        if (_durations[mid] < playHead) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+    return MAX(MIN(low, (int)_animatedImage.frameCount - 1), 0);
 }
 
 @end
