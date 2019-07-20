@@ -389,9 +389,12 @@
     }
 }
 
-- (void)resetDurationsWithAnimatedImage:(nonnull PINCachedAnimatedImage *)animatedImage
+- (void)resetDurationsWithAnimatedImage:(PINCachedAnimatedImage *)animatedImage
 {
     PINAssertMain();
+    if (!animatedImage) {
+        return;
+    }
     if (_durations) {
         free(_durations);
     }
