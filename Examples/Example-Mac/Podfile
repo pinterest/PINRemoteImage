@@ -1,4 +1,4 @@
-platform :macos, 10.9
+platform :macos, 10.11
 
 target 'PINRemoteImage' do
   pod "PINRemoteImage/OSX", :path => "../../"
