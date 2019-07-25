@@ -66,7 +66,6 @@
     
     if (animatedImage) {
         [self initializeAnimatedImage:animatedImage];
-        [self resetDurationsWithAnimatedImage:animatedImage];
     }
 }
 
@@ -91,6 +90,8 @@
     if (animatedImage.playbackReady) {
         [self checkIfShouldAnimate];
     }
+  
+    [self resetDurationsWithAnimatedImage:animatedImage];
 }
 
 - (void)dealloc
@@ -118,7 +119,6 @@
     
     if (animatedImage != nil) {
         [self initializeAnimatedImage:animatedImage];
-        [self resetDurationsWithAnimatedImage:animatedImage];
     } else {
         // Clean up after ourselves.
         self.layer.contents = nil;
