@@ -1,0 +1,15 @@
+name: Main workflow 
+
+on: [pull_request]
+
+jobs:
+  Lint:
+    name: Run Unit and Integration Tests (macOS)
+    runs-on: macOS-latest
+    steps:
+    - name: Checkout the Git repository
+      uses: actions/checkout@v1
+    - name: Setup dependencies
+      run: sudo gem install cocoapods danger danger-slack xcpretty
+    - name: Run Tests
+      run: make all 

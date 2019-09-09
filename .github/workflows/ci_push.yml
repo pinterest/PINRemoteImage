@@ -1,0 +1,21 @@
+name: Main workflow 
+
+on:
+ push:
+    # Sequence of patterns matched against refs/heads
+    branches:
+      - master         # Push events on master branch
+      - 'releases/*'   # Push events to branches matching refs/heads/releases/*
+
+
+jobs:
+  Lint:
+    name: Run Unit and Integration Tests (macOS)
+    runs-on: macOS-latest
+    steps:
+    - name: Checkout the Git repository
+      uses: actions/checkout@v1
+    - name: Setup dependencies
+      run: sudo gem install cocoapods danger danger-slack xcpretty
+    - name: Run Tests
+      run: make all 
