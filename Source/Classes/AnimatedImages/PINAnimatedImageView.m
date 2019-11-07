@@ -61,6 +61,33 @@
 {
     _animatedImage = animatedImage;
     _animatedImageRunLoopMode = NSRunLoopCommonModes;
+    
+    if (animatedImage) {
+        [self initializeAnimatedImage:animatedImage];
+    }
+}
+
+- (void)initializeAnimatedImage:(nonnull PINCachedAnimatedImage *)animatedImage
+{
+    PINWeakify(self);
+    animatedImage.coverImageReadyCallback = ^(PINImage *coverImage) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            PINStrongify(self);
+            // In this case the lock is already gone we have to call the unlocked version therefore
+            [self coverImageCompleted:coverImage];
+        });
+    };
+    
+    animatedImage.playbackReadyCallback = ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // In this case the lock is already gone we have to call the unlocked version therefore
+            PINStrongify(self);
+            [self checkIfShouldAnimate];
+        });
+    };
+    if (animatedImage.playbackReady) {
+        [self checkIfShouldAnimate];
+    }
 }
 
 - (void)dealloc
@@ -84,25 +111,7 @@
     _animatedImage = animatedImage;
     
     if (animatedImage != nil) {
-        PINWeakify(self);
-        animatedImage.coverImageReadyCallback = ^(PINImage *coverImage) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                PINStrongify(self);
-                // In this case the lock is already gone we have to call the unlocked version therefore
-                [self coverImageCompleted:coverImage];
-            });
-        };
-        
-        animatedImage.playbackReadyCallback = ^{
-            dispatch_async(dispatch_get_main_queue(), ^{
-                // In this case the lock is already gone we have to call the unlocked version therefore
-                PINStrongify(self);
-                [self checkIfShouldAnimate];
-            });
-        };
-        if (animatedImage.playbackReady) {
-            [self checkIfShouldAnimate];
-        }
+        [self initializeAnimatedImage:animatedImage];
     } else {
         // Clean up after ourselves.
         self.layer.contents = nil;
