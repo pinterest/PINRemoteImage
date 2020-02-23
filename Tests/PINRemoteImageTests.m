@@ -269,6 +269,37 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
+- (void)testGIFDownloadWithProcessor
+{
+    XCTestExpectation * expectation = [self expectationWithDescription:@"Download and process GIF"];
+    
+    CGSize processingTargetSize = CGSizeMake(10, 10);
+    
+    [self.imageManager downloadImageWithURL:[self GIFURL]
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                               processorKey:@"process"
+                                  processor:^UIImage * _Nullable(PINRemoteImageManagerResult * _Nonnull result, NSUInteger * _Nonnull cost) {
+        XCTAssert(result.image != nil, @"Expect image when processing GIF.");
+        UIGraphicsBeginImageContext(processingTargetSize);
+        [result.image drawInRect:(CGRect){.origin = CGPointZero, .size = processingTargetSize}];
+        UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
+        return image;
+    }
+                                 completion:^(PINRemoteImageManagerResult * _Nonnull result) {
+
+        XCTAssert(result.error == nil, @"GIF download with processor should not fail.");
+        
+        XCTAssert(result.image != nil, @"Expect processed (still) GIF image.");
+        XCTAssert(result.alternativeRepresentation == nil, @"AlternativeRepresentation should not available after processing.");
+
+        XCTAssert(CGSizeEqualToSize(result.image.size, processingTargetSize), @"Expect correct GIF processing output.");
+
+        [expectation fulfill];
+    }];
+        
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
 - (void)testInitWithNilConfiguration
 {
     self.imageManager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:nil];
