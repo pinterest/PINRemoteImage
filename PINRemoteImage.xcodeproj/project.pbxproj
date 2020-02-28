@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		0E71BE2A22E94C7200FC5B99 /* fireworks.gif in Resources */ = {isa = PBXBuildFile; fileRef = 0E71BE2522E94C7200FC5B99 /* fireworks.gif */; };
+		0CF0743B24093139008F126B /* PINAPNGAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CF0743524093139008F126B /* PINAPNGAnimatedImage.m */; };
+		0CF0743C24093139008F126B /* PINAPNGAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CF0743524093139008F126B /* PINAPNGAnimatedImage.m */; };
+		0CF0743D24093139008F126B /* PINAPNGAnimatedImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0CF0743A24093139008F126B /* PINAPNGAnimatedImage.h */; };
+		0CF0743E24093139008F126B /* PINAPNGAnimatedImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0CF0743A24093139008F126B /* PINAPNGAnimatedImage.h */; };
 		139D3A631F67284400F82935 /* PINRemoteImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 139D3A5A1F67284400F82935 /* PINRemoteImage.framework */; };
 		139D4FCA1F672B0D00DE64E0 /* PINButton+PINRemoteImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DD47F991C699F4B00F12CA0 /* PINButton+PINRemoteImage.m */; };
 		139D4FCB1F672B0D00DE64E0 /* PINImageView+PINRemoteImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DD47F9B1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.m */; };
@@ -205,6 +209,8 @@
 
 /* Begin PBXFileReference section */
 		0E71BE2522E94C7200FC5B99 /* fireworks.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = fireworks.gif; sourceTree = "<group>"; };
+		0CF0743524093139008F126B /* PINAPNGAnimatedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINAPNGAnimatedImage.m; sourceTree = "<group>"; };
+		0CF0743A24093139008F126B /* PINAPNGAnimatedImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINAPNGAnimatedImage.h; sourceTree = "<group>"; };
 		139D3A5A1F67284400F82935 /* PINRemoteImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PINRemoteImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		139D3A621F67284400F82935 /* PINRemoteImage-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PINRemoteImage-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		680B83C71ECE5F9D00210A55 /* PINRemoteImageManager+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PINRemoteImageManager+Private.h"; path = "../PINRemoteImageManager+Private.h"; sourceTree = "<group>"; };
@@ -387,6 +393,8 @@
 				68C155CA1F6EE0A20075EE40 /* PINCachedAnimatedImage.m */,
 				687750261F6B2305008748B0 /* PINWebPAnimatedImage.m */,
 				68C155DB1F6F202F0075EE40 /* PINGIFAnimatedImage.m */,
+				0CF0743A24093139008F126B /* PINAPNGAnimatedImage.h */,
+				0CF0743524093139008F126B /* PINAPNGAnimatedImage.m */,
 			);
 			path = AnimatedImages;
 			sourceTree = "<group>";
@@ -815,6 +823,7 @@
 				139D4FCB1F672B0D00DE64E0 /* PINImageView+PINRemoteImage.m in Sources */,
 				139D4FCC1F672B0D00DE64E0 /* NSData+ImageDetectors.m in Sources */,
 				139D4FCD1F672B0D00DE64E0 /* PINCache+PINRemoteImageCaching.m in Sources */,
+				0CF0743C24093139008F126B /* PINAPNGAnimatedImage.m in Sources */,
 				139D4FCE1F672B0D00DE64E0 /* PINAlternateRepresentationProvider.m in Sources */,
 				139D4FD01F672B0D00DE64E0 /* PINProgressiveImage.m in Sources */,
 				139D4FD11F672B0D00DE64E0 /* PINRemoteImageCategoryManager.m in Sources */,
@@ -872,6 +881,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				68F0EA931CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m in Sources */,
+				0CF0743B24093139008F126B /* PINAPNGAnimatedImage.m in Sources */,
 				926E01641F0DFEE800874D01 /* PINRequestRetryStrategy.m in Sources */,
 				F1B9190F1BCF23C900710963 /* PINProgressiveImage.m in Sources */,
 				F1B919121BCF23C900710963 /* PINRemoteImageCallbacks.m in Sources */,

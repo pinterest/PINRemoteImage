@@ -15,15 +15,17 @@
 
 - (id)alternateRepresentationWithData:(NSData *)data options:(PINRemoteImageManagerDownloadOptions)options
 {
-#if PIN_WEBP
-    if ([data pin_isAnimatedGIF] || [data pin_isAnimatedWebP]) {
-        return [[PINCachedAnimatedImage alloc] initWithAnimatedImageData:data];
-    }
-#else
     if ([data pin_isAnimatedGIF]) {
         return [[PINCachedAnimatedImage alloc] initWithAnimatedImageData:data];
     }
+#if PIN_WEBP
+    if ([data pin_isAnimatedWebP]) {
+        return [[PINCachedAnimatedImage alloc] initWithAnimatedImageData:data];
+    }
 #endif
+    if ([data pin_isAPNG]) {
+        return [[PINCachedAnimatedImage alloc] initWithAnimatedImageData:data];
+    }
     return nil;
 }
 
