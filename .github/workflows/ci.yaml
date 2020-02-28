@@ -1,0 +1,47 @@
+---
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - 'releases/*'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build
+    runs-on: macOS-latest
+    strategy:
+      matrix:
+        platform: ['iOS Simulator,name=iPhone 8']
+    steps:
+      - uses: actions/checkout@v1
+      - name: Analyze and Test
+        run: |
+          xcodebuild clean analyze test \
+            -destination "platform=${{ matrix.platform }}" \
+            -sdk "iphonesimulator" \
+            -project PINRemoteImage.xcodeproj \
+            -scheme PINRemoteImageCache \
+            ONLY_ACTIVE_ARCH=NO \
+            CODE_SIGNING_REQUIRED=NO \
+          | xcpretty
+  cocoapods:
+    name: CocoaPods
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Lint
+        run: pod lib lint
+  carthage:
+    name: Carthage
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Update
+        run: carthage update --no-use-binaries --no-build
+      - name: Build
+        run: carthage build --no-skip-current
