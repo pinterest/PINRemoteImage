@@ -28,7 +28,11 @@ jobs:
             -scheme PINRemoteImageCache \
             ONLY_ACTIVE_ARCH=NO \
             CODE_SIGNING_REQUIRED=NO \
-          | xcpretty
+            CLANG_ANALYZER_OUTPUT=plist-html \
+            CLANG_ANALYZER_OUTPUT_DIR="$(pwd)/clang" \
+           | xcpretty
+          if [[ -n `find $(pwd)/clang -name "*.html"` ]] ; then rm -rf $(pwd)/clang; exit 1; fi
+          rm -rf $(pwd)/clang
   cocoapods:
     name: CocoaPods
     runs-on: macOS-latest
