@@ -96,7 +96,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
         PINWeakify(self);
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             PINStrongify(self);
-            [strongSelf imageAtIndex:0];
+            [self imageAtIndex:0];
         });
     }
     return self;
@@ -245,7 +245,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
         PINWeakify(self);
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             PINStrongify(self);
-            [strongSelf updateCache];
+            [self updateCache];
         });
     }
 
@@ -284,13 +284,13 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
     if ([self framesToCache] > 0) {
         [_operationQueue scheduleOperation:^{
             PINStrongify(self);
-            [strongSelf _updateCacheOnQueue];
+            [self _updateCacheOnQueue];
         }];
     }
     
     [_operationQueue scheduleOperation:^{
         PINStrongify(self);
-        [strongSelf cleanupFrames];
+        [self cleanupFrames];
     }];
 }
 
@@ -393,7 +393,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
         PINWeakify(self);
         dispatch_async(_cachingQueue, ^{
             PINStrongify(self);
-            [strongSelf _cacheWithFrameIndex:frameIndex];
+            [self _cacheWithFrameIndex:frameIndex];
         });
     }
 }
@@ -501,7 +501,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
     PINWeakify(self);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PINStrongify(self);
-        [strongSelf _clearAnimatedImageCache];
+        [self _clearAnimatedImageCache];
     });
 }
 
