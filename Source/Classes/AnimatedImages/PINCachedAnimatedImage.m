@@ -107,6 +107,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+#if PIN_TARGET_IOS
 - (void)didReceiveMemoryWarningNotification:(NSNotification *)notification
 {
     NSDate *now = [NSDate date];
@@ -116,6 +117,7 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
     self.lastMemoryWarning = now;
     [self cleanupFrames];
 }
+#endif
 
 - (PINImage *)coverImage
 {
