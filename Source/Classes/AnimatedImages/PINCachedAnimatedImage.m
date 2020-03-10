@@ -93,9 +93,9 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
         _cachingQueue = dispatch_queue_create("Caching Queue", DISPATCH_QUEUE_SERIAL);
         
         // dispatch later so that blocks can be set after init this runloop
-        __weak typeof(self) weakSelf = self;
+        PINWeakify(self);
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            typeof(self) strongSelf = weakSelf;
+            PINStrongify(self);
             [strongSelf imageAtIndex:0];
         });
     }
@@ -242,9 +242,9 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
     if (cachingDisabled && imageRef == NULL) {
         imageRef = [_animatedImage imageAtIndex:index cacheProvider:self];
     } else {
-        __weak typeof(self) weakSelf = self;
+        PINWeakify(self);
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            typeof(self) strongSelf = weakSelf;
+            PINStrongify(self);
             [strongSelf updateCache];
         });
     }
@@ -279,17 +279,17 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
 
 - (void)updateCache
 {
-    __weak typeof(self) weakSelf = self;
+    PINWeakify(self);
     // skip if we don't have any frames to cache
     if ([self framesToCache] > 0) {
         [_operationQueue scheduleOperation:^{
-            typeof(self) strongSelf = weakSelf;
+            PINStrongify(self);
             [strongSelf _updateCacheOnQueue];
         }];
     }
     
     [_operationQueue scheduleOperation:^{
-        typeof(self) strongSelf = weakSelf;
+        PINStrongify(self);
         [strongSelf cleanupFrames];
     }];
 }
@@ -390,9 +390,9 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
         [_cachedOrCachingFrames addIndex:frameIndex];
         _frameRenderCount++;
         
-        __weak typeof(self) weakSelf = self;
+        PINWeakify(self);
         dispatch_async(_cachingQueue, ^{
-            typeof(self) strongSelf = weakSelf;
+            PINStrongify(self);
             [strongSelf _cacheWithFrameIndex:frameIndex];
         });
     }
@@ -498,9 +498,9 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
  */
 - (void)clearAnimatedImageCache
 {
-    __weak typeof(self) weakSelf = self;
+    PINWeakify(self);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        typeof(self) strongSelf = weakSelf;
+        PINStrongify(self);
         [strongSelf _clearAnimatedImageCache];
     });
 }
