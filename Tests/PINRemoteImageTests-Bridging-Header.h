@@ -3,3 +3,4 @@
 //
 
 #import "PINAnimatedImage+PINAnimatedImageTesting.h"
+#import "TestAnimatedImage.h"
