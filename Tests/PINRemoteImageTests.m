@@ -120,6 +120,8 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 @property (nonatomic, strong) PINRemoteImageDownloadTask *secondDownloadTask;
 @property (nonatomic, strong) NSError *error;
 @property (nonatomic, strong) dispatch_semaphore_t semaphore;
+@property (nonatomic, strong) dispatch_semaphore_t sessionDidCompleteDelegateSemaphore;
+
 @end
 
 @interface PINSpeedRecorder ()
@@ -265,6 +267,10 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 {
     self.task = task;
     self.error = error;
+    // Used for URLSessionDidCompleteDelegate test
+    if (self.sessionDidCompleteDelegateSemaphore) {
+        dispatch_semaphore_signal(self.sessionDidCompleteDelegateSemaphore);
+    }
 }
 
 - (void)setUp
@@ -282,10 +288,14 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     self.imageManager = nil;
     [[PINSpeedRecorder sharedRecorder] setCurrentBytesPerSecond:-1];
     [[PINSpeedRecorder sharedRecorder] resetMeasurements];
+
     if (self.semaphore) {
         self.semaphore = nil;
         self.firstDownloadTask = nil;
         self.secondDownloadTask = nil;
+    }
+    if (self.sessionDidCompleteDelegateSemaphore) {
+        self.sessionDidCompleteDelegateSemaphore = nil;
     }
     [super tearDown];
 }
@@ -1458,6 +1468,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
   method_exchangeImplementations(originalMethod, swizzledMethod);
 }
 
+
 - (void)testDownloadTaskWhenReDownload
 {
     self.semaphore = dispatch_semaphore_create(0);
@@ -1477,6 +1488,16 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     secondTask = self.secondDownloadTask;
     
     XCTAssert(firstTask != secondTask);
+}
+
+- (void)testURLSessionDidCompleteDelegate
+{
+    self.imageManager = [[PINRemoteImageManager alloc] init];
+    self.imageManager.sessionManager.delegate = self;
+    self.sessionDidCompleteDelegateSemaphore = dispatch_semaphore_create(0);
+    [self.imageManager downloadImageWithURL:[self transparentPNGURL] completion:nil];
+    long result = dispatch_semaphore_wait(self.sessionDidCompleteDelegateSemaphore, [self timeout]);
+    XCTAssert(result == 0);
 }
 
 - (void)testCancelAllTasks
