@@ -62,29 +62,9 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 #if DEBUG
 
-@interface PINRemoteImageWeakContainer : NSObject
+@interface PINRemoteImageWeakTask : NSObject
 
-@property (nonatomic, readonly, weak) id target;
-
-+ (PINRemoteImageWeakContainer *)weakContainerWithTarget:(id)target;
-- (instancetype)initWithTarget:(id)target;
-
-@end
-
-@implementation PINRemoteImageWeakContainer
-
-+ (PINRemoteImageWeakContainer *)weakContainerWithTarget:(id)target
-{
-    return [[self alloc] initWithTarget:target];
-}
-
-- (instancetype)initWithTarget:(id)target
-{
-    if (self) {
-        _target = target;
-    }
-    return self;
-}
+@property (nonatomic, readonly, weak) PINRemoteImageTask *task;
 
 @end
 
@@ -250,8 +230,8 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     self.task = task;
     // Used for DownloadTaskWhenReDownload test
     if (self.semaphore) {
-        PINRemoteImageWeakContainer *container = [NSURLProtocol propertyForKey:PINRemoteImageCacheKey inRequest:task.originalRequest];
-        PINRemoteImageTask *task = (PINRemoteImageDownloadTask *)container.target;
+        PINRemoteImageWeakTask *container = [NSURLProtocol propertyForKey:PINRemoteImageCacheKey inRequest:task.originalRequest];
+        PINRemoteImageTask *task = (PINRemoteImageDownloadTask *)container.task;
         if (!self.firstDownloadTask) {
             self.firstDownloadTask = (PINRemoteImageDownloadTask *)task;
             dispatch_semaphore_signal(self.semaphore);
