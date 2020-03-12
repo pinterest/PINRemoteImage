@@ -24,7 +24,7 @@
 #import <objc/runtime.h>
 
 static BOOL requestRetried = NO;
-extern NSString * const PINRemoteImageCacheKey;
+extern NSString * const PINRemoteImageWeakTaskKey;
 static NSInteger canceledCount = 0;
 
 static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
@@ -230,8 +230,8 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     self.task = task;
     // Used for DownloadTaskWhenReDownload test
     if (self.semaphore) {
-        PINRemoteImageWeakTask *container = [NSURLProtocol propertyForKey:PINRemoteImageCacheKey inRequest:task.originalRequest];
-        PINRemoteImageTask *task = (PINRemoteImageDownloadTask *)container.task;
+        PINRemoteImageWeakTask *weakTask = [NSURLProtocol propertyForKey:PINRemoteImageWeakTaskKey inRequest:task.originalRequest];
+        PINRemoteImageTask *task = (PINRemoteImageDownloadTask *)weakTask.task;
         if (!self.firstDownloadTask) {
             self.firstDownloadTask = (PINRemoteImageDownloadTask *)task;
             dispatch_semaphore_signal(self.semaphore);

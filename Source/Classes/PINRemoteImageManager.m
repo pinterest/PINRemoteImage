@@ -93,7 +93,7 @@ BOOL PINRemoteImageManagerSubclassOverridesSelector(Class subclass, SEL selector
 }
 
 NSErrorDomain const PINRemoteImageManagerErrorDomain = @"PINRemoteImageManagerErrorDomain";
-NSString * const PINRemoteImageCacheKey = @"cacheKey";
+NSString * const PINRemoteImageWeakTaskKey = @"PINRemoteImageWeakTaskKey";
 NSString * const PINRemoteImageCacheKeyResumePrefix = @"R-";
 typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse *response, NSError *error);
 
@@ -975,8 +975,8 @@ static dispatch_once_t sharedDispatchToken;
         request = [_requestConfigurationHandler(request) mutableCopy];
     }
     
-    PINRemoteImageWeakTask *container = [[PINRemoteImageWeakTask alloc] initWithTask:task];
-    [NSURLProtocol setProperty:container forKey:PINRemoteImageCacheKey inRequest:request];
+    PINRemoteImageWeakTask *weakTask = [[PINRemoteImageWeakTask alloc] initWithTask:task];
+    [NSURLProtocol setProperty:weakTask forKey:PINRemoteImageWeakTaskKey inRequest:request];
     
     return request;
 }
@@ -1255,8 +1255,8 @@ static dispatch_once_t sharedDispatchToken;
 - (void)didReceiveResponse:(nonnull NSURLResponse *)response forTask:(nonnull NSURLSessionTask *)dataTask
 {
     [self lock];
-        PINRemoteImageWeakTask *container = [NSURLProtocol propertyForKey:PINRemoteImageCacheKey inRequest:dataTask.originalRequest];
-        PINRemoteImageDownloadTask *task = (PINRemoteImageDownloadTask *)container.task;
+        PINRemoteImageWeakTask *weakTask = [NSURLProtocol propertyForKey:PINRemoteImageWeakTaskKey inRequest:dataTask.originalRequest];
+        PINRemoteImageDownloadTask *task = (PINRemoteImageDownloadTask *)weakTask.task;
     [self unlock];
     [task didReceiveResponse:response];
 }
@@ -1264,8 +1264,8 @@ static dispatch_once_t sharedDispatchToken;
 - (void)didReceiveData:(NSData *)data forTask:(NSURLSessionTask *)dataTask
 {
     [self lock];
-        PINRemoteImageWeakTask *container = [NSURLProtocol propertyForKey:PINRemoteImageCacheKey inRequest:dataTask.originalRequest];
-        PINRemoteImageDownloadTask *task = (PINRemoteImageDownloadTask *)container.task;
+        PINRemoteImageWeakTask *weakTask = [NSURLProtocol propertyForKey:PINRemoteImageWeakTaskKey inRequest:dataTask.originalRequest];
+        PINRemoteImageDownloadTask *task = (PINRemoteImageDownloadTask *)weakTask.task;
     [self unlock];
     [task didReceiveData:data];
 }
