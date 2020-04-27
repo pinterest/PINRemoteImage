@@ -124,7 +124,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse 
   PINOperationQueue *_concurrentOperationQueue;
   PINRemoteImageDownloadQueue *_urlSessionTaskQueue;
   
-  // Necesarry to have a strong reference to _defaultAlternateRepresentationProvider because _alternateRepProvider is __weak
+  // Necessary to have a strong reference to _defaultAlternateRepresentationProvider because _alternateRepProvider is __weak
   PINAlternateRepresentationProvider *_defaultAlternateRepresentationProvider;
   __weak PINAlternateRepresentationProvider *_alternateRepProvider;
   NSURLSessionConfiguration *_sessionConfiguration;
@@ -1045,7 +1045,7 @@ static dispatch_once_t sharedDispatchToken;
                             inputUUID:nil];
 }
 
-#pragma mark - Cancelation & Priority
+#pragma mark - Cancellation & Priority
 
 - (void)cancelTaskWithUUID:(NSUUID *)UUID
 {

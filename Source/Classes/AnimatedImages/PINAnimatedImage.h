@@ -147,7 +147,7 @@ typedef void(^PINAnimatedImageInfoReady)(PINImage * _Nonnull coverImage);
  */
 @property (nonatomic, readonly) size_t frameCount;
 /**
- @abstract Return any error that has occured. Playback will be paused if this returns non-nil.
+ @abstract Return any error that has occurred. Playback will be paused if this returns non-nil.
  */
 @property (nonatomic, readonly, nullable) NSError *error;
 

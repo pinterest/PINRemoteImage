@@ -96,7 +96,7 @@
     BOOL hasResume = resume != nil;
     [self.lock lockWithBlock:^{
         if (hasResume) {
-            //consider skipping cancelation if there's a request for resume data and the time to start the connection is greater than
+            //consider skipping cancellation if there's a request for resume data and the time to start the connection is greater than
             //the time remaining to download.
             NSTimeInterval timeToFirstByte = [[PINSpeedRecorder sharedRecorder] weightedTimeToFirstByteForHost:self->_progressImage.dataTask.currentRequest.URL.host];
             if (self->_progressImage.estimatedRemainingTime <= timeToFirstByte) {
