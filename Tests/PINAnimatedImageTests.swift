@@ -189,7 +189,18 @@ class PINAnimatedImageTests: XCTestCase, PINRemoteImageManagerAlternateRepresent
         let webpAnimatedImage = PINWebPAnimatedImage(animatedImageData: data)
         XCTAssert(webpAnimatedImage == nil)
     }
-    
+
+    func test_retainCycle() {
+        weak var weakCachedAnimatedImage : PINCachedAnimatedImage?
+        autoreleasepool {
+            let animatedImage = TestAnimatedImage.init()
+            let cachedAnimatedImage = PINCachedAnimatedImage.init(animatedImage: animatedImage)
+            weakCachedAnimatedImage = cachedAnimatedImage
+        }
+        let cachedAnimatedImage : PINCachedAnimatedImage? = weakCachedAnimatedImage
+        XCTAssertNil(cachedAnimatedImage)
+    }
+  
     func testFrameIndex() {
         let bundle = Bundle(for: type(of: self))
         let path = bundle.path(forResource: "fireworks", ofType: "gif")!

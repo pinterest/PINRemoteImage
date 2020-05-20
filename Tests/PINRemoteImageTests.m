@@ -24,6 +24,7 @@
 #import <objc/runtime.h>
 
 static BOOL requestRetried = NO;
+extern NSString * const PINRemoteImageWeakTaskKey;
 static NSInteger canceledCount = 0;
 
 static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
@@ -60,6 +61,13 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 @end
 
 #if DEBUG
+
+@interface PINRemoteImageWeakTask : NSObject
+
+@property (nonatomic, readonly, weak) PINRemoteImageTask *task;
+
+@end
+
 @interface PINRemoteImageManager ()
 
 @property (nonatomic, strong) PINURLSessionManager *sessionManager;
@@ -88,7 +96,11 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 @property (nonatomic, strong) PINRemoteImageManager *imageManager;
 @property (nonatomic, strong) NSMutableData *data;
 @property (nonatomic, strong) NSURLSessionTask *task;
+@property (nonatomic, strong) PINRemoteImageDownloadTask *firstDownloadTask;
+@property (nonatomic, strong) PINRemoteImageDownloadTask *secondDownloadTask;
 @property (nonatomic, strong) NSError *error;
+@property (nonatomic, strong) dispatch_semaphore_t semaphore;
+@property (nonatomic, strong) dispatch_semaphore_t sessionDidCompleteDelegateSemaphore;
 
 @end
 
@@ -216,12 +228,29 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 - (void)didReceiveData:(NSData *)data forTask:(NSURLSessionTask *)task
 {
     self.task = task;
+    // Used for DownloadTaskWhenReDownload test
+    if (self.semaphore) {
+        PINRemoteImageWeakTask *weakTask = [NSURLProtocol propertyForKey:PINRemoteImageWeakTaskKey inRequest:task.originalRequest];
+        PINRemoteImageTask *task = (PINRemoteImageDownloadTask *)weakTask.task;
+        if (!self.firstDownloadTask) {
+            self.firstDownloadTask = (PINRemoteImageDownloadTask *)task;
+            dispatch_semaphore_signal(self.semaphore);
+        }
+        if (self.firstDownloadTask && self.firstDownloadTask != task && !self.secondDownloadTask) {
+            self.secondDownloadTask = (PINRemoteImageDownloadTask *)task;
+            dispatch_semaphore_signal(self.semaphore);
+        }
+    }
 }
 
 - (void)didCompleteTask:(NSURLSessionTask *)task withError:(NSError *)error
 {
     self.task = task;
     self.error = error;
+    // Used for URLSessionDidCompleteDelegate test
+    if (self.sessionDidCompleteDelegateSemaphore) {
+        dispatch_semaphore_signal(self.sessionDidCompleteDelegateSemaphore);
+    }
 }
 
 - (void)setUp
@@ -239,6 +268,15 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     self.imageManager = nil;
     [[PINSpeedRecorder sharedRecorder] setCurrentBytesPerSecond:-1];
     [[PINSpeedRecorder sharedRecorder] resetMeasurements];
+
+    if (self.semaphore) {
+        self.semaphore = nil;
+        self.firstDownloadTask = nil;
+        self.secondDownloadTask = nil;
+    }
+    if (self.sessionDidCompleteDelegateSemaphore) {
+        self.sessionDidCompleteDelegateSemaphore = nil;
+    }
     [super tearDown];
 }
 
@@ -1408,6 +1446,38 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
   XCTAssert(requestRetried, @"Request should have been retried.");
   
   method_exchangeImplementations(originalMethod, swizzledMethod);
+}
+
+
+- (void)testDownloadTaskWhenReDownload
+{
+    self.semaphore = dispatch_semaphore_create(0);
+    self.imageManager = [[PINRemoteImageManager alloc] init];
+    self.imageManager.sessionManager.delegate = self;
+    
+    PINRemoteImageTask *firstTask = nil;
+    NSUUID *firstUUID = [self.imageManager downloadImageWithURL:[self transparentPNGURL] options:0 progressDownload:nil completion:nil];
+    dispatch_semaphore_wait(self.semaphore, [self timeout]);
+    firstTask = self.firstDownloadTask;
+
+    [self.imageManager cancelTaskWithUUID:firstUUID];
+    
+    PINRemoteImageTask *secondTask = nil;
+    [self.imageManager downloadImageWithURL:[self transparentPNGURL] options:0 progressDownload:nil completion:nil];
+    dispatch_semaphore_wait(self.semaphore, [self timeout]);
+    secondTask = self.secondDownloadTask;
+    
+    XCTAssert(firstTask != secondTask);
+}
+
+- (void)testURLSessionDidCompleteDelegate
+{
+    self.imageManager = [[PINRemoteImageManager alloc] init];
+    self.imageManager.sessionManager.delegate = self;
+    self.sessionDidCompleteDelegateSemaphore = dispatch_semaphore_create(0);
+    [self.imageManager downloadImageWithURL:[self transparentPNGURL] completion:nil];
+    long result = dispatch_semaphore_wait(self.sessionDidCompleteDelegateSemaphore, [self timeout]);
+    XCTAssert(result == 0);
 }
 
 - (void)testCancelAllTasks

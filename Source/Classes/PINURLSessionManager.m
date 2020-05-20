@@ -201,6 +201,10 @@ NSErrorDomain const PINURLErrorDomain = @"PINURLErrorDomain";
         if (completionHandler) {
             completionHandler(task, error);
         }
+        
+        if ([strongSelf.delegate respondsToSelector:@selector(didCompleteTask:withError:)]) {
+            [strongSelf.delegate didCompleteTask:task withError:error];
+        }
     });
 }
 
