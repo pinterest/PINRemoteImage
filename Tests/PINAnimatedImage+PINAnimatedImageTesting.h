@@ -7,9 +7,16 @@
 //
 
 #import <PINRemoteImage/PINRemoteImage.h>
+#import <PINRemoteImage/PINAnimatedImageView.h>
 
 @interface PINAnimatedImage (PINAnimatedImageTesting)
 
 + (NSUInteger)greatestCommonDivisorOfA:(NSUInteger)a andB:(NSUInteger)b;
+
+@end
+
+@interface PINAnimatedImageView (PINAnimatedImageViewTesting)
+
+- (NSUInteger)frameIndexAtPlayHeadPosition:(CFTimeInterval)playHead;
 
 @end

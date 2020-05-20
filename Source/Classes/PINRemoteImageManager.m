@@ -93,9 +93,29 @@ BOOL PINRemoteImageManagerSubclassOverridesSelector(Class subclass, SEL selector
 }
 
 NSErrorDomain const PINRemoteImageManagerErrorDomain = @"PINRemoteImageManagerErrorDomain";
-NSString * const PINRemoteImageCacheKey = @"cacheKey";
+NSString * const PINRemoteImageWeakTaskKey = @"PINRemoteImageWeakTaskKey";
 NSString * const PINRemoteImageCacheKeyResumePrefix = @"R-";
 typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse *response, NSError *error);
+
+@interface PINRemoteImageWeakTask : NSObject
+
+@property (nonatomic, readonly, weak) PINRemoteImageTask *task;
+
+- (instancetype)initWithTask:(PINRemoteImageTask *)task;
+
+@end
+
+@implementation PINRemoteImageWeakTask
+
+- (instancetype)initWithTask:(PINRemoteImageTask *)task
+{
+    if (self = [super init]) {
+        _task = task;
+    }
+    return self;
+}
+
+@end
 
 @interface PINRemoteImageManager () <PINURLSessionManagerDelegate>
 {
@@ -104,7 +124,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse 
   PINOperationQueue *_concurrentOperationQueue;
   PINRemoteImageDownloadQueue *_urlSessionTaskQueue;
   
-  // Necesarry to have a strong reference to _defaultAlternateRepresentationProvider because _alternateRepProvider is __weak
+  // Necessary to have a strong reference to _defaultAlternateRepresentationProvider because _alternateRepProvider is __weak
   PINAlternateRepresentationProvider *_defaultAlternateRepresentationProvider;
   __weak PINAlternateRepresentationProvider *_alternateRepProvider;
   NSURLSessionConfiguration *_sessionConfiguration;
@@ -220,8 +240,8 @@ static dispatch_once_t sharedDispatchToken;
             _sessionConfiguration.timeoutIntervalForRequest = PINRemoteImageManagerDefaultTimeout;
             _sessionConfiguration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
             _sessionConfiguration.URLCache = nil;
+            _sessionConfiguration.HTTPMaximumConnectionsPerHost = PINRemoteImageHTTPMaximumConnectionsPerHost;
         }
-        _sessionConfiguration.HTTPMaximumConnectionsPerHost = PINRemoteImageHTTPMaximumConnectionsPerHost;
         
         _callbackQueue = dispatch_queue_create("PINRemoteImageManagerCallbackQueue", DISPATCH_QUEUE_CONCURRENT);
         _lock = [[PINRemoteLock alloc] initWithName:@"PINRemoteImageManager"];
@@ -844,7 +864,7 @@ static dispatch_once_t sharedDispatchToken;
         PINRemoteImageDownloadTask *task = [self.tasks objectForKey:key];
     [self unlock];
     
-    [task scheduleDownloadWithRequest:[self requestWithURL:url key:key]
+    [task scheduleDownloadWithRequest:[self requestWithURL:url task:task]
                                resume:resume
                             skipRetry:(options & PINRemoteImageManagerDownloadOptionsSkipRetry)
                              priority:priority
@@ -939,7 +959,7 @@ static dispatch_once_t sharedDispatchToken;
     return NO;
 }
 
-- (NSURLRequest *)requestWithURL:(NSURL *)url key:(NSString *)key
+- (NSURLRequest *)requestWithURL:(NSURL *)url task:(PINRemoteImageTask *)task
 {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
 
@@ -953,7 +973,8 @@ static dispatch_once_t sharedDispatchToken;
         request = [_requestConfigurationHandler(request) mutableCopy];
     }
     
-    [NSURLProtocol setProperty:key forKey:PINRemoteImageCacheKey inRequest:request];
+    PINRemoteImageWeakTask *weakTask = [[PINRemoteImageWeakTask alloc] initWithTask:task];
+    [NSURLProtocol setProperty:weakTask forKey:PINRemoteImageWeakTaskKey inRequest:request];
     
     return request;
 }
@@ -1022,7 +1043,7 @@ static dispatch_once_t sharedDispatchToken;
                             inputUUID:nil];
 }
 
-#pragma mark - Cancelation & Priority
+#pragma mark - Cancellation & Priority
 
 - (void)cancelTaskWithUUID:(NSUUID *)UUID
 {
@@ -1231,8 +1252,8 @@ static dispatch_once_t sharedDispatchToken;
 - (void)didReceiveResponse:(nonnull NSURLResponse *)response forTask:(nonnull NSURLSessionTask *)dataTask
 {
     [self lock];
-        NSString *cacheKey = [NSURLProtocol propertyForKey:PINRemoteImageCacheKey inRequest:dataTask.originalRequest];
-        PINRemoteImageDownloadTask *task = [self.tasks objectForKey:cacheKey];
+        PINRemoteImageWeakTask *weakTask = [NSURLProtocol propertyForKey:PINRemoteImageWeakTaskKey inRequest:dataTask.originalRequest];
+        PINRemoteImageDownloadTask *task = (PINRemoteImageDownloadTask *)weakTask.task;
     [self unlock];
     [task didReceiveResponse:response];
 }
@@ -1240,8 +1261,8 @@ static dispatch_once_t sharedDispatchToken;
 - (void)didReceiveData:(NSData *)data forTask:(NSURLSessionTask *)dataTask
 {
     [self lock];
-        NSString *cacheKey = [NSURLProtocol propertyForKey:PINRemoteImageCacheKey inRequest:dataTask.originalRequest];
-        PINRemoteImageDownloadTask *task = [self.tasks objectForKey:cacheKey];
+        PINRemoteImageWeakTask *weakTask = [NSURLProtocol propertyForKey:PINRemoteImageWeakTaskKey inRequest:dataTask.originalRequest];
+        PINRemoteImageDownloadTask *task = (PINRemoteImageDownloadTask *)weakTask.task;
     [self unlock];
     [task didReceiveData:data];
 }
