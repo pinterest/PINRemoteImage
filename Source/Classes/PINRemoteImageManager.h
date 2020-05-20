@@ -167,6 +167,7 @@ typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSession
  Create and return a PINRemoteImageManager created with the specified configuration. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. Specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc.
  @param sessionConfiguration The session configuration used to create the PINRemoteImageManager.
  @return A PINRemoteImageManager with the specified configuration.
+ @note If you provide your own `sessionConfiguration`, please attention `HTTPMaximumConnectionsPerHost` property, it may causes timeout when in conjunction with `maxNumberOfConcurrentDownloads` if you set a larger number to `maxNumberOfConcurrentDownloads` but smaller number to `HTTPMaximumConnectionsPerHost`.
  */
 - (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)sessionConfiguration;
 
@@ -175,6 +176,7 @@ typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSession
  @param sessionConfiguration The session configuration used to create the PINRemoteImageManager.
  @param alternativeRepresentationProvider a delegate which conforms to the PINRemoteImageManagerAlternateRepresentationProvider protocol. Provide a delegate if you want to have non image results. The manager maintains a weak reference to the delegate. @see PINRemoteImageManagerAlternateRepresentationProvider for an example.
  @return A PINRemoteImageManager with the specified configuration.
+ @note If you provide your own `sessionConfiguration`, please attention `HTTPMaximumConnectionsPerHost` property, it may causes timeout when in conjunction with `maxNumberOfConcurrentDownloads` if you set a larger number to `maxNumberOfConcurrentDownloads` but smaller number to `HTTPMaximumConnectionsPerHost`.
  */
 - (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)sessionConfiguration
                    alternativeRepresentationProvider:(nullable id <PINRemoteImageManagerAlternateRepresentationProvider>)alternativeRepresentationProvider;
@@ -185,6 +187,7 @@ typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSession
  @param alternateRepDelegate a delegate which conforms to the PINRemoteImageManagerAlternateRepresentationProvider protocol. Provide a delegate if you want to have non image results. The manager maintains a weak reference to the delegate. @see PINRemoteImageManagerAlternateRepresentationProvider for an example.
  @param imageCache  Optional delegate which conforms to the PINRemoteImageCaching protocol. Provide a delegate if you want to control image caching. By default, image manager will use most appropriate implementation available (based on PINCache or NSCache, depending on subspec)@see PINRemoteImageBasicCache for an example.
  @return A PINRemoteImageManager with the specified configuration.
+ @note If you provide your own `sessionConfiguration`, please attention `HTTPMaximumConnectionsPerHost` property, it may causes timeout when in conjunction with `maxNumberOfConcurrentDownloads` if you set a larger number to `maxNumberOfConcurrentDownloads` but smaller number to `HTTPMaximumConnectionsPerHost`.
  */
 - (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)sessionConfiguration
                    alternativeRepresentationProvider:(nullable id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepDelegate
@@ -197,6 +200,7 @@ typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSession
  @param imageCache  Optional delegate which conforms to the PINRemoteImageCaching protocol. Provide a delegate if you want to control image caching. By default, image manager will use most appropriate implementation available (based on PINCache or NSCache, depending on subspec)@see PINRemoteImageBasicCache for an example.
  @param managerConfiguration The configuration used to create the PINRemoteImageManager.
  @return A PINRemoteImageManager with the specified configuration.
+ @note If you provide your own `sessionConfiguration`, please attention `HTTPMaximumConnectionsPerHost` property, it may causes timeout when in conjunction with `maxNumberOfConcurrentDownloads` if you set a larger number to `maxNumberOfConcurrentDownloads` but smaller number to `HTTPMaximumConnectionsPerHost`.
  */
 - (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)sessionConfiguration
                    alternativeRepresentationProvider:(nullable id <PINRemoteImageManagerAlternateRepresentationProvider>)alternateRepDelegate
@@ -214,6 +218,7 @@ typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSession
  Sets the shared instance of PINRemoteImageManager to an instance with the supplied configuration. If configuration is nil, [NSURLSessionConfiguration ephemeralSessionConfiguration] is used. You specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc. This method should not be used if the shared instance has already been created.
 
  @param configuration The configuration used to create the PINRemoteImageManager.
+ @note If you provide your own `sessionConfiguration`, please attention `HTTPMaximumConnectionsPerHost` property, it may causes timeout when in conjunction with `maxNumberOfConcurrentDownloads` if you set a larger number to `maxNumberOfConcurrentDownloads` but smaller number to `HTTPMaximumConnectionsPerHost`.
  */
 + (void)setSharedImageManagerWithConfiguration:(nullable NSURLSessionConfiguration *)configuration;
 

@@ -1,5 +1,6 @@
 ## master
 * Add your own contributions to the next release on the line below this with your name.
+- [fixed] Set HTTPMaximumConnectionsPerHost to PINRemoteImageHTTPMaximumConnectionsPerHost only if user don't provide sessionConfiguration. [#516](https://github.com/pinterest/PINRemoteImage/pull/516) [zhongwuzw](https://github.com/zhongwuzw)
 
 ## 3.0.0 -- 2020 Jan 06
 - [new] Add PINRemoteImageManagerConfiguration configuration object. [#492](https://github.com/pinterest/PINRemoteImage/pull/492) [rqueue](https://github.com/rqueue)
