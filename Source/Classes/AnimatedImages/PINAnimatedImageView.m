@@ -218,14 +218,10 @@
     if ([self canBeVisible] == NO) {
         return;
     }
-    
-    // Get frame interval before holding display link lock to avoid deadlock
-    NSUInteger frameInterval = self.animatedImage.frameInterval;
 
     if (_displayLink == nil) {
         _playHead = 0;
         _displayLink = [PINDisplayLink displayLinkWithTarget:[PINRemoteWeakProxy weakProxyWithTarget:self] selector:@selector(displayLinkFired:)];
-        _displayLink.frameInterval = frameInterval;
         _lastSuccessfulFrameIndex = NSUIntegerMax;
         
         [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:self.animatedImageRunLoopMode];
@@ -368,7 +364,7 @@
         _playHead = 0;
         _playedLoops++;
     }
-    
+  
     if (self.animatedImage.loopCount > 0 && _playedLoops >= self.animatedImage.loopCount) {
         [self stopAnimating];
         return;
