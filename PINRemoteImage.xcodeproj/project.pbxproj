@@ -1135,6 +1135,13 @@
 			path = AnimatedImages;
 			sourceTree = "<group>";
 		};
+		68C155D31F6EE3BE0075EE40 /* AnimatedImages */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = AnimatedImages;
+			sourceTree = "<group>";
+		};
 		68CA92801DB19C06008BECE2 /* PINCache */ = {
 			isa = PBXGroup;
 			children = (
@@ -1197,6 +1204,7 @@
 		F165DFD71BD021EE0008C6E8 /* Project */ = {
 			isa = PBXGroup;
 			children = (
+				68C155D31F6EE3BE0075EE40 /* AnimatedImages */,
 				F1B918DD1BCF23C800710963 /* Categories */,
 				689613E2208FD90A00D2095C /* PINDisplayLink.h */,
 				689613E3208FD90B00D2095C /* PINDisplayLink.m */,
