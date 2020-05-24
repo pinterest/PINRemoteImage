@@ -13,7 +13,7 @@
 
 typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse *response, NSError *error);
 
-@interface PINRemoteImageManager (private)
+@interface PINRemoteImageManager (PrivateExtension)
 
 @property (nonatomic, strong, readonly) dispatch_queue_t callbackQueue;
 @property (nonatomic, strong, readonly) PINOperationQueue *concurrentOperationQueue;

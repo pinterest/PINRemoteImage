@@ -4,7 +4,7 @@
 
 [![CocoaPods compatible](https://img.shields.io/cocoapods/v/PINRemoteImage.svg?style=flat)](https://cocoapods.org/pods/PINRemoteImage)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Build status](https://badge.buildkite.com/556f751bb6455e96687a5f8fb05a65f2df9db8b033121b8c3d.svg?branch=master&style=flat)](https://buildkite.com/pinterest/pinremoteimage)
+[![Build status](https://github.com/pinterest/PINRemoteImage/workflows/CI/badge.svg)](https://github.com/pinterest/PINRemoteImage/actions?query=workflow%3ACI+branch%3Amaster)
 
 [PINRemoteImageManager](Source/Classes/PINRemoteImageManager.h) is an image downloading, processing and caching manager. It uses the concept of download and processing tasks to ensure that even if multiple calls to download or process an image are made, it only occurs one time (unless an item is no longer in the cache). PINRemoteImageManager is backed by **GCD** and safe to **access** from **multiple threads** simultaneously. It ensures that images are decoded off the main thread so that animation performance isn't affected. None of its exposed methods allow for synchronous access. However, it is optimized to call completions on the calling thread if an item is in its memory cache.
 
@@ -197,7 +197,7 @@ __weak UIImageView *weakImageView = self.imageView;
 // cache is an instance of PINCache as long as you haven't overridden defaultImageCache
 PINCache *cache = (PINCache *)[[PINRemoteImageManager sharedImageManager] cache];
 // Max memory cost is based on number of pixels, we estimate the size of one hundred 600x600 images as our max memory image cache.
-[[cache memoryCache] setCostLimit:600 * 600 * 100 * [[UIScreen mainScreen] scale]];
+[[cache memoryCache] setCostLimit:600 * [[UIScreen mainScreen] scale] * 600 * [[UIScreen mainScreen] scale] * 100];
 
 // ~50 MB
 [[cache diskCache] setByteLimit:50 * 1024 * 1024];

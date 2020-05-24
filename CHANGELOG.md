@@ -1,9 +1,18 @@
 ## master
 * Add your own contributions to the next release on the line below this with your name.
+- [fixed] Set HTTPMaximumConnectionsPerHost to PINRemoteImageHTTPMaximumConnectionsPerHost only if user don't provide sessionConfiguration. [#516](https://github.com/pinterest/PINRemoteImage/pull/516) [zhongwuzw](https://github.com/zhongwuzw)
+
+## 3.0.0 -- 2020 Jan 06
 - [new] Add PINRemoteImageManagerConfiguration configuration object. [#492](https://github.com/pinterest/PINRemoteImage/pull/492) [rqueue](https://github.com/rqueue)
 - [fixed] Fixes blending in animated WebP images. [#507](https://github.com/pinterest/PINRemoteImage/pull/507) [garrettmoon](https://github.com/garrettmoon)
 - [fixed] Fixes support in PINAnimatedImageView for WebP animated images. [#507](https://github.com/pinterest/PINRemoteImage/pull/507) [garrettmoon](https://github.com/garrettmoon)
+- [fixed] Fixes re-downloading data corrupt for the same url. [#514](https://github.com/pinterest/PINRemoteImage/pull/514) [zhongwuzw](https://github.com/zhongwuzw)
+- [new] Exposure didCompleteTask:withError: delegate method of protocol PINURLSessionManagerDelegate. [#519](https://github.com/pinterest/PINRemoteImage/pull/519) [zhongwuzw](https://github.com/zhongwuzw)
+- [fixed] Fixes AnimatedImageView designated initializer not work. [#512](https://github.com/pinterest/PINRemoteImage/pull/512) [zhongwuzw](https://github.com/zhongwuzw)
+- [fixed] Set bpp(bits per pixel) to 32 bit for GIF. [#511](https://github.com/pinterest/PINRemoteImage/pull/511) [zhongwuzw](https://github.com/zhongwuzw)
 - [new] Add cancel method for PINRemoteImageManager. [#509](https://github.com/pinterest/PINRemoteImage/pull/509) [zhongwuzw](https://github.com/zhongwuzw)
+- [fixed] Fixes build error when using Xcode 10.2.1. [#524](https://github.com/pinterest/PINRemoteImage/pull/524) [ANNotunzdY](https://github.com/ANNotunzdY)
+- [refactor] Burst Animated Image speed of frame index search. [#523](https://github.com/pinterest/PINRemoteImage/pull/523) [zhongwuzw](https://github.com/zhongwuzw)
 
 ## 3.0.0 Beta 14
 - [fixed] Re-enable warnings check [#506](https://github.com/pinterest/PINRemoteImage/pull/506) [garrettmoon](https://github.com/garrettmoon)

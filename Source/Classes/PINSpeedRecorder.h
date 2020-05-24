@@ -26,7 +26,7 @@ typedef enum : NSUInteger {
 /*
  Returns a weighted average of the bytes per second of a transfer with the time to first byte subtracted.
  More specifically, we get the time to first byte for every task that completes,
- subtract it from the total transfer time, calulate bytes per second
+ subtract it from the total transfer time, calculate bytes per second
  and add it to an existing average using exponential weighted average and adjusting
  for starting bias.
  This is all done on a per host basis.

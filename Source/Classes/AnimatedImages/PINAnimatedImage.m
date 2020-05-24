@@ -91,8 +91,8 @@ const Float32 kPINAnimatedImageDefaultDuration = 0.1;
     // Scales the frame delays by `kGreatestCommonDivisorPrecision`
     // then converts it to an UInteger for in order to calculate the GCD.
     NSUInteger scaledGCD = lrint([self durationAtIndex:0] * kGreatestCommonDivisorPrecision);
-    for (NSUInteger durationIdx = 0; durationIdx < self.frameCount; durationIdx++) {
-        Float32 duration = [self durationAtIndex:durationIdx];
+    for (NSUInteger durationIdx = 1; durationIdx < self.frameCount; durationIdx++) {
+        CFTimeInterval duration = [self durationAtIndex:durationIdx];
         scaledGCD = gcd(lrint(duration * kGreatestCommonDivisorPrecision), scaledGCD);
     }
     

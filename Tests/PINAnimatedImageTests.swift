@@ -132,7 +132,55 @@ class PINAnimatedImageTests: XCTestCase, PINRemoteImageManagerAlternateRepresent
         }
         self.waitForExpectations(timeout: self.timeoutInterval(), handler: nil)
     }
+  
+  func testAnimatedImageViewInitializer() {
+      let animatedExpectation =  self.expectation(description: "Animated image should be downloaded")
+      let imageManager = PINRemoteImageManager.init(sessionConfiguration: nil, alternativeRepresentationProvider: self)
+      imageManager.downloadImage(with: self.slowAnimatedGIFURL()!) { (result : PINRemoteImageManagerResult) in
+          XCTAssert(result.image == nil)
+          guard let animatedData = result.alternativeRepresentation as? NSData else {
+              XCTAssert(false, "alternativeRepresentation should be able to be coerced into data")
+              return
+          }
+
+          XCTAssert(animatedData.pin_isGIF() && animatedData.pin_isAnimatedGIF())
+
+          DispatchQueue.main.async {
+              let pinCachedAnimatedImage = PINCachedAnimatedImage(animatedImageData: animatedData as Data)
+
+              let gifImageView = PINAnimatedImageView(animatedImage: pinCachedAnimatedImage!)
+              XCTAssert(gifImageView.animatedImage?.coverImageReadyCallback != nil)
+
+              animatedExpectation.fulfill()
+          }
+      }
+
+      self.waitForExpectations(timeout: self.timeoutInterval(), handler: nil)
+  }
     
+  func testGIFBytes() {
+        let animatedExpectation =  self.expectation(description: "Animated image should be downloaded")
+        let imageManager = PINRemoteImageManager.init(sessionConfiguration: nil, alternativeRepresentationProvider: self)
+        imageManager.downloadImage(with: self.slowAnimatedGIFURL()!) { (result : PINRemoteImageManagerResult) in
+            XCTAssert(result.image == nil)
+            guard let animatedData = result.alternativeRepresentation as? NSData else {
+                XCTAssert(false, "alternativeRepresentation should be able to be coerced into data")
+                return
+            }
+            
+            XCTAssert(animatedData.pin_isGIF() && animatedData.pin_isAnimatedGIF())
+            
+            let pinCachedAnimatedImage = PINGIFAnimatedImage(animatedImageData: animatedData as Data)!
+            let bytesSize = UInt32((pinCachedAnimatedImage.image(at: 0, cacheProvider: nil)!.takeUnretainedValue() as CGImage).bytesPerRow) * pinCachedAnimatedImage.height
+
+            XCTAssert(pinCachedAnimatedImage.bytesPerFrame == bytesSize)
+            
+            animatedExpectation.fulfill()
+        }
+        
+        self.waitForExpectations(timeout: self.timeoutInterval(), handler: nil)
+    }
+  
     func testInvalidAnimatedData() {
         let data = "AA".data(using: .ascii)
         let gifAnimatedImage = PINGIFAnimatedImage(animatedImageData: data)
@@ -140,5 +188,37 @@ class PINAnimatedImageTests: XCTestCase, PINRemoteImageManagerAlternateRepresent
         
         let webpAnimatedImage = PINWebPAnimatedImage(animatedImageData: data)
         XCTAssert(webpAnimatedImage == nil)
+    }
+
+    func test_retainCycle() {
+        weak var weakCachedAnimatedImage : PINCachedAnimatedImage?
+        autoreleasepool {
+            let animatedImage = TestAnimatedImage.init()
+            let cachedAnimatedImage = PINCachedAnimatedImage.init(animatedImage: animatedImage)
+            weakCachedAnimatedImage = cachedAnimatedImage
+        }
+        let cachedAnimatedImage : PINCachedAnimatedImage? = weakCachedAnimatedImage
+        XCTAssertNil(cachedAnimatedImage)
+    }
+  
+    func testFrameIndex() {
+        let bundle = Bundle(for: type(of: self))
+        let path = bundle.path(forResource: "fireworks", ofType: "gif")!
+        let gifData = NSData(contentsOfFile: path)
+        let cachedAnimatedImage = PINCachedAnimatedImage(animatedImageData: gifData! as Data)!
+        
+        let gifAnimatedImageView = PINAnimatedImageView(animatedImage: cachedAnimatedImage)
+        
+        // Test left bounds
+        var index = gifAnimatedImageView.frameIndex(atPlayHeadPosition: 0.1)
+        XCTAssert(index == 0)
+        
+        // Test right bounds
+        index = gifAnimatedImageView.frameIndex(atPlayHeadPosition: 1.1)
+        XCTAssert(index == 9)
+        
+        // Test random index
+        index = gifAnimatedImageView.frameIndex(atPlayHeadPosition: 0.41)
+        XCTAssert(index == 4)
     }
 }
