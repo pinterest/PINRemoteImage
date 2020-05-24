@@ -72,6 +72,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 @property (nonatomic, strong) PINURLSessionManager *sessionManager;
 @property (nonatomic, readonly) NSUInteger totalDownloads;
+@property (nonatomic, strong) NSMapTable <NSUUID *, PINRemoteImageTask *> *UUIDToTask;
 
 - (NSString *)resumeCacheKeyForURL:(NSURL *)url;
 
@@ -1539,6 +1540,24 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     });
     dispatch_group_wait(group, [self timeout]);
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
+- (void)testImageDownloadUUIDs
+{
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    __weak PINRemoteImageManager *weakImageManager = self.imageManager;
+    __block NSUUID *uuid = [self.imageManager downloadImageWithURL:[self progressiveURL2] options:0 progressDownload:^(int64_t completedBytes, int64_t totalBytes) {
+        PINRemoteImageDownloadTask *task = (PINRemoteImageDownloadTask *)[weakImageManager.UUIDToTask objectForKey:uuid];
+        XCTAssert([task.URL isEqual:[self progressiveURL2]]);
+    } completion:^(PINRemoteImageManagerResult *result) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            PINRemoteImageDownloadTask *task = (PINRemoteImageDownloadTask *)[weakImageManager.UUIDToTask objectForKey:uuid];
+            XCTAssert(!task);
+            dispatch_semaphore_signal(semaphore);
+        });
+    }];
+    
+    dispatch_semaphore_wait(semaphore, [self timeout]);
 }
 
 @end
