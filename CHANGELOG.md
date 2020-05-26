@@ -1,6 +1,7 @@
 ## master
 * Add your own contributions to the next release on the line below this with your name.
 - [fixed] Set HTTPMaximumConnectionsPerHost to PINRemoteImageHTTPMaximumConnectionsPerHost only if user don't provide sessionConfiguration. [#516](https://github.com/pinterest/PINRemoteImage/pull/516) [zhongwuzw](https://github.com/zhongwuzw)
+- [refactor] Refactor remote manager task for uuid method. [#526](https://github.com/pinterest/PINRemoteImage/pull/526) [zhongwuzw](https://github.com/zhongwuzw)
 
 ## 3.0.0 -- 2020 Jan 06
 - [new] Add PINRemoteImageManagerConfiguration configuration object. [#492](https://github.com/pinterest/PINRemoteImage/pull/492) [rqueue](https://github.com/rqueue)
@@ -12,7 +13,6 @@
 - [fixed] Set bpp(bits per pixel) to 32 bit for GIF. [#511](https://github.com/pinterest/PINRemoteImage/pull/511) [zhongwuzw](https://github.com/zhongwuzw)
 - [new] Add cancel method for PINRemoteImageManager. [#509](https://github.com/pinterest/PINRemoteImage/pull/509) [zhongwuzw](https://github.com/zhongwuzw)
 - [fixed] Fixes build error when using Xcode 10.2.1. [#524](https://github.com/pinterest/PINRemoteImage/pull/524) [ANNotunzdY](https://github.com/ANNotunzdY)
-- [refactor] Burst Animated Image speed of frame index search. [#523](https://github.com/pinterest/PINRemoteImage/pull/523) [zhongwuzw](https://github.com/zhongwuzw)
 
 ## 3.0.0 Beta 14
 - [fixed] Re-enable warnings check [#506](https://github.com/pinterest/PINRemoteImage/pull/506) [garrettmoon](https://github.com/garrettmoon)
