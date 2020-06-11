@@ -225,7 +225,7 @@
     if (_displayLink == nil) {
         _playHead = 0;
         _displayLink = [PINDisplayLink displayLinkWithTarget:[PINRemoteWeakProxy weakProxyWithTarget:self] selector:@selector(displayLinkFired:)];
-        if (@available(iOS 10.0, *)) {
+        if (@available(iOS 10.0, tvOS 10.0, *)) {
             _displayLink.preferredFramesPerSecond = frameInterval;
         } else {
             _displayLink.frameInterval = frameInterval;
