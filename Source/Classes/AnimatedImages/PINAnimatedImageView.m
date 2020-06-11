@@ -225,11 +225,15 @@
     if (_displayLink == nil) {
         _playHead = 0;
         _displayLink = [PINDisplayLink displayLinkWithTarget:[PINRemoteWeakProxy weakProxyWithTarget:self] selector:@selector(displayLinkFired:)];
+#if PIN_TARGET_IOS
         if (@available(iOS 10.0, tvOS 10.0, *)) {
             _displayLink.preferredFramesPerSecond = frameInterval;
         } else {
+#endif
             _displayLink.frameInterval = frameInterval;
+#if PIN_TARGET_IOS
         }
+#endif
         _lastSuccessfulFrameIndex = NSUIntegerMax;
         
         [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:self.animatedImageRunLoopMode];
