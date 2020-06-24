@@ -5,6 +5,8 @@
 //  Created by Garrett Moon on 4/17/18.
 //
 
+#import "PINRemoteImageMacros.h"
+
 #if PIN_TARGET_IOS
 #import <UIKit/UIKit.h>
 #elif PIN_TARGET_MAC

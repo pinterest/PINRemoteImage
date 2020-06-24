@@ -6,6 +6,8 @@
 //
 //
 
+#import "PINRemoteImageMacros.h"
+
 #if PIN_WEBP
 
 #if PIN_TARGET_IOS
@@ -13,8 +15,6 @@
 #elif PIN_TARGET_MAC
 #import <Cocoa/Cocoa.h>
 #endif
-
-#import "PINRemoteImageMacros.h"
 
 @interface PINImage (PINWebP)
 
