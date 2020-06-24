@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "PINRemoteImageMacros.h"
+
 @interface NSData (PINImageDetectors)
 
 - (BOOL)pin_isGIF;
