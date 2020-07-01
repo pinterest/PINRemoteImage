@@ -12,14 +12,14 @@
 // Author(s):  Djordje Pesut    (djordje.pesut@imgtec.com)
 //             Jovan Zelincevic (jovan.zelincevic@imgtec.com)
 
-#include "./dsp.h"
+#include "src/dsp/dsp.h"
 
 #if defined(WEBP_USE_MIPS_DSP_R2)
 
-#include "./lossless.h"
+#include "src/dsp/lossless.h"
 
-static void SubtractGreenFromBlueAndRed(uint32_t* argb_data,
-                                        int num_pixels) {
+static void SubtractGreenFromBlueAndRed_MIPSdspR2(uint32_t* argb_data,
+                                                  int num_pixels) {
   uint32_t temp0, temp1, temp2, temp3, temp4, temp5, temp6, temp7;
   uint32_t* const p_loop1_end = argb_data + (num_pixels & ~3);
   uint32_t* const p_loop2_end = p_loop1_end + (num_pixels & 3);
@@ -78,8 +78,8 @@ static WEBP_INLINE uint32_t ColorTransformDelta(int8_t color_pred,
   return (uint32_t)((int)(color_pred) * color) >> 5;
 }
 
-static void TransformColor(const VP8LMultipliers* const m, uint32_t* data,
-                           int num_pixels) {
+static void TransformColor_MIPSdspR2(const VP8LMultipliers* const m,
+                                     uint32_t* data, int num_pixels) {
   int temp0, temp1, temp2, temp3, temp4, temp5;
   uint32_t argb, argb1, new_red, new_red1;
   const uint32_t G_to_R = m->green_to_red_;
@@ -171,10 +171,13 @@ static WEBP_INLINE uint8_t TransformColorBlue(uint8_t green_to_blue,
   return (new_blue & 0xff);
 }
 
-static void CollectColorBlueTransforms(const uint32_t* argb, int stride,
-                                       int tile_width, int tile_height,
-                                       int green_to_blue, int red_to_blue,
-                                       int histo[]) {
+static void CollectColorBlueTransforms_MIPSdspR2(const uint32_t* argb,
+                                                 int stride,
+                                                 int tile_width,
+                                                 int tile_height,
+                                                 int green_to_blue,
+                                                 int red_to_blue,
+                                                 int histo[]) {
   const int rtb = (red_to_blue << 16) | (red_to_blue & 0xffff);
   const int gtb = (green_to_blue << 16) | (green_to_blue & 0xffff);
   const uint32_t mask = 0xff00ffu;
@@ -222,9 +225,12 @@ static WEBP_INLINE uint8_t TransformColorRed(uint8_t green_to_red,
   return (new_red & 0xff);
 }
 
-static void CollectColorRedTransforms(const uint32_t* argb, int stride,
-                                      int tile_width, int tile_height,
-                                      int green_to_red, int histo[]) {
+static void CollectColorRedTransforms_MIPSdspR2(const uint32_t* argb,
+                                                int stride,
+                                                int tile_width,
+                                                int tile_height,
+                                                int green_to_red,
+                                                int histo[]) {
   const int gtr = (green_to_red << 16) | (green_to_red & 0xffff);
   while (tile_height-- > 0) {
     int x;
@@ -262,10 +268,10 @@ static void CollectColorRedTransforms(const uint32_t* argb, int stride,
 extern void VP8LEncDspInitMIPSdspR2(void);
 
 WEBP_TSAN_IGNORE_FUNCTION void VP8LEncDspInitMIPSdspR2(void) {
-  VP8LSubtractGreenFromBlueAndRed = SubtractGreenFromBlueAndRed;
-  VP8LTransformColor = TransformColor;
-  VP8LCollectColorBlueTransforms = CollectColorBlueTransforms;
-  VP8LCollectColorRedTransforms = CollectColorRedTransforms;
+  VP8LSubtractGreenFromBlueAndRed = SubtractGreenFromBlueAndRed_MIPSdspR2;
+  VP8LTransformColor = TransformColor_MIPSdspR2;
+  VP8LCollectColorBlueTransforms = CollectColorBlueTransforms_MIPSdspR2;
+  VP8LCollectColorRedTransforms = CollectColorRedTransforms_MIPSdspR2;
 }
 
 #else  // !WEBP_USE_MIPS_DSP_R2

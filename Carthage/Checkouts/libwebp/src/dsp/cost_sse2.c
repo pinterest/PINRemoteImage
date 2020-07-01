@@ -11,19 +11,19 @@
 //
 // Author: Skal (pascal.massimino@gmail.com)
 
-#include "./dsp.h"
+#include "src/dsp/dsp.h"
 
 #if defined(WEBP_USE_SSE2)
 #include <emmintrin.h>
 
-#include "../enc/cost_enc.h"
-#include "../enc/vp8i_enc.h"
-#include "../utils/utils.h"
+#include "src/enc/cost_enc.h"
+#include "src/enc/vp8i_enc.h"
+#include "src/utils/utils.h"
 
 //------------------------------------------------------------------------------
 
-static void SetResidualCoeffsSSE2(const int16_t* const coeffs,
-                                  VP8Residual* const res) {
+static void SetResidualCoeffs_SSE2(const int16_t* const coeffs,
+                                   VP8Residual* const res) {
   const __m128i c0 = _mm_loadu_si128((const __m128i*)(coeffs + 0));
   const __m128i c1 = _mm_loadu_si128((const __m128i*)(coeffs + 8));
   // Use SSE2 to compare 16 values with a single instruction.
@@ -42,7 +42,7 @@ static void SetResidualCoeffsSSE2(const int16_t* const coeffs,
   res->coeffs = coeffs;
 }
 
-static int GetResidualCostSSE2(int ctx0, const VP8Residual* const res) {
+static int GetResidualCost_SSE2(int ctx0, const VP8Residual* const res) {
   uint8_t levels[16], ctxs[16];
   uint16_t abs_levels[16];
   int n = res->first;
@@ -108,8 +108,8 @@ static int GetResidualCostSSE2(int ctx0, const VP8Residual* const res) {
 extern void VP8EncDspCostInitSSE2(void);
 
 WEBP_TSAN_IGNORE_FUNCTION void VP8EncDspCostInitSSE2(void) {
-  VP8SetResidualCoeffs = SetResidualCoeffsSSE2;
-  VP8GetResidualCost = GetResidualCostSSE2;
+  VP8SetResidualCoeffs = SetResidualCoeffs_SSE2;
+  VP8GetResidualCost = GetResidualCost_SSE2;
 }
 
 #else  // !WEBP_USE_SSE2

@@ -74,12 +74,22 @@ model {
           cCompiler.args "-frename-registers -s"
         }
       }
+      // mips32 fails to build with clang from r14b
+      // https://bugs.chromium.org/p/webp/issues/detail?id=343
+      if (toolChain in Clang) {
+        if (getTargetPlatform() == "mips") {
+          cCompiler.args "-no-integrated-as"
+        }
+      }
       // Check for NEON usage.
-      if (getTargetPlatform() == "arm" || getTargetPlatform() == "arm64") {
+      if (getTargetPlatform() == "arm") {
         NEON = "c.neon"
+        cCompiler.define "HAVE_CPU_FEATURES_H"
       } else {
         NEON = "c"
       }
+
+      cCompiler.args "-I" + file(".").absolutePath
     }
     // Link to pthread for shared libraries.
     withType(SharedLibraryBinarySpec) {
@@ -112,9 +122,6 @@ model {
             include "alpha_processing_neon.$NEON"
             include "alpha_processing_sse2.c"
             include "alpha_processing_sse41.c"
-            include "argb.c"
-            include "argb_mips_dsp_r2.c"
-            include "argb_sse2.c"
             include "cpu.c"
             include "dec.c"
             include "dec_clip_tables.c"
@@ -145,10 +152,13 @@ model {
             include "upsampling_msa.c"
             include "upsampling_neon.$NEON"
             include "upsampling_sse2.c"
+            include "upsampling_sse41.c"
             include "yuv.c"
             include "yuv_mips32.c"
             include "yuv_mips_dsp_r2.c"
+            include "yuv_neon.$NEON"
             include "yuv_sse2.c"
+            include "yuv_sse41.c"
             srcDir "src/utils"
             include "bit_reader_utils.c"
             include "color_cache_utils.c"
@@ -163,9 +173,9 @@ model {
             include "cost.c"
             include "cost_mips32.c"
             include "cost_mips_dsp_r2.c"
+            include "cost_neon.$NEON"
             include "cost_sse2.c"
             include "enc.c"
-            include "enc_avx2.c"
             include "enc_mips32.c"
             include "enc_mips_dsp_r2.c"
             include "enc_msa.c"
@@ -179,13 +189,15 @@ model {
             include "lossless_enc_neon.$NEON"
             include "lossless_enc_sse2.c"
             include "lossless_enc_sse41.c"
+            include "ssim.c"
+            include "ssim_sse2.c"
             srcDir "src/enc"
             include "alpha_enc.c"
             include "analysis_enc.c"
+            include "backward_references_cost_enc.c"
             include "backward_references_enc.c"
             include "config_enc.c"
             include "cost_enc.c"
-            include "delta_palettization_enc.c"
             include "filter_enc.c"
             include "frame_enc.c"
             include "histogram_enc.c"
@@ -277,6 +289,7 @@ model {
     imagedec(NativeLibrarySpec) {
       binaries {
         all {
+          lib library: "webpdemux", linkage: "static"
           lib library: "webp", linkage: "static"
         }
       }
@@ -288,6 +301,7 @@ model {
             include "jpegdec.c"
             include "metadata.c"
             include "pngdec.c"
+            include "pnmdec.c"
             include "tiffdec.c"
             include "webpdec.c"
           }
@@ -318,6 +332,7 @@ model {
           lib library: "example_util", linkage: "static"
           lib library: "imagedec", linkage: "static"
           lib library: "imageio_util", linkage: "static"
+          lib library: "webpdemux", linkage: "static"
           lib library: "webp", linkage: "static"
         }
       }
@@ -338,6 +353,7 @@ model {
           lib library: "imagedec", linkage: "static"
           lib library: "imageenc", linkage: "static"
           lib library: "imageio_util", linkage: "static"
+          lib library: "webpdemux", linkage: "static"
           lib library: "webp"
         }
       }
@@ -377,6 +393,7 @@ model {
           lib library: "imagedec", linkage: "static"
           lib library: "imageio_util", linkage: "static"
           lib library: "webpmux", linkage: "static"
+          lib library: "webpdemux", linkage: "static"
           lib library: "webp"
         }
       }
@@ -385,6 +402,24 @@ model {
           source {
             srcDir "./examples"
             include "img2webp.c"
+          }
+        }
+      }
+    }
+
+    webpinfo_example(NativeExecutableSpec) {
+      binaries {
+        all {
+          lib library: "example_util", linkage: "static"
+          lib library: "imageio_util", linkage: "static"
+          lib library: "webp"
+        }
+      }
+      sources {
+        c {
+          source {
+            srcDir "./examples"
+            include "webpinfo.c"
           }
         }
       }

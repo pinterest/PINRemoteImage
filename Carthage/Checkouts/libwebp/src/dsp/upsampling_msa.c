@@ -12,12 +12,12 @@
 // Author: Prashant Patil (prashant.patil@imgtec.com)
 
 #include <string.h>
-#include "./dsp.h"
+#include "src/dsp/dsp.h"
 
 #if defined(WEBP_USE_MSA)
 
-#include "./msa_macro.h"
-#include "./yuv.h"
+#include "src/dsp/msa_macro.h"
+#include "src/dsp/yuv.h"
 
 #ifdef FANCY_UPSAMPLING
 
@@ -264,6 +264,7 @@ static void YuvToBgr(int y, int u, int v, uint8_t* const bgr) {
   bgr[2] = Clip8(r1 >> 6);
 }
 
+#if !defined(WEBP_REDUCE_CSP)
 static void YuvToRgb565(int y, int u, int v, uint8_t* const rgb) {
   const int y1 = MultHi(y, 19077);
   const int r1 = y1 + MultHi(v, 26149) - 14234;
@@ -274,7 +275,7 @@ static void YuvToRgb565(int y, int u, int v, uint8_t* const rgb) {
   const int b = Clip8(b1 >> 6);
   const int rg = (r & 0xf8) | (g >> 5);
   const int gb = ((g << 3) & 0xe0) | (b >> 3);
-#ifdef WEBP_SWAP_16BIT_CSP
+#if (WEBP_SWAP_16BIT_CSP == 1)
   rgb[0] = gb;
   rgb[1] = rg;
 #else
@@ -293,7 +294,7 @@ static void YuvToRgba4444(int y, int u, int v, uint8_t* const argb) {
   const int b = Clip8(b1 >> 6);
   const int rg = (r & 0xf0) | (g >> 4);
   const int ba = (b & 0xf0) | 0x0f;     // overwrite the lower 4 bits
-#ifdef WEBP_SWAP_16BIT_CSP
+#if (WEBP_SWAP_16BIT_CSP == 1)
   argb[0] = ba;
   argb[1] = rg;
 #else
@@ -306,6 +307,7 @@ static void YuvToArgb(uint8_t y, uint8_t u, uint8_t v, uint8_t* const argb) {
   argb[0] = 0xff;
   YuvToRgb(y, u, v, argb + 1);
 }
+#endif  // WEBP_REDUCE_CSP
 
 static void YuvToBgra(uint8_t y, uint8_t u, uint8_t v, uint8_t* const bgra) {
   YuvToBgr(y, u, v, bgra);
@@ -317,6 +319,7 @@ static void YuvToRgba(uint8_t y, uint8_t u, uint8_t v, uint8_t* const rgba) {
   rgba[3] = 0xff;
 }
 
+#if !defined(WEBP_REDUCE_CSP)
 static void YuvToRgbLine(const uint8_t* y, const uint8_t* u,
                          const uint8_t* v, uint8_t* dst, int length) {
   v16u8 R, G, B;
@@ -370,11 +373,12 @@ static void YuvToBgrLine(const uint8_t* y, const uint8_t* u,
     memcpy(dst, temp, length * 3 * sizeof(*dst));
   }
 }
+#endif  // WEBP_REDUCE_CSP
 
 static void YuvToRgbaLine(const uint8_t* y, const uint8_t* u,
                           const uint8_t* v, uint8_t* dst, int length) {
   v16u8 R, G, B;
-  const v16u8 A = (v16u8)__msa_ldi_b(0xff);
+  const v16u8 A = (v16u8)__msa_ldi_b(ALPHAVAL);
   while (length >= 16) {
     CALC_RGB16(y, u, v, R, G, B);
     STORE16_4(R, G, B, A, dst);
@@ -402,7 +406,7 @@ static void YuvToRgbaLine(const uint8_t* y, const uint8_t* u,
 static void YuvToBgraLine(const uint8_t* y, const uint8_t* u,
                           const uint8_t* v, uint8_t* dst, int length) {
   v16u8 R, G, B;
-  const v16u8 A = (v16u8)__msa_ldi_b(0xff);
+  const v16u8 A = (v16u8)__msa_ldi_b(ALPHAVAL);
   while (length >= 16) {
     CALC_RGB16(y, u, v, R, G, B);
     STORE16_4(B, G, R, A, dst);
@@ -427,10 +431,11 @@ static void YuvToBgraLine(const uint8_t* y, const uint8_t* u,
   }
 }
 
+#if !defined(WEBP_REDUCE_CSP)
 static void YuvToArgbLine(const uint8_t* y, const uint8_t* u,
                           const uint8_t* v, uint8_t* dst, int length) {
   v16u8 R, G, B;
-  const v16u8 A = (v16u8)__msa_ldi_b(0xff);
+  const v16u8 A = (v16u8)__msa_ldi_b(ALPHAVAL);
   while (length >= 16) {
     CALC_RGB16(y, u, v, R, G, B);
     STORE16_4(A, R, G, B, dst);
@@ -459,11 +464,11 @@ static void YuvToRgba4444Line(const uint8_t* y, const uint8_t* u,
                               const uint8_t* v, uint8_t* dst, int length) {
   v16u8 R, G, B, RG, BA, tmp0, tmp1;
   while (length >= 16) {
-  #ifdef WEBP_SWAP_16BIT_CSP
+#if (WEBP_SWAP_16BIT_CSP == 1)
     CALC_RGBA4444(y, u, v, BA, RG, 16, dst);
-  #else
+#else
     CALC_RGBA4444(y, u, v, RG, BA, 16, dst);
-  #endif
+#endif
     y      += 16;
     u      += 16;
     v      += 16;
@@ -473,7 +478,7 @@ static void YuvToRgba4444Line(const uint8_t* y, const uint8_t* u,
   if (length > 8) {
     uint8_t temp[2 * 16] = { 0 };
     memcpy(temp, y, length * sizeof(*temp));
-#ifdef WEBP_SWAP_16BIT_CSP
+#if (WEBP_SWAP_16BIT_CSP == 1)
     CALC_RGBA4444(temp, u, v, BA, RG, 16, temp);
 #else
     CALC_RGBA4444(temp, u, v, RG, BA, 16, temp);
@@ -482,7 +487,7 @@ static void YuvToRgba4444Line(const uint8_t* y, const uint8_t* u,
   } else if (length > 0) {
     uint8_t temp[2 * 8] = { 0 };
     memcpy(temp, y, length * sizeof(*temp));
-#ifdef WEBP_SWAP_16BIT_CSP
+#if (WEBP_SWAP_16BIT_CSP == 1)
     CALC_RGBA4444(temp, u, v, BA, RG, 8, temp);
 #else
     CALC_RGBA4444(temp, u, v, RG, BA, 8, temp);
@@ -495,11 +500,11 @@ static void YuvToRgb565Line(const uint8_t* y, const uint8_t* u,
                             const uint8_t* v, uint8_t* dst, int length) {
   v16u8 R, G, B, RG, GB, tmp0, tmp1;
   while (length >= 16) {
-  #ifdef WEBP_SWAP_16BIT_CSP
+#if (WEBP_SWAP_16BIT_CSP == 1)
     CALC_RGB565(y, u, v, GB, RG, 16, dst);
-  #else
+#else
     CALC_RGB565(y, u, v, RG, GB, 16, dst);
-  #endif
+#endif
     y      += 16;
     u      += 16;
     v      += 16;
@@ -509,7 +514,7 @@ static void YuvToRgb565Line(const uint8_t* y, const uint8_t* u,
   if (length > 8) {
     uint8_t temp[2 * 16] = { 0 };
     memcpy(temp, y, length * sizeof(*temp));
-#ifdef WEBP_SWAP_16BIT_CSP
+#if (WEBP_SWAP_16BIT_CSP == 1)
     CALC_RGB565(temp, u, v, GB, RG, 16, temp);
 #else
     CALC_RGB565(temp, u, v, RG, GB, 16, temp);
@@ -518,7 +523,7 @@ static void YuvToRgb565Line(const uint8_t* y, const uint8_t* u,
   } else if (length > 0) {
     uint8_t temp[2 * 8] = { 0 };
     memcpy(temp, y, length * sizeof(*temp));
-#ifdef WEBP_SWAP_16BIT_CSP
+#if (WEBP_SWAP_16BIT_CSP == 1)
     CALC_RGB565(temp, u, v, GB, RG, 8, temp);
 #else
     CALC_RGB565(temp, u, v, RG, GB, 8, temp);
@@ -526,6 +531,7 @@ static void YuvToRgb565Line(const uint8_t* y, const uint8_t* u,
     memcpy(dst, temp, length * 2 * sizeof(*dst));
   }
 }
+#endif  // WEBP_REDUCE_CSP
 
 #define UPSAMPLE_32PIXELS(a, b, c, d) do {    \
   v16u8 s = __msa_aver_u_b(a, d);             \
@@ -570,9 +576,9 @@ static void FUNC_NAME(const uint8_t* top_y, const uint8_t* bot_y,        \
   const uint32_t l_uv = ((cur_u[0]) | ((cur_v[0]) << 16));               \
   const uint32_t uv0 = (3 * tl_uv + l_uv + 0x00020002u) >> 2;            \
   const uint8_t* ptop_y = &top_y[1];                                     \
-  uint8_t *ptop_dst = top_dst + XSTEP;                                   \
+  uint8_t* ptop_dst = top_dst + XSTEP;                                   \
   const uint8_t* pbot_y = &bot_y[1];                                     \
-  uint8_t *pbot_dst = bot_dst + XSTEP;                                   \
+  uint8_t* pbot_dst = bot_dst + XSTEP;                                   \
                                                                          \
   FUNC(top_y[0], uv0 & 0xff, (uv0 >> 16), top_dst);                      \
   if (bot_y != NULL) {                                                   \
@@ -640,13 +646,15 @@ static void FUNC_NAME(const uint8_t* top_y, const uint8_t* bot_y,        \
   }                                                                      \
 }
 
-UPSAMPLE_FUNC(UpsampleRgbLinePair,      YuvToRgb,      3)
-UPSAMPLE_FUNC(UpsampleBgrLinePair,      YuvToBgr,      3)
 UPSAMPLE_FUNC(UpsampleRgbaLinePair,     YuvToRgba,     4)
 UPSAMPLE_FUNC(UpsampleBgraLinePair,     YuvToBgra,     4)
+#if !defined(WEBP_REDUCE_CSP)
+UPSAMPLE_FUNC(UpsampleRgbLinePair,      YuvToRgb,      3)
+UPSAMPLE_FUNC(UpsampleBgrLinePair,      YuvToBgr,      3)
 UPSAMPLE_FUNC(UpsampleArgbLinePair,     YuvToArgb,     4)
 UPSAMPLE_FUNC(UpsampleRgba4444LinePair, YuvToRgba4444, 2)
 UPSAMPLE_FUNC(UpsampleRgb565LinePair,   YuvToRgb565,   2)
+#endif   // WEBP_REDUCE_CSP
 
 //------------------------------------------------------------------------------
 // Entry point
@@ -656,17 +664,19 @@ extern WebPUpsampleLinePairFunc WebPUpsamplers[/* MODE_LAST */];
 extern void WebPInitUpsamplersMSA(void);
 
 WEBP_TSAN_IGNORE_FUNCTION void WebPInitUpsamplersMSA(void) {
-  WebPUpsamplers[MODE_RGB]       = UpsampleRgbLinePair;
   WebPUpsamplers[MODE_RGBA]      = UpsampleRgbaLinePair;
-  WebPUpsamplers[MODE_BGR]       = UpsampleBgrLinePair;
   WebPUpsamplers[MODE_BGRA]      = UpsampleBgraLinePair;
-  WebPUpsamplers[MODE_ARGB]      = UpsampleArgbLinePair;
   WebPUpsamplers[MODE_rgbA]      = UpsampleRgbaLinePair;
   WebPUpsamplers[MODE_bgrA]      = UpsampleBgraLinePair;
+#if !defined(WEBP_REDUCE_CSP)
+  WebPUpsamplers[MODE_RGB]       = UpsampleRgbLinePair;
+  WebPUpsamplers[MODE_BGR]       = UpsampleBgrLinePair;
+  WebPUpsamplers[MODE_ARGB]      = UpsampleArgbLinePair;
   WebPUpsamplers[MODE_Argb]      = UpsampleArgbLinePair;
   WebPUpsamplers[MODE_RGB_565]   = UpsampleRgb565LinePair;
   WebPUpsamplers[MODE_RGBA_4444] = UpsampleRgba4444LinePair;
   WebPUpsamplers[MODE_rgbA_4444] = UpsampleRgba4444LinePair;
+#endif   // WEBP_REDUCE_CSP
 }
 
 #endif  // FANCY_UPSAMPLING

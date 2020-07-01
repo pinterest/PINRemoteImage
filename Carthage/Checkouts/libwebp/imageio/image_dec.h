@@ -23,6 +23,7 @@
 #include "./metadata.h"
 #include "./jpegdec.h"
 #include "./pngdec.h"
+#include "./pnmdec.h"
 #include "./tiffdec.h"
 #include "./webpdec.h"
 #include "./wicdec.h"
@@ -36,6 +37,7 @@ typedef enum {
   WEBP_JPEG_FORMAT,
   WEBP_TIFF_FORMAT,
   WEBP_WEBP_FORMAT,
+  WEBP_PNM_FORMAT,
   WEBP_UNSUPPORTED_FORMAT
 } WebPInputFileFormat;
 

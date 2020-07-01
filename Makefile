@@ -2,7 +2,7 @@ PLATFORM="platform=iOS Simulator,name=iPhone 7"
 SDK="iphonesimulator"
 SHELL=/bin/bash -o pipefail
 
-.PHONY: all lint test carthage analyze
+.PHONY: all webp lint test carthage analyze
 
 lint:
 	pod lib lint
@@ -24,5 +24,9 @@ test:
 carthage:
 	carthage update --no-use-binaries --no-build
 	carthage build --no-use-binaries --no-skip-current
+
+webp:
+	carthage update --no-use-binaries --no-build
+	cd webp && ../Carthage/Checkouts/libwebp/iosbuild.sh
 	
 all: carthage test lint analyze

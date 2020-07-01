@@ -11,15 +11,15 @@
 //
 
 #ifdef HAVE_CONFIG_H
-#include "../webp/config.h"
+#include "src/webp/config.h"
 #endif
 
 #include <assert.h>
 #include <string.h>
 
-#include "../utils/utils.h"
-#include "../webp/decode.h"
-#include "../webp/demux.h"
+#include "src/utils/utils.h"
+#include "src/webp/decode.h"
+#include "src/webp/demux.h"
 
 #define NUM_CHANNELS 4
 

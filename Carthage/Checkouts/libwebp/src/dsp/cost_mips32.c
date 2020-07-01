@@ -9,13 +9,13 @@
 //
 // Author: Djordje Pesut (djordje.pesut@imgtec.com)
 
-#include "./dsp.h"
+#include "src/dsp/dsp.h"
 
 #if defined(WEBP_USE_MIPS32)
 
-#include "../enc/cost_enc.h"
+#include "src/enc/cost_enc.h"
 
-static int GetResidualCost(int ctx0, const VP8Residual* const res) {
+static int GetResidualCost_MIPS32(int ctx0, const VP8Residual* const res) {
   int temp0, temp1;
   int v_reg, ctx_reg;
   int n = res->first;
@@ -96,8 +96,8 @@ static int GetResidualCost(int ctx0, const VP8Residual* const res) {
   return cost;
 }
 
-static void SetResidualCoeffs(const int16_t* const coeffs,
-                              VP8Residual* const res) {
+static void SetResidualCoeffs_MIPS32(const int16_t* const coeffs,
+                                     VP8Residual* const res) {
   const int16_t* p_coeffs = (int16_t*)coeffs;
   int temp0, temp1, temp2, n, n1;
   assert(res->first == 0 || coeffs[0] == 0);
@@ -143,8 +143,8 @@ static void SetResidualCoeffs(const int16_t* const coeffs,
 extern void VP8EncDspCostInitMIPS32(void);
 
 WEBP_TSAN_IGNORE_FUNCTION void VP8EncDspCostInitMIPS32(void) {
-  VP8GetResidualCost = GetResidualCost;
-  VP8SetResidualCoeffs = SetResidualCoeffs;
+  VP8GetResidualCost = GetResidualCost_MIPS32;
+  VP8SetResidualCoeffs = SetResidualCoeffs_MIPS32;
 }
 
 #else  // !WEBP_USE_MIPS32

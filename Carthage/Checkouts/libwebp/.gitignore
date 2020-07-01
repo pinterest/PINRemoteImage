@@ -20,9 +20,11 @@
 Makefile
 Makefile.in
 examples/anim_diff
+examples/anim_dump
 examples/[cdv]webp
 examples/gif2webp
 examples/img2webp
+examples/webpinfo
 examples/webpmux
 src/webp/config.h*
 src/webp/stamp-h1
@@ -38,4 +40,5 @@ cmake_install.cmake
 .gradle
 /build
 extras/get_disto
+extras/vwebp_sdl
 extras/webp_quality

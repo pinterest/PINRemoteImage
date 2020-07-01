@@ -11,12 +11,12 @@
 //
 // Author: Urvang Joshi (urvang@google.com)
 
-#ifndef WEBP_UTILS_HUFFMAN_H_
-#define WEBP_UTILS_HUFFMAN_H_
+#ifndef WEBP_UTILS_HUFFMAN_UTILS_H_
+#define WEBP_UTILS_HUFFMAN_UTILS_H_
 
 #include <assert.h>
-#include "../webp/format_constants.h"
-#include "../webp/types.h"
+#include "src/webp/format_constants.h"
+#include "src/webp/types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -78,6 +78,8 @@ void VP8LHtreeGroupsFree(HTreeGroup* const htree_groups);
 // the huffman table.
 // Returns built table size or 0 in case of error (invalid tree or
 // memory error).
+// If root_table is NULL, it returns 0 if a lookup cannot be built, something
+// > 0 otherwise (but not the table size).
 int VP8LBuildHuffmanTable(HuffmanCode* const root_table, int root_bits,
                           const int code_lengths[], int code_lengths_size);
 
@@ -85,4 +87,4 @@ int VP8LBuildHuffmanTable(HuffmanCode* const root_table, int root_bits,
 }    // extern "C"
 #endif
 
-#endif  // WEBP_UTILS_HUFFMAN_H_
+#endif  // WEBP_UTILS_HUFFMAN_UTILS_H_

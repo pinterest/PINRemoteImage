@@ -12,11 +12,11 @@
 // Author(s):  Djordje Pesut    (djordje.pesut@imgtec.com)
 //             Jovan Zelincevic (jovan.zelincevic@imgtec.com)
 
-#include "./dsp.h"
+#include "src/dsp/dsp.h"
 
 #if defined(WEBP_USE_MIPS32)
 
-#include "./mips_macro.h"
+#include "src/dsp/mips_macro.h"
 
 static const int kC1 = 20091 + (1 << 16);
 static const int kC2 = 35468;

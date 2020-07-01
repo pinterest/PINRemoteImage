@@ -11,16 +11,16 @@
 //
 // Author: Skal (pascal.massimino@gmail.com)
 
-#ifndef WEBP_ENC_VP8ENCI_H_
-#define WEBP_ENC_VP8ENCI_H_
+#ifndef WEBP_ENC_VP8I_ENC_H_
+#define WEBP_ENC_VP8I_ENC_H_
 
 #include <string.h>     // for memcpy()
-#include "../dec/common_dec.h"
-#include "../dsp/dsp.h"
-#include "../utils/bit_writer_utils.h"
-#include "../utils/thread_utils.h"
-#include "../utils/utils.h"
-#include "../webp/encode.h"
+#include "src/dec/common_dec.h"
+#include "src/dsp/dsp.h"
+#include "src/utils/bit_writer_utils.h"
+#include "src/utils/thread_utils.h"
+#include "src/utils/utils.h"
+#include "src/webp/encode.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,8 +30,8 @@ extern "C" {
 // Various defines and enums
 
 // version numbers
-#define ENC_MAJ_VERSION 0
-#define ENC_MIN_VERSION 6
+#define ENC_MAJ_VERSION 1
+#define ENC_MIN_VERSION 1
 #define ENC_REV_VERSION 0
 
 enum { MAX_LF_LEVELS = 64,       // Maximum loop filter level
@@ -75,10 +75,10 @@ typedef enum {   // Rate-distortion optimization levels
 #define U_OFF_ENC    (16)
 #define V_OFF_ENC    (16 + 8)
 
-extern const int VP8Scan[16];           // in quant.c
-extern const int VP8UVModeOffsets[4];   // in analyze.c
-extern const int VP8I16ModeOffsets[4];
-extern const int VP8I4ModeOffsets[NUM_BMODES];
+extern const uint16_t VP8Scan[16];
+extern const uint16_t VP8UVModeOffsets[4];
+extern const uint16_t VP8I16ModeOffsets[4];
+extern const uint16_t VP8I4ModeOffsets[NUM_BMODES];
 
 // Layout of prediction blocks
 // intra 16x16
@@ -119,6 +119,9 @@ static WEBP_INLINE int QUANTDIV(uint32_t n, uint32_t iQ, uint32_t B) {
 
 // Uncomment the following to remove token-buffer code:
 // #define DISABLE_TOKEN_BUFFER
+
+// quality below which error-diffusion is enabled
+#define ERROR_DIFFUSION_QUALITY 98
 
 //------------------------------------------------------------------------------
 // Headers
@@ -201,6 +204,8 @@ typedef struct {
   score_t i4_penalty_;   // penalty for using Intra4
 } VP8SegmentInfo;
 
+typedef int8_t DError[2 /* u/v */][2 /* top or left */];
+
 // Handy transient struct to accumulate score and info during RD-optimization
 // and mode evaluation.
 typedef struct {
@@ -213,6 +218,7 @@ typedef struct {
   uint8_t modes_i4[16];       // mode numbers for intra4 predictions
   int mode_uv;                // mode number of chroma prediction
   uint32_t nz;                // non-zero blocks
+  int8_t derr[2][3];          // DC diffusion errors for U/V for blocks #1/2/3
 } VP8ModeScore;
 
 // Iterator structure to iterate through macroblocks, pointing to the
@@ -242,6 +248,9 @@ typedef struct {
   int           count_down0_;      // starting counter value (for progress)
   int           percent0_;         // saved initial progress percent
 
+  DError        left_derr_;        // left error diffusion (u/v)
+  DError*       top_derr_;         // top diffusion error - NULL if disabled
+
   uint8_t* y_left_;    // left luma samples (addressable from index -1 to 15).
   uint8_t* u_left_;    // left u samples (addressable from index -1 to 7)
   uint8_t* v_left_;    // left v samples (addressable from index -1 to 7)
@@ -269,7 +278,7 @@ int VP8IteratorIsDone(const VP8EncIterator* const it);
 // Import uncompressed samples from source.
 // If tmp_32 is not NULL, import boundary samples too.
 // tmp_32 is a 32-bytes scratch buffer that must be aligned in memory.
-void VP8IteratorImport(VP8EncIterator* const it, uint8_t* tmp_32);
+void VP8IteratorImport(VP8EncIterator* const it, uint8_t* const tmp_32);
 // export decimated samples
 void VP8IteratorExport(const VP8EncIterator* const it);
 // go to next macroblock. Returns false if not finished.
@@ -329,9 +338,6 @@ int VP8RecordCoeffTokens(int ctx, const struct VP8Residual* const res,
 
 // Estimate the final coded size given a set of 'probas'.
 size_t VP8EstimateTokenSize(VP8TBuffer* const b, const uint8_t* const probas);
-
-// unused for now
-void VP8TokenToStats(const VP8TBuffer* const b, proba_t* const stats);
 
 #endif  // !DISABLE_TOKEN_BUFFER
 
@@ -404,6 +410,7 @@ struct VP8Encoder {
   uint8_t*   uv_top_;    // top u/v samples.
                          // U and V are packed into 16 bytes (8 U + 8 V)
   LFStats*   lf_stats_;  // autofilter stats (if NULL, autofilter is off)
+  DError*    top_derr_;  // diffusion error (NULL if disabled)
 };
 
 //------------------------------------------------------------------------------
@@ -502,19 +509,10 @@ int WebPPictureAllocYUVA(WebPPicture* const picture, int width, int height);
 // compressibility (no guarantee, though). Assumes that pic->use_argb is true.
 void WebPCleanupTransparentAreaLossless(WebPPicture* const pic);
 
-  // in near_lossless.c
-// Near lossless preprocessing in RGB color-space.
-int VP8ApplyNearLossless(int xsize, int ysize, uint32_t* argb, int quality);
-// Near lossless adjustment for predictors.
-void VP8ApplyNearLosslessPredict(int xsize, int ysize, int pred_bits,
-                                 const uint32_t* argb_orig,
-                                 uint32_t* argb, uint32_t* argb_scratch,
-                                 const uint32_t* const transform_data,
-                                 int quality, int subtract_green);
 //------------------------------------------------------------------------------
 
 #ifdef __cplusplus
 }    // extern "C"
 #endif
 
-#endif  /* WEBP_ENC_VP8ENCI_H_ */
+#endif  // WEBP_ENC_VP8I_ENC_H_

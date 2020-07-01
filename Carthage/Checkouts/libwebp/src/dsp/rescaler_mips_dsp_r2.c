@@ -11,20 +11,22 @@
 //
 // Author(s): Djordje Pesut (djordje.pesut@imgtec.com)
 
-#include "./dsp.h"
+#include "src/dsp/dsp.h"
 
-#if defined(WEBP_USE_MIPS_DSP_R2)
+#if defined(WEBP_USE_MIPS_DSP_R2) && !defined(WEBP_REDUCE_SIZE)
 
 #include <assert.h>
-#include "../utils/rescaler_utils.h"
+#include "src/utils/rescaler_utils.h"
 
 #define ROUNDER (WEBP_RESCALER_ONE >> 1)
 #define MULT_FIX(x, y) (((uint64_t)(x) * (y) + ROUNDER) >> WEBP_RESCALER_RFIX)
+#define MULT_FIX_FLOOR(x, y) (((uint64_t)(x) * (y)) >> WEBP_RESCALER_RFIX)
 
 //------------------------------------------------------------------------------
 // Row export
 
-static void ExportRowShrink(WebPRescaler* const wrk) {
+#if 0  // disabled for now. TODO(skal): make match the C-code
+static void ExportRowShrink_MIPSdspR2(WebPRescaler* const wrk) {
   int i;
   const int x_out_max = wrk->dst_width * wrk->num_channels;
   uint8_t* dst = wrk->dst;
@@ -105,10 +107,9 @@ static void ExportRowShrink(WebPRescaler* const wrk) {
       );
     }
     for (i = 0; i < (x_out_max & 0x3); ++i) {
-      const uint32_t frac = (uint32_t)MULT_FIX(*frow++, yscale);
+      const uint32_t frac = (uint32_t)MULT_FIX_FLOOR(*frow++, yscale);
       const int v = (int)MULT_FIX(*irow - frac, wrk->fxy_scale);
-      assert(v >= 0 && v <= 255);
-      *dst++ = v;
+      *dst++ = (v > 255) ? 255u : (uint8_t)v;
       *irow++ = frac;   // new fractional start
     }
   } else {
@@ -154,15 +155,15 @@ static void ExportRowShrink(WebPRescaler* const wrk) {
       );
     }
     for (i = 0; i < (x_out_max & 0x3); ++i) {
-      const int v = (int)MULT_FIX(*irow, wrk->fxy_scale);
-      assert(v >= 0 && v <= 255);
-      *dst++ = v;
+      const int v = (int)MULT_FIX_FLOOR(*irow, wrk->fxy_scale);
+      *dst++ = (v > 255) ? 255u : (uint8_t)v;
       *irow++ = 0;
     }
   }
 }
+#endif  // 0
 
-static void ExportRowExpand(WebPRescaler* const wrk) {
+static void ExportRowExpand_MIPSdspR2(WebPRescaler* const wrk) {
   int i;
   uint8_t* dst = wrk->dst;
   rescaler_t* irow = wrk->irow;
@@ -216,8 +217,7 @@ static void ExportRowExpand(WebPRescaler* const wrk) {
     for (i = 0; i < (x_out_max & 0x3); ++i) {
       const uint32_t J = *frow++;
       const int v = (int)MULT_FIX(J, wrk->fy_scale);
-      assert(v >= 0 && v <= 255);
-      *dst++ = v;
+      *dst++ = (v > 255) ? 255u : (uint8_t)v;
     }
   } else {
     const uint32_t B = WEBP_RESCALER_FRAC(-wrk->y_accum, wrk->y_sub);
@@ -288,12 +288,12 @@ static void ExportRowExpand(WebPRescaler* const wrk) {
                        + (uint64_t)B * *irow++;
       const uint32_t J = (uint32_t)((I + ROUNDER) >> WEBP_RESCALER_RFIX);
       const int v = (int)MULT_FIX(J, wrk->fy_scale);
-      assert(v >= 0 && v <= 255);
-      *dst++ = v;
+      *dst++ = (v > 255) ? 255u : (uint8_t)v;
     }
   }
 }
 
+#undef MULT_FIX_FLOOR
 #undef MULT_FIX
 #undef ROUNDER
 
@@ -303,8 +303,8 @@ static void ExportRowExpand(WebPRescaler* const wrk) {
 extern void WebPRescalerDspInitMIPSdspR2(void);
 
 WEBP_TSAN_IGNORE_FUNCTION void WebPRescalerDspInitMIPSdspR2(void) {
-  WebPRescalerExportRowExpand = ExportRowExpand;
-  WebPRescalerExportRowShrink = ExportRowShrink;
+  WebPRescalerExportRowExpand = ExportRowExpand_MIPSdspR2;
+//  WebPRescalerExportRowShrink = ExportRowShrink_MIPSdspR2;
 }
 
 #else  // !WEBP_USE_MIPS_DSP_R2

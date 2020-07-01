@@ -16,9 +16,9 @@
 #include <string.h>   // for memcpy()
 #include <stdlib.h>
 
-#include "./bit_writer_utils.h"
-#include "./endian_inl_utils.h"
-#include "./utils.h"
+#include "src/utils/bit_writer_utils.h"
+#include "src/utils/endian_inl_utils.h"
+#include "src/utils/utils.h"
 
 //------------------------------------------------------------------------------
 // VP8BitWriter
@@ -70,7 +70,7 @@ static void Flush(VP8BitWriter* const bw) {
       const int value = (bits & 0x100) ? 0x00 : 0xff;
       for (; bw->run_ > 0; --bw->run_) bw->buf_[pos++] = value;
     }
-    bw->buf_[pos++] = bits;
+    bw->buf_[pos++] = bits & 0xff;
     bw->pos_ = pos;
   } else {
     bw->run_++;   // delay writing of bytes 0xff, pending eventual carry.
@@ -239,11 +239,39 @@ int VP8LBitWriterInit(VP8LBitWriter* const bw, size_t expected_size) {
   return VP8LBitWriterResize(bw, expected_size);
 }
 
+int VP8LBitWriterClone(const VP8LBitWriter* const src,
+                       VP8LBitWriter* const dst) {
+  const size_t current_size = src->cur_ - src->buf_;
+  assert(src->cur_ >= src->buf_ && src->cur_ <= src->end_);
+  if (!VP8LBitWriterResize(dst, current_size)) return 0;
+  memcpy(dst->buf_, src->buf_, current_size);
+  dst->bits_ = src->bits_;
+  dst->used_ = src->used_;
+  dst->error_ = src->error_;
+  dst->cur_ = dst->buf_ + current_size;
+  return 1;
+}
+
 void VP8LBitWriterWipeOut(VP8LBitWriter* const bw) {
   if (bw != NULL) {
     WebPSafeFree(bw->buf_);
     memset(bw, 0, sizeof(*bw));
   }
+}
+
+void VP8LBitWriterReset(const VP8LBitWriter* const bw_init,
+                        VP8LBitWriter* const bw) {
+  bw->bits_ = bw_init->bits_;
+  bw->used_ = bw_init->used_;
+  bw->cur_ = bw->buf_ + (bw_init->cur_ - bw_init->buf_);
+  assert(bw->cur_ <= bw->end_);
+  bw->error_ = bw_init->error_;
+}
+
+void VP8LBitWriterSwap(VP8LBitWriter* const src, VP8LBitWriter* const dst) {
+  const VP8LBitWriter tmp = *src;
+  *src = *dst;
+  *dst = tmp;
 }
 
 void VP8LPutBitsFlushBits(VP8LBitWriter* const bw) {

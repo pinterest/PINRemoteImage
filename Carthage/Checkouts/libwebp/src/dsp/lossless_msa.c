@@ -11,12 +11,12 @@
 //
 // Author: Prashant Patil (prashant.patil@imgtec.com)
 
-#include "./dsp.h"
+#include "src/dsp/dsp.h"
 
 #if defined(WEBP_USE_MSA)
 
-#include "./lossless.h"
-#include "./msa_macro.h"
+#include "src/dsp/lossless.h"
+#include "src/dsp/msa_macro.h"
 
 //------------------------------------------------------------------------------
 // Colorspace conversion functions
@@ -43,7 +43,7 @@
 
 #define CONVERT8_BGRA_XXX(psrc, pdst, m0, m1) do {         \
   uint64_t pix_d;                                          \
-  v16u8 src0, src1, src2, dst0, dst1;                      \
+  v16u8 src0, src1, src2 = { 0 }, dst0, dst1;              \
   LD_UB2(psrc, 16, src0, src1);                            \
   VSHF_B2_UB(src0, src1, src1, src2, m0, m1, dst0, dst1);  \
   ST_UB(dst0, pdst);                                       \
@@ -109,8 +109,8 @@
   dst = VSHF_UB(src, t0, mask1);                                        \
 } while (0)
 
-static void ConvertBGRAToRGBA(const uint32_t* src,
-                              int num_pixels, uint8_t* dst) {
+static void ConvertBGRAToRGBA_MSA(const uint32_t* src,
+                                  int num_pixels, uint8_t* dst) {
   int i;
   const uint8_t* ptemp_src = (const uint8_t*)src;
   uint8_t* ptemp_dst = (uint8_t*)dst;
@@ -150,8 +150,8 @@ static void ConvertBGRAToRGBA(const uint32_t* src,
   }
 }
 
-static void ConvertBGRAToBGR(const uint32_t* src,
-                             int num_pixels, uint8_t* dst) {
+static void ConvertBGRAToBGR_MSA(const uint32_t* src,
+                                 int num_pixels, uint8_t* dst) {
   const uint8_t* ptemp_src = (const uint8_t*)src;
   uint8_t* ptemp_dst = (uint8_t*)dst;
   const v16u8 mask0 = { 0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14,
@@ -197,8 +197,8 @@ static void ConvertBGRAToBGR(const uint32_t* src,
   }
 }
 
-static void ConvertBGRAToRGB(const uint32_t* src,
-                             int num_pixels, uint8_t* dst) {
+static void ConvertBGRAToRGB_MSA(const uint32_t* src,
+                                 int num_pixels, uint8_t* dst) {
   const uint8_t* ptemp_src = (const uint8_t*)src;
   uint8_t* ptemp_dst = (uint8_t*)dst;
   const v16u8 mask0 = { 2, 1, 0, 6, 5, 4, 10, 9, 8, 14, 13, 12,
@@ -244,8 +244,8 @@ static void ConvertBGRAToRGB(const uint32_t* src,
   }
 }
 
-static void AddGreenToBlueAndRed(const uint32_t* const src, int num_pixels,
-                                 uint32_t* dst) {
+static void AddGreenToBlueAndRed_MSA(const uint32_t* const src, int num_pixels,
+                                     uint32_t* dst) {
   int i;
   const uint8_t* in = (const uint8_t*)src;
   uint8_t* out = (uint8_t*)dst;
@@ -286,9 +286,9 @@ static void AddGreenToBlueAndRed(const uint32_t* const src, int num_pixels,
   }
 }
 
-static void TransformColorInverse(const VP8LMultipliers* const m,
-                                  const uint32_t* src, int num_pixels,
-                                  uint32_t* dst) {
+static void TransformColorInverse_MSA(const VP8LMultipliers* const m,
+                                      const uint32_t* src, int num_pixels,
+                                      uint32_t* dst) {
   v16u8 src0, dst0;
   const v16i8 g2br = (v16i8)__msa_fill_w(m->green_to_blue_ |
                                          (m->green_to_red_ << 16));
@@ -341,11 +341,12 @@ static void TransformColorInverse(const VP8LMultipliers* const m,
 extern void VP8LDspInitMSA(void);
 
 WEBP_TSAN_IGNORE_FUNCTION void VP8LDspInitMSA(void) {
-  VP8LConvertBGRAToRGBA = ConvertBGRAToRGBA;
-  VP8LConvertBGRAToBGR = ConvertBGRAToBGR;
-  VP8LConvertBGRAToRGB = ConvertBGRAToRGB;
-  VP8LAddGreenToBlueAndRed = AddGreenToBlueAndRed;
-  VP8LTransformColorInverse = TransformColorInverse;
+  VP8LConvertBGRAToRGBA = ConvertBGRAToRGBA_MSA;
+  VP8LConvertBGRAToBGR = ConvertBGRAToBGR_MSA;
+  VP8LConvertBGRAToRGB = ConvertBGRAToRGB_MSA;
+
+  VP8LAddGreenToBlueAndRed = AddGreenToBlueAndRed_MSA;
+  VP8LTransformColorInverse = TransformColorInverse_MSA;
 }
 
 #else  // !WEBP_USE_MSA

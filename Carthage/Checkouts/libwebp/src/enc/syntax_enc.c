@@ -13,10 +13,10 @@
 
 #include <assert.h>
 
-#include "../utils/utils.h"
-#include "../webp/format_constants.h"  // RIFF constants
-#include "../webp/mux_types.h"         // ALPHA_FLAG
-#include "./vp8i_enc.h"
+#include "src/utils/utils.h"
+#include "src/webp/format_constants.h"  // RIFF constants
+#include "src/webp/mux_types.h"         // ALPHA_FLAG
+#include "src/enc/vp8i_enc.h"
 
 //------------------------------------------------------------------------------
 // Helper functions
@@ -289,11 +289,17 @@ static int GeneratePartition0(VP8Encoder* const enc) {
 
   pos3 = VP8BitWriterPos(bw);
 
+#if !defined(WEBP_DISABLE_STATS)
   if (enc->pic_->stats) {
     enc->pic_->stats->header_bytes[0] = (int)((pos2 - pos1 + 7) >> 3);
     enc->pic_->stats->header_bytes[1] = (int)((pos3 - pos2 + 7) >> 3);
     enc->pic_->stats->alpha_data_size = (int)enc->alpha_data_size_;
   }
+#else
+  (void)pos1;
+  (void)pos2;
+  (void)pos3;
+#endif
   if (bw->error_) {
     return WebPEncodingSetError(enc->pic_, VP8_ENC_ERROR_OUT_OF_MEMORY);
   }

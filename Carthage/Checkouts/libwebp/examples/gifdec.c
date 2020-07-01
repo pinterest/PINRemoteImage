@@ -28,11 +28,17 @@
 #define GIF_DISPOSE_SHIFT     2
 
 // from utils/utils.h
+#ifdef __cplusplus
+extern "C" {
+#endif
 extern void WebPCopyPlane(const uint8_t* src, int src_stride,
                           uint8_t* dst, int dst_stride,
                           int width, int height);
 extern void WebPCopyPixels(const WebPPicture* const src,
                            WebPPicture* const dst);
+#ifdef __cplusplus
+}
+#endif
 
 void GIFGetBackgroundColor(const ColorMapObject* const color_map,
                            int bgcolor_index, int transparent_index,
@@ -131,7 +137,7 @@ int GIFReadFrame(GifFileType* const gif, int transparent_index,
   }
   dst = sub_image.argb;
 
-  tmp = (uint8_t*)malloc(rect.width * sizeof(*tmp));
+  tmp = (uint8_t*)WebPMalloc(rect.width * sizeof(*tmp));
   if (tmp == NULL) goto End;
 
   if (image_desc->Interlace) {  // Interlaced image.
@@ -162,7 +168,7 @@ int GIFReadFrame(GifFileType* const gif, int transparent_index,
  End:
   if (!ok) picture->error_code = sub_image.error_code;
   WebPPictureFree(&sub_image);
-  free(tmp);
+  WebPFree(tmp);
   return ok;
 }
 

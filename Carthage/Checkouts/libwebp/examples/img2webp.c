@@ -27,6 +27,7 @@
 #include "../imageio/image_dec.h"
 #include "../imageio/imageio_util.h"
 #include "./stopwatch.h"
+#include "./unicode.h"
 #include "webp/encode.h"
 #include "webp/mux.h"
 
@@ -48,6 +49,7 @@ static void Help(void) {
   printf(" -mixed ............... use mixed lossy/lossless automatic mode\n");
   printf(" -v ................... verbose mode\n");
   printf(" -h ................... this help\n");
+  printf(" -version ............. print version number and exit\n");
   printf("\n");
 
   printf("Per-frame options (only used for subsequent images input):\n");
@@ -60,6 +62,10 @@ static void Help(void) {
   printf("\n");
   printf("example: img2webp -loop 2 in0.png -lossy in1.jpg\n"
          "                  -d 80 in2.tiff -o out.webp\n");
+  printf("\nNote: if a single file name is passed as the argument, the "
+         "arguments will be\n");
+  printf("tokenized from this file. The file name must not start with "
+         "the character '-'.\n");
 }
 
 //------------------------------------------------------------------------------
@@ -117,14 +123,13 @@ static int SetLoopCount(int loop_count, WebPData* const webp_data) {
 
 //------------------------------------------------------------------------------
 
-int main(int argc, char* argv[]) {
+int main(int argc, const char* argv[]) {
   const char* output = NULL;
   WebPAnimEncoder* enc = NULL;
   int verbose = 0;
   int pic_num = 0;
   int duration = 100;
   int timestamp_ms = 0;
-  int ok = 1;
   int loop_count = 0;
   int width = 0, height = 0;
   WebPAnimEncoderOptions anim_config;
@@ -133,22 +138,33 @@ int main(int argc, char* argv[]) {
   WebPData webp_data;
   int c;
   int have_input = 0;
+  CommandLineArguments cmd_args;
+  int ok;
+
+  INIT_WARGV(argc, argv);
+
+  ok = ExUtilInitCommandLineArguments(argc - 1, argv + 1, &cmd_args);
+  if (!ok) FREE_WARGV_AND_RETURN(1);
+
+  argc = cmd_args.argc_;
+  argv = cmd_args.argv_;
 
   WebPDataInit(&webp_data);
   if (!WebPAnimEncoderOptionsInit(&anim_config) ||
       !WebPConfigInit(&config) ||
       !WebPPictureInit(&pic)) {
     fprintf(stderr, "Library version mismatch!\n");
-    return 1;
+    ok = 0;
+    goto End;
   }
 
   // 1st pass of option parsing
-  for (c = 1; ok && c < argc; ++c) {
+  for (c = 0; ok && c < argc; ++c) {
     if (argv[c][0] == '-') {
       int parse_error = 0;
       if (!strcmp(argv[c], "-o") && c + 1 < argc) {
         argv[c] = NULL;
-        output = argv[++c];
+        output = (const char*)GET_WARGV_SHIFTED(argv, ++c);
       } else if (!strcmp(argv[c], "-kmin") && c + 1 < argc) {
         argv[c] = NULL;
         anim_config.kmin = ExUtilGetInt(argv[++c], 0, &parse_error);
@@ -171,7 +187,15 @@ int main(int argc, char* argv[]) {
         verbose = 1;
       } else if (!strcmp(argv[c], "-h") || !strcmp(argv[c], "-help")) {
         Help();
-        return 0;
+        goto End;
+      } else if (!strcmp(argv[c], "-version")) {
+        const int enc_version = WebPGetEncoderVersion();
+        const int mux_version = WebPGetMuxVersion();
+        printf("WebP Encoder version: %d.%d.%d\nWebP Mux version: %d.%d.%d\n",
+               (enc_version >> 16) & 0xff, (enc_version >> 8) & 0xff,
+               enc_version & 0xff, (mux_version >> 16) & 0xff,
+               (mux_version >> 8) & 0xff, mux_version & 0xff);
+        goto End;
       } else {
         continue;
       }
@@ -184,13 +208,13 @@ int main(int argc, char* argv[]) {
   }
   if (!have_input) {
     fprintf(stderr, "No input file(s) for generating animation!\n");
-    return 0;
+    goto End;
   }
 
   // image-reading pass
   pic_num = 0;
   config.lossless = 1;
-  for (c = 1; ok && c < argc; ++c) {
+  for (c = 0; ok && c < argc; ++c) {
     if (argv[c] == NULL) continue;
     if (argv[c][0] == '-') {    // parse local options
       int parse_error = 0;
@@ -227,7 +251,7 @@ int main(int argc, char* argv[]) {
 
     // read next input image
     pic.use_argb = 1;
-    ok = ReadImage(argv[c], &pic);
+    ok = ReadImage((const char*)GET_WARGV_SHIFTED(argv, c), &pic);
     if (!ok) goto End;
 
     if (enc == NULL) {
@@ -259,8 +283,8 @@ int main(int argc, char* argv[]) {
     if (!ok) goto End;
 
     if (verbose) {
-      fprintf(stderr, "Added frame #%3d at time %4d (file: %s)\n",
-              pic_num, timestamp_ms, argv[c]);
+      WFPRINTF(stderr, "Added frame #%3d at time %4d (file: %s)\n",
+               pic_num, timestamp_ms, GET_WARGV_SHIFTED(argv, c));
     }
     timestamp_ms += duration;
     ++pic_num;
@@ -284,7 +308,7 @@ int main(int argc, char* argv[]) {
   if (ok) {
     if (output != NULL) {
       ok = ImgIoUtilWriteFile(output, webp_data.bytes, webp_data.size);
-      if (ok) fprintf(stderr, "output file: %s     ", output);
+      if (ok) WFPRINTF(stderr, "output file: %s     ", (const W_CHAR*)output);
     } else {
       fprintf(stderr, "[no output file specified]   ");
     }
@@ -294,7 +318,7 @@ int main(int argc, char* argv[]) {
     fprintf(stderr, "[%d frames, %u bytes].\n",
             pic_num, (unsigned int)webp_data.size);
   }
-
   WebPDataClear(&webp_data);
-  return ok ? 0 : 1;
+  ExUtilDeleteCommandLineArguments(&cmd_args);
+  FREE_WARGV_AND_RETURN(ok ? 0 : 1);
 }

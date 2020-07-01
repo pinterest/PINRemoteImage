@@ -11,17 +11,18 @@
 //
 // Author: Prashant Patil (prashant.patil@imgtec.com)
 
-#include "./dsp.h"
+#include "src/dsp/dsp.h"
 
-#if defined(WEBP_USE_MSA)
+#if defined(WEBP_USE_MSA) && !defined(WEBP_REDUCE_SIZE)
 
 #include <assert.h>
 
-#include "../utils/rescaler_utils.h"
-#include "./msa_macro.h"
+#include "src/utils/rescaler_utils.h"
+#include "src/dsp/msa_macro.h"
 
 #define ROUNDER (WEBP_RESCALER_ONE >> 1)
 #define MULT_FIX(x, y) (((uint64_t)(x) * (y) + ROUNDER) >> WEBP_RESCALER_RFIX)
+#define MULT_FIX_FLOOR(x, y) (((uint64_t)(x) * (y)) >> WEBP_RESCALER_RFIX)
 
 #define CALC_MULT_FIX_16(in0, in1, in2, in3, scale, shift, dst) do {  \
   v4u32 tmp0, tmp1, tmp2, tmp3;                                       \
@@ -165,8 +166,7 @@ static WEBP_INLINE void ExportRowExpand_0(const uint32_t* frow, uint8_t* dst,
     for (x_out = 0; x_out < length; ++x_out) {
       const uint32_t J = frow[x_out];
       const int v = (int)MULT_FIX(J, wrk->fy_scale);
-      assert(v >= 0 && v <= 255);
-      dst[x_out] = v;
+      dst[x_out] = (v > 255) ? 255u : (uint8_t)v;
     }
   }
 }
@@ -240,13 +240,12 @@ static WEBP_INLINE void ExportRowExpand_1(const uint32_t* frow, uint32_t* irow,
                        + (uint64_t)B * irow[x_out];
       const uint32_t J = (uint32_t)((I + ROUNDER) >> WEBP_RESCALER_RFIX);
       const int v = (int)MULT_FIX(J, wrk->fy_scale);
-      assert(v >= 0 && v <= 255);
-      dst[x_out] = v;
+      dst[x_out] = (v > 255) ? 255u : (uint8_t)v;
     }
   }
 }
 
-static void RescalerExportRowExpand(WebPRescaler* const wrk) {
+static void RescalerExportRowExpand_MIPSdspR2(WebPRescaler* const wrk) {
   uint8_t* dst = wrk->dst;
   rescaler_t* irow = wrk->irow;
   const int x_out_max = wrk->dst_width * wrk->num_channels;
@@ -262,6 +261,7 @@ static void RescalerExportRowExpand(WebPRescaler* const wrk) {
   }
 }
 
+#if 0  // disabled for now. TODO(skal): make match the C-code
 static WEBP_INLINE void ExportRowShrink_0(const uint32_t* frow, uint32_t* irow,
                                           uint8_t* dst, int length,
                                           const uint32_t yscale,
@@ -340,10 +340,9 @@ static WEBP_INLINE void ExportRowShrink_0(const uint32_t* frow, uint32_t* irow,
       length -= 4;
     }
     for (x_out = 0; x_out < length; ++x_out) {
-      const uint32_t frac = (uint32_t)MULT_FIX(frow[x_out], yscale);
+      const uint32_t frac = (uint32_t)MULT_FIX_FLOOR(frow[x_out], yscale);
       const int v = (int)MULT_FIX(irow[x_out] - frac, wrk->fxy_scale);
-      assert(v >= 0 && v <= 255);
-      dst[x_out] = v;
+      dst[x_out] = (v > 255) ? 255u : (uint8_t)v;
       irow[x_out] = frac;
     }
   }
@@ -404,14 +403,13 @@ static WEBP_INLINE void ExportRowShrink_1(uint32_t* irow, uint8_t* dst,
     }
     for (x_out = 0; x_out < length; ++x_out) {
       const int v = (int)MULT_FIX(irow[x_out], wrk->fxy_scale);
-      assert(v >= 0 && v <= 255);
-      dst[x_out] = v;
+      dst[x_out] = (v > 255) ? 255u : (uint8_t)v;
       irow[x_out] = 0;
     }
   }
 }
 
-static void RescalerExportRowShrink(WebPRescaler* const wrk) {
+static void RescalerExportRowShrink_MIPSdspR2(WebPRescaler* const wrk) {
   uint8_t* dst = wrk->dst;
   rescaler_t* irow = wrk->irow;
   const int x_out_max = wrk->dst_width * wrk->num_channels;
@@ -426,6 +424,7 @@ static void RescalerExportRowShrink(WebPRescaler* const wrk) {
     ExportRowShrink_1(irow, dst, x_out_max, wrk);
   }
 }
+#endif  // 0
 
 //------------------------------------------------------------------------------
 // Entry point
@@ -433,8 +432,8 @@ static void RescalerExportRowShrink(WebPRescaler* const wrk) {
 extern void WebPRescalerDspInitMSA(void);
 
 WEBP_TSAN_IGNORE_FUNCTION void WebPRescalerDspInitMSA(void) {
-  WebPRescalerExportRowExpand = RescalerExportRowExpand;
-  WebPRescalerExportRowShrink = RescalerExportRowShrink;
+  WebPRescalerExportRowExpand = RescalerExportRowExpand_MIPSdspR2;
+//  WebPRescalerExportRowShrink = RescalerExportRowShrink_MIPSdspR2;
 }
 
 #else     // !WEBP_USE_MSA

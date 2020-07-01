@@ -11,7 +11,7 @@
 //
 // Author: Christian Duvivier (cduvivier@google.com)
 
-#include "./dsp.h"
+#include "src/dsp/dsp.h"
 
 #if defined(WEBP_HAVE_NEON_RTCD)
 #include <stdio.h>
@@ -143,7 +143,7 @@ static int x86CPUInfo(CPUFeature feature) {
     return !!(cpu_info[2] & (1 << 0));
   }
   if (feature == kSlowSSSE3) {
-    if (is_intel && (cpu_info[2] & (1 << 0))) {   // SSSE3?
+    if (is_intel && (cpu_info[2] & (1 << 9))) {   // SSSE3?
       return CheckSlowModel(cpu_info[0]);
     }
     return 0;
@@ -173,8 +173,8 @@ static int AndroidCPUInfo(CPUFeature feature) {
   const AndroidCpuFamily cpu_family = android_getCpuFamily();
   const uint64_t cpu_features = android_getCpuFeatures();
   if (feature == kNEON) {
-    return (cpu_family == ANDROID_CPU_FAMILY_ARM &&
-            0 != (cpu_features & ANDROID_CPU_ARM_FEATURE_NEON));
+    return cpu_family == ANDROID_CPU_FAMILY_ARM &&
+           (cpu_features & ANDROID_CPU_ARM_FEATURE_NEON) != 0;
   }
   return 0;
 }

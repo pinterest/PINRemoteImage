@@ -25,13 +25,26 @@ ifeq ($(strip $(shell uname)), Darwin)
   # Failure observed with: gcc 4.2.1 and 4.0.1.
   EXTRA_FLAGS += -fno-common
   EXTRA_FLAGS += -DHAVE_GLUT_GLUT_H
+  EXTRA_FLAGS += -Wno-deprecated-declarations
   EXTRA_FLAGS += -I/opt/local/include
   EXTRA_LIBS  += -L/opt/local/lib
   GL_LIBS = -framework GLUT -framework OpenGL
 else
+  EXTRA_FLAGS += -I/usr/local/include
+  EXTRA_LIBS  += -L/usr/local/lib
   GL_LIBS = -lglut -lGL
 endif
 
+# SDL flags: use sdl-config if it exists
+SDL_CONFIG = $(shell sdl-config --version 2> /dev/null)
+ifneq ($(SDL_CONFIG),)
+  SDL_LIBS = $(shell sdl-config --libs)
+  SDL_FLAGS = $(shell sdl-config --cflags)
+else
+  # use best-guess
+  SDL_LIBS = -lSDL
+  SDL_FLAGS =
+endif
 
 # To install libraries on Mac OS X:
 # 1. Install MacPorts (http://www.macports.org/install.php)
@@ -51,11 +64,8 @@ endif
 # 'make -f makefile.unix EXTRA_FLAGS=-m32' to that effect.
 # EXTRA_FLAGS += -m32
 
-# Extra flags to enable experimental features and code
-# EXTRA_FLAGS += -DWEBP_EXPERIMENTAL_FEATURES
-
 # Extra flags to enable byte swap for 16 bit colorspaces.
-# EXTRA_FLAGS += -DWEBP_SWAP_16BIT_CSP
+# EXTRA_FLAGS += -DWEBP_SWAP_16BIT_CSP=1
 
 # Extra flags to enable multi-threading
 EXTRA_FLAGS += -DWEBP_USE_THREAD
@@ -79,12 +89,6 @@ EXTRA_FLAGS += -DWEBP_HAVE_SSE41
 src/dsp/%_sse41.o: EXTRA_FLAGS += -msse4.1
 endif
 
-# AVX2-specific flags:
-ifeq ($(HAVE_AVX2), 1)
-EXTRA_FLAGS += -DWEBP_HAVE_AVX2
-src/dsp/%_avx2.o: EXTRA_FLAGS += -mavx2
-endif
-
 # NEON-specific flags:
 # EXTRA_FLAGS += -march=armv7-a -mfloat-abi=hard -mfpu=neon -mtune=cortex-a8
 # -> seems to make the overall lib slower: -fno-split-wide-types
@@ -101,13 +105,22 @@ endif
 
 AR = ar
 ARFLAGS = r
-CPPFLAGS = -Isrc/ -Wall
-CFLAGS = -O3 -DNDEBUG $(EXTRA_FLAGS)
+CPPFLAGS = -I. -Isrc/ -Wall
+ifeq ($(DEBUG), 1)
+  CFLAGS = -g
+else
+  CFLAGS = -O3 -DNDEBUG
+endif
+CFLAGS += $(EXTRA_FLAGS)
 CC = gcc
 INSTALL = install
 GROFF = /usr/bin/groff
 COL = /usr/bin/col
 LDFLAGS = $(EXTRA_LIBS) $(EXTRA_FLAGS) -lm
+
+ifdef BITTRACE
+CFLAGS += -DBITTRACE=$(BITTRACE)
+endif
 
 ANIM_UTIL_OBJS = \
     examples/anim_util.o \
@@ -164,21 +177,21 @@ DSP_DEC_OBJS = \
     src/dsp/upsampling_msa.o \
     src/dsp/upsampling_neon.o \
     src/dsp/upsampling_sse2.o \
+    src/dsp/upsampling_sse41.o \
     src/dsp/yuv.o \
     src/dsp/yuv_mips32.o \
     src/dsp/yuv_mips_dsp_r2.o \
+    src/dsp/yuv_neon.o \
     src/dsp/yuv_sse2.o \
+    src/dsp/yuv_sse41.o \
 
 DSP_ENC_OBJS = \
-    src/dsp/argb.o \
-    src/dsp/argb_mips_dsp_r2.o \
-    src/dsp/argb_sse2.o \
     src/dsp/cost.o \
     src/dsp/cost_mips32.o \
     src/dsp/cost_mips_dsp_r2.o \
+    src/dsp/cost_neon.o \
     src/dsp/cost_sse2.o \
     src/dsp/enc.o \
-    src/dsp/enc_avx2.o \
     src/dsp/enc_mips32.o \
     src/dsp/enc_mips_dsp_r2.o \
     src/dsp/enc_msa.o \
@@ -192,14 +205,16 @@ DSP_ENC_OBJS = \
     src/dsp/lossless_enc_neon.o \
     src/dsp/lossless_enc_sse2.o \
     src/dsp/lossless_enc_sse41.o \
+    src/dsp/ssim.o \
+    src/dsp/ssim_sse2.o \
 
 ENC_OBJS = \
     src/enc/alpha_enc.o \
     src/enc/analysis_enc.o \
+    src/enc/backward_references_cost_enc.o \
     src/enc/backward_references_enc.o \
     src/enc/config_enc.o \
     src/enc/cost_enc.o \
-    src/enc/delta_palettization_enc.o \
     src/enc/filter_enc.o \
     src/enc/frame_enc.o \
     src/enc/histogram_enc.o \
@@ -223,6 +238,7 @@ EX_FORMAT_DEC_OBJS = \
     imageio/jpegdec.o \
     imageio/metadata.o \
     imageio/pngdec.o \
+    imageio/pnmdec.o \
     imageio/tiffdec.o \
     imageio/webpdec.o \
 
@@ -296,7 +312,6 @@ HDRS = \
     src/dsp/yuv.h \
     src/enc/backward_references_enc.h \
     src/enc/cost_enc.h \
-    src/enc/delta_palettization_enc.h \
     src/enc/histogram_enc.h \
     src/enc/vp8i_enc.h \
     src/enc/vp8li_enc.h \
@@ -328,8 +343,9 @@ OUT_LIBS += src/libwebp.a
 EXTRA_LIB = extras/libwebpextras.a
 OUT_EXAMPLES = examples/cwebp examples/dwebp
 EXTRA_EXAMPLES = examples/gif2webp examples/vwebp examples/webpmux \
-                 examples/anim_diff examples/img2webp
-OTHER_EXAMPLES = extras/get_disto extras/webp_quality
+                 examples/anim_diff examples/anim_dump \
+                 examples/img2webp examples/webpinfo
+OTHER_EXAMPLES = extras/get_disto extras/webp_quality extras/vwebp_sdl
 
 OUTPUT = $(OUT_LIBS) $(OUT_EXAMPLES)
 ifeq ($(MAKECMDGOALS),clean)
@@ -356,7 +372,7 @@ src/utils/bit_reader_utils.o: src/utils/endian_inl_utils.h
 src/utils/bit_writer_utils.o: src/utils/endian_inl_utils.h
 
 %.o: %.c $(HDRS)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 examples/libanim_util.a: $(ANIM_UTIL_OBJS)
 examples/libexample_util.a: $(EX_UTIL_OBJS)
@@ -374,51 +390,75 @@ src/demux/libwebpdemux.a: $(LIBWEBPDEMUX_OBJS)
 	$(AR) $(ARFLAGS) $@ $^
 
 examples/anim_diff: examples/anim_diff.o $(ANIM_UTIL_OBJS) $(GIFDEC_OBJS)
+examples/anim_dump: examples/anim_dump.o $(ANIM_UTIL_OBJS) $(GIFDEC_OBJS)
 examples/cwebp: examples/cwebp.o
 examples/dwebp: examples/dwebp.o
 examples/gif2webp: examples/gif2webp.o $(GIFDEC_OBJS)
 examples/vwebp: examples/vwebp.o
 examples/webpmux: examples/webpmux.o
 examples/img2webp: examples/img2webp.o
+examples/webpinfo: examples/webpinfo.o
 
 examples/anim_diff: examples/libanim_util.a examples/libgifdec.a
 examples/anim_diff: src/demux/libwebpdemux.a examples/libexample_util.a
 examples/anim_diff: imageio/libimageio_util.a src/libwebp.a
-examples/anim_diff: EXTRA_LIBS += $(GIF_LIBS)
+examples/anim_diff: override EXTRA_LIBS += $(GIF_LIBS)
 examples/anim_diff: EXTRA_FLAGS += -DWEBP_HAVE_GIF
+examples/anim_dump: examples/libanim_util.a examples/libgifdec.a
+examples/anim_dump: src/demux/libwebpdemux.a
+examples/anim_dump: examples/libexample_util.a
+examples/anim_dump: imageio/libimageio_util.a
+examples/anim_dump: imageio/libimageenc.a
+examples/anim_dump: src/libwebp.a
+examples/anim_dump: override EXTRA_LIBS += $(GIF_LIBS) $(DWEBP_LIBS)
 examples/cwebp: examples/libexample_util.a
 examples/cwebp: imageio/libimagedec.a
+examples/cwebp: src/demux/libwebpdemux.a
 examples/cwebp: imageio/libimageio_util.a
 examples/cwebp: src/libwebp.a
-examples/cwebp: EXTRA_LIBS += $(CWEBP_LIBS)
+examples/cwebp: override EXTRA_LIBS += $(CWEBP_LIBS)
 examples/dwebp: examples/libexample_util.a
 examples/dwebp: imageio/libimagedec.a
+examples/dwebp: src/demux/libwebpdemux.a
 examples/dwebp: imageio/libimageenc.a
 examples/dwebp: imageio/libimageio_util.a
 examples/dwebp: src/libwebp.a
-examples/dwebp: EXTRA_LIBS += $(DWEBP_LIBS)
+examples/dwebp: override EXTRA_LIBS += $(DWEBP_LIBS)
 examples/gif2webp: examples/libexample_util.a imageio/libimageio_util.a
 examples/gif2webp: examples/libgifdec.a src/mux/libwebpmux.a src/libwebp.a
-examples/gif2webp: EXTRA_LIBS += $(GIF_LIBS)
+examples/gif2webp: override EXTRA_LIBS += $(GIF_LIBS)
 examples/gif2webp: EXTRA_FLAGS += -DWEBP_HAVE_GIF
 examples/vwebp: examples/libexample_util.a src/demux/libwebpdemux.a
 examples/vwebp: imageio/libimageio_util.a src/libwebp.a
-examples/vwebp: EXTRA_LIBS += $(GL_LIBS)
+examples/vwebp: override EXTRA_LIBS += $(GL_LIBS)
 examples/vwebp: EXTRA_FLAGS += -DWEBP_HAVE_GL
 examples/webpmux: examples/libexample_util.a imageio/libimageio_util.a
 examples/webpmux: src/mux/libwebpmux.a src/libwebpdecoder.a
 examples/img2webp: examples/libexample_util.a imageio/libimageio_util.a
 examples/img2webp: imageio/libimagedec.a
+examples/img2webp: src/demux/libwebpdemux.a
 examples/img2webp: src/mux/libwebpmux.a src/libwebp.a
-examples/img2webp: EXTRA_LIBS += $(CWEBP_LIBS)
+examples/img2webp: override EXTRA_LIBS += $(CWEBP_LIBS)
+examples/webpinfo: examples/libexample_util.a imageio/libimageio_util.a
+examples/webpinfo: src/libwebpdecoder.a
 
 extras/get_disto: extras/get_disto.o
-extras/get_disto: imageio/libimagedec.a imageio/libimageio_util.a src/libwebp.a
-extras/get_disto: EXTRA_LIBS += $(CWEBP_LIBS)
+extras/get_disto: imageio/libimagedec.a
+extras/get_disto: src/demux/libwebpdemux.a
+extras/get_disto: imageio/libimageio_util.a
+extras/get_disto: src/libwebp.a
+extras/get_disto: override EXTRA_LIBS += $(CWEBP_LIBS)
 
 extras/webp_quality: extras/webp_quality.o
 extras/webp_quality: imageio/libimageio_util.a
 extras/webp_quality: $(EXTRA_LIB) src/libwebp.a
+
+extras/vwebp_sdl: extras/vwebp_sdl.o
+extras/vwebp_sdl: extras/webp_to_sdl.o
+extras/vwebp_sdl: imageio/libimageio_util.a
+extras/vwebp_sdl: src/libwebp.a
+extras/vwebp_sdl: EXTRA_FLAGS += -DWEBP_HAVE_SDL $(SDL_FLAGS)
+extras/vwebp_sdl: override EXTRA_LIBS += $(SDL_LIBS)
 
 $(OUT_EXAMPLES) $(EXTRA_EXAMPLES) $(OTHER_EXAMPLES):
 	$(CC) -o $@ $^ $(LDFLAGS)
@@ -435,9 +475,9 @@ dist: all
 	$(INSTALL) -m644 src/mux/libwebpmux.a $(DESTDIR)/lib
 	umask 022; \
 	for m in man/[cdv]webp.1 man/gif2webp.1 man/webpmux.1 \
-                 man/img2webp.1; do \
+                 man/img2webp.1 man/webpinfo.1; do \
 	  basenam=$$(basename $$m .1); \
-	  $(GROFF) -t -e -man -T utf8 $$m \
+	  $(GROFF) -t -e -man -T ascii $$m \
 	    | $(COL) -bx >$(DESTDIR)/doc/$${basenam}.txt; \
 	  $(GROFF) -t -e -man -T html $$m \
 	    | $(COL) -bx >$(DESTDIR)/doc/$${basenam}.html; \

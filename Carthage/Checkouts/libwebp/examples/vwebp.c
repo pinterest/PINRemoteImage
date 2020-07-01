@@ -42,6 +42,7 @@
 
 #include "../examples/example_util.h"
 #include "../imageio/imageio_util.h"
+#include "./unicode.h"
 
 #if defined(_MSC_VER) && _MSC_VER < 1900
 #define snprintf _snprintf
@@ -56,6 +57,7 @@ static struct {
   int print_info;
   int only_deltas;
   int use_color_profile;
+  int draw_anim_background_color;
 
   int canvas_width, canvas_height;
   int loop_count;
@@ -205,6 +207,11 @@ static void decode_callback(int what) {
         }
       }
       duration = curr->duration;
+      // Behavior copied from Chrome, cf:
+      // https://cs.chromium.org/chromium/src/third_party/WebKit/Source/
+      // platform/graphics/DeferredImageDecoder.cpp?
+      // rcl=b4c33049f096cd283f32be9a58b9a9e768227c26&l=246
+      if (duration <= 10) duration = 100;
     }
     if (!Decode()) {
       kParams.decoding_error = 1;
@@ -220,6 +227,9 @@ static void decode_callback(int what) {
 // Callbacks
 
 static void HandleKey(unsigned char key, int pos_x, int pos_y) {
+  // Note: rescaling the window or toggling some features during an animation
+  // generates visual artifacts. This is not fixed because refreshing the frame
+  // may require rendering the whole animation from start till current frame.
   (void)pos_x;
   (void)pos_y;
   if (key == 'q' || key == 'Q' || key == 27 /* Esc */) {
@@ -247,10 +257,12 @@ static void HandleKey(unsigned char key, int pos_x, int pos_y) {
         glutPostRedisplay();
       }
     }
+  } else if (key == 'b') {
+    kParams.draw_anim_background_color = 1 - kParams.draw_anim_background_color;
+    if (!kParams.has_animation) ClearPreviousFrame();
+    glutPostRedisplay();
   } else if (key == 'i') {
     kParams.print_info = 1 - kParams.print_info;
-    // TODO(skal): handle refresh of animation's last-frame too. It's quite
-    // more involved though (need to save the previous frame).
     if (!kParams.has_animation) ClearPreviousFrame();
     glutPostRedisplay();
   } else if (key == 'd') {
@@ -260,8 +272,8 @@ static void HandleKey(unsigned char key, int pos_x, int pos_y) {
 }
 
 static void HandleReshape(int width, int height) {
-  // TODO(skal): should we preserve aspect ratio?
-  // Also: handle larger-than-screen pictures correctly.
+  // Note: reshape doesn't preserve aspect ratio, and might
+  // be handling larger-than-screen pictures incorrectly.
   glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -281,7 +293,7 @@ static void PrintString(const char* const text) {
 }
 
 static float GetColorf(uint32_t color, int shift) {
-  return (color >> shift) / 255.f;
+  return ((color >> shift) & 0xff) / 255.f;
 }
 
 static void DrawCheckerBoard(void) {
@@ -304,6 +316,43 @@ static void DrawCheckerBoard(void) {
   glPopMatrix();
 }
 
+static void DrawBackground(void) {
+  // Whole window cleared with clear color, checkerboard rendered on top of it.
+  glClear(GL_COLOR_BUFFER_BIT);
+  DrawCheckerBoard();
+
+  // ANIM background color rendered (blend) on top. Default is white for still
+  // images (without ANIM chunk). glClear() can't be used for that (no blend).
+  if (kParams.draw_anim_background_color) {
+    glPushMatrix();
+    glLoadIdentity();
+    glColor4f(GetColorf(kParams.bg_color, 16),  // BGRA from spec
+              GetColorf(kParams.bg_color, 8),
+              GetColorf(kParams.bg_color, 0),
+              GetColorf(kParams.bg_color, 24));
+    glRecti(-1, -1, +1, +1);
+    glPopMatrix();
+  }
+}
+
+// Draw background in a scissored rectangle.
+static void DrawBackgroundScissored(int window_x, int window_y, int frame_w,
+                                    int frame_h) {
+  // Only update the requested area, not the whole canvas.
+  window_x = window_x * kParams.viewport_width / kParams.canvas_width;
+  window_y = window_y * kParams.viewport_height / kParams.canvas_height;
+  frame_w = frame_w * kParams.viewport_width / kParams.canvas_width;
+  frame_h = frame_h * kParams.viewport_height / kParams.canvas_height;
+
+  // glScissor() takes window coordinates (0,0 at bottom left).
+  window_y = kParams.viewport_height - window_y - frame_h;
+
+  glEnable(GL_SCISSOR_TEST);
+  glScissor(window_x, window_y, frame_w, frame_h);
+  DrawBackground();
+  glDisable(GL_SCISSOR_TEST);
+}
+
 static void HandleDisplay(void) {
   const WebPDecBuffer* const pic = kParams.pic;
   const WebPIterator* const curr = &kParams.curr_frame;
@@ -320,38 +369,21 @@ static void HandleDisplay(void) {
   glPixelStorei(GL_UNPACK_ROW_LENGTH, pic->u.RGBA.stride / 4);
 
   if (kParams.only_deltas) {
-    DrawCheckerBoard();
-  } else if (prev->dispose_method == WEBP_MUX_DISPOSE_BACKGROUND ||
-      curr->blend_method == WEBP_MUX_NO_BLEND) {
-    // glScissor() takes window coordinates (0,0 at bottom left).
-    int window_x, window_y;
-    int frame_w, frame_h;
+    DrawBackground();
+  } else {
+    // The rectangle of the previous frame might be different than the current
+    // frame, so we may need to DrawBackgroundScissored for both.
     if (prev->dispose_method == WEBP_MUX_DISPOSE_BACKGROUND) {
       // Clear the previous frame rectangle.
-      window_x = prev->x_offset;
-      window_y = kParams.canvas_height - prev->y_offset - prev->height;
-      frame_w = prev->width;
-      frame_h = prev->height;
-    } else {  // curr->blend_method == WEBP_MUX_NO_BLEND.
-      // We simulate no-blending behavior by first clearing the current frame
-      // rectangle (to a checker-board) and then alpha-blending against it.
-      window_x = curr->x_offset;
-      window_y = kParams.canvas_height - curr->y_offset - curr->height;
-      frame_w = curr->width;
-      frame_h = curr->height;
+      DrawBackgroundScissored(prev->x_offset, prev->y_offset, prev->width,
+                              prev->height);
     }
-    glEnable(GL_SCISSOR_TEST);
-    // Only update the requested area, not the whole canvas.
-    window_x = window_x * kParams.viewport_width / kParams.canvas_width;
-    window_y = window_y * kParams.viewport_height / kParams.canvas_height;
-    frame_w = frame_w * kParams.viewport_width / kParams.canvas_width;
-    frame_h = frame_h * kParams.viewport_height / kParams.canvas_height;
-    glScissor(window_x, window_y, frame_w, frame_h);
-
-    glClear(GL_COLOR_BUFFER_BIT);  // use clear color
-    DrawCheckerBoard();
-
-    glDisable(GL_SCISSOR_TEST);
+    if (curr->blend_method == WEBP_MUX_NO_BLEND) {
+      // We simulate no-blending behavior by first clearing the current frame
+      // rectangle and then alpha-blending against it.
+      DrawBackgroundScissored(curr->x_offset, curr->y_offset, curr->width,
+                              curr->height);
+    }
   }
 
   *prev = *curr;
@@ -378,13 +410,36 @@ static void HandleDisplay(void) {
     }
   }
   glPopMatrix();
+#if defined(__APPLE__) || defined(_WIN32)
   glFlush();
+#else
+  glutSwapBuffers();
+#endif
 }
 
 static void StartDisplay(void) {
-  const int width = kParams.canvas_width;
-  const int height = kParams.canvas_height;
+  int width = kParams.canvas_width;
+  int height = kParams.canvas_height;
+  int screen_width, screen_height;
+  // TODO(webp:365) GLUT_DOUBLE results in flickering / old frames to be
+  // partially displayed with animated webp + alpha.
+#if defined(__APPLE__) || defined(_WIN32)
   glutInitDisplayMode(GLUT_RGBA);
+#else
+  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+#endif
+  screen_width = glutGet(GLUT_SCREEN_WIDTH);
+  screen_height = glutGet(GLUT_SCREEN_HEIGHT);
+  if (width > screen_width || height > screen_height) {
+    if (width > screen_width) {
+      height = (height * screen_width + width - 1) / width;
+      width = screen_width;
+    }
+    if (height > screen_height) {
+      width = (width * screen_height + height - 1) / height;
+      height = screen_height;
+    }
+  }
   glutInitWindowSize(width, height);
   glutCreateWindow("WebP viewer");
   glutDisplayFunc(HandleDisplay);
@@ -393,57 +448,59 @@ static void StartDisplay(void) {
   glutKeyboardFunc(HandleKey);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_BLEND);
-  glClearColor(GetColorf(kParams.bg_color, 0),
-               GetColorf(kParams.bg_color, 8),
-               GetColorf(kParams.bg_color, 16),
-               GetColorf(kParams.bg_color, 24));
-  glClear(GL_COLOR_BUFFER_BIT);
-  DrawCheckerBoard();
+  glClearColor(0, 0, 0, 0);  // window will be cleared to black (no blend)
+  DrawBackground();
 }
 
 //------------------------------------------------------------------------------
 // Main
 
 static void Help(void) {
-  printf("Usage: vwebp in_file [options]\n\n"
-         "Decodes the WebP image file and visualize it using OpenGL\n"
-         "Options are:\n"
-         "  -version ..... print version number and exit\n"
-         "  -noicc ....... don't use the icc profile if present\n"
-         "  -nofancy ..... don't use the fancy YUV420 upscaler\n"
-         "  -nofilter .... disable in-loop filtering\n"
-         "  -dither <int>  dithering strength (0..100), default=50\n"
-         "  -noalphadither disable alpha plane dithering\n"
-         "  -mt .......... use multi-threading\n"
-         "  -info ........ print info\n"
-         "  -h ........... this help message\n"
-         "\n"
-         "Keyboard shortcuts:\n"
-         "  'c' ................ toggle use of color profile\n"
-         "  'i' ................ overlay file information\n"
-         "  'd' ................ disable blending & disposal (debug)\n"
-         "  'q' / 'Q' / ESC .... quit\n"
-        );
+  printf(
+      "Usage: vwebp in_file [options]\n\n"
+      "Decodes the WebP image file and visualize it using OpenGL\n"
+      "Options are:\n"
+      "  -version ..... print version number and exit\n"
+      "  -noicc ....... don't use the icc profile if present\n"
+      "  -nofancy ..... don't use the fancy YUV420 upscaler\n"
+      "  -nofilter .... disable in-loop filtering\n"
+      "  -dither <int>  dithering strength (0..100), default=50\n"
+      "  -noalphadither disable alpha plane dithering\n"
+      "  -usebgcolor .. display background color\n"
+      "  -mt .......... use multi-threading\n"
+      "  -info ........ print info\n"
+      "  -h ........... this help message\n"
+      "\n"
+      "Keyboard shortcuts:\n"
+      "  'c' ................ toggle use of color profile\n"
+      "  'b' ................ toggle background color display\n"
+      "  'i' ................ overlay file information\n"
+      "  'd' ................ disable blending & disposal (debug)\n"
+      "  'q' / 'Q' / ESC .... quit\n");
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   int c;
   WebPDecoderConfig* const config = &kParams.config;
   WebPIterator* const curr = &kParams.curr_frame;
 
+  INIT_WARGV(argc, argv);
+
   if (!WebPInitDecoderConfig(config)) {
     fprintf(stderr, "Library version mismatch!\n");
-    return -1;
+    FREE_WARGV_AND_RETURN(-1);
   }
   config->options.dithering_strength = 50;
   config->options.alpha_dithering_strength = 100;
   kParams.use_color_profile = 1;
+  // Background color hidden by default to see transparent areas.
+  kParams.draw_anim_background_color = 0;
 
   for (c = 1; c < argc; ++c) {
     int parse_error = 0;
     if (!strcmp(argv[c], "-h") || !strcmp(argv[c], "-help")) {
       Help();
-      return 0;
+      FREE_WARGV_AND_RETURN(0);
     } else if (!strcmp(argv[c], "-noicc")) {
       kParams.use_color_profile = 0;
     } else if (!strcmp(argv[c], "-nofancy")) {
@@ -452,6 +509,8 @@ int main(int argc, char *argv[]) {
       config->options.bypass_filtering = 1;
     } else if (!strcmp(argv[c], "-noalphadither")) {
       config->options.alpha_dithering_strength = 0;
+    } else if (!strcmp(argv[c], "-usebgcolor")) {
+      kParams.draw_anim_background_color = 1;
     } else if (!strcmp(argv[c], "-dither") && c + 1 < argc) {
       config->options.dithering_strength =
           ExUtilGetInt(argv[++c], 0, &parse_error);
@@ -464,30 +523,30 @@ int main(int argc, char *argv[]) {
              (dec_version >> 16) & 0xff, (dec_version >> 8) & 0xff,
              dec_version & 0xff, (dmux_version >> 16) & 0xff,
              (dmux_version >> 8) & 0xff, dmux_version & 0xff);
-      return 0;
+      FREE_WARGV_AND_RETURN(0);
     } else if (!strcmp(argv[c], "-mt")) {
       config->options.use_threads = 1;
     } else if (!strcmp(argv[c], "--")) {
-      if (c < argc - 1) kParams.file_name = argv[++c];
+      if (c < argc - 1) kParams.file_name = (const char*)GET_WARGV(argv, ++c);
       break;
     } else if (argv[c][0] == '-') {
       printf("Unknown option '%s'\n", argv[c]);
       Help();
-      return -1;
+      FREE_WARGV_AND_RETURN(-1);
     } else {
-      kParams.file_name = argv[c];
+      kParams.file_name = (const char*)GET_WARGV(argv, c);
     }
 
     if (parse_error) {
       Help();
-      return -1;
+      FREE_WARGV_AND_RETURN(-1);
     }
   }
 
   if (kParams.file_name == NULL) {
     printf("missing input file!!\n");
     Help();
-    return 0;
+    FREE_WARGV_AND_RETURN(0);
   }
 
   if (!ImgIoUtilReadFile(kParams.file_name,
@@ -562,16 +621,16 @@ int main(int argc, char *argv[]) {
 
   // Should only be reached when using FREEGLUT:
   ClearParams();
-  return 0;
+  FREE_WARGV_AND_RETURN(0);
 
  Error:
   ClearParams();
-  return -1;
+  FREE_WARGV_AND_RETURN(-1);
 }
 
 #else   // !WEBP_HAVE_GL
 
-int main(int argc, const char *argv[]) {
+int main(int argc, const char* argv[]) {
   fprintf(stderr, "OpenGL support not enabled in %s.\n", argv[0]);
   (void)argc;
   return 0;

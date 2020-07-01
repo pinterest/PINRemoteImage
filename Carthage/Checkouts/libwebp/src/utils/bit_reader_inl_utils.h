@@ -13,19 +13,19 @@
 //
 // Author: Skal (pascal.massimino@gmail.com)
 
-#ifndef WEBP_UTILS_BIT_READER_INL_H_
-#define WEBP_UTILS_BIT_READER_INL_H_
+#ifndef WEBP_UTILS_BIT_READER_INL_UTILS_H_
+#define WEBP_UTILS_BIT_READER_INL_UTILS_H_
 
 #ifdef HAVE_CONFIG_H
-#include "../webp/config.h"
+#include "src/webp/config.h"
 #endif
 
 #include <string.h>  // for memcpy
 
-#include "../dsp/dsp.h"
-#include "./bit_reader_utils.h"
-#include "./endian_inl_utils.h"
-#include "./utils.h"
+#include "src/dsp/dsp.h"
+#include "src/utils/bit_reader_utils.h"
+#include "src/utils/endian_inl_utils.h"
+#include "src/utils/utils.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -104,7 +104,8 @@ void VP8LoadNewBytes(VP8BitReader* const br) {
 }
 
 // Read a bit with proba 'prob'. Speed-critical function!
-static WEBP_INLINE int VP8GetBit(VP8BitReader* const br, int prob) {
+static WEBP_INLINE int VP8GetBit(VP8BitReader* const br,
+                                 int prob, const char label[]) {
   // Don't move this declaration! It makes a big speed difference to store
   // 'range' *before* calling VP8LoadNewBytes(), even if this function doesn't
   // alter br->range_ value.
@@ -129,13 +130,14 @@ static WEBP_INLINE int VP8GetBit(VP8BitReader* const br, int prob) {
       br->bits_ -= shift;
     }
     br->range_ = range - 1;
+    BT_TRACK(br);
     return bit;
   }
 }
 
 // simplified version of VP8GetBit() for prob=0x80 (note shift is always 1 here)
 static WEBP_UBSAN_IGNORE_UNSIGNED_OVERFLOW WEBP_INLINE
-int VP8GetSigned(VP8BitReader* const br, int v) {
+int VP8GetSigned(VP8BitReader* const br, int v, const char label[]) {
   if (br->bits_ < 0) {
     VP8LoadNewBytes(br);
   }
@@ -148,11 +150,13 @@ int VP8GetSigned(VP8BitReader* const br, int v) {
     br->range_ += mask;
     br->range_ |= 1;
     br->value_ -= (bit_t)((split + 1) & mask) << pos;
+    BT_TRACK(br);
     return (v ^ mask) - mask;
   }
 }
 
-static WEBP_INLINE int VP8GetBitAlt(VP8BitReader* const br, int prob) {
+static WEBP_INLINE int VP8GetBitAlt(VP8BitReader* const br,
+                                    int prob, const char label[]) {
   // Don't move this declaration! It makes a big speed difference to store
   // 'range' *before* calling VP8LoadNewBytes(), even if this function doesn't
   // alter br->range_ value.
@@ -179,6 +183,7 @@ static WEBP_INLINE int VP8GetBitAlt(VP8BitReader* const br, int prob) {
       br->bits_ -= shift;
     }
     br->range_ = range;
+    BT_TRACK(br);
     return bit;
   }
 }
@@ -187,4 +192,4 @@ static WEBP_INLINE int VP8GetBitAlt(VP8BitReader* const br, int prob) {
 }    // extern "C"
 #endif
 
-#endif   // WEBP_UTILS_BIT_READER_INL_H_
+#endif  // WEBP_UTILS_BIT_READER_INL_UTILS_H_

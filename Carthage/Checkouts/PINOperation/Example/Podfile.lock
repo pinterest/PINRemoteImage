@@ -1,0 +1,16 @@
+PODS:
+  - PINOperation (1.1.2)
+
+DEPENDENCIES:
+  - PINOperation (from `../`)
+
+EXTERNAL SOURCES:
+  PINOperation:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  PINOperation: 24b774353ca248fcf87d67b2d61eef42087c125a
+
+PODFILE CHECKSUM: b83a75d584abe07185e7be951687702dadbabf84
+
+COCOAPODS: 1.9.1

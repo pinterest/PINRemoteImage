@@ -11,11 +11,11 @@
 //
 // Author: Prashant Patil (prashant.patil@imgtec.com)
 
-#include "./dsp.h"
+#include "src/dsp/dsp.h"
 
 #if defined(WEBP_USE_MSA)
 
-#include "./msa_macro.h"
+#include "src/dsp/msa_macro.h"
 
 #include <assert.h>
 
@@ -66,8 +66,8 @@ static WEBP_INLINE void PredictLineInverse0(const uint8_t* src,
 //------------------------------------------------------------------------------
 // Horrizontal filter
 
-static void HorizontalFilter(const uint8_t* data, int width, int height,
-                             int stride, uint8_t* filtered_data) {
+static void HorizontalFilter_MSA(const uint8_t* data, int width, int height,
+                                 int stride, uint8_t* filtered_data) {
   const uint8_t* preds = data;
   const uint8_t* in = data;
   uint8_t* out = filtered_data;
@@ -129,8 +129,8 @@ static WEBP_INLINE void PredictLineGradient(const uint8_t* pinput,
 }
 
 
-static void GradientFilter(const uint8_t* data, int width, int height,
-                           int stride, uint8_t* filtered_data) {
+static void GradientFilter_MSA(const uint8_t* data, int width, int height,
+                               int stride, uint8_t* filtered_data) {
   const uint8_t* in = data;
   const uint8_t* preds = data;
   uint8_t* out = filtered_data;
@@ -157,8 +157,8 @@ static void GradientFilter(const uint8_t* data, int width, int height,
 //------------------------------------------------------------------------------
 // Vertical filter
 
-static void VerticalFilter(const uint8_t* data, int width, int height,
-                           int stride, uint8_t* filtered_data) {
+static void VerticalFilter_MSA(const uint8_t* data, int width, int height,
+                               int stride, uint8_t* filtered_data) {
   const uint8_t* in = data;
   const uint8_t* preds = data;
   uint8_t* out = filtered_data;
@@ -190,9 +190,9 @@ static void VerticalFilter(const uint8_t* data, int width, int height,
 extern void VP8FiltersInitMSA(void);
 
 WEBP_TSAN_IGNORE_FUNCTION void VP8FiltersInitMSA(void) {
-  WebPFilters[WEBP_FILTER_HORIZONTAL] = HorizontalFilter;
-  WebPFilters[WEBP_FILTER_VERTICAL] = VerticalFilter;
-  WebPFilters[WEBP_FILTER_GRADIENT] = GradientFilter;
+  WebPFilters[WEBP_FILTER_HORIZONTAL] = HorizontalFilter_MSA;
+  WebPFilters[WEBP_FILTER_VERTICAL] = VerticalFilter_MSA;
+  WebPFilters[WEBP_FILTER_GRADIENT] = GradientFilter_MSA;
 }
 
 #else  // !WEBP_USE_MSA
