@@ -29,6 +29,10 @@ WebPInputFileFormat WebPGuessImageType(const uint8_t* const data,
       format = WEBP_TIFF_FORMAT;
     } else if (magic1 == 0x52494646 && magic2 == 0x57454250) {
       format = WEBP_WEBP_FORMAT;
+    } else if (((magic1 >> 24) & 0xff) == 'P') {
+      const int type = (magic1 >> 16) & 0xff;
+      // we only support 'P5 -> P7' for now.
+      if (type >= '5' && type <= '7') format = WEBP_PNM_FORMAT;
     }
   }
   return format;
@@ -51,6 +55,7 @@ WebPImageReader WebPGetImageReader(WebPInputFileFormat format) {
     case WEBP_JPEG_FORMAT: return ReadJPEG;
     case WEBP_TIFF_FORMAT: return ReadTIFF;
     case WEBP_WEBP_FORMAT: return ReadWebP;
+    case WEBP_PNM_FORMAT: return ReadPNM;
     default: return FailReader;
   }
 }

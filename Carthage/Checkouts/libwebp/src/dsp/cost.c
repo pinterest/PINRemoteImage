@@ -9,8 +9,8 @@
 //
 // Author: Skal (pascal.massimino@gmail.com)
 
-#include "./dsp.h"
-#include "../enc/cost_enc.h"
+#include "src/dsp/dsp.h"
+#include "src/enc/cost_enc.h"
 
 //------------------------------------------------------------------------------
 // Boolean-cost cost table
@@ -319,7 +319,7 @@ const uint8_t VP8EncBands[16 + 1] = {
 //------------------------------------------------------------------------------
 // Mode costs
 
-static int GetResidualCost(int ctx0, const VP8Residual* const res) {
+static int GetResidualCost_C(int ctx0, const VP8Residual* const res) {
   int n = res->first;
   // should be prob[VP8EncBands[n]], but it's equivalent for n=0 or 1
   const int p0 = res->prob[n][ctx0][0];
@@ -354,8 +354,8 @@ static int GetResidualCost(int ctx0, const VP8Residual* const res) {
   return cost;
 }
 
-static void SetResidualCoeffs(const int16_t* const coeffs,
-                              VP8Residual* const res) {
+static void SetResidualCoeffs_C(const int16_t* const coeffs,
+                                VP8Residual* const res) {
   int n;
   res->last = -1;
   assert(res->first == 0 || coeffs[0] == 0);
@@ -377,15 +377,11 @@ VP8SetResidualCoeffsFunc VP8SetResidualCoeffs;
 extern void VP8EncDspCostInitMIPS32(void);
 extern void VP8EncDspCostInitMIPSdspR2(void);
 extern void VP8EncDspCostInitSSE2(void);
+extern void VP8EncDspCostInitNEON(void);
 
-static volatile VP8CPUInfo cost_last_cpuinfo_used =
-    (VP8CPUInfo)&cost_last_cpuinfo_used;
-
-WEBP_TSAN_IGNORE_FUNCTION void VP8EncDspCostInit(void) {
-  if (cost_last_cpuinfo_used == VP8GetCPUInfo) return;
-
-  VP8GetResidualCost = GetResidualCost;
-  VP8SetResidualCoeffs = SetResidualCoeffs;
+WEBP_DSP_INIT_FUNC(VP8EncDspCostInit) {
+  VP8GetResidualCost = GetResidualCost_C;
+  VP8SetResidualCoeffs = SetResidualCoeffs_C;
 
   // If defined, use CPUInfo() to overwrite some pointers with faster versions.
   if (VP8GetCPUInfo != NULL) {
@@ -404,9 +400,12 @@ WEBP_TSAN_IGNORE_FUNCTION void VP8EncDspCostInit(void) {
       VP8EncDspCostInitSSE2();
     }
 #endif
+#if defined(WEBP_USE_NEON)
+    if (VP8GetCPUInfo(kNEON)) {
+      VP8EncDspCostInitNEON();
+    }
+#endif
   }
-
-  cost_last_cpuinfo_used = VP8GetCPUInfo;
 }
 
 //------------------------------------------------------------------------------

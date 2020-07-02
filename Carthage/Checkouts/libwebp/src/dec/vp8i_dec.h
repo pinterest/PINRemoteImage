@@ -11,16 +11,16 @@
 //
 // Author: Skal (pascal.massimino@gmail.com)
 
-#ifndef WEBP_DEC_VP8I_H_
-#define WEBP_DEC_VP8I_H_
+#ifndef WEBP_DEC_VP8I_DEC_H_
+#define WEBP_DEC_VP8I_DEC_H_
 
 #include <string.h>     // for memcpy()
-#include "./common_dec.h"
-#include "./vp8li_dec.h"
-#include "../utils/bit_reader_utils.h"
-#include "../utils/random_utils.h"
-#include "../utils/thread_utils.h"
-#include "../dsp/dsp.h"
+#include "src/dec/common_dec.h"
+#include "src/dec/vp8li_dec.h"
+#include "src/utils/bit_reader_utils.h"
+#include "src/utils/random_utils.h"
+#include "src/utils/thread_utils.h"
+#include "src/dsp/dsp.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,8 +30,8 @@ extern "C" {
 // Various defines and enums
 
 // version numbers
-#define DEC_MAJ_VERSION 0
-#define DEC_MIN_VERSION 6
+#define DEC_MAJ_VERSION 1
+#define DEC_MIN_VERSION 1
 #define DEC_REV_VERSION 0
 
 // YUV-cache parameters. Cache is 32-bytes wide (= one cacheline).
@@ -57,7 +57,6 @@ extern "C" {
 //  '|' = left sample,   '-' = top sample,    '+' = top-left sample
 //  't' = extra top-right sample for 4x4 modes
 #define YUV_SIZE (BPS * 17 + BPS * 9)
-#define Y_SIZE   (BPS * 17)
 #define Y_OFF    (BPS * 1 + 8)
 #define U_OFF    (Y_OFF + BPS * 16 + BPS)
 #define V_OFF    (U_OFF + 16)
@@ -317,4 +316,4 @@ const uint8_t* VP8DecompressAlphaRows(VP8Decoder* const dec,
 }    // extern "C"
 #endif
 
-#endif  /* WEBP_DEC_VP8I_H_ */
+#endif  // WEBP_DEC_VP8I_DEC_H_

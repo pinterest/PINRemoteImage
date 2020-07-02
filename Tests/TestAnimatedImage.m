@@ -32,7 +32,7 @@
     return 0;
 }
 
-- (id)imageAtIndex:(NSUInteger)index cacheProvider:(nullable id<PINCachedAnimatedFrameProvider>)cacheProvider {
+- (nullable CGImageRef)imageAtIndex:(NSUInteger)index cacheProvider:(nullable id<PINCachedAnimatedFrameProvider>)cacheProvider {
     return nil;
 }
 

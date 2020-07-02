@@ -11,7 +11,7 @@
 //
 // Author: Skal (pascal.massimino@gmail.com)
 
-#include "./extras.h"
+#include "extras/extras.h"
 #include "webp/decode.h"
 
 #include <math.h>
@@ -73,7 +73,7 @@ int VP8EstimateQuality(const uint8_t* const data, size_t size) {
   pos += 4;
   bit_pos = pos * 8;
 
-  GET_BIT(2);  // color_space + clamp type
+  GET_BIT(2);  // colorspace + clamp type
 
   // Segment header
   if (GET_BIT(1)) {       // use_segment_

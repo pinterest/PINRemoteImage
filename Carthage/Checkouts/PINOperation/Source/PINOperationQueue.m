@@ -305,16 +305,10 @@
 
 - (BOOL)locked_cancelOperation:(id <PINOperationReference>)operationReference
 {
-  BOOL success = NO;
   PINOperation *operation = [_referenceToOperations objectForKey:operationReference];
-  if (operation) {
-    NSMutableOrderedSet *queue = [self operationQueueWithPriority:operation.priority];
-    if ([queue containsObject:operation]) {
-      success = YES;
-      [queue removeObject:operation];
-      [_queuedOperations removeObject:operation];
-      dispatch_group_leave(_group);
-    }
+  BOOL success = [self locked_removeOperation:operation];
+  if (success) {
+    dispatch_group_leave(_group);
   }
   return success;
 }
@@ -448,13 +442,20 @@
 }
 
 //Call with lock held
-- (void)locked_removeOperation:(PINOperation *)operation
+- (BOOL)locked_removeOperation:(PINOperation *)operation
 {
   if (operation) {
     NSMutableOrderedSet *priorityQueue = [self operationQueueWithPriority:operation.priority];
-    [priorityQueue removeObject:operation];
-    [_queuedOperations removeObject:operation];
+    if ([priorityQueue containsObject:operation]) {
+      [priorityQueue removeObject:operation];
+      [_queuedOperations removeObject:operation];
+      if (operation.identifier) {
+        [_identifierToOperations removeObjectForKey:operation.identifier];
+      }
+      return YES;
+    }
   }
+  return NO;
 }
 
 - (void)lock

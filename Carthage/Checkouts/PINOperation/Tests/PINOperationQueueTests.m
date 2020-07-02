@@ -6,8 +6,8 @@
 //  Copyright © 2016 Pinterest. All rights reserved.
 //
 
+@import PINOperation;
 #import <XCTest/XCTest.h>
-#import <PINOperation/PINOperation.h>
 #import <pthread.h>
 
 static NSTimeInterval PINOperationQueueTestBlockTimeout = 20;

@@ -17,18 +17,20 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "../dsp/lossless_common.h"
-#include "../utils/utils.h"
-#include "./vp8i_enc.h"
+#include "src/dsp/lossless_common.h"
+#include "src/utils/utils.h"
+#include "src/enc/vp8li_enc.h"
+
+#if (WEBP_NEAR_LOSSLESS == 1)
 
 #define MIN_DIM_FOR_NEAR_LOSSLESS 64
 #define MAX_LIMIT_BITS             5
 
 // Quantizes the value up or down to a multiple of 1<<bits (or to 255),
 // choosing the closer one, resolving ties using bankers' rounding.
-static int FindClosestDiscretized(int a, int bits) {
-  const int mask = (1 << bits) - 1;
-  const int biased = a + (mask >> 1) + ((a >> bits) & 1);
+static uint32_t FindClosestDiscretized(uint32_t a, int bits) {
+  const uint32_t mask = (1u << bits) - 1;
+  const uint32_t biased = a + (mask >> 1) + ((a >> bits) & 1);
   assert(bits > 0);
   if (biased > 0xff) return 0xff;
   return biased & ~mask;
@@ -69,22 +71,30 @@ static int IsSmooth(const uint32_t* const prev_row,
 }
 
 // Adjusts pixel values of image with given maximum error.
-static void NearLossless(int xsize, int ysize, uint32_t* argb,
-                         int limit_bits, uint32_t* copy_buffer) {
+static void NearLossless(int xsize, int ysize, const uint32_t* argb_src,
+                         int stride, int limit_bits, uint32_t* copy_buffer,
+                         uint32_t* argb_dst) {
   int x, y;
   const int limit = 1 << limit_bits;
   uint32_t* prev_row = copy_buffer;
   uint32_t* curr_row = prev_row + xsize;
   uint32_t* next_row = curr_row + xsize;
-  memcpy(copy_buffer, argb, xsize * 2 * sizeof(argb[0]));
+  memcpy(curr_row, argb_src, xsize * sizeof(argb_src[0]));
+  memcpy(next_row, argb_src + stride, xsize * sizeof(argb_src[0]));
 
-  for (y = 1; y < ysize - 1; ++y) {
-    uint32_t* const curr_argb_row = argb + y * xsize;
-    uint32_t* const next_argb_row = curr_argb_row + xsize;
-    memcpy(next_row, next_argb_row, xsize * sizeof(argb[0]));
-    for (x = 1; x < xsize - 1; ++x) {
-      if (!IsSmooth(prev_row, curr_row, next_row, x, limit)) {
-        curr_argb_row[x] = ClosestDiscretizedArgb(curr_row[x], limit_bits);
+  for (y = 0; y < ysize; ++y, argb_src += stride, argb_dst += xsize) {
+    if (y == 0 || y == ysize - 1) {
+      memcpy(argb_dst, argb_src, xsize * sizeof(argb_src[0]));
+    } else {
+      memcpy(next_row, argb_src + stride, xsize * sizeof(argb_src[0]));
+      argb_dst[0] = argb_src[0];
+      argb_dst[xsize - 1] = argb_src[xsize - 1];
+      for (x = 1; x < xsize - 1; ++x) {
+        if (IsSmooth(prev_row, curr_row, next_row, x, limit)) {
+          argb_dst[x] = curr_row[x];
+        } else {
+          argb_dst[x] = ClosestDiscretizedArgb(curr_row[x], limit_bits);
+        }
       }
     }
     {
@@ -97,26 +107,45 @@ static void NearLossless(int xsize, int ysize, uint32_t* argb,
   }
 }
 
-int VP8ApplyNearLossless(int xsize, int ysize, uint32_t* argb, int quality) {
+int VP8ApplyNearLossless(const WebPPicture* const picture, int quality,
+                         uint32_t* const argb_dst) {
   int i;
+  const int xsize = picture->width;
+  const int ysize = picture->height;
+  const int stride = picture->argb_stride;
   uint32_t* const copy_buffer =
       (uint32_t*)WebPSafeMalloc(xsize * 3, sizeof(*copy_buffer));
   const int limit_bits = VP8LNearLosslessBits(quality);
-  assert(argb != NULL);
-  assert(limit_bits >= 0);
+  assert(argb_dst != NULL);
+  assert(limit_bits > 0);
   assert(limit_bits <= MAX_LIMIT_BITS);
   if (copy_buffer == NULL) {
     return 0;
   }
   // For small icon images, don't attempt to apply near-lossless compression.
-  if (xsize < MIN_DIM_FOR_NEAR_LOSSLESS && ysize < MIN_DIM_FOR_NEAR_LOSSLESS) {
+  if ((xsize < MIN_DIM_FOR_NEAR_LOSSLESS &&
+       ysize < MIN_DIM_FOR_NEAR_LOSSLESS) ||
+      ysize < 3) {
+    for (i = 0; i < ysize; ++i) {
+      memcpy(argb_dst + i * xsize, picture->argb + i * picture->argb_stride,
+             xsize * sizeof(*argb_dst));
+    }
     WebPSafeFree(copy_buffer);
     return 1;
   }
 
-  for (i = limit_bits; i != 0; --i) {
-    NearLossless(xsize, ysize, argb, i, copy_buffer);
+  NearLossless(xsize, ysize, picture->argb, stride, limit_bits, copy_buffer,
+               argb_dst);
+  for (i = limit_bits - 1; i != 0; --i) {
+    NearLossless(xsize, ysize, argb_dst, xsize, i, copy_buffer, argb_dst);
   }
   WebPSafeFree(copy_buffer);
   return 1;
 }
+#else  // (WEBP_NEAR_LOSSLESS == 1)
+
+// Define a stub to suppress compiler warnings.
+extern void VP8LNearLosslessStub(void);
+void VP8LNearLosslessStub(void) {}
+
+#endif  // (WEBP_NEAR_LOSSLESS == 1)

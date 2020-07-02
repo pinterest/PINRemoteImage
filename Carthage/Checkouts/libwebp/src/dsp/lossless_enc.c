@@ -13,15 +13,16 @@
 //          Jyrki Alakuijala (jyrki@google.com)
 //          Urvang Joshi (urvang@google.com)
 
-#include "./dsp.h"
+#include "src/dsp/dsp.h"
 
+#include <assert.h>
 #include <math.h>
 #include <stdlib.h>
-#include "../dec/vp8li_dec.h"
-#include "../utils/endian_inl_utils.h"
-#include "./lossless.h"
-#include "./lossless_common.h"
-#include "./yuv.h"
+#include "src/dec/vp8li_dec.h"
+#include "src/utils/endian_inl_utils.h"
+#include "src/dsp/lossless.h"
+#include "src/dsp/lossless_common.h"
+#include "src/dsp/yuv.h"
 
 // lookup table for small values of log2(int)
 const float kLog2Table[LOG_LOOKUP_IDX_MAX] = {
@@ -325,7 +326,7 @@ const uint8_t kPrefixEncodeExtraBitsValue[PREFIX_LOOKUP_IDX_MAX] = {
   112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126
 };
 
-static float FastSLog2Slow(uint32_t v) {
+static float FastSLog2Slow_C(uint32_t v) {
   assert(v >= LOG_LOOKUP_IDX_MAX);
   if (v < APPROX_LOG_WITH_CORRECTION_MAX) {
     int log_cnt = 0;
@@ -351,7 +352,7 @@ static float FastSLog2Slow(uint32_t v) {
   }
 }
 
-static float FastLog2Slow(uint32_t v) {
+static float FastLog2Slow_C(uint32_t v) {
   assert(v >= LOG_LOOKUP_IDX_MAX);
   if (v < APPROX_LOG_WITH_CORRECTION_MAX) {
     int log_cnt = 0;
@@ -380,7 +381,7 @@ static float FastLog2Slow(uint32_t v) {
 // Methods to calculate Entropy (Shannon).
 
 // Compute the combined Shanon's entropy for distribution {X} and {X+Y}
-static float CombinedShannonEntropy(const int X[256], const int Y[256]) {
+static float CombinedShannonEntropy_C(const int X[256], const int Y[256]) {
   int i;
   double retval = 0.;
   int sumX = 0, sumXY = 0;
@@ -453,9 +454,9 @@ static WEBP_INLINE void GetEntropyUnrefinedHelper(
   *i_prev = i;
 }
 
-static void GetEntropyUnrefined(const uint32_t X[], int length,
-                                VP8LBitEntropy* const bit_entropy,
-                                VP8LStreaks* const stats) {
+static void GetEntropyUnrefined_C(const uint32_t X[], int length,
+                                  VP8LBitEntropy* const bit_entropy,
+                                  VP8LStreaks* const stats) {
   int i;
   int i_prev = 0;
   uint32_t x_prev = X[0];
@@ -474,10 +475,11 @@ static void GetEntropyUnrefined(const uint32_t X[], int length,
   bit_entropy->entropy += VP8LFastSLog2(bit_entropy->sum);
 }
 
-static void GetCombinedEntropyUnrefined(const uint32_t X[], const uint32_t Y[],
-                                        int length,
-                                        VP8LBitEntropy* const bit_entropy,
-                                        VP8LStreaks* const stats) {
+static void GetCombinedEntropyUnrefined_C(const uint32_t X[],
+                                          const uint32_t Y[],
+                                          int length,
+                                          VP8LBitEntropy* const bit_entropy,
+                                          VP8LStreaks* const stats) {
   int i = 1;
   int i_prev = 0;
   uint32_t xy_prev = X[0] + Y[0];
@@ -513,15 +515,19 @@ static WEBP_INLINE int ColorTransformDelta(int8_t color_pred, int8_t color) {
   return ((int)color_pred * color) >> 5;
 }
 
+static WEBP_INLINE int8_t U32ToS8(uint32_t v) {
+  return (int8_t)(v & 0xff);
+}
+
 void VP8LTransformColor_C(const VP8LMultipliers* const m, uint32_t* data,
                           int num_pixels) {
   int i;
   for (i = 0; i < num_pixels; ++i) {
     const uint32_t argb = data[i];
-    const uint32_t green = argb >> 8;
-    const uint32_t red = argb >> 16;
-    int new_red = red;
-    int new_blue = argb;
+    const int8_t green = U32ToS8(argb >>  8);
+    const int8_t red   = U32ToS8(argb >> 16);
+    int new_red = red & 0xff;
+    int new_blue = argb & 0xff;
     new_red -= ColorTransformDelta(m->green_to_red_, green);
     new_red &= 0xff;
     new_blue -= ColorTransformDelta(m->green_to_blue_, green);
@@ -533,7 +539,7 @@ void VP8LTransformColor_C(const VP8LMultipliers* const m, uint32_t* data,
 
 static WEBP_INLINE uint8_t TransformColorRed(uint8_t green_to_red,
                                              uint32_t argb) {
-  const uint32_t green = argb >> 8;
+  const int8_t green = U32ToS8(argb >> 8);
   int new_red = argb >> 16;
   new_red -= ColorTransformDelta(green_to_red, green);
   return (new_red & 0xff);
@@ -542,9 +548,9 @@ static WEBP_INLINE uint8_t TransformColorRed(uint8_t green_to_red,
 static WEBP_INLINE uint8_t TransformColorBlue(uint8_t green_to_blue,
                                               uint8_t red_to_blue,
                                               uint32_t argb) {
-  const uint32_t green = argb >> 8;
-  const uint32_t red = argb >> 16;
-  uint8_t new_blue = argb;
+  const int8_t green = U32ToS8(argb >>  8);
+  const int8_t red   = U32ToS8(argb >> 16);
+  uint8_t new_blue = argb & 0xff;
   new_blue -= ColorTransformDelta(green_to_blue, green);
   new_blue -= ColorTransformDelta(red_to_blue, red);
   return (new_blue & 0xff);
@@ -556,7 +562,7 @@ void VP8LCollectColorRedTransforms_C(const uint32_t* argb, int stride,
   while (tile_height-- > 0) {
     int x;
     for (x = 0; x < tile_width; ++x) {
-      ++histo[TransformColorRed(green_to_red, argb[x])];
+      ++histo[TransformColorRed((uint8_t)green_to_red, argb[x])];
     }
     argb += stride;
   }
@@ -569,7 +575,8 @@ void VP8LCollectColorBlueTransforms_C(const uint32_t* argb, int stride,
   while (tile_height-- > 0) {
     int x;
     for (x = 0; x < tile_width; ++x) {
-      ++histo[TransformColorBlue(green_to_blue, red_to_blue, argb[x])];
+      ++histo[TransformColorBlue((uint8_t)green_to_blue, (uint8_t)red_to_blue,
+                                 argb[x])];
     }
     argb += stride;
   }
@@ -577,8 +584,8 @@ void VP8LCollectColorBlueTransforms_C(const uint32_t* argb, int stride,
 
 //------------------------------------------------------------------------------
 
-static int VectorMismatch(const uint32_t* const array1,
-                          const uint32_t* const array2, int length) {
+static int VectorMismatch_C(const uint32_t* const array1,
+                            const uint32_t* const array2, int length) {
   int match_len = 0;
 
   while (match_len < length && array1[match_len] == array2[match_len]) {
@@ -610,15 +617,15 @@ void VP8LBundleColorMap_C(const uint8_t* const row, int width, int xbits,
 
 //------------------------------------------------------------------------------
 
-static double ExtraCost(const uint32_t* population, int length) {
+static double ExtraCost_C(const uint32_t* population, int length) {
   int i;
   double cost = 0.;
   for (i = 2; i < length - 2; ++i) cost += (i >> 1) * population[i + 2];
   return cost;
 }
 
-static double ExtraCostCombined(const uint32_t* X, const uint32_t* Y,
-                                int length) {
+static double ExtraCostCombined_C(const uint32_t* X, const uint32_t* Y,
+                                  int length) {
   int i;
   double cost = 0.;
   for (i = 2; i < length - 2; ++i) {
@@ -630,38 +637,67 @@ static double ExtraCostCombined(const uint32_t* X, const uint32_t* Y,
 
 //------------------------------------------------------------------------------
 
-static void HistogramAdd(const VP8LHistogram* const a,
-                         const VP8LHistogram* const b,
-                         VP8LHistogram* const out) {
+static void AddVector_C(const uint32_t* a, const uint32_t* b, uint32_t* out,
+                        int size) {
+  int i;
+  for (i = 0; i < size; ++i) out[i] = a[i] + b[i];
+}
+
+static void AddVectorEq_C(const uint32_t* a, uint32_t* out, int size) {
+  int i;
+  for (i = 0; i < size; ++i) out[i] += a[i];
+}
+
+#define ADD(X, ARG, LEN) do {                                                  \
+  if (a->is_used_[X]) {                                                        \
+    if (b->is_used_[X]) {                                                      \
+      VP8LAddVector(a->ARG, b->ARG, out->ARG, (LEN));                          \
+    } else {                                                                   \
+      memcpy(&out->ARG[0], &a->ARG[0], (LEN) * sizeof(out->ARG[0]));           \
+    }                                                                          \
+  } else if (b->is_used_[X]) {                                                 \
+    memcpy(&out->ARG[0], &b->ARG[0], (LEN) * sizeof(out->ARG[0]));             \
+  } else {                                                                     \
+    memset(&out->ARG[0], 0, (LEN) * sizeof(out->ARG[0]));                      \
+  }                                                                            \
+} while (0)
+
+#define ADD_EQ(X, ARG, LEN) do {                                               \
+  if (a->is_used_[X]) {                                                        \
+    if (out->is_used_[X]) {                                                    \
+      VP8LAddVectorEq(a->ARG, out->ARG, (LEN));                                \
+    } else {                                                                   \
+      memcpy(&out->ARG[0], &a->ARG[0], (LEN) * sizeof(out->ARG[0]));           \
+    }                                                                          \
+  }                                                                            \
+} while (0)
+
+void VP8LHistogramAdd(const VP8LHistogram* const a,
+                      const VP8LHistogram* const b, VP8LHistogram* const out) {
   int i;
   const int literal_size = VP8LHistogramNumCodes(a->palette_code_bits_);
   assert(a->palette_code_bits_ == b->palette_code_bits_);
+
   if (b != out) {
-    for (i = 0; i < literal_size; ++i) {
-      out->literal_[i] = a->literal_[i] + b->literal_[i];
-    }
-    for (i = 0; i < NUM_DISTANCE_CODES; ++i) {
-      out->distance_[i] = a->distance_[i] + b->distance_[i];
-    }
-    for (i = 0; i < NUM_LITERAL_CODES; ++i) {
-      out->red_[i] = a->red_[i] + b->red_[i];
-      out->blue_[i] = a->blue_[i] + b->blue_[i];
-      out->alpha_[i] = a->alpha_[i] + b->alpha_[i];
+    ADD(0, literal_, literal_size);
+    ADD(1, red_, NUM_LITERAL_CODES);
+    ADD(2, blue_, NUM_LITERAL_CODES);
+    ADD(3, alpha_, NUM_LITERAL_CODES);
+    ADD(4, distance_, NUM_DISTANCE_CODES);
+    for (i = 0; i < 5; ++i) {
+      out->is_used_[i] = (a->is_used_[i] | b->is_used_[i]);
     }
   } else {
-    for (i = 0; i < literal_size; ++i) {
-      out->literal_[i] += a->literal_[i];
-    }
-    for (i = 0; i < NUM_DISTANCE_CODES; ++i) {
-      out->distance_[i] += a->distance_[i];
-    }
-    for (i = 0; i < NUM_LITERAL_CODES; ++i) {
-      out->red_[i] += a->red_[i];
-      out->blue_[i] += a->blue_[i];
-      out->alpha_[i] += a->alpha_[i];
-    }
+    ADD_EQ(0, literal_, literal_size);
+    ADD_EQ(1, red_, NUM_LITERAL_CODES);
+    ADD_EQ(2, blue_, NUM_LITERAL_CODES);
+    ADD_EQ(3, alpha_, NUM_LITERAL_CODES);
+    ADD_EQ(4, distance_, NUM_DISTANCE_CODES);
+    for (i = 0; i < 5; ++i) out->is_used_[i] |= a->is_used_[i];
   }
 }
+#undef ADD
+#undef ADD_EQ
 
 //------------------------------------------------------------------------------
 // Image transforms.
@@ -846,7 +882,8 @@ VP8LCombinedShannonEntropyFunc VP8LCombinedShannonEntropy;
 VP8LGetEntropyUnrefinedFunc VP8LGetEntropyUnrefined;
 VP8LGetCombinedEntropyUnrefinedFunc VP8LGetCombinedEntropyUnrefined;
 
-VP8LHistogramAddFunc VP8LHistogramAdd;
+VP8LAddVectorFunc VP8LAddVector;
+VP8LAddVectorEqFunc VP8LAddVectorEq;
 
 VP8LVectorMismatchFunc VP8LVectorMismatch;
 VP8LBundleColorMapFunc VP8LBundleColorMap;
@@ -861,34 +898,32 @@ extern void VP8LEncDspInitMIPS32(void);
 extern void VP8LEncDspInitMIPSdspR2(void);
 extern void VP8LEncDspInitMSA(void);
 
-static volatile VP8CPUInfo lossless_enc_last_cpuinfo_used =
-    (VP8CPUInfo)&lossless_enc_last_cpuinfo_used;
-
-WEBP_TSAN_IGNORE_FUNCTION void VP8LEncDspInit(void) {
-  if (lossless_enc_last_cpuinfo_used == VP8GetCPUInfo) return;
-
+WEBP_DSP_INIT_FUNC(VP8LEncDspInit) {
   VP8LDspInit();
 
+#if !WEBP_NEON_OMIT_C_CODE
   VP8LSubtractGreenFromBlueAndRed = VP8LSubtractGreenFromBlueAndRed_C;
 
   VP8LTransformColor = VP8LTransformColor_C;
+#endif
 
   VP8LCollectColorBlueTransforms = VP8LCollectColorBlueTransforms_C;
   VP8LCollectColorRedTransforms = VP8LCollectColorRedTransforms_C;
 
-  VP8LFastLog2Slow = FastLog2Slow;
-  VP8LFastSLog2Slow = FastSLog2Slow;
+  VP8LFastLog2Slow = FastLog2Slow_C;
+  VP8LFastSLog2Slow = FastSLog2Slow_C;
 
-  VP8LExtraCost = ExtraCost;
-  VP8LExtraCostCombined = ExtraCostCombined;
-  VP8LCombinedShannonEntropy = CombinedShannonEntropy;
+  VP8LExtraCost = ExtraCost_C;
+  VP8LExtraCostCombined = ExtraCostCombined_C;
+  VP8LCombinedShannonEntropy = CombinedShannonEntropy_C;
 
-  VP8LGetEntropyUnrefined = GetEntropyUnrefined;
-  VP8LGetCombinedEntropyUnrefined = GetCombinedEntropyUnrefined;
+  VP8LGetEntropyUnrefined = GetEntropyUnrefined_C;
+  VP8LGetCombinedEntropyUnrefined = GetCombinedEntropyUnrefined_C;
 
-  VP8LHistogramAdd = HistogramAdd;
+  VP8LAddVector = AddVector_C;
+  VP8LAddVectorEq = AddVectorEq_C;
 
-  VP8LVectorMismatch = VectorMismatch;
+  VP8LVectorMismatch = VectorMismatch_C;
   VP8LBundleColorMap = VP8LBundleColorMap_C;
 
   VP8LPredictorsSub[0] = PredictorSub0_C;
@@ -937,11 +972,6 @@ WEBP_TSAN_IGNORE_FUNCTION void VP8LEncDspInit(void) {
 #endif
     }
 #endif
-#if defined(WEBP_USE_NEON)
-    if (VP8GetCPUInfo(kNEON)) {
-      VP8LEncDspInitNEON();
-    }
-#endif
 #if defined(WEBP_USE_MIPS32)
     if (VP8GetCPUInfo(kMIPS32)) {
       VP8LEncDspInitMIPS32();
@@ -958,7 +988,61 @@ WEBP_TSAN_IGNORE_FUNCTION void VP8LEncDspInit(void) {
     }
 #endif
   }
-  lossless_enc_last_cpuinfo_used = VP8GetCPUInfo;
+
+#if defined(WEBP_USE_NEON)
+  if (WEBP_NEON_OMIT_C_CODE ||
+      (VP8GetCPUInfo != NULL && VP8GetCPUInfo(kNEON))) {
+    VP8LEncDspInitNEON();
+  }
+#endif
+
+  assert(VP8LSubtractGreenFromBlueAndRed != NULL);
+  assert(VP8LTransformColor != NULL);
+  assert(VP8LCollectColorBlueTransforms != NULL);
+  assert(VP8LCollectColorRedTransforms != NULL);
+  assert(VP8LFastLog2Slow != NULL);
+  assert(VP8LFastSLog2Slow != NULL);
+  assert(VP8LExtraCost != NULL);
+  assert(VP8LExtraCostCombined != NULL);
+  assert(VP8LCombinedShannonEntropy != NULL);
+  assert(VP8LGetEntropyUnrefined != NULL);
+  assert(VP8LGetCombinedEntropyUnrefined != NULL);
+  assert(VP8LAddVector != NULL);
+  assert(VP8LAddVectorEq != NULL);
+  assert(VP8LVectorMismatch != NULL);
+  assert(VP8LBundleColorMap != NULL);
+  assert(VP8LPredictorsSub[0] != NULL);
+  assert(VP8LPredictorsSub[1] != NULL);
+  assert(VP8LPredictorsSub[2] != NULL);
+  assert(VP8LPredictorsSub[3] != NULL);
+  assert(VP8LPredictorsSub[4] != NULL);
+  assert(VP8LPredictorsSub[5] != NULL);
+  assert(VP8LPredictorsSub[6] != NULL);
+  assert(VP8LPredictorsSub[7] != NULL);
+  assert(VP8LPredictorsSub[8] != NULL);
+  assert(VP8LPredictorsSub[9] != NULL);
+  assert(VP8LPredictorsSub[10] != NULL);
+  assert(VP8LPredictorsSub[11] != NULL);
+  assert(VP8LPredictorsSub[12] != NULL);
+  assert(VP8LPredictorsSub[13] != NULL);
+  assert(VP8LPredictorsSub[14] != NULL);
+  assert(VP8LPredictorsSub[15] != NULL);
+  assert(VP8LPredictorsSub_C[0] != NULL);
+  assert(VP8LPredictorsSub_C[1] != NULL);
+  assert(VP8LPredictorsSub_C[2] != NULL);
+  assert(VP8LPredictorsSub_C[3] != NULL);
+  assert(VP8LPredictorsSub_C[4] != NULL);
+  assert(VP8LPredictorsSub_C[5] != NULL);
+  assert(VP8LPredictorsSub_C[6] != NULL);
+  assert(VP8LPredictorsSub_C[7] != NULL);
+  assert(VP8LPredictorsSub_C[8] != NULL);
+  assert(VP8LPredictorsSub_C[9] != NULL);
+  assert(VP8LPredictorsSub_C[10] != NULL);
+  assert(VP8LPredictorsSub_C[11] != NULL);
+  assert(VP8LPredictorsSub_C[12] != NULL);
+  assert(VP8LPredictorsSub_C[13] != NULL);
+  assert(VP8LPredictorsSub_C[14] != NULL);
+  assert(VP8LPredictorsSub_C[15] != NULL);
 }
 
 //------------------------------------------------------------------------------

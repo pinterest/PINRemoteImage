@@ -20,9 +20,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "./cost_enc.h"
-#include "./vp8i_enc.h"
-#include "../utils/utils.h"
+#include "src/enc/cost_enc.h"
+#include "src/enc/vp8i_enc.h"
+#include "src/utils/utils.h"
 
 #if !defined(DISABLE_TOKEN_BUFFER)
 
@@ -195,39 +195,6 @@ int VP8RecordCoeffTokens(int ctx, const struct VP8Residual* const res,
 #undef TOKEN_ID
 
 //------------------------------------------------------------------------------
-// This function works, but isn't currently used. Saved for later.
-
-#if 0
-
-static void Record(int bit, proba_t* const stats) {
-  proba_t p = *stats;
-  if (p >= 0xffff0000u) {               // an overflow is inbound.
-    p = ((p + 1u) >> 1) & 0x7fff7fffu;  // -> divide the stats by 2.
-  }
-  // record bit count (lower 16 bits) and increment total count (upper 16 bits).
-  p += 0x00010000u + bit;
-  *stats = p;
-}
-
-void VP8TokenToStats(const VP8TBuffer* const b, proba_t* const stats) {
-  const VP8Tokens* p = b->pages_;
-  while (p != NULL) {
-    const int N = (p->next_ == NULL) ? b->left_ : 0;
-    int n = MAX_NUM_TOKEN;
-    const token_t* const tokens = TOKEN_DATA(p);
-    while (n-- > N) {
-      const token_t token = tokens[n];
-      if (!(token & FIXED_PROBA_BIT)) {
-        Record((token >> 15) & 1, stats + (token & 0x3fffu));
-      }
-    }
-    p = p->next_;
-  }
-}
-
-#endif   // 0
-
-//------------------------------------------------------------------------------
 // Final coding pass, with known probabilities
 
 int VP8EmitTokens(VP8TBuffer* const b, VP8BitWriter* const bw,
@@ -283,8 +250,9 @@ size_t VP8EstimateTokenSize(VP8TBuffer* const b, const uint8_t* const probas) {
 
 #else     // DISABLE_TOKEN_BUFFER
 
-void VP8TBufferInit(VP8TBuffer* const b) {
+void VP8TBufferInit(VP8TBuffer* const b, int page_size) {
   (void)b;
+  (void)page_size;
 }
 void VP8TBufferClear(VP8TBuffer* const b) {
   (void)b;

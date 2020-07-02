@@ -14,9 +14,9 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "./vp8i_enc.h"
-#include "../dsp/dsp.h"
-#include "../utils/utils.h"
+#include "src/enc/vp8i_enc.h"
+#include "src/dsp/dsp.h"
+#include "src/utils/utils.h"
 
 //------------------------------------------------------------------------------
 // WebPPicture
@@ -76,13 +76,12 @@ int WebPPictureAllocARGB(WebPPicture* const picture, int width, int height) {
     return WebPEncodingSetError(picture, VP8_ENC_ERROR_BAD_DIMENSION);
   }
   // allocate a new buffer.
-  memory = WebPSafeMalloc(argb_size, sizeof(*picture->argb));
+  memory = WebPSafeMalloc(argb_size + WEBP_ALIGN_CST, sizeof(*picture->argb));
   if (memory == NULL) {
     return WebPEncodingSetError(picture, VP8_ENC_ERROR_OUT_OF_MEMORY);
   }
-  // TODO(skal): align plane to cache line?
   picture->memory_argb_ = memory;
-  picture->argb = (uint32_t*)memory;
+  picture->argb = (uint32_t*)WEBP_ALIGN(memory);
   picture->argb_stride = width;
   return 1;
 }
@@ -92,8 +91,8 @@ int WebPPictureAllocYUVA(WebPPicture* const picture, int width, int height) {
       (WebPEncCSP)((int)picture->colorspace & WEBP_CSP_UV_MASK);
   const int has_alpha = (int)picture->colorspace & WEBP_CSP_ALPHA_BIT;
   const int y_stride = width;
-  const int uv_width = (width + 1) >> 1;
-  const int uv_height = (height + 1) >> 1;
+  const int uv_width = (int)(((int64_t)width + 1) >> 1);
+  const int uv_height = (int)(((int64_t)height + 1) >> 1);
   const int uv_stride = uv_width;
   int a_width, a_stride;
   uint64_t y_size, uv_size, a_size, total_size;
@@ -118,8 +117,8 @@ int WebPPictureAllocYUVA(WebPPicture* const picture, int width, int height) {
   total_size = y_size + a_size + 2 * uv_size;
 
   // Security and validation checks
-  if (width <= 0 || height <= 0 ||         // luma/alpha param error
-      uv_width < 0 || uv_height < 0) {     // u/v param error
+  if (width <= 0 || height <= 0 ||           // luma/alpha param error
+      uv_width <= 0 || uv_height <= 0) {     // u/v param error
     return WebPEncodingSetError(picture, VP8_ENC_ERROR_BAD_DIMENSION);
   }
   // allocate a new buffer.
@@ -271,9 +270,11 @@ size_t NAME(const uint8_t* in, int w, int h, int bps, float q,          \
 }
 
 ENCODE_FUNC(WebPEncodeRGB, WebPPictureImportRGB)
-ENCODE_FUNC(WebPEncodeBGR, WebPPictureImportBGR)
 ENCODE_FUNC(WebPEncodeRGBA, WebPPictureImportRGBA)
+#if !defined(WEBP_REDUCE_CSP)
+ENCODE_FUNC(WebPEncodeBGR, WebPPictureImportBGR)
 ENCODE_FUNC(WebPEncodeBGRA, WebPPictureImportBGRA)
+#endif  // WEBP_REDUCE_CSP
 
 #undef ENCODE_FUNC
 
@@ -284,9 +285,11 @@ size_t NAME(const uint8_t* in, int w, int h, int bps, uint8_t** out) {       \
 }
 
 LOSSLESS_ENCODE_FUNC(WebPEncodeLosslessRGB, WebPPictureImportRGB)
-LOSSLESS_ENCODE_FUNC(WebPEncodeLosslessBGR, WebPPictureImportBGR)
 LOSSLESS_ENCODE_FUNC(WebPEncodeLosslessRGBA, WebPPictureImportRGBA)
+#if !defined(WEBP_REDUCE_CSP)
+LOSSLESS_ENCODE_FUNC(WebPEncodeLosslessBGR, WebPPictureImportBGR)
 LOSSLESS_ENCODE_FUNC(WebPEncodeLosslessBGRA, WebPPictureImportBGRA)
+#endif  // WEBP_REDUCE_CSP
 
 #undef LOSSLESS_ENCODE_FUNC
 

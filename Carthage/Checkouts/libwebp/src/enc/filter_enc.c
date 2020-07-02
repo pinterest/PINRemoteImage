@@ -12,8 +12,8 @@
 // Author: somnath@google.com (Somnath Banerjee)
 
 #include <assert.h>
-#include "./vp8i_enc.h"
-#include "../dsp/dsp.h"
+#include "src/enc/vp8i_enc.h"
+#include "src/dsp/dsp.h"
 
 // This table gives, for a given sharpness, the filtering strength to be
 // used (at least) in order to filter a given edge step delta.
@@ -64,6 +64,8 @@ int VP8FilterStrengthFromDelta(int sharpness, int delta) {
 
 //------------------------------------------------------------------------------
 // Paragraph 15.4: compute the inner-edge filtering strength
+
+#if !defined(WEBP_REDUCE_SIZE)
 
 static int GetILevel(int sharpness, int level) {
   if (sharpness > 0) {
@@ -129,11 +131,14 @@ static double GetMBSSIM(const uint8_t* yuv1, const uint8_t* yuv2) {
   return sum;
 }
 
+#endif  // !defined(WEBP_REDUCE_SIZE)
+
 //------------------------------------------------------------------------------
 // Exposed APIs: Encoder should call the following 3 functions to adjust
 // loop filter strength
 
 void VP8InitFilter(VP8EncIterator* const it) {
+#if !defined(WEBP_REDUCE_SIZE)
   if (it->lf_stats_ != NULL) {
     int s, i;
     for (s = 0; s < NUM_MB_SEGMENTS; s++) {
@@ -143,9 +148,13 @@ void VP8InitFilter(VP8EncIterator* const it) {
     }
     VP8SSIMDspInit();
   }
+#else
+  (void)it;
+#endif
 }
 
 void VP8StoreFilterStats(VP8EncIterator* const it) {
+#if !defined(WEBP_REDUCE_SIZE)
   int d;
   VP8Encoder* const enc = it->enc_;
   const int s = it->mb_->segment_;
@@ -177,10 +186,14 @@ void VP8StoreFilterStats(VP8EncIterator* const it) {
     DoFilter(it, level);
     (*it->lf_stats_)[s][level] += GetMBSSIM(it->yuv_in_, it->yuv_out2_);
   }
+#else  // defined(WEBP_REDUCE_SIZE)
+  (void)it;
+#endif  // !defined(WEBP_REDUCE_SIZE)
 }
 
 void VP8AdjustFilterStrength(VP8EncIterator* const it) {
   VP8Encoder* const enc = it->enc_;
+#if !defined(WEBP_REDUCE_SIZE)
   if (it->lf_stats_ != NULL) {
     int s;
     for (s = 0; s < NUM_MB_SEGMENTS; s++) {
@@ -196,7 +209,10 @@ void VP8AdjustFilterStrength(VP8EncIterator* const it) {
       }
       enc->dqm_[s].fstrength_ = best_level;
     }
-  } else if (enc->config_->filter_strength > 0) {
+    return;
+  }
+#endif  // !defined(WEBP_REDUCE_SIZE)
+  if (enc->config_->filter_strength > 0) {
     int max_level = 0;
     int s;
     for (s = 0; s < NUM_MB_SEGMENTS; s++) {

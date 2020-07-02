@@ -24,6 +24,7 @@
 #include "../imageio/image_enc.h"
 #include "../imageio/webpdec.h"
 #include "./stopwatch.h"
+#include "./unicode.h"
 
 static int verbose = 0;
 static int quiet = 0;
@@ -42,7 +43,7 @@ extern void* VP8GetCPUInfo;   // opaque forward declaration.
 
 static int SaveOutput(const WebPDecBuffer* const buffer,
                       WebPOutputFileFormat format, const char* const out_file) {
-  const int use_stdout = (out_file != NULL) && !strcmp(out_file, "-");
+  const int use_stdout = (out_file != NULL) && !WSTRCMP(out_file, "-");
   int ok = 1;
   Stopwatch stop_watch;
 
@@ -56,7 +57,7 @@ static int SaveOutput(const WebPDecBuffer* const buffer,
       if (use_stdout) {
         fprintf(stderr, "Saved to stdout\n");
       } else {
-        fprintf(stderr, "Saved file %s\n", out_file);
+        WFPRINTF(stderr, "Saved file %s\n", (const W_CHAR*)out_file);
       }
     }
     if (verbose) {
@@ -67,7 +68,7 @@ static int SaveOutput(const WebPDecBuffer* const buffer,
     if (use_stdout) {
       fprintf(stderr, "Error writing to stdout !!\n");
     } else {
-      fprintf(stderr, "Error writing file %s !!\n", out_file);
+      WFPRINTF(stderr, "Error writing file %s !!\n", (const W_CHAR*)out_file);
     }
   }
   return ok;
@@ -131,7 +132,7 @@ static uint8_t* AllocateExternalBuffer(WebPDecoderConfig* config,
                      format == RGB_565) ? 2
                   : 4;
     uint32_t stride = bpp * w + 7;   // <- just for exercising
-    external_buffer = (uint8_t*)malloc(stride * h);
+    external_buffer = (uint8_t*)WebPMalloc(stride * h);
     if (external_buffer == NULL) return NULL;
     output_buffer->u.RGBA.stride = stride;
     output_buffer->u.RGBA.size = stride * h;
@@ -144,7 +145,7 @@ static uint8_t* AllocateExternalBuffer(WebPDecoderConfig* config,
     uint32_t total_size = stride * h * (has_alpha ? 2 : 1)
                         + 2 * uv_stride * (h + 1) / 2;
     assert(format >= YUV && format <= YUVA);
-    external_buffer = (uint8_t*)malloc(total_size);
+    external_buffer = (uint8_t*)WebPMalloc(total_size);
     if (external_buffer == NULL) return NULL;
     tmp = external_buffer;
     output_buffer->u.YUVA.y = tmp;
@@ -175,10 +176,10 @@ static uint8_t* AllocateExternalBuffer(WebPDecoderConfig* config,
   return external_buffer;
 }
 
-int main(int argc, const char *argv[]) {
+int main(int argc, const char* argv[]) {
   int ok = 0;
-  const char *in_file = NULL;
-  const char *out_file = NULL;
+  const char* in_file = NULL;
+  const char* out_file = NULL;
 
   WebPDecoderConfig config;
   WebPDecBuffer* const output_buffer = &config.output;
@@ -191,18 +192,20 @@ int main(int argc, const char *argv[]) {
   int incremental = 0;
   int c;
 
+  INIT_WARGV(argc, argv);
+
   if (!WebPInitDecoderConfig(&config)) {
     fprintf(stderr, "Library version mismatch!\n");
-    return -1;
+    FREE_WARGV_AND_RETURN(-1);
   }
 
   for (c = 1; c < argc; ++c) {
     int parse_error = 0;
     if (!strcmp(argv[c], "-h") || !strcmp(argv[c], "-help")) {
       Help();
-      return 0;
+      FREE_WARGV_AND_RETURN(0);
     } else if (!strcmp(argv[c], "-o") && c < argc - 1) {
-      out_file = argv[++c];
+      out_file = (const char*)GET_WARGV(argv, ++c);
     } else if (!strcmp(argv[c], "-alpha")) {
       format = ALPHA_PLANE_ONLY;
     } else if (!strcmp(argv[c], "-nofancy")) {
@@ -223,7 +226,7 @@ int main(int argc, const char *argv[]) {
       const int version = WebPGetDecoderVersion();
       printf("%d.%d.%d\n",
              (version >> 16) & 0xff, (version >> 8) & 0xff, version & 0xff);
-      return 0;
+      FREE_WARGV_AND_RETURN(0);
     } else if (!strcmp(argv[c], "-pgm")) {
       format = PGM;
     } else if (!strcmp(argv[c], "-yuv")) {
@@ -284,26 +287,26 @@ int main(int argc, const char *argv[]) {
     } else if (!strcmp(argv[c], "-incremental")) {
       incremental = 1;
     } else if (!strcmp(argv[c], "--")) {
-      if (c < argc - 1) in_file = argv[++c];
+      if (c < argc - 1) in_file = (const char*)GET_WARGV(argv, ++c);
       break;
     } else if (argv[c][0] == '-') {
       fprintf(stderr, "Unknown option '%s'\n", argv[c]);
       Help();
-      return -1;
+      FREE_WARGV_AND_RETURN(-1);
     } else {
-      in_file = argv[c];
+      in_file = (const char*)GET_WARGV(argv, c);
     }
 
     if (parse_error) {
       Help();
-      return -1;
+      FREE_WARGV_AND_RETURN(-1);
     }
   }
 
   if (in_file == NULL) {
     fprintf(stderr, "missing input file!!\n");
     Help();
-    return -1;
+    FREE_WARGV_AND_RETURN(-1);
   }
 
   if (quiet) verbose = 0;
@@ -312,7 +315,7 @@ int main(int argc, const char *argv[]) {
     VP8StatusCode status = VP8_STATUS_OK;
     size_t data_size = 0;
     if (!LoadWebP(in_file, &data, &data_size, bitstream)) {
-      return -1;
+      FREE_WARGV_AND_RETURN(-1);
     }
 
     switch (format) {
@@ -332,9 +335,8 @@ int main(int argc, const char *argv[]) {
       case BMP:
         output_buffer->colorspace = bitstream->has_alpha ? MODE_BGRA : MODE_BGR;
         break;
-      case TIFF:    // note: force pre-multiplied alpha
-        output_buffer->colorspace =
-            bitstream->has_alpha ? MODE_rgbA : MODE_RGB;
+      case TIFF:
+        output_buffer->colorspace = bitstream->has_alpha ? MODE_RGBA : MODE_RGB;
         break;
       case PGM:
       case RAW_YUV:
@@ -390,18 +392,18 @@ int main(int argc, const char *argv[]) {
 
   if (out_file != NULL) {
     if (!quiet) {
-      fprintf(stderr, "Decoded %s. Dimensions: %d x %d %s. Format: %s. "
-                      "Now saving...\n",
-              in_file, output_buffer->width, output_buffer->height,
+      WFPRINTF(stderr, "Decoded %s.", (const W_CHAR*)in_file);
+      fprintf(stderr, " Dimensions: %d x %d %s. Format: %s. Now saving...\n",
+              output_buffer->width, output_buffer->height,
               bitstream->has_alpha ? " (with alpha)" : "",
               kFormatType[bitstream->format]);
     }
     ok = SaveOutput(output_buffer, format, out_file);
   } else {
     if (!quiet) {
-      fprintf(stderr, "File %s can be decoded "
-                      "(dimensions: %d x %d %s. Format: %s).\n",
-              in_file, output_buffer->width, output_buffer->height,
+      WFPRINTF(stderr, "File %s can be decoded ", (const W_CHAR*)in_file);
+      fprintf(stderr, "(dimensions: %d x %d %s. Format: %s).\n",
+              output_buffer->width, output_buffer->height,
               bitstream->has_alpha ? " (with alpha)" : "",
               kFormatType[bitstream->format]);
       fprintf(stderr, "Nothing written; "
@@ -410,9 +412,9 @@ int main(int argc, const char *argv[]) {
   }
  Exit:
   WebPFreeDecBuffer(output_buffer);
-  free((void*)external_buffer);
-  free((void*)data);
-  return ok ? 0 : -1;
+  WebPFree((void*)external_buffer);
+  WebPFree((void*)data);
+  FREE_WARGV_AND_RETURN(ok ? 0 : -1);
 }
 
 //------------------------------------------------------------------------------

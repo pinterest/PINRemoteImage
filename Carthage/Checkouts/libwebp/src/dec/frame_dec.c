@@ -12,13 +12,13 @@
 // Author: Skal (pascal.massimino@gmail.com)
 
 #include <stdlib.h>
-#include "./vp8i_dec.h"
-#include "../utils/utils.h"
+#include "src/dec/vp8i_dec.h"
+#include "src/utils/utils.h"
 
 //------------------------------------------------------------------------------
 // Main reconstruction function.
 
-static const int kScan[16] = {
+static const uint16_t kScan[16] = {
   0 +  0 * BPS,  4 +  0 * BPS, 8 +  0 * BPS, 12 +  0 * BPS,
   0 +  4 * BPS,  4 +  4 * BPS, 8 +  4 * BPS, 12 +  4 * BPS,
   0 +  8 * BPS,  4 +  8 * BPS, 8 +  8 * BPS, 12 +  8 * BPS,
@@ -320,7 +320,7 @@ static void PrecomputeFilterStrengths(VP8Decoder* const dec) {
 #define MIN_DITHER_AMP 4
 
 #define DITHER_AMP_TAB_SIZE 12
-static const int kQuantToDitherAmp[DITHER_AMP_TAB_SIZE] = {
+static const uint8_t kQuantToDitherAmp[DITHER_AMP_TAB_SIZE] = {
   // roughly, it's dqm->uv_mat_[1]
   8, 7, 6, 4, 4, 2, 2, 2, 1, 1, 1, 1
 };
@@ -338,7 +338,6 @@ void VP8InitDithering(const WebPDecoderOptions* const options,
       for (s = 0; s < NUM_MB_SEGMENTS; ++s) {
         VP8QuantMatrix* const dqm = &dec->dqm_[s];
         if (dqm->uv_quant_ < DITHER_AMP_TAB_SIZE) {
-          // TODO(skal): should we specially dither more for uv_quant_ < 0?
           const int idx = (dqm->uv_quant_ < 0) ? 0 : dqm->uv_quant_;
           dqm->dither_ = (f * kQuantToDitherAmp[idx]) >> 3;
         }
@@ -400,7 +399,9 @@ static void DitherRow(VP8Decoder* const dec) {
 #define MACROBLOCK_VPOS(mb_y)  ((mb_y) * 16)    // vertical position of a MB
 
 // Finalize and transmit a complete row. Return false in case of user-abort.
-static int FinishRow(VP8Decoder* const dec, VP8Io* const io) {
+static int FinishRow(void* arg1, void* arg2) {
+  VP8Decoder* const dec = (VP8Decoder*)arg1;
+  VP8Io* const io = (VP8Io*)arg2;
   int ok = 1;
   const VP8ThreadContext* const ctx = &dec->thread_ctx_;
   const int cache_id = ctx->id_;
@@ -448,10 +449,9 @@ static int FinishRow(VP8Decoder* const dec, VP8Io* const io) {
     if (y_end > io->crop_bottom) {
       y_end = io->crop_bottom;    // make sure we don't overflow on last row.
     }
+    // If dec->alpha_data_ is not NULL, we have some alpha plane present.
     io->a = NULL;
     if (dec->alpha_data_ != NULL && y_start < y_end) {
-      // TODO(skal): testing presence of alpha with dec->alpha_data_ is not a
-      // good idea.
       io->a = VP8DecompressAlphaRows(dec, io, y_start, y_end - y_start);
       if (io->a == NULL) {
         return VP8SetError(dec, VP8_STATUS_BITSTREAM_ERROR,
@@ -558,7 +558,6 @@ VP8StatusCode VP8EnterCritical(VP8Decoder* const dec, VP8Io* const io) {
   if (io->bypass_filtering) {
     dec->filter_type_ = 0;
   }
-  // TODO(skal): filter type / strength / sharpness forcing
 
   // Define the area where we can skip in-loop filtering, in case of cropping.
   //
@@ -569,8 +568,6 @@ VP8StatusCode VP8EnterCritical(VP8Decoder* const dec, VP8Io* const io) {
   // Means: there's a dependency chain that goes all the way up to the
   // top-left corner of the picture (MB #0). We must filter all the previous
   // macroblocks.
-  // TODO(skal): add an 'approximate_decoding' option, that won't produce
-  // a 1:1 bit-exactness for complex filtering?
   {
     const int extra_pixels = kFilterExtraRows[dec->filter_type_];
     if (dec->filter_type_ == 2) {
@@ -651,7 +648,7 @@ static int InitThreadContext(VP8Decoder* const dec) {
     }
     worker->data1 = dec;
     worker->data2 = (void*)&dec->thread_ctx_.io_;
-    worker->hook = (WebPWorkerHook)FinishRow;
+    worker->hook = FinishRow;
     dec->num_caches_ =
       (dec->filter_type_ > 0) ? MT_CACHE_LINES : MT_CACHE_LINES - 1;
   } else {
@@ -671,15 +668,9 @@ int VP8GetThreadMethod(const WebPDecoderOptions* const options,
   (void)height;
   assert(headers == NULL || !headers->is_lossless);
 #if defined(WEBP_USE_THREAD)
-  if (width < MIN_WIDTH_FOR_THREADS) return 0;
-  // TODO(skal): tune the heuristic further
-#if 0
-  if (height < 2 * width) return 2;
+  if (width >= MIN_WIDTH_FOR_THREADS) return 2;
 #endif
-  return 2;
-#else   // !WEBP_USE_THREAD
   return 0;
-#endif
 }
 
 #undef MT_CACHE_LINES
@@ -728,7 +719,7 @@ static int AllocateMemory(VP8Decoder* const dec) {
   }
 
   mem = (uint8_t*)dec->mem_;
-  dec->intra_t_ = (uint8_t*)mem;
+  dec->intra_t_ = mem;
   mem += intra_pred_mode_size;
 
   dec->yuv_t_ = (VP8TopSamples*)mem;
@@ -741,7 +732,7 @@ static int AllocateMemory(VP8Decoder* const dec) {
   mem += f_info_size;
   dec->thread_ctx_.id_ = 0;
   dec->thread_ctx_.f_info_ = dec->f_info_;
-  if (dec->mt_method_ > 0) {
+  if (dec->filter_type_ > 0 && dec->mt_method_ > 0) {
     // secondary cache line. The deblocking process need to make use of the
     // filtering strength from previous macroblock row, while the new ones
     // are being decoded in parallel. We'll just swap the pointers.
@@ -750,7 +741,7 @@ static int AllocateMemory(VP8Decoder* const dec) {
 
   mem = (uint8_t*)WEBP_ALIGN(mem);
   assert((yuv_size & WEBP_ALIGN_CST) == 0);
-  dec->yuv_b_ = (uint8_t*)mem;
+  dec->yuv_b_ = mem;
   mem += yuv_size;
 
   dec->mb_data_ = (VP8MBData*)mem;
@@ -766,7 +757,7 @@ static int AllocateMemory(VP8Decoder* const dec) {
     const int extra_rows = kFilterExtraRows[dec->filter_type_];
     const int extra_y = extra_rows * dec->cache_y_stride_;
     const int extra_uv = (extra_rows / 2) * dec->cache_uv_stride_;
-    dec->cache_y_ = ((uint8_t*)mem) + extra_y;
+    dec->cache_y_ = mem + extra_y;
     dec->cache_u_ = dec->cache_y_
                   + 16 * num_caches * dec->cache_y_stride_ + extra_uv;
     dec->cache_v_ = dec->cache_u_
@@ -776,7 +767,7 @@ static int AllocateMemory(VP8Decoder* const dec) {
   mem += cache_size;
 
   // alpha plane
-  dec->alpha_plane_ = alpha_size ? (uint8_t*)mem : NULL;
+  dec->alpha_plane_ = alpha_size ? mem : NULL;
   mem += alpha_size;
   assert(mem <= (uint8_t*)dec->mem_ + dec->mem_size_);
 

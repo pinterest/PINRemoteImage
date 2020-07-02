@@ -10,13 +10,14 @@
 //  Additional WebP utilities.
 //
 
-#include "./extras.h"
+#include "extras/extras.h"
 #include "webp/format_constants.h"
+#include "src/dsp/dsp.h"
 
 #include <assert.h>
 #include <string.h>
 
-#define XTRA_MAJ_VERSION 0
+#define XTRA_MAJ_VERSION 1
 #define XTRA_MIN_VERSION 1
 #define XTRA_REV_VERSION 0
 
@@ -48,15 +49,16 @@ int WebPImportGray(const uint8_t* gray_data, WebPPicture* pic) {
 
 int WebPImportRGB565(const uint8_t* rgb565, WebPPicture* pic) {
   int x, y;
+  uint32_t* dst;
   if (pic == NULL || rgb565 == NULL) return 0;
   pic->colorspace = WEBP_YUV420;
   pic->use_argb = 1;
   if (!WebPPictureAlloc(pic)) return 0;
+  dst = pic->argb;
   for (y = 0; y < pic->height; ++y) {
     const int width = pic->width;
-    uint32_t* dst = pic->argb + y * pic->argb_stride;
     for (x = 0; x < width; ++x) {
-#ifdef WEBP_SWAP_16BIT_CSP
+#if defined(WEBP_SWAP_16BIT_CSP) && (WEBP_SWAP_16BIT_CSP == 1)
       const uint32_t rg = rgb565[2 * x + 1];
       const uint32_t gb = rgb565[2 * x + 0];
 #else
@@ -70,24 +72,26 @@ int WebPImportRGB565(const uint8_t* rgb565, WebPPicture* pic) {
       r = r | (r >> 5);
       g = g | (g >> 6);
       b = b | (b >> 5);
-      dst[x] = (r << 16) | (g << 8) | b;
+      dst[x] = (0xffu << 24) | (r << 16) | (g << 8) | b;
     }
     rgb565 += 2 * width;
+    dst += pic->argb_stride;
   }
   return 1;
 }
 
 int WebPImportRGB4444(const uint8_t* rgb4444, WebPPicture* pic) {
   int x, y;
+  uint32_t* dst;
   if (pic == NULL || rgb4444 == NULL) return 0;
   pic->colorspace = WEBP_YUV420;
   pic->use_argb = 1;
   if (!WebPPictureAlloc(pic)) return 0;
+  dst = pic->argb;
   for (y = 0; y < pic->height; ++y) {
     const int width = pic->width;
-    uint32_t* dst = pic->argb + y * pic->argb_stride;
     for (x = 0; x < width; ++x) {
-#ifdef WEBP_SWAP_16BIT_CSP
+#if defined(WEBP_SWAP_16BIT_CSP) && (WEBP_SWAP_16BIT_CSP == 1)
       const uint32_t rg = rgb4444[2 * x + 1];
       const uint32_t ba = rgb4444[2 * x + 0];
 #else
@@ -106,6 +110,7 @@ int WebPImportRGB4444(const uint8_t* rgb4444, WebPPicture* pic) {
       dst[x] = (a << 24) | (r << 16) | (g << 8) | b;
     }
     rgb4444 += 2 * width;
+    dst += pic->argb_stride;
   }
   return 1;
 }
@@ -134,6 +139,21 @@ int WebPImportColorMappedARGB(const uint8_t* indexed, int indexed_stride,
       dst[x] = palette[indexed[x]];
     }
     indexed += indexed_stride;
+    dst += pic->argb_stride;
+  }
+  return 1;
+}
+
+//------------------------------------------------------------------------------
+
+int WebPUnmultiplyARGB(WebPPicture* pic) {
+  int y;
+  uint32_t* dst;
+  if (pic == NULL || pic->use_argb != 1 || pic->argb == NULL) return 0;
+  WebPInitAlphaProcessing();
+  dst = pic->argb;
+  for (y = 0; y < pic->height; ++y) {
+    WebPMultARGBRow(dst, pic->width, /*inverse=*/1);
     dst += pic->argb_stride;
   }
   return 1;

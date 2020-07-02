@@ -29,7 +29,7 @@ PLATFORM_LDFLAGS = /SAFESEH
 NOLOGO     = /nologo
 CCNODBG    = cl.exe $(NOLOGO) /O2 /DNDEBUG
 CCDEBUG    = cl.exe $(NOLOGO) /Od /Gm /Zi /D_DEBUG /RTC1
-CFLAGS     = /Isrc $(NOLOGO) /W3 /EHsc /c
+CFLAGS     = /I. /Isrc $(NOLOGO) /W3 /EHsc /c
 CFLAGS     = $(CFLAGS) /DWIN32 /D_CRT_SECURE_NO_WARNINGS /DWIN32_LEAN_AND_MEAN
 LDFLAGS    = /LARGEADDRESSAWARE /MANIFEST /NXCOMPAT /DYNAMICBASE
 LDFLAGS    = $(LDFLAGS) $(PLATFORM_LDFLAGS)
@@ -51,11 +51,6 @@ CFGSET     = FALSE
 OUTDIR = ..\obj\
 !ELSE
 OUTDIR = $(OBJDIR)
-!ENDIF
-
-!IF "$(HAVE_AVX2)" == "1"
-CFLAGS = $(CFLAGS) /DWEBP_HAVE_AVX2
-AVX2_FLAGS = /arch:AVX2
 !ENDIF
 
 ##############################################################
@@ -134,12 +129,16 @@ LIBWEBP_PDBNAME = $(DIROBJ)\$(LIBWEBP_BASENAME)_dll.pdb
 CFGSET = TRUE
 !ENDIF
 
+!IF "$(UNICODE)" == "1"
+CFLAGS = $(CFLAGS) /D_UNICODE /DUNICODE
+!ENDIF
+
 #######################
 # Usage
 #
 !IF "$(CFGSET)" == "FALSE"
 !MESSAGE Usage: nmake /f Makefile.vc [CFG=<config>]
-!MESSAGE .          [OBJDIR=<path>] [RTLIBCFG=<rtlib>] [<target>]
+!MESSAGE .          [OBJDIR=<path>] [RTLIBCFG=<rtlib>] [UNICODE=1] [<target>]
 !MESSAGE
 !MESSAGE where <config> is one of:
 !MESSAGE -  release-static                - release static library
@@ -155,6 +154,7 @@ CFGSET = TRUE
 !MESSAGE - all                            - build (de)mux-based targets for CFG
 !MESSAGE - gif2webp                       - requires libgif & >= VS2013
 !MESSAGE - anim_diff                      - requires libgif & >= VS2013
+!MESSAGE - anim_dump
 !MESSAGE
 !MESSAGE RTLIBCFG controls the runtime library linkage - 'static' or 'dynamic'.
 !MESSAGE   'legacy' will produce a Windows 2000 compatible library.
@@ -226,21 +226,21 @@ DSP_DEC_OBJS = \
     $(DIROBJ)\dsp\upsampling_msa.obj \
     $(DIROBJ)\dsp\upsampling_neon.obj \
     $(DIROBJ)\dsp\upsampling_sse2.obj \
+    $(DIROBJ)\dsp\upsampling_sse41.obj \
     $(DIROBJ)\dsp\yuv.obj \
     $(DIROBJ)\dsp\yuv_mips32.obj \
     $(DIROBJ)\dsp\yuv_mips_dsp_r2.obj \
+    $(DIROBJ)\dsp\yuv_neon.obj \
     $(DIROBJ)\dsp\yuv_sse2.obj \
+    $(DIROBJ)\dsp\yuv_sse41.obj \
 
 DSP_ENC_OBJS = \
-    $(DIROBJ)\dsp\argb.obj \
-    $(DIROBJ)\dsp\argb_mips_dsp_r2.obj \
-    $(DIROBJ)\dsp\argb_sse2.obj \
     $(DIROBJ)\dsp\cost.obj \
     $(DIROBJ)\dsp\cost_mips32.obj \
     $(DIROBJ)\dsp\cost_mips_dsp_r2.obj \
+    $(DIROBJ)\dsp\cost_neon.obj \
     $(DIROBJ)\dsp\cost_sse2.obj \
     $(DIROBJ)\dsp\enc.obj \
-    $(DIROBJ)\dsp\enc_avx2.obj \
     $(DIROBJ)\dsp\enc_mips32.obj \
     $(DIROBJ)\dsp\enc_mips_dsp_r2.obj \
     $(DIROBJ)\dsp\enc_msa.obj \
@@ -254,6 +254,8 @@ DSP_ENC_OBJS = \
     $(DIROBJ)\dsp\lossless_enc_neon.obj \
     $(DIROBJ)\dsp\lossless_enc_sse2.obj \
     $(DIROBJ)\dsp\lossless_enc_sse41.obj \
+    $(DIROBJ)\dsp\ssim.obj \
+    $(DIROBJ)\dsp\ssim_sse2.obj \
 
 EX_ANIM_UTIL_OBJS = \
     $(DIROBJ)\examples\anim_util.obj \
@@ -263,6 +265,7 @@ IMAGEIO_DEC_OBJS = \
     $(DIROBJ)\imageio\jpegdec.obj \
     $(DIROBJ)\imageio\metadata.obj \
     $(DIROBJ)\imageio\pngdec.obj \
+    $(DIROBJ)\imageio\pnmdec.obj \
     $(DIROBJ)\imageio\tiffdec.obj \
     $(DIROBJ)\imageio\webpdec.obj \
     $(DIROBJ)\imageio\wicdec.obj \
@@ -279,10 +282,10 @@ EX_UTIL_OBJS = \
 ENC_OBJS = \
     $(DIROBJ)\enc\alpha_enc.obj \
     $(DIROBJ)\enc\analysis_enc.obj \
+    $(DIROBJ)\enc\backward_references_cost_enc.obj \
     $(DIROBJ)\enc\backward_references_enc.obj \
     $(DIROBJ)\enc\config_enc.obj \
     $(DIROBJ)\enc\cost_enc.obj \
-    $(DIROBJ)\enc\delta_palettization_enc.obj \
     $(DIROBJ)\enc\filter_enc.obj \
     $(DIROBJ)\enc\frame_enc.obj \
     $(DIROBJ)\enc\histogram_enc.obj \
@@ -344,7 +347,8 @@ all: ex
 OUT_EXAMPLES = $(DIRBIN)\cwebp.exe $(DIRBIN)\dwebp.exe
 EXTRA_EXAMPLES = $(DIRBIN)\vwebp.exe $(DIRBIN)\webpmux.exe \
                  $(DIRBIN)\img2webp.exe $(DIRBIN)\get_disto.exe \
-                 $(DIRBIN)\webp_quality.exe
+                 $(DIRBIN)\webp_quality.exe $(DIRBIN)\vwebp_sdl.exe \
+                 $(DIRBIN)\webpinfo.exe
 
 ex: $(OUT_LIBS) $(OUT_EXAMPLES)
 all: ex $(EXTRA_EXAMPLES)
@@ -352,41 +356,57 @@ all: ex $(EXTRA_EXAMPLES)
 # C99 support which is only available from VS2013 onward.
 gif2webp: $(DIRBIN)\gif2webp.exe
 anim_diff: $(DIRBIN)\anim_diff.exe
+anim_dump: $(DIRBIN)\anim_dump.exe
 
 $(DIRBIN)\anim_diff.exe: $(DIROBJ)\examples\anim_diff.obj $(EX_ANIM_UTIL_OBJS)
 $(DIRBIN)\anim_diff.exe: $(EX_UTIL_OBJS) $(IMAGEIO_UTIL_OBJS)
 $(DIRBIN)\anim_diff.exe: $(EX_GIF_DEC_OBJS) $(LIBWEBPDEMUX) $(LIBWEBP)
+$(DIRBIN)\anim_dump.exe: $(DIROBJ)\examples\anim_dump.obj $(EX_ANIM_UTIL_OBJS)
+$(DIRBIN)\anim_dump.exe: $(EX_UTIL_OBJS) $(IMAGEIO_UTIL_OBJS)
+$(DIRBIN)\anim_dump.exe: $(EX_GIF_DEC_OBJS) $(LIBWEBPDEMUX) $(LIBWEBP)
+$(DIRBIN)\anim_dump.exe: $(IMAGEIO_ENC_OBJS)
 $(DIRBIN)\cwebp.exe: $(DIROBJ)\examples\cwebp.obj $(IMAGEIO_DEC_OBJS)
 $(DIRBIN)\cwebp.exe: $(IMAGEIO_UTIL_OBJS)
+$(DIRBIN)\cwebp.exe: $(LIBWEBPDEMUX)
 $(DIRBIN)\dwebp.exe: $(DIROBJ)\examples\dwebp.obj $(IMAGEIO_DEC_OBJS)
 $(DIRBIN)\dwebp.exe: $(IMAGEIO_ENC_OBJS)
 $(DIRBIN)\dwebp.exe: $(IMAGEIO_UTIL_OBJS)
+$(DIRBIN)\dwebp.exe: $(LIBWEBPDEMUX)
 $(DIRBIN)\gif2webp.exe: $(DIROBJ)\examples\gif2webp.obj $(EX_GIF_DEC_OBJS)
 $(DIRBIN)\gif2webp.exe: $(EX_UTIL_OBJS) $(IMAGEIO_UTIL_OBJS) $(LIBWEBPMUX)
 $(DIRBIN)\gif2webp.exe: $(LIBWEBP)
 $(DIRBIN)\vwebp.exe: $(DIROBJ)\examples\vwebp.obj $(EX_UTIL_OBJS)
 $(DIRBIN)\vwebp.exe: $(IMAGEIO_UTIL_OBJS) $(LIBWEBPDEMUX) $(LIBWEBP)
+$(DIRBIN)\vwebp_sdl.exe: $(DIROBJ)\extras\vwebp_sdl.obj
+$(DIRBIN)\vwebp_sdl.exe: $(DIROBJ)\extras\webp_to_sdl.obj
+$(DIRBIN)\vwebp_sdl.exe: $(IMAGEIO_UTIL_OBJS) $(LIBWEBP)
 $(DIRBIN)\webpmux.exe: $(DIROBJ)\examples\webpmux.obj $(LIBWEBPMUX)
 $(DIRBIN)\webpmux.exe: $(EX_UTIL_OBJS) $(IMAGEIO_UTIL_OBJS) $(LIBWEBP)
 $(DIRBIN)\img2webp.exe: $(DIROBJ)\examples\img2webp.obj $(LIBWEBPMUX)
 $(DIRBIN)\img2webp.exe: $(IMAGEIO_DEC_OBJS)
-$(DIRBIN)\img2webp.exe: $(EX_UTIL_OBJS) $(IMAGEIO_UTIL_OBJS) $(LIBWEBP)
+$(DIRBIN)\img2webp.exe: $(EX_UTIL_OBJS) $(IMAGEIO_UTIL_OBJS)
+$(DIRBIN)\img2webp.exe: $(LIBWEBPDEMUX) $(LIBWEBP)
 $(DIRBIN)\get_disto.exe: $(DIROBJ)\extras\get_disto.obj
-$(DIRBIN)\get_disto.exe: $(IMAGEIO_DEC_OBJS) $(IMAGEIO_UTIL_OBJS) $(LIBWEBP)
-
+$(DIRBIN)\get_disto.exe: $(IMAGEIO_DEC_OBJS) $(IMAGEIO_UTIL_OBJS)
+$(DIRBIN)\get_disto.exe: $(LIBWEBPDEMUX) $(LIBWEBP)
 $(DIRBIN)\webp_quality.exe: $(DIROBJ)\extras\webp_quality.obj
 $(DIRBIN)\webp_quality.exe: $(IMAGEIO_UTIL_OBJS)
-$(DIRBIN)\webp_quality.exe: $(EXTRAS_OBJS) $(LIBWEBP)
+$(DIRBIN)\webp_quality.exe: $(EXTRAS_OBJS)
+# EXTRA_OBJS requires private symbols from dsp. Explicitly add those when
+# building libwebp as a dll.
+!IF "$(DLLBUILD)" == "TRUE"
+$(DIRBIN)\webp_quality.exe: $(DSP_DEC_OBJS)
+!ENDIF
+$(DIRBIN)\webp_quality.exe: $(LIBWEBP)
+$(DIRBIN)\webpinfo.exe: $(DIROBJ)\examples\webpinfo.obj
+$(DIRBIN)\webpinfo.exe: $(IMAGEIO_DEC_OBJS)
+$(DIRBIN)\webpinfo.exe: $(EX_UTIL_OBJS) $(IMAGEIO_UTIL_OBJS)
+$(DIRBIN)\webpinfo.exe: $(LIBWEBPDEMUX) $(LIBWEBP)
 
 $(OUT_EXAMPLES): $(EX_UTIL_OBJS) $(LIBWEBP)
 $(EX_UTIL_OBJS) $(IMAGEIO_UTIL_OBJS): $(OUTPUT_DIRS)
 $(IMAGEIO_DEC_OBJS) $(IMAGEIO_ENC_OBJS) $(EXTRAS_OBJS): $(OUTPUT_DIRS)
 !ENDIF  # ARCH == ARM
-
-experimental:
-	$(MAKE) /f Makefile.vc \
-	    CFG=$(CFG) \
-	    CFLAGS="$(CFLAGS) /DWEBP_EXPERIMENTAL_FEATURES" /$(MAKEFLAGS)
 
 $(LIBWEBPDECODER): $(LIBWEBPDECODER_OBJS)
 $(LIBWEBP): $(LIBWEBP_OBJS)
@@ -433,16 +453,16 @@ $(OUTPUT_DIRS):
 $(DIROBJ)\$(DLLINC):
 	@echo #ifndef WEBP_DLL_H_ > $@
 	@echo #define WEBP_DLL_H_ >> $@
-	@echo #define WEBP_EXTERN(type) __declspec(dllexport) type >> $@
+	@echo #define WEBP_EXTERN __declspec(dllexport) >> $@
 	@echo #endif  /* WEBP_DLL_H_ */ >> $@
 
 .SUFFIXES: .c .obj .res .exe
 # File-specific flag builds. Note batch rules take precedence over wildcards,
 # so for now name each file individually.
-$(DIROBJ)\dsp\enc_avx2.obj: src\dsp\enc_avx2.c
-	$(CC) $(CFLAGS) $(AVX2_FLAGS) /Fd$(LIBWEBP_PDBNAME) /Fo$(DIROBJ)\dsp\ \
-	  src\dsp\$(@B).c
 $(DIROBJ)\examples\anim_diff.obj: examples\anim_diff.c
+	$(CC) $(CFLAGS) /DWEBP_HAVE_GIF /Fd$(LIBWEBP_PDBNAME) \
+	  /Fo$(DIROBJ)\examples\ examples\$(@B).c
+$(DIROBJ)\examples\anim_dump.obj: examples\anim_dump.c
 	$(CC) $(CFLAGS) /DWEBP_HAVE_GIF /Fd$(LIBWEBP_PDBNAME) \
 	  /Fo$(DIROBJ)\examples\ examples\$(@B).c
 $(DIROBJ)\examples\anim_util.obj: examples\anim_util.c
@@ -474,15 +494,18 @@ $(DIROBJ)\examples\gifdec.obj: examples\gifdec.c
 {src\utils}.c{$(DIROBJ)\utils}.obj::
 	$(CC) $(CFLAGS) /Fd$(LIBWEBP_PDBNAME) /Fo$(DIROBJ)\utils\ $<
 
+LNKLIBS     = ole32.lib windowscodecs.lib shlwapi.lib
+!IF "$(UNICODE)" == "1"
+LNKLIBS     = $(LNKLIBS) Shell32.lib
+!ENDIF
+
 {$(DIROBJ)\examples}.obj{$(DIRBIN)}.exe:
-	$(LNKEXE) $(LDFLAGS) /OUT:$@ $** \
-	    ole32.lib windowscodecs.lib shlwapi.lib
+	$(LNKEXE) $(LDFLAGS) /OUT:$@ $** $(LNKLIBS)
 	$(MT) -manifest $@.manifest -outputresource:$@;1
 	del $@.manifest
 
 {$(DIROBJ)\extras}.obj{$(DIRBIN)}.exe:
-	$(LNKEXE) $(LDFLAGS) /OUT:$@ $** \
-	    ole32.lib windowscodecs.lib shlwapi.lib
+	$(LNKEXE) $(LDFLAGS) /OUT:$@ $** $(LNKLIBS)
 	$(MT) -manifest $@.manifest -outputresource:$@;1
 	del $@.manifest
 

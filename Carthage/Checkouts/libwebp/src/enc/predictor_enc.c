@@ -14,9 +14,9 @@
 //          Urvang Joshi (urvang@google.com)
 //          Vincent Rabaud (vrabaud@google.com)
 
-#include "../dsp/lossless.h"
-#include "../dsp/lossless_common.h"
-#include "./vp8li_enc.h"
+#include "src/dsp/lossless.h"
+#include "src/dsp/lossless_common.h"
+#include "src/enc/vp8li_enc.h"
 
 #define MAX_DIFF_COST (1e30f)
 
@@ -26,7 +26,6 @@ static const uint32_t kMaskAlpha = 0xff000000;
 
 // Mostly used to reduce code size + readability
 static WEBP_INLINE int GetMin(int a, int b) { return (a > b) ? b : a; }
-static WEBP_INLINE int GetMax(int a, int b) { return (a < b) ? b : a; }
 
 //------------------------------------------------------------------------------
 // Methods to calculate Entropy (Shannon).
@@ -89,6 +88,9 @@ static WEBP_INLINE void PredictBatch(int mode, int x_start, int y,
                             out);
   }
 }
+
+#if (WEBP_NEAR_LOSSLESS == 1)
+static WEBP_INLINE int GetMax(int a, int b) { return (a < b) ? b : a; }
 
 static int MaxDiffBetweenPixels(uint32_t p1, uint32_t p2) {
   const int diff_a = abs((int)(p1 >> 24) - (int)(p2 >> 24));
@@ -175,6 +177,10 @@ static uint8_t NearLosslessComponent(uint8_t value, uint8_t predict,
   }
 }
 
+static WEBP_INLINE uint8_t NearLosslessDiff(uint8_t a, uint8_t b) {
+  return (uint8_t)((((int)(a) - (int)(b))) & 0xff);
+}
+
 // Quantize every component of the difference between the actual pixel value and
 // its prediction to a multiple of a quantization (a power of 2, not larger than
 // max_quantization which is a power of 2, smaller than max_diff). Take care if
@@ -196,7 +202,7 @@ static uint32_t NearLossless(uint32_t value, uint32_t predict,
   }
   if ((value >> 24) == 0 || (value >> 24) == 0xff) {
     // Preserve transparency of fully transparent or fully opaque pixels.
-    a = ((value >> 24) - (predict >> 24)) & 0xff;
+    a = NearLosslessDiff((value >> 24) & 0xff, (predict >> 24) & 0xff);
   } else {
     a = NearLosslessComponent(value >> 24, predict >> 24, 0xff, quantization);
   }
@@ -209,15 +215,16 @@ static uint32_t NearLossless(uint32_t value, uint32_t predict,
     // The amount by which green has been adjusted during quantization. It is
     // subtracted from red and blue for compensation, to avoid accumulating two
     // quantization errors in them.
-    green_diff = (new_green - (value >> 8)) & 0xff;
+    green_diff = NearLosslessDiff(new_green, (value >> 8) & 0xff);
   }
-  r = NearLosslessComponent(((value >> 16) - green_diff) & 0xff,
+  r = NearLosslessComponent(NearLosslessDiff((value >> 16) & 0xff, green_diff),
                             (predict >> 16) & 0xff, 0xff - new_green,
                             quantization);
-  b = NearLosslessComponent((value - green_diff) & 0xff, predict & 0xff,
-                            0xff - new_green, quantization);
+  b = NearLosslessComponent(NearLosslessDiff(value & 0xff, green_diff),
+                            predict & 0xff, 0xff - new_green, quantization);
   return ((uint32_t)a << 24) | ((uint32_t)r << 16) | ((uint32_t)g << 8) | b;
 }
+#endif  // (WEBP_NEAR_LOSSLESS == 1)
 
 // Stores the difference between the pixel and its prediction in "out".
 // In case of a lossy encoding, updates the source image to avoid propagating
@@ -244,6 +251,7 @@ static WEBP_INLINE void GetResidual(
       } else {
         predict = pred_func(current_row[x - 1], upper_row + x);
       }
+#if (WEBP_NEAR_LOSSLESS == 1)
       if (max_quantization == 1 || mode == 0 || y == 0 || y == height - 1 ||
           x == 0 || x == width - 1) {
         residual = VP8LSubPixels(current_row[x], predict);
@@ -254,6 +262,13 @@ static WEBP_INLINE void GetResidual(
         current_row[x] = VP8LAddPixels(predict, residual);
         // x is never 0 here so we do not need to update upper_row like below.
       }
+#else
+      (void)max_diffs;
+      (void)height;
+      (void)max_quantization;
+      (void)used_subtract_green;
+      residual = VP8LSubPixels(current_row[x], predict);
+#endif
       if ((current_row[x] & kMaskAlpha) == 0) {
         // If alpha is 0, cleanup RGB. We can choose the RGB values of the
         // residual for best compression. The prediction of alpha itself can be
@@ -296,11 +311,12 @@ static int GetBestPredictorForTile(int width, int height,
   const int max_x = GetMin(tile_size, width - start_x);
   // Whether there exist columns just outside the tile.
   const int have_left = (start_x > 0);
-  const int have_right = (max_x < width - start_x);
   // Position and size of the strip covering the tile and adjacent columns if
   // they exist.
   const int context_start_x = start_x - have_left;
-  const int context_width = max_x + have_left + have_right;
+#if (WEBP_NEAR_LOSSLESS == 1)
+  const int context_width = max_x + have_left + (max_x < width - start_x);
+#endif
   const int tiles_per_row = VP8LSubSampleSize(width, bits);
   // Prediction modes of the left and above neighbor tiles.
   const int left_mode = (tile_x > 0) ?
@@ -352,10 +368,12 @@ static int GetBestPredictorForTile(int width, int height,
       memcpy(current_row + context_start_x,
              argb + y * width + context_start_x,
              sizeof(*argb) * (max_x + have_left + (y + 1 < height)));
+#if (WEBP_NEAR_LOSSLESS == 1)
       if (max_quantization > 1 && y >= 1 && y + 1 < height) {
         MaxDiffsForRow(context_width, width, argb + y * width + context_start_x,
                        max_diffs + context_start_x, used_subtract_green);
       }
+#endif
 
       GetResidual(width, height, upper_row, current_row, max_diffs, mode,
                   start_x, start_x + max_x, y, max_quantization, exact,
@@ -405,7 +423,9 @@ static void CopyImageWithPrediction(int width, int height,
   uint32_t* upper_row = argb_scratch;
   uint32_t* current_row = upper_row + width + 1;
   uint8_t* current_max_diffs = (uint8_t*)(current_row + width + 1);
+#if (WEBP_NEAR_LOSSLESS == 1)
   uint8_t* lower_max_diffs = current_max_diffs + width;
+#endif
   int y;
 
   for (y = 0; y < height; ++y) {
@@ -420,6 +440,7 @@ static void CopyImageWithPrediction(int width, int height,
       PredictBatch(kPredLowEffort, 0, y, width, current_row, upper_row,
                    argb + y * width);
     } else {
+#if (WEBP_NEAR_LOSSLESS == 1)
       if (max_quantization > 1) {
         // Compute max_diffs for the lower row now, because that needs the
         // contents of argb for the current row, which we will overwrite with
@@ -432,6 +453,7 @@ static void CopyImageWithPrediction(int width, int height,
                          used_subtract_green);
         }
       }
+#endif
       for (x = 0; x < width;) {
         const int mode =
             (modes[(y >> bits) * tiles_per_row + (x >> bits)] >> 8) & 0xff;
@@ -565,7 +587,7 @@ static void GetBestGreenToRed(
       }
     }
   }
-  best_tx->green_to_red_ = green_to_red_best;
+  best_tx->green_to_red_ = (green_to_red_best & 0xff);
 }
 
 static float GetPredictionCostCrossColorBlue(
@@ -644,8 +666,8 @@ static void GetBestGreenRedToBlue(
       break;  // out of iter-loop.
     }
   }
-  best_tx->green_to_blue_ = green_to_blue_best;
-  best_tx->red_to_blue_ = red_to_blue_best;
+  best_tx->green_to_blue_ = green_to_blue_best & 0xff;
+  best_tx->red_to_blue_ = red_to_blue_best & 0xff;
 }
 #undef kGreenRedToBlueMaxIters
 #undef kGreenRedToBlueNumAxis

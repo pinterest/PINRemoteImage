@@ -14,12 +14,12 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "./vp8i_enc.h"
-#include "../dsp/dsp.h"
-#include "../utils/filters_utils.h"
-#include "../utils/quant_levels_utils.h"
-#include "../utils/utils.h"
-#include "../webp/format_constants.h"
+#include "src/enc/vp8i_enc.h"
+#include "src/dsp/dsp.h"
+#include "src/utils/filters_utils.h"
+#include "src/utils/quant_levels_utils.h"
+#include "src/utils/utils.h"
+#include "src/webp/format_constants.h"
 
 // -----------------------------------------------------------------------------
 // Encodes the given alpha data via specified compression method 'method'.
@@ -44,11 +44,11 @@
 //           invalid quality or method, or
 //           memory allocation for the compressed data fails.
 
-#include "../enc/vp8li_enc.h"
+#include "src/enc/vp8li_enc.h"
 
 static int EncodeLossless(const uint8_t* const data, int width, int height,
                           int effort_level,  // in [0..6] range
-                          VP8LBitWriter* const bw,
+                          int use_quality_100, VP8LBitWriter* const bw,
                           WebPAuxStats* const stats) {
   int ok = 0;
   WebPConfig config;
@@ -76,7 +76,10 @@ static int EncodeLossless(const uint8_t* const data, int width, int height,
   // Set a low default quality for encoding alpha. Ensure that Alpha quality at
   // lower methods (3 and below) is less than the threshold for triggering
   // costly 'BackwardReferencesTraceBackwards'.
-  config.quality = 8.f * effort_level;
+  // If the alpha quality is set to 100 and the method to 6, allow for a high
+  // lossless quality to trigger the cruncher.
+  config.quality =
+      (use_quality_100 && effort_level == 6) ? 100 : 8.f * effort_level;
   assert(config.quality >= 0 && config.quality <= 100.f);
 
   // TODO(urvang): Temporary fix to avoid generating images that trigger
@@ -134,7 +137,7 @@ static int EncodeAlphaInternal(const uint8_t* const data, int width, int height,
   if (method != ALPHA_NO_COMPRESSION) {
     ok = VP8LBitWriterInit(&tmp_bw, data_size >> 3);
     ok = ok && EncodeLossless(alpha_src, width, height, effort_level,
-                              &tmp_bw, &result->stats);
+                              !reduce_levels, &tmp_bw, &result->stats);
     if (ok) {
       output = VP8LBitWriterFinish(&tmp_bw);
       output_size = VP8LBitWriterNumBytes(&tmp_bw);
@@ -264,6 +267,7 @@ static int ApplyFiltersAndEncode(const uint8_t* alpha, int width, int height,
                              reduce_levels, effort_level, NULL, &best);
   }
   if (ok) {
+#if !defined(WEBP_DISABLE_STATS)
     if (stats != NULL) {
       stats->lossless_features = best.stats.lossless_features;
       stats->histogram_bits = best.stats.histogram_bits;
@@ -274,6 +278,9 @@ static int ApplyFiltersAndEncode(const uint8_t* alpha, int width, int height,
       stats->lossless_hdr_size = best.stats.lossless_hdr_size;
       stats->lossless_data_size = best.stats.lossless_data_size;
     }
+#else
+    (void)stats;
+#endif
     *output_size = VP8BitWriterSize(&best.bw);
     *output = VP8BitWriterBuf(&best.bw);
   } else {
@@ -339,10 +346,12 @@ static int EncodeAlpha(VP8Encoder* const enc,
     ok = ApplyFiltersAndEncode(quant_alpha, width, height, data_size, method,
                                filter, reduce_levels, effort_level, output,
                                output_size, pic->stats);
+#if !defined(WEBP_DISABLE_STATS)
     if (pic->stats != NULL) {  // need stats?
       pic->stats->coded_size += (int)(*output_size);
       enc->sse_[3] = sse;
     }
+#endif
   }
 
   WebPSafeFree(quant_alpha);
@@ -352,7 +361,8 @@ static int EncodeAlpha(VP8Encoder* const enc,
 //------------------------------------------------------------------------------
 // Main calls
 
-static int CompressAlphaJob(VP8Encoder* const enc, void* dummy) {
+static int CompressAlphaJob(void* arg1, void* dummy) {
+  VP8Encoder* const enc = (VP8Encoder*)arg1;
   const WebPConfig* config = enc->config_;
   uint8_t* alpha_data = NULL;
   size_t alpha_size = 0;
@@ -385,7 +395,7 @@ void VP8EncInitAlpha(VP8Encoder* const enc) {
     WebPGetWorkerInterface()->Init(worker);
     worker->data1 = enc;
     worker->data2 = NULL;
-    worker->hook = (WebPWorkerHook)CompressAlphaJob;
+    worker->hook = CompressAlphaJob;
   }
 }
 

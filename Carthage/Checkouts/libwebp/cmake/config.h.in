@@ -13,6 +13,9 @@
 /* Set to 1 if __builtin_bswap64 is available */
 #cmakedefine HAVE_BUILTIN_BSWAP64 1
 
+/* Define to 1 if you have the <cpu-features.h> header file. */
+#cmakedefine HAVE_CPU_FEATURES_H 1
+
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #cmakedefine HAVE_DLFCN_H 1
 
@@ -100,12 +103,6 @@
 /* Version number of package */
 #cmakedefine VERSION "@VERSION@"
 
-/* Enable experimental code */
-#cmakedefine WEBP_EXPERIMENTAL_FEATURES 1
-
-/* Set to 1 if AVX2 is supported */
-#cmakedefine WEBP_HAVE_AVX2 1
-
 /* Set to 1 if GIF library is installed */
 #cmakedefine WEBP_HAVE_GIF 1
 
@@ -115,8 +112,18 @@
 /* Set to 1 if JPEG library is installed */
 #cmakedefine WEBP_HAVE_JPEG 1
 
+/* Set to 1 if NEON is supported */
+#cmakedefine WEBP_HAVE_NEON
+
+/* Set to 1 if runtime detection of NEON is enabled */
+/* TODO: handle properly in CMake */
+#cmakedefine WEBP_HAVE_NEON_RTCD
+
 /* Set to 1 if PNG library is installed */
 #cmakedefine WEBP_HAVE_PNG 1
+
+/* Set to 1 if SDL library is installed */
+#cmakedefine WEBP_HAVE_SDL 1
 
 /* Set to 1 if SSE2 is supported */
 #cmakedefine WEBP_HAVE_SSE2 1
@@ -126,6 +133,9 @@
 
 /* Set to 1 if TIFF library is installed */
 #cmakedefine WEBP_HAVE_TIFF 1
+
+/* Enable near lossless encoding */
+#cmakedefine WEBP_NEAR_LOSSLESS 1
 
 /* Undefine this to disable thread support. */
 #cmakedefine WEBP_USE_THREAD 1

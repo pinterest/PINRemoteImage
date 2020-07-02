@@ -29,11 +29,13 @@
                          // code with COBJMACROS.
 #include <ole2.h>  // CreateStreamOnHGlobal()
 #include <shlwapi.h>
+#include <tchar.h>
 #include <windows.h>
 #include <wincodec.h>
 #endif
 
 #include "./imageio_util.h"
+#include "../examples/unicode.h"
 
 //------------------------------------------------------------------------------
 // PNG
@@ -61,11 +63,12 @@ static HRESULT CreateOutputStream(const char* out_file_name,
     // Output to a memory buffer. This is freed when 'stream' is released.
     IFS(CreateStreamOnHGlobal(NULL, TRUE, stream));
   } else {
-    IFS(SHCreateStreamOnFileA(out_file_name, STGM_WRITE | STGM_CREATE, stream));
+    IFS(SHCreateStreamOnFile((const LPTSTR)out_file_name,
+                             STGM_WRITE | STGM_CREATE, stream));
   }
   if (FAILED(hr)) {
-    fprintf(stderr, "Error opening output file %s (%08lx)\n",
-            out_file_name, hr);
+    _ftprintf(stderr, _T("Error opening output file %s (%08lx)\n"),
+              (const LPTSTR)out_file_name, hr);
   }
   return hr;
 }
@@ -158,14 +161,8 @@ static void PNGAPI PNGErrorFunction(png_structp png, png_const_charp dummy) {
 }
 
 int WebPWritePNG(FILE* out_file, const WebPDecBuffer* const buffer) {
-  const uint32_t width = buffer->width;
-  const uint32_t height = buffer->height;
-  png_bytep row = buffer->u.RGBA.rgba;
-  const int stride = buffer->u.RGBA.stride;
-  const int has_alpha = WebPIsAlphaMode(buffer->colorspace);
   volatile png_structp png;
   volatile png_infop info;
-  png_uint_32 y;
 
   if (out_file == NULL || buffer == NULL) return 0;
 
@@ -184,14 +181,23 @@ int WebPWritePNG(FILE* out_file, const WebPDecBuffer* const buffer) {
     return 0;
   }
   png_init_io(png, out_file);
-  png_set_IHDR(png, info, width, height, 8,
-               has_alpha ? PNG_COLOR_TYPE_RGBA : PNG_COLOR_TYPE_RGB,
-               PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT,
-               PNG_FILTER_TYPE_DEFAULT);
-  png_write_info(png, info);
-  for (y = 0; y < height; ++y) {
-    png_write_rows(png, &row, 1);
-    row += stride;
+  {
+    const uint32_t width = buffer->width;
+    const uint32_t height = buffer->height;
+    png_bytep row = buffer->u.RGBA.rgba;
+    const int stride = buffer->u.RGBA.stride;
+    const int has_alpha = WebPIsAlphaMode(buffer->colorspace);
+    uint32_t y;
+
+    png_set_IHDR(png, info, width, height, 8,
+                 has_alpha ? PNG_COLOR_TYPE_RGBA : PNG_COLOR_TYPE_RGB,
+                 PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT,
+                 PNG_FILTER_TYPE_DEFAULT);
+    png_write_info(png, info);
+    for (y = 0; y < height; ++y) {
+      png_write_rows(png, &row, 1);
+      row += stride;
+    }
   }
   png_write_end(png, info);
   png_destroy_write_struct((png_structpp)&png, (png_infopp)&info);
@@ -361,6 +367,8 @@ int WebPWriteTIFF(FILE* fout, const WebPDecBuffer* const buffer) {
   const uint8_t* rgba = buffer->u.RGBA.rgba;
   const int stride = buffer->u.RGBA.stride;
   const uint8_t bytes_per_px = has_alpha ? 4 : 3;
+  const uint8_t assoc_alpha =
+      WebPIsPremultipliedMode(buffer->colorspace) ? 1 : 2;
   // For non-alpha case, we omit tag 0x152 (ExtraSamples).
   const uint8_t num_ifd_entries = has_alpha ? NUM_IFD_ENTRIES
                                             : NUM_IFD_ENTRIES - 1;
@@ -388,7 +396,8 @@ int WebPWriteTIFF(FILE* fout, const WebPDecBuffer* const buffer) {
         EXTRA_DATA_OFFSET + 8, 0, 0, 0,
     0x1c, 0x01, 3, 0, 1, 0, 0, 0, 1, 0, 0, 0,    // 154: PlanarConfiguration
     0x28, 0x01, 3, 0, 1, 0, 0, 0, 2, 0, 0, 0,    // 166: ResolutionUnit (inch)
-    0x52, 0x01, 3, 0, 1, 0, 0, 0, 1, 0, 0, 0,    // 178: ExtraSamples: rgbA
+    0x52, 0x01, 3, 0, 1, 0, 0, 0,
+        assoc_alpha, 0, 0, 0,                    // 178: ExtraSamples: rgbA/RGBA
     0, 0, 0, 0,                                  // 190: IFD terminator
     // EXTRA_DATA_OFFSET:
     8, 0, 8, 0, 8, 0, 8, 0,      // BitsPerSample
@@ -539,22 +548,26 @@ int WebPWriteYUV(FILE* fout, const WebPDecBuffer* const buffer) {
 // Generic top-level call
 
 int WebPSaveImage(const WebPDecBuffer* const buffer,
-                  WebPOutputFileFormat format, const char* const out_file) {
+                  WebPOutputFileFormat format,
+                  const char* const out_file_name) {
   FILE* fout = NULL;
   int needs_open_file = 1;
-  const int use_stdout = (out_file != NULL) && !strcmp(out_file, "-");
+  const int use_stdout =
+      (out_file_name != NULL) && !WSTRCMP(out_file_name, "-");
   int ok = 1;
 
-  if (buffer == NULL || out_file == NULL) return 0;
+  if (buffer == NULL || out_file_name == NULL) return 0;
 
 #ifdef HAVE_WINCODEC_H
   needs_open_file = (format != PNG);
 #endif
 
   if (needs_open_file) {
-    fout = use_stdout ? ImgIoUtilSetBinaryMode(stdout) : fopen(out_file, "wb");
+    fout = use_stdout ? ImgIoUtilSetBinaryMode(stdout)
+                      : WFOPEN(out_file_name, "wb");
     if (fout == NULL) {
-      fprintf(stderr, "Error opening output file %s\n", out_file);
+      WFPRINTF(stderr, "Error opening output file %s\n",
+               (const W_CHAR*)out_file_name);
       return 0;
     }
   }
@@ -563,7 +576,7 @@ int WebPSaveImage(const WebPDecBuffer* const buffer,
       format == RGBA || format == BGRA || format == ARGB ||
       format == rgbA || format == bgrA || format == Argb) {
 #ifdef HAVE_WINCODEC_H
-    ok &= WebPWritePNG(out_file, use_stdout, buffer);
+    ok &= WebPWritePNG(out_file_name, use_stdout, buffer);
 #else
     ok &= WebPWritePNG(fout, buffer);
 #endif

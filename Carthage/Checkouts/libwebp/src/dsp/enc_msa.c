@@ -11,13 +11,13 @@
 //
 // Author:  Prashant Patil   (prashant.patil@imgtec.com)
 
-#include "./dsp.h"
+#include "src/dsp/dsp.h"
 
 #if defined(WEBP_USE_MSA)
 
 #include <stdlib.h>
-#include "./msa_macro.h"
-#include "../enc/vp8i_enc.h"
+#include "src/dsp/msa_macro.h"
+#include "src/enc/vp8i_enc.h"
 
 //------------------------------------------------------------------------------
 // Transforms
@@ -69,20 +69,21 @@ static WEBP_INLINE void ITransformOne(const uint8_t* ref, const int16_t* in,
   ST4x4_UB(res0, res0, 3, 2, 1, 0, dst, BPS);
 }
 
-static void ITransform(const uint8_t* ref, const int16_t* in, uint8_t* dst,
-                       int do_two) {
+static void ITransform_MSA(const uint8_t* ref, const int16_t* in, uint8_t* dst,
+                           int do_two) {
   ITransformOne(ref, in, dst);
   if (do_two) {
     ITransformOne(ref + 4, in + 16, dst + 4);
   }
 }
 
-static void FTransform(const uint8_t* src, const uint8_t* ref, int16_t* out) {
+static void FTransform_MSA(const uint8_t* src, const uint8_t* ref,
+                           int16_t* out) {
   uint64_t out0, out1, out2, out3;
   uint32_t in0, in1, in2, in3;
   v4i32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5;
   v8i16 t0, t1, t2, t3;
-  v16u8 srcl0, srcl1, src0, src1;
+  v16u8 srcl0, srcl1, src0 = { 0 }, src1 = { 0 };
   const v8i16 mask0 = { 0, 4, 8, 12, 1, 5, 9, 13 };
   const v8i16 mask1 = { 3, 7, 11, 15, 2, 6, 10, 14 };
   const v8i16 mask2 = { 4, 0, 5, 1, 6, 2, 7, 3 };
@@ -130,7 +131,7 @@ static void FTransform(const uint8_t* src, const uint8_t* ref, int16_t* out) {
   SD4(out0, out1, out2, out3, out, 8);
 }
 
-static void FTransformWHT(const int16_t* in, int16_t* out) {
+static void FTransformWHT_MSA(const int16_t* in, int16_t* out) {
   v8i16 in0 = { 0 };
   v8i16 in1 = { 0 };
   v8i16 tmp0, tmp1, tmp2, tmp3;
@@ -167,10 +168,10 @@ static void FTransformWHT(const int16_t* in, int16_t* out) {
   ST_SH2(out0, out1, out, 8);
 }
 
-static int TTransform(const uint8_t* in, const uint16_t* w) {
+static int TTransform_MSA(const uint8_t* in, const uint16_t* w) {
   int sum;
   uint32_t in0_m, in1_m, in2_m, in3_m;
-  v16i8 src0;
+  v16i8 src0 = { 0 };
   v8i16 in0, in1, tmp0, tmp1, tmp2, tmp3;
   v4i32 dst0, dst1;
   const v16i8 zero = { 0 };
@@ -199,20 +200,20 @@ static int TTransform(const uint8_t* in, const uint16_t* w) {
   return sum;
 }
 
-static int Disto4x4(const uint8_t* const a, const uint8_t* const b,
-                    const uint16_t* const w) {
-  const int sum1 = TTransform(a, w);
-  const int sum2 = TTransform(b, w);
+static int Disto4x4_MSA(const uint8_t* const a, const uint8_t* const b,
+                        const uint16_t* const w) {
+  const int sum1 = TTransform_MSA(a, w);
+  const int sum2 = TTransform_MSA(b, w);
   return abs(sum2 - sum1) >> 5;
 }
 
-static int Disto16x16(const uint8_t* const a, const uint8_t* const b,
-                      const uint16_t* const w) {
+static int Disto16x16_MSA(const uint8_t* const a, const uint8_t* const b,
+                          const uint16_t* const w) {
   int D = 0;
   int x, y;
   for (y = 0; y < 16 * BPS; y += 4 * BPS) {
     for (x = 0; x < 16; x += 4) {
-      D += Disto4x4(a + x + y, b + x + y, w);
+      D += Disto4x4_MSA(a + x + y, b + x + y, w);
     }
   }
   return D;
@@ -221,9 +222,9 @@ static int Disto16x16(const uint8_t* const a, const uint8_t* const b,
 //------------------------------------------------------------------------------
 // Histogram
 
-static void CollectHistogram(const uint8_t* ref, const uint8_t* pred,
-                             int start_block, int end_block,
-                             VP8Histogram* const histo) {
+static void CollectHistogram_MSA(const uint8_t* ref, const uint8_t* pred,
+                                 int start_block, int end_block,
+                                 VP8Histogram* const histo) {
   int j;
   int distribution[MAX_COEFF_THRESH + 1] = { 0 };
   for (j = start_block; j < end_block; ++j) {
@@ -259,8 +260,9 @@ static void CollectHistogram(const uint8_t* ref, const uint8_t* pred,
 #define AVG2(a, b) (((a) + (b) + 1) >> 1)
 
 static WEBP_INLINE void VE4(uint8_t* dst, const uint8_t* top) {    // vertical
+  const v16u8 A1 = { 0 };
   const uint64_t val_m = LD(top - 1);
-  const v16u8 A = (v16u8)__msa_insert_d((v2i64)A, 0, val_m);
+  const v16u8 A = (v16u8)__msa_insert_d((v2i64)A1, 0, val_m);
   const v16u8 B = SLDI_UB(A, A, 1);
   const v16u8 C = SLDI_UB(A, A, 2);
   const v16u8 AC = __msa_ave_u_b(A, C);
@@ -292,8 +294,9 @@ static WEBP_INLINE void DC4(uint8_t* dst, const uint8_t* top) {
 }
 
 static WEBP_INLINE void RD4(uint8_t* dst, const uint8_t* top) {
+  const v16u8 A2 = { 0 };
   const uint64_t val_m = LD(top - 5);
-  const v16u8 A1 = (v16u8)__msa_insert_d((v2i64)A1, 0, val_m);
+  const v16u8 A1 = (v16u8)__msa_insert_d((v2i64)A2, 0, val_m);
   const v16u8 A = (v16u8)__msa_insert_b((v16i8)A1, 8, top[3]);
   const v16u8 B = SLDI_UB(A, A, 1);
   const v16u8 C = SLDI_UB(A, A, 2);
@@ -311,8 +314,9 @@ static WEBP_INLINE void RD4(uint8_t* dst, const uint8_t* top) {
 }
 
 static WEBP_INLINE void LD4(uint8_t* dst, const uint8_t* top) {
+  const v16u8 A1 = { 0 };
   const uint64_t val_m = LD(top);
-  const v16u8 A = (v16u8)__msa_insert_d((v2i64)A, 0, val_m);
+  const v16u8 A = (v16u8)__msa_insert_d((v2i64)A1, 0, val_m);
   const v16u8 B = SLDI_UB(A, A, 1);
   const v16u8 C1 = SLDI_UB(A, A, 2);
   const v16u8 C = (v16u8)__msa_insert_b((v16i8)C1, 6, top[7]);
@@ -427,7 +431,7 @@ static WEBP_INLINE void TM4(uint8_t* dst, const uint8_t* top) {
 #undef AVG3
 #undef AVG2
 
-static void Intra4Preds(uint8_t* dst, const uint8_t* top) {
+static void Intra4Preds_MSA(uint8_t* dst, const uint8_t* top) {
   DC4(I4DC4 + dst, top);
   TM4(I4TM4 + dst, top);
   VE4(I4VE4 + dst, top);
@@ -544,8 +548,8 @@ static WEBP_INLINE void DCMode16x16(uint8_t* dst, const uint8_t* left,
   STORE16x16(out, dst);
 }
 
-static void Intra16Preds(uint8_t* dst,
-                         const uint8_t* left, const uint8_t* top) {
+static void Intra16Preds_MSA(uint8_t* dst,
+                             const uint8_t* left, const uint8_t* top) {
   DCMode16x16(I16DC16 + dst, left, top);
   VerticalPred16x16(I16VE16 + dst, top);
   HorizontalPred16x16(I16HE16 + dst, left);
@@ -645,7 +649,7 @@ static WEBP_INLINE void TrueMotion8x8(uint8_t* dst, const uint8_t* left,
 static WEBP_INLINE void DCMode8x8(uint8_t* dst, const uint8_t* left,
                                   const uint8_t* top) {
   uint64_t out;
-  v16u8 src;
+  v16u8 src = { 0 };
   if (top != NULL && left != NULL) {
     const uint64_t left_m = LD(left);
     const uint64_t top_m = LD(top);
@@ -666,8 +670,8 @@ static WEBP_INLINE void DCMode8x8(uint8_t* dst, const uint8_t* left,
   STORE8x8(out, dst);
 }
 
-static void IntraChromaPreds(uint8_t* dst, const uint8_t* left,
-                             const uint8_t* top) {
+static void IntraChromaPreds_MSA(uint8_t* dst, const uint8_t* left,
+                                 const uint8_t* top) {
   // U block
   DCMode8x8(C8DC8 + dst, left, top);
   VerticalPred8x8(C8VE8 + dst, top);
@@ -708,7 +712,7 @@ static void IntraChromaPreds(uint8_t* dst, const uint8_t* left,
   DPADD_SH2_SW(tmp2, tmp3, tmp2, tmp3, out2, out3);                         \
 } while (0)
 
-static int SSE16x16(const uint8_t* a, const uint8_t* b) {
+static int SSE16x16_MSA(const uint8_t* a, const uint8_t* b) {
   uint32_t sum;
   v16u8 src0, src1, src2, src3, src4, src5, src6, src7;
   v16u8 ref0, ref1, ref2, ref3, ref4, ref5, ref6, ref7;
@@ -735,7 +739,7 @@ static int SSE16x16(const uint8_t* a, const uint8_t* b) {
   return sum;
 }
 
-static int SSE16x8(const uint8_t* a, const uint8_t* b) {
+static int SSE16x8_MSA(const uint8_t* a, const uint8_t* b) {
   uint32_t sum;
   v16u8 src0, src1, src2, src3, src4, src5, src6, src7;
   v16u8 ref0, ref1, ref2, ref3, ref4, ref5, ref6, ref7;
@@ -754,7 +758,7 @@ static int SSE16x8(const uint8_t* a, const uint8_t* b) {
   return sum;
 }
 
-static int SSE8x8(const uint8_t* a, const uint8_t* b) {
+static int SSE8x8_MSA(const uint8_t* a, const uint8_t* b) {
   uint32_t sum;
   v16u8 src0, src1, src2, src3, src4, src5, src6, src7;
   v16u8 ref0, ref1, ref2, ref3, ref4, ref5, ref6, ref7;
@@ -774,10 +778,10 @@ static int SSE8x8(const uint8_t* a, const uint8_t* b) {
   return sum;
 }
 
-static int SSE4x4(const uint8_t* a, const uint8_t* b) {
+static int SSE4x4_MSA(const uint8_t* a, const uint8_t* b) {
   uint32_t sum = 0;
   uint32_t src0, src1, src2, src3, ref0, ref1, ref2, ref3;
-  v16u8 src, ref, tmp0, tmp1;
+  v16u8 src = { 0 }, ref = { 0 }, tmp0, tmp1;
   v8i16 diff0, diff1;
   v4i32 out0, out1;
 
@@ -796,8 +800,8 @@ static int SSE4x4(const uint8_t* a, const uint8_t* b) {
 //------------------------------------------------------------------------------
 // Quantization
 
-static int QuantizeBlock(int16_t in[16], int16_t out[16],
-                         const VP8Matrix* const mtx) {
+static int QuantizeBlock_MSA(int16_t in[16], int16_t out[16],
+                             const VP8Matrix* const mtx) {
   int sum;
   v8i16 in0, in1, sh0, sh1, out0, out1;
   v8i16 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, sign0, sign1;
@@ -828,7 +832,7 @@ static int QuantizeBlock(int16_t in[16], int16_t out[16],
   tmp1 = (tmp3 > maxlevel);
   tmp2 = (v8i16)__msa_bmnz_v((v16u8)tmp2, (v16u8)maxlevel, (v16u8)tmp0);
   tmp3 = (v8i16)__msa_bmnz_v((v16u8)tmp3, (v16u8)maxlevel, (v16u8)tmp1);
-  SUB2(0, tmp2, 0, tmp3, tmp0, tmp1);
+  SUB2(zero, tmp2, zero, tmp3, tmp0, tmp1);
   tmp2 = (v8i16)__msa_bmnz_v((v16u8)tmp2, (v16u8)tmp0, (v16u8)sign0);
   tmp3 = (v8i16)__msa_bmnz_v((v16u8)tmp3, (v16u8)tmp1, (v16u8)sign1);
   LD_SW4(&mtx->zthresh_[0], 4, t0, t1, t2, t3);   // zthresh
@@ -849,8 +853,8 @@ static int QuantizeBlock(int16_t in[16], int16_t out[16],
   return (sum > 0);
 }
 
-static int Quantize2Blocks(int16_t in[32], int16_t out[32],
-                           const VP8Matrix* const mtx) {
+static int Quantize2Blocks_MSA(int16_t in[32], int16_t out[32],
+                               const VP8Matrix* const mtx) {
   int nz;
   nz  = VP8EncQuantizeBlock(in + 0 * 16, out + 0 * 16, mtx) << 0;
   nz |= VP8EncQuantizeBlock(in + 1 * 16, out + 1 * 16, mtx) << 1;
@@ -863,26 +867,26 @@ static int Quantize2Blocks(int16_t in[32], int16_t out[32],
 extern void VP8EncDspInitMSA(void);
 
 WEBP_TSAN_IGNORE_FUNCTION void VP8EncDspInitMSA(void) {
-  VP8ITransform = ITransform;
-  VP8FTransform = FTransform;
-  VP8FTransformWHT = FTransformWHT;
+  VP8ITransform = ITransform_MSA;
+  VP8FTransform = FTransform_MSA;
+  VP8FTransformWHT = FTransformWHT_MSA;
 
-  VP8TDisto4x4 = Disto4x4;
-  VP8TDisto16x16 = Disto16x16;
-  VP8CollectHistogram = CollectHistogram;
+  VP8TDisto4x4 = Disto4x4_MSA;
+  VP8TDisto16x16 = Disto16x16_MSA;
+  VP8CollectHistogram = CollectHistogram_MSA;
 
-  VP8EncPredLuma4 = Intra4Preds;
-  VP8EncPredLuma16 = Intra16Preds;
-  VP8EncPredChroma8 = IntraChromaPreds;
+  VP8EncPredLuma4 = Intra4Preds_MSA;
+  VP8EncPredLuma16 = Intra16Preds_MSA;
+  VP8EncPredChroma8 = IntraChromaPreds_MSA;
 
-  VP8SSE16x16 = SSE16x16;
-  VP8SSE16x8 = SSE16x8;
-  VP8SSE8x8 = SSE8x8;
-  VP8SSE4x4 = SSE4x4;
+  VP8SSE16x16 = SSE16x16_MSA;
+  VP8SSE16x8 = SSE16x8_MSA;
+  VP8SSE8x8 = SSE8x8_MSA;
+  VP8SSE4x4 = SSE4x4_MSA;
 
-  VP8EncQuantizeBlock = QuantizeBlock;
-  VP8EncQuantize2Blocks = Quantize2Blocks;
-  VP8EncQuantizeBlockWHT = QuantizeBlock;
+  VP8EncQuantizeBlock = QuantizeBlock_MSA;
+  VP8EncQuantize2Blocks = Quantize2Blocks_MSA;
+  VP8EncQuantizeBlockWHT = QuantizeBlock_MSA;
 }
 
 #else  // !WEBP_USE_MSA

@@ -206,6 +206,7 @@ struct my_error_mgr {
 
 static void my_error_exit(j_common_ptr dinfo) {
   struct my_error_mgr* myerr = (struct my_error_mgr*)dinfo->err;
+  fprintf(stderr, "libjpeg error: ");
   dinfo->err->output_message(dinfo);
   longjmp(myerr->setjmp_buffer, 1);
 }
@@ -304,18 +305,18 @@ int ReadJPEG(const uint8_t* const data, size_t data_size,
 
   if (stride != (int)stride ||
       !ImgIoUtilCheckSizeArgumentsOverflow(stride, height)) {
-    goto End;
+    goto Error;
   }
 
   rgb = (uint8_t*)malloc((size_t)stride * height);
   if (rgb == NULL) {
-    goto End;
+    goto Error;
   }
   buffer[0] = (JSAMPLE*)rgb;
 
   while (dinfo.output_scanline < dinfo.output_height) {
     if (jpeg_read_scanlines((j_decompress_ptr)&dinfo, buffer, 1) != 1) {
-      goto End;
+      goto Error;
     }
     buffer[0] += stride;
   }
