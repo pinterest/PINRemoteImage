@@ -8,13 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+#import "PINRemoteImageMacros.h"
+
 #if PIN_TARGET_IOS
 #import <UIKit/UIKit.h>
 #elif PIN_TARGET_MAC
 #import <Cocoa/Cocoa.h>
 #endif
 
-#import "PINRemoteImageMacros.h"
 #import "PINRemoteImageManagerResult.h"
 
 #define PINRemoteImageHTTPMaximumConnectionsPerHost UINT16_MAX

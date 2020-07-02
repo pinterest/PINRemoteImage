@@ -15,6 +15,7 @@ Pod::Spec.new do |s|
   s.license          = 'Apache 2.0'
   s.author           = { "Garrett Moon" => "garrett@pinterest.com" }
   s.source           = { :git => "https://github.com/pinterest/PINRemoteImage.git", :tag => s.version.to_s }
+  s.prefix_header_file = false
   # s.social_media_url = 'https://twitter.com/garrettmoon'
 
   ios_deployment = "8.0"

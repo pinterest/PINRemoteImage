@@ -302,7 +302,6 @@
 		68CA927B1DAEFF93008BECE2 /* PINRemoteImageCaching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageCaching.h; sourceTree = "<group>"; };
 		68CA92811DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "PINCache+PINRemoteImageCaching.h"; path = "PINCache/PINCache+PINRemoteImageCaching.h"; sourceTree = "<group>"; };
 		68CA92821DB19C20008BECE2 /* PINCache+PINRemoteImageCaching.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PINCache+PINRemoteImageCaching.m"; path = "PINCache/PINCache+PINRemoteImageCaching.m"; sourceTree = "<group>"; };
-		68EB25231C6A64E4002501A3 /* PINRemoteImage-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PINRemoteImage-Prefix.pch"; sourceTree = "<group>"; };
 		68F0EA8E1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINAlternateRepresentationProvider.h; sourceTree = "<group>"; };
 		68F0EA8F1CB32EC900F1FD41 /* PINAlternateRepresentationProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINAlternateRepresentationProvider.m; sourceTree = "<group>"; };
 		68F0EA901CB32EC900F1FD41 /* PINRemoteImageMemoryContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINRemoteImageMemoryContainer.h; sourceTree = "<group>"; };
@@ -470,7 +469,6 @@
 			isa = PBXGroup;
 			children = (
 				F1B918D61BCF239200710963 /* Info.plist */,
-				68EB25231C6A64E4002501A3 /* PINRemoteImage-Prefix.pch */,
 				F1E3658B1BE04112003BF022 /* PINRemoteImage.modulemap */,
 			);
 			name = "Supporting Files";
@@ -1061,7 +1059,6 @@
 					"$(PROJECT_DIR)/webp",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_PREFIX_HEADER = "Source/PINRemoteImage-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"PIN_WEBP=0",
 					"DEBUG=1",
@@ -1107,7 +1104,6 @@
 					"$(PROJECT_DIR)/webp",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_PREFIX_HEADER = "Source/PINRemoteImage-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"PIN_WEBP=0",
@@ -1378,7 +1374,6 @@
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/tvOS",
 					"$(PROJECT_DIR)/webp",
 				);
-				GCC_PREFIX_HEADER = "Source/PINRemoteImage-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"PIN_WEBP=1",
 					"DEBUG=1",
@@ -1415,7 +1410,6 @@
 					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/tvOS",
 					"$(PROJECT_DIR)/webp",
 				);
-				GCC_PREFIX_HEADER = "Source/PINRemoteImage-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"PIN_WEBP=1",
 					"$(inherited)",
