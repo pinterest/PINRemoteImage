@@ -9,7 +9,7 @@
 #import "PINImage+WebP.h"
 
 #if PIN_WEBP
-#import <WebPDecoder/decode.h>
+#import "decode.h"
 
 static void releaseData(void *info, const void *data, size_t size)
 {
