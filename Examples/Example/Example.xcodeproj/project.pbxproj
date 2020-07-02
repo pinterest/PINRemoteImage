@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2B38B1CD5C8E405102293255 /* libPods-Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA9AA7E6E87DBD4CB132A1F /* libPods-Example.a */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -23,15 +24,16 @@
 		68B3850B1B5572BF004EB26F /* ProgressiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B3850A1B5572BF004EB26F /* ProgressiveViewController.m */; };
 		68B3850E1B5577D4004EB26F /* DegradedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B3850D1B5577D4004EB26F /* DegradedViewController.m */; };
 		9D9328E51C3D4CC200E1F1D3 /* Kitten.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D9328E41C3D4CC200E1F1D3 /* Kitten.m */; };
-		D2712A480BA078E050EA2B3B /* libPods-PINRemoteImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CC3DC6E2AB62C575AEB6C8B /* libPods-PINRemoteImage.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		063FF605A6CC8884BB10EE35 /* Pods-PINRemoteImage Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage Tests/Pods-PINRemoteImage Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		1CC3DC6E2AB62C575AEB6C8B /* libPods-PINRemoteImage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PINRemoteImage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		25CF9DB8CF954119BAA63004 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		32A377E2A670E405B928B26E /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
+		3FA9AA7E6E87DBD4CB132A1F /* libPods-Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		500C3EFB07D23E183AC04C5D /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
 		5A85B7779305DF163437777D /* libPods-PINRemoteImage Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PINRemoteImage Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6003F58A195388D20070C39A /* PINRemoteImage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PINRemoteImage.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6003F58A195388D20070C39A /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		6003F591195388D20070C39A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -66,6 +68,7 @@
 		9D9328E41C3D4CC200E1F1D3 /* Kitten.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Kitten.m; path = "../../Example-Shared/Kitten.m"; sourceTree = "<group>"; };
 		A5DEC9B706184109844D57E2 /* PINRemoteImage.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = PINRemoteImage.podspec; path = ../PINRemoteImage.podspec; sourceTree = "<group>"; };
 		E2B84DF860DF48B5B22537B6 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		F30E394524AE56850067A777 /* PINRemoteImage copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "PINRemoteImage copy-Info.plist"; path = "/Users/garrettmoon/code/PINRemoteImage/Examples/Example/PINRemoteImage copy-Info.plist"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,7 +79,7 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
-				D2712A480BA078E050EA2B3B /* libPods-PINRemoteImage.a in Frameworks */,
+				2B38B1CD5C8E405102293255 /* libPods-Example.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,13 +95,14 @@
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
 				F5A6BFF7672C3055495CF245 /* Pods */,
+				F30E394524AE56850067A777 /* PINRemoteImage copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
 		6003F58B195388D20070C39A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6003F58A195388D20070C39A /* PINRemoteImage.app */,
+				6003F58A195388D20070C39A /* Example.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -110,8 +114,8 @@
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
 				6003F5AF195388D20070C39A /* XCTest.framework */,
-				1CC3DC6E2AB62C575AEB6C8B /* libPods-PINRemoteImage.a */,
 				5A85B7779305DF163437777D /* libPods-PINRemoteImage Tests.a */,
+				3FA9AA7E6E87DBD4CB132A1F /* libPods-Example.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -188,6 +192,8 @@
 				8D571FD9970F7A64A2B80EE0 /* Pods-PINRemoteImage.release.xcconfig */,
 				063FF605A6CC8884BB10EE35 /* Pods-PINRemoteImage Tests.debug.xcconfig */,
 				6008DA13D004B38845BA74EC /* Pods-PINRemoteImage Tests.release.xcconfig */,
+				32A377E2A670E405B928B26E /* Pods-Example.debug.xcconfig */,
+				500C3EFB07D23E183AC04C5D /* Pods-Example.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -195,9 +201,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6003F589195388D20070C39A /* PINRemoteImage */ = {
+		6003F589195388D20070C39A /* Example */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6003F5BF195388D20070C39A /* Build configuration list for PBXNativeTarget "PINRemoteImage" */;
+			buildConfigurationList = 6003F5BF195388D20070C39A /* Build configuration list for PBXNativeTarget "Example" */;
 			buildPhases = (
 				D2E4FE25FDCE1E36A864F521 /* [CP] Check Pods Manifest.lock */,
 				6003F586195388D20070C39A /* Sources */,
@@ -208,9 +214,9 @@
 			);
 			dependencies = (
 			);
-			name = PINRemoteImage;
+			name = Example;
 			productName = PIRemoteImage;
-			productReference = 6003F58A195388D20070C39A /* PINRemoteImage.app */;
+			productReference = 6003F58A195388D20070C39A /* Example.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -223,11 +229,12 @@
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "Garrett Moon";
 			};
-			buildConfigurationList = 6003F585195388D10070C39A /* Build configuration list for PBXProject "PINRemoteImage" */;
+			buildConfigurationList = 6003F585195388D10070C39A /* Build configuration list for PBXProject "Example" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -236,7 +243,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6003F589195388D20070C39A /* PINRemoteImage */,
+				6003F589195388D20070C39A /* Example */,
 			);
 		};
 /* End PBXProject section */
@@ -267,7 +274,7 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-PINRemoteImage-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Example-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -390,7 +397,7 @@
 		};
 		6003F5C0195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 95043F8A31505C02E51C4D2F /* Pods-PINRemoteImage.debug.xcconfig */;
+			baseConfigurationReference = 32A377E2A670E405B928B26E /* Pods-Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -400,7 +407,7 @@
 				GCC_PREFIX_HEADER = "PINRemoteImage/PINRemoteImage-Prefix.pch";
 				INFOPLIST_FILE = "PINRemoteImage/PINRemoteImage-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Example;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -408,7 +415,7 @@
 		};
 		6003F5C1195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8D571FD9970F7A64A2B80EE0 /* Pods-PINRemoteImage.release.xcconfig */;
+			baseConfigurationReference = 500C3EFB07D23E183AC04C5D /* Pods-Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -418,7 +425,7 @@
 				GCC_PREFIX_HEADER = "PINRemoteImage/PINRemoteImage-Prefix.pch";
 				INFOPLIST_FILE = "PINRemoteImage/PINRemoteImage-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Example;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -427,7 +434,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6003F585195388D10070C39A /* Build configuration list for PBXProject "PINRemoteImage" */ = {
+		6003F585195388D10070C39A /* Build configuration list for PBXProject "Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6003F5BD195388D20070C39A /* Debug */,
@@ -436,7 +443,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6003F5BF195388D20070C39A /* Build configuration list for PBXNativeTarget "PINRemoteImage" */ = {
+		6003F5BF195388D20070C39A /* Build configuration list for PBXNativeTarget "Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6003F5C0195388D20070C39A /* Debug */,

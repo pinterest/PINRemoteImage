@@ -1,4 +1,3 @@
-xcodeproj 'PINRemoteImage.xcodeproj'
 platform :ios, 8.0
 
 def shared_pods
@@ -7,6 +6,6 @@ def shared_pods
   pod "PINRemoteImage/PINCache", :path => "../../"
 end
 
-target 'PINRemoteImage' do
+target 'Example' do
   shared_pods
 end
