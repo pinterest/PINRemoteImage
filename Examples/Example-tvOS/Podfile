@@ -2,7 +2,7 @@ use_frameworks!
 
 platform :tvos, 9.0
 
-target 'PINRemoteImage.tvOSExample' do
+target 'Example-tvOS' do
   pod "PINRemoteImage/iOS", :path => "../../"
   pod "PINRemoteImage/WebP", :path => "../../"
 end
