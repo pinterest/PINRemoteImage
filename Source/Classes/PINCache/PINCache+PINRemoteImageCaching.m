@@ -74,7 +74,7 @@
 {
   if (completion) {
     __weak typeof(self) weakSelf = self;
-    [self removeObjectForKeyAsync:key completion:^(PINCache * _Nonnull cache, NSString * _Nonnull key, id  _Nullable object) {
+    [self removeObjectForKeyAsync:key completion:^(id<PINCaching> _Nonnull cache, NSString * _Nonnull key, id  _Nullable object) {
         typeof(self) strongSelf = weakSelf;
         completion(strongSelf, key, object);
     }];
