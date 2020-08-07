@@ -230,7 +230,12 @@
             _displayLink.preferredFramesPerSecond = frameInterval;
         } else {
 #endif
+            
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
             _displayLink.frameInterval = frameInterval;
+#pragma clang diagnostic pop
+            
 #if PIN_TARGET_IOS
         }
 #endif
