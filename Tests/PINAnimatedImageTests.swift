@@ -190,13 +190,21 @@ class PINAnimatedImageTests: XCTestCase, PINRemoteImageManagerAlternateRepresent
         XCTAssert(webpAnimatedImage == nil)
     }
 
-    func test_retainCycle() {
+    func testRetainCycle() {
         weak var weakCachedAnimatedImage : PINCachedAnimatedImage?
         autoreleasepool {
             let animatedImage = TestAnimatedImage.init()
             let cachedAnimatedImage = PINCachedAnimatedImage.init(animatedImage: animatedImage)
             weakCachedAnimatedImage = cachedAnimatedImage
         }
+        
+        // PINCachedAnimatedImage kicks off a block on init which grabs a strong
+        // reference to itself. Wait for the work to complete. This test would be
+        // more reliable if we made a separate API for testing to *not* kick off
+        // the work, but then it wouldn't *really* be testing what we want it to
+        // test.
+        sleep(1);
+        
         let cachedAnimatedImage : PINCachedAnimatedImage? = weakCachedAnimatedImage
         XCTAssertNil(cachedAnimatedImage)
     }
