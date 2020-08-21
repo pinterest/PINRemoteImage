@@ -1,6 +1,31 @@
-## master
+# Changelog
 
-* Add your own contributions to the next release on the line below this with your name.
+## [3.0.1](https://github.com/Pinterest/PINCache/tree/3.0.1) (2020-08-20)
+
+[Full Changelog](https://github.com/Pinterest/PINCache/compare/3.0.1-beta.8...3.0.1)
+
+**Implemented enhancements:**
+
+- Support Catalyst [\#272](https://github.com/pinterest/PINCache/pull/272) ([cgmaier](https://github.com/cgmaier))
+
+**Merged pull requests:**
+
+- Update PINOperation [\#277](https://github.com/pinterest/PINCache/pull/277) ([garrettmoon](https://github.com/garrettmoon))
+- Fix PINCacheTests compiling in Xcode 12.0b4 [\#276](https://github.com/pinterest/PINCache/pull/276) ([arangato](https://github.com/arangato))
+- Remove BUCK files [\#274](https://github.com/pinterest/PINCache/pull/274) ([adlerj](https://github.com/adlerj))
+- Fix compiling in Xcode 12.0b4 [\#273](https://github.com/pinterest/PINCache/pull/273) ([zacwest](https://github.com/zacwest))
+- Fix the grammar in an assertion failure message [\#270](https://github.com/pinterest/PINCache/pull/270) ([jparise](https://github.com/jparise))
+- Add Carthage for watchOS, fix macOS min deployment target version [\#269](https://github.com/pinterest/PINCache/pull/269) ([dreampiggy](https://github.com/dreampiggy))
+- Remove the unused CI directory [\#265](https://github.com/pinterest/PINCache/pull/265) ([jparise](https://github.com/jparise))
+- Fix up analyze for github CI [\#264](https://github.com/pinterest/PINCache/pull/264) ([garrettmoon](https://github.com/garrettmoon))
+- Use correct class name in NSAssert\(\) messages [\#263](https://github.com/pinterest/PINCache/pull/263) ([jparise](https://github.com/jparise))
+- Check fileURL outside of the locked scope [\#262](https://github.com/pinterest/PINCache/pull/262) ([jparise](https://github.com/jparise))
+- Remove Danger from the project [\#261](https://github.com/pinterest/PINCache/pull/261) ([jparise](https://github.com/jparise))
+- Switch to GitHub Actions for CI [\#259](https://github.com/pinterest/PINCache/pull/259) ([jparise](https://github.com/jparise))
+- Test that the "remove object" blocks are called [\#258](https://github.com/pinterest/PINCache/pull/258) ([jparise](https://github.com/jparise))
+- Discrepancy between Header Comment and Implementation \#trivial [\#257](https://github.com/pinterest/PINCache/pull/257) ([jlaws](https://github.com/jlaws))
+- Optimization `PINMemoryCache` trim to date [\#252](https://github.com/pinterest/PINCache/pull/252) ([kinarobin](https://github.com/kinarobin))
+- Optimize `PINMemoryCache` remove objects when receive memory warning notification [\#251](https://github.com/pinterest/PINCache/pull/251) ([kinarobin](https://github.com/kinarobin))
 
 ## 3.0.1 -- Beta 8
 - [fix] Initing PINCache with TTL enabled should enable TTL on PINMemoryCache. [#246](https://github.com/pinterest/PINCache/pull/246)

@@ -1,0 +1,51 @@
+---
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - 'releases/*'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build
+    runs-on: macOS-latest
+    strategy:
+      matrix:
+        platform: ['iOS Simulator,name=iPhone 8']
+    steps:
+      - uses: actions/checkout@v1
+      - name: Analyze and Test
+        run: |
+          xcodebuild clean analyze test \
+            -destination "platform=${{ matrix.platform }}" \
+            -sdk "iphonesimulator" \
+            -project PINCache.xcodeproj \
+            -scheme PINCache \
+            ONLY_ACTIVE_ARCH=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CLANG_ANALYZER_OUTPUT=plist-html \
+            CLANG_ANALYZER_OUTPUT_DIR="$(pwd)/clang" \
+           | xcpretty
+          if [[ -n `find $(pwd)/clang -name "*.html"` ]] ; then rm -rf $(pwd)/clang; exit 1; fi
+          rm -rf $(pwd)/clang
+  cocoapods:
+    name: CocoaPods
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Lint
+        run: pod lib lint
+  carthage:
+    name: Carthage
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Update
+        run: carthage update --no-use-binaries --no-build
+      - name: Build
+        run: carthage build --no-skip-current

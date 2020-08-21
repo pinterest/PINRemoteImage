@@ -2,7 +2,7 @@
 
 [![CocoaPods](https://img.shields.io/cocoapods/v/PINCache.svg)](http://cocoadocs.org/docsets/PINCache/)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Build status](https://badge.buildkite.com/03e247305c96c3371f2ff2766e9c8c1efdd5fdb3a7eceaff43.svg?branch=master&style=flat)](https://buildkite.com/pinterest/pincache)
+[![Build status](https://github.com/pinterest/PINCache/workflows/CI/badge.svg)](https://github.com/pinterest/PINCache/actions?query=workflow%3ACI+branch%3Amaster)
 
 ## Fast, non-deadlocking parallel object cache for iOS and OS X.
 
@@ -82,7 +82,7 @@ Add the following line to your `Cartfile` and run `carthage update --platform io
 
 ## Requirements
 
-__PINCache__ requires iOS 8.0, tvOS 9.0, watchOS 2.0 or OS X 10.8 and greater.
+__PINCache__ requires iOS 8.0, tvOS 9.0, watchOS 2.0 or macOS 10.8 and greater.
 
 ## Contact
 

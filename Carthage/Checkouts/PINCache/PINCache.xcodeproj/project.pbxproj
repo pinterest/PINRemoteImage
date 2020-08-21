@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		320117C524444E3C004FD783 /* PINCaching.h in Headers */ = {isa = PBXBuildFile; fileRef = 6928EED21E4160EE00B5D975 /* PINCaching.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		320117C624444E3D004FD783 /* PINCache.h in Headers */ = {isa = PBXBuildFile; fileRef = CC0106051E271A9000890935 /* PINCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		320117C724444E3D004FD783 /* PINCache.m in Sources */ = {isa = PBXBuildFile; fileRef = CC0106061E271A9000890935 /* PINCache.m */; };
+		320117C824444E3D004FD783 /* PINCacheObjectSubscripting.h in Headers */ = {isa = PBXBuildFile; fileRef = CC0106071E271A9000890935 /* PINCacheObjectSubscripting.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		320117C924444E3D004FD783 /* PINDiskCache.h in Headers */ = {isa = PBXBuildFile; fileRef = CC0106081E271A9000890935 /* PINDiskCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		320117CA24444E3D004FD783 /* PINDiskCache.m in Sources */ = {isa = PBXBuildFile; fileRef = CC0106091E271A9000890935 /* PINDiskCache.m */; };
+		320117CB24444E3D004FD783 /* PINMemoryCache.h in Headers */ = {isa = PBXBuildFile; fileRef = CC01060A1E271A9000890935 /* PINMemoryCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		320117CC24444E3D004FD783 /* PINMemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = CC01060B1E271A9000890935 /* PINMemoryCache.m */; };
+		320117CD24444E3D004FD783 /* PINCacheMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 68A0FBFF1E4D3282000B552D /* PINCacheMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6818C1491E55020400875DB7 /* PINCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC0105CE1E271A4900890935 /* PINCache.framework */; };
 		6818C2881E55217D00875DB7 /* PINOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6818C2871E55217D00875DB7 /* PINOperation.framework */; };
 		6818C28A1E55218400875DB7 /* PINOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6818C2891E55218400875DB7 /* PINOperation.framework */; };
@@ -54,6 +63,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		320117AC24444DF7004FD783 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6818C2901E564C1100875DB7 /* PINOperation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3201178C24444859004FD783;
+			remoteInfo = "PINOperation-watchOS";
+		};
+		320117B424444E23004FD783 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6818C2901E564C1100875DB7 /* PINOperation.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 3201178B24444859004FD783;
+			remoteInfo = "PINOperation-watchOS";
+		};
 		6818C2991E564C1100875DB7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6818C2901E564C1100875DB7 /* PINOperation.xcodeproj */;
@@ -171,6 +194,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		320117A124444DF7004FD783 /* PINCache.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PINCache.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6818C2871E55217D00875DB7 /* PINOperation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PINOperation.framework; path = "../../Library/Developer/Xcode/DerivedData/PINCache-cxjnintatqynfgceozwzgezmeypl/Build/Products/Debug-iphonesimulator/PINOperation.framework"; sourceTree = "<group>"; };
 		6818C2891E55218400875DB7 /* PINOperation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PINOperation.framework; path = "../../Library/Developer/Xcode/DerivedData/PINCache-cxjnintatqynfgceozwzgezmeypl/Build/Products/Debug-appletvsimulator/PINOperation.framework"; sourceTree = "<group>"; };
 		6818C28B1E55218A00875DB7 /* PINOperation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PINOperation.framework; path = Carthage/Checkouts/PINOperation/build/Debug/PINOperation.framework; sourceTree = "<group>"; };
@@ -202,6 +226,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		3201179E24444DF7004FD783 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CC0105AD1E271A1600890935 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -272,6 +303,7 @@
 				6818C2A01E564C1100875DB7 /* PINOperation-tvOSTests.xctest */,
 				6818C2A21E564C1100875DB7 /* PINOperation.framework */,
 				6818C2A41E564C1100875DB7 /* PINOperation-macOSTests.xctest */,
+				320117AD24444DF7004FD783 /* PINOperation.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -296,6 +328,7 @@
 				CC0105DA1E271A5C00890935 /* PINCacheTests.xctest */,
 				CC0105E91E271A6400890935 /* PINCache-tvOSTests.xctest */,
 				CC0105F81E271A7300890935 /* PINCache-macOSTests.xctest */,
+				320117A124444DF7004FD783 /* PINCache.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -343,6 +376,19 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		3201179C24444DF7004FD783 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				320117CB24444E3D004FD783 /* PINMemoryCache.h in Headers */,
+				320117C624444E3D004FD783 /* PINCache.h in Headers */,
+				320117C824444E3D004FD783 /* PINCacheObjectSubscripting.h in Headers */,
+				320117CD24444E3D004FD783 /* PINCacheMacros.h in Headers */,
+				320117C924444E3D004FD783 /* PINDiskCache.h in Headers */,
+				320117C524444E3C004FD783 /* PINCaching.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CC0105AE1E271A1600890935 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -386,6 +432,25 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		320117A024444DF7004FD783 /* PINCache-watchOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 320117AE24444DF7004FD783 /* Build configuration list for PBXNativeTarget "PINCache-watchOS" */;
+			buildPhases = (
+				3201179D24444DF7004FD783 /* Sources */,
+				3201179E24444DF7004FD783 /* Frameworks */,
+				3201179C24444DF7004FD783 /* Headers */,
+				3201179F24444DF7004FD783 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				320117B524444E23004FD783 /* PBXTargetDependency */,
+			);
+			name = "PINCache-watchOS";
+			productName = "PINCache-watchOS";
+			productReference = 320117A124444DF7004FD783 /* PINCache.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		CC0105B01E271A1600890935 /* PINCache */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = CC0105B91E271A1600890935 /* Build configuration list for PBXNativeTarget "PINCache" */;
@@ -509,6 +574,10 @@
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = Pinterest;
 				TargetAttributes = {
+					320117A024444DF7004FD783 = {
+						CreatedOnToolsVersion = 11.4;
+						ProvisioningStyle = Automatic;
+					};
 					CC0105B01E271A1600890935 = {
 						CreatedOnToolsVersion = 7.3.1;
 					};
@@ -553,11 +622,19 @@
 				CC0105E81E271A6400890935 /* PINCache-tvOSTests */,
 				CC0105CD1E271A4900890935 /* PINCache-macOS */,
 				CC0105F71E271A7300890935 /* PINCache-macOSTests */,
+				320117A024444DF7004FD783 /* PINCache-watchOS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		320117AD24444DF7004FD783 /* PINOperation.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PINOperation.framework;
+			remoteRef = 320117AC24444DF7004FD783 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		6818C29A1E564C1100875DB7 /* PINOperation.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -603,6 +680,13 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		3201179F24444DF7004FD783 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CC0105AF1E271A1600890935 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -651,6 +735,16 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		3201179D24444DF7004FD783 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				320117C724444E3D004FD783 /* PINCache.m in Sources */,
+				320117CC24444E3D004FD783 /* PINMemoryCache.m in Sources */,
+				320117CA24444E3D004FD783 /* PINDiskCache.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CC0105AC1E271A1600890935 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -712,6 +806,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		320117B524444E23004FD783 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "PINOperation-watchOS";
+			targetProxy = 320117B424444E23004FD783 /* PBXContainerItemProxy */;
+		};
 		6818C2A61E564C2000875DB7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = PINOperation;
@@ -745,6 +844,61 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		320117A624444DF7004FD783 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINCache;
+				PRODUCT_NAME = PINCache;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		320117A724444DF7004FD783 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINCache;
+				PRODUCT_NAME = PINCache;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
 		CC0105B71E271A1600890935 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -878,6 +1032,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINCache;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
 			};
 			name = Debug;
 		};
@@ -900,6 +1055,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINCache;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
 			};
 			name = Release;
 		};
@@ -924,7 +1080,7 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.2;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Debug;
 		};
@@ -949,7 +1105,7 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.2;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Release;
 		};
@@ -971,6 +1127,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINCache;
 				PRODUCT_NAME = PINCache;
 				SDKROOT = macosx;
@@ -996,6 +1153,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINCache;
 				PRODUCT_NAME = PINCache;
 				SDKROOT = macosx;
@@ -1086,6 +1244,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		320117AE24444DF7004FD783 /* Build configuration list for PBXNativeTarget "PINCache-watchOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				320117A624444DF7004FD783 /* Debug */,
+				320117A724444DF7004FD783 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		CC0105AB1E271A1600890935 /* Build configuration list for PBXProject "PINCache" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

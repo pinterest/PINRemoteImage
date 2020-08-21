@@ -111,7 +111,7 @@ static NSURL *_sharedTrashURL;
 - (void)dealloc
 {
     __unused int result = pthread_mutex_destroy(&_mutex);
-    NSCAssert(result == 0, @"Failed to destroy lock in PINMemoryCache %p. Code: %d", (void *)self, result);
+    NSCAssert(result == 0, @"Failed to destroy lock in PINDiskCache %p. Code: %d", (void *)self, result);
     pthread_cond_destroy(&_diskWritableCondition);
     pthread_cond_destroy(&_diskStateKnownCondition);
 }
@@ -185,19 +185,19 @@ static NSURL *_sharedTrashURL;
               operationQueue:(PINOperationQueue *)operationQueue
                     ttlCache:(BOOL)ttlCache
 {
-    if (!name)
+    if (!name) {
         return nil;
-    
+    }
 
     NSAssert(((!serializer && !deserializer) || (serializer && deserializer)),
              @"PINDiskCache must be initialized with a serializer AND deserializer.");
     
     NSAssert(((!keyEncoder && !keyDecoder) || (keyEncoder && keyDecoder)),
-              @"PINDiskCache must be initialized with a encoder AND decoder.");
+              @"PINDiskCache must be initialized with an encoder AND decoder.");
     
     if (self = [super init]) {
         __unused int result = pthread_mutex_init(&_mutex, NULL);
-        NSAssert(result == 0, @"Failed to init lock in PINMemoryCache %@. Code: %d", self, result);
+        NSAssert(result == 0, @"Failed to init lock in PINDiskCache %@. Code: %d", self, result);
         
         _name = [name copy];
         _prefix = [prefix copy];
@@ -666,15 +666,18 @@ static NSURL *_sharedTrashURL;
 - (BOOL)removeFileAndExecuteBlocksForKey:(NSString *)key
 {
     NSURL *fileURL = [self encodedFileURLForKey:key];
-    
+    if (!fileURL) {
+        return NO;
+    }
+
     // We only need to lock until writable at the top because once writable, always writable
     [self lockForWriting];
-        if (!fileURL || ![[NSFileManager defaultManager] fileExistsAtPath:[fileURL path]]) {
+        if (![[NSFileManager defaultManager] fileExistsAtPath:[fileURL path]]) {
             [self unlock];
             return NO;
         }
     
-        PINCacheObjectBlock willRemoveObjectBlock = _willRemoveObjectBlock;
+        PINDiskCacheObjectBlock willRemoveObjectBlock = _willRemoveObjectBlock;
         if (willRemoveObjectBlock) {
             [self unlock];
             willRemoveObjectBlock(self, key, nil);
@@ -695,7 +698,7 @@ static NSURL *_sharedTrashURL;
         
         [_metadata removeObjectForKey:key];
     
-        PINCacheObjectBlock didRemoveObjectBlock = _didRemoveObjectBlock;
+        PINDiskCacheObjectBlock didRemoveObjectBlock = _didRemoveObjectBlock;
         if (didRemoveObjectBlock) {
             [self unlock];
             _didRemoveObjectBlock(self, key, nil);
@@ -1204,7 +1207,7 @@ static NSURL *_sharedTrashURL;
     }
 
     [self lockForWriting];
-        PINCacheObjectBlock willAddObjectBlock = self->_willAddObjectBlock;
+        PINDiskCacheObjectBlock willAddObjectBlock = self->_willAddObjectBlock;
         if (willAddObjectBlock) {
             [self unlock];
                 willAddObjectBlock(self, key, object);
@@ -1248,7 +1251,7 @@ static NSURL *_sharedTrashURL;
             fileURL = nil;
         }
     
-        PINCacheObjectBlock didAddObjectBlock = self->_didAddObjectBlock;
+        PINDiskCacheObjectBlock didAddObjectBlock = self->_didAddObjectBlock;
         if (didAddObjectBlock) {
             [self unlock];
                 didAddObjectBlock(self, key, object);
@@ -1660,29 +1663,49 @@ static NSURL *_sharedTrashURL;
 
 - (void)trimToDate:(NSDate *)date block:(nullable PINDiskCacheBlock)block
 {
-    [self trimToDateAsync:date completion:block];
+    [self trimToDateAsync:date completion:^(id<PINCaching> diskCache) {
+        if (block) {
+            block((PINDiskCache *)diskCache);
+        }
+    }];
 }
 
 - (void)trimToSize:(NSUInteger)byteCount block:(nullable PINDiskCacheBlock)block
 {
-    [self trimToSizeAsync:byteCount completion:block];
+    [self trimToSizeAsync:byteCount completion:^(id<PINCaching> diskCache) {
+        if (block) {
+            block((PINDiskCache *)diskCache);
+        }
+    }];
 }
 
 - (void)trimToSizeByDate:(NSUInteger)byteCount block:(nullable PINDiskCacheBlock)block
 {
-    [self trimToSizeAsync:byteCount completion:block];
+    [self trimToSizeAsync:byteCount completion:^(id<PINCaching> diskCache) {
+        if (block) {
+            block((PINDiskCache *)diskCache);
+        }
+    }];
 }
 
 - (void)removeAllObjects:(nullable PINDiskCacheBlock)block
 {
-    [self removeAllObjectsAsync:block];
+    [self removeAllObjectsAsync:^(id<PINCaching> diskCache) {
+        if (block) {
+            block((PINDiskCache *)diskCache);
+        }
+    }];
 }
 
 - (void)enumerateObjectsWithBlock:(PINDiskCacheFileURLBlock)block completionBlock:(nullable PINDiskCacheBlock)completionBlock
 {
     [self enumerateObjectsWithBlockAsync:^(NSString * _Nonnull key, NSURL * _Nullable fileURL, BOOL * _Nonnull stop) {
       block(key, fileURL);
-    } completionBlock:completionBlock];
+    } completionBlock:^(id<PINCaching> diskCache) {
+        if (completionBlock) {
+            completionBlock((PINDiskCache *)diskCache);
+        }
+    }];
 }
 
 - (void)setTtlCache:(BOOL)ttlCache

@@ -1,4 +1,4 @@
-PLATFORM="platform=iOS Simulator,name=iPhone 7"
+PLATFORM="platform=iOS Simulator,name=iPhone 8"
 SDK="iphonesimulator"
 SHELL=/bin/bash -o pipefail
 
