@@ -1,7 +1,29 @@
-## master
-* Add your own contributions to the next release on the line below this with your name.
-- [fixed] Set HTTPMaximumConnectionsPerHost to PINRemoteImageHTTPMaximumConnectionsPerHost only if user don't provide sessionConfiguration. [#516](https://github.com/pinterest/PINRemoteImage/pull/516) [zhongwuzw](https://github.com/zhongwuzw)
-- [refactor] Refactor remote manager task for uuid method. [#526](https://github.com/pinterest/PINRemoteImage/pull/526) [zhongwuzw](https://github.com/zhongwuzw)
+## [3.0.1](https://github.com/Pinterest/PINRemoteImage/tree/3.0.1) (2020-09-08)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/3.0.0...3.0.1)
+
+**Merged pull requests:**
+
+- Update PINCache in podspec [\#564](https://github.com/pinterest/PINRemoteImage/pull/564) ([garrettmoon](https://github.com/garrettmoon))
+- Update PINCache and PINOperation [\#562](https://github.com/pinterest/PINRemoteImage/pull/562) ([garrettmoon](https://github.com/garrettmoon))
+- Let's use the same commands we use locally. [\#561](https://github.com/pinterest/PINRemoteImage/pull/561) ([garrettmoon](https://github.com/garrettmoon))
+- Ensure the example defines the macros before referencing them. [\#557](https://github.com/pinterest/PINRemoteImage/pull/557) ([bolsinga](https://github.com/bolsinga))
+- Remove the PCH file and ensure macros are defined before using [\#556](https://github.com/pinterest/PINRemoteImage/pull/556) ([bolsinga](https://github.com/bolsinga))
+- Seems that having the framework and example have the same name confuses cocoapods [\#555](https://github.com/pinterest/PINRemoteImage/pull/555) ([garrettmoon](https://github.com/garrettmoon))
+- Upgrade WebP to 1.1.0 [\#554](https://github.com/pinterest/PINRemoteImage/pull/554) ([garrettmoon](https://github.com/garrettmoon))
+- Conditionally call CADisplayLink method based upon iOS10 availability to remove deprecation warning [\#552](https://github.com/pinterest/PINRemoteImage/pull/552) ([bolsinga](https://github.com/bolsinga))
+- Fix typos [\#548](https://github.com/pinterest/PINRemoteImage/pull/548) ([pgrimaud](https://github.com/pgrimaud))
+- Remove unused CI directory [\#547](https://github.com/pinterest/PINRemoteImage/pull/547) ([jparise](https://github.com/jparise))
+- PINCachedAnimatedImage: Fix retain cycles [\#546](https://github.com/pinterest/PINRemoteImage/pull/546) ([bolsinga](https://github.com/bolsinga))
+- Fix up analyze for new github CI [\#545](https://github.com/pinterest/PINRemoteImage/pull/545) ([garrettmoon](https://github.com/garrettmoon))
+- Switch to GitHub Actions for CI [\#544](https://github.com/pinterest/PINRemoteImage/pull/544) ([jparise](https://github.com/jparise))
+- \#trivial Fix performance issue caused by saving encoded image data to memory cache [\#539](https://github.com/pinterest/PINRemoteImage/pull/539) ([Naituw](https://github.com/Naituw))
+- Update 3.0.0 change log and podspec [\#537](https://github.com/pinterest/PINRemoteImage/pull/537) ([ernestmama](https://github.com/ernestmama))
+- Fix memory cache content in README [\#530](https://github.com/pinterest/PINRemoteImage/pull/530) ([OhKanghoon](https://github.com/OhKanghoon))
+-  Refactor remote manager task for uuid method [\#526](https://github.com/pinterest/PINRemoteImage/pull/526) ([zhongwuzw](https://github.com/zhongwuzw))
+- Burst Animated Image speed of frame index search [\#523](https://github.com/pinterest/PINRemoteImage/pull/523) ([zhongwuzw](https://github.com/zhongwuzw))
+- Set HTTPMaximumConnectionsPerHost to PINRemoteImageHTTPMaximumConnectionsPerHost only if user don't provide sessionConfiguration [\#516](https://github.com/pinterest/PINRemoteImage/pull/516) ([zhongwuzw](https://github.com/zhongwuzw))
+- Fixes re-downloading data corrupt for the same url [\#514](https://github.com/pinterest/PINRemoteImage/pull/514) ([zhongwuzw](https://github.com/zhongwuzw))
 
 ## 3.0.0 -- 2020 Jan 06
 - [new] Add PINRemoteImageManagerConfiguration configuration object. [#492](https://github.com/pinterest/PINRemoteImage/pull/492) [rqueue](https://github.com/rqueue)
