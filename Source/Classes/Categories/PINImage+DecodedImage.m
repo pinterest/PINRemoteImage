@@ -16,6 +16,49 @@
 
 #import "NSData+ImageDetectors.h"
 
+NS_INLINE BOOL pin_CGImageRefIsOpaque(CGImageRef imageRef) {
+    CGImageAlphaInfo alpha = CGImageGetAlphaInfo(imageRef);
+    switch (alpha) {
+        case kCGImageAlphaNone:
+        case kCGImageAlphaNoneSkipLast:
+        case kCGImageAlphaNoneSkipFirst:
+            return YES;
+        default:
+            return NO;
+    }
+}
+
+#if PIN_TARGET_IOS
+NS_INLINE void pin_degreesFromOrientation(UIImageOrientation orientation, void (^completion)(CGFloat degrees, BOOL horizontalFlip, BOOL verticalFlip)) {
+    switch (orientation) {
+        case UIImageOrientationUp: // default orientation
+            completion(0.0, NO, NO);
+            break;
+        case UIImageOrientationDown: // 180 deg rotation
+            completion(180.0, NO, NO);
+            break;
+        case UIImageOrientationLeft:
+            completion(270.0, NO, NO); // 90 deg CCW
+            break;
+        case UIImageOrientationRight:
+            completion(90.0, NO, NO); // 90 deg CW
+            break;
+        case UIImageOrientationUpMirrored: // as above but image mirrored along other axis. horizontal flip
+            completion(0.0, YES, NO);
+            break;
+        case UIImageOrientationDownMirrored: // horizontal flip
+            completion(180.0, YES, NO);
+            break;
+        case UIImageOrientationLeftMirrored: // vertical flip
+            completion(270.0, NO, YES);
+            break;
+        case UIImageOrientationRightMirrored: // vertical flip
+            completion(90.0, NO, YES);
+            break;
+    }
+}
+#endif
+
 #if !PIN_TARGET_IOS
 @implementation NSImage (PINiOSMapping)
 
@@ -277,47 +320,6 @@ UIImageOrientation pin_UIImageOrientationFromImageSource(CGImageSourceRef imageS
     return orientation;
 }
 
-void pin_degreesFromOrientation(UIImageOrientation orientation, void (^completion)(CGFloat degrees, BOOL horizontalFlip, BOOL verticalFlip)) {
-    switch (orientation) {
-        case UIImageOrientationUp: // default orientation
-            completion(0.0, NO, NO);
-            break;
-        case UIImageOrientationDown: // 180 deg rotation
-            completion(180.0, NO, NO);
-            break;
-        case UIImageOrientationLeft:
-            completion(270.0, NO, NO); // 90 deg CCW
-            break;
-        case UIImageOrientationRight:
-            completion(90.0, NO, NO); // 90 deg CW
-            break;
-        case UIImageOrientationUpMirrored: // as above but image mirrored along other axis. horizontal flip
-            completion(0.0, YES, NO);
-            break;
-        case UIImageOrientationDownMirrored: // horizontal flip
-            completion(180.0, YES, NO);
-            break;
-        case UIImageOrientationLeftMirrored: // vertical flip
-            completion(270.0, NO, YES);
-            break;
-        case UIImageOrientationRightMirrored: // vertical flip
-            completion(90.0, NO, YES);
-            break;
-    }
-}
-
 #endif
-
-BOOL pin_CGImageRefIsOpaque(CGImageRef imageRef) {
-    CGImageAlphaInfo alpha = CGImageGetAlphaInfo(imageRef);
-    switch (alpha) {
-        case kCGImageAlphaNone:
-        case kCGImageAlphaNoneSkipLast:
-        case kCGImageAlphaNoneSkipFirst:
-            return YES;
-        default:
-            return NO;
-    }
-}
 
 @end
