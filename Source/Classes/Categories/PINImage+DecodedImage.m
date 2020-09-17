@@ -126,7 +126,7 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
 {
 #endif
 #if PIN_TARGET_IOS
-    if (@available(iOS 10.0, *)) {
+    if (@available(iOS 10.0, tvOS 10.0, *)) {
         return [self pin_decodedImageUsingGraphicsImageRendererRefWithCGImageRef:imageRef scale:1.0 orientation:orientation];
     } else {
         return [UIImage imageWithCGImage:[self pin_decodedImageRefWithCGImageRef:imageRef] scale:1.0 orientation:orientation];
@@ -139,9 +139,9 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
 #if PIN_TARGET_IOS
 + (PINImage *)pin_decodedImageUsingGraphicsImageRendererRefWithCGImageRef:(CGImageRef)imageRef
                                                                     scale:(CGFloat)scale
-                                                              orientation:(UIImageOrientation)orientation API_AVAILABLE(macosx(10.13), ios(10.0), tvos(11.0)) {
+                                                              orientation:(UIImageOrientation)orientation API_AVAILABLE(ios(10.0), tvos(10.0)) {
     UIGraphicsImageRendererFormat *format = nil;
-    if (@available(iOS 11.0, macOS 10.13, tvOS 11.0, *)) {
+    if (@available(iOS 11.0, tvOS 11.0, *)) {
         format = [UIGraphicsImageRendererFormat preferredFormat];
     } else {
         format = [UIGraphicsImageRendererFormat defaultFormat];
@@ -178,7 +178,7 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
     return [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
         CGContextRef ctx = rendererContext.CGContext;
         
-        // Flip the default coordinate system for iOS:  https://developer.apple.com/library/archive/documentation/2DDrawing/Conceptual/DrawingPrintingiOS/GraphicsDrawingOverview/GraphicsDrawingOverview.html#//apple_ref/doc/uid/TP40010156-CH14-SW4
+        // Flip the default coordinate system for iOS/tvOS:  https://developer.apple.com/library/archive/documentation/2DDrawing/Conceptual/DrawingPrintingiOS/GraphicsDrawingOverview/GraphicsDrawingOverview.html#//apple_ref/doc/uid/TP40010156-CH14-SW4
         CGContextTranslateCTM(ctx, rotatedRect.size.width / 2.0, rotatedRect.size.height / 2.0);
         CGContextScaleCTM(ctx, (doHorizontalFlip ? -1.0 : 1.0), (doVerticalFlip ? 1.0 : -1.0));
         

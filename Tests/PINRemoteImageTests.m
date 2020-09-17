@@ -1285,10 +1285,10 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
         UIImageOrientationRightMirrored, // vertical flip
     };
     
-    // iOS versions below iOS 10 use the traditional `+[UIImage imageWithCGImage:]` API that doesn't translate orientation.
-    // For iOS 10+ we manually convert the `UIImageOrientation` in `UIGraphicsImageRenderer`, and therefore,
-    // the following test is here to solidify that behavior
-    if (@available(iOS 10.0, *)) {
+    // iOS or tvOS versions below 10.0 use the traditional `+[UIImage imageWithCGImage:]` API that doesn't translate orientation.
+    // For iOS/tvOS 10.0+ we manually convert the `UIImageOrientation` in `UIGraphicsImageRenderer`, and therefore,
+    // the following test is meant to solidify that behavior
+    if (@available(iOS 10.0, tvOS 10.0, *)) {
         // Loop over all orientations and compare each element respective to one-another
         for (NSInteger i = 0; i < sizeof(allOrientations)/sizeof(allOrientations[0]); i++) {
             
