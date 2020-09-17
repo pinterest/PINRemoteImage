@@ -60,6 +60,13 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 @end
 
+@interface PINImage (Private)
+
++ (nullable PINImage *)pin_decodedImageWithCGImageRef:(nonnull CGImageRef)imageRef orientation:(UIImageOrientation) orientation;
+
+@end
+
+
 #if DEBUG
 
 @interface PINRemoteImageWeakTask : NSObject
@@ -184,6 +191,11 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 - (NSURL *)transparentWebPURL
 {
     return [NSURL URLWithString:@"https://www.gstatic.com/webp/gallery3/4_webp_ll.webp"];
+}
+
+- (NSURL *)grayscalePNGURL
+{
+    return [NSURL URLWithString:@"https://upload.wikimedia.org/wikipedia/commons/f/fa/Grayscale_8bits_palette_sample_image.png"];
 }
 
 - (NSURL *)veryLongURL
@@ -1226,6 +1238,84 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 		 [expectation fulfill];
 	 }];
 	[self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
+- (void)testThatGrayscalePNGImageIsEightBPP
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Downloading grayscale PNG image"];
+    [self.imageManager downloadImageWithURL:[self grayscalePNGURL]
+                                    options:PINRemoteImageManagerDownloadOptionsNone
+                                 completion:^(PINRemoteImageManagerResult *result)
+     {
+         UIImage *outImage = result.image;
+        
+         XCTAssertEqual(CGImageGetBitsPerPixel(outImage.CGImage), 8, @"This grayscale image should've been decoded as a 8 bit per pixel image.");
+         XCTAssert(PINImageAlphaInfoIsOpaque(CGImageGetAlphaInfo(outImage.CGImage)), @"Opaque image has an alpha channel.");
+         
+         [expectation fulfill];
+     }];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
+- (void)testImageRendererOrientation
+{
+    dispatch_group_t group = dispatch_group_create();
+    __block CGImageRef imageRefEncoded = nil;
+    
+    dispatch_group_enter(group);
+    [self.imageManager downloadImageWithURL:[self JPEGURL]
+                                    options:PINRemoteImageManagerDownloadOptionsSkipDecode
+                                 completion:^(PINRemoteImageManagerResult *result)
+    {
+        imageRefEncoded = CGImageCreateCopy(result.image.CGImage);
+        dispatch_group_leave(group);
+    }];
+    
+    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+    
+    // All image orientations (copied from `UIImage.h`)
+    UIImageOrientation allOrientations[] = {
+        UIImageOrientationUp,            // default orientation
+        UIImageOrientationDown,          // 180 deg rotation
+        UIImageOrientationLeft,          // 90 deg CCW
+        UIImageOrientationRight,         // 90 deg CW
+        UIImageOrientationUpMirrored,    // as above but image mirrored along other axis. horizontal flip
+        UIImageOrientationDownMirrored,  // horizontal flip
+        UIImageOrientationLeftMirrored,  // vertical flip
+        UIImageOrientationRightMirrored, // vertical flip
+    };
+    
+    // iOS versions below iOS 10 we use the traditional `+[UIImage imageWithCGImage:]` API that doesn't translate orientation.
+    // For iOS 10+ we manually convert the `UIImageOrientation` in `UIGraphicsImageRenderer`, and therefore,
+    // the following test is here to solidify that experience
+    if (@available(iOS 10.0, *)) {
+        // Loop over all orientations and compare each element respective to one-another
+        for (NSInteger i = 0; i < sizeof(allOrientations)/sizeof(allOrientations[0]); i++) {
+            
+            // Rotate the reference image by the given orientation
+            UIImage *referenceImage = [UIImage pin_decodedImageWithCGImageRef:imageRefEncoded orientation:allOrientations[i]];
+            
+            // Compare the reference image to each element
+            for (NSInteger j = 0; j < sizeof(allOrientations)/sizeof(allOrientations[0]); j++) {
+                
+                // Rotate the image by the given orientation
+                UIImage *rotatedImage = [UIImage pin_decodedImageWithCGImageRef:imageRefEncoded orientation:allOrientations[j]];
+                
+                // equal images must succeed
+                if (i == j) {
+                    XCTAssert([UIImageJPEGRepresentation(referenceImage, 1.0) isEqualToData:UIImageJPEGRepresentation(rotatedImage, 1.0)],
+                              @"Unsuccessful transformation. The `referenceImage` and `rotatedImage` are not the same.");
+                }
+                // unequal images must fail
+                else {
+                    XCTAssertFalse([UIImageJPEGRepresentation(referenceImage, 1.0) isEqualToData:UIImageJPEGRepresentation(rotatedImage, 1.0)],
+                                   @"Unsuccessful transformation. The `referenceImage` and `rotatedImage` are the same.");
+                }
+            }
+        }
+    }
+    
+    CGImageRelease(imageRefEncoded);
 }
 
 - (void)testExponentialRetryStrategy
