@@ -139,9 +139,9 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
 #if PIN_TARGET_IOS
 + (PINImage *)pin_decodedImageUsingGraphicsImageRendererRefWithCGImageRef:(CGImageRef)imageRef
                                                                     scale:(CGFloat)scale
-                                                              orientation:(UIImageOrientation)orientation API_AVAILABLE(ios(10.0)) {
+                                                              orientation:(UIImageOrientation)orientation API_AVAILABLE(macosx(10.13), ios(10.0), tvos(11.0)) {
     UIGraphicsImageRendererFormat *format = nil;
-    if (@available(iOS 11.0, *)) {
+    if (@available(iOS 11.0, macOS 10.13, tvOS 11.0, *)) {
         format = [UIGraphicsImageRendererFormat preferredFormat];
     } else {
         format = [UIGraphicsImageRendererFormat defaultFormat];
