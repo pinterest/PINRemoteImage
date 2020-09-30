@@ -45,3 +45,8 @@ xcuserdata
 Pods/
 
 Carthage/Build
+
+## SPM
+.swiftpm/
+.build/
+Package.resolved
