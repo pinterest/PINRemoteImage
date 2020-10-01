@@ -14,7 +14,7 @@
 #import "PINWebPAnimatedImage.h"
 #endif
 
-#import <PINOperation/PINOperationQueue.h>
+@import PINOperation;
 #import "NSData+ImageDetectors.h"
 
 static const NSUInteger kFramesToRenderForLargeFrames = 4;

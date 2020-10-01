@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <PINOperation/PINOperation.h>
+@import PINOperation;
 
 #import "PINRemoteImageCallbacks.h"
 #import "PINRemoteImageManager.h"
