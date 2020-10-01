@@ -2,7 +2,7 @@ PLATFORM="platform=iOS Simulator,name=iPhone 8"
 SDK="iphonesimulator"
 SHELL=/bin/bash -o pipefail
 
-.PHONY: all webp cocoapods test carthage analyze
+.PHONY: all webp cocoapods test carthage analyze spm
 
 cocoapods:
 	pod lib lint
@@ -28,5 +28,8 @@ carthage:
 webp:
 	carthage update --no-use-binaries --no-build
 	cd webp && ../Carthage/Checkouts/libwebp/iosbuild.sh
+
+spm:
+	swift build
 	
-all: carthage test cocoapods analyze
+all: carthage test cocoapods analyze spm
