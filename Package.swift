@@ -27,11 +27,6 @@ let package = Package(
             name: "PINRemoteImage",
             dependencies: ["PINCache", "libwebp"],
             path: "Source/Classes",
-            exclude: ["Source/PINWebP", "webp", "Examples",
-                      "Carthage", "docs", "PINRemoteImage",
-                      "build_docs.sh", "Cartfile",
-                      "Cartfile.resolved", "Makefile",
-                      "PINRemoteImge.podspec", "progressive.gif"],
             publicHeadersPath: "include",
             cSettings: [
                 .headerSearchPath("."),
@@ -40,7 +35,6 @@ let package = Package(
                 .headerSearchPath("ImageCategories"),
                 .headerSearchPath("PinCache"),
                 .define("USE_PINCACHE", to: "1"),
-                .define("PIN_WEBP", to: "1"),
                 ]),
     ]
 )
