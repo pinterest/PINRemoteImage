@@ -5,7 +5,7 @@
 //  Created by Garrett Moon on 4/19/18.
 //
 
-#import <PINRemoteImage/PINAnimatedImageView.h>
+#import "PINAnimatedImageView.h"
 
 #import "PINRemoteImageCategoryManager.h"
 
