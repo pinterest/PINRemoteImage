@@ -6,7 +6,7 @@
 //
 //
 
-@import PINCache;
+#import "PINCache.h"
 
 #import "PINRemoteImageCaching.h"
 #import "PINRemoteImageManager.h"
