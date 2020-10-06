@@ -27,18 +27,10 @@
 #endif
 
 #ifndef PIN_WEBP
-    #if SWIFT_PACKAGE
-        #if __has_include(<webp/decode.h>)
-            #define PIN_WEBP    1
-        #else
-            #define PIN_WEBP    0
-        #endif
+    #if __has_include(<WebPDecoder/decode.h>)
+    #define PIN_WEBP    1
     #else
-        #if __has_include(<WebPDecoder/decode.h>)
-            #define PIN_WEBP    1
-        #else
-            #define PIN_WEBP    0
-        #endif
+    #define PIN_WEBP    0
     #endif
 #endif
 
