@@ -219,15 +219,16 @@
         return;
     }
     
-    // Get frame interval before holding display link lock to avoid deadlock
     NSUInteger frameInterval = self.animatedImage.frameInterval;
-
+    
     if (_displayLink == nil) {
         _playHead = 0;
         _displayLink = [PINDisplayLink displayLinkWithTarget:[PINRemoteWeakProxy weakProxyWithTarget:self] selector:@selector(displayLinkFired:)];
 #if PIN_TARGET_IOS
         if (@available(iOS 10.0, tvOS 10.0, *)) {
-            _displayLink.preferredFramesPerSecond = frameInterval;
+            // Convert from display link fractional value to fps (note: frameInterval is always at least 1)
+            NSInteger frameRate = ceil([PINAnimatedImage maximumFramesPerSecond] / ((double) frameInterval));
+            _displayLink.preferredFramesPerSecond = frameRate;
         } else {
 #endif
             _displayLink.frameInterval = frameInterval;
