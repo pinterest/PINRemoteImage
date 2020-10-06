@@ -19,7 +19,7 @@
 #endif
 
 #ifndef USE_PINCACHE
-    #if __has_include(<PINCache/PINCache.h>)
+    #if __has_include(<PINCache/PINCache.h>) || __has_include("PINCache.h")
     #define USE_PINCACHE    1
     #else
     #define USE_PINCACHE    0
@@ -27,7 +27,7 @@
 #endif
 
 #ifndef PIN_WEBP
-    #if __has_include(<WebPDecoder/decode.h>)
+    #if __has_include(<WebPDecoder/decode.h>) || __has_include(<webp/decode.h>)
     #define PIN_WEBP    1
     #else
     #define PIN_WEBP    0

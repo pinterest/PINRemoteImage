@@ -17,7 +17,7 @@ let package = Package(
             targets: ["PINRemoteImage"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/3a4oT/PINCache.git", .branch("spm")),
+        .package(url: "https://github.com/pinterest/PINCache.git", from: "3.0.2"),
         .package(name: "libwebp",
                  url: "https://github.com/SDWebImage/libwebp-Xcode",
                  from: "1.1.0"),
@@ -34,8 +34,6 @@ let package = Package(
                 .headerSearchPath("AnimatedImages"),
                 .headerSearchPath("ImageCategories"),
                 .headerSearchPath("PinCache"),
-                .define("USE_PINCACHE", to: "1"),
-                .define("PIN_WEBP", to: "1"),
                 ]),
     ]
 )
