@@ -34,6 +34,8 @@ let package = Package(
                 .headerSearchPath("AnimatedImages"),
                 .headerSearchPath("ImageCategories"),
                 .headerSearchPath("PinCache"),
+                
+                .define("PIN_WEBP", to: "1"),
                 ]),
     ]
 )
