@@ -15,7 +15,7 @@
 #if SWIFT_PACKAGE
 @import libwebp;
 #else
-#import "demux.h"
+#import "webp/demux.h"
 #endif
 
 @interface PINWebPAnimatedImage ()

@@ -13,7 +13,7 @@
 #if SWIFT_PACKAGE
 @import libwebp;
 #else
-#import "decode.h"
+#import "webp/decode.h"
 #endif
 
 static void releaseData(void *info, const void *data, size_t size)
