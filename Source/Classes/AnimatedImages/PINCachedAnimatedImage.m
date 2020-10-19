@@ -14,7 +14,12 @@
 #import "PINWebPAnimatedImage.h"
 #endif
 
+#if SWIFT_PACKAGE
 @import PINOperation;
+#else
+#import <PINOperation/PINOperation.h>
+#endif
+
 #import "NSData+ImageDetectors.h"
 
 static const NSUInteger kFramesToRenderForLargeFrames = 4;

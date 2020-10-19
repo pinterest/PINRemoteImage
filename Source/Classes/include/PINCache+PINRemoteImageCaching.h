@@ -7,9 +7,9 @@
 //
 
 #if SWIFT_PACKAGE
-#import "PINCache.h"
-#else
 @import PINCache;
+#else
+#import <PINCache/PINCache.h>
 #endif
 
 #import "PINRemoteImageCaching.h"

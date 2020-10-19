@@ -9,7 +9,12 @@
 #import "PINRemoteImageManager.h"
 
 #import <CommonCrypto/CommonDigest.h>
+
+#if SWIFT_PACKAGE
 @import PINOperation;
+#else
+#import <PINOperation/PINOperation.h>
+#endif
 
 #import <objc/runtime.h>
 
