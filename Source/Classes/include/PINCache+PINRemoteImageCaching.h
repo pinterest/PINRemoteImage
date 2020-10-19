@@ -7,7 +7,7 @@
 //
 
 #if SWIFT_PACKAGE
-@import PINCache
+@import PINCache;
 #else
 #import <PINCache/PINCache.h>
 #endif
