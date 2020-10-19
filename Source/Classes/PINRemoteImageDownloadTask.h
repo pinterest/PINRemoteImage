@@ -6,7 +6,11 @@
 //
 //
 
+#if SWIFT_PACKAGE
 @import PINOperation;
+#else
+#import "PINOperation.h"
+#endif
 
 #import "PINRemoteImageManager+Private.h"
 #import "PINRemoteImageTask.h"
