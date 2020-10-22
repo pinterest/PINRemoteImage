@@ -1,3 +1,19 @@
+# Changelog
+
+## [3.0.2](https://github.com/Pinterest/PINRemoteImage/tree/3.0.2) (2020-10-22)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/3.0.1...3.0.2)
+
+
+- Add support for automated releases [\#580](https://github.com/pinterest/PINRemoteImage/pull/580) ([garrettmoon](https://github.com/garrettmoon))
+- Fix imports for non-SPM [\#579](https://github.com/pinterest/PINRemoteImage/pull/579) ([garrettmoon](https://github.com/garrettmoon))
+- Moves to an .xcworkspace so we don't imbed subprojects [\#575](https://github.com/pinterest/PINRemoteImage/pull/575) ([garrettmoon](https://github.com/garrettmoon))
+- SPM define [\#574](https://github.com/pinterest/PINRemoteImage/pull/574) ([3a4oT](https://github.com/3a4oT))
+- SPM - Objective-C++ consumers fix [\#573](https://github.com/pinterest/PINRemoteImage/pull/573) ([3a4oT](https://github.com/3a4oT))
+- Use proper units when setting preferredFramesPerSecond [\#572](https://github.com/pinterest/PINRemoteImage/pull/572) ([bdolman](https://github.com/bdolman))
+- SPM support [\#571](https://github.com/pinterest/PINRemoteImage/pull/571) ([3a4oT](https://github.com/3a4oT))
+- fix: build error when using multiproject config [\#569](https://github.com/pinterest/PINRemoteImage/pull/569) ([hendych](https://github.com/hendych))
+- Integrated UIGraphicsImageRenderer for iOS/tvOS 10.0 and above [\#549](https://github.com/pinterest/PINRemoteImage/pull/549) ([IHEARTCOOKIES](https://github.com/IHEARTCOOKIES))
 ## [3.0.1](https://github.com/Pinterest/PINRemoteImage/tree/3.0.1) (2020-09-08)
 
 [Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/3.0.0...3.0.1)
