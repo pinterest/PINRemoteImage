@@ -37,21 +37,21 @@ case $1 in
 esac
 
 PODSPEC="$PROJECT.podspec"
-CURRENT_VERSION=`grep "version" -m 1 $PODSPEC | sed -E "s/^.*version[ \t]*=[ \t]*'([0-9\.]+)'/\1/"`
-DOT_COUNT=`echo "$CURRENT_VERSION" | grep -o '\.' | wc -l`
+CURRENT_VERSION=$(grep "version" -m 1 $PODSPEC | sed -E "s/^.*version[ \t]*=[ \t]*['\"]([0-9\.]+)['\"]/\1/")
+DOT_COUNT=$(echo "$CURRENT_VERSION" | grep -o '\.' | wc -l)
 
 if [ "$DOT_COUNT" -eq "0" ]; then
     major=$CURRENT_VERSION
     minor="0"
     patch="0"
 elif [ "$DOT_COUNT" -eq "1" ]; then
-    major=`echo "$CURRENT_VERSION" | sed -E "s/([0-9])+\.([0-9]+)/\1/"`
-    minor=`echo "$CURRENT_VERSION" | sed -E "s/([0-9])+\.([0-9]+)/\2/"`
+    major=$(echo "$CURRENT_VERSION" | sed -E "s/([0-9])+\.([0-9]+)/\1/")
+    minor=$(echo "$CURRENT_VERSION" | sed -E "s/([0-9])+\.([0-9]+)/\2/")
     patch="0"
 elif [ "$DOT_COUNT" -eq "2" ]; then
-    major=`echo "$CURRENT_VERSION" | sed -E "s/([0-9])+\.([0-9]+)\.([0-9]+)/\1/"`
-    minor=`echo "$CURRENT_VERSION" | sed -E "s/([0-9])+\.([0-9]+)\.([0-9]+)/\2/"`
-    patch=`echo "$CURRENT_VERSION" | sed -E "s/([0-9])+\.([0-9]+)\.([0-9]+)/\3/"`
+    major=$(echo "$CURRENT_VERSION" | sed -E "s/([0-9])+\.([0-9]+)\.([0-9]+)/\1/")
+    minor=$(echo "$CURRENT_VERSION" | sed -E "s/([0-9])+\.([0-9]+)\.([0-9]+)/\2/")
+    patch=$(echo "$CURRENT_VERSION" | sed -E "s/([0-9])+\.([0-9]+)\.([0-9]+)/\3/")
 fi
 
 echo "Current version: $major.$minor.$patch"
