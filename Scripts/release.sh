@@ -72,7 +72,7 @@ echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 echo "New version: $NEW_VERSION"
 
 echo "Updating $PODSPEC"
-sed -E "s/^(.*version[ \t]*=[ \t]*)'$CURRENT_VERSION'/\1'$NEW_VERSION'/" $PODSPEC > new.podspec
+sed -E "s/^(.*version[ \t]*=[ \t]*)['|\"]$CURRENT_VERSION'/\1'$NEW_VERSION'/" $PODSPEC > new.podspec
 mv new.podspec $PODSPEC
 
 echo "Updating .github_changelog_generator"
