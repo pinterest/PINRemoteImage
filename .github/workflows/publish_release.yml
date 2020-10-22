@@ -13,7 +13,11 @@ jobs:
       # Make sure we can lint before creating the release.
       - name: Cocoapods lint
         run: make cocoapods
+<<<<<<< Updated upstream
       - name: Create Release Branch
+=======
+      - name: Create Release Commit
+>>>>>>> Stashed changes
         env:
           GITHUB_CHANGELOG_API_KEY: ${{ secrets.GITHUB_TOKEN }}
           OSS_PROJECT: PINRemoteImage
