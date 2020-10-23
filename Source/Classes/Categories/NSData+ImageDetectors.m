@@ -131,7 +131,7 @@ static inline BOOL advancePositionWithBytes(NSUInteger *position, Byte *bytes, N
 }
 
 #endif
-
+#if PIN_APNG
 - (BOOL)pin_isAPNG
 {
     const void* bytes = self.bytes;
@@ -165,5 +165,6 @@ static inline BOOL advancePositionWithBytes(NSUInteger *position, Byte *bytes, N
 
     return YES;
 }
+#endif
 
 @end

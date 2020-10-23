@@ -8,6 +8,8 @@
 
 #import "PINAPNGAnimatedImage.h"
 
+#if PIN_APNG
+
 #import <ImageIO/ImageIO.h>
 #if PIN_TARGET_IOS
 #import <MobileCoreServices/UTCoreTypes.h>
@@ -164,3 +166,5 @@
 }
 
 @end
+
+#endif

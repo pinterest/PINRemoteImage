@@ -29,7 +29,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.animatedImageView pin_setImageFromURL:[NSURL URLWithString:@"http://littlesvr.ca/apng/images/o_sample.png"]];
+    [self.animatedImageView pin_setImageFromURL:[NSURL URLWithString:@"https://upload.wikimedia.org/wikipedia/commons/1/14/Animated_PNG_example_bouncing_beach_ball.png"]];
 }
 
 /*

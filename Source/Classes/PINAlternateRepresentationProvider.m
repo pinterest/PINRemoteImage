@@ -23,9 +23,11 @@
         return [[PINCachedAnimatedImage alloc] initWithAnimatedImageData:data];
     }
 #endif
+#if PIN_APNG
     if ([data pin_isAPNG]) {
         return [[PINCachedAnimatedImage alloc] initWithAnimatedImageData:data];
     }
+#endif
     return nil;
 }
 

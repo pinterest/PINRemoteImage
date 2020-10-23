@@ -16,6 +16,7 @@
 #import "PINCachedAnimatedImage.h"
 #import "PINGIFAnimatedImage.h"
 #import "PINWebPAnimatedImage.h"
+#import "PINAPNGAnimatedImage.h"
 #import "PINRemoteImageManager.h"
 #import "PINRemoteImageCategoryManager.h"
 #import "PINRemoteImageManagerResult.h"

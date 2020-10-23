@@ -38,6 +38,14 @@ class PINAnimatedImageTests: XCTestCase, PINRemoteImageManagerAlternateRepresent
         return URL.init(string: "http://ak-cache.legacy.net/legacy/images/fhlogo/7630fhlogo.gif")
     }
     
+    func APNGURL() -> URL? {
+        return URL.init(string: "https://upload.wikimedia.org/wikipedia/commons/1/14/Animated_PNG_example_bouncing_beach_ball.png")
+    }
+    
+    func nonAPNGURL() -> URL? {
+        return URL.init(string: "https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png")
+    }
+
     func testMinimumFrameInterval() {
         let expectation =  self.expectation(description: "Result should be downloaded")
         let imageManager = PINRemoteImageManager.init(sessionConfiguration: nil, alternativeRepresentationProvider: self)
@@ -104,7 +112,7 @@ class PINAnimatedImageTests: XCTestCase, PINRemoteImageManagerAlternateRepresent
         guard let nsdata = data as NSData? else {
             return nil
         }
-        if nsdata.pin_isAnimatedWebP() || nsdata.pin_isAnimatedGIF() {
+        if nsdata.pin_isAnimatedWebP() || nsdata.pin_isAnimatedGIF() || nsdata.pin_isAPNG() {
             return data
         }
         return nil
@@ -127,6 +135,29 @@ class PINAnimatedImageTests: XCTestCase, PINRemoteImageManagerAlternateRepresent
         
         let nonAnimatedExpectation = self.expectation(description: "Non animated image should be downloaded")
         imageManager.downloadImage(with: self.nonAnimatedGIFURL()!) { (result : PINRemoteImageManagerResult) in
+            XCTAssert(result.image != nil && result.alternativeRepresentation == nil)
+            nonAnimatedExpectation.fulfill()
+        }
+        self.waitForExpectations(timeout: self.timeoutInterval(), handler: nil)
+    }
+    
+    func testIsAPNG() {
+        let animatedExpectation =  self.expectation(description: "Animated image should be downloaded")
+        let imageManager = PINRemoteImageManager.init(sessionConfiguration: nil, alternativeRepresentationProvider: self)
+        imageManager.downloadImage(with: self.APNGURL()!) { (result : PINRemoteImageManagerResult) in
+            XCTAssert(result.image == nil)
+            guard let animatedData = result.alternativeRepresentation as? NSData else {
+                XCTAssert(false, "alternativeRepresentation should be able to be coerced into data")
+                return
+            }
+            
+            XCTAssert(animatedData.pin_isAPNG())
+            
+            animatedExpectation.fulfill()
+        }
+        
+        let nonAnimatedExpectation = self.expectation(description: "Non animated image should be downloaded")
+        imageManager.downloadImage(with: self.nonAPNGURL()!) { (result : PINRemoteImageManagerResult) in
             XCTAssert(result.image != nil && result.alternativeRepresentation == nil)
             nonAnimatedExpectation.fulfill()
         }
