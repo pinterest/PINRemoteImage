@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.3](https://github.com/Pinterest/PINRemoteImage/tree/3.0.3) (2020-10-23)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/3.0.2...3.0.3)
+
+
+- Fixes macOS build on newer versions of Xcode [\#581](https://github.com/pinterest/PINRemoteImage/pull/581) ([garrettmoon](https://github.com/garrettmoon))
+
 ## [3.0.2](https://github.com/Pinterest/PINRemoteImage/tree/3.0.2) (2020-10-22)
 
 [Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/3.0.1...3.0.2)
