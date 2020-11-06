@@ -1,6 +1,7 @@
 PLATFORM="platform=iOS Simulator,name=iPhone 8"
 SDK="iphonesimulator"
 SHELL=/bin/bash -o pipefail
+XCODE_MAJOR_VERSION=$(shell xcodebuild -version | HEAD -n 1 | sed -E 's/Xcode ([0-9]+).*/\1/')
 
 .PHONY: all webp cocoapods test carthage analyze spm
 
@@ -22,6 +23,10 @@ test:
 	CODE_SIGNING_REQUIRED=NO | xcpretty
 	
 carthage:
+	if [ ${XCODE_MAJOR_VERSION} -gt 11 ] ; then \
+ 		echo "Carthage no longer works in Xcode 12 https://github.com/Carthage/Carthage/blob/master/Documentation/Xcode12Workaround.md"; \
+ 		exit 1; \
+ 	fi
 	carthage update --no-use-binaries --no-build
 	carthage build --no-use-binaries --no-skip-current
 
