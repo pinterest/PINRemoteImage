@@ -11,7 +11,11 @@
 #import <pthread.h>
 #import <sys/xattr.h>
 
+#if SWIFT_PACKAGE
+@import PINOperation;
+#else
 #import <PINOperation/PINOperation.h>
+#endif
 
 #define PINDiskCacheError(error) if (error) { NSLog(@"%@ (%d) ERROR: %@", \
 [[NSString stringWithUTF8String:__FILE__] lastPathComponent], \

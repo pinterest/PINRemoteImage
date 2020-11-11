@@ -17,18 +17,18 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  A callback block which provides only the cache as an argument
  */
-typedef void (^PINCacheBlock)(id<PINCaching> cache);
+typedef void (^PINCacheBlock)(__kindof id<PINCaching> cache);
 
 /**
  A callback block which provides the cache, key and object as arguments
  */
-typedef void (^PINCacheObjectBlock)(id<PINCaching> cache, NSString *key, id _Nullable object);
+typedef void (^PINCacheObjectBlock)(__kindof id<PINCaching> cache, NSString *key, id _Nullable object);
 
 /**
  A callback block used for enumeration which provides the cache, key and object as arguments plus a stop flag that
  may be flipped by the caller.
  */
-typedef void (^PINCacheObjectEnumerationBlock)(id<PINCaching> cache, NSString *key, id _Nullable object, BOOL *stop);
+typedef void (^PINCacheObjectEnumerationBlock)(__kindof id<PINCaching> cache, NSString *key, id _Nullable object, BOOL *stop);
 
 /**
  A callback block which provides a BOOL value as argument

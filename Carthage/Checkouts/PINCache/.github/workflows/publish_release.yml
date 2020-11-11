@@ -1,0 +1,39 @@
+name: Create Release
+on:
+  workflow_dispatch:
+    inputs:
+      release-type:
+        description: 'The type of release. Must be major, minor or patch'
+        required: true
+jobs:
+  create_release:
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v2
+      # Make sure we can lint before creating the release.
+      - name: Cocoapods lint
+        run: make cocoapods
+      - name: Create Release Branch
+        env:
+          GITHUB_CHANGELOG_API_KEY: ${{ secrets.GITHUB_TOKEN }}
+          OSS_PROJECT: PINCache
+        run: |
+          gem install github_changelog_generator
+          Scripts/release.sh --${{ github.event.inputs.release-type }}
+          git push origin HEAD
+      - name: Tag Release
+        run: Scripts/tag-release-branch.sh
+      - name: Publish Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_CHANGELOG_API_KEY: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          release_name: ${{ env.RELEASE_TAG }}
+          body_path: RELEASE_NOTES.md
+          draft: false
+      - name: Push to Cocoapods
+        env:
+          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+        run: pod trunk push
