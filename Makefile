@@ -1,4 +1,4 @@
-PLATFORM="platform=iOS Simulator,name=iPhone 8"
+PLATFORM="platform=iOS Simulator,name=iPhone 11"
 SDK="iphonesimulator"
 SHELL=/bin/bash -o pipefail
 XCODE_MAJOR_VERSION=$(shell xcodebuild -version | HEAD -n 1 | sed -E 's/Xcode ([0-9]+).*/\1/')
@@ -10,7 +10,6 @@ cocoapods:
 	
 analyze:
 	xcodebuild clean analyze -destination ${PLATFORM} -sdk ${SDK} -workspace PINRemoteImage.xcworkspace -scheme PINRemoteImage \
-	ONLY_ACTIVE_ARCH=NO \
 	CODE_SIGNING_REQUIRED=NO \
 	CLANG_ANALYZER_OUTPUT=plist-html \
 	CLANG_ANALYZER_OUTPUT_DIR="$(shell pwd)/clang" | xcpretty
@@ -19,7 +18,6 @@ analyze:
 	
 test:
 	xcodebuild clean test -destination ${PLATFORM} -sdk ${SDK} -workspace PINRemoteImage.xcworkspace -scheme PINRemoteImage \
-	ONLY_ACTIVE_ARCH=NO \
 	CODE_SIGNING_REQUIRED=NO | xcpretty
 	
 carthage:

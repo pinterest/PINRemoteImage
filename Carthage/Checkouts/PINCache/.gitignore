@@ -23,3 +23,8 @@ xcuserdata
 /.buckd
 
 Carthage/Build
+
+# SPM
+.swiftpm/
+.build/
+Package.resolved

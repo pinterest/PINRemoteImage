@@ -4,9 +4,9 @@
 
 #import <Foundation/Foundation.h>
 
-#import <PINCache/PINCacheMacros.h>
-#import <PINCache/PINCaching.h>
-#import <PINCache/PINCacheObjectSubscripting.h>
+#import "PINCacheMacros.h"
+#import "PINCaching.h"
+#import "PINCacheObjectSubscripting.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

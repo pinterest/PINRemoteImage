@@ -4,10 +4,10 @@
 
 #import <Foundation/Foundation.h>
 
-#import <PINCache/PINCacheMacros.h>
-#import <PINCache/PINCaching.h>
-#import <PINCache/PINDiskCache.h>
-#import <PINCache/PINMemoryCache.h>
+#import "PINCacheMacros.h"
+#import "PINCaching.h"
+#import "PINDiskCache.h"
+#import "PINMemoryCache.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

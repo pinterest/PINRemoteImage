@@ -1,5 +1,26 @@
 # Changelog
 
+## [3.0.3](https://github.com/Pinterest/PINCache/tree/3.0.3) (2020-10-22)
+
+[Full Changelog](https://github.com/Pinterest/PINCache/compare/3.0.2...3.0.3)
+
+
+- Update PINOperation to fix imports [\#293](https://github.com/pinterest/PINCache/pull/293) ([garrettmoon](https://github.com/garrettmoon))
+- Add support for automated releases [\#292](https://github.com/pinterest/PINCache/pull/292) ([garrettmoon](https://github.com/garrettmoon))
+- Fix up imports [\#290](https://github.com/pinterest/PINCache/pull/290) ([garrettmoon](https://github.com/garrettmoon))
+- Fix build issues by removing nested PINOperation.xcodeproj [\#282](https://github.com/pinterest/PINCache/pull/282) ([elliottwilliams](https://github.com/elliottwilliams))
+
+## [3.0.2](https://github.com/Pinterest/PINCache/tree/3.0.2) (2020-10-06)
+
+[Full Changelog](https://github.com/Pinterest/PINCache/compare/3.0.1...3.0.2)
+
+**Merged pull requests:**
+
+- Update checkout action [\#287](https://github.com/pinterest/PINCache/pull/287) ([garrettmoon](https://github.com/garrettmoon))
+- Use make commands on the CI so it actually fails [\#286](https://github.com/pinterest/PINCache/pull/286) ([garrettmoon](https://github.com/garrettmoon))
+- Added SPM support [\#283](https://github.com/pinterest/PINCache/pull/283) ([3a4oT](https://github.com/3a4oT))
+- Fix PINCaching compiling in Xcode 12.0b6 \(\#275\) [\#281](https://github.com/pinterest/PINCache/pull/281) ([sagesse-cn](https://github.com/sagesse-cn))
+
 ## [3.0.1](https://github.com/Pinterest/PINCache/tree/3.0.1) (2020-08-20)
 
 [Full Changelog](https://github.com/Pinterest/PINCache/compare/3.0.1-beta.8...3.0.1)
