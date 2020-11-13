@@ -1,3 +1,15 @@
+# Changelog
+
+## [1.2.1](https://github.com/Pinterest/PINOperation/tree/1.2.1) (2020-10-22)
+
+[Full Changelog](https://github.com/Pinterest/PINOperation/compare/1.2...1.2.1)
+
+
+- Add release script [\#38](https://github.com/pinterest/PINOperation/pull/38) ([garrettmoon](https://github.com/garrettmoon))
+- Only use @import for SPM [\#36](https://github.com/pinterest/PINOperation/pull/36) ([garrettmoon](https://github.com/garrettmoon))
+- Add SPM Test [\#35](https://github.com/pinterest/PINOperation/pull/35) ([garrettmoon](https://github.com/garrettmoon))
+- Remove BUCK target [\#34](https://github.com/pinterest/PINOperation/pull/34) ([adlerj](https://github.com/adlerj))
+
 ## [1.2](https://github.com/Pinterest/PINOperation/tree/1.2) (2020-06-30)
 
 [Full Changelog](https://github.com/Pinterest/PINOperation/compare/1.1.2...1.2)

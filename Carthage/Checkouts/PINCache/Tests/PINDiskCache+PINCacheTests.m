@@ -15,7 +15,7 @@
 - (void)setTtlCacheSync:(BOOL)ttlCache
 {
     [self lock];
-        self->_ttlCache = ttlCache;
+    [self setValue:@(ttlCache) forKey:@"_ttlCache"];
     [self unlock];
 }
 

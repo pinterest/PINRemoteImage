@@ -42,6 +42,7 @@ jobs:
     name: Carthage
     runs-on: macOS-latest
     env:
+      # Carthage is broken in Xcode 12 and above https://github.com/Carthage/Carthage/blob/master/Documentation/Xcode12Workaround.md
       DEVELOPER_DIR: /Applications/Xcode_11.7.app/Contents/Developer
     steps:
       - uses: actions/checkout@v2
