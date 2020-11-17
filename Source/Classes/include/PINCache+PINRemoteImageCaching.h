@@ -6,7 +6,7 @@
 //
 //
 
-#if SWIFT_PACKAGE
+#if !__has_include(<PINCache/PINCache.h>)
 @import PINCache;
 #else
 #import <PINCache/PINCache.h>

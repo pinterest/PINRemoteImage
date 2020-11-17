@@ -6,7 +6,7 @@
 //
 //
 
-#if SWIFT_PACKAGE
+#if !__has_include(<PINOperation/PINOperation.h>)
 @import PINOperation;
 #else
 #import <PINOperation/PINOperation.h>
