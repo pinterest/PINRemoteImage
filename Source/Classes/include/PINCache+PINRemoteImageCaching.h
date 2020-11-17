@@ -7,7 +7,7 @@
 //
 
 #if !__has_include(<PINCache/PINCache.h>)
-@import PINCache;
+#import "PINCache.h"
 #else
 #import <PINCache/PINCache.h>
 #endif

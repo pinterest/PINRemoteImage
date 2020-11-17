@@ -15,7 +15,7 @@
 #endif
 
 #if !__has_include(<PINOperation/PINOperation.h>)
-@import PINOperation;
+#import "PINOperation.h"
 #else
 #import <PINOperation/PINOperation.h>
 #endif
