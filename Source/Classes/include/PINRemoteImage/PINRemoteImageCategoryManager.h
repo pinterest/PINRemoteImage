@@ -1,0 +1,1 @@
+../../PINRemoteImageCategoryManager.h
