@@ -21,12 +21,9 @@ test:
 	CODE_SIGNING_REQUIRED=NO | xcpretty
 	
 carthage:
-	if [ ${XCODE_MAJOR_VERSION} -gt 11 ] ; then \
- 		echo "Carthage no longer works in Xcode 12 https://github.com/Carthage/Carthage/blob/master/Documentation/Xcode12Workaround.md"; \
- 		exit 1; \
- 	fi
-	carthage update --no-use-binaries --no-build
-	carthage build --no-use-binaries --no-skip-current
+	##### Apply workaround https://github.com/Carthage/Carthage/issues/3019#issuecomment-734415287
+ 	./carthage.sh update --no-use-binaries --no-build; \
+ 	./carthage.sh build --no-skip-current;
 
 webp:
 	carthage update --no-use-binaries --no-build
