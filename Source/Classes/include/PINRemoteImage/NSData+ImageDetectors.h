@@ -1,0 +1,1 @@
+../../Categories/NSData+ImageDetectors.h
