@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-#if SWIFT_PACKAGE
-@import PINOperation;
+#if !__has_include(<PINOperation/PINOperation.h>)
+#import "PINOperation.h"
 #else
 #import <PINOperation/PINOperation.h>
 #endif
