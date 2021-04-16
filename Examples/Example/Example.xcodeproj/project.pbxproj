@@ -24,6 +24,7 @@
 		68B3850B1B5572BF004EB26F /* ProgressiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B3850A1B5572BF004EB26F /* ProgressiveViewController.m */; };
 		68B3850E1B5577D4004EB26F /* DegradedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B3850D1B5577D4004EB26F /* DegradedViewController.m */; };
 		9D9328E51C3D4CC200E1F1D3 /* Kitten.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D9328E41C3D4CC200E1F1D3 /* Kitten.m */; };
+		FABFA41B262938420074812A /* Oriented.m in Sources */ = {isa = PBXBuildFile; fileRef = FABFA41A262938420074812A /* Oriented.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,9 @@
 		A5DEC9B706184109844D57E2 /* PINRemoteImage.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = PINRemoteImage.podspec; path = ../PINRemoteImage.podspec; sourceTree = "<group>"; };
 		E2B84DF860DF48B5B22537B6 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		F30E394524AE56850067A777 /* PINRemoteImage copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "PINRemoteImage copy-Info.plist"; path = "/Users/garrettmoon/code/PINRemoteImage/Examples/Example/PINRemoteImage copy-Info.plist"; sourceTree = "<absolute>"; };
+		FABFA419262938420074812A /* Oriented.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Oriented.h; sourceTree = "<group>"; };
+		FABFA41A262938420074812A /* Oriented.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Oriented.m; sourceTree = "<group>"; };
+		FABFA41D262938590074812A /* ImageSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageSource.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,8 +126,11 @@
 		6003F593195388D20070C39A /* PINRemoteImage */ = {
 			isa = PBXGroup;
 			children = (
+				FABFA41D262938590074812A /* ImageSource.h */,
 				9D9328E31C3D4CC200E1F1D3 /* Kitten.h */,
 				9D9328E41C3D4CC200E1F1D3 /* Kitten.m */,
+				FABFA419262938420074812A /* Oriented.h */,
+				FABFA41A262938420074812A /* Oriented.m */,
 				6003F59C195388D20070C39A /* PINAppDelegate.h */,
 				6003F59D195388D20070C39A /* PINAppDelegate.m */,
 				6003F59F195388D20070C39A /* Main.storyboard */,
@@ -287,6 +294,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				68B385081B557116004EB26F /* WebPViewController.m in Sources */,
+				FABFA41B262938420074812A /* Oriented.m in Sources */,
 				68B3850B1B5572BF004EB26F /* ProgressiveViewController.m in Sources */,
 				9D9328E51C3D4CC200E1F1D3 /* Kitten.m in Sources */,
 				6003F59E195388D20070C39A /* PINAppDelegate.m in Sources */,

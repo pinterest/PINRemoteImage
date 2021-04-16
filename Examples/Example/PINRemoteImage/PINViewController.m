@@ -12,12 +12,14 @@
 #import <PINRemoteImage/PINImageView+PINRemoteImage.h>
 #import <PINRemoteImage/PINRemoteImageCaching.h>
 
+#import "ImageSource.h"
 #import "Kitten.h"
+#import "Oriented.h"
 
 @interface PINViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (nonatomic, strong) UICollectionView *collectionView;
-@property (nonatomic, strong) NSMutableArray *kittens;
+@property (nonatomic, strong) NSMutableArray *images;
 
 @end
 
@@ -40,8 +42,18 @@
 
 - (void)fetchKittenImages
 {
-    [Kitten fetchKittenForWidth:CGRectGetWidth(self.collectionView.frame) completion:^(NSArray *kittens) {
-        [self.kittens addObjectsFromArray:kittens];
+    [Kitten fetchImagesForWidth:CGRectGetWidth(self.collectionView.frame) completion:^(NSArray *kittens) {
+        [self.images removeAllObjects];
+        [self.images addObjectsFromArray:kittens];
+        [self.collectionView reloadData];
+    }];
+}
+
+- (void)fetchOrientedImages
+{
+    [Oriented fetchImagesForWidth:CGRectGetWidth(self.collectionView.frame) completion:^(NSArray *oriented) {
+        [self.images removeAllObjects];
+        [self.images addObjectsFromArray:oriented];
         [self.collectionView reloadData];
     }];
 }
@@ -56,16 +68,16 @@
     [self.collectionView registerClass:[PINImageCell class] forCellWithReuseIdentifier:NSStringFromClass([PINImageCell class])];
     [self.view addSubview:self.collectionView];
     
-    self.kittens = [[NSMutableArray alloc] init];
-    [self fetchKittenImages];
+    self.images = [[NSMutableArray alloc] init];
+    [self fetchOrientedImages];
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView
                   layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    Kitten *kitten = [self.kittens objectAtIndex:indexPath.item];
-    return kitten.imageSize;
+    id<ImageSource> image = [self.images objectAtIndex:indexPath.item];
+    return image.imageSize;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -75,18 +87,18 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.kittens.count;
+    return self.images.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     PINImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([PINImageCell class]) forIndexPath:indexPath];
-    Kitten *kitten = [self.kittens objectAtIndex:indexPath.item];
-    cell.backgroundColor = kitten.dominantColor;
+    id<ImageSource> image = [self.images objectAtIndex:indexPath.item];
+    cell.backgroundColor = image.dominantColor;
     cell.imageView.alpha = 0.0f;
     __weak PINImageCell *weakCell = cell;
     
-    [cell.imageView pin_setImageFromURL:kitten.imageURL
+    [cell.imageView pin_setImageFromURL:image.imageURL
                              completion:^(PINRemoteImageManagerResult *result) {
                                  if (result.requestDuration > 0.25) {
                                      [UIView animateWithDuration:0.3 animations:^{
