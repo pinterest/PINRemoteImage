@@ -23,3 +23,7 @@
 #import "PINProgressiveImage.h"
 #import "PINURLSessionManager.h"
 #import "PINRequestRetryStrategy.h"
+#import "PINAnimatedImageView.h"
+#import "PINAnimatedImageView+PINRemoteImage.h"
+#import "PINButton+PINRemoteImage.h"
+#import "PINImageView+PINRemoteImage.h"
