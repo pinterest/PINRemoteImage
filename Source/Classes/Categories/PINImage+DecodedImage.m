@@ -218,8 +218,22 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
     // Rotate rect by transformation
     CGRect rotatedRect = CGRectApplyAffineTransform(CGRectMake(0.0, 0.0, imageSize.width, imageSize.height), transform);
     
+    // Do not use rotated rect for renderer size as renderer contexts will round up pixel sizes
+    // and affine transformations when applied to CGFloats have a different rounding tolerance
+    CGSize contextSize = imageSize;
+    switch (orientation) {
+        case UIImageOrientationLeft:
+        case UIImageOrientationLeftMirrored:
+        case UIImageOrientationRight:
+        case UIImageOrientationRightMirrored:
+            contextSize = CGSizeMake(contextSize.height, contextSize.width);
+            break;
+        default:
+            break;
+    }
+    
     // Use graphics renderer to render image
-    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:rotatedRect.size format:format];
+    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:contextSize format:format];
     
     return [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
         CGContextRef ctx = rendererContext.CGContext;
