@@ -105,6 +105,7 @@
 		A7343C5B228993D100972894 /* NSHTTPURLResponse+MaxAge.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD28EAE81695DDF84BB76B8 /* NSHTTPURLResponse+MaxAge.m */; };
 		A7343C60228993F400972894 /* NSHTTPURLResponse+MaxAge.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD28EAE81695DDF84BB76B8 /* NSHTTPURLResponse+MaxAge.m */; };
 		ACD28AB87FABF6BA3B9BF4E4 /* NSDate+PINCacheTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD28D963D79EEC14EE071CE /* NSDate+PINCacheTests.m */; };
+		BD9F6A5A265E29670069BB12 /* libwebp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD9F6A59265E29670069BB12 /* libwebp.framework */; };
 		D93A340224182D46005EB15E /* TestAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A340124182D46005EB15E /* TestAnimatedImage.m */; };
 		D93A340324182D46005EB15E /* TestAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A340124182D46005EB15E /* TestAnimatedImage.m */; };
 		F1B918FF1BCF23C900710963 /* PINRemoteImageCategoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B918DC1BCF23C800710963 /* PINRemoteImageCategoryManager.m */; };
@@ -121,8 +122,6 @@
 		F1B9191C1BCF23C900710963 /* PINRemoteImageTask.h in Headers */ = {isa = PBXBuildFile; fileRef = F1B918FB1BCF23C800710963 /* PINRemoteImageTask.h */; };
 		F1B9191D1BCF23C900710963 /* PINRemoteImageTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B918FC1BCF23C800710963 /* PINRemoteImageTask.m */; };
 		F1B9191F1BCF23C900710963 /* PINURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B918FE1BCF23C900710963 /* PINURLSessionManager.m */; };
-		F370FD6624AD0F6D0026A9D9 /* WebPDemux.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F370FD6524AD0F6D0026A9D9 /* WebPDemux.framework */; };
-		F370FD6924AD0F920026A9D9 /* WebPDecoder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F370FD6824AD0F920026A9D9 /* WebPDecoder.framework */; };
 		FBC8209C2526277E007FD40D /* PINURLSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FBC820812526277E007FD40D /* PINURLSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FBC8209D2526277E007FD40D /* PINURLSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FBC820812526277E007FD40D /* PINURLSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FBC8209E2526277E007FD40D /* PINRemoteImageCategoryManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FBC820822526277E007FD40D /* PINRemoteImageCategoryManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -183,15 +182,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		687BB0A81E526FE0005D70C6 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		687BB0B11E527EBC005D70C6 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -262,6 +252,7 @@
 		ACD28A0374E664CFF0BB3297 /* NSHTTPURLResponse+MaxAge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSHTTPURLResponse+MaxAge.h"; sourceTree = "<group>"; };
 		ACD28D963D79EEC14EE071CE /* NSDate+PINCacheTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+PINCacheTests.m"; sourceTree = "<group>"; };
 		ACD28EAE81695DDF84BB76B8 /* NSHTTPURLResponse+MaxAge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSHTTPURLResponse+MaxAge.m"; sourceTree = "<group>"; };
+		BD9F6A59265E29670069BB12 /* libwebp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = libwebp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D93A340024182D46005EB15E /* TestAnimatedImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestAnimatedImage.h; sourceTree = "<group>"; };
 		D93A340124182D46005EB15E /* TestAnimatedImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestAnimatedImage.m; sourceTree = "<group>"; };
 		F1B918D11BCF239200710963 /* PINRemoteImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PINRemoteImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -335,8 +326,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F370FD6624AD0F6D0026A9D9 /* WebPDemux.framework in Frameworks */,
-				F370FD6924AD0F920026A9D9 /* WebPDecoder.framework in Frameworks */,
+				BD9F6A5A265E29670069BB12 /* libwebp.framework in Frameworks */,
 				68837709252F9D5300B9C290 /* PINOperation.framework in Frameworks */,
 				68837707252F9D5300B9C290 /* PINCache.framework in Frameworks */,
 			);
@@ -348,6 +338,7 @@
 		6818C1531E551B5900875DB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BD9F6A59265E29670069BB12 /* libwebp.framework */,
 				6883770A252F9D7800B9C290 /* PINCache.framework */,
 				6883770C252F9D7800B9C290 /* PINOperation.framework */,
 				68837706252F9D5300B9C290 /* PINCache.framework */,
@@ -720,7 +711,6 @@
 			buildConfigurationList = F1B918D91BCF239200710963 /* Build configuration list for PBXNativeTarget "PINRemoteImage" */;
 			buildPhases = (
 				F1B918CC1BCF239200710963 /* Sources */,
-				687BB0A81E526FE0005D70C6 /* CopyFiles */,
 				F1B918CD1BCF239200710963 /* Frameworks */,
 				F1B918CE1BCF239200710963 /* Headers */,
 			);
@@ -1159,7 +1149,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = Carthage/Build/iOS;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1174,7 +1164,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "Carthage/Checkouts/libwebp/**";
+				HEADER_SEARCH_PATHS = "Carthage/Checkouts/libwebp-Xcode/include/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1222,7 +1212,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = Carthage/Build/iOS;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
@@ -1232,7 +1222,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "Carthage/Checkouts/libwebp/**";
+				HEADER_SEARCH_PATHS = "Carthage/Checkouts/libwebp-Xcode/include/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = "";
@@ -1256,19 +1246,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-					"$(PROJECT_DIR)/Carthage/Build/tvOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/libwebp/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/libwebp/Carthage/Build/Mac",
-					"$(PROJECT_DIR)/Carthage/Checkouts/libwebp/Carthage/Build/tvOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/Mac",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/tvOS",
-					"$(PROJECT_DIR)/webp",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"PIN_WEBP=1",
 					"$(inherited)",
@@ -1291,19 +1269,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-					"$(PROJECT_DIR)/Carthage/Build/tvOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/libwebp/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/libwebp/Carthage/Build/Mac",
-					"$(PROJECT_DIR)/Carthage/Checkouts/libwebp/Carthage/Build/tvOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/Mac",
-					"$(PROJECT_DIR)/Carthage/Checkouts/PINCache/Carthage/Build/tvOS",
-					"$(PROJECT_DIR)/webp",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"PIN_WEBP=1",
 					"$(inherited)",

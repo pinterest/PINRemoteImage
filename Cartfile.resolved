@@ -1,0 +1,3 @@
+github "SDWebImage/libwebp-Xcode" "1.2.0"
+github "pinterest/PINCache" "3.0.3"
+github "pinterest/PINOperation" "1.2.1"
