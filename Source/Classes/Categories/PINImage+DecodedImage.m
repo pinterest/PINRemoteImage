@@ -122,12 +122,6 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
         return nil;
     }
     
-#if PIN_WEBP
-    if ([data pin_isWebP]) {
-        return [PINImage pin_imageWithWebPData:data];
-    }
-#endif
-    
     PINImage *decodedImage = nil;
     
     CGImageSourceRef imageSourceRef = CGImageSourceCreateWithData((CFDataRef)data, NULL);
@@ -156,6 +150,12 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
         CFRelease(imageSourceRef);
     }
     
+#if PIN_WEBP
+    if (!decodedImage && [data pin_isWebP]) {
+        return [PINImage pin_imageWithWebPData:data];
+    }
+#endif
+
     return decodedImage;
 }
 
