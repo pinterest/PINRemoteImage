@@ -82,7 +82,7 @@ static enum WEBP_CSP_MODE webp_cs_mode_from_cg_bitmap_info(CGBitmapInfo info, BO
     NSAssert(ctx != NULL, @"Failed to get CG context.");
     BOOL getColorspaceFailed = NO;
     cfg.output.colorspace = webp_cs_mode_from_cg_bitmap_info(CGBitmapContextGetBitmapInfo(ctx),
-                                                             &fail);
+                                                             &getColorspaceFailed);
     if (getColorspaceFailed) {
         PIN_WEBP_DECODE_CLEANUP();
         return nil;
