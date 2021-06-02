@@ -12,14 +12,7 @@
 
 #import "webp/decode.h"
 
-static void releaseData(void *info, const void *data, size_t size)
-{
-    WebPFree((void *)data);
-}
-
 @implementation PINImage (PINWebP)
-
-#if PIN_TARGET_IOS
 
 static enum WEBP_CSP_MODE webp_cs_mode_from_cg_bitmap_info(CGBitmapInfo info, BOOL *fail) {
     CGImageByteOrderInfo byteOrder = info & kCGBitmapByteOrderMask;
@@ -59,6 +52,12 @@ static enum WEBP_CSP_MODE webp_cs_mode_from_cg_bitmap_info(CGBitmapInfo info, BO
     }
 }
 
+#if PIN_TARGET_IOS
+#define PIN_WEBP_DECODE_CLEANUP() UIGraphicsEndImageContext()
+#elif PIN_TARGET_MAC
+#define PIN_WEBP_DECODE_CLEANUP() [image unlockFocus]
+#endif
+
 // For iOS we let the system decide all the bitmap options for us, so Core Animation won't have
 // to copy our images over to the render server. Use "Color Copied Images" in the iOS simulator to
 // detect this case.
@@ -70,13 +69,22 @@ static enum WEBP_CSP_MODE webp_cs_mode_from_cg_bitmap_info(CGBitmapInfo info, BO
         return nil;
     }
     CGSize size = CGSizeMake(cfg.input.width, cfg.input.height);
+    CGContextRef ctx = NULL;
+    PINImage *image;
+#if PIN_TARGET_IOS
     UIGraphicsBeginImageContextWithOptions(size, !cfg.input.has_alpha, 1.0);
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    BOOL fail = NO;
+    ctx = UIGraphicsGetCurrentContext();
+#elif PIN_TARGET_MAC
+    image = [[NSImage alloc] initWithSize:NSSizeFromCGSize(size)];
+    [image lockFocus];
+    ctx = NSGraphicsContext.currentContext.CGContext;
+#endif
+    NSAssert(ctx != NULL, @"Failed to get CG context.");
+    BOOL getColorspaceFailed = NO;
     cfg.output.colorspace = webp_cs_mode_from_cg_bitmap_info(CGBitmapContextGetBitmapInfo(ctx),
                                                              &fail);
-    if (fail) {
-        UIGraphicsEndImageContext();
+    if (getColorspaceFailed) {
+        PIN_WEBP_DECODE_CLEANUP();
         return nil;
     }
     cfg.output.width = cfg.input.width;
@@ -86,72 +94,14 @@ static enum WEBP_CSP_MODE webp_cs_mode_from_cg_bitmap_info(CGBitmapInfo info, BO
     cfg.output.u.RGBA.stride = (int)CGBitmapContextGetBytesPerRow(ctx);
     cfg.output.u.RGBA.size = cfg.output.u.RGBA.stride * cfg.input.height;
     int status = WebPDecode(webPData.bytes, webPData.length, &cfg);
-    UIImage *image = nil;
+#if PIN_TARGET_IOS
     if (status == VP8_STATUS_OK) {
         image = UIGraphicsGetImageFromCurrentImageContext();
     }
-    UIGraphicsEndImageContext();
-    return image;
-}
-
-#elif PIN_TARGET_MAC
-
-// TODO: Can we get the optimal bitmap config from macOS like we do for iOS?
-+ (PINImage *)pin_imageWithWebPData:(NSData *)webPData
-{
-    WebPBitstreamFeatures features;
-    if (WebPGetFeatures([webPData bytes], [webPData length], &features) == VP8_STATUS_OK) {
-        // Decode the WebP image data into a RGBA value array
-        int height, width;
-        uint8_t *data = NULL;
-        int pixelLength = 0;
-        
-        if (features.has_alpha) {
-            data = WebPDecodeRGBA([webPData bytes], [webPData length], &width, &height);
-            pixelLength = 4;
-        } else {
-            data = WebPDecodeRGB([webPData bytes], [webPData length], &width, &height);
-            pixelLength = 3;
-        }
-        
-        if (data) {
-            CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, data, width * height * pixelLength, releaseData);
-            
-            CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
-            CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
-            
-            if (features.has_alpha) {
-                bitmapInfo |= kCGImageAlphaLast;
-            } else {
-                bitmapInfo |= kCGImageAlphaNone;
-            }
-            
-            CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
-            CGImageRef imageRef = CGImageCreate(width,
-                                                height,
-                                                8,
-                                                8 * pixelLength,
-                                                pixelLength * width,
-                                                colorSpaceRef,
-                                                bitmapInfo,
-                                                provider,
-                                                NULL,
-                                                NO,
-                                                renderingIntent);
-            
-            PINImage *image = [[self alloc] initWithCGImage:imageRef size:CGSizeZero];
-            
-            CGImageRelease(imageRef);
-            CGColorSpaceRelease(colorSpaceRef);
-            CGDataProviderRelease(provider);
-            
-            return image;
-        }
-    }
-    return nil;
-}
-
 #endif
+    PIN_WEBP_DECODE_CLEANUP();
+    return status == VP8_STATUS_OK ? image : nil;
+}
 
 @end
 
