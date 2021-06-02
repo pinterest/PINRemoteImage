@@ -58,7 +58,7 @@ static enum WEBP_CSP_MODE webp_cs_mode_from_cg_bitmap_info(CGBitmapInfo info, BO
 #define PIN_WEBP_DECODE_CLEANUP() [image unlockFocus]
 #endif
 
-// For iOS we let the system decide all the bitmap options for us, so Core Animation won't have
+// We let the system decide all the bitmap options for us, so Core Animation won't have
 // to copy our images over to the render server. Use "Color Copied Images" in the iOS simulator to
 // detect this case.
 + (PINImage *)pin_imageWithWebPData:(NSData *)webPData
