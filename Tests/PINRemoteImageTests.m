@@ -388,7 +388,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (void)testImageRequestIgnoresLocalData
 {
-    XCTestExpectation *expectation = [self expectationWithDescription:@"xxx"];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Verify cache policy of request"];
     
     self.imageManager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:nil];
     self.imageManager.sessionManager.delegate = self;
