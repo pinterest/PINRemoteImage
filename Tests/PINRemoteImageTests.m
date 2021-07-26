@@ -386,6 +386,25 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
 }
 
+- (void)testImageRequestIgnoresLocalData
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Verify cache policy of request"];
+    
+    self.imageManager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:nil];
+    self.imageManager.sessionManager.delegate = self;
+    
+    [self.imageManager setRequestConfiguration:^NSURLRequest * _Nonnull(NSURLRequest * _Nonnull request) {
+        XCTAssertEqual(request.cachePolicy, NSURLRequestReloadIgnoringLocalCacheData);
+        [expectation fulfill];
+        return request;
+    }];
+  
+    [self.imageManager downloadImageWithURL:[self headersURL]
+                                    options:PINRemoteImageManagerDownloadOptionsIgnoreCache
+                                 completion:nil];
+    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+}
+
 - (void)testRequestConfigurationIsUsedForImageRequest
 {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Requestion configuration block was called image request"];

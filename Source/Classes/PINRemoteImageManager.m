@@ -859,7 +859,7 @@ static dispatch_once_t sharedDispatchToken;
                         UUID:(NSUUID *)UUID
 {
     PINResume *resume = nil;
-    if ((options & PINRemoteImageManagerDownloadOptionsIgnoreCache) == NO) {
+    if ((options & PINRemoteImageManagerDownloadOptionsIgnoreCache) == 0) {
         NSString *resumeKey = [self resumeCacheKeyForURL:url];
         resume = [self.cache objectFromDiskForKey:resumeKey];
         [self.cache removeObjectForKey:resumeKey completion:nil];
@@ -869,7 +869,7 @@ static dispatch_once_t sharedDispatchToken;
         PINRemoteImageDownloadTask *task = [self.tasks objectForKey:key];
     [self unlock];
     
-    [task scheduleDownloadWithRequest:[self requestWithURL:url task:task]
+    [task scheduleDownloadWithRequest:[self requestWithURL:url task:task downloadOption:options]
                                resume:resume
                             skipRetry:(options & PINRemoteImageManagerDownloadOptionsSkipRetry)
                              priority:priority
@@ -964,9 +964,14 @@ static dispatch_once_t sharedDispatchToken;
     return NO;
 }
 
-- (NSURLRequest *)requestWithURL:(NSURL *)url task:(PINRemoteImageTask *)task
+- (NSURLRequest *)requestWithURL:(NSURL *)url task:(PINRemoteImageTask *)task downloadOption:(PINRemoteImageManagerDownloadOptions)options
 {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    //set request cache policy as caller might pass in their own NSURLSessionConfiguration that enables cache
+    if ((options & PINRemoteImageManagerDownloadOptionsIgnoreCache) != 0) {
+        request.cachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
+    }
 
     NSMutableDictionary *headers = [self.httpHeaderFields mutableCopy];
     
