@@ -10,4 +10,7 @@
    <FileRef
       location = "group:Carthage/Checkouts/PINOperation/PINOperation.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/libwebp-Xcode/libwebp.xcodeproj">
+   </FileRef>
 </Workspace>
