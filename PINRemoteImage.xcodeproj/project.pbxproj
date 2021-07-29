@@ -97,7 +97,7 @@
 		939546C02220AF84006031BB /* PINRemoteImageManagerConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 939546BE2220AF84006031BB /* PINRemoteImageManagerConfiguration.h */; };
 		939546C12220AF84006031BB /* PINRemoteImageManagerConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 939546BF2220AF84006031BB /* PINRemoteImageManagerConfiguration.m */; };
 		9A079DD826826EFD00F2E70A /* PINImage+AlternativeTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A079DD726826EFD00F2E70A /* PINImage+AlternativeTypes.m */; };
-		9A079DE1268270F900F2E70A /* PINImage+AlternativeTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A079DDB26826F0E00F2E70A /* PINImage+AlternativeTypes.h */; };
+		9A079DE1268270F900F2E70A /* PINImage+AlternativeTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A079DDB26826F0E00F2E70A /* PINImage+AlternativeTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9DD47F9D1C699F4B00F12CA0 /* PINButton+PINRemoteImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DD47F991C699F4B00F12CA0 /* PINButton+PINRemoteImage.m */; };
 		9DD47F9F1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DD47F9B1C699F4B00F12CA0 /* PINImageView+PINRemoteImage.m */; };
 		9DD47FA41C699FDC00F12CA0 /* PINImage+DecodedImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DD47FA01C699FDC00F12CA0 /* PINImage+DecodedImage.h */; };
@@ -639,9 +639,9 @@
 				FBC820B22526277E007FD40D /* PINRemoteImageManager.h in Headers */,
 				FBC820A62526277E007FD40D /* PINAnimatedImageView+PINRemoteImage.h in Headers */,
 				FBC820A22526277E007FD40D /* PINProgressiveImage.h in Headers */,
+				9A079DE1268270F900F2E70A /* PINImage+AlternativeTypes.h in Headers */,
 				939546C02220AF84006031BB /* PINRemoteImageManagerConfiguration.h in Headers */,
 				FBC820BA2526277E007FD40D /* PINButton+PINRemoteImage.h in Headers */,
-				9A079DE1268270F900F2E70A /* PINImage+AlternativeTypes.h in Headers */,
 				FBC820B82526277E007FD40D /* PINRemoteImageMacros.h in Headers */,
 				FBC820AE2526277E007FD40D /* PINGIFAnimatedImage.h in Headers */,
 				FBC8209E2526277E007FD40D /* PINRemoteImageCategoryManager.h in Headers */,
