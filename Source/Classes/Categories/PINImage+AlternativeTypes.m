@@ -11,36 +11,27 @@
 
 @implementation PINImage (AlternativeTypes)
 
-+ (void)pin_registerCustomDecoder:(id<PINImageCustomDecoder>)customDecoder {
-  NSMutableArray<id<PINImageCustomDecoder>> *decoders = [PINImage pin_decoders];
-  [decoders addObject:customDecoder];
-  objc_setAssociatedObject(self, @selector(pin_registerCustomDecoder:), decoders, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-
-}
-
 - (nullable NSData *)pin_encodedImageData {
   return (NSData *)objc_getAssociatedObject(self, @selector(pin_encodedImageData));
 }
 
 - (void)setPin_encodedImageData:(NSData *)data {
-  objc_setAssociatedObject(self, @selector(pin_encodedImageData), data, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+  objc_setAssociatedObject(self, @selector(pin_encodedImageData), data, OBJC_ASSOCIATION_RETAIN);
 }
 
-- (nullable PINImage *)pin_decodedImageUsingCustomDecodersWithSize:(CGSize)size {
-  NSMutableArray<id<PINImageCustomDecoder>> *decoders = [PINImage pin_decoders];
-  for (id<PINImageCustomDecoder> decoder in decoders) {
-    if ([decoder canRender:self.pin_encodedImageData]) {
-      return [decoder imageFromData:self.pin_encodedImageData targetSize:size];
-    }
-  }
-
-  return nil;
+- (nullable id<PINImageCustomDecoder>)pin_encodedImageDataCustomDecoder {
+  return (id<PINImageCustomDecoder>)objc_getAssociatedObject(
+      self, @selector(pin_encodedImageDataCustomDecoder));
 }
 
-#pragma mark - Private
+- (void)setPin_encodedImageDataCustomDecoder:(id<PINImageCustomDecoder>)customDecoder {
+  objc_setAssociatedObject(self, @selector(pin_encodedImageDataCustomDecoder), customDecoder,
+                           OBJC_ASSOCIATION_RETAIN);
+}
 
-+ (NSMutableArray<id<PINImageCustomDecoder>> *)pin_decoders {
-  return objc_getAssociatedObject(self, @selector(pin_registerCustomDecoder:)) ?: [NSMutableArray array];
+- (nullable PINImage *)pin_decodedImageUsingCustomDecoderWithSize:(CGSize)size {
+  return [self.pin_encodedImageDataCustomDecoder imageFromData:self.pin_encodedImageData
+                                                       targetSize:size];
 }
 
 @end
