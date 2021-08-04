@@ -96,6 +96,8 @@
 		
 		<option value="//api/name/initWithSessionConfiguration:">- initWithSessionConfiguration:</option>
 		
+		<option value="//api/name/initWithSessionConfiguration:alternativeRepresentationProvider:">- initWithSessionConfiguration:alternativeRepresentationProvider:</option>
+		
 		<option value="//api/name/prefetchImageWithURL:">- prefetchImageWithURL:</option>
 		
 		<option value="//api/name/prefetchImageWithURL:options:">- prefetchImageWithURL:options:</option>
@@ -191,7 +193,7 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Create and return a PINRemoteImageManager created with the specified configuration. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. You specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc.</p>
+				<p>Create and return a PINRemoteImageManager created with the specified configuration. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. Specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc.</p>
 			</div>
 			
 		    
@@ -207,6 +209,69 @@
 					<tr>
 						<th scope="row" class="argument-name"><code>configuration</code></th>
 						<td><p>The configuration used to create the PINRemoteImageManager.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A PINRemoteImageManager with the specified configuration.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">PINRemoteImageManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/initWithSessionConfiguration:alternativeRepresentationProvider:" title="initWithSessionConfiguration:alternativeRepresentationProvider:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithSessionConfiguration:alternativeRepresentationProvider:">&ndash;&nbsp;initWithSessionConfiguration:alternativeRepresentationProvider:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Create and return a PINRemoteImageManager with the specified configuration and alternative representation delegate. If configuration is nil, [NSURLSessionConfiguration defaultConfiguration] is used. Specify a custom configuration if you need to configure timeout values, cookie policies, additional HTTP headers, etc. If alternativeRepresentationProvider is nil, the default is used (and supports FLAnimatedImage).</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (nonnull instancetype)initWithSessionConfiguration:(nullable NSURLSessionConfiguration *)<em>configuration</em> alternativeRepresentationProvider:(nullable id&lt;PINRemoteImageManagerAlternateRepresentationProvider&gt;)<em>alternateRepDelegate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>configuration</code></th>
+						<td><p>The configuration used to create the PINRemoteImageManager.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>alternativeRepDelegate</code></th>
+						<td><p>a delegate which conforms to the PINRemoteImageManagerAlternateRepresentationProvider protocol. Provide a delegate if you want to have non image results. @see PINAlternativeRepresentationDelaget for an example.</p></td>
 					</tr>
 				
 				</table>
@@ -1069,7 +1134,7 @@
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>options</code></th>
-						<td><p>PINRemoteImageManagerDownloadOptions options with which to pefetch the image.</p></td>
+						<td><p>PINRemoteImageManagerDownloadOptions options with which to prefetch the image.</p></td>
 					</tr>
 				
 				</table>
@@ -1180,7 +1245,7 @@
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>options</code></th>
-						<td><p>PINRemoteImageManagerDownloadOptions options with which to pefetch the image.</p></td>
+						<td><p>PINRemoteImageManagerDownloadOptions options with which to prefetch the image.</p></td>
 					</tr>
 				
 				</table>
@@ -2045,7 +2110,7 @@
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>options</code></th>
-						<td><p>optoins will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.</p></td>
+						<td><p>options will be used to determine if the cached image should be decompressed or FLAnimatedImages should be returned.</p></td>
 					</tr>
 				
 				</table>
@@ -2276,7 +2341,7 @@
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2016 Pinterest. All rights reserved. Updated: 2016-03-20</p>
+						<p class="copyright">Copyright &copy; 2016 Pinterest. All rights reserved. Updated: 2016-04-08</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>

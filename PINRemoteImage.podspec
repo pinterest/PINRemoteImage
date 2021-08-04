@@ -9,62 +9,73 @@
 
 Pod::Spec.new do |s|
   s.name             = "PINRemoteImage"
-  s.version          = "2.1.4"
+  s.version          = "3.0.3"
   s.summary          = "A thread safe, performant, feature rich image fetcher"
   s.homepage         = "https://github.com/pinterest/PINRemoteImage"
   s.license          = 'Apache 2.0'
   s.author           = { "Garrett Moon" => "garrett@pinterest.com" }
   s.source           = { :git => "https://github.com/pinterest/PINRemoteImage.git", :tag => s.version.to_s }
-  s.social_media_url = 'https://twitter.com/garrettmoon'
+  s.prefix_header_file = false
+  # s.social_media_url = 'https://twitter.com/garrettmoon'
 
-  s.ios.deployment_target = "6.0"
-  s.osx.deployment_target = "10.8"
-  s.tvos.deployment_target = "9.0"
+  ios_deployment = "8.0"
+  tvos_deployment = "9.0"
+  osx_deployment = "10.11"
+  s.ios.deployment_target = ios_deployment
+  s.tvos.deployment_target = tvos_deployment
   s.requires_arc = true
   
-  # Include optional FLAnimatedImage module
-  s.default_subspecs = 'FLAnimatedImage'
+  s.default_subspecs = 'PINCache'
   
   ### Subspecs
   s.subspec 'Core' do |cs|
-    cs.source_files = 'Pod/Classes/**/*.{h,m}'
-    cs.exclude_files = 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h', 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m'
-    cs.public_header_files = 'Pod/Classes/**/*.h'
+    cs.dependency 'PINOperation'
+    cs.ios.deployment_target = ios_deployment
+    cs.tvos.deployment_target = tvos_deployment
+    cs.osx.deployment_target = osx_deployment
+    cs.source_files = 'Source/Classes/**/*.{h,m}'
+    cs.public_header_files = 'Source/Classes/**/*.h'
+    cs.exclude_files = 'Source/Classes/PINCache/*.{h,m}', 'Source/Classes/include/PINCache+PINRemoteImageCaching.h'
     cs.frameworks = 'ImageIO', 'Accelerate'
-    cs.dependency 'PINCache', '>=2.1'
   end
   
   s.subspec 'iOS' do |ios|
-    ios.platforms = "ios"
+    ios.ios.deployment_target = ios_deployment
+    ios.tvos.deployment_target = tvos_deployment
     ios.dependency 'PINRemoteImage/Core'
     ios.frameworks = 'UIKit'
   end
 
   s.subspec 'OSX' do |cs|
-    cs.platforms = "osx"
+    cs.osx.deployment_target = osx_deployment
     cs.dependency 'PINRemoteImage/Core'
-    cs.frameworks = 'Cocoa'
+    cs.frameworks = 'Cocoa', 'CoreServices'
   end
 
+  # The tvOS spec is no longer necessary, iOS should be used instead.
   s.subspec 'tvOS' do |tvos|
-    tvos.platforms = "tvos"
-    tvos.dependency 'PINRemoteImage/Core'
-    tvos.frameworks = 'UIKit'
-  end
-
-  s.subspec "FLAnimatedImage" do |fs|
-    fs.platforms = "ios"
-    fs.dependency 'PINRemoteImage/Core'
-    fs.source_files = 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.h', 'Pod/Classes/Image Categories/FLAnimatedImageView+PINRemoteImage.m'
-    fs.dependency 'FLAnimatedImage', '>= 1.0'
+    tvos.dependency 'PINRemoteImage/iOS'
   end
 
   s.subspec 'WebP' do |webp|
+    webp.ios.deployment_target = ios_deployment
+    webp.tvos.deployment_target = tvos_deployment
+    webp.osx.deployment_target = osx_deployment
     webp.xcconfig = {
-        'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) PIN_WEBP=1',
+        'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) PIN_WEBP=1', 
         'USER_HEADER_SEARCH_PATHS' => '$(inherited) $(SRCROOT)/libwebp/src'
     }
     webp.dependency 'PINRemoteImage/Core'
     webp.dependency 'libwebp'
   end
+  
+  s.subspec "PINCache" do |pc|
+    pc.dependency 'PINRemoteImage/Core'
+    pc.dependency 'PINCache', '~> 3.0.3'
+    pc.ios.deployment_target = ios_deployment
+    pc.tvos.deployment_target = tvos_deployment
+    pc.osx.deployment_target = osx_deployment
+    pc.source_files = 'Source/Classes/PINCache/*.{h,m}', 'Source/Classes/include/PINCache+PINRemoteImageCaching.h'
+  end
+  
 end

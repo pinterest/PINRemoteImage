@@ -1,16 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/PINRemoteImageCategoryManager.html">
+	<File path="Classes/PINProgressiveImage.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/PINRemoteImageCategoryManager</TokenIdentifier>
-			<Abstract type="html">PINRemoteImageCategoryManager is a class that handles subclassing image display classes. PINImage+PINRemoteImage, UIButton+PINRemoteImage, etc, all delegate their work to this class. If you&apos;d like to create a category to display an image on a view, you should mimic one of the above categories.</Abstract>
-			<DeclaredIn>PINRemoteImageCategoryManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/PINProgressiveImage</TokenIdentifier>
+			<Abstract type="html">An object which store the data of a downloading image and vends progressive scans *</Abstract>
+			<DeclaredIn>PINProgressiveImage.h</DeclaredIn>
             
 			
 			<NodeRef refid="2"/>
 		</Token>
 		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINProgressiveImage/currentImageBlurred:maxProgressiveRenderSize:</TokenIdentifier>
+			<Abstract type="html">Returns the latest image based on thresholds, returns nil if no new image is generated</Abstract>
+			<DeclaredIn>PINProgressiveImage.h</DeclaredIn>
+			
+			<Declaration>- (nullable PINImage *)currentImageBlurred:(BOOL)blurred maxProgressiveRenderSize:(CGSize)maxProgressiveRenderSize</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>blurred</Name>
+					<Abstract type="html">A boolean to indicate if the image should be blurred</Abstract>
+				</Parameter><Parameter>
+					<Name>maxProgressiveRenderSize</Name>
+					<Abstract type="html">the maximum dimensions at which to apply a blur. If an image exceeds either the height
+or width of this dimension, the image will not be blurred regardless of the blurred parameter.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">PINImage a progressive scan of the image or nil if a new one has not been generated</Abstract></ReturnValue>
+			<Anchor>//api/name/currentImageBlurred:maxProgressiveRenderSize:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINProgressiveImage/data</TokenIdentifier>
+			<Abstract type="html">Returns the current data for the image.</Abstract>
+			<DeclaredIn>PINProgressiveImage.h</DeclaredIn>
+			
+			<Declaration>- (nullable NSData *)data</Declaration>
+			
+			<ReturnValue><Abstract type="html">NSData the current data for the image</Abstract></ReturnValue>
+			<Anchor>//api/name/data</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
 		
         
         

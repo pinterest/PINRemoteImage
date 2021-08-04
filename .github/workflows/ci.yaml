@@ -1,0 +1,67 @@
+---
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - 'releases/*'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: macOS-latest
+    strategy:
+      matrix:
+        platform: ['iOS Simulator,name=iPhone 8']
+    steps:
+      - uses: actions/checkout@v2
+      - name: Analyze
+        run: make analyze
+  test:
+    name: Test
+    runs-on: macOS-latest
+    strategy:
+      matrix:
+        platform: ['iOS Simulator,name=iPhone 8']
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test
+        run: make test
+  cocoapods:
+    name: CocoaPods
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: CocoaPods
+        run: make cocoapods
+  carthage:
+    name: Carthage
+    runs-on: macOS-latest
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_12.2.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v2
+      - name: Carthage
+        run: make carthage
+  swift-package-manager:
+    runs-on: macos-latest
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_12.2.app/Contents/Developer
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Verify that PINRemoteImage can be build by SPM
+        run: make spm
+  example-spm-xcode:
+    runs-on: macos-latest
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_12.2.app/Contents/Developer
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Verify that PINRemoteImage can be build by Xcode's SPM integration
+        run: make example

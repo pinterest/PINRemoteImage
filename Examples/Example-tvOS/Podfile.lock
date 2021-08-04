@@ -1,0 +1,40 @@
+PODS:
+  - libwebp (1.1.0):
+    - libwebp/demux (= 1.1.0)
+    - libwebp/mux (= 1.1.0)
+    - libwebp/webp (= 1.1.0)
+  - libwebp/demux (1.1.0):
+    - libwebp/webp
+  - libwebp/mux (1.1.0):
+    - libwebp/demux
+  - libwebp/webp (1.1.0)
+  - PINOperation (1.2)
+  - PINRemoteImage/Core (3.0.0):
+    - PINOperation
+  - PINRemoteImage/iOS (3.0.0):
+    - PINRemoteImage/Core
+  - PINRemoteImage/WebP (3.0.0):
+    - libwebp
+    - PINRemoteImage/Core
+
+DEPENDENCIES:
+  - PINRemoteImage/iOS (from `../../`)
+  - PINRemoteImage/WebP (from `../../`)
+
+SPEC REPOS:
+  trunk:
+    - libwebp
+    - PINOperation
+
+EXTERNAL SOURCES:
+  PINRemoteImage:
+    :path: "../../"
+
+SPEC CHECKSUMS:
+  libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
+  PINOperation: 3a967a927e7867e61976c6cc23e5770416449fbc
+  PINRemoteImage: e2b89e19fb6e77ffc099f9d9f3b3fe1745e3f9f9
+
+PODFILE CHECKSUM: 616774737470fed4625bcb3219bb8a1df4d701b8
+
+COCOAPODS: 1.9.3

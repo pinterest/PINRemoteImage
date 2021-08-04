@@ -1,0 +1,53 @@
+---
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - 'releases/*'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    name: Test
+    runs-on: macOS-latest
+    strategy:
+      matrix:
+        platform: ['iOS Simulator,name=iPhone 8']
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test
+        run: make test
+  analyze:
+    name: Analyze
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: analyze
+        run: make analyze
+  cocoapods:
+    name: CocoaPods
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cocoapods lint
+        run: make cocoapods
+  carthage:
+    name: Carthage
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: carthage
+        run: make carthage
+  swift-package-manager:
+    runs-on: macos-latest
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_12.app/Contents/Developer
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Verify that PINCache can be build by SPM
+        run: make spm

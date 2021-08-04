@@ -1,0 +1,53 @@
+PODS:
+  - libwebp (1.1.0):
+    - libwebp/demux (= 1.1.0)
+    - libwebp/mux (= 1.1.0)
+    - libwebp/webp (= 1.1.0)
+  - libwebp/demux (1.1.0):
+    - libwebp/webp
+  - libwebp/mux (1.1.0):
+    - libwebp/demux
+  - libwebp/webp (1.1.0)
+  - PINCache (3.0.1-beta.8):
+    - PINCache/Arc-exception-safe (= 3.0.1-beta.8)
+    - PINCache/Core (= 3.0.1-beta.8)
+  - PINCache/Arc-exception-safe (3.0.1-beta.8):
+    - PINCache/Core
+  - PINCache/Core (3.0.1-beta.8):
+    - PINOperation (~> 1.1.1)
+  - PINOperation (1.1.2)
+  - PINRemoteImage (3.0.0):
+    - PINRemoteImage/PINCache (= 3.0.0)
+  - PINRemoteImage/Core (3.0.0):
+    - PINOperation
+  - PINRemoteImage/PINCache (3.0.0):
+    - PINCache (= 3.0.1-beta.8)
+    - PINRemoteImage/Core
+  - PINRemoteImage/WebP (3.0.0):
+    - libwebp
+    - PINRemoteImage/Core
+
+DEPENDENCIES:
+  - PINRemoteImage (from `../../`)
+  - PINRemoteImage/PINCache (from `../../`)
+  - PINRemoteImage/WebP (from `../../`)
+
+SPEC REPOS:
+  trunk:
+    - libwebp
+    - PINCache
+    - PINOperation
+
+EXTERNAL SOURCES:
+  PINRemoteImage:
+    :path: "../../"
+
+SPEC CHECKSUMS:
+  libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
+  PINCache: 534fd41d358d828dfdf227a0d327f3673a65e20b
+  PINOperation: 24b774353ca248fcf87d67b2d61eef42087c125a
+  PINRemoteImage: e2b89e19fb6e77ffc099f9d9f3b3fe1745e3f9f9
+
+PODFILE CHECKSUM: 6be36f4931404348fd582ddb8bd0b80c534561ac
+
+COCOAPODS: 1.9.3

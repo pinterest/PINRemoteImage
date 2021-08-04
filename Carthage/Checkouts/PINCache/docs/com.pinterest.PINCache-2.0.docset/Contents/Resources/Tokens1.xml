@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/PINCache.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/PINCache</TokenIdentifier>
+			<Abstract type="html">PINCache is a thread safe key/value store designed for persisting temporary objects that are expensive to
+reproduce, such as downloaded data or the results of slow processing. It is comprised of two self-similar
+stores, one in memory (PINMemoryCache and one on disk (PINDiskCache.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+            
+			
+			<NodeRef refid="1"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/setName:</TokenIdentifier>
+			<Abstract type="html">The name of this cache, used to create the diskCache and also appearing in stack traces.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSString *name</Declaration>
+			
+			
+			<Anchor>//api/name/name</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/name</TokenIdentifier>
+			<Abstract type="html">The name of this cache, used to create the diskCache and also appearing in stack traces.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSString *name</Declaration>
+			
+			
+			<Anchor>//api/name/name</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINCache/name</TokenIdentifier>
+			<Abstract type="html">The name of this cache, used to create the diskCache and also appearing in stack traces.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSString *name</Declaration>
+			
+			
+			<Anchor>//api/name/name</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/setConcurrentQueue:</TokenIdentifier>
+			<Abstract type="html">A concurrent queue on which blocks passed to the asynchronous access methods are run.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) dispatch_queue_t concurrentQueue</Declaration>
+			
+			
+			<Anchor>//api/name/concurrentQueue</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/concurrentQueue</TokenIdentifier>
+			<Abstract type="html">A concurrent queue on which blocks passed to the asynchronous access methods are run.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) dispatch_queue_t concurrentQueue</Declaration>
+			
+			
+			<Anchor>//api/name/concurrentQueue</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINCache/concurrentQueue</TokenIdentifier>
+			<Abstract type="html">A concurrent queue on which blocks passed to the asynchronous access methods are run.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) dispatch_queue_t concurrentQueue</Declaration>
+			
+			
+			<Anchor>//api/name/concurrentQueue</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/setDiskByteCount:</TokenIdentifier>
+			<Abstract type="html">Synchronously retrieves the total byte count of the diskCache on the shared disk queue.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSUInteger diskByteCount</Declaration>
+			
+			
+			<Anchor>//api/name/diskByteCount</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/diskByteCount</TokenIdentifier>
+			<Abstract type="html">Synchronously retrieves the total byte count of the diskCache on the shared disk queue.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSUInteger diskByteCount</Declaration>
+			
+			
+			<Anchor>//api/name/diskByteCount</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINCache/diskByteCount</TokenIdentifier>
+			<Abstract type="html">Synchronously retrieves the total byte count of the diskCache on the shared disk queue.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSUInteger diskByteCount</Declaration>
+			
+			
+			<Anchor>//api/name/diskByteCount</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/setDiskCache:</TokenIdentifier>
+			<Abstract type="html">The underlying disk cache, see PINDiskCache for additional configuration and trimming options.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) PINDiskCache *diskCache</Declaration>
+			
+			
+			<Anchor>//api/name/diskCache</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/diskCache</TokenIdentifier>
+			<Abstract type="html">The underlying disk cache, see PINDiskCache for additional configuration and trimming options.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) PINDiskCache *diskCache</Declaration>
+			
+			
+			<Anchor>//api/name/diskCache</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINCache/diskCache</TokenIdentifier>
+			<Abstract type="html">The underlying disk cache, see PINDiskCache for additional configuration and trimming options.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) PINDiskCache *diskCache</Declaration>
+			
+			
+			<Anchor>//api/name/diskCache</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/setMemoryCache:</TokenIdentifier>
+			<Abstract type="html">The underlying memory cache, see PINMemoryCache for additional configuration and trimming options.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) PINMemoryCache *memoryCache</Declaration>
+			
+			
+			<Anchor>//api/name/memoryCache</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/memoryCache</TokenIdentifier>
+			<Abstract type="html">The underlying memory cache, see PINMemoryCache for additional configuration and trimming options.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) PINMemoryCache *memoryCache</Declaration>
+			
+			
+			<Anchor>//api/name/memoryCache</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINCache/memoryCache</TokenIdentifier>
+			<Abstract type="html">The underlying memory cache, see PINMemoryCache for additional configuration and trimming options.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) PINMemoryCache *memoryCache</Declaration>
+			
+			
+			<Anchor>//api/name/memoryCache</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/PINCache/sharedCache</TokenIdentifier>
+			<Abstract type="html">A shared cache.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)sharedCache</Declaration>
+			
+			<ReturnValue><Abstract type="html">The shared singleton cache instance.</Abstract></ReturnValue>
+			<Anchor>//api/name/sharedCache</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/initWithName:</TokenIdentifier>
+			<Abstract type="html">Multiple instances with the same name are allowed and can safely access
+the same data on disk thanks to the magic of seriality. Also used to create the diskCache.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instp/PINCache/name</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (instancetype)initWithName:(NSString *)name</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>name</Name>
+					<Abstract type="html">The name of the cache.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">A new cache with the specified name.</Abstract></ReturnValue>
+			<Anchor>//api/name/initWithName:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/initWithName:rootPath:</TokenIdentifier>
+			<Abstract type="html">Multiple instances with the same name are allowed and can safely access
+the same data on disk thanks to the magic of seriality. Also used to create the diskCache.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instp/PINCache/name</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (instancetype)initWithName:(NSString *)name rootPath:(NSString *)rootPath</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>name</Name>
+					<Abstract type="html">The name of the cache.</Abstract>
+				</Parameter><Parameter>
+					<Name>rootPath</Name>
+					<Abstract type="html">The path of the cache on disk.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">A new cache with the specified name.</Abstract></ReturnValue>
+			<Anchor>//api/name/initWithName:rootPath:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/containsObjectForKey:block:</TokenIdentifier>
+			<Abstract type="html">This method determines whether an object is present for the given key in the cache. This method returns immediately
+and executes the passed block after the object is available, potentially in parallel with other blocks on the
+concurrentQueue.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instm/PINCache/containsObjectForKey:</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (void)containsObjectForKey:(NSString *)key block:(PINCacheObjectContainmentBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the object.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed concurrently after the containment check happened</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/containsObjectForKey:block:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/objectForKey:block:</TokenIdentifier>
+			<Abstract type="html">Retrieves the object for the specified key. This method returns immediately and executes the passed
+block after the object is available, potentially in parallel with other blocks on the concurrentQueue.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>- (void)objectForKey:(NSString *)key block:(PINCacheObjectBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the requested object.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed concurrently when the object is available.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/objectForKey:block:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/setObject:forKey:block:</TokenIdentifier>
+			<Abstract type="html">Stores an object in the cache for the specified key. This method returns immediately and executes the
+passed block after the object has been stored, potentially in parallel with other blocks on the concurrentQueue.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>- (void)setObject:(id&lt;NSCoding&gt;)object forKey:(NSString *)key block:(nullable PINCacheObjectBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>object</Name>
+					<Abstract type="html">An object to store in the cache.</Abstract>
+				</Parameter><Parameter>
+					<Name>key</Name>
+					<Abstract type="html">A key to associate with the object. This string will be copied.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed concurrently after the object has been stored, or nil.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setObject:forKey:block:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/removeObjectForKey:block:</TokenIdentifier>
+			<Abstract type="html">Removes the object for the specified key. This method returns immediately and executes the passed
+block after the object has been removed, potentially in parallel with other blocks on the concurrentQueue.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>- (void)removeObjectForKey:(NSString *)key block:(nullable PINCacheObjectBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the object to be removed.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed concurrently after the object has been removed, or nil.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/removeObjectForKey:block:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/trimToDate:block:</TokenIdentifier>
+			<Abstract type="html">Removes all objects from the cache that have not been used since the specified date. This method returns immediately and
+executes the passed block after the cache has been trimmed, potentially in parallel with other blocks on the concurrentQueue.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>- (void)trimToDate:(NSDate *)date block:(nullable PINCacheBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>date</Name>
+					<Abstract type="html">Objects that haven&apos;t been accessed since this date are removed from the cache.</Abstract>
+				</Parameter><Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed concurrently after the cache has been trimmed, or nil.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/trimToDate:block:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/removeAllObjects:</TokenIdentifier>
+			<Abstract type="html">Removes all objects from the cache.This method returns immediately and executes the passed block after the
+cache has been cleared, potentially in parallel with other blocks on the concurrentQueue.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>- (void)removeAllObjects:(nullable PINCacheBlock)block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>block</Name>
+					<Abstract type="html">A block to be executed concurrently after the cache has been cleared, or nil.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/removeAllObjects:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/containsObjectForKey:</TokenIdentifier>
+			<Abstract type="html">This method determines whether an object is present for the given key in the cache.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instm/PINCache/containsObjectForKey:block:</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (BOOL)containsObjectForKey:(NSString *)key</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the object.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">YES if an object is present for the given key in the cache, otherwise NO.</Abstract></ReturnValue>
+			<Anchor>//api/name/containsObjectForKey:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/objectForKey:</TokenIdentifier>
+			<Abstract type="html">Retrieves the object for the specified key. This method blocks the calling thread until the object is available.
+Uses a semaphore to achieve synchronicity on the disk cache.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instm/PINCache/objectForKey:block:</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (__nullable id)objectForKey:(NSString *)key</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the object.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">The object for the specified key.</Abstract></ReturnValue>
+			<Anchor>//api/name/objectForKey:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/setObject:forKey:</TokenIdentifier>
+			<Abstract type="html">Stores an object in the cache for the specified key. This method blocks the calling thread until the object has been set.
+Uses a semaphore to achieve synchronicity on the disk cache.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/instm/PINCache/setObject:forKey:block:</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>- (void)setObject:(id&lt;NSCoding&gt;)object forKey:(NSString *)key</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>object</Name>
+					<Abstract type="html">An object to store in the cache.</Abstract>
+				</Parameter><Parameter>
+					<Name>key</Name>
+					<Abstract type="html">A key to associate with the object. This string will be copied.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setObject:forKey:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/removeObjectForKey:</TokenIdentifier>
+			<Abstract type="html">Removes the object for the specified key. This method blocks the calling thread until the object
+has been removed.
+Uses a semaphore to achieve synchronicity on the disk cache.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>- (void)removeObjectForKey:(NSString *)key</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>key</Name>
+					<Abstract type="html">The key associated with the object to be removed.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/removeObjectForKey:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/trimToDate:</TokenIdentifier>
+			<Abstract type="html">Removes all objects from the cache that have not been used since the specified date.
+This method blocks the calling thread until the cache has been trimmed.
+Uses a semaphore to achieve synchronicity on the disk cache.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>- (void)trimToDate:(NSDate *)date</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>date</Name>
+					<Abstract type="html">Objects that haven&apos;t been accessed since this date are removed from the cache.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/trimToDate:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINCache/removeAllObjects</TokenIdentifier>
+			<Abstract type="html">Removes all objects from the cache. This method blocks the calling thread until the cache has been cleared.
+Uses a semaphore to achieve synchronicity on the disk cache.</Abstract>
+			<DeclaredIn>PINCache.h</DeclaredIn>
+			
+			<Declaration>- (void)removeAllObjects</Declaration>
+			
+			
+			<Anchor>//api/name/removeAllObjects</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

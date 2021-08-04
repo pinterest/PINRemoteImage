@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/PINProgressiveImage.html">
+	<File path="Classes/PINAnimatedImage.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/PINProgressiveImage</TokenIdentifier>
-			<Abstract type="html">An object which store the data of a downloading image and vends progressive scans *</Abstract>
-			<DeclaredIn>PINProgressiveImage.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/PINAnimatedImage</TokenIdentifier>
+			<Abstract type="html">PINAnimatedImage is a class which decodes GIFs to memory mapped files on disk. Like PINRemoteImageManager,
+it will only decode a GIF one time, regardless of the number of the number of PINAnimatedImages created with
+the same NSData.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
             
 			
 			<NodeRef refid="1"/>
@@ -13,35 +15,450 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/PINProgressiveImage/currentImageBlurred:maxProgressiveRenderSize:</TokenIdentifier>
-			<Abstract type="html">Returns the latest image based on thresholds, returns nil if no new image is generated</Abstract>
-			<DeclaredIn>PINProgressiveImage.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/setInfoCompletion:</TokenIdentifier>
+			<Abstract type="html">A block to be called on when GIF info has been processed. Status will == PINAnimatedImageStatusInfoProcessed</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
 			
-			<Declaration>- (nullable PINImage *)currentImageBlurred:(BOOL)blurred maxProgressiveRenderSize:(CGSize)maxProgressiveRenderSize</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>blurred</Name>
-					<Abstract type="html">A boolean to indicate if the image should be blurred</Abstract>
-				</Parameter><Parameter>
-					<Name>maxProgressiveRenderSize</Name>
-					<Abstract type="html">the maximum dimensions at which to apply a blur. If an image exceeds either the height
-or width of this dimension, the image will not be blurred regardless of the blurred parameter.</Abstract>
-				</Parameter>
-			</Parameters>
-			<ReturnValue><Abstract type="html">PINImage a progressive scan of the image or nil if a new one has not been generated</Abstract></ReturnValue>
-			<Anchor>//api/name/currentImageBlurred:maxProgressiveRenderSize:</Anchor>
+			<Declaration>@property (nonatomic, strong, readwrite) PINAnimatedImageInfoReady infoCompletion</Declaration>
+			
+			
+			<Anchor>//api/name/infoCompletion</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/PINProgressiveImage/data</TokenIdentifier>
-			<Abstract type="html">Returns the current data for the image.</Abstract>
-			<DeclaredIn>PINProgressiveImage.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/infoCompletion</TokenIdentifier>
+			<Abstract type="html">A block to be called on when GIF info has been processed. Status will == PINAnimatedImageStatusInfoProcessed</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
 			
-			<Declaration>- (nullable NSData *)data</Declaration>
+			<Declaration>@property (nonatomic, strong, readwrite) PINAnimatedImageInfoReady infoCompletion</Declaration>
 			
-			<ReturnValue><Abstract type="html">NSData the current data for the image</Abstract></ReturnValue>
-			<Anchor>//api/name/data</Anchor>
+			
+			<Anchor>//api/name/infoCompletion</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINAnimatedImage/infoCompletion</TokenIdentifier>
+			<Abstract type="html">A block to be called on when GIF info has been processed. Status will == PINAnimatedImageStatusInfoProcessed</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong, readwrite) PINAnimatedImageInfoReady infoCompletion</Declaration>
+			
+			
+			<Anchor>//api/name/infoCompletion</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/setFileReady:</TokenIdentifier>
+			<Abstract type="html">A block to be called whenever a new file is done being processed. You can start (or resume) playback when you
+get this callback, though it&apos;s possible for playback to catch up to the decoding and you&apos;ll need to pause.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong, readwrite) dispatch_block_t fileReady</Declaration>
+			
+			
+			<Anchor>//api/name/fileReady</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/fileReady</TokenIdentifier>
+			<Abstract type="html">A block to be called whenever a new file is done being processed. You can start (or resume) playback when you
+get this callback, though it&apos;s possible for playback to catch up to the decoding and you&apos;ll need to pause.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong, readwrite) dispatch_block_t fileReady</Declaration>
+			
+			
+			<Anchor>//api/name/fileReady</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINAnimatedImage/fileReady</TokenIdentifier>
+			<Abstract type="html">A block to be called whenever a new file is done being processed. You can start (or resume) playback when you
+get this callback, though it&apos;s possible for playback to catch up to the decoding and you&apos;ll need to pause.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong, readwrite) dispatch_block_t fileReady</Declaration>
+			
+			
+			<Anchor>//api/name/fileReady</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/setAnimatedImageReady:</TokenIdentifier>
+			<Abstract type="html">A block to be called when the animated image is fully decoded and written to disk.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong, readwrite) dispatch_block_t animatedImageReady</Declaration>
+			
+			
+			<Anchor>//api/name/animatedImageReady</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/animatedImageReady</TokenIdentifier>
+			<Abstract type="html">A block to be called when the animated image is fully decoded and written to disk.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong, readwrite) dispatch_block_t animatedImageReady</Declaration>
+			
+			
+			<Anchor>//api/name/animatedImageReady</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINAnimatedImage/animatedImageReady</TokenIdentifier>
+			<Abstract type="html">A block to be called when the animated image is fully decoded and written to disk.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong, readwrite) dispatch_block_t animatedImageReady</Declaration>
+			
+			
+			<Anchor>//api/name/animatedImageReady</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/setStatus:</TokenIdentifier>
+			<Abstract type="html">The current status of the animated image.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign, readwrite) PINAnimatedImageStatus status</Declaration>
+			
+			
+			<Anchor>//api/name/status</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/status</TokenIdentifier>
+			<Abstract type="html">The current status of the animated image.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign, readwrite) PINAnimatedImageStatus status</Declaration>
+			
+			
+			<Anchor>//api/name/status</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINAnimatedImage/status</TokenIdentifier>
+			<Abstract type="html">The current status of the animated image.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign, readwrite) PINAnimatedImageStatus status</Declaration>
+			
+			
+			<Anchor>//api/name/status</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/setCoverImageReady:</TokenIdentifier>
+			<Abstract type="html">A helper function which references status to check if the coverImage is ready.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) BOOL coverImageReady</Declaration>
+			
+			
+			<Anchor>//api/name/coverImageReady</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/coverImageReady</TokenIdentifier>
+			<Abstract type="html">A helper function which references status to check if the coverImage is ready.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) BOOL coverImageReady</Declaration>
+			
+			
+			<Anchor>//api/name/coverImageReady</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINAnimatedImage/coverImageReady</TokenIdentifier>
+			<Abstract type="html">A helper function which references status to check if the coverImage is ready.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) BOOL coverImageReady</Declaration>
+			
+			
+			<Anchor>//api/name/coverImageReady</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/setPlaybackReady:</TokenIdentifier>
+			<Abstract type="html">A helper function which references status to check if playback is ready.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) BOOL playbackReady</Declaration>
+			
+			
+			<Anchor>//api/name/playbackReady</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/playbackReady</TokenIdentifier>
+			<Abstract type="html">A helper function which references status to check if playback is ready.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) BOOL playbackReady</Declaration>
+			
+			
+			<Anchor>//api/name/playbackReady</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINAnimatedImage/playbackReady</TokenIdentifier>
+			<Abstract type="html">A helper function which references status to check if playback is ready.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) BOOL playbackReady</Declaration>
+			
+			
+			<Anchor>//api/name/playbackReady</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/setCoverImage:</TokenIdentifier>
+			<Abstract type="html">The first frame / cover image of the animated image.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) PINImage *coverImage</Declaration>
+			
+			
+			<Anchor>//api/name/coverImage</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/coverImage</TokenIdentifier>
+			<Abstract type="html">The first frame / cover image of the animated image.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) PINImage *coverImage</Declaration>
+			
+			
+			<Anchor>//api/name/coverImage</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINAnimatedImage/coverImage</TokenIdentifier>
+			<Abstract type="html">The first frame / cover image of the animated image.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) PINImage *coverImage</Declaration>
+			
+			
+			<Anchor>//api/name/coverImage</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/setTotalDuration:</TokenIdentifier>
+			<Abstract type="html">The total duration of one loop of playback.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) CFTimeInterval totalDuration</Declaration>
+			
+			
+			<Anchor>//api/name/totalDuration</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/totalDuration</TokenIdentifier>
+			<Abstract type="html">The total duration of one loop of playback.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) CFTimeInterval totalDuration</Declaration>
+			
+			
+			<Anchor>//api/name/totalDuration</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINAnimatedImage/totalDuration</TokenIdentifier>
+			<Abstract type="html">The total duration of one loop of playback.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) CFTimeInterval totalDuration</Declaration>
+			
+			
+			<Anchor>//api/name/totalDuration</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/setFrameInterval:</TokenIdentifier>
+			<Abstract type="html">The number of frames to play per second * display refresh rate (defined as 60 which appears to be true on iOS). You probably want to
+set this value on a displayLink.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSUInteger frameInterval</Declaration>
+			
+			
+			<Anchor>//api/name/frameInterval</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/frameInterval</TokenIdentifier>
+			<Abstract type="html">The number of frames to play per second * display refresh rate (defined as 60 which appears to be true on iOS). You probably want to
+set this value on a displayLink.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSUInteger frameInterval</Declaration>
+			
+			
+			<Anchor>//api/name/frameInterval</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINAnimatedImage/frameInterval</TokenIdentifier>
+			<Abstract type="html">The number of frames to play per second * display refresh rate (defined as 60 which appears to be true on iOS). You probably want to
+set this value on a displayLink.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSUInteger frameInterval</Declaration>
+			
+			
+			<Anchor>//api/name/frameInterval</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/setLoopCount:</TokenIdentifier>
+			<Abstract type="html">The number of times to loop the animated image. Returns 0 if looping should occur infinitely.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) size_t loopCount</Declaration>
+			
+			
+			<Anchor>//api/name/loopCount</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/loopCount</TokenIdentifier>
+			<Abstract type="html">The number of times to loop the animated image. Returns 0 if looping should occur infinitely.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) size_t loopCount</Declaration>
+			
+			
+			<Anchor>//api/name/loopCount</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINAnimatedImage/loopCount</TokenIdentifier>
+			<Abstract type="html">The number of times to loop the animated image. Returns 0 if looping should occur infinitely.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) size_t loopCount</Declaration>
+			
+			
+			<Anchor>//api/name/loopCount</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/setFrameCount:</TokenIdentifier>
+			<Abstract type="html">The total number of frames in the animated image.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) size_t frameCount</Declaration>
+			
+			
+			<Anchor>//api/name/frameCount</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/frameCount</TokenIdentifier>
+			<Abstract type="html">The total number of frames in the animated image.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) size_t frameCount</Declaration>
+			
+			
+			<Anchor>//api/name/frameCount</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/PINAnimatedImage/frameCount</TokenIdentifier>
+			<Abstract type="html">The total number of frames in the animated image.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) size_t frameCount</Declaration>
+			
+			
+			<Anchor>//api/name/frameCount</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/imageAtIndex:</TokenIdentifier>
+			<Abstract type="html">The image at the frame index passed in.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>- (CGImageRef)imageAtIndex:(NSUInteger)index</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>index</Name>
+					<Abstract type="html">The index of the frame to retrieve.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/imageAtIndex:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/durationAtIndex:</TokenIdentifier>
+			<Abstract type="html">The duration of the frame of the passed in index.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>- (CFTimeInterval)durationAtIndex:(NSUInteger)index</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>index</Name>
+					<Abstract type="html">The index of the frame to retrieve the duration it should be shown for.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/durationAtIndex:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/PINAnimatedImage/clearAnimatedImageCache</TokenIdentifier>
+			<Abstract type="html">Clears out the strong references to any memory maps that are being held.</Abstract>
+			<DeclaredIn>PINAnimatedImage.h</DeclaredIn>
+			
+			<Declaration>- (void)clearAnimatedImageCache</Declaration>
+			
+			
+			<Anchor>//api/name/clearAnimatedImageCache</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
