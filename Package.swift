@@ -17,9 +17,9 @@ let package = Package(
             targets: ["PINRemoteImage"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/pinterest/PINCache.git", from: "3.0.3"),
+        .package(url: "https://github.com/basecamp/PINCache.git", from: "3.0.3"),
         .package(name: "libwebp",
-                 url: "https://github.com/SDWebImage/libwebp-Xcode",
+                 url: "https://github.com/basecamp/libwebp-Xcode",
                  from: "1.1.0"),
     ],
     targets: [
