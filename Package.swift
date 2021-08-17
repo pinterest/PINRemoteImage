@@ -20,7 +20,7 @@ let package = Package(
         .package(url: "https://github.com/basecamp/PINCache.git", from: "3.0.4"),
         .package(name: "libwebp",
                  url: "https://github.com/basecamp/libwebp-Xcode",
-                 from: "1.1.0"),
+                 from: "1.2.1"),
     ],
     targets: [
         .target(
