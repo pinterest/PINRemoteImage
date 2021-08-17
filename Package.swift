@@ -7,7 +7,7 @@ let package = Package(
     name: "PINRemoteImage",
     platforms: [
              .macOS(.v10_10),
-             .iOS(.v9),
+             .iOS(.v12),
              .tvOS(.v9)
          ],
     products: [
