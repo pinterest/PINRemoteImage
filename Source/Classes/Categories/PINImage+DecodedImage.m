@@ -38,10 +38,10 @@ NS_INLINE void pin_degreesFromOrientation(UIImageOrientation orientation, void (
             completion(180.0, NO, NO);
             break;
         case UIImageOrientationLeft:
-            completion(270.0, NO, NO); // 90 deg CCW
+            completion(90.0, NO, NO); // 90 deg CCW
             break;
         case UIImageOrientationRight:
-            completion(90.0, NO, NO); // 90 deg CW
+            completion(-90.0, NO, NO); // 90 deg CW
             break;
         case UIImageOrientationUpMirrored: // as above but image mirrored along other axis. horizontal flip
             completion(0.0, YES, NO);
@@ -50,10 +50,10 @@ NS_INLINE void pin_degreesFromOrientation(UIImageOrientation orientation, void (
             completion(180.0, YES, NO);
             break;
         case UIImageOrientationLeftMirrored: // vertical flip
-            completion(270.0, NO, YES);
+            completion(90.0, NO, YES);
             break;
         case UIImageOrientationRightMirrored: // vertical flip
-            completion(90.0, NO, YES);
+            completion(-90.0, NO, YES);
             break;
     }
 }
