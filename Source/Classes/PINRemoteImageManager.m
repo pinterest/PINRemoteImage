@@ -329,10 +329,7 @@ static dispatch_once_t sharedDispatchToken;
         id <NSCoding, NSObject> obj = (id <NSCoding, NSObject>)object;
         if ([key hasPrefix:PINRemoteImageCacheKeyResumePrefix]) {
             if (@available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *)) {
-                NSError *error = nil;
-                NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:&error];
-                PINDiskCacheLogError(error);
-                return data;
+                return [NSKeyedArchiver archivedDataWithRootObject:obj requiringSecureCoding:NO error:nil];
             } else {
                 return [NSKeyedArchiver archivedDataWithRootObject:object];
             }

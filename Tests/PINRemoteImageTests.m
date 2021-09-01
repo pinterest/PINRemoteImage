@@ -796,10 +796,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
   
     PINDiskCache *tempDiskCache = [[PINDiskCache alloc] initWithName:kPINRemoteImageDiskCacheName rootPath:cachePath serializer:^NSData * _Nonnull(id<NSCoding>  _Nonnull object, NSString * _Nonnull key) {
         if (@available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *)) {
-            NSError *error = nil;
-            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:&error];
-            PINDiskCacheLogError(error);
-            return data;
+            return [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:nil];
         } else {
             return [NSKeyedArchiver archivedDataWithRootObject:object];
         }
