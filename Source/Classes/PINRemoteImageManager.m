@@ -342,8 +342,7 @@ static dispatch_once_t sharedDispatchToken;
                 NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:data error:&error];
                 NSAssert(!error, @"unarchiver init failed with error");
                 unarchiver.requiresSecureCoding = NO;
-                id obj = [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
-                return obj;
+                return [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
             } else {
                 return [NSKeyedUnarchiver unarchiveObjectWithData:data];
             }

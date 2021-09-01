@@ -17,12 +17,16 @@
 #import <PINOperation/PINOperation.h>
 #endif
 
+#define PINDiskCacheLogError(error) if (error) { NSLog(@"%@ (%d) ERROR: %@", \
+[[NSString stringWithUTF8String:__FILE__] lastPathComponent], \
+__LINE__, [error localizedDescription]); }
+
 #define PINDiskCacheException(exception) if (exception) { NSAssert(NO, [exception reason]); }
 
 const char * PINDiskCacheAgeLimitAttributeName = "com.pinterest.PINDiskCache.ageLimit";
-NSString * const PINDiskCacheLogErrorDomain = @"com.pinterest.PINDiskCache";
-NSErrorUserInfoKey const PINDiskCacheLogErrorReadFailureCodeKey = @"PINDiskCacheLogErrorReadFailureCodeKey";
-NSErrorUserInfoKey const PINDiskCacheLogErrorWriteFailureCodeKey = @"PINDiskCacheLogErrorWriteFailureCodeKey";
+NSString * const PINDiskCacheErrorDomain = @"com.pinterest.PINDiskCache";
+NSErrorUserInfoKey const PINDiskCacheErrorReadFailureCodeKey = @"PINDiskCacheErrorReadFailureCodeKey";
+NSErrorUserInfoKey const PINDiskCacheErrorWriteFailureCodeKey = @"PINDiskCacheErrorWriteFailureCodeKey";
 NSString * const PINDiskCachePrefix = @"com.pinterest.PINDiskCache";
 static NSString * const PINDiskCacheSharedName = @"PINDiskCacheShared";
 
@@ -344,8 +348,7 @@ static NSURL *_sharedTrashURL;
             NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:data error:&error];
             PINDiskCacheLogError(error);
             unarchiver.requiresSecureCoding = NO;
-            id obj = [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
-            return obj;
+            return [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
         } else {
             return [NSKeyedUnarchiver unarchiveObjectWithData:data];
         }
@@ -555,8 +558,8 @@ static NSURL *_sharedTrashURL;
         } else if (res == -1) {
             // Ignore if the extended attribute was never recorded for this file.
             if (errno != ENOATTR) {
-                NSDictionary<NSErrorUserInfoKey, id> *userInfo = @{ PINDiskCacheLogErrorReadFailureCodeKey : @(errno)};
-                error = [NSError errorWithDomain:PINDiskCacheLogErrorDomain code:PINDiskCacheLogErrorReadFailure userInfo:userInfo];
+                NSDictionary<NSErrorUserInfoKey, id> *userInfo = @{ PINDiskCacheErrorReadFailureCodeKey : @(errno)};
+                error = [NSError errorWithDomain:PINDiskCacheErrorDomain code:PINDiskCacheErrorReadFailure userInfo:userInfo];
                 PINDiskCacheLogError(error);
             }
         }
@@ -649,15 +652,15 @@ static NSURL *_sharedTrashURL;
         if (removexattr(PINDiskCacheFileSystemRepresentation(fileURL), PINDiskCacheAgeLimitAttributeName, 0) != 0) {
           // Ignore if the extended attribute was never recorded for this file.
           if (errno != ENOATTR) {
-            NSDictionary<NSErrorUserInfoKey, id> *userInfo = @{ PINDiskCacheLogErrorWriteFailureCodeKey : @(errno)};
-            error = [NSError errorWithDomain:PINDiskCacheLogErrorDomain code:PINDiskCacheLogErrorWriteFailure userInfo:userInfo];
+            NSDictionary<NSErrorUserInfoKey, id> *userInfo = @{ PINDiskCacheErrorWriteFailureCodeKey : @(errno)};
+            error = [NSError errorWithDomain:PINDiskCacheErrorDomain code:PINDiskCacheErrorWriteFailure userInfo:userInfo];
             PINDiskCacheLogError(error);
           }
         }
     } else {
         if (setxattr(PINDiskCacheFileSystemRepresentation(fileURL), PINDiskCacheAgeLimitAttributeName, &ageLimit, sizeof(NSTimeInterval), 0, 0) != 0) {
-            NSDictionary<NSErrorUserInfoKey, id> *userInfo = @{ PINDiskCacheLogErrorWriteFailureCodeKey : @(errno)};
-            error = [NSError errorWithDomain:PINDiskCacheLogErrorDomain code:PINDiskCacheLogErrorWriteFailure userInfo:userInfo];
+            NSDictionary<NSErrorUserInfoKey, id> *userInfo = @{ PINDiskCacheErrorWriteFailureCodeKey : @(errno)};
+            error = [NSError errorWithDomain:PINDiskCacheErrorDomain code:PINDiskCacheErrorWriteFailure userInfo:userInfo];
             PINDiskCacheLogError(error);
         }
     }

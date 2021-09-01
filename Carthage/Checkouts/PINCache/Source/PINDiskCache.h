@@ -13,19 +13,15 @@ NS_ASSUME_NONNULL_BEGIN
 @class PINDiskCache;
 @class PINOperationQueue;
 
-extern NSString * const PINDiskCacheLogErrorDomain;
-extern NSErrorUserInfoKey const PINDiskCacheLogErrorReadFailureCodeKey;
-extern NSErrorUserInfoKey const PINDiskCacheLogErrorWriteFailureCodeKey;
+extern NSString * const PINDiskCacheErrorDomain;
+extern NSErrorUserInfoKey const PINDiskCacheErrorReadFailureCodeKey;
+extern NSErrorUserInfoKey const PINDiskCacheErrorWriteFailureCodeKey;
 extern NSString * const PINDiskCachePrefix;
 
-typedef NS_ENUM(NSInteger, PINDiskCacheErrorType) {
-  PINDiskCacheLogErrorReadFailure = -1000,
-  PINDiskCacheLogErrorWriteFailure = -1001,
+typedef NS_ENUM(NSInteger, PINDiskCacheError) {
+    PINDiskCacheErrorReadFailure = -1000,
+    PINDiskCacheErrorWriteFailure = -1001,
 };
-
-#define PINDiskCacheLogError(error) if (error) { NSLog(@"%@ (%d) ERROR: %@", \
-[[NSString stringWithUTF8String:__FILE__] lastPathComponent], \
-__LINE__, [error localizedDescription]); }
 
 /**
  A callback block which provides the cache, key and object as arguments

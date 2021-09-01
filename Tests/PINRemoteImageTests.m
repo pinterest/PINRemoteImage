@@ -804,8 +804,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
         if (@available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *)) {
             NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:data error:nil];
             unarchiver.requiresSecureCoding = NO;
-            id obj = [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
-            return obj;
+            return [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
         } else {
             return [NSKeyedUnarchiver unarchiveObjectWithData:data];
         }
