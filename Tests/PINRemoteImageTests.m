@@ -801,8 +801,11 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
             return [NSKeyedArchiver archivedDataWithRootObject:object];
         }
     } deserializer:^id<NSCoding> _Nonnull(NSData * _Nonnull data, NSString * _Nonnull key) {
-        if (@available(iOS 11.0, tvOS 11.0, *)) {
-            return [NSKeyedUnarchiver unarchivedObjectOfClass:[NSObject class] fromData:data error:nil];
+        if (@available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *)) {
+            NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:data error:nil];
+            unarchiver.requiresSecureCoding = NO;
+            id obj = [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
+            return obj;
         } else {
             return [NSKeyedUnarchiver unarchiveObjectWithData:data];
         }
