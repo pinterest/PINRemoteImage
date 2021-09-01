@@ -328,12 +328,23 @@ static dispatch_once_t sharedDispatchToken;
     PINCache *pinCache = [[PINCache alloc] initWithName:kPINRemoteImageDiskCacheName rootPath:cacheURLRoot serializer:^NSData * _Nonnull(id<NSCoding>  _Nonnull object, NSString * _Nonnull key) {
         id <NSCoding, NSObject> obj = (id <NSCoding, NSObject>)object;
         if ([key hasPrefix:PINRemoteImageCacheKeyResumePrefix]) {
-            return [NSKeyedArchiver archivedDataWithRootObject:obj];
+            if (@available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *)) {
+                NSError *error = nil;
+                NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:&error];
+                PINDiskCacheError(error);
+                return data;
+            } else {
+                return [NSKeyedArchiver archivedDataWithRootObject:object];
+            }
         }
         return (NSData *)object;
     } deserializer:^id<NSCoding> _Nonnull(NSData * _Nonnull data, NSString * _Nonnull key) {
         if ([key hasPrefix:PINRemoteImageCacheKeyResumePrefix]) {
-            return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+            if (@available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *)) {
+                return [NSKeyedUnarchiver unarchivedObjectOfClass:[NSObject class] fromData:data error:nil];
+            } else {
+                return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+            }
         }
         return data;
     } keyEncoder:nil keyDecoder:nil ttlCache:enableTtl];

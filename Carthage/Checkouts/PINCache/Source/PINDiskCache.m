@@ -343,7 +343,11 @@ static NSURL *_sharedTrashURL;
 - (PINDiskCacheDeserializerBlock)defaultDeserializer
 {
     return ^id(NSData * data, NSString *key){
-        return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        if (@available(iOS 11.0, tvOS 11.0, *)) {
+            return [NSKeyedUnarchiver unarchivedObjectOfClass:[NSObject class] fromData:data error:nil];
+        } else {
+            return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        }
     };
 }
 
