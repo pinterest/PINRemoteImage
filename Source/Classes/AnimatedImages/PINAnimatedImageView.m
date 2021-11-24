@@ -271,6 +271,13 @@
     if (_animatedImage) {
         return _frameImage;
     } else if ((underlyingImage = [super image])) {
+#if PIN_TARGET_IOS
+        if (@available(iOS 13.0, tvOS 10.0, *)) {
+            if (underlyingImage.imageAsset != nil) {
+                underlyingImage = [underlyingImage.imageAsset imageWithTraitCollection:self.traitCollection];
+            }
+        }
+#endif
         return (CGImageRef)CFAutorelease(CFRetain([underlyingImage CGImage]));
     }
     return nil;
