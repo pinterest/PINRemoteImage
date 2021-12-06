@@ -45,7 +45,7 @@ static enum WEBP_CSP_MODE webp_cs_mode_from_cg_bitmap_info(CGBitmapInfo info, BO
         case kCGImageAlphaPremultipliedLast:
             return keepByteOrder ? MODE_rgbA : MODE_Argb;
         case kCGImageAlphaPremultipliedFirst:
-            return keepByteOrder ? MODE_Argb : MODE_rgbA;
+            return keepByteOrder ? MODE_Argb : MODE_bgrA;
         case kCGImageAlphaOnly:
             *fail = YES;
             return MODE_RGB;
