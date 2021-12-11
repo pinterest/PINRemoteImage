@@ -35,6 +35,7 @@ let package = Package(
                 .headerSearchPath("ImageCategories"),
                 .headerSearchPath("PinCache"),
                 
+                .define("NS_BLOCK_ASSERTIONS", to: "1", .when(configuration: .release)),
                 .define("USE_PINCACHE", to: "1"),
                 .define("PIN_WEBP", to: "1"),
                 ]),
