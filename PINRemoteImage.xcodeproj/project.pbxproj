@@ -105,6 +105,10 @@
 		A7343C5B228993D100972894 /* NSHTTPURLResponse+MaxAge.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD28EAE81695DDF84BB76B8 /* NSHTTPURLResponse+MaxAge.m */; };
 		A7343C60228993F400972894 /* NSHTTPURLResponse+MaxAge.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD28EAE81695DDF84BB76B8 /* NSHTTPURLResponse+MaxAge.m */; };
 		ACD28AB87FABF6BA3B9BF4E4 /* NSDate+PINCacheTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD28D963D79EEC14EE071CE /* NSDate+PINCacheTests.m */; };
+		C74E0C7127A327630005EBA5 /* NSString+MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74E0C7027A327620005EBA5 /* NSString+MD5.swift */; };
+		C74E0C7427A351000005EBA5 /* NSString+MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74E0C7027A327620005EBA5 /* NSString+MD5.swift */; };
+		C74E0C7927A355740005EBA5 /* NSString+MD5Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74E0C7827A355740005EBA5 /* NSString+MD5Tests.swift */; };
+		C74E0C7A27A355740005EBA5 /* NSString+MD5Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74E0C7827A355740005EBA5 /* NSString+MD5Tests.swift */; };
 		D93A340224182D46005EB15E /* TestAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A340124182D46005EB15E /* TestAnimatedImage.m */; };
 		D93A340324182D46005EB15E /* TestAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A340124182D46005EB15E /* TestAnimatedImage.m */; };
 		F1B918FF1BCF23C900710963 /* PINRemoteImageCategoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B918DC1BCF23C800710963 /* PINRemoteImageCategoryManager.m */; };
@@ -262,6 +266,9 @@
 		ACD28A0374E664CFF0BB3297 /* NSHTTPURLResponse+MaxAge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSHTTPURLResponse+MaxAge.h"; sourceTree = "<group>"; };
 		ACD28D963D79EEC14EE071CE /* NSDate+PINCacheTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+PINCacheTests.m"; sourceTree = "<group>"; };
 		ACD28EAE81695DDF84BB76B8 /* NSHTTPURLResponse+MaxAge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSHTTPURLResponse+MaxAge.m"; sourceTree = "<group>"; };
+		C74E0C7027A327620005EBA5 /* NSString+MD5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSString+MD5.swift"; sourceTree = "<group>"; };
+		C74E0C7727A355740005EBA5 /* PINRemoteImage-tvOSTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PINRemoteImage-tvOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		C74E0C7827A355740005EBA5 /* NSString+MD5Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+MD5Tests.swift"; sourceTree = "<group>"; };
 		D93A340024182D46005EB15E /* TestAnimatedImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestAnimatedImage.h; sourceTree = "<group>"; };
 		D93A340124182D46005EB15E /* TestAnimatedImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestAnimatedImage.m; sourceTree = "<group>"; };
 		F1B918D11BCF239200710963 /* PINRemoteImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PINRemoteImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -375,6 +382,8 @@
 				683128F41F95045200D5B4A8 /* PINAnimatedImage+PINAnimatedImageTesting.m */,
 				ACD288C6E6B13E6DA226D252 /* NSDate+PINCacheTests.h */,
 				ACD28D963D79EEC14EE071CE /* NSDate+PINCacheTests.m */,
+				C74E0C7827A355740005EBA5 /* NSString+MD5Tests.swift */,
+				C74E0C7727A355740005EBA5 /* PINRemoteImage-tvOSTests-Bridging-Header.h */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -515,6 +524,7 @@
 		F1B918DD1BCF23C800710963 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				C74E0C7027A327620005EBA5 /* NSString+MD5.swift */,
 				680B83C71ECE5F9D00210A55 /* PINRemoteImageManager+Private.h */,
 				68A6B1D91E5248BF003A92D1 /* PINImage+ScaledImage.m */,
 				68A6B1DA1E5248BF003A92D1 /* PINImage+ScaledImage.h */,
@@ -744,10 +754,12 @@
 				TargetAttributes = {
 					139D3A591F67284400F82935 = {
 						CreatedOnToolsVersion = 9.0;
+						LastSwiftMigration = 1320;
 						ProvisioningStyle = Automatic;
 					};
 					139D3A611F67284400F82935 = {
 						CreatedOnToolsVersion = 9.0;
+						LastSwiftMigration = 1320;
 						ProvisioningStyle = Automatic;
 					};
 					68A0FC181E523434000B552D = {
@@ -757,6 +769,7 @@
 					};
 					F1B918D01BCF239200710963 = {
 						CreatedOnToolsVersion = 7.0;
+						LastSwiftMigration = 1320;
 					};
 				};
 			};
@@ -825,6 +838,7 @@
 				139D4FD61F672B0D00DE64E0 /* PINImage+ScaledImage.m in Sources */,
 				139D4FD71F672B0D00DE64E0 /* PINImage+DecodedImage.m in Sources */,
 				139D4FD81F672B0D00DE64E0 /* PINImage+WebP.m in Sources */,
+				C74E0C7427A351000005EBA5 /* NSString+MD5.swift in Sources */,
 				139D4FDB1F672B0D00DE64E0 /* PINRemoteImageCallbacks.m in Sources */,
 				139D4FDC1F672B0D00DE64E0 /* PINRemoteImageDownloadTask.m in Sources */,
 				139D4FDD1F672B0D00DE64E0 /* PINRemoteImageProcessorTask.m in Sources */,
@@ -851,6 +865,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C74E0C7A27A355740005EBA5 /* NSString+MD5Tests.swift in Sources */,
 				D93A340324182D46005EB15E /* TestAnimatedImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -863,6 +878,7 @@
 				68A0FC1C1E523434000B552D /* PINRemoteImageTests.m in Sources */,
 				683128F51F95045200D5B4A8 /* PINAnimatedImage+PINAnimatedImageTesting.m in Sources */,
 				D93A340224182D46005EB15E /* TestAnimatedImage.m in Sources */,
+				C74E0C7927A355740005EBA5 /* NSString+MD5Tests.swift in Sources */,
 				ACD28AB87FABF6BA3B9BF4E4 /* NSDate+PINCacheTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -883,6 +899,7 @@
 				68B1F2821E679D7A00ED87C4 /* PINRemoteImageDownloadQueue.m in Sources */,
 				F1B919011BCF23C900710963 /* NSData+ImageDetectors.m in Sources */,
 				939546C12220AF84006031BB /* PINRemoteImageManagerConfiguration.m in Sources */,
+				C74E0C7127A327630005EBA5 /* NSString+MD5.swift in Sources */,
 				A7343C5B228993D100972894 /* NSHTTPURLResponse+MaxAge.m in Sources */,
 				689613E6208FD90B00D2095C /* PINDisplayLink.m in Sources */,
 				F1B918FF1BCF23C900710963 /* PINRemoteImageCategoryManager.m in Sources */,
@@ -931,6 +948,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -964,6 +982,8 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 			};
 			name = Debug;
@@ -975,6 +995,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -1008,6 +1029,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 			};
 			name = Release;
@@ -1015,9 +1037,11 @@
 		139D3A6D1F67284400F82935 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -1040,6 +1064,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/PINRemoteImage-tvOSTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 			};
@@ -1048,9 +1075,11 @@
 		139D3A6E1F67284400F82935 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -1070,6 +1099,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/PINRemoteImage-tvOSTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 			};
@@ -1078,6 +1109,7 @@
 		68A0FC211E523434000B552D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -1105,6 +1137,7 @@
 		68A0FC221E523434000B552D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -1251,6 +1284,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1279,6 +1313,8 @@
 				MODULEMAP_FILE = Source/PINRemoteImage.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINRemoteImage;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1286,6 +1322,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1314,6 +1351,7 @@
 				MODULEMAP_FILE = Source/PINRemoteImage.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINRemoteImage;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

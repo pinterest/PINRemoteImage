@@ -35,6 +35,7 @@
 #import "PINRequestRetryStrategy.h"
 #import "PINSpeedRecorder.h"
 #import "PINURLSessionManager.h"
+#import <PINRemoteImage/PINRemoteImage-Swift.h>
 
 #import "NSData+ImageDetectors.h"
 #import "PINImage+DecodedImage.h"
@@ -1556,6 +1557,32 @@ static dispatch_once_t sharedDispatchToken;
     return [self cacheKeyForURL:url processorKey:processorKey resume:NO];
 }
 
+-(NSString *) hashCacheKey_removeMeIOS13:(NSString *) string {
+    __block CC_MD5_CTX ctx;
+    CC_MD5_Init(&ctx);
+    NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
+    [data enumerateByteRangesUsingBlock:^(const void * _Nonnull bytes, NSRange byteRange, BOOL * _Nonnull stop) {
+        CC_MD5_Update(&ctx, bytes, (CC_LONG)byteRange.length);
+    }];
+
+    unsigned char digest[CC_MD5_DIGEST_LENGTH];
+    CC_MD5_Final(digest, &ctx);
+
+    NSMutableString *hexString  = [NSMutableString stringWithCapacity:(CC_MD5_DIGEST_LENGTH * 2)];
+    for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
+        [hexString appendFormat:@"%02lx", (unsigned long)digest[i]];
+    }
+    return [hexString copy];
+}
+
+-(NSString *) hashCacheKey:(NSString *) string {
+    if (@available(iOS 13, *)) {
+        return [string cryptoKitCacheKeyMD5];
+    } else {
+        return [self hashCacheKey_removeMeIOS13:string];
+    }
+}
+
 - (NSString *)cacheKeyForURL:(NSURL *)url processorKey:(NSString *)processorKey resume:(BOOL)resume
 {
     NSString *cacheKey = [url absoluteString];
@@ -1569,25 +1596,11 @@ static dispatch_once_t sharedDispatchToken;
     //In case the generated key exceeds PINRemoteImageManagerCacheKeyMaxLength characters,
     //we return the hash of it instead.
     if (cacheKey.length > PINRemoteImageManagerCacheKeyMaxLength) {
-        __block CC_MD5_CTX ctx;
-        CC_MD5_Init(&ctx);
-        NSData *data = [cacheKey dataUsingEncoding:NSUTF8StringEncoding];
-        [data enumerateByteRangesUsingBlock:^(const void * _Nonnull bytes, NSRange byteRange, BOOL * _Nonnull stop) {
-            CC_MD5_Update(&ctx, bytes, (CC_LONG)byteRange.length);
-        }];
-
-        unsigned char digest[CC_MD5_DIGEST_LENGTH];
-        CC_MD5_Final(digest, &ctx);
-
-        NSMutableString *hexString  = [NSMutableString stringWithCapacity:(CC_MD5_DIGEST_LENGTH * 2)];
-        for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
-            [hexString appendFormat:@"%02lx", (unsigned long)digest[i]];
-        }
-        cacheKey = [hexString copy];
+        cacheKey = [self hashCacheKey:cacheKey];
     }
     //The resume key must not be hashed, it is used to decide whether or not to decode from the disk cache.
     if (resume) {
-      cacheKey = [PINRemoteImageCacheKeyResumePrefix stringByAppendingString:cacheKey];
+        cacheKey = [PINRemoteImageCacheKeyResumePrefix stringByAppendingString:cacheKey];
     }
 
     return cacheKey;
