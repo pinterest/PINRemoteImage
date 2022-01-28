@@ -109,6 +109,8 @@
 		C74E0C7427A351000005EBA5 /* NSString+MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74E0C7027A327620005EBA5 /* NSString+MD5.swift */; };
 		C74E0C7927A355740005EBA5 /* NSString+MD5Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74E0C7827A355740005EBA5 /* NSString+MD5Tests.swift */; };
 		C74E0C7A27A355740005EBA5 /* NSString+MD5Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74E0C7827A355740005EBA5 /* NSString+MD5Tests.swift */; };
+		C7CE90B027A44FFB00FCEABE /* PINRemoteImageManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C7CE90AE27A44FEF00FCEABE /* PINRemoteImageManagerTests.m */; };
+		C7CE90B127A44FFC00FCEABE /* PINRemoteImageManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C7CE90AE27A44FEF00FCEABE /* PINRemoteImageManagerTests.m */; };
 		D93A340224182D46005EB15E /* TestAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A340124182D46005EB15E /* TestAnimatedImage.m */; };
 		D93A340324182D46005EB15E /* TestAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A340124182D46005EB15E /* TestAnimatedImage.m */; };
 		F1B918FF1BCF23C900710963 /* PINRemoteImageCategoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B918DC1BCF23C800710963 /* PINRemoteImageCategoryManager.m */; };
@@ -269,6 +271,7 @@
 		C74E0C7027A327620005EBA5 /* NSString+MD5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSString+MD5.swift"; sourceTree = "<group>"; };
 		C74E0C7727A355740005EBA5 /* PINRemoteImage-tvOSTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PINRemoteImage-tvOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		C74E0C7827A355740005EBA5 /* NSString+MD5Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+MD5Tests.swift"; sourceTree = "<group>"; };
+		C7CE90AE27A44FEF00FCEABE /* PINRemoteImageManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageManagerTests.m; sourceTree = "<group>"; };
 		D93A340024182D46005EB15E /* TestAnimatedImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestAnimatedImage.h; sourceTree = "<group>"; };
 		D93A340124182D46005EB15E /* TestAnimatedImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestAnimatedImage.m; sourceTree = "<group>"; };
 		F1B918D11BCF239200710963 /* PINRemoteImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PINRemoteImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -371,6 +374,7 @@
 		68A0FC1A1E523434000B552D /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				C7CE90AE27A44FEF00FCEABE /* PINRemoteImageManagerTests.m */,
 				0E71BE2522E94C7200FC5B99 /* fireworks.gif */,
 				68A0FC1B1E523434000B552D /* PINRemoteImageTests.m */,
 				6864A9211F6D94AF007BB848 /* PINAnimatedImageTests.swift */,
@@ -866,6 +870,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C74E0C7A27A355740005EBA5 /* NSString+MD5Tests.swift in Sources */,
+				C7CE90B127A44FFC00FCEABE /* PINRemoteImageManagerTests.m in Sources */,
 				D93A340324182D46005EB15E /* TestAnimatedImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -877,6 +882,7 @@
 				6864A9221F6D94AF007BB848 /* PINAnimatedImageTests.swift in Sources */,
 				68A0FC1C1E523434000B552D /* PINRemoteImageTests.m in Sources */,
 				683128F51F95045200D5B4A8 /* PINAnimatedImage+PINAnimatedImageTesting.m in Sources */,
+				C7CE90B027A44FFB00FCEABE /* PINRemoteImageManagerTests.m in Sources */,
 				D93A340224182D46005EB15E /* TestAnimatedImage.m in Sources */,
 				C74E0C7927A355740005EBA5 /* NSString+MD5Tests.swift in Sources */,
 				ACD28AB87FABF6BA3B9BF4E4 /* NSDate+PINCacheTests.m in Sources */,
