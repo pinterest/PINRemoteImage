@@ -13,10 +13,12 @@ extension NSString {
 
     private func MD5(with format: String) -> NSString {
         guard #available(iOS 13, *),
-              #available(tvOSApplicationExtension 13.0, *) else { return "" }
+              #available(tvOSApplicationExtension 13.0, *) else {
+                  fatalError("This API is only available for iOS >= 13")
+              }
 
         let string = self as String
-        guard let data = string.data(using: .utf8) else { return "" }
+        let data = Data(string.utf8)
         let digest = Insecure.MD5.hash(data: data)
 
         return digest.map { byte in
@@ -27,7 +29,10 @@ extension NSString {
     @objc
     public func cryptoKitCacheKeyMD5() -> NSString {
         guard #available(iOS 13, *),
-              #available(tvOSApplicationExtension 13.0, *)else { return "" }
+              #available(tvOSApplicationExtension 13.0, *)else {
+                  fatalError("This API is only available for iOS >= 13")
+              }
+        
         return MD5(with: "%02lx")
     }
 }
