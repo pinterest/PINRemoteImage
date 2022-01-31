@@ -1557,7 +1557,7 @@ static dispatch_once_t sharedDispatchToken;
     return [self cacheKeyForURL:url processorKey:processorKey resume:NO];
 }
 
--(NSString *) hashCacheKey_removeMeIOS13:(NSString *) string {
+- (NSString *)hashCacheKey_removeMeIOS13:(NSString *) string {
     __block CC_MD5_CTX ctx;
     CC_MD5_Init(&ctx);
     NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
@@ -1575,7 +1575,7 @@ static dispatch_once_t sharedDispatchToken;
     return [hexString copy];
 }
 
--(NSString *) hashCacheKey:(NSString *) string {
+- (NSString *)hashCacheKey:(NSString *) string {
     if (@available(iOS 13, *)) {
         return [string cryptoKitCacheKeyMD5];
     } else {
