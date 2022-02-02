@@ -17,6 +17,8 @@ class NSString_MD5Tests: XCTestCase {
     override func tearDownWithError() throws {
     }
 
+    @available(iOS 13, *)
+    @available(tvOS 13.0, *)
     func testCryptoKitCacheKeyMD5() throws {
         let testString: NSString = "My awesome test string"
         let expectedKey: NSString = "4a7719ad08fce9edc64b6ecc59bdf061"

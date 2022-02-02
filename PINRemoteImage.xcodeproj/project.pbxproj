@@ -109,6 +109,7 @@
 		C74E0C7427A351000005EBA5 /* NSString+MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74E0C7027A327620005EBA5 /* NSString+MD5.swift */; };
 		C74E0C7927A355740005EBA5 /* NSString+MD5Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74E0C7827A355740005EBA5 /* NSString+MD5Tests.swift */; };
 		C74E0C7A27A355740005EBA5 /* NSString+MD5Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74E0C7827A355740005EBA5 /* NSString+MD5Tests.swift */; };
+		C7C6EB7927AB0E97007F412A /* CryptoKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7C6EB7827AB0E97007F412A /* CryptoKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C7CE90B027A44FFB00FCEABE /* PINRemoteImageManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C7CE90AE27A44FEF00FCEABE /* PINRemoteImageManagerTests.m */; };
 		C7CE90B127A44FFC00FCEABE /* PINRemoteImageManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C7CE90AE27A44FEF00FCEABE /* PINRemoteImageManagerTests.m */; };
 		D93A340224182D46005EB15E /* TestAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A340124182D46005EB15E /* TestAnimatedImage.m */; };
@@ -271,6 +272,7 @@
 		C74E0C7027A327620005EBA5 /* NSString+MD5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSString+MD5.swift"; sourceTree = "<group>"; };
 		C74E0C7727A355740005EBA5 /* PINRemoteImage-tvOSTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PINRemoteImage-tvOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		C74E0C7827A355740005EBA5 /* NSString+MD5Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+MD5Tests.swift"; sourceTree = "<group>"; };
+		C7C6EB7827AB0E97007F412A /* CryptoKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/Library/Frameworks/CryptoKit.framework; sourceTree = DEVELOPER_DIR; };
 		C7CE90AE27A44FEF00FCEABE /* PINRemoteImageManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PINRemoteImageManagerTests.m; sourceTree = "<group>"; };
 		D93A340024182D46005EB15E /* TestAnimatedImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestAnimatedImage.h; sourceTree = "<group>"; };
 		D93A340124182D46005EB15E /* TestAnimatedImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestAnimatedImage.m; sourceTree = "<group>"; };
@@ -345,6 +347,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7C6EB7927AB0E97007F412A /* CryptoKit.framework in Frameworks */,
 				F370FD6624AD0F6D0026A9D9 /* WebPDemux.framework in Frameworks */,
 				F370FD6924AD0F920026A9D9 /* WebPDecoder.framework in Frameworks */,
 				68837709252F9D5300B9C290 /* PINOperation.framework in Frameworks */,
@@ -358,6 +361,7 @@
 		6818C1531E551B5900875DB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C7C6EB7827AB0E97007F412A /* CryptoKit.framework */,
 				6883770A252F9D7800B9C290 /* PINCache.framework */,
 				6883770C252F9D7800B9C290 /* PINOperation.framework */,
 				68837706252F9D5300B9C290 /* PINCache.framework */,

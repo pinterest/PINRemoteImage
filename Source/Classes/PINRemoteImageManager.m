@@ -1576,7 +1576,7 @@ static dispatch_once_t sharedDispatchToken;
 }
 
 - (NSString *)hashCacheKey:(NSString *) string {
-    if (@available(iOS 13, *)) {
+    if ([string respondsToSelector: @selector(cryptoKitCacheKeyMD5)]) {
         return [string cryptoKitCacheKeyMD5];
     } else {
         return [self hashCacheKey_removeMeIOS13:string];

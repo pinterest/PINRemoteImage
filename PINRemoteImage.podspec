@@ -24,21 +24,21 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = ios_deployment
   s.tvos.deployment_target = tvos_deployment
   s.requires_arc = true
-  
+  s.swift_versions = ['4.0', '4.1', '4.2', '5.0']
   s.default_subspecs = 'PINCache'
-  
+
   ### Subspecs
   s.subspec 'Core' do |cs|
     cs.dependency 'PINOperation'
     cs.ios.deployment_target = ios_deployment
     cs.tvos.deployment_target = tvos_deployment
     cs.osx.deployment_target = osx_deployment
-    cs.source_files = 'Source/Classes/**/*.{h,m}'
+    cs.source_files = 'Source/Classes/**/*.{swift,h,m}'
     cs.public_header_files = 'Source/Classes/**/*.h'
     cs.exclude_files = 'Source/Classes/PINCache/*.{h,m}', 'Source/Classes/include/PINCache+PINRemoteImageCaching.h'
     cs.frameworks = 'ImageIO', 'Accelerate'
   end
-  
+
   s.subspec 'iOS' do |ios|
     ios.ios.deployment_target = ios_deployment
     ios.tvos.deployment_target = tvos_deployment
