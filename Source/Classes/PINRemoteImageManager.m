@@ -35,7 +35,12 @@
 #import "PINRequestRetryStrategy.h"
 #import "PINSpeedRecorder.h"
 #import "PINURLSessionManager.h"
+
+#if SWIFT_PACKAGE
+@import PINRemoteImageSwift;
+#else
 #import <PINRemoteImage/PINRemoteImage-Swift.h>
+#endif
 
 #import "NSData+ImageDetectors.h"
 #import "PINImage+DecodedImage.h"

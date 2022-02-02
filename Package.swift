@@ -25,19 +25,25 @@ let package = Package(
     targets: [
         .target(
             name: "PINRemoteImage",
-            dependencies: ["PINCache", "libwebp"],
+            dependencies: ["PINCache", "libwebp", "PINRemoteImageSwift"],
             path: "Source/Classes",
             publicHeadersPath: "include",
             cSettings: [
+              .headerSearchPath("Internal"),
                 .headerSearchPath("."),
                 .headerSearchPath("Categories"),
                 .headerSearchPath("AnimatedImages"),
                 .headerSearchPath("ImageCategories"),
                 .headerSearchPath("PinCache"),
-                
+
                 .define("NS_BLOCK_ASSERTIONS", to: "1", .when(configuration: .release)),
                 .define("USE_PINCACHE", to: "1"),
                 .define("PIN_WEBP", to: "1"),
                 ]),
+            .target(
+                name: "PINRemoteImageSwift",
+                dependencies: [],
+                path: "Source/PINRemoteImageSwift"
+                ),
     ]
 )

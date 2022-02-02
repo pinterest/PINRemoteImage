@@ -33,8 +33,8 @@ Pod::Spec.new do |s|
     cs.ios.deployment_target = ios_deployment
     cs.tvos.deployment_target = tvos_deployment
     cs.osx.deployment_target = osx_deployment
-    cs.source_files = 'Source/Classes/**/*.{swift,h,m}'
-    cs.public_header_files = 'Source/Classes/**/*.h'
+    cs.source_files = 'Source/*/**/*.{swift,h,m}'
+    cs.public_header_files = 'Source/*/**/*.h'
     cs.exclude_files = 'Source/Classes/PINCache/*.{h,m}', 'Source/Classes/include/PINCache+PINRemoteImageCaching.h'
     cs.frameworks = 'ImageIO', 'Accelerate'
   end
