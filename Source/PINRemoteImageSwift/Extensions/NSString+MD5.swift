@@ -13,7 +13,7 @@ import CryptoKit
 import Foundation
 
 @available(iOS 13, *)
-@available(tvOSApplicationExtension 13.0, *)
+@available(tvOS 15.0, *)
 @available(macOS 10.15, *)
 extension NSString {
 

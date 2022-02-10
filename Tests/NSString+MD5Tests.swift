@@ -12,13 +12,16 @@ import XCTest
 class NSString_MD5Tests: XCTestCase {
 
     override func setUpWithError() throws {
+        guard #available(iOS 13, tvOS 15.0, macOS 10.15, *) else {
+            throw XCTSkip("This test can only run in an OS with CryptoKit enabled")
+        }
     }
 
     override func tearDownWithError() throws {
     }
 
     @available(iOS 13, *)
-    @available(tvOS 13.0, *)
+    @available(tvOS 15.0, *)
     func testCryptoKitCacheKeyMD5() throws {
         let testString: NSString = "My awesome test string"
         let expectedKey: NSString = "4a7719ad08fce9edc64b6ecc59bdf061"
@@ -27,6 +30,8 @@ class NSString_MD5Tests: XCTestCase {
         XCTAssertEqual(expectedKey, actualKey)
     }
 
+    @available(iOS 13, *)
+    @available(tvOS 15.0, *)
     func testCacheKeyForURL() throws {
         let manager = PINRemoteImageManager.shared()
         let expectedKey = "301b1cb35f86b7959817ef3ccc35f438"

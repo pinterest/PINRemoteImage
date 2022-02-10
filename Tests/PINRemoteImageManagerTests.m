@@ -30,6 +30,11 @@
 
 - (void)testCCMD5AndCryptoKitCacheKeyGenerateSameKey
 {
+
+    if(@available(iOS 13, tvOS 15.0, macOS 10.15, *)) {} else {
+        XCTSkip(@"This test can only run in an OS with CryptoKit enabled");
+    }
+
     PINRemoteImageManager *manager = [PINRemoteImageManager sharedImageManager];
 
     int num = 250;

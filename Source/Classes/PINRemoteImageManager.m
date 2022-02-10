@@ -1580,8 +1580,18 @@ static dispatch_once_t sharedDispatchToken;
     return [hexString copy];
 }
 
+- (BOOL)canUseCryptoKit {
+    bool canUseCryptoKit = false;
+
+    if(@available(iOS 13, tvOS 15.0, macOS 10.15, *)) {
+        canUseCryptoKit = true;
+    }
+
+    return canUseCryptoKit;
+}
+
 - (NSString *)hashCacheKey:(NSString *) string {
-    if ([string respondsToSelector: @selector(cryptoKitCacheKeyMD5)]) {
+    if ([self canUseCryptoKit]) {
         return [string cryptoKitCacheKeyMD5];
     } else {
         return [self hashCacheKey_removeMeIOS13:string];
