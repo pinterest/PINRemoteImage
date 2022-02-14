@@ -66,6 +66,12 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 @end
 
+@interface PINRemoteImageManager (Private)
+
+@property (nonatomic, copy) PINRemoteImageManagerRequestConfigurationHandler requestConfigurationHandler;
+
+@end
+
 
 #if DEBUG
 
@@ -392,12 +398,14 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     
     self.imageManager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:nil];
     self.imageManager.sessionManager.delegate = self;
-    
-    [self.imageManager setRequestConfiguration:^NSURLRequest * _Nonnull(NSURLRequest * _Nonnull request) {
+
+    // To help reduce possibilities of flakiness, assign directly
+    // instead of `setRequestConfiguration` to avoid locks
+    self.imageManager.requestConfigurationHandler = ^NSURLRequest * _Nonnull(NSURLRequest * _Nonnull request) {
         XCTAssertEqual(request.cachePolicy, NSURLRequestReloadIgnoringLocalCacheData);
         [expectation fulfill];
         return request;
-    }];
+    };
   
     [self.imageManager downloadImageWithURL:[self headersURL]
                                     options:PINRemoteImageManagerDownloadOptionsIgnoreCache
