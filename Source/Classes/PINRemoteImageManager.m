@@ -391,14 +391,23 @@ static dispatch_once_t sharedDispatchToken;
     });
 }
 
-- (void)setRequestConfiguration:(PINRemoteImageManagerRequestConfigurationHandler)configurationBlock {
+- (void)setRequestConfiguration:(PINRemoteImageManagerRequestConfigurationHandler)configurationBlock
+                     completion:(void (^)(void))completion; {
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         typeof(self) strongSelf = weakSelf;
         [strongSelf lock];
-            strongSelf.requestConfigurationHandler = configurationBlock;
+        strongSelf.requestConfigurationHandler = configurationBlock;
         [strongSelf unlock];
+
+        if(completion != nil) {
+            completion();
+        }
     });
+}
+
+- (void)setRequestConfiguration:(PINRemoteImageManagerRequestConfigurationHandler)configurationBlock {
+    [self setRequestConfiguration:configurationBlock completion:nil];
 }
 
 - (void)setAuthenticationChallenge:(PINRemoteImageManagerAuthenticationChallenge)challengeBlock {

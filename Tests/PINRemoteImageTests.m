@@ -66,13 +66,6 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 @end
 
-@interface PINRemoteImageManager (Private)
-
-@property (nonatomic, copy) PINRemoteImageManagerRequestConfigurationHandler requestConfigurationHandler;
-
-@end
-
-
 #if DEBUG
 
 @interface PINRemoteImageWeakTask : NSObject
@@ -394,23 +387,27 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (void)testImageRequestIgnoresLocalData
 {
-    XCTestExpectation *expectation = [self expectationWithDescription:@"Verify cache policy of request"];
+    XCTestExpectation *cacheExpectation = [self expectationWithDescription:@"Verify cache policy of request"];
+    XCTestExpectation *setRequestConfigExpectation = [self expectationWithDescription:@"Verify request configuration is set"];
     
     self.imageManager = [[PINRemoteImageManager alloc] initWithSessionConfiguration:nil];
     self.imageManager.sessionManager.delegate = self;
 
-    // To help reduce possibilities of flakiness, assign directly
-    // instead of `setRequestConfiguration` to avoid locks
-    self.imageManager.requestConfigurationHandler = ^NSURLRequest * _Nonnull(NSURLRequest * _Nonnull request) {
+    [self.imageManager setRequestConfiguration:^NSURLRequest * _Nonnull(NSURLRequest * _Nonnull request) {
         XCTAssertEqual(request.cachePolicy, NSURLRequestReloadIgnoringLocalCacheData);
-        [expectation fulfill];
+        [cacheExpectation fulfill];
         return request;
-    };
-  
+    } completion:^{
+        [setRequestConfigExpectation fulfill];
+    }];
+
+    [self waitForExpectations:@[setRequestConfigExpectation] timeout:[self timeoutTimeInterval]];
+
     [self.imageManager downloadImageWithURL:[self headersURL]
                                     options:PINRemoteImageManagerDownloadOptionsIgnoreCache
                                  completion:nil];
-    [self waitForExpectationsWithTimeout:[self timeoutTimeInterval] handler:nil];
+
+    [self waitForExpectations:@[cacheExpectation] timeout:[self timeoutTimeInterval]];
 }
 
 - (void)testRequestConfigurationIsUsedForImageRequest
