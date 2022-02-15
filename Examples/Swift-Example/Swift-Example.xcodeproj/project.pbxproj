@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C353DFA27BB468600422709 /* APNGViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C353DF927BB468600422709 /* APNGViewController.swift */; };
 		689613CD208FC26400D2095C /* GIFViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689613CC208FC26400D2095C /* GIFViewController.swift */; };
 		8E0F3C501C542A25006C0777 /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0F3C4F1C542A25006C0777 /* ScrollViewController.swift */; };
 		8E0F3C521C542A31006C0777 /* WebPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0F3C511C542A31006C0777 /* WebPViewController.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0C353DF927BB468600422709 /* APNGViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APNGViewController.swift; sourceTree = "<group>"; };
 		3498E59FF2DC090C0259B157 /* Pods_Swift_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Swift_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		39E0C8A2598DAAD2294FF9F4 /* Pods-Swift-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swift-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Swift-Example/Pods-Swift-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		689613CC208FC26400D2095C /* GIFViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GIFViewController.swift; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 		8E0F3C5A1C542A84006C0777 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				0C353DF927BB468600422709 /* APNGViewController.swift */,
 				8E0F3C4F1C542A25006C0777 /* ScrollViewController.swift */,
 				8E0F3C531C542A55006C0777 /* ProgressiveViewController.swift */,
 				8E0F3C511C542A31006C0777 /* WebPViewController.swift */,
@@ -235,6 +238,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C353DFA27BB468600422709 /* APNGViewController.swift in Sources */,
 				8E50054A1C4F62EB0095AD0F /* AppDelegate.swift in Sources */,
 				8E0F3C501C542A25006C0777 /* ScrollViewController.swift in Sources */,
 				8E0F3C541C542A55006C0777 /* ProgressiveViewController.swift in Sources */,
