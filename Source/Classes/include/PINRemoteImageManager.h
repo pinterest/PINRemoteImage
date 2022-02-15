@@ -264,6 +264,15 @@ typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSession
 - (void)setRequestConfiguration:(nullable PINRemoteImageManagerRequestConfigurationHandler)configurationBlock;
 
 /**
+ Sets the Request Configuration Block.
+
+ @param configurationBlock A PINRemoteImageManagerRequestConfigurationHandler block.
+ @param completion Completion to be called once configurationBlock has been set.
+ */
+- (void)setRequestConfiguration:(nullable PINRemoteImageManagerRequestConfigurationHandler)configurationBlock
+                     completion:(void (^_Nullable)(void))completion;
+
+/**
  Set the Authentication Challenge Block.
  
  @param challengeBlock A PINRemoteImageManagerAuthenticationChallenge block.
