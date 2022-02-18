@@ -701,6 +701,7 @@
                                     <segment label="Degraded"/>
                                     <segment label="Processing"/>
                                     <segment label="GIF"/>
+                                    <segment label="APNG"/>
                                 </segments>
                             </segmentedCell>
                             <connections>

@@ -131,5 +131,40 @@ static inline BOOL advancePositionWithBytes(NSUInteger *position, Byte *bytes, N
 }
 
 #endif
+#if PIN_APNG
+- (BOOL)pin_isAPNG
+{
+    const void* bytes = self.bytes;
+    if (self.length < 16) {
+        return NO;
+    }
+    
+    // This is a PNG signature.
+    if (memcmp(bytes, "\x89\x50\x4e\x47\x0d\x0a\x1a\x0a", 8)) {
+        return NO;
+    }
+    // The correct PNG must exist in the head chunk.
+    bytes += 8; /* skip signature */
+    if (memcmp(bytes + 4, "IHDR", 4)) {
+        return NO;
+    }
+    
+    uint32_t length = ntohl(*(uint32_t*)(bytes));
+    bytes += 4; /* skip length */
+    bytes += 4; /* skip type code */
+    bytes += length; /* skip type data */
+    bytes += 4; /* skip crc */
+    if ((uint32_t)(bytes - self.bytes) > self.length - 4) {
+        return NO;
+    }
+    
+    // The correct APNG equal correct PNG + animation control chunk.
+    if (memcmp(bytes + 4, "acTL", 4)) {
+        return NO;
+    }
+
+    return YES;
+}
+#endif
 
 @end

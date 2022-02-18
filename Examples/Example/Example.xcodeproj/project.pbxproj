@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2B38B1CD5C8E405102293255 /* libPods-Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA9AA7E6E87DBD4CB132A1F /* libPods-Example.a */; };
+		0CF0743224093090008F126B /* APNGViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CF0743124093090008F126B /* APNGViewController.m */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -28,6 +29,8 @@
 
 /* Begin PBXFileReference section */
 		063FF605A6CC8884BB10EE35 /* Pods-PINRemoteImage Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage Tests/Pods-PINRemoteImage Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		0CF0743024093090008F126B /* APNGViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APNGViewController.h; sourceTree = "<group>"; };
+		0CF0743124093090008F126B /* APNGViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APNGViewController.m; sourceTree = "<group>"; };
 		25CF9DB8CF954119BAA63004 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		32A377E2A670E405B928B26E /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		3FA9AA7E6E87DBD4CB132A1F /* libPods-Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -142,6 +145,8 @@
 				682C52601B584DD300B3B813 /* ProcessingViewController.m */,
 				687666B720869C82001E825C /* GIFViewController.h */,
 				687666B820869C82001E825C /* GIFViewController.m */,
+				0CF0743024093090008F126B /* APNGViewController.h */,
+				0CF0743124093090008F126B /* APNGViewController.m */,
 			);
 			path = PINRemoteImage;
 			sourceTree = "<group>";
@@ -292,6 +297,7 @@
 				6003F59E195388D20070C39A /* PINAppDelegate.m in Sources */,
 				682C52611B584DD300B3B813 /* ProcessingViewController.m in Sources */,
 				687666B920869C82001E825C /* GIFViewController.m in Sources */,
+				0CF0743224093090008F126B /* APNGViewController.m in Sources */,
 				6003F5A7195388D20070C39A /* PINViewController.m in Sources */,
 				68B3850E1B5577D4004EB26F /* DegradedViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,

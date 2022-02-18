@@ -34,6 +34,10 @@
     #endif
 #endif
 
+#ifndef PIN_APNG
+    #define PIN_APNG    1
+#endif
+
 #if PIN_TARGET_IOS
 #define PINImage     UIImage
 #define PINImageView UIImageView

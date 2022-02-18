@@ -18,5 +18,8 @@
 - (BOOL)pin_isWebP;
 - (BOOL)pin_isAnimatedWebP;
 #endif
+#if PIN_APNG
+- (BOOL)pin_isAPNG;
+#endif
 
 @end

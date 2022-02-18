@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C353DF727BB3E7B00422709 /* APNGViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C353DF427BB3E7B00422709 /* APNGViewController.xib */; };
+		0C353DF827BB3E7B00422709 /* APNGViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C353DF527BB3E7B00422709 /* APNGViewController.m */; };
 		689613C6208EA95800D2095C /* GIFViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689613C4208EA95800D2095C /* GIFViewController.m */; };
 		689613C7208EA95800D2095C /* GIFViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689613C5208EA95800D2095C /* GIFViewController.xib */; };
 		9C8BAA38D285DF744BB7A18E /* libPods-Example-Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 30CF2F690D5332945E2257CA /* libPods-Example-Mac.a */; };
@@ -30,6 +32,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0C353DF427BB3E7B00422709 /* APNGViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APNGViewController.xib; sourceTree = "<group>"; };
+		0C353DF527BB3E7B00422709 /* APNGViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APNGViewController.m; sourceTree = "<group>"; };
+		0C353DF627BB3E7B00422709 /* APNGViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APNGViewController.h; sourceTree = "<group>"; };
 		0C7B3B480ECE116693899B73 /* Pods-PINRemoteImage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINRemoteImage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PINRemoteImage/Pods-PINRemoteImage.debug.xcconfig"; sourceTree = "<group>"; };
 		30CF2F690D5332945E2257CA /* libPods-Example-Mac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Example-Mac.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		689613C3208EA95800D2095C /* GIFViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GIFViewController.h; sourceTree = "<group>"; };
@@ -147,6 +152,9 @@
 				689613C3208EA95800D2095C /* GIFViewController.h */,
 				689613C4208EA95800D2095C /* GIFViewController.m */,
 				689613C5208EA95800D2095C /* GIFViewController.xib */,
+				0C353DF627BB3E7B00422709 /* APNGViewController.h */,
+				0C353DF527BB3E7B00422709 /* APNGViewController.m */,
+				0C353DF427BB3E7B00422709 /* APNGViewController.xib */,
 			);
 			path = PINRemoteImage;
 			sourceTree = "<group>";
@@ -245,6 +253,7 @@
 				9D9328CA1C3D09BB00E1F1D3 /* WebPViewController.xib in Resources */,
 				9D9328D01C3D0C0D00E1F1D3 /* ScrollViewController.xib in Resources */,
 				9D97D09D1C3C4D960006C115 /* PINImageCollectionViewItemView.xib in Resources */,
+				0C353DF727BB3E7B00422709 /* APNGViewController.xib in Resources */,
 				689613C7208EA95800D2095C /* GIFViewController.xib in Resources */,
 				9DC09DC01C39AB0D00C6451E /* MainMenu.xib in Resources */,
 				9D9328D51C3D131900E1F1D3 /* ProcessingViewController.xib in Resources */,
@@ -286,6 +295,7 @@
 				9D9328DE1C3D275D00E1F1D3 /* DegradedViewController.m in Sources */,
 				9DC09DBB1C39AB0D00C6451E /* main.m in Sources */,
 				9D9328D41C3D131900E1F1D3 /* ProcessingViewController.m in Sources */,
+				0C353DF827BB3E7B00422709 /* APNGViewController.m in Sources */,
 				9D9328D91C3D243A00E1F1D3 /* ProgressiveViewController.m in Sources */,
 				9DC09DB81C39AB0D00C6451E /* AppDelegate.m in Sources */,
 				9D9328C51C3C60E700E1F1D3 /* PINViewWithBackgroundColor.m in Sources */,

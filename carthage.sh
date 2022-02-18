@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 
 # ISSUE: https://github.com/Carthage/Carthage/issues/3019
