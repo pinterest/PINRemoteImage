@@ -260,4 +260,30 @@ class PINAnimatedImageTests: XCTestCase, PINRemoteImageManagerAlternateRepresent
         index = gifAnimatedImageView.frameIndex(atPlayHeadPosition: 0.41)
         XCTAssert(index == 4)
     }
+    
+    @available(iOS 13.0, tvOS 10.0, *)
+    func testDynamicPlaceholderImages() {
+        let bundle = Bundle(for: type(of: self))
+        let dynamicImage = UIImage(named: "DynamicImage", in: bundle, with: nil)
+        XCTAssertNotNil(dynamicImage, "Unable to read image")
+        
+        let lightTraitCollection = UITraitCollection(traitsFrom: [.current, .init(userInterfaceStyle: .light)])
+        let darkTraitCollection = UITraitCollection(traitsFrom: [.current, .init(userInterfaceStyle: .dark)])
+        
+        let lightImage = dynamicImage?.imageAsset?.image(with: lightTraitCollection).cgImage
+        let darkImage = dynamicImage?.imageAsset?.image(with: darkTraitCollection).cgImage
+        
+        let imageView = PINAnimatedImageView()
+        imageView.image = dynamicImage
+        
+        let layer = CALayer()
+        
+        imageView.overrideUserInterfaceStyle = .light
+        imageView.display(layer)
+        XCTAssert(lightImage === (layer.contents as! CGImage), "Placeholder image should be using light mode version")
+        
+        imageView.overrideUserInterfaceStyle = .dark
+        imageView.display(layer)
+        XCTAssert(darkImage === (layer.contents as! CGImage), "Placeholder image should be using dark mode version")
+    }
 }
