@@ -11,7 +11,7 @@
 #if SWIFT_PACKAGE
 @import PINOperation;
 #else
-#import "external/PINOperation/Source/PINOperation.h"
+#import "../PINOperation/Source/PINOperation.h"
 #endif
 
 #import "Source/Classes/PINRemoteImageCallbacks.h"
