@@ -6,7 +6,7 @@
 //
 //
 
-#import "PINRemoteImageMemoryContainer.h"
+#import "Source/Classes/PINRemoteImageMemoryContainer.h"
 
 @implementation PINRemoteImageMemoryContainer
 

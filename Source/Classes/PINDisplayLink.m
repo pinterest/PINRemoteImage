@@ -5,7 +5,7 @@
 //  Created by Garrett Moon on 4/23/18.
 //
 
-#import "PINDisplayLink.h"
+#import "Source/Classes/PINDisplayLink.h"
 
 #if PIN_TARGET_MAC
 
@@ -41,7 +41,7 @@ static CVReturn displayLinkFired (CVDisplayLinkRef displayLink,
 @implementation PINDisplayLink
 {
     CVDisplayLinkRef _displayLinkRef;
-    
+
     BOOL _paused;
     NSInteger _frameInterval;
 }
@@ -108,7 +108,7 @@ static CVReturn displayLinkFired (CVDisplayLinkRef displayLink,
     if (_paused == paused) {
         return;
     }
-    
+
     _paused = paused;
     if (paused) {
         CVDisplayLinkStop(_displayLinkRef);

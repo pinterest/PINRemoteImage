@@ -9,7 +9,7 @@
 #ifndef PINRemoteImageManager_Private_h
 #define PINRemoteImageManager_Private_h
 
-#import "PINRemoteImageDownloadQueue.h"
+#import "Source/Classes/PINRemoteImageDownloadQueue.h"
 
 typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse *response, NSError *error);
 

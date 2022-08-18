@@ -6,15 +6,15 @@
 //  Copyright © 2017 Pinterest. All rights reserved.
 //
 
-#import "PINRemoteImageDownloadQueue.h"
+#import "Source/Classes/PINRemoteImageDownloadQueue.h"
 
-#import "PINURLSessionManager.h"
-#import "PINRemoteLock.h"
+#import "Source/Classes/include/PINURLSessionManager.h"
+#import "Source/Classes/PINRemoteLock.h"
 
 @interface PINRemoteImageDownloadQueue ()
 {
     PINRemoteLock *_lock;
-    
+
     NSMutableOrderedSet <NSURLSessionDataTask *> *_highPriorityQueuedOperations;
     NSMutableOrderedSet <NSURLSessionDataTask *> *_defaultPriorityQueuedOperations;
     NSMutableOrderedSet <NSURLSessionDataTask *> *_lowPriorityQueuedOperations;
@@ -59,7 +59,7 @@
     [self lock];
         _maxNumberOfConcurrentDownloads = maxNumberOfConcurrentDownloads;
     [self unlock];
-    
+
     [self scheduleDownloadsIfNeeded];
 }
 
@@ -98,15 +98,15 @@
             } else if (_lowPriorityQueuedOperations.count > 0) {
                 queue = _lowPriorityQueuedOperations;
             }
-            
+
             if (!queue) {
                 break;
             }
-            
+
             NSURLSessionDataTask *task = [queue firstObject];
             [queue removeObjectAtIndex:0];
             [task resume];
-            
+
             [_runningTasks addObject:task];
         }
     [self unlock];
@@ -138,7 +138,7 @@
 - (void)setQueuePriority:(PINRemoteImageManagerPriority)priority forTask:(NSURLSessionDataTask *)downloadTask addIfNecessary:(BOOL)addIfNecessary
 {
     BOOL containsTask = [self removeDownloadTaskFromQueue:downloadTask];
-    
+
     if (containsTask || addIfNecessary) {
         NSMutableOrderedSet <NSURLSessionDataTask *> *queue = nil;
         [self lock];
@@ -146,15 +146,15 @@
                 case PINRemoteImageManagerPriorityLow:
                     queue = _lowPriorityQueuedOperations;
                     break;
-                    
+
                 case PINRemoteImageManagerPriorityDefault:
                     queue = _defaultPriorityQueuedOperations;
                     break;
-                    
+
                 case PINRemoteImageManagerPriorityHigh:
                     queue = _highPriorityQueuedOperations;
                     break;
-                    
+
                 default:
                     NSAssert(NO, @"invalid priority: %tu", priority);
                     break;

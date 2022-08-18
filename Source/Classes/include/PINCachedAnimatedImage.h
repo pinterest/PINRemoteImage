@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PINRemoteImageMacros.h"
-#import "PINAnimatedImage.h"
+#import "Source/Classes/include/PINRemoteImageMacros.h"
+#import "Source/Classes/include/PINAnimatedImage.h"
 
 @interface PINCachedAnimatedImage : NSObject
 

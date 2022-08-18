@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "PINRemoteImageMacros.h"
+#import "Source/Classes/include/PINRemoteImageMacros.h"
 
 #if PIN_TARGET_IOS
 #import <UIKit/UIKit.h>
@@ -73,14 +73,14 @@ typedef void(^PINAnimatedImageInfoReady)(PINImage * _Nonnull coverImage);
 
 /**
  @abstract Return the duration at a given index.
- 
+
  @warning *Must be overridden by subclass
  */
 - (CFTimeInterval)durationAtIndex:(NSUInteger)index;
 
 /**
  @abstract Return the total number of frames in the animated image.
- 
+
  @warning *Must be overridden by subclass
  */
 @property (nonatomic, readonly) size_t frameCount;
@@ -155,7 +155,7 @@ typedef void(^PINAnimatedImageInfoReady)(PINImage * _Nonnull coverImage);
  */
 - (nullable CGImageRef)imageAtIndex:(NSUInteger)index cacheProvider:(nullable id<PINCachedAnimatedFrameProvider>)cacheProvider;
 /**
- 
+
  @abstract Return the duration at a given index.
  */
 - (CFTimeInterval)durationAtIndex:(NSUInteger)index;

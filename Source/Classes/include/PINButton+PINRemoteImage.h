@@ -6,7 +6,7 @@
 //
 //
 
-#import "PINRemoteImageMacros.h"
+#import "Source/Classes/include/PINRemoteImageMacros.h"
 
 #if PIN_TARGET_IOS
 #import <UIKit/UIKit.h>
@@ -14,8 +14,8 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#import "PINRemoteImageManager.h"
-#import "PINRemoteImageCategoryManager.h"
+#import "Source/Classes/include/PINRemoteImageManager.h"
+#import "Source/Classes/include/PINRemoteImageCategoryManager.h"
 
 @interface PINButton (PINRemoteImage) <PINRemoteImageCategory>
 

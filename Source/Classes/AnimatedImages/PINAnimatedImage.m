@@ -6,7 +6,7 @@
 //  Copyright © 2017 Pinterest. All rights reserved.
 //
 
-#import "PINAnimatedImage.h"
+#import "Source/Classes/include/PINAnimatedImage.h"
 
 NSErrorDomain const kPINAnimatedImageErrorDomain = @"kPINAnimatedImageErrorDomain";
 
@@ -25,7 +25,7 @@ const Float32 kPINAnimatedImageDefaultDuration = 0.1;
 {
     static dispatch_once_t onceToken;
     static NSInteger maximumFramesPerSecond = 60;
-    
+
     dispatch_once(&onceToken, ^{
 #if PIN_TARGET_IOS
         if (@available(iOS 10.3, tvOS 10.3, *)) {
@@ -87,7 +87,7 @@ const Float32 kPINAnimatedImageDefaultDuration = 0.1;
     dispatch_once(&onceToken, ^{
         kGreatestCommonDivisorPrecision = 2.0 / (1.0 / [PINAnimatedImage maximumFramesPerSecond]);
     });
-    
+
     // Scales the frame delays by `kGreatestCommonDivisorPrecision`
     // then converts it to an UInteger for in order to calculate the GCD.
     NSUInteger scaledGCD = lrint([self durationAtIndex:0] * kGreatestCommonDivisorPrecision);
@@ -95,7 +95,7 @@ const Float32 kPINAnimatedImageDefaultDuration = 0.1;
         CFTimeInterval duration = [self durationAtIndex:durationIdx];
         scaledGCD = gcd(lrint(duration * kGreatestCommonDivisorPrecision), scaledGCD);
     }
-    
+
     // Reverse to scale to get the value back into seconds.
     return (scaledGCD / kGreatestCommonDivisorPrecision);
 }
@@ -106,7 +106,7 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
 {
     // http://en.wikipedia.org/wiki/Greatest_common_divisor
     NSCAssert(a > 0 && b > 0, @"A and B must be greater than 0");
-    
+
     while (a != b) {
         if (a > b) {
             a = a - b;

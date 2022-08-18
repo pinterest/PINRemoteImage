@@ -6,46 +6,45 @@
 //
 //
 
-#import "PINRemoteImageManager.h"
+#import "Source/Classes/include/PINRemoteImageManager.h"
 
 #import <CommonCrypto/CommonDigest.h>
 
 #if SWIFT_PACKAGE
 @import PINOperation;
 #else
-#import <PINOperation/PINOperation.h>
+#import "external/PINOperation/Source/PINOperation.h"
 #endif
 
 #import <objc/runtime.h>
 
-#import "PINAlternateRepresentationProvider.h"
-#import "PINRemoteImage.h"
-#import "PINRemoteImageManagerConfiguration.h"
-#import "PINRemoteLock.h"
-#import "PINProgressiveImage.h"
-#import "PINRemoteImageCallbacks.h"
-#import "PINRemoteImageTask.h"
-#import "PINRemoteImageProcessorTask.h"
-#import "PINRemoteImageDownloadTask.h"
-#import "PINResume.h"
-#import "PINRemoteImageMemoryContainer.h"
-#import "PINRemoteImageCaching.h"
-#import "PINRequestRetryStrategy.h"
-#import "PINRemoteImageDownloadQueue.h"
-#import "PINRequestRetryStrategy.h"
-#import "PINSpeedRecorder.h"
-#import "PINURLSessionManager.h"
+#import "Source/Classes/include/PINAlternateRepresentationProvider.h"
+#import "Source/Classes/include/PINRemoteImage.h"
+#import "Source/Classes/PINRemoteImageManagerConfiguration.h"
+#import "Source/Classes/PINRemoteLock.h"
+#import "Source/Classes/include/PINProgressiveImage.h"
+#import "Source/Classes/PINRemoteImageCallbacks.h"
+#import "Source/Classes/PINRemoteImageTask.h"
+#import "Source/Classes/PINRemoteImageProcessorTask.h"
+#import "Source/Classes/PINRemoteImageDownloadTask.h"
+#import "Source/Classes/PINResume.h"
+#import "Source/Classes/PINRemoteImageMemoryContainer.h"
+#import "Source/Classes/include/PINRemoteImageCaching.h"
+#import "Source/Classes/include/PINRequestRetryStrategy.h"
+#import "Source/Classes/PINRemoteImageDownloadQueue.h"
+#import "Source/Classes/PINSpeedRecorder.h"
+#import "Source/Classes/include/PINURLSessionManager.h"
 
-#import "NSData+ImageDetectors.h"
-#import "PINImage+DecodedImage.h"
-#import "PINImage+ScaledImage.h"
-#import "PINRemoteImageManager+Private.h"
-#import "NSHTTPURLResponse+MaxAge.h"
+#import "Source/Classes/include/NSData+ImageDetectors.h"
+#import "Source/Classes/Categories/PINImage+DecodedImage.h"
+#import "Source/Classes/Categories/PINImage+ScaledImage.h"
+#import "Source/Classes/PINRemoteImageManager+Private.h"
+#import "Source/Classes/Categories/NSHTTPURLResponse+MaxAge.h"
 
 #if USE_PINCACHE
-#import "PINCache+PINRemoteImageCaching.h"
+#import "Source/Classes/include/PINCache+PINRemoteImageCaching.h"
 #else
-#import "PINRemoteImageBasicCache.h"
+#import "Source/Classes/include/PINRemoteImageBasicCache.h"
 #endif
 
 
@@ -60,11 +59,11 @@ PINOperationQueuePriority operationPriorityWithImageManagerPriority(PINRemoteIma
         case PINRemoteImageManagerPriorityLow:
             return PINOperationQueuePriorityLow;
             break;
-            
+
         case PINRemoteImageManagerPriorityDefault:
             return PINOperationQueuePriorityDefault;
             break;
-            
+
         case PINRemoteImageManagerPriorityHigh:
             return PINOperationQueuePriorityHigh;
             break;
@@ -76,11 +75,11 @@ float dataTaskPriorityWithImageManagerPriority(PINRemoteImageManagerPriority pri
         case PINRemoteImageManagerPriorityLow:
             return 0.0;
             break;
-            
+
         case PINRemoteImageManagerPriorityDefault:
             return 0.5;
             break;
-            
+
         case PINRemoteImageManagerPriorityHigh:
             return 1.0;
             break;
@@ -128,7 +127,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse 
   PINRemoteLock *_lock;
   PINOperationQueue *_concurrentOperationQueue;
   PINRemoteImageDownloadQueue *_urlSessionTaskQueue;
-  
+
   // Necessary to have a strong reference to _defaultAlternateRepresentationProvider because _alternateRepProvider is __weak
   PINAlternateRepresentationProvider *_defaultAlternateRepresentationProvider;
   __weak PINAlternateRepresentationProvider *_alternateRepProvider;
@@ -219,7 +218,7 @@ static dispatch_once_t sharedDispatchToken;
         if (!configuration) {
             configuration = [[PINRemoteImageManagerConfiguration alloc] init];
         }
-        
+
         if (imageCache) {
             self.cache = imageCache;
         } else if (PINRemoteImageManagerSubclassOverridesSelector([self class], @selector(defaultImageCache))) {
@@ -230,7 +229,7 @@ static dispatch_once_t sharedDispatchToken;
         } else {
             self.cache = [[self class] defaultImageCache];
         }
-        
+
         if ([self.cache respondsToSelector:@selector(setObjectOnDisk:forKey:withAgeLimit:)] &&
                 [self.cache respondsToSelector:@selector(setObjectInMemory:forKey:withCost:withAgeLimit:)] &&
                 [self.cache respondsToSelector:@selector(diskCacheIsTTLCache)] &&
@@ -238,7 +237,7 @@ static dispatch_once_t sharedDispatchToken;
             _diskCacheTTLIsEnabled = [self.cache diskCacheIsTTLCache];
             _memoryCacheTTLIsEnabled = [self.cache memoryCacheIsTTLCache];
         }
-        
+
         _sessionConfiguration = [sessionConfiguration copy];
         if (!_sessionConfiguration) {
             _sessionConfiguration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
@@ -247,18 +246,18 @@ static dispatch_once_t sharedDispatchToken;
             _sessionConfiguration.URLCache = nil;
             _sessionConfiguration.HTTPMaximumConnectionsPerHost = PINRemoteImageHTTPMaximumConnectionsPerHost;
         }
-        
+
         _callbackQueue = dispatch_queue_create("PINRemoteImageManagerCallbackQueue", DISPATCH_QUEUE_CONCURRENT);
         _lock = [[PINRemoteLock alloc] initWithName:@"PINRemoteImageManager"];
-        
+
         _concurrentOperationQueue = [[PINOperationQueue alloc] initWithMaxConcurrentOperations: configuration.maxConcurrentOperations];
         _urlSessionTaskQueue = [PINRemoteImageDownloadQueue queueWithMaxConcurrentDownloads:configuration.maxConcurrentDownloads];
-        
+
         self.sessionManager = [[PINURLSessionManager alloc] initWithSessionConfiguration:_sessionConfiguration];
         self.sessionManager.delegate = self;
-        
+
         self.estimatedRemainingTimeThreshold = configuration.estimatedRemainingTimeThreshold;
-        
+
         _highQualityBPSThreshold = configuration.highQualityBPSThreshold;
         _lowQualityBPSThreshold = configuration.lowQualityBPSThreshold;
         _shouldUpgradeLowQualityImages = configuration.shouldUpgradeLowQualityImages;
@@ -267,7 +266,7 @@ static dispatch_once_t sharedDispatchToken;
         self.tasks = [[NSMutableDictionary alloc] init];
         self.canceledTasks = [[NSHashTable alloc] initWithOptions:NSHashTableWeakMemory capacity:5];
         self.UUIDToTask = [NSMapTable weakToWeakObjectsMapTable];
-        
+
         if (alternateRepProvider == nil) {
             _defaultAlternateRepresentationProvider = [[PINAlternateRepresentationProvider alloc] init];
             alternateRepProvider = _defaultAlternateRepresentationProvider;
@@ -310,9 +309,9 @@ static dispatch_once_t sharedDispatchToken;
     NSString * const kPINRemoteImageDiskCacheVersionKey = @"kPINRemoteImageDiskCacheVersionKey";
     const NSInteger kPINRemoteImageDiskCacheVersion = 1;
     NSUserDefaults *pinDefaults = [[NSUserDefaults alloc] init];
-    
+
     NSString *cacheURLRoot = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    
+
     if ([pinDefaults integerForKey:kPINRemoteImageDiskCacheVersionKey] != kPINRemoteImageDiskCacheVersion) {
         //remove the old version of the disk cache
         NSURL *diskCacheURL = [PINDiskCache cacheURLWithRootPath:cacheURLRoot prefix:PINDiskCachePrefix name:kPINRemoteImageDiskCacheName];
@@ -654,21 +653,21 @@ static dispatch_once_t sharedDispatchToken;
                        inputUUID:(NSUUID *)UUID
 {
     NSAssert((processor != nil && processorKey.length > 0) || (processor == nil && processorKey == nil), @"processor must not be nil and processorKey length must be greater than zero OR processor must be nil and processorKey must be nil");
-    
+
     Class taskClass;
     if (processor && processorKey.length > 0) {
         taskClass = [PINRemoteImageProcessorTask class];
     } else {
         taskClass = [PINRemoteImageDownloadTask class];
     }
-    
+
     NSString *key = [self cacheKeyForURL:url processorKey:processorKey];
 
     if (url == nil) {
         [self earlyReturnWithOptions:options url:nil key:key object:nil completion:completion];
         return nil;
     }
-    
+
     NSAssert([url isKindOfClass:[NSURL class]], @"url must be of type NSURL, if it's an NSString, we'll try to correct");
     if ([url isKindOfClass:[NSString class]]) {
         url = [NSURL URLWithString:(NSString *)url];
@@ -688,7 +687,7 @@ static dispatch_once_t sharedDispatchToken;
             }
         }
     }
-    
+
     if ([url.scheme isEqualToString:@"data"]) {
         NSData *data = [NSData dataWithContentsOfURL:url];
         if (data) {
@@ -697,7 +696,7 @@ static dispatch_once_t sharedDispatchToken;
             }
         }
     }
-    
+
     [_concurrentOperationQueue scheduleOperation:^
     {
         [self lock];
@@ -707,7 +706,7 @@ static dispatch_once_t sharedDispatchToken;
                 [self unlock];
                 return;
             }
-        
+
             PINRemoteImageTask *task = [self.tasks objectForKey:key];
             BOOL taskExisted = NO;
             if (task == nil) {
@@ -722,10 +721,10 @@ static dispatch_once_t sharedDispatchToken;
             [self.tasks setObject:task forKey:key];
             // Relax :), task retain the UUID for us, it's ok to have a weak reference to UUID here.
             [self.UUIDToTask setObject:task forKey:UUID];
-        
+
             NSAssert(taskClass == [task class], @"Task class should be the same!");
         [self unlock];
-        
+
         if (taskExisted == NO) {
             [self.concurrentOperationQueue scheduleOperation:^
              {
@@ -742,7 +741,7 @@ static dispatch_once_t sharedDispatchToken;
                                      [self.tasks removeObjectForKey:key];
                                  }
                              [self unlock];
-                             
+
                              //Skip early check
                              [self downloadImageWithURL:url
                                                 options:options | PINRemoteImageManagerDownloadOptionsSkipEarlyCheck
@@ -777,7 +776,7 @@ static dispatch_once_t sharedDispatchToken;
              } withPriority:operationPriorityWithImageManagerPriority(priority)];
         }
     } withPriority:operationPriorityWithImageManagerPriority(priority)];
-    
+
     return UUID;
 }
 
@@ -796,7 +795,7 @@ static dispatch_once_t sharedDispatchToken;
             [self unlock];
             return;
         }
-        
+
         __weak typeof(self) weakSelf = self;
         NSUUID *downloadTaskUUID = [self downloadImageWithURL:url
                                                       options:options | PINRemoteImageManagerDownloadOptionsSkipEarlyCheck
@@ -816,14 +815,14 @@ static dispatch_once_t sharedDispatchToken;
             if (result.image && error == nil) {
                 //If completionBlocks.count == 0, we've canceled before we were even able to start.
                 PINImage *image = processor(result, &processCost);
-                
+
                 if (image == nil) {
                     error = [NSError errorWithDomain:PINRemoteImageManagerErrorDomain
                                                 code:PINRemoteImageManagerErrorFailedToProcessImage
                                             userInfo:nil];
                 }
                 [strongSelf callCompletionsWithKey:key image:image alternativeRepresentation:nil cached:NO response:result.response error:error finalized:NO];
-              
+
                 if (error == nil && image != nil) {
                     BOOL saveAsJPEG = (options & PINRemoteImageManagerSaveProcessedImageAsJPEG) != 0;
                     NSData *diskData = nil;
@@ -832,10 +831,10 @@ static dispatch_once_t sharedDispatchToken;
                     } else {
                         diskData = PINImagePNGRepresentation(image);
                     }
-                    
+
                     [strongSelf materializeAndCacheObject:image cacheInDisk:diskData additionalCost:processCost url:url key:key options:options outImage:nil outAltRep:nil];
                 }
-                
+
                 [strongSelf callCompletionsWithKey:key image:image alternativeRepresentation:nil cached:NO response:result.response error:error finalized:YES];
             } else {
                 if (error == nil) {
@@ -864,11 +863,11 @@ static dispatch_once_t sharedDispatchToken;
         resume = [self.cache objectFromDiskForKey:resumeKey];
         [self.cache removeObjectForKey:resumeKey completion:nil];
     }
-    
+
     [self lock];
         PINRemoteImageDownloadTask *task = [self.tasks objectForKey:key];
     [self unlock];
-    
+
     [task scheduleDownloadWithRequest:[self requestWithURL:url task:task]
                                resume:resume
                             skipRetry:(options & PINRemoteImageManagerDownloadOptionsSkipRetry)
@@ -910,17 +909,17 @@ static dispatch_once_t sharedDispatchToken;
                    processorKey:(nullable NSString *)processorKey
                  additionalCost:(NSUInteger)additionalCost
 {
-  
+
   if (url != nil) {
     NSString *key = [self cacheKeyForURL:url processorKey:processorKey];
-    
+
     PINRemoteImageManagerDownloadOptions options = PINRemoteImageManagerDownloadOptionsSkipDecode | PINRemoteImageManagerDownloadOptionsSkipEarlyCheck;
     PINRemoteImageMemoryContainer *container = [[PINRemoteImageMemoryContainer alloc] init];
     container.data = data;
-    
+
     return [self materializeAndCacheObject:container cacheInDisk:data additionalCost:additionalCost url:url key:key options:options outImage: nil outAltRep: nil];
   }
-  
+
   return NO;
 }
 
@@ -936,7 +935,7 @@ static dispatch_once_t sharedDispatchToken;
         resultType = PINRemoteImageResultTypeMemoryCache;
         [self materializeAndCacheObject:object url:url key:key options:options outImage:&image outAltRep:&alternativeRepresentation];
     }
-    
+
     if (completion && ((image || alternativeRepresentation) || (url == nil))) {
         //If we're on the main thread, special case to call completion immediately
         NSError *error = nil;
@@ -969,18 +968,18 @@ static dispatch_once_t sharedDispatchToken;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
 
     NSMutableDictionary *headers = [self.httpHeaderFields mutableCopy];
-    
+
     if (headers.count > 0) {
         request.allHTTPHeaderFields = headers;
     }
-    
+
     if (_requestConfigurationHandler) {
         request = [_requestConfigurationHandler(request) mutableCopy];
     }
-    
+
     PINRemoteImageWeakTask *weakTask = [[PINRemoteImageWeakTask alloc] initWithTask:task];
     [NSURLProtocol setProperty:weakTask forKey:PINRemoteImageWeakTaskKey inRequest:request];
-    
+
     return request;
 }
 
@@ -1070,12 +1069,12 @@ static dispatch_once_t sharedDispatchToken;
                 //there's no need to ever remove a UUID from canceledTasks because it is weak.
                 [self.canceledTasks addObject:UUID];
             }
-            
+
             if ([taskToEvaluate cancelWithUUID:UUID resume:storeResumeData ? &resume : NULL]) {
                 [self.tasks removeObjectForKey:taskToEvaluate.key];
             }
         [self unlock];
-        
+
         if (resume) {
             //store resume data away, only download tasks currently return resume data
             [self storeResumeData:resume forURL:[(PINRemoteImageDownloadTask *)taskToEvaluate URL]];
@@ -1120,7 +1119,7 @@ static dispatch_once_t sharedDispatchToken;
     if (UUID == nil) {
         return;
     }
-    
+
     PINLog(@"setting progress block of UUID: %@ progressBlock: %@", UUID, progressImageCallback);
     [_concurrentOperationQueue scheduleOperation:^{
         [self lock];
@@ -1171,7 +1170,7 @@ static dispatch_once_t sharedDispatchToken;
                    completion:(PINRemoteImageManagerImageCompletion)completion
 {
     CFTimeInterval requestTime = CACurrentMediaTime();
-    
+
     if ((PINRemoteImageManagerDownloadOptionsSkipEarlyCheck & options) == NO && [NSThread isMainThread]) {
         PINRemoteImageManagerResult *result = [self synchronousImageFromCacheWithURL:url processorKey:processorKey cacheKey:cacheKey options:options];
         if (result.image && result.error == nil) {
@@ -1179,7 +1178,7 @@ static dispatch_once_t sharedDispatchToken;
             return;
         }
     }
-    
+
     [self objectForURL:url processorKey:processorKey key:cacheKey options:options completion:^(BOOL found, BOOL valid, PINImage *image, id alternativeRepresentation) {
         NSError *error = nil;
         if (valid == NO) {
@@ -1187,7 +1186,7 @@ static dispatch_once_t sharedDispatchToken;
                                         code:PINRemoteImageManagerErrorInvalidItemInCache
                                     userInfo:nil];
         }
-        
+
         dispatch_async(self.callbackQueue, ^{
             completion([PINRemoteImageManagerResult imageResultWithImage:image
                                                alternativeRepresentation:alternativeRepresentation
@@ -1213,13 +1212,13 @@ static dispatch_once_t sharedDispatchToken;
 - (PINRemoteImageManagerResult *)synchronousImageFromCacheWithURL:(NSURL *)url processorKey:(NSString *)processorKey cacheKey:(NSString *)cacheKey options:(PINRemoteImageManagerDownloadOptions)options
 {
     CFTimeInterval requestTime = CACurrentMediaTime();
-  
+
     if (cacheKey == nil && url == nil) {
         return nil;
     }
-  
+
     cacheKey = cacheKey ?: [self cacheKeyForURL:url processorKey:processorKey];
-    
+
     id object = [self.cache objectFromMemoryForKey:cacheKey];
     PINImage *image;
     id alternativeRepresentation;
@@ -1232,7 +1231,7 @@ static dispatch_once_t sharedDispatchToken;
                                     code:PINRemoteImageManagerErrorInvalidItemInCache
                                 userInfo:nil];
     }
-    
+
     return [PINRemoteImageManagerResult imageResultWithImage:image
                                    alternativeRepresentation:alternativeRepresentation
                                                requestLength:CACurrentMediaTime() - requestTime
@@ -1315,10 +1314,10 @@ static dispatch_once_t sharedDispatchToken;
                          inputUUID:UUID];
         return UUID;
     }
-    
+
     [self.concurrentOperationQueue scheduleOperation:^{
         __block NSInteger highestQualityDownloadedIdx = -1;
-        
+
         //check for the highest quality image already in cache. It's possible that an image is in the process of being
         //cached when this is being run. In which case two things could happen:
         // -    If network conditions dictate that a lower quality image should be downloaded than the one that is currently
@@ -1330,39 +1329,39 @@ static dispatch_once_t sharedDispatchToken;
         [urls enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSURL *url, NSUInteger idx, BOOL *stop) {
             NSAssert([url isKindOfClass:[NSURL class]], @"url must be of type URL");
             NSString *cacheKey = [self cacheKeyForURL:url processorKey:nil];
-            
+
             //we don't actually need the object, just need to know it exists so that we can request it later
             BOOL hasObject = [self.cache objectExistsForKey:cacheKey];
-            
+
             if (hasObject) {
                 highestQualityDownloadedIdx = idx;
                 *stop = YES;
             }
         }];
-        
+
         [self lock];
             float highQualityQPSThreshold = [self highQualityBPSThreshold];
             float lowQualityQPSThreshold = [self lowQualityBPSThreshold];
             BOOL shouldUpgradeLowQualityImages = [self shouldUpgradeLowQualityImages];
         [self unlock];
-        
+
         NSUInteger desiredImageURLIdx = [PINSpeedRecorder appropriateImageIdxForURLsGivenHistoricalNetworkConditions:urls
                                                                                               lowQualityQPSThreshold:lowQualityQPSThreshold
                                                                                              highQualityQPSThreshold:highQualityQPSThreshold];
-        
+
         NSUInteger downloadIdx;
         //if the highest quality already downloaded is less than what currentBPS would dictate and shouldUpgrade is
         //set, download the new higher quality image. If no image has been cached, download the image dictated by
         //current bps
-        
+
         if ((highestQualityDownloadedIdx < desiredImageURLIdx && shouldUpgradeLowQualityImages) || highestQualityDownloadedIdx == -1) {
             downloadIdx = desiredImageURLIdx;
         } else {
             downloadIdx = highestQualityDownloadedIdx;
         }
-        
+
         NSURL *downloadURL = [urls objectAtIndex:downloadIdx];
-        
+
         [self downloadImageWithURL:downloadURL
                                  options:options
                                 priority:PINRemoteImageManagerPriorityDefault
@@ -1375,7 +1374,7 @@ static dispatch_once_t sharedDispatchToken;
                                   for (NSInteger idx = downloadIdx - 1; idx >= 0; idx--) {
                                       [[self cache] removeObjectForKey:[self cacheKeyForURL:[urls objectAtIndex:idx] processorKey:nil]];
                                   }
-                                  
+
                                   if (completion) {
                                       completion(result);
                                   }
@@ -1430,7 +1429,7 @@ static dispatch_once_t sharedDispatchToken;
     __block PINImage *image = nil;
     __block NSData *data = nil;
     __block BOOL updateMemoryCache = NO;
-    
+
     PINRemoteImageMemoryContainer *container = nil;
     if ([object isKindOfClass:[PINRemoteImageMemoryContainer class]]) {
         container = (PINRemoteImageMemoryContainer *)object;
@@ -1439,10 +1438,10 @@ static dispatch_once_t sharedDispatchToken;
         }];
     } else {
         updateMemoryCache = YES;
-        
+
         // don't need to lock the container here because we just init it.
         container = [[PINRemoteImageMemoryContainer alloc] init];
-        
+
         if ([object isKindOfClass:[PINImage class]]) {
             data = diskData;
             container.image = (PINImage *)object;
@@ -1454,14 +1453,14 @@ static dispatch_once_t sharedDispatchToken;
             data = nil;
             container = nil;
         }
-        
+
         container.data = data;
     }
-    
+
     if (alternateRepresentationsAllowed) {
         alternateRepresentation = [_alternateRepProvider alternateRepresentationWithData:data options:options];
     }
-    
+
     if (alternateRepresentation == nil) {
         //we need the image
         [container.lock lockWithBlock:^{
@@ -1469,11 +1468,11 @@ static dispatch_once_t sharedDispatchToken;
         }];
         if (image == nil && container.data) {
             image = [PINImage pin_decodedImageWithData:container.data skipDecodeIfPossible:skipDecode];
-            
+
             if (url != nil) {
                 image = [PINImage pin_scaledImageForImage:image withKey:key];
             }
-            
+
             if (skipDecode == NO) {
                 [container.lock lockWithBlock:^{
                     updateMemoryCache = YES;
@@ -1517,15 +1516,15 @@ static dispatch_once_t sharedDispatchToken;
             }
         }
     }
-    
+
     if (outImage) {
         *outImage = image;
     }
-    
+
     if (outAlternateRepresentation) {
         *outAlternateRepresentation = alternateRepresentation;
     }
-    
+
     if (image == nil && alternateRepresentation == nil) {
         PINLog(@"Invalid item in cache");
         [self.cache removeObjectForKey:key completion:nil];
@@ -1587,12 +1586,12 @@ static dispatch_once_t sharedDispatchToken;
         completion(NO, YES, nil, nil);
         return;
     }
-  
+
     if (key == nil && url == nil) {
         completion(NO, YES, nil, nil);
         return;
     }
-  
+
     key = key ?: [self cacheKeyForURL:url processorKey:processorKey];
 
     void (^materialize)(id object) = ^(id object) {
@@ -1604,10 +1603,10 @@ static dispatch_once_t sharedDispatchToken;
                                              options:options
                                             outImage:&image
                                            outAltRep:&alternativeRepresentation];
-        
+
         completion(YES, valid, image, alternativeRepresentation);
     };
-    
+
     PINRemoteImageMemoryContainer *container = [self.cache objectFromMemoryForKey:key];
     if (container) {
         materialize(container);

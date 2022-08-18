@@ -6,7 +6,7 @@
 //  Copyright © 2020 Pinterest. All rights reserved.
 //
 
-#import "PINAnimatedImage.h"
+#import "Source/Classes/include/PINAnimatedImage.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

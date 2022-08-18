@@ -6,7 +6,7 @@
 //
 //
 
-#import "PINRemoteImageBasicCache.h"
+#import "Source/Classes/PINRemoteImageBasicCache.h"
 
 @interface PINRemoteImageBasicCache()
 @property (nonatomic, strong) NSCache *cache;
@@ -62,7 +62,7 @@
 
 -(void)setObjectOnDisk:(id)object forKey:(NSString *)key
 {
-    
+
 }
 
 //******************************************************************************************************

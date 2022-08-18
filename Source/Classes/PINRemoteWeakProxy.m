@@ -6,7 +6,7 @@
 //  Copyright © 2018 Pinterest. All rights reserved.
 //
 
-#import "PINRemoteWeakProxy.h"
+#import "Source/Classes/PINRemoteWeakProxy.h"
 
 @interface PINRemoteWeakProxy ()
 {

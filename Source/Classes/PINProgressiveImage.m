@@ -6,15 +6,15 @@
 //
 //
 
-#import "PINProgressiveImage.h"
+#import "Source/Classes/include/PINProgressiveImage.h"
 
 #import <ImageIO/ImageIO.h>
 #import <Accelerate/Accelerate.h>
 
-#import "PINRemoteImage.h"
-#import "PINImage+DecodedImage.h"
-#import "PINRemoteImageDownloadTask.h"
-#import "PINSpeedRecorder.h"
+#import "Source/Classes/include/PINRemoteImage.h"
+#import "Source/Classes/Categories/PINImage+DecodedImage.h"
+#import "Source/Classes/PINRemoteImageDownloadTask.h"
+#import "Source/Classes/PINSpeedRecorder.h"
 
 @interface PINProgressiveImage ()
 
@@ -44,7 +44,7 @@
 {
     if (self = [super init]) {
         self.lock = [[PINRemoteLock alloc] initWithName:@"PINProgressiveImage"];
-        
+
         _dataTask = dataTask;
         _imageSource = CGImageSourceCreateIncremental(NULL);;
         self.size = CGSizeZero;
@@ -123,7 +123,7 @@
     if (remainingBytes == 0) {
         return 0;
     }
-    
+
     float bytesPerSecond = [[PINSpeedRecorder sharedRecorder] weightedAdjustedBytesPerSecondForHost:[_dataTask.currentRequest.URL host]];
     if (bytesPerSecond == -1) {
         return MAXFLOAT;
@@ -138,7 +138,7 @@
             NSAssert(self.mutableData == nil, @"If we're resuming, data shouldn't be setup yet.");
             self.startingBytes = data.length;
         }
-    
+
         if (self.mutableData == nil) {
             NSUInteger bytesToAlloc = 0;
             if (expectedNumberOfBytes > 0) {
@@ -148,7 +148,7 @@
             self.expectedNumberOfBytes = expectedNumberOfBytes;
         }
         [self.mutableData appendData:data];
-        
+
         while ([self l_hasCompletedFirstScan] == NO && self.scannedByte < self.mutableData.length) {
     #if DEBUG
             CFTimeInterval start = CACurrentMediaTime();
@@ -165,7 +165,7 @@
             self.scanTime += total;
     #endif
         }
-        
+
         if (self.imageSource) {
             CGImageSourceUpdateData(self.imageSource, (CFDataRef)self.mutableData, NO);
         }
@@ -179,31 +179,31 @@
             [self.lock unlock];
             return nil;
         }
-        
+
         if (self.currentThreshold == _progressThresholds.count) {
             [self.lock unlock];
             return nil;
         }
-        
+
         if (_estimatedRemainingTimeThreshold > 0 && [self l_estimatedRemainingTime] < _estimatedRemainingTimeThreshold) {
             [self.lock unlock];
             return nil;
         }
-        
+
         if ([self l_hasCompletedFirstScan] == NO) {
             [self.lock unlock];
             return nil;
         }
-        
+
     #if DEBUG
         if (self.scanTime > 0) {
             PINLog(@"scan time: %f", self.scanTime);
             self.scanTime = 0;
         }
     #endif
-        
+
         PINImage *currentImage = nil;
-        
+
         //Size information comes after JFIF so jpeg properties should be available at or before size?
         if (self.size.width <= 0 || self.size.height <= 0) {
             //attempt to get size info
@@ -212,28 +212,28 @@
             if (size.width <= 0 && imageProperties[(NSString *)kCGImagePropertyPixelWidth]) {
                 size.width = [imageProperties[(NSString *)kCGImagePropertyPixelWidth] floatValue];
             }
-            
+
             if (size.height <= 0 && imageProperties[(NSString *)kCGImagePropertyPixelHeight]) {
                 size.height = [imageProperties[(NSString *)kCGImagePropertyPixelHeight] floatValue];
             }
-            
+
             self.size = size;
-            
+
             NSDictionary *jpegProperties = imageProperties[(NSString *)kCGImagePropertyJFIFDictionary];
             NSNumber *isProgressive = jpegProperties[(NSString *)kCGImagePropertyJFIFIsProgressive];
             self.isProgressiveJPEG = jpegProperties && [isProgressive boolValue];
         }
-    
+
         if (self.size.width > maxProgressiveRenderSize.width || self.size.height > maxProgressiveRenderSize.height) {
             [self.lock unlock];
             return nil;
         }
-        
+
         float progress = 0;
         if (self.expectedNumberOfBytes > 0) {
             progress = (float)self.mutableData.length / (float)self.expectedNumberOfBytes;
         }
-        
+
         //Don't bother if we're basically done
         if (progress >= 0.99) {
             [self.lock unlock];
@@ -258,7 +258,7 @@
                 }
             }
         }
-    
+
     [self.lock unlock];
     return currentImage;
 }
@@ -280,7 +280,7 @@
     //SOS marker
     scanMarker[0] = 0xFF;
     scanMarker[1] = 0xDA;
-    
+
     //scan one byte back in case we only got half the SOS on the last data append
     NSRange scanRange;
     scanRange.location = startByte;
@@ -311,7 +311,7 @@
     if (inputImageRef == nil) {
         return nil;
     }
-    
+
     CGSize inputSize = inputImage.size;
     if (inputSize.width < 1 ||
         inputSize.height < 1) {
@@ -325,16 +325,16 @@
     // TODO: What scale factor should be used here?
     CGFloat imageScale = [[NSScreen mainScreen] backingScaleFactor];
 #endif
-    
+
     CGFloat radius = (inputImage.size.width / 25.0) * MAX(0, 1.0 - progress);
     radius *= imageScale;
-    
+
     //we'll round the radius to a whole number below anyway,
     if (radius < FLT_EPSILON) {
         CGImageRelease(inputImageRef);
         return inputImage;
     }
-    
+
     CGContextRef ctx;
 #if PIN_TARGET_IOS
     UIGraphicsBeginImageContextWithOptions(inputSize, YES, imageScale);
@@ -342,19 +342,19 @@
 #elif PIN_TARGET_MAC
     ctx = CGBitmapContextCreate(0, inputSize.width, inputSize.height, 8, 0, [NSColorSpace genericRGBColorSpace].CGColorSpace, kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little);
 #endif
-    
+
     if (ctx) {
 #if PIN_TARGET_IOS
         CGContextScaleCTM(ctx, 1.0, -1.0);
         CGContextTranslateCTM(ctx, 0, -inputSize.height);
 #endif
-        
+
         vImage_Buffer effectInBuffer;
         vImage_Buffer scratchBuffer;
-        
+
         vImage_Buffer *inputBuffer;
         vImage_Buffer *outputBuffer;
-        
+
         vImage_CGImageFormat format = {
             .bitsPerComponent = 8,
             .bitsPerPixel = 32,
@@ -366,7 +366,7 @@
             .decode = NULL,
             .renderingIntent = kCGRenderingIntentDefault
         };
-        
+
         vImage_Error e = vImageBuffer_InitWithCGImage(&effectInBuffer, &format, NULL, inputImage.CGImage, kvImagePrintDiagnosticsToConsole);
         if (e == kvImageNoError)
         {
@@ -374,7 +374,7 @@
             if (e == kvImageNoError) {
                 inputBuffer = &effectInBuffer;
                 outputBuffer = &scratchBuffer;
-                
+
                 // A description of how to compute the box kernel width from the Gaussian
                 // radius (aka standard deviation) appears in the SVG spec:
                 // http://www.w3.org/TR/SVG/filters.html#feGaussianBlurElement
@@ -390,26 +390,26 @@
                 if (radius - 2. < __FLT_EPSILON__)
                     radius = 2.;
                 uint32_t wholeRadius = floor((radius * 3. * sqrt(2 * M_PI) / 4 + 0.5) / 2);
-                
+
                 wholeRadius |= 1; // force wholeRadius to be odd so that the three box-blur methodology works.
-                
+
                 //calculate the size necessary for vImageBoxConvolve_ARGB8888, this does not actually do any operations.
                 NSInteger tempBufferSize = vImageBoxConvolve_ARGB8888(inputBuffer, outputBuffer, NULL, 0, 0, wholeRadius, wholeRadius, NULL, kvImageGetTempBufferSize | kvImageEdgeExtend);
                 void *tempBuffer = malloc(tempBufferSize);
-                
+
                 if (tempBuffer) {
                     //errors can be ignored because we've passed in allocated memory
                     vImageBoxConvolve_ARGB8888(inputBuffer, outputBuffer, tempBuffer, 0, 0, wholeRadius, wholeRadius, NULL, kvImageEdgeExtend);
                     vImageBoxConvolve_ARGB8888(outputBuffer, inputBuffer, tempBuffer, 0, 0, wholeRadius, wholeRadius, NULL, kvImageEdgeExtend);
                     vImageBoxConvolve_ARGB8888(inputBuffer, outputBuffer, tempBuffer, 0, 0, wholeRadius, wholeRadius, NULL, kvImageEdgeExtend);
-                    
+
                     free(tempBuffer);
-                    
+
                     //switch input and output
                     vImage_Buffer *temp = inputBuffer;
                     inputBuffer = outputBuffer;
                     outputBuffer = temp;
-                    
+
                     CGImageRef effectCGImage = vImageCreateCGImageFromBuffer(inputBuffer, &format, &cleanupBuffer, NULL, kvImageNoAllocate, NULL);
                     if (effectCGImage == NULL) {
                         //if creating the cgimage failed, the cleanup buffer on input buffer will not be called, we must dealloc ourselves
@@ -421,7 +421,7 @@
                         CGContextRestoreGState(ctx);
                         CGImageRelease(effectCGImage);
                     }
-                    
+
                     // Cleanup
                     free(outputBuffer->data);
 #if PIN_TARGET_IOS
@@ -431,7 +431,7 @@
                     outputImage = [[NSImage alloc] initWithCGImage:outputImageRef size:inputSize];
                     CFRelease(outputImageRef);
 #endif
-                    
+
                 }
             } else {
                 if (scratchBuffer.data) {
@@ -445,13 +445,13 @@
             }
         }
     }
-    
+
 #if PIN_TARGET_IOS
     UIGraphicsEndImageContext();
 #endif
 
     CGImageRelease(inputImageRef);
-    
+
     return outputImage;
 }
 

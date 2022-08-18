@@ -6,7 +6,7 @@
 //
 //
 
-#import "PINRemoteImageCategoryManager.h"
+#import "Source/Classes/include/PINRemoteImageCategoryManager.h"
 
 #import <objc/runtime.h>
 
@@ -162,31 +162,31 @@
         });
         return;
     }
-    
+
     [self cancelImageDownloadOnView:view];
-  
+
     if (placeholderImage) {
         [view pin_setPlaceholderWithImage:placeholderImage];
     }
-    
+
     if (urls == nil || urls.count == 0) {
         if (!placeholderImage) {
             [view pin_clearImages];
         }
         return;
     }
-    
+
     PINRemoteImageManagerDownloadOptions options;
     if([view respondsToSelector:@selector(pin_defaultOptions)]) {
         options = [view pin_defaultOptions];
     } else {
         options = PINRemoteImageManagerDownloadOptionsNone;
     }
-    
+
     if ([view pin_ignoreGIFs]) {
         options |= PINRemoteImageManagerDisallowAlternateRepresentations;
     }
-    
+
     PINRemoteImageManagerImageCompletion internalProgress = nil;
     if ([self updateWithProgressOnView:view] && processorKey.length <= 0 && processor == nil) {
         internalProgress = ^(PINRemoteImageManagerResult *result)
@@ -211,7 +211,7 @@
             }
         };
     }
-    
+
     PINRemoteImageManagerImageCompletion internalCompletion = ^(PINRemoteImageManagerResult *result)
     {
         void (^mainQueue)(void) = ^{
@@ -227,9 +227,9 @@
                 }
                 return;
             }
-            
+
             [view pin_updateUIWithRemoteImageManagerResult:result];
-            
+
             if (completion) {
                 completion(result);
             }
@@ -242,7 +242,7 @@
             });
         }
     };
-    
+
     NSUUID *downloadImageOperationUUID = nil;
     if (urls.count > 1) {
         downloadImageOperationUUID = [[PINRemoteImageManager sharedImageManager] downloadImageWithURLs:urls
@@ -261,7 +261,7 @@
                                                                                         progressImage:internalProgress
                                                                                            completion:internalCompletion];
     }
-    
+
     [self setDownloadImageOperationUUID:downloadImageOperationUUID onView:view];
 }
 

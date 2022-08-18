@@ -9,11 +9,11 @@
 #if SWIFT_PACKAGE
 @import PINCache;
 #else
-#import <PINCache/PINCache.h>
+#import "external/PINCache/Source/PINCache.h"
 #endif
 
-#import "PINRemoteImageCaching.h"
-#import "PINRemoteImageManager.h"
+#import "Source/Classes/include/PINRemoteImageCaching.h"
+#import "Source/Classes/include/PINRemoteImageManager.h"
 
 @interface PINCache (PINRemoteImageCaching) <PINRemoteImageCaching>
 

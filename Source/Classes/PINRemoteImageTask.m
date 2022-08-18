@@ -6,9 +6,9 @@
 //
 //
 
-#import "PINRemoteImageTask.h"
+#import "Source/Classes/PINRemoteImageTask.h"
 
-#import "PINRemoteImageCallbacks.h"
+#import "Source/Classes/PINRemoteImageCallbacks.h"
 #import "PINRemoteImageManager+Private.h"
 
 @interface PINRemoteImageTask ()
@@ -46,7 +46,7 @@
     completion.completionBlock = completionBlock;
     completion.progressImageBlock = progressImageBlock;
     completion.progressDownloadBlock = progressDownloadBlock;
-    
+
     [self.lock lockWithBlock:^{
         [self->_callbackBlocks setObject:completion forKey:UUID];
     }];
@@ -87,7 +87,7 @@
         if (completionBlock != nil) {
             PINLog(@"calling completion for UUID: %@ key: %@", UUID, strongSelf.key);
             CFTimeInterval requestTime = callback.requestTime;
-          
+
             dispatch_async(self.manager.callbackQueue, ^
             {
                 PINRemoteImageResultType result;
@@ -132,7 +132,7 @@
 
 - (void)setPriority:(PINRemoteImageManagerPriority)priority
 {
-    
+
 }
 
 - (nonnull PINRemoteImageManagerResult *)imageResultWithImage:(nullable PINImage *)image

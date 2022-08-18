@@ -6,13 +6,13 @@
 //
 //
 
-#import "PINRemoteImageDownloadTask.h"
+#import "Source/Classes/PINRemoteImageDownloadTask.h"
 
-#import "PINRemoteImageTask+Subclassing.h"
-#import "PINRemoteImage.h"
-#import "PINRemoteImageCallbacks.h"
-#import "PINRemoteLock.h"
-#import "PINSpeedRecorder.h"
+#import "Source/Classes/Categories/PINRemoteImageTask+Subclassing.h"
+#import "Source/Classes/include/PINRemoteImage.h"
+#import "Source/Classes/PINRemoteImageCallbacks.h"
+#import "Source/Classes/PINRemoteLock.h"
+#import "Source/Classes/PINSpeedRecorder.h"
 
 @interface PINRemoteImageDownloadTask ()
 {
@@ -39,15 +39,15 @@
     #if PINRemoteImageLogging
     NSString *key = self.key;
     #endif
-    
+
     __block int64_t completedBytes;
     __block int64_t totalBytes;
-    
+
     [self.lock lockWithBlock:^{
         completedBytes = self->_progressImage.dataTask.countOfBytesReceived;
         totalBytes = self->_progressImage.dataTask.countOfBytesExpectedToReceive;
     }];
-    
+
     [callbackBlocks enumerateKeysAndObjectsUsingBlock:^(NSUUID *UUID, PINRemoteImageCallbacks *callback, BOOL *stop) {
         PINRemoteImageManagerProgressDownload progressDownloadBlock = callback.progressDownloadBlock;
         if (progressDownloadBlock != nil) {
@@ -66,8 +66,8 @@
 #if PINRemoteImageLogging
     NSString *key = self.key;
 #endif
-    
-    
+
+
     [callbackBlocks enumerateKeysAndObjectsUsingBlock:^(NSUUID *UUID, PINRemoteImageCallbacks *callback, BOOL *stop) {
         PINRemoteImageManagerImageCompletion progressImageBlock = callback.progressImageBlock;
         if (progressImageBlock != nil) {
@@ -104,20 +104,20 @@
                 return;
             }
         }
-        
+
         noMoreCompletions = [super l_cancelWithUUID:UUID];
-        
+
         if (noMoreCompletions) {
             [self.manager.urlSessionTaskQueue removeDownloadTaskFromQueue:self->_progressImage.dataTask];
             [self->_progressImage.dataTask cancel];
-            
+
             if (hasResume && self->_ifRange && self->_progressImage.dataTask.countOfBytesExpectedToReceive > 0 && self->_progressImage.dataTask.countOfBytesExpectedToReceive != NSURLSessionTransferSizeUnknown) {
                 NSData *progressData = self->_progressImage.data;
                 if (progressData.length > 0) {
                     strongResume = [PINResume resumeData:progressData ifRange:self->_ifRange totalBytes:self->_progressImage.dataTask.countOfBytesExpectedToReceive];
                 }
             }
-            
+
             PINLog(@"Canceling download of URL: %@, UUID: %@", _progressImage.dataTask.originalRequest.URL, UUID);
         }
 #if PINRemoteImageLogging
@@ -126,11 +126,11 @@
         }
 #endif
     }];
-    
+
     if (hasResume) {
         *resume = strongResume;
     }
-    
+
     return noMoreCompletions;
 }
 
@@ -182,12 +182,12 @@
 - (void)didReceiveData:(NSData *_Nonnull)data
 {
     [self callProgressDownload];
-    
+
     __block int64_t expectedNumberOfBytes;
     [self.lock lockWithBlock:^{
         expectedNumberOfBytes = self->_progressImage.dataTask.countOfBytesExpectedToReceive;
     }];
-    
+
     [self updateData:data isResume:NO expectedBytes:expectedNumberOfBytes];
 }
 
@@ -204,9 +204,9 @@
             }
         }];
     }];
-    
+
     [progressImage updateProgressiveImageWithData:data expectedNumberOfBytes:expectedBytes isResume:isResume];
-    
+
     if (hasProgressBlocks) {
         if (PINNSOperationSupportsBlur) {
             [self.manager.concurrentOperationQueue scheduleOperation:^{
@@ -224,14 +224,14 @@
 {
     if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-        
+
         // Got partial data back for a resume
         if (httpResponse.statusCode == 206) {
             __block PINResume *resume;
             [self.lock lockWithBlock:^{
                 resume = self->_resume;
             }];
-            
+
             [self updateData:resume.resumeData isResume:YES expectedBytes:resume.totalBytes];
         } else {
             //Check if there's resume data and we didn't get back a 206, get rid of it
@@ -239,12 +239,12 @@
                 self->_resume = nil;
             }];
         }
-        
+
         // Check to see if the server supports resume
         if ([[httpResponse allHeaderFields][@"Accept-Ranges"] isEqualToString:@"bytes"]) {
             NSString *ifRange = nil;
             NSString *etag = nil;
-            
+
             if ((etag = [httpResponse allHeaderFields][@"ETag"])) {
                 if ([etag hasPrefix:@"W/"] == NO) {
                     ifRange = etag;
@@ -252,7 +252,7 @@
             } else {
                 ifRange = [httpResponse allHeaderFields][@"Last-Modified"];
             }
-            
+
             if (ifRange.length > 0) {
                 [self.lock lockWithBlock:^{
                     self->_ifRange = ifRange;
@@ -283,7 +283,7 @@
             return;
         }
         self->_resume = resume;
-        
+
         NSURLRequest *adjustedRequest = request;
         if (self->_resume) {
             NSMutableURLRequest *mutableRequest = [request mutableCopy];
@@ -293,7 +293,7 @@
             mutableRequest.allHTTPHeaderFields = headers;
             adjustedRequest = mutableRequest;
         }
-        
+
         self->_progressImage = [[PINProgressiveImage alloc] initWithDataTask:[self.manager.urlSessionTaskQueue addDownloadWithSessionManager:self.manager.sessionManager
                                                                                                                                      request:adjustedRequest
                                                                                                                                     priority:priority
@@ -310,16 +310,16 @@
                     PINLog(@"Finished downloading image: %@", request.URL);
                 }
 #endif
-                
+
                 if (error.code != NSURLErrorCancelled) {
                     NSData *data = self.progressImage.data;
-                    
+
                     if (error == nil && data == nil) {
                         error = [NSError errorWithDomain:PINRemoteImageManagerErrorDomain
                                                     code:PINRemoteImageManagerErrorImageEmpty
                                                 userInfo:nil];
                     }
-                    
+
                     __block BOOL retry = NO;
                     __block int64_t delay = 0;
                     [self.lock lockWithBlock:^{
@@ -338,7 +338,7 @@
                         });
                         return;
                     }
-                    
+
                     completionHandler(data, response, error);
                 }
             }];

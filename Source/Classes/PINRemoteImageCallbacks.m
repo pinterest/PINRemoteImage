@@ -6,7 +6,7 @@
 //
 //
 
-#import "PINRemoteImageCallbacks.h"
+#import "Source/Classes/PINRemoteImageCallbacks.h"
 
 @implementation PINRemoteImageCallbacks
 

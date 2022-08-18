@@ -1,5 +1,5 @@
 //
-//  PINGIFAnimatedImage.h
+//  #import "Source/Classes/include/PINGIFAnimatedImage.h"
 //  PINRemoteImage
 //
 //  Created by Garrett Moon on 9/17/17.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PINAnimatedImage.h"
+#import "Source/Classes/include/PINAnimatedImage.h"
 
 @interface PINGIFAnimatedImage : PINAnimatedImage <PINAnimatedImage>
 

@@ -50,3 +50,5 @@ Carthage/Build
 .swiftpm/
 .build/
 Package.resolved
+
+bazel-*

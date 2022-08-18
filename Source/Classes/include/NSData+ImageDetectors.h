@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PINRemoteImageMacros.h"
+#import "Source/Classes/include/PINRemoteImageMacros.h"
 
 @interface NSData (PINImageDetectors)
 

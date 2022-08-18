@@ -8,9 +8,9 @@
 
 #if PIN_WEBP
 
-#import "PINWebPAnimatedImage.h"
+#import "Source/Classes/include/PINWebPAnimatedImage.h"
 
-#import "NSData+ImageDetectors.h"
+#import "Source/Classes/include/NSData+ImageDetectors.h"
 
 #if SWIFT_PACKAGE
 @import libwebp;
@@ -50,7 +50,7 @@ static void releaseData(void *info, const void *data, size_t size)
         _underlyingData.bytes = [animatedImageData bytes];
         _underlyingData.size = [animatedImageData length];
         _demux = WebPDemux(&_underlyingData);
-        
+
         if (_demux != NULL) {
             _width = WebPDemuxGetI(_demux, WEBP_FF_CANVAS_WIDTH);
             _height = WebPDemuxGetI(_demux, WEBP_FF_CANVAS_HEIGHT);
@@ -59,7 +59,7 @@ static void releaseData(void *info, const void *data, size_t size)
             uint32_t flags = WebPDemuxGetI(_demux, WEBP_FF_FORMAT_FLAGS);
             _hasAlpha = flags & ALPHA_FLAG;
             _durations = malloc(sizeof(CFTimeInterval) * _frameCount);
-          
+
             uint32_t backgroundColorInt = WebPDemuxGetI(_demux, WEBP_FF_BACKGROUND_COLOR);
             CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
             CGFloat components[4];
@@ -69,7 +69,7 @@ static void releaseData(void *info, const void *data, size_t size)
             components[3] = (CGFloat)((backgroundColorInt & 0x000000FF)/255.0);
             _backgroundColor = CGColorCreate(rgbColorSpace, components);
             CGColorSpaceRelease(rgbColorSpace);
-            
+
             // Iterate over the frames to gather duration
             WebPIterator iter;
             if (WebPDemuxGetFrame(_demux, 1, &iter)) {
@@ -166,14 +166,14 @@ static void releaseData(void *info, const void *data, size_t size)
     if (backgroundColor) {
         CGContextSetFillColorWithColor(context, backgroundColor);
     }
-    
+
     if (previousFrame) {
         CGContextDrawImage(context, CGRectMake(0, 0, _width, _height), previousFrame);
         if (clearPreviousFrame) {
             CGContextFillRect(context, previousFrameRect);
         }
     }
-    
+
     if (image) {
         CGRect currentRect = CGRectMake(rect.origin.x, _height - rect.size.height - rect.origin.y, rect.size.width, rect.size.height);
         if (clearCurrentFrame) {
@@ -181,14 +181,14 @@ static void releaseData(void *info, const void *data, size_t size)
         }
         CGContextDrawImage(context, currentRect, image);
     }
-    
+
     CGImageRef canvas = CGBitmapContextCreateImage(context);
     if (canvas) {
         CFAutorelease(canvas);
     }
     CGContextRelease(context);
     CGColorSpaceRelease(colorSpaceRef);
-    
+
     return canvas;
 }
 
@@ -197,7 +197,7 @@ static void releaseData(void *info, const void *data, size_t size)
     CGImageRef imageRef = NULL;
     uint8_t *data = NULL;
     int pixelLength = 0;
-    
+
     if (iterator.has_alpha) {
         data = WebPDecodeRGBA(iterator.fragment.bytes, iterator.fragment.size, NULL, NULL);
         pixelLength = 4;
@@ -205,19 +205,19 @@ static void releaseData(void *info, const void *data, size_t size)
         data = WebPDecodeRGB(iterator.fragment.bytes, iterator.fragment.size, NULL, NULL);
         pixelLength = 3;
     }
-    
+
     if (data) {
         CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, data, iterator.width * iterator.height * pixelLength, releaseData);
-        
+
         CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
         CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
-        
+
         if (iterator.has_alpha) {
             bitmapInfo |= kCGImageAlphaLast;
         } else {
             bitmapInfo |= kCGImageAlphaNone;
         }
-        
+
         CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
         imageRef = CGImageCreate(iterator.width,
                                  iterator.height,
@@ -230,15 +230,15 @@ static void releaseData(void *info, const void *data, size_t size)
                                  NULL,
                                  NO,
                                  renderingIntent);
-        
+
         CGColorSpaceRelease(colorSpaceRef);
         CGDataProviderRelease(provider);
     }
-    
+
     if (imageRef) {
         CFAutorelease(imageRef);
     }
-    
+
     return imageRef;
 }
 
@@ -247,7 +247,7 @@ static void releaseData(void *info, const void *data, size_t size)
     PINLog(@"Drawing webp image at index: %lu", (unsigned long)index);
     // This all *appears* to be threadsafe as I believe demux is immutable…
     WebPIterator iterator, previousIterator;
-    
+
     if (index > 0) {
         if (WebPDemuxGetFrame(_demux, (int)index, &previousIterator) == NO) {
             return nil;
@@ -256,12 +256,12 @@ static void releaseData(void *info, const void *data, size_t size)
     if (WebPDemuxGetFrame(_demux, (int)index + 1, &iterator) == NO) {
         return nil;
     }
-    
+
     BOOL isKeyFrame = [self isKeyFrame:&iterator previousIterator:(index > 0) ? &previousIterator : nil];
-    
+
     CGImageRef imageRef = [self rawImageWithIterator:iterator];
     CGImageRef canvas = NULL;
-    
+
     if (imageRef) {
         if (isKeyFrame) {
             // If the current frame is a keyframe, we can just copy it into a blank
@@ -305,7 +305,7 @@ static void releaseData(void *info, const void *data, size_t size)
                                                              colorSpaceRef,
                                                              _hasAlpha ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNone);
                 CGContextSetFillColorWithColor(context, _backgroundColor);
-                
+
                 while (previousIterator.frame_num <= iterator.frame_num) {
                     CGImageRef previousFrame = [self rawImageWithIterator:previousIterator];
                     if (previousFrame) {
@@ -313,7 +313,7 @@ static void releaseData(void *info, const void *data, size_t size)
                         if (previousIterator.blend_method == WEBP_MUX_NO_BLEND) {
                             CGContextFillRect(context, previousFrameRect);
                         }
-                      
+
                         if (previousIterator.frame_num == iterator.frame_num) {
                             CGContextDrawImage(context, previousFrameRect, previousFrame);
                             // We have to break here because we're not getting the next frame! Basically
@@ -329,7 +329,7 @@ static void releaseData(void *info, const void *data, size_t size)
                         }
                     }
                 }
-              
+
                 canvas = CGBitmapContextCreateImage(context);
                 if (canvas) {
                     CFAutorelease(canvas);
@@ -339,12 +339,12 @@ static void releaseData(void *info, const void *data, size_t size)
             }
         }
     }
-    
+
     WebPDemuxReleaseIterator(&iterator);
     if (index > 0) {
         WebPDemuxReleaseIterator(&previousIterator);
     }
-    
+
     return canvas;
 }
 
@@ -371,11 +371,11 @@ static void releaseData(void *info, const void *data, size_t size)
         // Check if we're a key frame regardless of previous frame.
         return YES;
     }
-    
+
     if (previousIterator == nil) {
         return NO;
     }
-    
+
     BOOL previousFrameMadeThisKeyFrame = previousIterator->dispose_method == WEBP_MUX_DISPOSE_BACKGROUND;
     BOOL foundKeyframe = NO;
     while (foundKeyframe == NO) {
@@ -394,7 +394,7 @@ static void releaseData(void *info, const void *data, size_t size)
             }
         }
     }
-        
+
     return previousFrameMadeThisKeyFrame;
 }
 

@@ -5,7 +5,7 @@
 //  Created by Garrett Moon on 4/17/18.
 //
 
-#import "PINRemoteImageMacros.h"
+#import "Source/Classes/include/PINRemoteImageMacros.h"
 
 #if PIN_TARGET_IOS
 #import <UIKit/UIKit.h>
@@ -13,7 +13,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#import "PINCachedAnimatedImage.h"
+#import "Source/Classes/include/PINCachedAnimatedImage.h"
 
 @interface PINAnimatedImageView : PINImageView
 

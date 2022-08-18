@@ -6,7 +6,7 @@
 //
 //
 
-#import "PINImageView+PINRemoteImage.h"
+#import "Source/Classes/include/PINImageView+PINRemoteImage.h"
 
 @implementation PINImageView (PINRemoteImage)
 
@@ -111,7 +111,7 @@
 - (void)pin_clearImages
 {
     self.image = nil;
-    
+
 #if PIN_TARGET_IOS
     [self setNeedsLayout];
 #elif PIN_TARGET_MAC

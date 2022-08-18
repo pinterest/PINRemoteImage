@@ -6,7 +6,7 @@
 //  Copyright © 2017 Pinterest. All rights reserved.
 //
 
-#import "PINRemoteImageTask.h"
+#import "Source/Classes/PINRemoteImageTask.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

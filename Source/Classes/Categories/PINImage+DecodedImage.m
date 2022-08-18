@@ -14,7 +14,7 @@
 #import "PINImage+WebP.h"
 #endif
 
-#import "NSData+ImageDetectors.h"
+#import "Source/Classes/include/NSData+ImageDetectors.h"
 
 NS_INLINE BOOL pin_CGImageRefIsOpaque(CGImageRef imageRef) {
     CGImageAlphaInfo alpha = CGImageGetAlphaInfo(imageRef);
@@ -121,17 +121,17 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
     if (data == nil) {
         return nil;
     }
-    
+
 #if PIN_WEBP
     if ([data pin_isWebP]) {
         return [PINImage pin_imageWithWebPData:data];
     }
 #endif
-    
+
     PINImage *decodedImage = nil;
-    
+
     CGImageSourceRef imageSourceRef = CGImageSourceCreateWithData((CFDataRef)data, NULL);
-    
+
     if (imageSourceRef) {
         CGImageRef imageRef = CGImageSourceCreateImageAtIndex(imageSourceRef, 0, (CFDictionaryRef)@{(NSString *)kCGImageSourceShouldCache : (NSNumber *)kCFBooleanFalse});
         if (imageRef) {
@@ -152,10 +152,10 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
 #endif
             CGImageRelease(imageRef);
         }
-        
+
         CFRelease(imageSourceRef);
     }
-    
+
     return decodedImage;
 }
 
@@ -189,14 +189,14 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
     } else {
         format = [UIGraphicsImageRendererFormat defaultFormat];
     }
-    
+
     format.scale = scale;
     format.opaque = pin_CGImageRefIsOpaque(imageRef);
-    
+
     __block CGFloat radians = 0.0;
     __block BOOL doHorizontalFlip = NO;
     __block BOOL doVerticalFlip = NO;
-    
+
     pin_degreesFromOrientation(orientation, ^(CGFloat degrees, BOOL horizontalFlip, BOOL verticalFlip) {
         // Convert degrees to radians
         radians = [[[NSMeasurement alloc] initWithDoubleValue:degrees
@@ -205,29 +205,29 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
         doHorizontalFlip = horizontalFlip;
         doVerticalFlip = verticalFlip;
     });
-    
+
     // Create rotation out of radians
     CGAffineTransform transform = CGAffineTransformMakeRotation(radians);
-    
+
     // Grab image size
     CGSize imageSize = CGSizeMake(CGImageGetWidth(imageRef), CGImageGetHeight(imageRef));
-    
+
     // Rotate rect by transformation
     CGRect rotatedRect = CGRectApplyAffineTransform(CGRectMake(0.0, 0.0, imageSize.width, imageSize.height), transform);
-    
+
     // Use graphics renderer to render image
     UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:rotatedRect.size format:format];
-    
+
     return [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
         CGContextRef ctx = rendererContext.CGContext;
-        
+
         // Flip the default coordinate system for iOS/tvOS:  https://developer.apple.com/library/archive/documentation/2DDrawing/Conceptual/DrawingPrintingiOS/GraphicsDrawingOverview/GraphicsDrawingOverview.html#//apple_ref/doc/uid/TP40010156-CH14-SW4
         CGContextTranslateCTM(ctx, rotatedRect.size.width / 2.0, rotatedRect.size.height / 2.0);
         CGContextScaleCTM(ctx, (doHorizontalFlip ? -1.0 : 1.0), (doVerticalFlip ? 1.0 : -1.0));
-        
+
         // Apply transformation
         CGContextConcatCTM(ctx, transform);
-        
+
         // Draw image
         CGContextDrawImage(ctx, CGRectMake(-(imageSize.width / 2.0), -(imageSize.height / 2.0), imageSize.width, imageSize.height), imageRef);
     }];
@@ -237,86 +237,86 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
 + (CGImageRef)pin_decodedImageRefWithCGImageRef:(CGImageRef)imageRef
 {
     CGSize imageSize = CGSizeMake(CGImageGetWidth(imageRef), CGImageGetHeight(imageRef));
-    
+
     CGBitmapInfo info = pin_CGImageRefIsOpaque(imageRef) ? (kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Host) : (kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Host);
     CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
-    
+
     //Use UIGraphicsBeginImageContext parameters from docs: https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIKitFunctionReference/#//apple_ref/c/func/UIGraphicsBeginImageContextWithOptions
     CGContextRef ctx = CGBitmapContextCreate(NULL, imageSize.width, imageSize.height,
                                              8,
                                              0,
                                              colorspace,
                                              info);
-    
+
     CGColorSpaceRelease(colorspace);
-    
+
     if (ctx) {
         CGContextSetBlendMode(ctx, kCGBlendModeCopy);
         CGContextDrawImage(ctx, CGRectMake(0, 0, imageSize.width, imageSize.height), imageRef);
-        
+
         CGImageRef decodedImageRef = CGBitmapContextCreateImage(ctx);
         if (decodedImageRef) {
             CFAutorelease(decodedImageRef);
         }
         CGContextRelease(ctx);
         return decodedImageRef;
-        
+
     }
-    
+
     return imageRef;
 }
 
 #if PIN_TARGET_IOS
 UIImageOrientation pin_UIImageOrientationFromImageSource(CGImageSourceRef imageSourceRef) {
     UIImageOrientation orientation = UIImageOrientationUp;
-    
+
     if (imageSourceRef != nil) {
         NSDictionary *dict = (NSDictionary *)CFBridgingRelease(CGImageSourceCopyPropertiesAtIndex(imageSourceRef, 0, NULL));
-        
+
         if (dict != nil) {
-            
+
             NSNumber* exifOrientation = dict[(id)kCGImagePropertyOrientation];
             if (exifOrientation != nil) {
-                
+
                 switch (exifOrientation.intValue) {
                     case 1: /*kCGImagePropertyOrientationUp*/
                         orientation = UIImageOrientationUp;
                         break;
-                        
+
                     case 2: /*kCGImagePropertyOrientationUpMirrored*/
                         orientation = UIImageOrientationUpMirrored;
                         break;
-                        
+
                     case 3: /*kCGImagePropertyOrientationDown*/
                         orientation = UIImageOrientationDown;
                         break;
-                        
+
                     case 4: /*kCGImagePropertyOrientationDownMirrored*/
                         orientation = UIImageOrientationDownMirrored;
                         break;
                     case 5: /*kCGImagePropertyOrientationLeftMirrored*/
                         orientation = UIImageOrientationLeftMirrored;
                         break;
-                        
+
                     case 6: /*kCGImagePropertyOrientationRight*/
                         orientation = UIImageOrientationRight;
                         break;
-                        
+
                     case 7: /*kCGImagePropertyOrientationRightMirrored*/
                         orientation = UIImageOrientationRightMirrored;
                         break;
-                        
+
                     case 8: /*kCGImagePropertyOrientationLeft*/
                         orientation = UIImageOrientationLeft;
                         break;
-                        
+
                     default:
                         break;
                 }
             }
         }
     }
-    
+
     return orientation;
 }
 

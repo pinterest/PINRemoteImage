@@ -1,0 +1,32 @@
+objc_library(
+    name = "PINRemoteImage",
+    srcs = glob(
+        ["Source/Classes/**/*.m"],
+        allow_empty = False,
+    ),
+    hdrs = glob(
+        ["Source/Classes/**/*.h"],
+        allow_empty = False,
+    ),
+    copts = [
+        "-Wno-deprecated-declarations",
+        "-Wno-shadow-ivar",
+    ],
+    defines = [
+        "PIN_WEBP",
+        "USE_PINCACHE",
+    ],
+    sdk_frameworks = [
+        "Accelerate",
+        "CoreServices",
+        "ImageIO",
+    ],
+    visibility = [
+        "//visibility:public",
+    ],
+    deps = [
+        "@PINCache",
+        "@PINOperation",
+        "@libwebp//:webp",
+    ],
+)

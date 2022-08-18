@@ -6,7 +6,7 @@
 //
 //
 
-#import "PINRemoteLock.h"
+#import "Source/Classes/PINRemoteLock.h"
 
 #import <pthread.h>
 
@@ -42,14 +42,14 @@
         } else {
             _recursiveLock = [[NSRecursiveLock alloc] init];
         }
-        
+
         if (lockName) {
             [_lock setName:lockName];
             [_recursiveLock setName:lockName];
         }
 #else
         pthread_mutexattr_t attr;
-        
+
         pthread_mutexattr_init(&attr);
         if (lockType == PINRemoteLockTypeRecursive) {
             pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);

@@ -6,12 +6,12 @@
 //  Copyright © 2017 Pinterest. All rights reserved.
 //
 
-#import "PINSpeedRecorder.h"
+#import "Source/Classes/PINSpeedRecorder.h"
 
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <netinet/in.h>
 
-#import "PINRemoteLock.h"
+#import "Source/Classes/PINRemoteLock.h"
 
 @interface PINSpeedMeasurement : NSObject
 
@@ -47,7 +47,7 @@
     dispatch_once(&onceToken, ^{
         sharedRecorder = [[self alloc] init];
     });
-    
+
     return sharedRecorder;
 }
 
@@ -57,7 +57,7 @@
         _lock = [[PINRemoteLock alloc] initWithName:@"PINSpeedRecorder lock"];
         _speedMeasurements = [[NSCache alloc] init];
         _speedMeasurements.countLimit = 25;
-        
+
         struct sockaddr_in zeroAddress;
         bzero(&zeroAddress, sizeof(zeroAddress));
         zeroAddress.sin_len = sizeof(zeroAddress);
@@ -73,22 +73,22 @@
     NSDate *firstByte = [NSDate distantFuture];
     NSDate *requestEnd = [NSDate distantPast];
     int64_t contentLength = task.countOfBytesReceived;
-    
+
     for (NSURLSessionTaskTransactionMetrics *metric in metrics.transactionMetrics) {
         if (metric.requestStartDate == nil || metric.responseStartDate == nil) {
             //Only evaluate requests which completed their first byte.
             return;
         }
-        
+
         requestStart = [requestStart earlierDate:metric.requestStartDate];
         firstByte = [firstByte earlierDate:metric.responseStartDate];
         requestEnd = [requestEnd laterDate:metric.responseEndDate];
     }
-    
+
     if ([requestStart isEqual:[NSDate distantFuture]] || [firstByte isEqual:[NSDate distantFuture]] || [requestEnd isEqual:[NSDate distantPast]] || contentLength == 0) {
         return;
     }
-    
+
     [self updateSpeedsForHost:task.currentRequest.URL.host
                bytesPerSecond:contentLength / [requestEnd timeIntervalSinceDate:requestStart]
   startAdjustedBytesPerSecond:contentLength / [requestEnd timeIntervalSinceDate:firstByte]
@@ -174,7 +174,7 @@
 {
     PINSpeedRecorderConnectionStatus status = PINSpeedRecorderConnectionStatusNotReachable;
     SCNetworkReachabilityFlags flags;
-    
+
     // _reachability is set on init and therefore safe to access outside the lock
     if (SCNetworkReachabilityGetFlags(_reachability, &flags)) {
         return [self networkStatusForFlags:flags];
@@ -188,21 +188,21 @@
         // The target host is not reachable.
         return PINSpeedRecorderConnectionStatusNotReachable;
     }
-    
+
     PINSpeedRecorderConnectionStatus connectionStatus = PINSpeedRecorderConnectionStatusNotReachable;
-    
+
     if ((flags & kSCNetworkReachabilityFlagsConnectionRequired) == 0) {
         /*
          If the target host is reachable and no connection is required then we'll assume (for now) that you're on Wi-Fi...
          */
         connectionStatus = PINSpeedRecorderConnectionStatusWiFi;
     }
-    
+
     if ((((flags & kSCNetworkReachabilityFlagsConnectionOnDemand ) != 0) || (flags & kSCNetworkReachabilityFlagsConnectionOnTraffic) != 0)) {
         /*
          ... and the connection is on-demand (or on-traffic) if the calling application is using the CFSocketStream or higher APIs...
          */
-        
+
         if ((flags & kSCNetworkReachabilityFlagsInterventionRequired) == 0) {
             /*
              ... and no [user] intervention is needed...
@@ -210,7 +210,7 @@
             connectionStatus = PINSpeedRecorderConnectionStatusWiFi;
         }
     }
-    
+
 #if PIN_TARGET_IOS
     if ((flags & kSCNetworkReachabilityFlagsIsWWAN) == kSCNetworkReachabilityFlagsIsWWAN) {
         /*
@@ -219,7 +219,7 @@
         connectionStatus = PINSpeedRecorderConnectionStatusWWAN;
     }
 #endif
-    
+
     return connectionStatus;
 }
 
@@ -228,16 +228,16 @@
                                                  highQualityQPSThreshold:(float)highQualityQPSThreshold
 {
     float currentBytesPerSecond = [[PINSpeedRecorder sharedRecorder] weightedAdjustedBytesPerSecondForHost:[[urls firstObject] host]];
-    
+
     NSUInteger desiredImageURLIdx;
-    
+
     if (currentBytesPerSecond == -1) {
         // Base it on reachability
         switch ([[PINSpeedRecorder sharedRecorder] connectionStatus]) {
             case PINSpeedRecorderConnectionStatusWiFi:
                 desiredImageURLIdx = urls.count - 1;
                 break;
-                
+
             case PINSpeedRecorderConnectionStatusWWAN:
             case PINSpeedRecorderConnectionStatusNotReachable:
                 desiredImageURLIdx = 0;
@@ -254,7 +254,7 @@
             desiredImageURLIdx = ceilf((currentBytesPerSecond - lowQualityQPSThreshold) / ((highQualityQPSThreshold - lowQualityQPSThreshold) / (float)(urls.count - 2)));
         }
     }
-    
+
     return desiredImageURLIdx;
 }
 

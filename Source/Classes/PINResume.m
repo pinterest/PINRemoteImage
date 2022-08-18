@@ -6,7 +6,7 @@
 //  Copyright © 2017 Pinterest. All rights reserved.
 //
 
-#import "PINResume.h"
+#import "Source/Classes/PINResume.h"
 
 @implementation PINResume
 

@@ -5,12 +5,12 @@
 //  Created by Garrett Moon on 4/17/18.
 //
 
-#import "PINAnimatedImageView.h"
+#import "Source/Classes/include/PINAnimatedImageView.h"
 
-#import "PINRemoteLock.h"
-#import "PINDisplayLink.h"
-#import "PINImage+DecodedImage.h"
-#import "PINRemoteWeakProxy.h"
+#import "Source/Classes/PINRemoteLock.h"
+#import "Source/Classes/PINDisplayLink.h"
+#import "Source/Classes/Categories/PINImage+DecodedImage.h"
+#import "Source/Classes/PINRemoteWeakProxy.h"
 
 @interface PINAnimatedImageView ()
 {
@@ -63,7 +63,7 @@
     _animatedImage = animatedImage;
     _animatedImageRunLoopMode = NSRunLoopCommonModes;
     _durations = NULL;
-    
+
     if (animatedImage) {
         [self initializeAnimatedImage:animatedImage];
     }
@@ -79,7 +79,7 @@
             [self coverImageCompleted:coverImage];
         });
     };
-    
+
     animatedImage.playbackReadyCallback = ^{
         dispatch_async(dispatch_get_main_queue(), ^{
             // In this case the lock is already gone we have to call the unlocked version therefore
@@ -90,7 +90,7 @@
     if (animatedImage.playbackReady) {
         [self checkIfShouldAnimate];
     }
-  
+
     [self resetDurationsWithAnimatedImage:animatedImage];
 }
 
@@ -112,11 +112,11 @@
     if (_animatedImage == animatedImage && animatedImage.playbackReady) {
         return;
     }
-    
+
     PINCachedAnimatedImage *previousAnimatedImage = _animatedImage;
-    
+
     _animatedImage = animatedImage;
-    
+
     if (animatedImage != nil) {
         [self initializeAnimatedImage:animatedImage];
     } else {
@@ -124,7 +124,7 @@
         self.layer.contents = nil;
         [self setCoverImage:nil];
     }
-    
+
     // Animated Image can take a while to dealloc, let's try and do it off main.
     __block PINCachedAnimatedImage *strongAnimatedImage = previousAnimatedImage;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -147,9 +147,9 @@
 - (void)setAnimatedImageRunLoopMode:(NSString *)newRunLoopMode
 {
     PINAssertMain();
-    
+
     NSString *runLoopMode = newRunLoopMode ?: NSRunLoopCommonModes;
-    
+
     if (_displayLink != nil) {
         [_displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:_animatedImageRunLoopMode];
         [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:runLoopMode];
@@ -166,7 +166,7 @@
 - (void)setPlaybackPaused:(BOOL)playbackPaused
 {
     PINAssertMain();
-    
+
     _playbackPaused = playbackPaused;
     [self checkIfShouldAnimate];
 }
@@ -175,7 +175,7 @@
 {
     PINAssertMain();
     BOOL setCoverImage = (_displayLink == nil) || _displayLink.paused;
-    
+
     if (setCoverImage) {
         [self setCoverImage:coverImage];
     }
@@ -206,21 +206,21 @@
 - (void)startAnimating
 {
     PINAssertMain();
-    
+
     if (_playbackPaused) {
         return;
     }
-    
+
     if (_animatedImage.playbackReady == NO) {
         return;
     }
-    
+
     if ([self canBeVisible] == NO) {
         return;
     }
-    
+
     NSUInteger frameInterval = self.animatedImage.frameInterval;
-    
+
     if (_displayLink == nil) {
         _playHead = 0;
         _displayLink = [PINDisplayLink displayLinkWithTarget:[PINRemoteWeakProxy weakProxyWithTarget:self] selector:@selector(displayLinkFired:)];
@@ -236,7 +236,7 @@
         }
 #endif
         _lastSuccessfulFrameIndex = NSUIntegerMax;
-        
+
         [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:self.animatedImageRunLoopMode];
     } else {
         _displayLink.paused = NO;
@@ -249,7 +249,7 @@
 
     _displayLink.paused = YES;
     _lastDisplayLinkFire = 0;
-    
+
     [_animatedImage clearAnimatedImageCache];
 }
 
@@ -282,7 +282,7 @@
     if (image) {
         self.animatedImage = nil;
     }
-    
+
     super.image = image;
 }
 
@@ -367,28 +367,28 @@
     } else {
         timeBetweenLastFire = CACurrentMediaTime() - self.lastDisplayLinkFire;
     }
-    
+
     self.lastDisplayLinkFire = CACurrentMediaTime();
-    
+
     _playHead += timeBetweenLastFire;
-    
+
     while (_playHead > self.animatedImage.totalDuration) {
         // Set playhead to zero to keep from showing different frames on different playthroughs
         _playHead = 0;
         _playedLoops++;
     }
-    
+
     if (self.animatedImage.loopCount > 0 && _playedLoops >= self.animatedImage.loopCount) {
         [self stopAnimating];
         return;
     }
-    
+
     NSUInteger frameIndex = [self frameIndexAtPlayHeadPosition:_playHead];
     if (frameIndex == _lastSuccessfulFrameIndex) {
         return;
     }
     CGImageRef frameImage = [self.animatedImage imageAtIndex:frameIndex];
-    
+
     if (frameImage == nil) {
         //Pause the display link until we get a file ready notification
         displayLink.paused = YES;
@@ -428,7 +428,7 @@
 {
     PINAssertMain();
     int low = 0, high = (int)_animatedImage.frameCount - 1;
-    
+
     while (low <= high) {
         int mid = low + (high - low) / 2;
         if (_durations[mid] < playHead) {

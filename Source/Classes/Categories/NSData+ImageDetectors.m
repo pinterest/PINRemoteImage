@@ -6,7 +6,7 @@
 //
 //
 
-#import "NSData+ImageDetectors.h"
+#import "Source/Classes/include/NSData+ImageDetectors.h"
 
 #if PIN_WEBP
     #if SWIFT_PACKAGE
@@ -40,7 +40,7 @@ static inline BOOL advancePositionWithCount(NSUInteger *position, NSUInteger len
         return NO;
     }
     *position = *position + count;
-    
+
     return YES;
 }
 
@@ -60,13 +60,13 @@ static inline BOOL advancePositionWithBytes(NSUInteger *position, Byte *bytes, N
         }
         // Advance the byte read as well.
         bytesToAdvance++;
-        
+
         if (*position + bytesToAdvance >= length) {
             return NO;
         }
         *position = *position + bytesToAdvance;
     } while (readAgain);
-    
+
     return YES;
 }
 
@@ -75,12 +75,12 @@ static inline BOOL advancePositionWithBytes(NSUInteger *position, Byte *bytes, N
     if ([self pin_isGIF] == NO) {
         return NO;
     }
-    
+
     Byte *bytes = (Byte *)self.bytes;
     NSUInteger length = self.length;
     NSUInteger position = 0;
     NSUInteger GCECount = 0;
-    
+
     while (bytes && position < length) {
         // Look for Graphic Control Extension
         if (*(bytes + position) == 0x21) {
@@ -105,7 +105,7 @@ static inline BOOL advancePositionWithBytes(NSUInteger *position, Byte *bytes, N
         }
         if (!advancePositionWithCount(&position, length, 1)) break;
     }
-    
+
     return GCECount > 1;
 }
 
@@ -130,7 +130,7 @@ static inline BOOL advancePositionWithBytes(NSUInteger *position, Byte *bytes, N
     if (WebPGetFeatures([self bytes], [self length], &features) == VP8_STATUS_OK) {
         return features.has_animation;
     }
-    
+
     return NO;
 }
 

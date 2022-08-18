@@ -6,7 +6,7 @@
 //
 //
 
-#import "PINRemoteImageMacros.h"
+#import "Source/Classes/include/PINRemoteImageMacros.h"
 
 #if PIN_WEBP
 

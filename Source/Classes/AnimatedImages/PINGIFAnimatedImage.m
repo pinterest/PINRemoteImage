@@ -6,7 +6,7 @@
 //  Copyright © 2017 Pinterest. All rights reserved.
 //
 
-#import "PINGIFAnimatedImage.h"
+#import "Source/Classes/include/PINGIFAnimatedImage.h"
 
 #import <ImageIO/ImageIO.h>
 #if PIN_TARGET_IOS
@@ -15,8 +15,8 @@
 #import <CoreServices/CoreServices.h>
 #endif
 
-#import "PINImage+DecodedImage.h"
-#import "NSData+ImageDetectors.h"
+#import "Source/Classes/Categories/PINImage+DecodedImage.h"
+#import "Source/Classes/include/NSData+ImageDetectors.h"
 
 @interface PINGIFAnimatedImage ()
 {
@@ -57,7 +57,7 @@
                                                                           (__bridge NSNumber *)kCFBooleanFalse});
             _width = (uint32_t)[(NSNumber *)imageProperties[(__bridge NSString *)kCGImagePropertyPixelWidth] unsignedIntegerValue];
             _height = (uint32_t)[(NSNumber *)imageProperties[(__bridge NSString *)kCGImagePropertyPixelHeight] unsignedIntegerValue];
-            
+
             for (NSUInteger frameIdx = 0; frameIdx < _frameCount; frameIdx++) {
                 _durations[frameIdx] = [PINGIFAnimatedImage frameDurationAtIndex:frameIdx source:_imageSource];
             }
@@ -82,17 +82,17 @@
             frameDuration = [delayTime floatValue];
         }
     }
-    
+
     static dispatch_once_t onceToken;
     static Float32 maximumFrameDuration;
     dispatch_once(&onceToken, ^{
         maximumFrameDuration = 1.0 / [PINAnimatedImage maximumFramesPerSecond];
     });
-    
+
     if (frameDuration < maximumFrameDuration) {
         frameDuration = kPINAnimatedImageDefaultDuration;
     }
-    
+
     return frameDuration;
 }
 
@@ -159,7 +159,7 @@
         CGImageRelease(imageRef);
         imageRef = decodedImageRef;
     }
-    
+
     return imageRef;
 }
 

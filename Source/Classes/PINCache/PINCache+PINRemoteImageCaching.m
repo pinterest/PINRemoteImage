@@ -6,7 +6,7 @@
 //
 //
 
-#import "PINCache+PINRemoteImageCaching.h"
+#import "Source/Classes/include/PINCache+PINRemoteImageCaching.h"
 
 @implementation PINCache (PINRemoteImageCaching)
 

@@ -6,7 +6,7 @@
 //
 //
 
-#import "PINRemoteImageMacros.h"
+#import "Source/Classes/include/PINRemoteImageMacros.h"
 
 #if PIN_TARGET_IOS
 #import <UIKit/UIKit.h>
@@ -14,7 +14,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#import "PINRemoteImageManager.h"
+#import "Source/Classes/include/PINRemoteImageManager.h"
 
 @protocol PINRemoteImageCategory;
 
@@ -97,14 +97,14 @@
 
 /**
  Set the image from the given URL.
- 
+
  @param url NSURL to fetch from.
  */
 - (void)pin_setImageFromURL:(nullable NSURL *)url;
 
 /**
  Set the image from the given URL and set placeholder image while image at URL is being retrieved.
- 
+
  @param url NSURL to fetch from.
  @param placeholderImage PINImage to set on the view while the image at URL is being retrieved.
  */
@@ -112,7 +112,7 @@
 
 /**
  Set the image from the given URL and call completion when finished.
- 
+
  @param url NSURL to fetch from.
  @param completion Called when url has been retrieved and set on view.
  */
@@ -120,7 +120,7 @@
 
 /**
  Set the image from the given URL, set placeholder while image at url is being retrieved and call completion when finished.
- 
+
  @param url NSURL to fetch from.
  @param placeholderImage PINImage to set on the view while the image at URL is being retrieved.
  @param completion Called when url has been retrieved and set on view.
@@ -129,7 +129,7 @@
 
 /**
  Retrieve the image from the given URL, process it using the passed in processor block and set result on view.
- 
+
  @param url NSURL to fetch from.
  @param processorKey NSString key to uniquely identify processor. Used in caching.
  @param processor PINRemoteImageManagerImageProcessor processor block which should return the processed image.
@@ -138,7 +138,7 @@
 
 /**
  Set placeholder on view and retrieve the image from the given URL, process it using the passed in processor block and set result on view.
- 
+
  @param url NSURL to fetch from.
  @param placeholderImage PINImage to set on the view while the image at URL is being retrieved.
  @param processorKey NSString key to uniquely identify processor. Used in caching.
@@ -148,7 +148,7 @@
 
 /**
  Retrieve the image from the given URL, process it using the passed in processor block and set result on view. Call completion after image has been fetched, processed and set on view.
- 
+
  @param url NSURL to fetch from.
  @param processorKey NSString key to uniquely identify processor. Used in caching.
  @param processor PINRemoteImageManagerImageProcessor processor block which should return the processed image.
@@ -158,7 +158,7 @@
 
 /**
  Set placeholder on view and retrieve the image from the given URL, process it using the passed in processor block and set result on view. Call completion after image has been fetched, processed and set on view.
- 
+
  @param url NSURL to fetch from.
  @param placeholderImage PINImage to set on the view while the image at URL is being retrieved.
  @param processorKey NSString key to uniquely identify processor. Used in caching.
@@ -169,14 +169,14 @@
 
 /**
  Retrieve one of the images at the passed in URLs depending on previous network performance and set result on view.
- 
+
  @param urls NSArray of NSURLs sorted in increasing quality
  */
 - (void)pin_setImageFromURLs:(nullable NSArray <NSURL *> *)urls;
 
 /**
  Set placeholder on view and retrieve one of the images at the passed in URLs depending on previous network performance and set result on view.
- 
+
  @param urls NSArray of NSURLs sorted in increasing quality
  @param placeholderImage PINImage to set on the view while the image at URL is being retrieved.
  */
@@ -184,7 +184,7 @@
 
 /**
  Set placeholder on view and retrieve one of the images at the passed in URLs depending on previous network performance and set result on view. Call completion after image has been fetched and set on view.
- 
+
  @param urls NSArray of NSURLs sorted in increasing quality
  @param placeholderImage PINImage to set on the view while the image at URL is being retrieved.
  @param completion Called when url has been retrieved and set on view.
@@ -198,21 +198,21 @@
 
 /**
  Returns the NSUUID associated with any PINRemoteImage task currently running on the view.
- 
+
  @return NSUUID associated with any PINRemoteImage task currently running on the view.
  */
 - (nullable NSUUID *)pin_downloadImageOperationUUID;
 
 /**
  Set the current NSUUID associated with a PINRemoteImage task running on the view.
- 
+
  @param downloadImageOperationUUID NSUUID associated with a PINRemoteImage task.
  */
 - (void)pin_setDownloadImageOperationUUID:(nullable NSUUID *)downloadImageOperationUUID;
 
 /**
  Whether the view should update with progress images (such as those provided by progressive JPEG images).
- 
+
  @return BOOL value indicating whether the view should update with progress images
  */
 @property (nonatomic, assign) BOOL pin_updateWithProgress;

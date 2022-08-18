@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreGraphics/CoreGraphics.h>
 
-#import "PINAnimatedImage.h"
+#import "Source/Classes/include/PINAnimatedImage.h"
 
 @interface PINWebPAnimatedImage : PINAnimatedImage <PINAnimatedImage>
 

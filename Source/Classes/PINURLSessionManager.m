@@ -6,9 +6,9 @@
 //
 //
 
-#import "PINURLSessionManager.h"
+#import "Source/Classes/include/PINURLSessionManager.h"
 
-#import "PINSpeedRecorder.h"
+#import "Source/Classes/PINSpeedRecorder.h"
 
 NSErrorDomain const PINURLErrorDomain = @"PINURLErrorDomain";
 
@@ -31,7 +31,7 @@ NSErrorDomain const PINURLErrorDomain = @"PINURLErrorDomain";
         self.sessionManagerLock.name = @"PINURLSessionManager";
         self.operationQueue = [[NSOperationQueue alloc] init];
         self.operationQueue.name = @"PINURLSessionManager Operation Queue";
-        
+
         //queue must be serial to ensure proper ordering
         [self.operationQueue setMaxConcurrentOperationCount:1];
         self.session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:self.operationQueue];
@@ -49,9 +49,9 @@ NSErrorDomain const PINURLErrorDomain = @"PINURLErrorDomain";
 }
 
 - (nonnull NSURLSessionDataTask *)dataTaskWithRequest:(nonnull NSURLRequest *)request
-                                    completionHandler:(nonnull PINURLSessionDataTaskCompletion)completionHandler 
+                                    completionHandler:(nonnull PINURLSessionDataTaskCompletion)completionHandler
 {
-    return [self dataTaskWithRequest:request 
+    return [self dataTaskWithRequest:request
                             priority:PINRemoteImageManagerPriorityDefault
                    completionHandler:completionHandler];
 }
@@ -92,12 +92,12 @@ NSErrorDomain const PINURLErrorDomain = @"PINURLErrorDomain";
     [self lock];
         dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
     [self unlock];
-    
+
     NSAssert(delegateQueue != nil, @"There seems to be an issue in iOS 9 where this can be nil. If you can reliably reproduce hitting this, *please* open an issue: https://github.com/pinterest/PINRemoteImage/issues");
     if (delegateQueue == nil) {
         return;
     }
-    
+
     __weak typeof(self) weakSelf = self;
     dispatch_async(delegateQueue, ^{
         typeof(self) strongSelf = weakSelf;
@@ -128,12 +128,12 @@ NSErrorDomain const PINURLErrorDomain = @"PINURLErrorDomain";
     [self lock];
         dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
     [self unlock];
-    
+
     NSAssert(delegateQueue != nil, @"There seems to be an issue in iOS 9 where this can be nil. If you can reliably reproduce hitting this, *please* open an issue: https://github.com/pinterest/PINRemoteImage/issues");
     if (delegateQueue == nil) {
         return;
     }
-    
+
     __weak typeof(self) weakSelf = self;
     dispatch_async(delegateQueue, ^{
         typeof(self) strongSelf = weakSelf;
@@ -153,12 +153,12 @@ NSErrorDomain const PINURLErrorDomain = @"PINURLErrorDomain";
     [self lock];
         dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
     [self unlock];
-    
+
     NSAssert(delegateQueue != nil, @"There seems to be an issue in iOS 9 where this can be nil. If you can reliably reproduce hitting this, *please* open an issue: https://github.com/pinterest/PINRemoteImage/issues");
     if (delegateQueue == nil) {
         return;
     }
-    
+
     __weak typeof(self) weakSelf = self;
     dispatch_async(delegateQueue, ^{
         typeof(self) strongSelf = weakSelf;
@@ -171,12 +171,12 @@ NSErrorDomain const PINURLErrorDomain = @"PINURLErrorDomain";
     [self lock];
         dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
     [self unlock];
-    
+
     NSAssert(delegateQueue != nil, @"There seems to be an issue in iOS 9 where this can be nil. If you can reliably reproduce hitting this, *please* open an issue: https://github.com/pinterest/PINRemoteImage/issues");
     if (delegateQueue == nil) {
         return;
     }
-    
+
     if (!error && [task.response isKindOfClass:[NSHTTPURLResponse class]]) {
         NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
         NSInteger statusCode = [response statusCode];
@@ -191,17 +191,17 @@ NSErrorDomain const PINURLErrorDomain = @"PINURLErrorDomain";
     __weak typeof(self) weakSelf = self;
     dispatch_async(delegateQueue, ^{
         typeof(self) strongSelf = weakSelf;
-        
+
         [strongSelf lock];
             PINURLSessionDataTaskCompletion completionHandler = strongSelf.completions[@(task.taskIdentifier)];
             [strongSelf.completions removeObjectForKey:@(task.taskIdentifier)];
             [strongSelf.delegateQueues removeObjectForKey:@(task.taskIdentifier)];
         [strongSelf unlock];
-        
+
         if (completionHandler) {
             completionHandler(task, error);
         }
-        
+
         if ([strongSelf.delegate respondsToSelector:@selector(didCompleteTask:withError:)]) {
             [strongSelf.delegate didCompleteTask:task withError:error];
         }
@@ -214,16 +214,16 @@ NSErrorDomain const PINURLErrorDomain = @"PINURLErrorDomain";
 {
     if (@available(iOS 10.0, macOS 10.12, *)) {
         [[PINSpeedRecorder sharedRecorder] processMetrics:metrics forTask:task];
-        
+
         [self lock];
             dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
         [self unlock];
-        
+
         NSAssert(delegateQueue != nil, @"There seems to be an issue in iOS 9 where this can be nil. If you can reliably reproduce hitting this, *please* open an issue: https://github.com/pinterest/PINRemoteImage/issues");
         if (delegateQueue == nil) {
             return;
         }
-        
+
         __weak typeof(self) weakSelf = self;
         dispatch_async(delegateQueue, ^{
             typeof(self) strongSelf = weakSelf;

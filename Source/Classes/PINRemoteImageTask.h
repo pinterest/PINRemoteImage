@@ -11,14 +11,14 @@
 #if SWIFT_PACKAGE
 @import PINOperation;
 #else
-#import <PINOperation/PINOperation.h>
+#import "external/PINOperation/Source/PINOperation.h"
 #endif
 
-#import "PINRemoteImageCallbacks.h"
-#import "PINRemoteImageManager.h"
-#import "PINRemoteImageMacros.h"
-#import "PINRemoteLock.h"
-#import "PINResume.h"
+#import "Source/Classes/PINRemoteImageCallbacks.h"
+#import "Source/Classes/include/PINRemoteImageManager.h"
+#import "Source/Classes/include/PINRemoteImageMacros.h"
+#import "Source/Classes/PINRemoteLock.h"
+#import "Source/Classes/PINResume.h"
 
 @interface PINRemoteImageTask : NSObject
 

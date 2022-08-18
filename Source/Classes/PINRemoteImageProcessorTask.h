@@ -6,7 +6,7 @@
 //
 //
 
-#import "PINRemoteImageTask.h"
+#import "Source/Classes/PINRemoteImageTask.h"
 
 @interface PINRemoteImageProcessorTask : PINRemoteImageTask
 

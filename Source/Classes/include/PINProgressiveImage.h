@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PINRemoteImageMacros.h"
+#import "Source/Classes/include/PINRemoteImageMacros.h"
 
 #if PIN_TARGET_IOS
 #import <UIKit/UIKit.h>
@@ -33,7 +33,7 @@
 
 /**
  Returns the latest image based on thresholds, returns nil if no new image is generated.
- 
+
  @param blurred A boolean to indicate if the image should be blurred.
  @param maxProgressiveRenderSize The maximum dimensions at which to apply a blur. If an image exceeds either the height.
  or width of this dimension, the image will *not* be blurred regardless of the blurred parameter.
@@ -44,7 +44,7 @@
 
 /**
  Returns the current data for the image.
- 
+
  @return NSData The current data for the image.
  */
 - (nullable NSData *)data;

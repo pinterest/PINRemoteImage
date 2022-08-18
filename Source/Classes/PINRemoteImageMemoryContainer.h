@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PINRemoteImageMacros.h"
-#import "PINRemoteLock.h"
+#import "Source/Classes/include/PINRemoteImageMacros.h"
+#import "Source/Classes/PINRemoteLock.h"
 
 @class PINImage;
 

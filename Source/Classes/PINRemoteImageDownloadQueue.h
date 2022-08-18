@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PINRemoteImageManager.h"
+#import "Source/Classes/include/PINRemoteImageManager.h"
 
 @class PINURLSessionManager;
 
@@ -31,8 +31,8 @@ typedef void (^PINRemoteImageDownloadCompletion)(NSURLResponse * _Nullable respo
 /***
  This prevents a task from being run if it hasn't already started yet. It is the caller's responsibility to cancel
  the task if it has already been started.
- 
- @return BOOL Returns YES if the task was in the queue. 
+
+ @return BOOL Returns YES if the task was in the queue.
  */
 - (BOOL)removeDownloadTaskFromQueue:(NSURLSessionDataTask *)downloadTask;
 
