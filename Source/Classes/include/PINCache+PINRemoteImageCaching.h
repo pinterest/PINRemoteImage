@@ -11,7 +11,7 @@
 #else
 #ifdef SWIFT_PACKAGE
 @import PINCache;
-#else
+#endif
 #endif
 
 #import "Source/Classes/include/PINRemoteImageCaching.h"
