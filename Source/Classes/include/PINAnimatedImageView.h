@@ -25,4 +25,9 @@
 @property (nullable, nonatomic, strong) NSString *animatedImageRunLoopMode;
 @property (nonatomic, assign, getter=isPlaybackPaused) BOOL playbackPaused;
 
+-(CFTimeInterval)lastDisplayedTimestamp;
+-(void)setCurrentTimestamp:(CFTimeInterval)newTimestamp;
+
+-(void)setAnimatedImage:(nullable PINCachedAnimatedImage*)image atTimestamp:(CFTimeInterval)newTimestamp;
+
 @end

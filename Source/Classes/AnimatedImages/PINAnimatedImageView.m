@@ -27,6 +27,7 @@
 
 @end
 
+
 @implementation PINAnimatedImageView
 
 @synthesize animatedImage = _animatedImage;
@@ -105,6 +106,13 @@
 }
 
 #pragma mark - Public
+
+-(void)setAnimatedImage:(PINCachedAnimatedImage*)image atTimestamp:(CFTimeInterval)newTimestamp
+{
+	[self setAnimatedImage:image];
+	
+	[self setCurrentTimestamp:newTimestamp];
+}
 
 - (void)setAnimatedImage:(PINCachedAnimatedImage *)animatedImage
 {
@@ -190,12 +198,39 @@
     _frameImage = CGImageRetain([coverImage CGImage]);
 }
 
+-(CFTimeInterval)lastDisplayedTimestamp
+{
+	return _playHead;
+}
+
+-(void)setCurrentTimestamp:(CFTimeInterval)newTimestamp
+{
+	if (_displayLink == nil) {
+		[self startAnimating];
+		
+		_playHead = newTimestamp;
+	}
+	else {
+		// Reset
+		_displayLink.paused = YES;
+		_displayLink.paused = NO;
+		
+		_lastDisplayLinkFire = 0;
+		_playedLoops = 0;
+		
+		_playHead = newTimestamp;
+		
+		[self displayLinkFired:_displayLink];
+	}
+}
+
 #pragma mark - Animating
 
 - (void)checkIfShouldAnimate
 {
     PINAssertMain();
     BOOL shouldAnimate = _playbackPaused == NO && _animatedImage.playbackReady && [self canBeVisible];
+	
     if (shouldAnimate) {
         [self startAnimating];
     } else {
