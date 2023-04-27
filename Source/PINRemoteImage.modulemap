@@ -1,4 +1,4 @@
-framework module PINRemoteImage {    
+framework module PINRemoteImage {
     umbrella header "PINRemoteImage.h"
 
     textual header "PINRemoteImageMacros.h"
@@ -7,4 +7,5 @@ framework module PINRemoteImage {
     header "PINImageView+PINRemoteImage.h"
 
     export *
+    module * { export * }
 }
