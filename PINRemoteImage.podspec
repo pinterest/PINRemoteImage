@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.prefix_header_file = false
   # s.social_media_url = 'https://twitter.com/garrettmoon'
 
-  ios_deployment = "8.0"
+  ios_deployment = "11.0"
   tvos_deployment = "9.0"
   osx_deployment = "10.11"
   s.ios.deployment_target = ios_deployment
