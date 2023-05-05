@@ -31,10 +31,12 @@
 
 #endif
 
-
 @implementation Kitten
+@synthesize imageURL;
+@synthesize dominantColor;
+@synthesize imageSize;
 
-+ (void)fetchKittenForWidth:(CGFloat)width completion:(void (^)(NSArray *kittens))completion
++ (void)fetchImagesForWidth:(CGFloat)width completion:(void (^)(NSArray *images))completion
 {
     NSArray *kittenURLs = @[[NSURL URLWithString:@"https://i.pinimg.com/736x/92/5d/5a/925d5ac74db0dcfabc238e1686e31d16.jpg"],
                             [NSURL URLWithString:@"https://i.pinimg.com/736x/ff/b3/ae/ffb3ae40533b7f9463cf1c04d7ab69d1.jpg"],

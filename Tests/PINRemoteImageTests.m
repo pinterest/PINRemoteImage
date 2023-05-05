@@ -1293,63 +1293,131 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (void)testImageRendererOrientation
 {
-    dispatch_group_t group = dispatch_group_create();
-    __block CGImageRef imageRefEncoded = nil;
+    // Generate a 24x48 pixel grid image, with distinct colours at all four corners.
+    // The initial version will be the reference image
+    CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef ctx = CGBitmapContextCreate(NULL, 24, 48, 8, 8 * 24, colorspace, kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Host);
+    CGColorSpaceRelease(colorspace);
+    XCTAssert(ctx != nil, @"Failed to create CGContext");
     
-    dispatch_group_enter(group);
-    [self.imageManager downloadImageWithURL:[self JPEGURL]
-                                    options:PINRemoteImageManagerDownloadOptionsSkipDecode
-                                 completion:^(PINRemoteImageManagerResult *result)
-    {
-        imageRefEncoded = CGImageCreateCopy(result.image.CGImage);
-        dispatch_group_leave(group);
-    }];
-    
-    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
-    
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 2; j++) {
+            CGContextSetRGBFillColor(ctx, i, 0, j, 1);
+            CGContextFillRect(ctx, CGRectMake(i * 12, j * 24, 12, 24));
+        }
+    }
+
+    CGImageRef referenceImageRef = CGBitmapContextCreateImage(ctx);
+    CGContextRelease(ctx);
+    XCTAssert(referenceImageRef != nil, @"Failed to create reference image");
+            
     // All image orientations (copied from `UIImage.h`)
-    UIImageOrientation allOrientations[] = {
-        UIImageOrientationUp,            // default orientation
-        UIImageOrientationDown,          // 180 deg rotation
-        UIImageOrientationLeft,          // 90 deg CCW
-        UIImageOrientationRight,         // 90 deg CW
-        UIImageOrientationUpMirrored,    // as above but image mirrored along other axis. horizontal flip
-        UIImageOrientationDownMirrored,  // horizontal flip
-        UIImageOrientationLeftMirrored,  // vertical flip
-        UIImageOrientationRightMirrored, // vertical flip
-    };
+    NSArray<NSNumber *> *allOrientations = @[
+        @(UIImageOrientationUp),            // default orientation
+        @(UIImageOrientationDown),          // 180 deg rotation
+        @(UIImageOrientationLeft),          // 90 deg CCW
+        @(UIImageOrientationRight),         // 90 deg CW
+        @(UIImageOrientationUpMirrored),    // as above but image mirrored along other axis. horizontal flip
+        @(UIImageOrientationDownMirrored),  // horizontal flip
+        @(UIImageOrientationLeftMirrored),  // vertical flip
+        @(UIImageOrientationRightMirrored), // vertical flip
+    ];
+    
+    // Store reference to the reference image as PNG data, this will come in handy when comparing
+    // the output of the transformations after they've been corrected by the decoder
+    UIImage *referenceImage = [UIImage imageWithCGImage:referenceImageRef
+                                                  scale:1
+                                            orientation:UIImageOrientationUp];
+    NSData *referenceImagePNGData = UIImagePNGRepresentation(referenceImage);
+    CGImageRelease(referenceImageRef);
+
+    // For all image orientations apply the inverse of the corrective transformations
+    // as if it were how the pixel grid were laid out in the image data.
+    NSMutableDictionary<NSNumber *, UIImage *> *imageMap = [NSMutableDictionary new];
+    for (NSNumber *orientation in allOrientations) {
+        CGSize outSize;
+        switch (orientation.integerValue) {
+            case UIImageOrientationLeft:
+            case UIImageOrientationLeftMirrored:
+            case UIImageOrientationRight:
+            case UIImageOrientationRightMirrored:
+                outSize = CGSizeMake(48, 24);
+                break;
+            default:
+                outSize = CGSizeMake(24, 48);
+                break;
+        }
+        UIGraphicsBeginImageContextWithOptions(outSize, true, 1);
+        
+        CGContextRef ctx = UIGraphicsGetCurrentContext();
+        CGContextTranslateCTM(ctx, outSize.width / 2, outSize.height / 2);
+
+        switch (orientation.integerValue) {
+            case UIImageOrientationDown:
+            case UIImageOrientationDownMirrored:
+                if (orientation.integerValue == UIImageOrientationDown) {
+                    CGContextScaleCTM(ctx, 1, -1);
+                } else {
+                    CGContextScaleCTM(ctx, -1, -1);
+                }
+                CGContextRotateCTM(ctx, M_PI);
+                CGContextTranslateCTM(ctx, -outSize.width / 2, -outSize.height / 2);
+                break;
+            case UIImageOrientationLeft:
+            case UIImageOrientationLeftMirrored:
+                if (orientation.integerValue != UIImageOrientationLeftMirrored) {
+                    CGContextScaleCTM(ctx, -1, 1);
+                }
+                CGContextRotateCTM(ctx, M_PI_2);
+                CGContextTranslateCTM(ctx, -outSize.height / 2, -outSize.width / 2);
+                break;
+            case UIImageOrientationRight:
+            case UIImageOrientationRightMirrored:
+                if (orientation.integerValue != UIImageOrientationRightMirrored) {
+                    CGContextScaleCTM(ctx, -1, 1);
+                }
+                CGContextRotateCTM(ctx, -M_PI_2);
+                CGContextTranslateCTM(ctx, -outSize.height / 2, -outSize.width / 2);
+                break;
+            case UIImageOrientationUp:
+            case UIImageOrientationUpMirrored:
+                if (orientation.integerValue == UIImageOrientationUp) {
+                    CGContextScaleCTM(ctx, 1, -1);
+                } else {
+                    CGContextScaleCTM(ctx, -1, -1);
+                }
+                CGContextTranslateCTM(ctx, -outSize.width / 2, -outSize.height / 2);
+                break;
+            default:
+                XCTFail(@"Unexpected orientation case");
+        }
+                
+        CGContextDrawImage(ctx, CGRectMake(0, 0, referenceImage.size.width, referenceImage.size.height), referenceImageRef);
+        UIImage *transformed = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        XCTAssert(transformed != nil, @"Failed to create transformed image for orientation %@", orientation.debugDescription);
+        imageMap[orientation] = transformed;
+    }
     
     // iOS or tvOS versions below 10.0 use the traditional `+[UIImage imageWithCGImage:]` API that doesn't translate orientation.
     // For iOS/tvOS 10.0+ we manually convert the `UIImageOrientation` in `UIGraphicsImageRenderer`, and therefore,
     // the following test is meant to solidify that behavior
     if (@available(iOS 10.0, tvOS 10.0, *)) {
-        // Loop over all orientations and compare each element respective to one-another
-        for (NSInteger i = 0; i < sizeof(allOrientations)/sizeof(allOrientations[0]); i++) {
+        // Loop over all orientations and compare each element to the reference image
+        for (NSNumber *orientation in allOrientations) {
+            // Apply the decoder's rotation on this orientation
+            UIImage *decodedImage = [UIImage pin_decodedImageWithCGImageRef:[imageMap[orientation] CGImage]
+                                                                orientation:orientation.integerValue];
+           
+            // Anything decoded should behave as up
+            XCTAssert(decodedImage.imageOrientation == UIImageOrientationUp,
+                      @"Decode should've set the output image's rotation to up");
             
-            // Rotate the reference image by the given orientation
-            UIImage *referenceImage = [UIImage pin_decodedImageWithCGImageRef:imageRefEncoded orientation:allOrientations[i]];
-            
-            // Compare the reference image to each element
-            for (NSInteger j = 0; j < sizeof(allOrientations)/sizeof(allOrientations[0]); j++) {
-                
-                // Rotate the image by the given orientation
-                UIImage *rotatedImage = [UIImage pin_decodedImageWithCGImageRef:imageRefEncoded orientation:allOrientations[j]];
-                
-                // equal images must succeed
-                if (i == j) {
-                    XCTAssert([UIImageJPEGRepresentation(referenceImage, 1.0) isEqualToData:UIImageJPEGRepresentation(rotatedImage, 1.0)],
-                              @"Unsuccessful transformation. The `referenceImage` and `rotatedImage` are not the same.");
-                }
-                // unequal images must fail
-                else {
-                    XCTAssertFalse([UIImageJPEGRepresentation(referenceImage, 1.0) isEqualToData:UIImageJPEGRepresentation(rotatedImage, 1.0)],
-                                   @"Unsuccessful transformation. The `referenceImage` and `rotatedImage` are the same.");
-                }
-            }
+            // Compare pixel content by converting image into lossless data
+            XCTAssert([UIImagePNGRepresentation(decodedImage) isEqual:referenceImagePNGData],
+                      @"Unsuccessful transformation. The `referenceImage` and `rotatedImage` are not the same.");
         }
     }
-    
-    CGImageRelease(imageRefEncoded);
 }
 
 - (void)testExponentialRetryStrategy

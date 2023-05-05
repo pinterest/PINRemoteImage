@@ -37,11 +37,11 @@ NS_INLINE void pin_degreesFromOrientation(UIImageOrientation orientation, void (
         case UIImageOrientationDown: // 180 deg rotation
             completion(180.0, NO, NO);
             break;
-        case UIImageOrientationLeft:
-            completion(270.0, NO, NO); // 90 deg CCW
+        case UIImageOrientationLeft: // 90 deg CCW
+            completion(270.0, NO, NO);
             break;
-        case UIImageOrientationRight:
-            completion(90.0, NO, NO); // 90 deg CW
+        case UIImageOrientationRight: // 90 deg CW
+            completion(90.0, NO, NO);
             break;
         case UIImageOrientationUpMirrored: // as above but image mirrored along other axis. horizontal flip
             completion(0.0, YES, NO);
@@ -198,8 +198,11 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
     __block BOOL doVerticalFlip = NO;
     
     pin_degreesFromOrientation(orientation, ^(CGFloat degrees, BOOL horizontalFlip, BOOL verticalFlip) {
-        // Convert degrees to radians
-        radians = [[[NSMeasurement alloc] initWithDoubleValue:degrees
+        // Convert degrees to radians we want to reverse the degrees calculated from the image
+        // orientation as they represent the current transformation that is baked into the image.
+        // When applying the inverse transform, we will receive an image that represents
+        // UIImageOrientationUp
+        radians = [[[NSMeasurement alloc] initWithDoubleValue:-degrees
                                                          unit:[NSUnitAngle degrees]]
                    measurementByConvertingToUnit:[NSUnitAngle radians]].doubleValue;
         doHorizontalFlip = horizontalFlip;
@@ -215,8 +218,22 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
     // Rotate rect by transformation
     CGRect rotatedRect = CGRectApplyAffineTransform(CGRectMake(0.0, 0.0, imageSize.width, imageSize.height), transform);
     
+    // Do not use rotated rect for renderer size as renderer contexts will round up pixel sizes
+    // and affine transformations when applied to CGFloats have a different rounding tolerance
+    CGSize contextSize = imageSize;
+    switch (orientation) {
+        case UIImageOrientationLeft:
+        case UIImageOrientationLeftMirrored:
+        case UIImageOrientationRight:
+        case UIImageOrientationRightMirrored:
+            contextSize = CGSizeMake(contextSize.height, contextSize.width);
+            break;
+        default:
+            break;
+    }
+    
     // Use graphics renderer to render image
-    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:rotatedRect.size format:format];
+    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:contextSize format:format];
     
     return [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
         CGContextRef ctx = rendererContext.CGContext;

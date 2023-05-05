@@ -13,12 +13,8 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-@interface Kitten : NSObject
+#import "ImageSource.h"
 
-@property (nonatomic, strong) NSURL *imageURL;
-@property (nonatomic, strong) id dominantColor;
-@property (nonatomic, assign) CGSize imageSize;
-
-+ (void)fetchKittenForWidth:(CGFloat)width completion:(void (^)(NSArray *kittens))completion;
+@interface Kitten : NSObject <ImageSource>
 
 @end
