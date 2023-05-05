@@ -820,7 +820,7 @@ static dispatch_once_t sharedDispatchToken;
         
         __weak typeof(self) weakSelf = self;
         NSUUID *downloadTaskUUID = [self downloadImageWithURL:url
-                                                      options:options | PINRemoteImageManagerDownloadOptionsSkipEarlyCheck
+                                                      options:options | PINRemoteImageManagerDownloadOptionsSkipEarlyCheck | PINRemoteImageManagerDisallowAlternateRepresentations
                                                    completion:^(PINRemoteImageManagerResult *result)
         {
             typeof(self) strongSelf = weakSelf;
