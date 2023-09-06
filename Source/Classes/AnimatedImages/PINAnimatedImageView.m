@@ -23,8 +23,6 @@
 @property (nonatomic, assign) CGImageRef frameImage;
 @property (nonatomic, strong) PINDisplayLink *displayLink;
 
-@property (nonatomic, assign) CFTimeInterval lastDisplayLinkFire;
-
 @end
 
 @implementation PINAnimatedImageView
@@ -248,7 +246,6 @@
     PINAssertMain();
 
     _displayLink.paused = YES;
-    _lastDisplayLinkFire = 0;
     
     [_animatedImage clearAnimatedImageCache];
 }
@@ -368,14 +365,11 @@
 - (void)displayLinkFired:(PINDisplayLink *)displayLink
 {
     PINAssertMain();
-    CFTimeInterval timeBetweenLastFire;
-    if (_lastDisplayLinkFire == 0) {
-        timeBetweenLastFire = 0;
-    } else {
-        timeBetweenLastFire = CACurrentMediaTime() - self.lastDisplayLinkFire;
-    }
-    
-    self.lastDisplayLinkFire = CACurrentMediaTime();
+#if PIN_TARGET_MAC
+    CFTimeInterval timeBetweenLastFire = displayLink.duration;
+#else
+    CFTimeInterval timeBetweenLastFire = displayLink.duration * displayLink.frameInterval;
+#endif
     
     _playHead += timeBetweenLastFire;
     
@@ -399,7 +393,7 @@
     if (frameImage == nil) {
         //Pause the display link until we get a file ready notification
         displayLink.paused = YES;
-        self.lastDisplayLinkFire = 0;
+        _playHead = MAX(_playHead - timeBetweenLastFire, 0);
     } else {
         if (_frameImage) {
             CGImageRelease(_frameImage);
