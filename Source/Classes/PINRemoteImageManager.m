@@ -13,7 +13,7 @@
 #if SWIFT_PACKAGE
 @import PINOperation;
 #else
-#import "../PINOperation/Source/PINOperation.h"
+#import "../_main~non_module_dependencies~PINOperation/Source/PINOperation.h"
 #endif
 
 #import <objc/runtime.h>
