@@ -7,7 +7,7 @@
 //
 
 #ifdef BAZEL
-#import "../PINCache/Source/PINCache.h"
+#import "../_main~non_module_dependencies~PINCache/Source/PINCache.h"
 #else
 #ifdef SWIFT_PACKAGE
 @import PINCache;
