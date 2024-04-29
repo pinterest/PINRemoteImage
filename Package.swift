@@ -27,6 +27,7 @@ let package = Package(
             name: "PINRemoteImage",
             dependencies: ["PINCache", "libwebp"],
             path: "Source/Classes",
+            resources: [.copy("../PrivacyInfo.xcprivacy")],
             publicHeadersPath: "include",
             cSettings: [
                 .headerSearchPath("."),
