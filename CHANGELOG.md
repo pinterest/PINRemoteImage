@@ -1,5 +1,278 @@
 # Changelog
 
+## [releases/p12.19](https://github.com/Pinterest/PINRemoteImage/tree/releases/p12.19) (2024-04-29)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p12.20...releases/p12.19)
+
+## [releases/p12.20](https://github.com/Pinterest/PINRemoteImage/tree/releases/p12.20) (2024-04-29)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p12.6...releases/p12.20)
+
+
+- Add PrivacyInfo.xcprivacy [\#637](https://github.com/pinterest/PINRemoteImage/pull/637) ([garricn](https://github.com/garricn))
+
+## [releases/p12.6](https://github.com/Pinterest/PINRemoteImage/tree/releases/p12.6) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p12.5...releases/p12.6)
+
+## [releases/p12.5](https://github.com/Pinterest/PINRemoteImage/tree/releases/p12.5) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p12.4...releases/p12.5)
+
+## [releases/p12.4](https://github.com/Pinterest/PINRemoteImage/tree/releases/p12.4) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.19...releases/p12.4)
+
+## [releases/p11.19](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.19) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.20...releases/p11.19)
+
+## [releases/p11.20](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.20) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.21...releases/p11.20)
+
+## [releases/p11.21](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.21) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.22...releases/p11.21)
+
+## [releases/p11.22](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.22) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.23...releases/p11.22)
+
+## [releases/p11.23](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.23) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.24...releases/p11.23)
+
+## [releases/p11.24](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.24) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.25...releases/p11.24)
+
+## [releases/p11.25](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.25) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.26...releases/p11.25)
+
+## [releases/p11.26](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.26) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.27...releases/p11.26)
+
+## [releases/p11.27](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.27) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.28...releases/p11.27)
+
+## [releases/p11.28](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.28) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.29...releases/p11.28)
+
+## [releases/p11.29](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.29) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p12.3...releases/p11.29)
+
+## [releases/p12.3](https://github.com/Pinterest/PINRemoteImage/tree/releases/p12.3) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p12.2...releases/p12.3)
+
+## [releases/p12.2](https://github.com/Pinterest/PINRemoteImage/tree/releases/p12.2) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.45...releases/p12.2)
+
+## [releases/p11.45](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.45) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.44...releases/p11.45)
+
+## [releases/p11.44](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.44) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.43...releases/p11.44)
+
+## [releases/p11.43](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.43) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.42...releases/p11.43)
+
+## [releases/p11.42](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.42) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.41...releases/p11.42)
+
+## [releases/p11.41](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.41) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.40...releases/p11.41)
+
+## [releases/p11.40](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.40) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.39...releases/p11.40)
+
+## [releases/p11.39](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.39) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.38...releases/p11.39)
+
+## [releases/p11.38](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.38) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.37...releases/p11.38)
+
+## [releases/p11.37](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.37) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.36...releases/p11.37)
+
+## [releases/p11.36](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.36) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.35...releases/p11.36)
+
+## [releases/p11.35](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.35) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.34...releases/p11.35)
+
+## [releases/p11.34](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.34) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.33...releases/p11.34)
+
+## [releases/p11.33](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.33) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.32...releases/p11.33)
+
+## [releases/p11.32](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.32) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.31...releases/p11.32)
+
+## [releases/p11.31](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.31) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.30...releases/p11.31)
+
+## [releases/p11.30](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.30) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p12.18...releases/p11.30)
+
+## [releases/p12.18](https://github.com/Pinterest/PINRemoteImage/tree/releases/p12.18) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p12.9...releases/p12.18)
+
+## [releases/p12.9](https://github.com/Pinterest/PINRemoteImage/tree/releases/p12.9) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p12.7...releases/p12.9)
+
+## [releases/p12.7](https://github.com/Pinterest/PINRemoteImage/tree/releases/p12.7) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p12.17...releases/p12.7)
+
+## [releases/p12.17](https://github.com/Pinterest/PINRemoteImage/tree/releases/p12.17) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p12.16...releases/p12.17)
+
+## [releases/p12.16](https://github.com/Pinterest/PINRemoteImage/tree/releases/p12.16) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p12.15...releases/p12.16)
+
+## [releases/p12.15](https://github.com/Pinterest/PINRemoteImage/tree/releases/p12.15) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p12.14...releases/p12.15)
+
+## [releases/p12.14](https://github.com/Pinterest/PINRemoteImage/tree/releases/p12.14) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p12.13...releases/p12.14)
+
+## [releases/p12.13](https://github.com/Pinterest/PINRemoteImage/tree/releases/p12.13) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p12.12...releases/p12.13)
+
+## [releases/p12.12](https://github.com/Pinterest/PINRemoteImage/tree/releases/p12.12) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p12.11...releases/p12.12)
+
+## [releases/p12.11](https://github.com/Pinterest/PINRemoteImage/tree/releases/p12.11) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p12.10...releases/p12.11)
+
+## [releases/p12.10](https://github.com/Pinterest/PINRemoteImage/tree/releases/p12.10) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p12.8...releases/p12.10)
+
+## [releases/p12.8](https://github.com/Pinterest/PINRemoteImage/tree/releases/p12.8) (2023-05-03)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p10.45...releases/p12.8)
+
+
+- Add missing imports to the header [\#627](https://github.com/pinterest/PINRemoteImage/pull/627) ([xGeorge](https://github.com/xGeorge))
+
+## [releases/p10.45](https://github.com/Pinterest/PINRemoteImage/tree/releases/p10.45) (2022-03-02)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.1...releases/p10.45)
+
+## [releases/p11.1](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.1) (2022-03-02)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.3...releases/p11.1)
+
+## [releases/p11.3](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.3) (2022-03-02)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.4...releases/p11.3)
+
+## [releases/p11.4](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.4) (2022-03-02)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.5...releases/p11.4)
+
+## [releases/p11.5](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.5) (2022-03-02)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.6...releases/p11.5)
+
+## [releases/p11.6](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.6) (2022-03-02)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.7...releases/p11.6)
+
+## [releases/p11.7](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.7) (2022-03-02)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.8...releases/p11.7)
+
+## [releases/p11.8](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.8) (2022-03-02)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.9...releases/p11.8)
+
+## [releases/p11.9](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.9) (2022-03-02)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.12...releases/p11.9)
+
+## [releases/p11.12](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.12) (2022-03-02)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.13...releases/p11.12)
+
+## [releases/p11.13](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.13) (2022-03-02)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.14...releases/p11.13)
+
+## [releases/p11.14](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.14) (2022-03-02)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.15...releases/p11.14)
+
+## [releases/p11.15](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.15) (2022-03-02)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.16...releases/p11.15)
+
+## [releases/p11.16](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.16) (2022-03-02)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.17...releases/p11.16)
+
+## [releases/p11.17](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.17) (2022-03-02)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.18...releases/p11.17)
+
+## [releases/p11.18](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.18) (2022-03-02)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/releases/p11.2...releases/p11.18)
+
+## [releases/p11.2](https://github.com/Pinterest/PINRemoteImage/tree/releases/p11.2) (2022-03-02)
+
+[Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/3.0.3...releases/p11.2)
+
+
+- Stability fixes [\#618](https://github.com/pinterest/PINRemoteImage/pull/618) ([RRUIZ5](https://github.com/RRUIZ5))
+- Disable asserts in release builds when using Swift Package Manager [\#615](https://github.com/pinterest/PINRemoteImage/pull/615) ([rcancro](https://github.com/rcancro))
+- Add support for dynamic placeholder images [\#613](https://github.com/pinterest/PINRemoteImage/pull/613) ([bdolman](https://github.com/bdolman))
+- remove property:previousFrame from PINWebPAnimatedImage [\#611](https://github.com/pinterest/PINRemoteImage/pull/611) ([woshimaliang](https://github.com/woshimaliang))
+- unarchiveObjectWithData: and archivedDataWithRootObject: are deprecated [\#610](https://github.com/pinterest/PINRemoteImage/pull/610) ([woshimaliang](https://github.com/woshimaliang))
+- Set cachePolicy accordingly when PINRemoteImageManagerDownloadOptions is provided [\#605](https://github.com/pinterest/PINRemoteImage/pull/605) ([woshimaliang](https://github.com/woshimaliang))
+- Decode WebP images directly into a buffer Core Animation likes [\#600](https://github.com/pinterest/PINRemoteImage/pull/600) ([Adlai-Holler](https://github.com/Adlai-Holler))
+- Xcode 12.5 / SPM - Add missing headers to fix build errors [\#597](https://github.com/pinterest/PINRemoteImage/pull/597) ([bpollman](https://github.com/bpollman))
+- Fix PINRemoteImageManager.h Close Comment Formatting [\#594](https://github.com/pinterest/PINRemoteImage/pull/594) ([paulryanclark](https://github.com/paulryanclark))
+- Fix typo in PINRemoteImageManager.html [\#593](https://github.com/pinterest/PINRemoteImage/pull/593) ([HollowMan6](https://github.com/HollowMan6))
+- Fixed spm  integration on regular Xcode project [\#586](https://github.com/pinterest/PINRemoteImage/pull/586) ([3a4oT](https://github.com/3a4oT))
+- Carthage is broken on Xcode 12 [\#584](https://github.com/pinterest/PINRemoteImage/pull/584) ([garrettmoon](https://github.com/garrettmoon))
+- Add APNG image support [\#543](https://github.com/pinterest/PINRemoteImage/pull/543) ([SAGESSE-CN](https://github.com/SAGESSE-CN))
+
 ## [3.0.3](https://github.com/Pinterest/PINRemoteImage/tree/3.0.3) (2020-10-23)
 
 [Full Changelog](https://github.com/Pinterest/PINRemoteImage/compare/3.0.2...3.0.3)
