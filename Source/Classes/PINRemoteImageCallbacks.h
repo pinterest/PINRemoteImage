@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PINRemoteImageManager.h"
+#import <PINRemoteImage/PINRemoteImageManager.h>
 
 @interface PINRemoteImageCallbacks : NSObject
 

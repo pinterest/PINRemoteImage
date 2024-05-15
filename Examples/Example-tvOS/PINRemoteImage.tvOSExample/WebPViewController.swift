@@ -15,6 +15,6 @@ class WebPViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        imageView.pin_setImage(from: URL(string: "https://github.com/samdutton/simpl/blob/master/picturetype/kittens.webp?raw=true"))
+        imageView.pin_setImage(from: URL(string: "https://raw.githubusercontent.com/samdutton/simpl/main/picturetype/kittens.webp"))
     }
 }

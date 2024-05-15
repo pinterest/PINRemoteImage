@@ -6,11 +6,7 @@
 //
 //
 
-#import "NSData+ImageDetectors.h"
-
-#if PIN_WEBP
-#import "webp/demux.h"
-#endif
+#import <PINRemoteImage/NSData+ImageDetectors.h>
 
 @implementation NSData (PINImageDetectors)
 
@@ -122,12 +118,34 @@ static inline BOOL advancePositionWithBytes(NSUInteger *position, Byte *bytes, N
 
 - (BOOL)pin_isAnimatedWebP
 {
-    WebPBitstreamFeatures features;
-    if (WebPGetFeatures([self bytes], [self length], &features) == VP8_STATUS_OK) {
-        return features.has_animation;
+    if (![self pin_isWebP]) {
+        return NO;
     }
     
-    return NO;
+    const NSInteger formatSize = 4;
+
+    NSInteger offset = 12;
+    if ([self length] < (offset + formatSize)) {
+        return NO;
+    }
+    
+    // VP8X is extended, which means this might be animated
+    Byte formatBytes[formatSize];
+    [self getBytes:&formatBytes range:NSMakeRange(offset, formatSize)];
+    if (formatBytes[0] != 'V' || formatBytes[1] != 'P' || formatBytes[2] != '8' || formatBytes[3] != 'X') {
+        return NO;
+    }
+    
+    offset += formatSize + 14;
+    
+    // Expecting `ANIM`
+    Byte animateBytes[formatSize];
+    [self getBytes:animateBytes range:NSMakeRange(offset, formatSize)];
+    if (animateBytes[0] != 'A' || animateBytes[1] != 'N' || animateBytes[2] != 'I' || animateBytes[3] != 'M') {
+        return NO;
+    }
+
+    return YES;
 }
 
 #endif

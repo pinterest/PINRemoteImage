@@ -6,7 +6,7 @@
 //
 //
 
-#import "PINImage+ScaledImage.h"
+#import <PINRemoteImage/PINImage+ScaledImage.h>
 
 static inline PINImage *PINScaledImageForKey(NSString * __nullable key, PINImage * __nullable image) {
     if (image == nil) {

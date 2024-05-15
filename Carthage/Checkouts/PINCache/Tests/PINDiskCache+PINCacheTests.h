@@ -1,4 +1,4 @@
-#import "PINCache.h"
+#import <PINCache/PINCache.h>
 
 @interface PINDiskCache (PINCacheTests)
 

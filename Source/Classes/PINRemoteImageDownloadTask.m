@@ -8,8 +8,9 @@
 
 #import "PINRemoteImageDownloadTask.h"
 
+#import <PINRemoteImage/PINRequestRetryStrategy.h>
+#import <PINRemoteImage/PINURLSessionManager.h>
 #import "PINRemoteImageTask+Subclassing.h"
-#import "PINRemoteImage.h"
 #import "PINRemoteImageCallbacks.h"
 #import "PINRemoteLock.h"
 #import "PINSpeedRecorder.h"
@@ -137,15 +138,13 @@
 - (void)setPriority:(PINRemoteImageManagerPriority)priority
 {
     [super setPriority:priority];
-    if (@available(iOS 8.0, macOS 10.10, tvOS 9.0, watchOS 2.0, *)) {
-        [self.lock lockWithBlock:^{
-            NSURLSessionDataTask *dataTask = self->_progressImage.dataTask;
-            if (dataTask) {
-                dataTask.priority = dataTaskPriorityWithImageManagerPriority(priority);
-                [self.manager.urlSessionTaskQueue setQueuePriority:priority forTask:dataTask];
-            }
-        }];
-    }
+    [self.lock lockWithBlock:^{
+        NSURLSessionDataTask *dataTask = self->_progressImage.dataTask;
+        if (dataTask) {
+            dataTask.priority = dataTaskPriorityWithImageManagerPriority(priority);
+            [self.manager.urlSessionTaskQueue setQueuePriority:priority forTask:dataTask];
+        }
+    }];    
 }
 
 - (NSURL *)URL

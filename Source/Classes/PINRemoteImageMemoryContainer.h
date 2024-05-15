@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PINRemoteImageMacros.h"
+#import <PINRemoteImage/PINRemoteImageMacros.h>
 #import "PINRemoteLock.h"
 
 @class PINImage;

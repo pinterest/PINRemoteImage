@@ -1,12 +1,16 @@
 //
 //  PINOperationGroupTests.m
-//  PINOperationQueue
+//  PINOperation
 //
 //  Created by Garrett Moon on 10/12/16.
 //  Copyright © 2016 Pinterest. All rights reserved.
 //
 
+#if SWIFT_PACKAGE
 @import PINOperation;
+#else
+#import <PINOperation/PINOperation.h>
+#endif
 
 #import <XCTest/XCTest.h>
 #import <pthread.h>

@@ -1,8 +1,7 @@
-platform :ios, 8.0
+platform :ios, 14.0
 
 def shared_pods
   pod "PINRemoteImage", :path => "../../"
-  pod "PINRemoteImage/WebP", :path => "../../"
   pod "PINRemoteImage/PINCache", :path => "../../"
 end
 

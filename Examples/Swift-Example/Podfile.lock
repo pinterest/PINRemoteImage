@@ -1,54 +1,25 @@
 PODS:
-  - libwebp (1.0.2):
-    - libwebp/core (= 1.0.2)
-    - libwebp/dec (= 1.0.2)
-    - libwebp/demux (= 1.0.2)
-    - libwebp/dsp (= 1.0.2)
-    - libwebp/enc (= 1.0.2)
-    - libwebp/mux (= 1.0.2)
-    - libwebp/utils (= 1.0.2)
-    - libwebp/webp (= 1.0.2)
-  - libwebp/core (1.0.2):
-    - libwebp/webp
-  - libwebp/dec (1.0.2):
-    - libwebp/core
-  - libwebp/demux (1.0.2):
-    - libwebp/core
-  - libwebp/dsp (1.0.2):
-    - libwebp/core
-  - libwebp/enc (1.0.2):
-    - libwebp/core
-  - libwebp/mux (1.0.2):
-    - libwebp/core
-  - libwebp/utils (1.0.2):
-    - libwebp/core
-  - libwebp/webp (1.0.2)
-  - PINCache (3.0.1-beta.7):
-    - PINCache/Arc-exception-safe (= 3.0.1-beta.7)
-    - PINCache/Core (= 3.0.1-beta.7)
-  - PINCache/Arc-exception-safe (3.0.1-beta.7):
+  - PINCache (3.0.4):
+    - PINCache/Arc-exception-safe (= 3.0.4)
+    - PINCache/Core (= 3.0.4)
+  - PINCache/Arc-exception-safe (3.0.4):
     - PINCache/Core
-  - PINCache/Core (3.0.1-beta.7):
-    - PINOperation (~> 1.1.1)
-  - PINOperation (1.1.1)
-  - PINRemoteImage (3.0.0-beta.14):
-    - PINRemoteImage/PINCache (= 3.0.0-beta.14)
-  - PINRemoteImage/Core (3.0.0-beta.14):
+  - PINCache/Core (3.0.4):
+    - PINOperation (~> 1.2.3)
+  - PINOperation (1.2.3)
+  - PINRemoteImage (3.0.4):
+    - PINRemoteImage/PINCache (= 3.0.4)
+  - PINRemoteImage/Core (3.0.4):
     - PINOperation
-  - PINRemoteImage/PINCache (3.0.0-beta.14):
-    - PINCache (= 3.0.1-beta.7)
-    - PINRemoteImage/Core
-  - PINRemoteImage/WebP (3.0.0-beta.14):
-    - libwebp
+  - PINRemoteImage/PINCache (3.0.4):
+    - PINCache (~> 3.0.4)
     - PINRemoteImage/Core
 
 DEPENDENCIES:
   - PINRemoteImage (from `../../`)
-  - PINRemoteImage/WebP (from `../../`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
-    - libwebp
+  trunk:
     - PINCache
     - PINOperation
 
@@ -57,11 +28,10 @@ EXTERNAL SOURCES:
     :path: "../../"
 
 SPEC CHECKSUMS:
-  libwebp: b068a3bd7c45f7460f6715be7bed1a18fd5d6b48
-  PINCache: 7cb9ae068c8f655717f7c644ef1dff9fd573e979
-  PINOperation: a6219e6fc9db9c269eb7a7b871ac193bcf400aac
-  PINRemoteImage: 81bbff853acc71c6de9e106e9e489a791b8bbb08
+  PINCache: d9a87a0ff397acffe9e2f0db972ac14680441158
+  PINOperation: fb563bcc9c32c26d6c78aaff967d405aa2ee74a7
+  PINRemoteImage: 6256a644f4996991f124811763c7286b2a63ff94
 
-PODFILE CHECKSUM: a59d0c8bbae76419ecd87b8e4089d7dd00ea9e67
+PODFILE CHECKSUM: 493be0577869744e7a142367f13f9f5aa0e6fb4c
 
-COCOAPODS: 1.6.0
+COCOAPODS: 1.15.2

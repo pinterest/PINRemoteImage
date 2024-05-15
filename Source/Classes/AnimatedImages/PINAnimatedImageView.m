@@ -5,11 +5,11 @@
 //  Created by Garrett Moon on 4/17/18.
 //
 
-#import "PINAnimatedImageView.h"
+#import <PINRemoteImage/PINAnimatedImageView.h>
 
 #import "PINRemoteLock.h"
 #import "PINDisplayLink.h"
-#import "PINImage+DecodedImage.h"
+#import <PINRemoteImage/PINImage+DecodedImage.h>
 #import "PINRemoteWeakProxy.h"
 
 @interface PINAnimatedImageView ()
@@ -225,15 +225,11 @@
         _playHead = 0;
         _displayLink = [PINDisplayLink displayLinkWithTarget:[PINRemoteWeakProxy weakProxyWithTarget:self] selector:@selector(displayLinkFired:)];
 #if PIN_TARGET_IOS
-        if (@available(iOS 10.0, tvOS 10.0, *)) {
-            // Convert from display link fractional value to fps (note: frameInterval is always at least 1)
-            NSInteger frameRate = ceil([PINAnimatedImage maximumFramesPerSecond] / ((double) frameInterval));
-            _displayLink.preferredFramesPerSecond = frameRate;
-        } else {
-#endif
-            _displayLink.frameInterval = frameInterval;
-#if PIN_TARGET_IOS
-        }
+        // Convert from display link fractional value to fps (note: frameInterval is always at least 1)
+        NSInteger frameRate = ceil([PINAnimatedImage maximumFramesPerSecond] / ((double) frameInterval));
+        _displayLink.preferredFramesPerSecond = frameRate;
+#else
+        _displayLink.frameInterval = frameInterval;
 #endif
         _lastSuccessfulFrameIndex = NSUIntegerMax;
         

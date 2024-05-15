@@ -6,15 +6,11 @@
 //
 //
 
-#import "PINImage+DecodedImage.h"
+#import <PINRemoteImage/PINImage+DecodedImage.h>
 
 #import <ImageIO/ImageIO.h>
 
-#ifdef PIN_WEBP
-#import "PINImage+WebP.h"
-#endif
-
-#import "NSData+ImageDetectors.h"
+#import <PINRemoteImage/NSData+ImageDetectors.h>
 
 NS_INLINE BOOL pin_CGImageRefIsOpaque(CGImageRef imageRef) {
     CGImageAlphaInfo alpha = CGImageGetAlphaInfo(imageRef);
@@ -29,6 +25,11 @@ NS_INLINE BOOL pin_CGImageRefIsOpaque(CGImageRef imageRef) {
 }
 
 #if PIN_TARGET_IOS
+NS_INLINE BOOL pin_CGImageRefIsGrayscale(CGImageRef imageRef) {
+    CGColorSpaceRef colorSpace = CGImageGetColorSpace(imageRef);
+    return CGColorSpaceGetNumberOfComponents(colorSpace) == 1;
+}
+
 NS_INLINE void pin_degreesFromOrientation(UIImageOrientation orientation, void (^completion)(CGFloat degrees, BOOL horizontalFlip, BOOL verticalFlip)) {
     switch (orientation) {
         case UIImageOrientationUp: // default orientation
@@ -94,7 +95,7 @@ NSData * __nullable PINImageJPEGRepresentation(PINImage * __nonnull image, CGFlo
 #elif PIN_TARGET_MAC
     NSBitmapImageRep *imageRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
     NSDictionary *imageProperties = @{NSImageCompressionFactor : @(compressionQuality)};
-    return [imageRep representationUsingType:NSJPEGFileType properties:imageProperties];
+    return [imageRep representationUsingType:NSBitmapImageFileTypeJPEG properties:imageProperties];
 #endif
 }
 
@@ -104,7 +105,7 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
 #elif PIN_TARGET_MAC
     NSBitmapImageRep *imageRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
     NSDictionary *imageProperties = @{NSImageCompressionFactor : @1};
-    return [imageRep representationUsingType:NSPNGFileType properties:imageProperties];
+    return [imageRep representationUsingType:NSBitmapImageFileTypePNG properties:imageProperties];
 #endif
 }
 
@@ -150,12 +151,6 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
         CFRelease(imageSourceRef);
     }
     
-#if PIN_WEBP
-    if (!decodedImage && [data pin_isWebP]) {
-        return [PINImage pin_imageWithWebPData:data];
-    }
-#endif
-
     return decodedImage;
 }
 
@@ -169,11 +164,7 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
 {
 #endif
 #if PIN_TARGET_IOS
-    if (@available(iOS 10.0, tvOS 10.0, *)) {
-        return [self pin_decodedImageUsingGraphicsImageRendererRefWithCGImageRef:imageRef scale:1.0 orientation:orientation];
-    } else {
-        return [UIImage imageWithCGImage:[self pin_decodedImageRefWithCGImageRef:imageRef] scale:1.0 orientation:orientation];
-    }
+    return [self pin_decodedImageUsingGraphicsImageRendererRefWithCGImageRef:imageRef scale:1.0 orientation:orientation];
 #elif PIN_TARGET_MAC
     return [[NSImage alloc] initWithCGImage:[self pin_decodedImageRefWithCGImageRef:imageRef] size:NSZeroSize];
 #endif
@@ -182,16 +173,18 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
 #if PIN_TARGET_IOS
 + (PINImage *)pin_decodedImageUsingGraphicsImageRendererRefWithCGImageRef:(CGImageRef)imageRef
                                                                     scale:(CGFloat)scale
-                                                              orientation:(UIImageOrientation)orientation API_AVAILABLE(ios(10.0), tvos(10.0)) {
-    UIGraphicsImageRendererFormat *format = nil;
-    if (@available(iOS 11.0, tvOS 11.0, *)) {
-        format = [UIGraphicsImageRendererFormat preferredFormat];
-    } else {
-        format = [UIGraphicsImageRendererFormat defaultFormat];
-    }
+                                                              orientation:(UIImageOrientation)orientation  {
+    UIGraphicsImageRendererFormat *format = [UIGraphicsImageRendererFormat preferredFormat];
     
     format.scale = scale;
     format.opaque = pin_CGImageRefIsOpaque(imageRef);
+    if (format.opaque && !pin_CGImageRefIsGrayscale(imageRef)) {
+        // For color images, if we leave `preferredRange` alone it'll add alpha
+        //  even to opaque images. So we set it to standard, which respects opaque
+        // For grayscale images, if we set `preferredRange` it'll add all other color
+        //  channels (rgb). If we leave it alone, it'll keep it just gray (grayscale)
+        format.preferredRange = UIGraphicsImageRendererFormatRangeStandard;
+    }
     
     __block CGFloat radians = 0.0;
     __block BOOL doHorizontalFlip = NO;

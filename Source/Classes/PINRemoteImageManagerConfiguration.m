@@ -8,7 +8,7 @@
 
 #import "PINRemoteImageManagerConfiguration.h"
 
-#import "PINRemoteImageManager.h"
+#import <PINRemoteImage/PINRemoteImageManager.h>
 
 @implementation PINRemoteImageManagerConfiguration
 

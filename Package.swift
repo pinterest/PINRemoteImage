@@ -1,14 +1,14 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.9
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "PINRemoteImage",
-    platforms: [
-             .macOS(.v10_10),
-             .iOS(.v9),
-             .tvOS(.v9)
+    platforms: [             
+             .iOS(.v14),
+             .macOS(.v11),
+             .tvOS(.v14),
          ],
     products: [
         .library(
@@ -17,17 +17,14 @@ let package = Package(
             targets: ["PINRemoteImage"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/pinterest/PINCache.git", from: "3.0.3"),
-        .package(name: "libwebp",
-                 url: "https://github.com/SDWebImage/libwebp-Xcode",
-                 from: "1.1.0"),
+        .package(url: "https://github.com/pinterest/PINCache.git", from: "3.0.4"),
     ],
     targets: [
         .target(
             name: "PINRemoteImage",
-            dependencies: ["PINCache", "libwebp"],
+            dependencies: ["PINCache"],
             path: "Source/Classes",
-            resources: [.copy("../PrivacyInfo.xcprivacy")],
+            resources: [.process("../PrivacyInfo.xcprivacy")],
             publicHeadersPath: "include",
             cSettings: [
                 .headerSearchPath("."),

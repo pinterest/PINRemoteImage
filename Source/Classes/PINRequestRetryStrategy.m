@@ -6,9 +6,9 @@
 //
 //
 
-#import "PINRequestRetryStrategy.h"
-#import "PINURLSessionManager.h"
-#import "PINRemoteImageManager.h"
+#import <PINRemoteImage/PINRequestRetryStrategy.h>
+#import <PINRemoteImage/PINURLSessionManager.h>
+#import <PINRemoteImage/PINRemoteImageManager.h>
 
 @interface PINRequestExponentialRetryStrategy ()
 

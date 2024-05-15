@@ -23,8 +23,8 @@ class DegradedViewController: UIViewController {
         super.viewWillAppear(animated)
         
         imageView.pin_setImage(from: [
-            URL(string: "https://placekitten.com/101/101")!,
-            URL(string: "https://placekitten.com/401/401")!,
-            URL(string: "https://placekitten.com/801/801")!])
+            URL(string: "https://loremflickr.com/101/101")!,
+            URL(string: "https://loremflickr.com/401/401")!,
+            URL(string: "https://loremflickr.com/801/801")!])
     }
 }

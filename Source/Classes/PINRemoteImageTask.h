@@ -15,8 +15,8 @@
 #endif
 
 #import "PINRemoteImageCallbacks.h"
-#import "PINRemoteImageManager.h"
-#import "PINRemoteImageMacros.h"
+#import <PINRemoteImage/PINRemoteImageManager.h>
+#import <PINRemoteImage/PINRemoteImageMacros.h>
 #import "PINRemoteLock.h"
 #import "PINResume.h"
 

@@ -32,9 +32,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.imageView pin_setImageFromURLs:@[[NSURL URLWithString:@"https://placekitten.com/101/101"],
-                                           [NSURL URLWithString:@"https://placekitten.com/401/401"],
-                                           [NSURL URLWithString:@"https://placekitten.com/801/801"]]];
+    [self.imageView pin_setImageFromURLs:@[[NSURL URLWithString:@"https://loremflickr.com/101/101"],
+                                           [NSURL URLWithString:@"https://loremflickr.com/401/401"],
+                                           [NSURL URLWithString:@"https://loremflickr.com/801/801"]]];
 }
 
 /*

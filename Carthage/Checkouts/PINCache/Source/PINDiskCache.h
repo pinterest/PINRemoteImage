@@ -4,9 +4,9 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PINCacheMacros.h"
-#import "PINCaching.h"
-#import "PINCacheObjectSubscripting.h"
+#import <PINCache/PINCacheMacros.h>
+#import <PINCache/PINCaching.h>
+#import <PINCache/PINCacheObjectSubscripting.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,9 +18,12 @@ extern NSErrorUserInfoKey const PINDiskCacheErrorReadFailureCodeKey;
 extern NSErrorUserInfoKey const PINDiskCacheErrorWriteFailureCodeKey;
 extern NSString * const PINDiskCachePrefix;
 
+extern NSUInteger PINDiskCacheDefaultByteLimit;
+extern NSTimeInterval PINDiskCacheDefaultAgeLimit;
+
 typedef NS_ENUM(NSInteger, PINDiskCacheError) {
-    PINDiskCacheErrorReadFailure = -1000,
-    PINDiskCacheErrorWriteFailure = -1001,
+  PINDiskCacheErrorReadFailure = -1000,
+  PINDiskCacheErrorWriteFailure = -1001,
 };
 
 /**
@@ -167,6 +170,11 @@ PIN_SUBCLASSING_RESTRICTED
  
  */
 @property (assign) NSTimeInterval ageLimit;
+
+/**
+ The eviction strategy when trimming the cache.
+ */
+@property (atomic, assign) PINCacheEvictionStrategy evictionStrategy;
 
 /**
  The writing protection option used when writing a file on disk. This value is used every time an object is set.
@@ -334,7 +342,65 @@ PIN_SUBCLASSING_RESTRICTED
                   keyEncoder:(nullable PINDiskCacheKeyEncoderBlock)keyEncoder
                   keyDecoder:(nullable PINDiskCacheKeyDecoderBlock)keyDecoder
               operationQueue:(nonnull PINOperationQueue *)operationQueue
-                    ttlCache:(BOOL)ttlCache NS_DESIGNATED_INITIALIZER;
+                    ttlCache:(BOOL)ttlCache;
+
+/**
+ @see name
+ @param name The name of the cache.
+ @param prefix The prefix for the cache name. Defaults to com.pinterest.PINDiskCache
+ @param rootPath The path of the cache.
+ @param serializer   A block used to serialize object. If nil provided, default NSKeyedArchiver serialized will be used.
+ @param deserializer A block used to deserialize object. If nil provided, default NSKeyedUnarchiver serialized will be used.
+ @param keyEncoder A block used to encode key(filename). If nil provided, default url encoder will be used
+ @param keyDecoder A block used to decode key(filename). If nil provided, default url decoder will be used
+ @param operationQueue A PINOperationQueue to run asynchronous operations
+ @param ttlCache Whether or not the cache should behave as a TTL cache.
+ @param byteLimit The maximum number of bytes allowed on disk. Defaults to 50MB.
+ @param ageLimit The maximum number of seconds an object is allowed to exist in the cache. Defaults to 30 days.
+ @result A new cache with the specified name.
+ */
+- (instancetype)initWithName:(nonnull NSString *)name
+                      prefix:(nonnull NSString *)prefix
+                    rootPath:(nonnull NSString *)rootPath
+                  serializer:(nullable PINDiskCacheSerializerBlock)serializer
+                deserializer:(nullable PINDiskCacheDeserializerBlock)deserializer
+                  keyEncoder:(nullable PINDiskCacheKeyEncoderBlock)keyEncoder
+                  keyDecoder:(nullable PINDiskCacheKeyDecoderBlock)keyDecoder
+              operationQueue:(nonnull PINOperationQueue *)operationQueue
+                    ttlCache:(BOOL)ttlCache
+                   byteLimit:(NSUInteger)byteLimit
+                    ageLimit:(NSTimeInterval)ageLimit;
+
+/**
+ The designated initializer allowing you to override default NSKeyedArchiver/NSKeyedUnarchiver serialization.
+ 
+ @see name
+ @param name The name of the cache.
+ @param prefix The prefix for the cache name. Defaults to com.pinterest.PINDiskCache
+ @param rootPath The path of the cache.
+ @param serializer   A block used to serialize object. If nil provided, default NSKeyedArchiver serialized will be used.
+ @param deserializer A block used to deserialize object. If nil provided, default NSKeyedUnarchiver serialized will be used.
+ @param keyEncoder A block used to encode key(filename). If nil provided, default url encoder will be used
+ @param keyDecoder A block used to decode key(filename). If nil provided, default url decoder will be used
+ @param operationQueue A PINOperationQueue to run asynchronous operations
+ @param ttlCache Whether or not the cache should behave as a TTL cache.
+ @param byteLimit The maximum number of bytes allowed on disk. Defaults to 50MB.
+ @param ageLimit The maximum number of seconds an object is allowed to exist in the cache. Defaults to 30 days.
+ @param evictionStrategy How the cache decides to evict objects
+ @result A new cache with the specified name.
+ */
+- (instancetype)initWithName:(nonnull NSString *)name
+                      prefix:(nonnull NSString *)prefix
+                    rootPath:(nonnull NSString *)rootPath
+                  serializer:(nullable PINDiskCacheSerializerBlock)serializer
+                deserializer:(nullable PINDiskCacheDeserializerBlock)deserializer
+                  keyEncoder:(nullable PINDiskCacheKeyEncoderBlock)keyEncoder
+                  keyDecoder:(nullable PINDiskCacheKeyDecoderBlock)keyDecoder
+              operationQueue:(nonnull PINOperationQueue *)operationQueue
+                    ttlCache:(BOOL)ttlCache
+                   byteLimit:(NSUInteger)byteLimit
+                    ageLimit:(NSTimeInterval)ageLimit
+            evictionStrategy:(PINCacheEvictionStrategy)evictionStrategy NS_DESIGNATED_INITIALIZER;
 
 #pragma mark - Asynchronous Methods
 /// @name Asynchronous Methods
@@ -442,7 +508,7 @@ PIN_SUBCLASSING_RESTRICTED
 - (void)trimToSizeAsync:(NSUInteger)byteCount completion:(nullable PINCacheBlock)block;
 
 /**
- Removes objects from the cache, ordered by date (least recently used first), until the cache is equal to or smaller
+ Removes objects from the cache, using the eviction strategy, until the cache is equal to or smaller
  than the specified byteCount. This method returns immediately and executes the passed block as soon as the cache has
  been trimmed.
 
@@ -451,7 +517,7 @@ PIN_SUBCLASSING_RESTRICTED
 
  @note This will not remove objects that have been added via one of the @c -setObject:forKey:withAgeLimit methods.
  */
-- (void)trimToSizeByDateAsync:(NSUInteger)byteCount completion:(nullable PINCacheBlock)block;
+- (void)trimToSizeByEvictionStrategyAsync:(NSUInteger)byteCount completion:(nullable PINCacheBlock)block;
 
 /**
  Loops through all objects in the cache (reads and writes are suspended during the enumeration). Data is not actually
@@ -535,15 +601,15 @@ PIN_SUBCLASSING_RESTRICTED
 - (void)trimToSize:(NSUInteger)byteCount;
 
 /**
- Removes objects from the cache, ordered by date (least recently used first), until the cache is equal to or
+ Removes objects from the cache, using the defined evictionStrategy, until the cache is equal to or
  smaller than the specified byteCount. This method blocks the calling thread until the cache has been trimmed.
  
- @see trimToSizeByDateAsync:
+ @see trimToSizeByEvictionStrategyAsync:
  @param byteCount The cache will be trimmed equal to or smaller than this size.
 
  @note This will not remove objects that have been added via one of the @c -setObject:forKey:withAgeLimit methods.
  */
-- (void)trimToSizeByDate:(NSUInteger)byteCount;
+- (void)trimToSizeByEvictionStrategy:(NSUInteger)byteCount;
 
 /**
  Loops through all objects in the cache (reads and writes are suspended during the enumeration). Data is not actually
@@ -587,6 +653,8 @@ typedef void (^PINDiskCacheBlock)(PINDiskCache *cache);
 - (void)removeAllObjects:(nullable PINDiskCacheBlock)block __attribute__((deprecated));
 - (void)enumerateObjectsWithBlock:(PINDiskCacheFileURLBlock)block completionBlock:(nullable PINDiskCacheBlock)completionBlock __attribute__((deprecated));
 - (void)setTtlCache:(BOOL)ttlCache DEPRECATED_MSG_ATTRIBUTE("ttlCache is no longer a settable property and must now be set via initializer.");
+- (void)trimToSizeByDate:(NSUInteger)byteCount DEPRECATED_MSG_ATTRIBUTE("Use trimToSizeByEvictionStrategy: instead");
+- (void)trimToSizeByDateAsync:(NSUInteger)byteCount completion:(nullable PINCacheBlock)block DEPRECATED_MSG_ATTRIBUTE("Use trimToSizeByEvictionStrategyAsync:completion: instead");
 @end
 
 NS_ASSUME_NONNULL_END

@@ -31,7 +31,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.imageView pin_setImageFromURL:[NSURL URLWithString:@"https://github.com/samdutton/simpl/blob/master/picturetype/kittens.webp?raw=true"]];
+    [self.imageView pin_setImageFromURL:[NSURL URLWithString:@"https://raw.githubusercontent.com/samdutton/simpl/main/picturetype/kittens.webp"]];
 }
 
 /*

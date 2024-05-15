@@ -4,9 +4,9 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PINCacheMacros.h"
-#import "PINCaching.h"
-#import "PINCacheObjectSubscripting.h"
+#import <PINCache/PINCacheMacros.h>
+#import <PINCache/PINCaching.h>
+#import <PINCache/PINCacheObjectSubscripting.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
  optional <ageLimit> will trigger a GCD timer to periodically to trim the cache to that age.
  
  Objects can optionally be set with a "cost", which could be a byte count or any other meaningful integer.
- Setting a <costLimit> will automatically keep the cache below that value with <trimToCostByDate:>.
+ Setting a <costLimit> will automatically keep the cache below that value with <trimToCostByEvictionStrategy:>.
  
  Values will not persist after application relaunch or returning from the background. See <PINCache> for
  a memory cache backed by a disk cache.
@@ -43,7 +43,7 @@ PIN_SUBCLASSING_RESTRICTED
 @property (readonly) NSUInteger totalCost;
 
 /**
- The maximum cost allowed to accumulate before objects begin to be removed with <trimToCostByDate:>.
+ The maximum cost allowed to accumulate before objects begin to be removed with <trimToCostByEvictionStrategy:>.
  */
 @property (assign) NSUInteger costLimit;
 
@@ -66,6 +66,11 @@ PIN_SUBCLASSING_RESTRICTED
        less than self.agelimit but must be greater than zero.
  */
 @property (nonatomic, readonly, getter=isTTLCache) BOOL ttlCache;
+
+/**
+ The eviction strategy when trimming the cache.
+ */
+@property (atomic, assign) PINCacheEvictionStrategy evictionStrategy;
 
 /**
  When `YES` on iOS the cache will remove all objects when the app receives a memory warning.
@@ -150,7 +155,9 @@ PIN_SUBCLASSING_RESTRICTED
 
 - (instancetype)initWithName:(NSString *)name operationQueue:(PINOperationQueue *)operationQueue;
 
-- (instancetype)initWithName:(NSString *)name operationQueue:(PINOperationQueue *)operationQueue ttlCache:(BOOL)ttlCache NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithName:(NSString *)name operationQueue:(PINOperationQueue *)operationQueue ttlCache:(BOOL)ttlCache;
+
+- (instancetype)initWithName:(NSString *)name operationQueue:(PINOperationQueue *)operationQueue ttlCache:(BOOL)ttlCache evictionStrategy:(PINCacheEvictionStrategy)evictionStrategy NS_DESIGNATED_INITIALIZER;
 
 #pragma mark - Asynchronous Methods
 /// @name Asynchronous Methods
@@ -173,7 +180,7 @@ PIN_SUBCLASSING_RESTRICTED
  @param cost The total accumulation allowed to remain after the cache has been trimmed.
  @param block A block to be executed concurrently after the cache has been trimmed, or nil.
  */
-- (void)trimToCostByDateAsync:(NSUInteger)cost completion:(nullable PINCacheBlock)block;
+- (void)trimToCostByEvictionStrategyAsync:(NSUInteger)cost completion:(nullable PINCacheBlock)block;
 
 /**
  Loops through all objects in the cache with reads and writes suspended. Calling serial methods which
@@ -200,10 +207,10 @@ PIN_SUBCLASSING_RESTRICTED
  Removes objects from the cache, ordered by date (least recently used first), until the <totalCost> is below
  the specified value. This method blocks the calling thread until the cache has been trimmed.
  
- @see trimToCostByDateAsync:
+ @see trimToCostByEvictionStrategyAsync:
  @param cost The total accumulation allowed to remain after the cache has been trimmed.
  */
-- (void)trimToCostByDate:(NSUInteger)cost;
+- (void)trimToCostByEvictionStrategy:(NSUInteger)cost;
 
 /**
  Loops through all objects in the cache within a memory lock (reads and writes are suspended during the enumeration).
@@ -240,6 +247,8 @@ typedef void (^PINMemoryCacheContainmentBlock)(BOOL containsObject);
 - (void)removeAllObjects:(nullable PINMemoryCacheBlock)block __attribute__((deprecated));
 - (void)enumerateObjectsWithBlock:(PINMemoryCacheObjectBlock)block completionBlock:(nullable PINMemoryCacheBlock)completionBlock __attribute__((deprecated));
 - (void)setTtlCache:(BOOL)ttlCache DEPRECATED_MSG_ATTRIBUTE("ttlCache is no longer a settable property and must now be set via initializer.");
+- (void)trimToCostByDate:(NSUInteger)cost DEPRECATED_MSG_ATTRIBUTE("Use trimToCostByEvictionStrategy: instead");
+- (void)trimToCostByDateAsync:(NSUInteger)cost completion:(nullable PINCacheBlock)block DEPRECATED_MSG_ATTRIBUTE("Use trimToCostByEvictionStrategyAsync:completion: instead.");
 @end
 
 NS_ASSUME_NONNULL_END

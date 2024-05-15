@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "PINRemoteImageCaching.h"
+#import <PINRemoteImage/PINRemoteImageCaching.h>
 
 /**
  *  Simplistic <PINRemoteImageCacheProtocol> wrapper based on NSCache.

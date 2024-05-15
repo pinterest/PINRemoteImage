@@ -5,9 +5,8 @@
 //  Created by Garrett Moon on 4/19/18.
 //
 
-#import "PINAnimatedImageView+PINRemoteImage.h"
-
-#import "PINAnimatedImage.h"
+#import <PINRemoteImage/PINAnimatedImageView+PINRemoteImage.h>
+#import <PINRemoteImage/PINAnimatedImage.h>
 
 @implementation PINAnimatedImageView (PINRemoteImage)
 

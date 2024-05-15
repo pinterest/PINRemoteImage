@@ -1,6 +1,6 @@
 //
 //  PINOperationGroupTests.m
-//  PINOperationQueue
+//  PINOperation
 //
 //  Created by Garrett Moon on 10/12/16.
 //  Copyright © 2016 Pinterest. All rights reserved.

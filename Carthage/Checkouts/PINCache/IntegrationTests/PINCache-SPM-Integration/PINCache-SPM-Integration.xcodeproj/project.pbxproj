@@ -1,0 +1,358 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 60;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E03DEAC225671BA900ACCAFC /* PINCache_SPM_IntegrationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03DEAC125671BA900ACCAFC /* PINCache_SPM_IntegrationApp.swift */; };
+		E03DEAC425671BA900ACCAFC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03DEAC325671BA900ACCAFC /* ContentView.swift */; };
+		E03DEAC625671BAE00ACCAFC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E03DEAC525671BAE00ACCAFC /* Assets.xcassets */; };
+		E03DEAC925671BAE00ACCAFC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E03DEAC825671BAE00ACCAFC /* Preview Assets.xcassets */; };
+		E03DEB1B256BD0CB00ACCAFC /* PINCache in Frameworks */ = {isa = PBXBuildFile; productRef = E03DEB1A256BD0CB00ACCAFC /* PINCache */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		E03DEABE25671BA900ACCAFC /* PINCache-SPM-Integration.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PINCache-SPM-Integration.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E03DEAC125671BA900ACCAFC /* PINCache_SPM_IntegrationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PINCache_SPM_IntegrationApp.swift; sourceTree = "<group>"; };
+		E03DEAC325671BA900ACCAFC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		E03DEAC525671BAE00ACCAFC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E03DEAC825671BAE00ACCAFC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		E03DEACA25671BAE00ACCAFC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E03DEB18256BD05A00ACCAFC /* PINCache */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PINCache; path = ../../..; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E03DEABB25671BA900ACCAFC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E03DEB1B256BD0CB00ACCAFC /* PINCache in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E03DEAB525671BA900ACCAFC = {
+			isa = PBXGroup;
+			children = (
+				E03DEAC025671BA900ACCAFC /* PINCache-SPM-Integration */,
+				E03DEABF25671BA900ACCAFC /* Products */,
+				E03DEAD325671F1100ACCAFC /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		E03DEABF25671BA900ACCAFC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E03DEABE25671BA900ACCAFC /* PINCache-SPM-Integration.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E03DEAC025671BA900ACCAFC /* PINCache-SPM-Integration */ = {
+			isa = PBXGroup;
+			children = (
+				E03DEB18256BD05A00ACCAFC /* PINCache */,
+				E03DEAC125671BA900ACCAFC /* PINCache_SPM_IntegrationApp.swift */,
+				E03DEAC325671BA900ACCAFC /* ContentView.swift */,
+				E03DEAC525671BAE00ACCAFC /* Assets.xcassets */,
+				E03DEACA25671BAE00ACCAFC /* Info.plist */,
+				E03DEAC725671BAE00ACCAFC /* Preview Content */,
+			);
+			path = "PINCache-SPM-Integration";
+			sourceTree = "<group>";
+		};
+		E03DEAC725671BAE00ACCAFC /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				E03DEAC825671BAE00ACCAFC /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		E03DEAD325671F1100ACCAFC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E03DEABD25671BA900ACCAFC /* PINCache-SPM-Integration */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E03DEACD25671BAE00ACCAFC /* Build configuration list for PBXNativeTarget "PINCache-SPM-Integration" */;
+			buildPhases = (
+				E03DEABA25671BA900ACCAFC /* Sources */,
+				E03DEABB25671BA900ACCAFC /* Frameworks */,
+				E03DEABC25671BA900ACCAFC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "PINCache-SPM-Integration";
+			packageProductDependencies = (
+				E03DEB1A256BD0CB00ACCAFC /* PINCache */,
+			);
+			productName = "PINCache-SPM-Integration";
+			productReference = E03DEABE25671BA900ACCAFC /* PINCache-SPM-Integration.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E03DEAB625671BA900ACCAFC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 1210;
+				LastUpgradeCheck = 1520;
+				TargetAttributes = {
+					E03DEABD25671BA900ACCAFC = {
+						CreatedOnToolsVersion = 12.1;
+					};
+				};
+			};
+			buildConfigurationList = E03DEAB925671BA900ACCAFC /* Build configuration list for PBXProject "PINCache-SPM-Integration" */;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E03DEAB525671BA900ACCAFC;
+			packageReferences = (
+			);
+			productRefGroup = E03DEABF25671BA900ACCAFC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E03DEABD25671BA900ACCAFC /* PINCache-SPM-Integration */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E03DEABC25671BA900ACCAFC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E03DEAC925671BAE00ACCAFC /* Preview Assets.xcassets in Resources */,
+				E03DEAC625671BAE00ACCAFC /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E03DEABA25671BA900ACCAFC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E03DEAC425671BA900ACCAFC /* ContentView.swift in Sources */,
+				E03DEAC225671BA900ACCAFC /* PINCache_SPM_IntegrationApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		E03DEACB25671BAE00ACCAFC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E03DEACC25671BAE00ACCAFC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E03DEACE25671BAE00ACCAFC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"PINCache-SPM-Integration/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "PINCache-SPM-Integration/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "pintrest.PINCache-SPM-Integration";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E03DEACF25671BAE00ACCAFC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"PINCache-SPM-Integration/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "PINCache-SPM-Integration/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "pintrest.PINCache-SPM-Integration";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E03DEAB925671BA900ACCAFC /* Build configuration list for PBXProject "PINCache-SPM-Integration" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E03DEACB25671BAE00ACCAFC /* Debug */,
+				E03DEACC25671BAE00ACCAFC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E03DEACD25671BAE00ACCAFC /* Build configuration list for PBXNativeTarget "PINCache-SPM-Integration" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E03DEACE25671BAE00ACCAFC /* Debug */,
+				E03DEACF25671BAE00ACCAFC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E03DEB1A256BD0CB00ACCAFC /* PINCache */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PINCache;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = E03DEAB625671BA900ACCAFC /* Project object */;
+}

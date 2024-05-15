@@ -6,7 +6,7 @@
 //
 //
 
-#import "PINRemoteImageManager.h"
+#import <PINRemoteImage/PINRemoteImageManager.h>
 
 #import <CommonCrypto/CommonDigest.h>
 
@@ -18,32 +18,30 @@
 
 #import <objc/runtime.h>
 
-#import "PINAlternateRepresentationProvider.h"
-#import "PINRemoteImage.h"
+#import <PINRemoteImage/PINAlternateRepresentationProvider.h>
 #import "PINRemoteImageManagerConfiguration.h"
 #import "PINRemoteLock.h"
-#import "PINProgressiveImage.h"
+#import <PINRemoteImage/PINProgressiveImage.h>
 #import "PINRemoteImageCallbacks.h"
 #import "PINRemoteImageTask.h"
 #import "PINRemoteImageProcessorTask.h"
 #import "PINRemoteImageDownloadTask.h"
 #import "PINResume.h"
 #import "PINRemoteImageMemoryContainer.h"
-#import "PINRemoteImageCaching.h"
-#import "PINRequestRetryStrategy.h"
+#import <PINRemoteImage/PINRemoteImageCaching.h>
+#import <PINRemoteImage/PINRequestRetryStrategy.h>
 #import "PINRemoteImageDownloadQueue.h"
-#import "PINRequestRetryStrategy.h"
 #import "PINSpeedRecorder.h"
-#import "PINURLSessionManager.h"
+#import <PINRemoteImage/PINURLSessionManager.h>
 
-#import "NSData+ImageDetectors.h"
-#import "PINImage+DecodedImage.h"
-#import "PINImage+ScaledImage.h"
+#import <PINRemoteImage/NSData+ImageDetectors.h>
+#import <PINRemoteImage/PINImage+DecodedImage.h>
+#import <PINRemoteImage/PINImage+ScaledImage.h>
 #import "PINRemoteImageManager+Private.h"
-#import "NSHTTPURLResponse+MaxAge.h"
+#import <PINRemoteImage/NSHTTPURLResponse+MaxAge.h>
 
 #if USE_PINCACHE
-#import "PINCache+PINRemoteImageCaching.h"
+#import <PINRemoteImage/PINCache+PINRemoteImageCaching.h>
 #else
 #import "PINRemoteImageBasicCache.h"
 #endif
@@ -150,7 +148,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse 
 @property (nonatomic, assign) float highQualityBPSThreshold;
 @property (nonatomic, assign) float lowQualityBPSThreshold;
 @property (nonatomic, assign) BOOL shouldUpgradeLowQualityImages;
-@property (nonatomic, strong) PINRemoteImageManagerMetrics metricsCallback API_AVAILABLE(macosx(10.12), ios(10.0), watchos(3.0), tvos(10.0));
+@property (nonatomic, strong) PINRemoteImageManagerMetrics metricsCallback;
 @property (nonatomic, copy) PINRemoteImageManagerAuthenticationChallenge authenticationChallengeHandler;
 @property (nonatomic, copy) id<PINRequestRetryStrategy> (^retryStrategyCreationBlock)(void);
 @property (nonatomic, copy) PINRemoteImageManagerRequestConfigurationHandler requestConfigurationHandler;
@@ -328,24 +326,16 @@ static dispatch_once_t sharedDispatchToken;
     PINCache *pinCache = [[PINCache alloc] initWithName:kPINRemoteImageDiskCacheName rootPath:cacheURLRoot serializer:^NSData * _Nonnull(id<NSCoding>  _Nonnull object, NSString * _Nonnull key) {
         id <NSCoding, NSObject> obj = (id <NSCoding, NSObject>)object;
         if ([key hasPrefix:PINRemoteImageCacheKeyResumePrefix]) {
-            if (@available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *)) {
-                return [NSKeyedArchiver archivedDataWithRootObject:obj requiringSecureCoding:NO error:nil];
-            } else {
-                return [NSKeyedArchiver archivedDataWithRootObject:object];
-            }
+            return [NSKeyedArchiver archivedDataWithRootObject:obj requiringSecureCoding:NO error:nil];
         }
         return (NSData *)object;
     } deserializer:^id<NSCoding> _Nonnull(NSData * _Nonnull data, NSString * _Nonnull key) {
         if ([key hasPrefix:PINRemoteImageCacheKeyResumePrefix]) {
-            if (@available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *)) {
-                NSError *error = nil;
-                NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:data error:&error];
-                NSAssert(!error, @"unarchiver init failed with error");
-                unarchiver.requiresSecureCoding = NO;
-                return [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
-            } else {
-                return [NSKeyedUnarchiver unarchiveObjectWithData:data];
-            }
+            NSError *error = nil;
+            NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:data error:&error];
+            NSAssert(!error, @"unarchiver init failed with error");
+            unarchiver.requiresSecureCoding = NO;
+            return [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
         }
         return data;
     } keyEncoder:nil keyDecoder:nil ttlCache:enableTtl];
@@ -1298,7 +1288,7 @@ static dispatch_once_t sharedDispatchToken;
     [task didReceiveData:data];
 }
 
-- (void)didCollectMetrics:(nonnull NSURLSessionTaskMetrics *)metrics forURL:(nonnull NSURL *)url API_AVAILABLE(macosx(10.12), ios(10.0), watchos(3.0), tvos(10.0))
+- (void)didCollectMetrics:(nonnull NSURLSessionTaskMetrics *)metrics forURL:(nonnull NSURL *)url
 {
     [self lock];
         if (self.metricsCallback) {

@@ -5,7 +5,7 @@
 //
 //
 
-#import "NSHTTPURLResponse+MaxAge.h"
+#import <PINRemoteImage/NSHTTPURLResponse+MaxAge.h>
 
 @implementation NSHTTPURLResponse (MaxAge)
 

@@ -1,4 +1,4 @@
-PLATFORM="platform=iOS Simulator,name=iPhone 11"
+PLATFORM="platform=iOS Simulator,name=iPhone 15"
 SDK="iphonesimulator"
 SHELL=/bin/bash -o pipefail
 XCODE_MAJOR_VERSION=$(shell xcodebuild -version | HEAD -n 1 | sed -E 's/Xcode ([0-9]+).*/\1/')
@@ -8,7 +8,7 @@ EXAMPLE_SCHEME="Example-Xcode-SPM"
 .PHONY: all webp cocoapods test carthage analyze spm example
 
 cocoapods:
-	pod lib lint
+	pod lib lint --allow-warnings
 	
 analyze:
 	xcodebuild clean analyze -destination ${PLATFORM} -sdk ${SDK} -workspace PINRemoteImage.xcworkspace -scheme PINRemoteImage \
@@ -23,20 +23,15 @@ test:
 	CODE_SIGNING_REQUIRED=NO | xcpretty
 	
 carthage:
-	##### Apply workaround https://github.com/Carthage/Carthage/issues/3019#issuecomment-734415287
-	./carthage.sh update --no-use-binaries --no-build; \
-	./carthage.sh build --no-skip-current;
-
-webp:
 	carthage update --no-use-binaries --no-build
-	cd webp && ../Carthage/Checkouts/libwebp/iosbuild.sh
+	carthage build --no-skip-current --use-xcframeworks
 
 spm:
 	swift build
 
 example:
-	if [ ${XCODE_MAJOR_VERSION} -lt 12 ] ; then \
-		echo "Xcode 12 and Swift 5.3 reqiured to build example project"; \
+	if [ ${XCODE_MAJOR_VERSION} -lt 15 ] ; then \
+		echo "Xcode 15 and Swift 5.9 reqiured to build example project"; \
 		exit 1; \
 	fi
 	xcodebuild clean build -project ${IOS_EXAMPLE_PROJECT} -scheme ${EXAMPLE_SCHEME} -destination ${PLATFORM} -sdk ${SDK} \

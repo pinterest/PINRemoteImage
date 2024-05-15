@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "PINRemoteImage"
-  s.version          = "3.0.3"
+  s.version          = "3.0.4"
   s.summary          = "A thread safe, performant, feature rich image fetcher"
   s.homepage         = "https://github.com/pinterest/PINRemoteImage"
   s.license          = 'Apache 2.0'
@@ -18,9 +18,10 @@ Pod::Spec.new do |s|
   s.prefix_header_file = false
   # s.social_media_url = 'https://twitter.com/garrettmoon'
 
-  ios_deployment = "8.0"
-  tvos_deployment = "9.0"
-  osx_deployment = "10.11"
+  ios_deployment = "14.0"
+  tvos_deployment = "14.0"
+  osx_deployment = "11.0"
+  s.cocoapods_version = '>= 1.13.0'
   s.ios.deployment_target = ios_deployment
   s.tvos.deployment_target = tvos_deployment
   s.requires_arc = true
@@ -34,9 +35,12 @@ Pod::Spec.new do |s|
     cs.tvos.deployment_target = tvos_deployment
     cs.osx.deployment_target = osx_deployment
     cs.source_files = 'Source/Classes/**/*.{h,m}'
-    cs.public_header_files = 'Source/Classes/**/*.h'
-    cs.exclude_files = 'Source/Classes/PINCache/*.{h,m}', 'Source/Classes/include/PINCache+PINRemoteImageCaching.h'
+    cs.public_header_files = 'Source/Classes/include/**/*.h'
+    cs.exclude_files = 'Source/Classes/PINCache/*.{h,m}', 'Source/Classes/include/PINRemoteImage/PINCache+PINRemoteImageCaching.h'
     cs.frameworks = 'ImageIO', 'Accelerate'
+    cs.xcconfig = {
+        'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) PIN_WEBP=1', 
+    }
   end
   
   s.subspec 'iOS' do |ios|
@@ -56,26 +60,15 @@ Pod::Spec.new do |s|
   s.subspec 'tvOS' do |tvos|
     tvos.dependency 'PINRemoteImage/iOS'
   end
-
-  s.subspec 'WebP' do |webp|
-    webp.ios.deployment_target = ios_deployment
-    webp.tvos.deployment_target = tvos_deployment
-    webp.osx.deployment_target = osx_deployment
-    webp.xcconfig = {
-        'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) PIN_WEBP=1', 
-        'USER_HEADER_SEARCH_PATHS' => '$(inherited) $(SRCROOT)/libwebp/src'
-    }
-    webp.dependency 'PINRemoteImage/Core'
-    webp.dependency 'libwebp'
-  end
   
   s.subspec "PINCache" do |pc|
     pc.dependency 'PINRemoteImage/Core'
-    pc.dependency 'PINCache', '~> 3.0.3'
     pc.ios.deployment_target = ios_deployment
     pc.tvos.deployment_target = tvos_deployment
     pc.osx.deployment_target = osx_deployment
-    pc.source_files = 'Source/Classes/PINCache/*.{h,m}', 'Source/Classes/include/PINCache+PINRemoteImageCaching.h'
+    pc.dependency 'PINCache', '~> 3.0.4'
+    pc.source_files = 'Source/Classes/PINCache/*.{h,m}', 'Source/Classes/include/PINRemoteImage/PINCache+PINRemoteImageCaching.h'
   end
   
+  s.resource_bundles = { 'PINRemoteImage' => ['Source/PrivacyInfo.xcprivacy'] }
 end
