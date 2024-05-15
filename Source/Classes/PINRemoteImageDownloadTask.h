@@ -14,7 +14,7 @@
 
 #import "PINRemoteImageManager+Private.h"
 #import "PINRemoteImageTask.h"
-#import "PINProgressiveImage.h"
+#import <PINRemoteImage/PINProgressiveImage.h>
 #import "PINResume.h"
 
 @interface PINRemoteImageDownloadTask : PINRemoteImageTask

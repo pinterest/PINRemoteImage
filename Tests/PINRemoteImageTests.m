@@ -164,7 +164,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (NSURL *)JPEGURL_Large
 {
-    return [NSURL URLWithString:@"https://i.pinimg.com/750x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"];
+    return [NSURL URLWithString:@"https://i.pinimg.com/736x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"];
 }
 
 - (NSURL *)JPEGURL
@@ -199,7 +199,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
 
 - (NSURL *)veryLongURL
 {
-    return [NSURL URLWithString:@"https://placekitten.com/g/200/301?longarg=helloMomHowAreYouDoing.IamFineJustMovedToLiveWithANiceChapWeTravelTogetherInHisBlueBoxThroughSpaceAndTimeMaybeYouveMetHimAlready.YesterdayWeMetACultureOfPeopleWithTentaclesWhoSingWithAVeryCelestialVoice.SoGood.SeeYouSoon.MaybeYesterday.WhoKnows.XOXO"];
+    return [NSURL URLWithString:@"https://loremflickr.com/200/301?longarg=helloMomHowAreYouDoing.IamFineJustMovedToLiveWithANiceChapWeTravelTogetherInHisBlueBoxThroughSpaceAndTimeMaybeYouveMetHimAlready.YesterdayWeMetACultureOfPeopleWithTentaclesWhoSingWithAVeryCelestialVoice.SoGood.SeeYouSoon.MaybeYesterday.WhoKnows.XOXO"];
 }
 
 - (NSURL *)progressiveURL
@@ -819,19 +819,11 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     NSString *cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
   
     PINDiskCache *tempDiskCache = [[PINDiskCache alloc] initWithName:kPINRemoteImageDiskCacheName rootPath:cachePath serializer:^NSData * _Nonnull(id<NSCoding>  _Nonnull object, NSString * _Nonnull key) {
-        if (@available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *)) {
-            return [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:nil];
-        } else {
-            return [NSKeyedArchiver archivedDataWithRootObject:object];
-        }
+        return [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:nil];
     } deserializer:^id<NSCoding> _Nonnull(NSData * _Nonnull data, NSString * _Nonnull key) {
-        if (@available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *)) {
-            NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:data error:nil];
-            unarchiver.requiresSecureCoding = NO;
-            return [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
-        } else {
-            return [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        }
+        NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:data error:nil];
+        unarchiver.requiresSecureCoding = NO;
+        return [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
     }];
     
     [tempDiskCache setObject:@"invalid" forKey:[self.imageManager cacheKeyForURL:[self JPEGURL] processorKey:nil]];
@@ -983,7 +975,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
                                   completion:^(PINRemoteImageManagerResult *result)
     {
         image = result.image;
-        XCTAssert(image.size.width == 750, @"Large image should be downloaded. result.image: %@, result.error: %@", result.image, result.error);
+        XCTAssertEqual(image.size.width, 736, @"Large image should be downloaded. result.image: %@, result.error: %@", result.image, result.error);
         dispatch_semaphore_signal(semaphore);
     }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
@@ -999,7 +991,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
                                   completion:^(PINRemoteImageManagerResult *result)
     {
         image = result.image;
-        XCTAssert(image.size.width == 750, @"Large image should be found in cache");
+        XCTAssertEqual(image.size.width, 736, @"Large image should be found in cache");
         dispatch_semaphore_signal(semaphore);
     }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
@@ -1088,6 +1080,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     XCTAssert(pinCache.diskCache.isTTLCache, @"Default imageManager did not use a ttl cache");
 
     // JPEGURL_Small includes the header "Cache-Control: max-age=31536000, immutable"
+    // Looks like it adds about 13 years right now
     // If that ever changes, this might start failing
     [self.imageManager downloadImageWithURL:[self JPEGURL_Small] completion:^(PINRemoteImageManagerResult *result) {
         XCTAssert(result.resultType == PINRemoteImageResultTypeDownload, @"Expected PINRemoteImageResultTypeDownload(3), got %lu", (unsigned long)result.resultType);
@@ -1103,12 +1096,12 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
         dispatch_semaphore_signal(semaphore);
     }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
-
-    [NSDate startMockingDateWithDate:[NSDate dateWithTimeIntervalSinceNow:32000000]];
+    
+    [NSDate startMockingDateWithDate:[NSDate dateWithTimeIntervalSinceNow:448000000]];
     diskCachedObj = [cache objectFromDiskForKey:key];
     XCTAssert(diskCachedObj == nil, @"Image was not discarded from the disk cache");
     [self.imageManager downloadImageWithURL:[self JPEGURL_Small] completion:^(PINRemoteImageManagerResult *result) {
-        XCTAssert(result.resultType == PINRemoteImageResultTypeDownload, @"Expected PINRemoteImageResultTypeDownload(3), got %lu", (unsigned long)result.resultType);
+        XCTAssertEqual(result.resultType, PINRemoteImageResultTypeDownload, @"Expected PINRemoteImageResultTypeDownload(3), got %lu", (unsigned long)result.resultType);
         dispatch_semaphore_signal(semaphore);
     }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
@@ -1322,33 +1315,31 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     // iOS or tvOS versions below 10.0 use the traditional `+[UIImage imageWithCGImage:]` API that doesn't translate orientation.
     // For iOS/tvOS 10.0+ we manually convert the `UIImageOrientation` in `UIGraphicsImageRenderer`, and therefore,
     // the following test is meant to solidify that behavior
-    if (@available(iOS 10.0, tvOS 10.0, *)) {
-        // Loop over all orientations and compare each element respective to one-another
-        for (NSInteger i = 0; i < sizeof(allOrientations)/sizeof(allOrientations[0]); i++) {
+    // Loop over all orientations and compare each element respective to one-another
+    for (NSInteger i = 0; i < sizeof(allOrientations)/sizeof(allOrientations[0]); i++) {
+        
+        // Rotate the reference image by the given orientation
+        UIImage *referenceImage = [UIImage pin_decodedImageWithCGImageRef:imageRefEncoded orientation:allOrientations[i]];
+        
+        // Compare the reference image to each element
+        for (NSInteger j = 0; j < sizeof(allOrientations)/sizeof(allOrientations[0]); j++) {
             
-            // Rotate the reference image by the given orientation
-            UIImage *referenceImage = [UIImage pin_decodedImageWithCGImageRef:imageRefEncoded orientation:allOrientations[i]];
+            // Rotate the image by the given orientation
+            UIImage *rotatedImage = [UIImage pin_decodedImageWithCGImageRef:imageRefEncoded orientation:allOrientations[j]];
             
-            // Compare the reference image to each element
-            for (NSInteger j = 0; j < sizeof(allOrientations)/sizeof(allOrientations[0]); j++) {
-                
-                // Rotate the image by the given orientation
-                UIImage *rotatedImage = [UIImage pin_decodedImageWithCGImageRef:imageRefEncoded orientation:allOrientations[j]];
-                
-                // equal images must succeed
-                if (i == j) {
-                    XCTAssert([UIImageJPEGRepresentation(referenceImage, 1.0) isEqualToData:UIImageJPEGRepresentation(rotatedImage, 1.0)],
-                              @"Unsuccessful transformation. The `referenceImage` and `rotatedImage` are not the same.");
-                }
-                // unequal images must fail
-                else {
-                    XCTAssertFalse([UIImageJPEGRepresentation(referenceImage, 1.0) isEqualToData:UIImageJPEGRepresentation(rotatedImage, 1.0)],
-                                   @"Unsuccessful transformation. The `referenceImage` and `rotatedImage` are the same.");
-                }
+            // equal images must succeed
+            if (i == j) {
+                XCTAssert([UIImageJPEGRepresentation(referenceImage, 1.0) isEqualToData:UIImageJPEGRepresentation(rotatedImage, 1.0)],
+                          @"Unsuccessful transformation. The `referenceImage` and `rotatedImage` are not the same.");
+            }
+            // unequal images must fail
+            else {
+                XCTAssertFalse([UIImageJPEGRepresentation(referenceImage, 1.0) isEqualToData:UIImageJPEGRepresentation(rotatedImage, 1.0)],
+                               @"Unsuccessful transformation. The `referenceImage` and `rotatedImage` are the same.");
             }
         }
     }
-    
+        
     CGImageRelease(imageRefEncoded);
 }
 

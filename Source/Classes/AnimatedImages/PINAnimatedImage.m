@@ -6,7 +6,7 @@
 //  Copyright © 2017 Pinterest. All rights reserved.
 //
 
-#import "PINAnimatedImage.h"
+#import <PINRemoteImage/PINAnimatedImage.h>
 
 NSErrorDomain const kPINAnimatedImageErrorDomain = @"kPINAnimatedImageErrorDomain";
 
@@ -28,14 +28,12 @@ const Float32 kPINAnimatedImageDefaultDuration = 0.1;
     
     dispatch_once(&onceToken, ^{
 #if PIN_TARGET_IOS
-        if (@available(iOS 10.3, tvOS 10.3, *)) {
-            maximumFramesPerSecond = 0;
-            for (UIScreen *screen in [UIScreen screens]) {
-                if ([screen maximumFramesPerSecond] > maximumFramesPerSecond) {
-                    maximumFramesPerSecond = [screen maximumFramesPerSecond];
-                }
+        maximumFramesPerSecond = 0;
+        for (UIScreen *screen in [UIScreen screens]) {
+            if ([screen maximumFramesPerSecond] > maximumFramesPerSecond) {
+                maximumFramesPerSecond = [screen maximumFramesPerSecond];
             }
-        }
+        }        
 #endif
     });
     return maximumFramesPerSecond;

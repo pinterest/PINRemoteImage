@@ -6,7 +6,7 @@
 //
 //
 
-#import "PINRemoteImageCategoryManager.h"
+#import <PINRemoteImage/PINRemoteImageCategoryManager.h>
 
 #import <objc/runtime.h>
 

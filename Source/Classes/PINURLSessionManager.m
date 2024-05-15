@@ -6,7 +6,7 @@
 //
 //
 
-#import "PINURLSessionManager.h"
+#import <PINRemoteImage/PINURLSessionManager.h>
 
 #import "PINSpeedRecorder.h"
 
@@ -62,9 +62,7 @@ NSErrorDomain const PINURLErrorDomain = @"PINURLErrorDomain";
 {
     [self lock];
         NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request];
-        if (@available(iOS 8.0, macOS 10.10, tvOS 9.0, watchOS 2.0, *)) {
-            dataTask.priority = dataTaskPriorityWithImageManagerPriority(priority);
-        }
+        dataTask.priority = dataTaskPriorityWithImageManagerPriority(priority);
         if (completionHandler) {
             [self.completions setObject:completionHandler forKey:@(dataTask.taskIdentifier)];
         }
@@ -212,26 +210,24 @@ NSErrorDomain const PINURLErrorDomain = @"PINURLErrorDomain";
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didFinishCollectingMetrics:(NSURLSessionTaskMetrics *)metrics
 {
-    if (@available(iOS 10.0, macOS 10.12, *)) {
-        [[PINSpeedRecorder sharedRecorder] processMetrics:metrics forTask:task];
-        
-        [self lock];
-            dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
-        [self unlock];
-        
-        NSAssert(delegateQueue != nil, @"There seems to be an issue in iOS 9 where this can be nil. If you can reliably reproduce hitting this, *please* open an issue: https://github.com/pinterest/PINRemoteImage/issues");
-        if (delegateQueue == nil) {
-            return;
-        }
-        
-        __weak typeof(self) weakSelf = self;
-        dispatch_async(delegateQueue, ^{
-            typeof(self) strongSelf = weakSelf;
-            if ([strongSelf.delegate respondsToSelector:@selector(didCollectMetrics:forURL:)]) {
-                [strongSelf.delegate didCollectMetrics:metrics forURL:task.originalRequest.URL];
-            }
-        });
+    [[PINSpeedRecorder sharedRecorder] processMetrics:metrics forTask:task];
+    
+    [self lock];
+        dispatch_queue_t delegateQueue = self.delegateQueues[@(task.taskIdentifier)];
+    [self unlock];
+    
+    NSAssert(delegateQueue != nil, @"There seems to be an issue in iOS 9 where this can be nil. If you can reliably reproduce hitting this, *please* open an issue: https://github.com/pinterest/PINRemoteImage/issues");
+    if (delegateQueue == nil) {
+        return;
     }
+    
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(delegateQueue, ^{
+        typeof(self) strongSelf = weakSelf;
+        if ([strongSelf.delegate respondsToSelector:@selector(didCollectMetrics:forURL:)]) {
+            [strongSelf.delegate didCollectMetrics:metrics forURL:task.originalRequest.URL];
+        }
+    });
 }
 
 - (BOOL)responseRecoverableFrom404:(NSHTTPURLResponse*)response
@@ -243,18 +239,9 @@ NSErrorDomain const PINURLErrorDomain = @"PINURLErrorDomain";
 #if DEBUG
 - (void)concurrentDownloads:(void (^_Nullable)(NSUInteger concurrentDownloads))concurrentDownloadsCompletion
 {
-    if (@available(macos 10.11, iOS 9.0, watchOS 2.0, tvOS 9.0,  *)) {
-        [self.session getAllTasksWithCompletionHandler:^(NSArray<__kindof NSURLSessionTask *> * _Nonnull tasks) {
-            concurrentDownloadsCompletion(tasks.count);
-        }];
-    } else {
-        [self.session getTasksWithCompletionHandler:^(NSArray<NSURLSessionDataTask *> * _Nonnull dataTasks,
-                                                      NSArray<NSURLSessionUploadTask *> * _Nonnull uploadTasks,
-                                                      NSArray<NSURLSessionDownloadTask *> * _Nonnull downloadTasks) {
-          NSUInteger total = dataTasks.count + uploadTasks.count + downloadTasks.count;
-          concurrentDownloadsCompletion(total);
-        }];
-    }
+    [self.session getAllTasksWithCompletionHandler:^(NSArray<__kindof NSURLSessionTask *> * _Nonnull tasks) {
+        concurrentDownloadsCompletion(tasks.count);
+    }];
 }
 
 #endif

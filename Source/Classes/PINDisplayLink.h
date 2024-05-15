@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PINRemoteImageMacros.h"
+#import <PINRemoteImage/PINRemoteImageMacros.h>
 
 #if PIN_TARGET_IOS
 #define PINDisplayLink CADisplayLink

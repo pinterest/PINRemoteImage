@@ -6,10 +6,10 @@
 //
 //
 
-#import "PINAlternateRepresentationProvider.h"
+#import <PINRemoteImage/PINAlternateRepresentationProvider.h>
 
-#import "PINCachedAnimatedImage.h"
-#import "NSData+ImageDetectors.h"
+#import <PINRemoteImage/PINCachedAnimatedImage.h>
+#import <PINRemoteImage/NSData+ImageDetectors.h>
 
 @implementation PINAlternateRepresentationProvider
 

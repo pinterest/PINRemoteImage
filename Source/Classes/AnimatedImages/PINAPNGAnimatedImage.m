@@ -6,7 +6,7 @@
 //  Copyright © 2020 Pinterest. All rights reserved.
 //
 
-#import "PINAPNGAnimatedImage.h"
+#import <PINRemoteImage/PINAPNGAnimatedImage.h>
 
 #if PIN_APNG
 
@@ -17,8 +17,8 @@
 #import <CoreServices/CoreServices.h>
 #endif
 
-#import "PINImage+DecodedImage.h"
-#import "NSData+ImageDetectors.h"
+#import <PINRemoteImage/PINImage+DecodedImage.h>
+#import <PINRemoteImage/NSData+ImageDetectors.h>
 
 @interface PINAPNGAnimatedImage ()
 {

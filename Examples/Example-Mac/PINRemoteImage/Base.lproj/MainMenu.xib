@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -668,15 +668,16 @@
                     </menu>
                 </menuItem>
             </items>
+            <point key="canvasLocation" x="29" y="154"/>
         </menu>
         <window title="PINRemoteImage" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="335" y="390" width="789" height="384"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
             <view key="contentView" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="789" height="384"/>
-                <autoresizingMask key="autoresizingMask"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             </view>
             <toolbar key="toolbar" implicitIdentifier="ECE89FB8-3803-4EC1-80FA-A3A31DB0B167" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="uDT-d9-ekb">
                 <allowedToolbarItems>
@@ -687,10 +688,10 @@
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="yrG-z8-rb5"/>
                     <toolbarItem implicitItemIdentifier="94242F95-D4DC-435D-858C-7820289981E0" label="Switch Views" paletteLabel="Switch Views" id="hxg-fF-Cdm">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="104" height="24"/>
-                        <size key="maxSize" width="444" height="26"/>
+                        <size key="minSize" width="104" height="23"/>
+                        <size key="maxSize" width="515" height="26"/>
                         <segmentedControl key="view" verticalHuggingPriority="750" id="RO4-iv-KcU">
-                            <rect key="frame" x="0.0" y="14" width="444" height="24"/>
+                            <rect key="frame" x="0.0" y="14" width="515" height="26"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="selectOne" id="jqk-9E-gyT">
                                 <font key="font" metaFont="system"/>
@@ -702,6 +703,7 @@
                                     <segment label="Processing"/>
                                     <segment label="GIF"/>
                                     <segment label="APNG"/>
+                                    <segment label="Animated WebP"/>
                                 </segments>
                             </segmentedCell>
                             <connections>
@@ -721,5 +723,12 @@
             </connections>
             <point key="canvasLocation" x="402.5" y="332"/>
         </window>
+        <segmentedCell controlSize="small" borderStyle="border" alignment="left" segmentDistribution="fill" style="rounded" trackingMode="selectOne" id="8DG-lT-Fva">
+            <font key="font" metaFont="smallSystem"/>
+            <segments>
+                <segment width="36"/>
+                <segment width="36" tag="1"/>
+            </segments>
+        </segmentedCell>
     </objects>
 </document>

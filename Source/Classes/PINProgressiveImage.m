@@ -6,13 +6,12 @@
 //
 //
 
-#import "PINProgressiveImage.h"
+#import <PINRemoteImage/PINProgressiveImage.h>
 
 #import <ImageIO/ImageIO.h>
 #import <Accelerate/Accelerate.h>
 
-#import "PINRemoteImage.h"
-#import "PINImage+DecodedImage.h"
+#import <PINRemoteImage/PINImage+DecodedImage.h>
 #import "PINRemoteImageDownloadTask.h"
 #import "PINSpeedRecorder.h"
 

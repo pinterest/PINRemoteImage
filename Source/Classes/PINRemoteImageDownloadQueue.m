@@ -8,7 +8,7 @@
 
 #import "PINRemoteImageDownloadQueue.h"
 
-#import "PINURLSessionManager.h"
+#import <PINRemoteImage/PINURLSessionManager.h>
 #import "PINRemoteLock.h"
 
 @interface PINRemoteImageDownloadQueue ()

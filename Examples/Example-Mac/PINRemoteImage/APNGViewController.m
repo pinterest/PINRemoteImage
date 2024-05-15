@@ -8,7 +8,7 @@
 
 #import "APNGViewController.h"
 
-#import "PINAnimatedImageView+PINRemoteImage.h"
+#import <PINRemoteImage/PINAnimatedImageView+PINRemoteImage.h>
 
 @interface APNGViewController ()
 

@@ -82,7 +82,7 @@ Add the following line to your `Cartfile` and run `carthage update --platform io
 
 ## Requirements
 
-__PINCache__ requires iOS 8.0, tvOS 9.0, watchOS 2.0 or macOS 10.8 and greater.
+__PINCache__ requires iOS 12.0, tvOS 12.0, watchOS 4.0 or macOS 10.13 and greater.
 
 ## Contact
 

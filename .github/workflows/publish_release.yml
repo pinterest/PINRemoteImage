@@ -5,9 +5,14 @@ on:
       release-type:
         description: 'The type of release. Must be major, minor or patch'
         required: true
+
+env:
+  # Use Xcode 15.2 or newer to support VisionOS
+  DEVELOPER_DIR: /Applications/Xcode_15.2.app
+
 jobs:
   create_release:
-    runs-on: macOS-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       # Make sure we can lint before creating the release.

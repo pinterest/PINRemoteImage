@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,6 +14,24 @@
 		3201179824444862004FD783 /* PINOperationTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = CC0105861E2711B700890935 /* PINOperationTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3201179924444862004FD783 /* PINOperationGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = CC0105821E2711B700890935 /* PINOperationGroup.m */; };
 		3201179A24444862004FD783 /* PINOperationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = CC0105851E2711B700890935 /* PINOperationQueue.m */; };
+		68133AEC2BE056A5007627EC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 68133AEB2BE056A5007627EC /* PrivacyInfo.xcprivacy */; };
+		6817A6442BE46E48007710C1 /* PINOperationGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = CC0105821E2711B700890935 /* PINOperationGroup.m */; };
+		6817A6452BE46E48007710C1 /* PINOperationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = CC0105851E2711B700890935 /* PINOperationQueue.m */; };
+		6817A6482BE46E48007710C1 /* PINOperationTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = CC0105861E2711B700890935 /* PINOperationTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6817A6492BE46E48007710C1 /* PINOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = CC0105801E2711B700890935 /* PINOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6817A64A2BE46E48007710C1 /* PINOperationGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = CC0105811E2711B700890935 /* PINOperationGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6817A64B2BE46E48007710C1 /* PINOperationMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = CC0105831E2711B700890935 /* PINOperationMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6817A64C2BE46E48007710C1 /* PINOperationQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = CC0105841E2711B700890935 /* PINOperationQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6817A64E2BE46E48007710C1 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 68133AEB2BE056A5007627EC /* PrivacyInfo.xcprivacy */; };
+		6850F2E62BE471CB00A38144 /* PINOperationQueueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CC01059D1E27131B00890935 /* PINOperationQueueTests.m */; };
+		6850F2E72BE471CB00A38144 /* PINOperationGroupTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CC01059E1E27131B00890935 /* PINOperationGroupTests.m */; };
+		686ECECD2BE4731900634D9F /* PINOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6817A6522BE46E48007710C1 /* PINOperation.framework */; };
+		686ECED62BE474F300634D9F /* PINOperationQueueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CC01059D1E27131B00890935 /* PINOperationQueueTests.m */; };
+		686ECED72BE474F300634D9F /* PINOperationGroupTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CC01059E1E27131B00890935 /* PINOperationGroupTests.m */; };
+		68B3C3072BE475FF00C335B8 /* PINOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3201178C24444859004FD783 /* PINOperation.framework */; };
+		68CEDB9F2BE0E1DF0045CBE7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 68133AEB2BE056A5007627EC /* PrivacyInfo.xcprivacy */; };
+		68CEDBA02BE0E1E00045CBE7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 68133AEB2BE056A5007627EC /* PrivacyInfo.xcprivacy */; };
+		68CEDBA12BE0E1E10045CBE7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 68133AEB2BE056A5007627EC /* PrivacyInfo.xcprivacy */; };
 		CC01055B1E27116600890935 /* PINOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC01052D1E27110D00890935 /* PINOperation.framework */; };
 		CC01056A1E27117300890935 /* PINOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC01053D1E27113700890935 /* PINOperation.framework */; };
 		CC0105791E27117F00890935 /* PINOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC01054A1E27114300890935 /* PINOperation.framework */; };
@@ -47,6 +65,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		686ECECF2BE4731900634D9F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CC0105241E27110D00890935 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6817A6422BE46E48007710C1;
+			remoteInfo = "PINOperation-visionOS";
+		};
+		68B3C3092BE475FF00C335B8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CC0105241E27110D00890935 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3201178B24444859004FD783;
+			remoteInfo = "PINOperation-watchOS";
+		};
 		CC01055C1E27116600890935 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = CC0105241E27110D00890935 /* Project object */;
@@ -72,6 +104,10 @@
 
 /* Begin PBXFileReference section */
 		3201178C24444859004FD783 /* PINOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PINOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		68133AEB2BE056A5007627EC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		6817A6522BE46E48007710C1 /* PINOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PINOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6850F2EE2BE471CB00A38144 /* PINOperation-visionOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PINOperation-visionOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		686ECEDE2BE474F300634D9F /* PINOperation-watchOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PINOperation-watchOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC01052D1E27110D00890935 /* PINOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PINOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC01053D1E27113700890935 /* PINOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PINOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC01054A1E27114300890935 /* PINOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PINOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,6 +132,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6817A6462BE46E48007710C1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6850F2E82BE471CB00A38144 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				686ECECD2BE4731900634D9F /* PINOperation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		686ECED82BE474F300634D9F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				68B3C3072BE475FF00C335B8 /* PINOperation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,12 +206,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6850F2F02BE4724000A38144 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		CC0105231E27110D00890935 = {
 			isa = PBXGroup;
 			children = (
 				CC01057F1E2711B700890935 /* Source */,
 				CC0105571E27116600890935 /* Tests */,
 				CC01052E1E27110D00890935 /* Products */,
+				6850F2F02BE4724000A38144 /* Frameworks */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -169,6 +236,9 @@
 				CC0105651E27117300890935 /* PINOperation-tvOSTests.xctest */,
 				CC0105741E27117F00890935 /* PINOperation-macOSTests.xctest */,
 				3201178C24444859004FD783 /* PINOperation.framework */,
+				6817A6522BE46E48007710C1 /* PINOperation.framework */,
+				6850F2EE2BE471CB00A38144 /* PINOperation-visionOSTests.xctest */,
+				686ECEDE2BE474F300634D9F /* PINOperation-watchOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -194,6 +264,7 @@
 				CC0105821E2711B700890935 /* PINOperationGroup.m */,
 				CC0105851E2711B700890935 /* PINOperationQueue.m */,
 				CC01059C1E27129E00890935 /* Info.plist */,
+				68133AEB2BE056A5007627EC /* PrivacyInfo.xcprivacy */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -210,6 +281,18 @@
 				3201179424444862004FD783 /* PINOperation.h in Headers */,
 				3201179724444862004FD783 /* PINOperationQueue.h in Headers */,
 				3201179624444862004FD783 /* PINOperationMacros.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6817A6472BE46E48007710C1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6817A6482BE46E48007710C1 /* PINOperationTypes.h in Headers */,
+				6817A6492BE46E48007710C1 /* PINOperation.h in Headers */,
+				6817A64A2BE46E48007710C1 /* PINOperationGroup.h in Headers */,
+				6817A64B2BE46E48007710C1 /* PINOperationMacros.h in Headers */,
+				6817A64C2BE46E48007710C1 /* PINOperationQueue.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,9 +339,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3201179324444859004FD783 /* Build configuration list for PBXNativeTarget "PINOperation-watchOS" */;
 			buildPhases = (
-				3201178724444859004FD783 /* Headers */,
 				3201178824444859004FD783 /* Sources */,
 				3201178924444859004FD783 /* Frameworks */,
+				3201178724444859004FD783 /* Headers */,
 				3201178A24444859004FD783 /* Resources */,
 			);
 			buildRules = (
@@ -269,6 +352,60 @@
 			productName = "PINOperation-watchOS";
 			productReference = 3201178C24444859004FD783 /* PINOperation.framework */;
 			productType = "com.apple.product-type.framework";
+		};
+		6817A6422BE46E48007710C1 /* PINOperation-visionOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6817A64F2BE46E48007710C1 /* Build configuration list for PBXNativeTarget "PINOperation-visionOS" */;
+			buildPhases = (
+				6817A6432BE46E48007710C1 /* Sources */,
+				6817A6462BE46E48007710C1 /* Frameworks */,
+				6817A6472BE46E48007710C1 /* Headers */,
+				6817A64D2BE46E48007710C1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "PINOperation-visionOS";
+			productName = PINOperation;
+			productReference = 6817A6522BE46E48007710C1 /* PINOperation.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		6850F2E22BE471CB00A38144 /* PINOperation-visionOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6850F2EB2BE471CB00A38144 /* Build configuration list for PBXNativeTarget "PINOperation-visionOSTests" */;
+			buildPhases = (
+				6850F2E52BE471CB00A38144 /* Sources */,
+				6850F2E82BE471CB00A38144 /* Frameworks */,
+				6850F2EA2BE471CB00A38144 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				686ECED02BE4731900634D9F /* PBXTargetDependency */,
+			);
+			name = "PINOperation-visionOSTests";
+			productName = PINOperationTests;
+			productReference = 6850F2EE2BE471CB00A38144 /* PINOperation-visionOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		686ECED22BE474F300634D9F /* PINOperation-watchOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 686ECEDB2BE474F300634D9F /* Build configuration list for PBXNativeTarget "PINOperation-watchOSTests" */;
+			buildPhases = (
+				686ECED52BE474F300634D9F /* Sources */,
+				686ECED82BE474F300634D9F /* Frameworks */,
+				686ECEDA2BE474F300634D9F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				68B3C30A2BE475FF00C335B8 /* PBXTargetDependency */,
+			);
+			name = "PINOperation-watchOSTests";
+			productName = PINOperationTests;
+			productReference = 686ECEDE2BE474F300634D9F /* PINOperation-watchOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		CC01052C1E27110D00890935 /* PINOperation */ = {
 			isa = PBXNativeTarget;
@@ -384,7 +521,9 @@
 		CC0105241E27110D00890935 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1010;
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 1520;
+				LastUpgradeCheck = 1520;
 				ORGANIZATIONNAME = Pinterest;
 				TargetAttributes = {
 					3201178B24444859004FD783 = {
@@ -412,7 +551,7 @@
 				};
 			};
 			buildConfigurationList = CC0105271E27110D00890935 /* Build configuration list for PBXProject "PINOperation" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -431,12 +570,38 @@
 				CC0105491E27114300890935 /* PINOperation-macOS */,
 				CC0105731E27117F00890935 /* PINOperation-macOSTests */,
 				3201178B24444859004FD783 /* PINOperation-watchOS */,
+				686ECED22BE474F300634D9F /* PINOperation-watchOSTests */,
+				6817A6422BE46E48007710C1 /* PINOperation-visionOS */,
+				6850F2E22BE471CB00A38144 /* PINOperation-visionOSTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		3201178A24444859004FD783 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				68CEDBA12BE0E1E10045CBE7 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6817A64D2BE46E48007710C1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6817A64E2BE46E48007710C1 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6850F2EA2BE471CB00A38144 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		686ECEDA2BE474F300634D9F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -447,6 +612,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68133AEC2BE056A5007627EC /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,6 +620,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68CEDB9F2BE0E1DF0045CBE7 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -461,6 +628,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68CEDBA02BE0E1E00045CBE7 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -494,6 +662,33 @@
 			files = (
 				3201179924444862004FD783 /* PINOperationGroup.m in Sources */,
 				3201179A24444862004FD783 /* PINOperationQueue.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6817A6432BE46E48007710C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6817A6442BE46E48007710C1 /* PINOperationGroup.m in Sources */,
+				6817A6452BE46E48007710C1 /* PINOperationQueue.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6850F2E52BE471CB00A38144 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6850F2E62BE471CB00A38144 /* PINOperationQueueTests.m in Sources */,
+				6850F2E72BE471CB00A38144 /* PINOperationGroupTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		686ECED52BE474F300634D9F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				686ECED62BE474F300634D9F /* PINOperationQueueTests.m in Sources */,
+				686ECED72BE474F300634D9F /* PINOperationGroupTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -554,6 +749,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		686ECED02BE4731900634D9F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6817A6422BE46E48007710C1 /* PINOperation-visionOS */;
+			targetProxy = 686ECECF2BE4731900634D9F /* PBXContainerItemProxy */;
+		};
+		68B3C30A2BE475FF00C335B8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3201178B24444859004FD783 /* PINOperation-watchOS */;
+			targetProxy = 68B3C3092BE475FF00C335B8 /* PBXContainerItemProxy */;
+		};
 		CC01055D1E27116600890935 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = CC01052C1E27110D00890935 /* PINOperation */;
@@ -580,23 +785,30 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pinterest.PINOperation-watchOS";
+				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINOperation;
 				PRODUCT_NAME = PINOperation;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
 		};
@@ -608,22 +820,157 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pinterest.PINOperation-watchOS";
+				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINOperation;
 				PRODUCT_NAME = PINOperation;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		6817A6502BE46E48007710C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
+				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINOperation;
+				PRODUCT_NAME = PINOperation;
+				RESOURCES_TARGETED_DEVICE_FAMILY = "";
+				SDKROOT = xros;
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 7;
+			};
+			name = Debug;
+		};
+		6817A6512BE46E48007710C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
+				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINOperation;
+				PRODUCT_NAME = PINOperation;
+				RESOURCES_TARGETED_DEVICE_FAMILY = "";
+				SDKROOT = xros;
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 7;
+			};
+			name = Release;
+		};
+		6850F2EC2BE471CB00A38144 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINOperationTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = xros;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 7;
+			};
+			name = Debug;
+		};
+		6850F2ED2BE471CB00A38144 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINOperationTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = xros;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 7;
+			};
+			name = Release;
+		};
+		686ECEDC2BE474F300634D9F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINOperationTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
+		686ECEDD2BE474F300634D9F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINOperationTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				TARGETED_DEVICE_FAMILY = 4;
 			};
 			name = Release;
 		};
@@ -651,6 +998,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -661,6 +1009,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -675,14 +1024,17 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
+				XROS_DEPLOYMENT_TARGET = 1.0;
 			};
 			name = Debug;
 		};
@@ -710,6 +1062,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -720,6 +1073,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -728,14 +1082,17 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
+				XROS_DEPLOYMENT_TARGET = 1.0;
 			};
 			name = Release;
 		};
@@ -743,16 +1100,25 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
 				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINOperation;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
 			};
 			name = Debug;
 		};
@@ -760,16 +1126,25 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
 				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINOperation;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
 			};
 			name = Release;
 		};
@@ -777,20 +1152,26 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
 				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINOperation;
 				PRODUCT_NAME = PINOperation;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Debug;
 		};
@@ -798,20 +1179,26 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
 				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINOperation;
 				PRODUCT_NAME = PINOperation;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Release;
 		};
@@ -820,15 +1207,22 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
 				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINOperation;
 				PRODUCT_NAME = PINOperation;
 				SDKROOT = macosx;
@@ -841,15 +1235,22 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
 				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINOperation;
 				PRODUCT_NAME = PINOperation;
 				SDKROOT = macosx;
@@ -860,8 +1261,12 @@
 		CC01055F1E27116600890935 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINOperationTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -870,8 +1275,12 @@
 		CC0105601E27116600890935 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINOperationTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -880,24 +1289,32 @@
 		CC01056E1E27117300890935 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.pinterest.PINOperation-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TVOS_DEPLOYMENT_TARGET = 9.2;
+				TARGETED_DEVICE_FAMILY = 3;
 			};
 			name = Debug;
 		};
 		CC01056F1E27117300890935 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.pinterest.PINOperation-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TVOS_DEPLOYMENT_TARGET = 9.2;
+				TARGETED_DEVICE_FAMILY = 3;
 			};
 			name = Release;
 		};
@@ -906,9 +1323,13 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = Tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				DEAD_CODE_STRIPPING = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.pinterest.PINOperation-macOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -920,9 +1341,13 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = Tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				DEAD_CODE_STRIPPING = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.pinterest.PINOperation-macOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -937,6 +1362,33 @@
 			buildConfigurations = (
 				3201179124444859004FD783 /* Debug */,
 				3201179224444859004FD783 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6817A64F2BE46E48007710C1 /* Build configuration list for PBXNativeTarget "PINOperation-visionOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6817A6502BE46E48007710C1 /* Debug */,
+				6817A6512BE46E48007710C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6850F2EB2BE471CB00A38144 /* Build configuration list for PBXNativeTarget "PINOperation-visionOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6850F2EC2BE471CB00A38144 /* Debug */,
+				6850F2ED2BE471CB00A38144 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		686ECEDB2BE474F300634D9F /* Build configuration list for PBXNativeTarget "PINOperation-watchOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				686ECEDC2BE474F300634D9F /* Debug */,
+				686ECEDD2BE474F300634D9F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

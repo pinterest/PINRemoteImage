@@ -235,7 +235,7 @@ You can set up PINRemoteImage as a submodule of your repo instead of cloning and
 
 ## Requirements
 
-__PINRemoteImage__ requires iOS 7.0 or greater.
+__PINRemoteImage__ requires iOS 12.0 or greater.
 
 ## Contact
 

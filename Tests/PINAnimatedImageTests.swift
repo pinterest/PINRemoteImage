@@ -279,10 +279,16 @@ class PINAnimatedImageTests: XCTestCase, PINRemoteImageManagerAlternateRepresent
         let layer = CALayer()
         
         imageView.overrideUserInterfaceStyle = .light
+        if #available(iOS 17.0, *) {
+            imageView.updateTraitsIfNeeded()
+        }
         imageView.display(layer)
         XCTAssert(lightImage === (layer.contents as! CGImage), "Placeholder image should be using light mode version")
         
         imageView.overrideUserInterfaceStyle = .dark
+        if #available(iOS 17.0, *) {
+            imageView.updateTraitsIfNeeded()
+        }
         imageView.display(layer)
         XCTAssert(darkImage === (layer.contents as! CGImage), "Placeholder image should be using dark mode version")
     }

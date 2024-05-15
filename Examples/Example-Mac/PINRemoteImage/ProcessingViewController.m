@@ -8,8 +8,7 @@
 
 #import "ProcessingViewController.h"
 
-#import <PINRemoteImage/PINImageView+PINRemoteImage.h>
-#import <PINRemoteImage/PINImage+DecodedImage.h>
+#import <PINRemoteImage/PINRemoteImage.h>
 
 @interface ProcessingViewController ()
 @property (weak) IBOutlet NSImageView *imageView;
@@ -66,7 +65,7 @@
          [bezierPath stroke];
         
          NSImage *logo = [NSImage imageNamed:@"white-pinterest-logo"];
-         CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
+         CGContextRef ctx = [[NSGraphicsContext currentContext] CGContext];
          CGContextSetBlendMode(ctx, kCGBlendModeOverlay);
          CGContextSetAlpha(ctx, 0.5);
          CGContextDrawImage(ctx, CGRectMake(90, 10, logo.size.width, logo.size.height), [logo CGImage]);

@@ -8,7 +8,7 @@
 
 #import "GIFViewController.h"
 
-#import "PINAnimatedImageView+PINRemoteImage.h"
+#import <PINRemoteImage/PINAnimatedImageView+PINRemoteImage.h>
 
 @interface GIFViewController ()
 

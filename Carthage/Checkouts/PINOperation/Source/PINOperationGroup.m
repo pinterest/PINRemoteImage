@@ -1,13 +1,13 @@
 //
 //  PINOperationGroup.m
-//  PINQueue
+//  PINOperation
 //
 //  Created by Garrett Moon on 10/8/16.
 //  Copyright © 2016 Pinterest. All rights reserved.
 //
 
 #import "PINOperationGroup.h"
-#import "PINOperation.h"
+#import <PINOperation/PINOperation.h>
 #import <pthread.h>
 
 @interface NSNumber (PINGroupOperationQueue) <PINGroupOperationReference>

@@ -6,7 +6,6 @@
 //  Copyright © 2017 Pinterest. All rights reserved.
 //
 
-#pragma once
 #import <Foundation/Foundation.h>
 
 
@@ -34,6 +33,11 @@ typedef void (^PINCacheObjectEnumerationBlock)(__kindof id<PINCaching> cache, NS
  A callback block which provides a BOOL value as argument
  */
 typedef void (^PINCacheObjectContainmentBlock)(BOOL containsObject);
+
+typedef NS_ENUM(NSInteger, PINCacheEvictionStrategy) {
+  PINCacheEvictionStrategyLeastRecentlyUsed,
+  PINCacheEvictionStrategyLeastFrequentlyUsed,
+};
 
 @protocol PINCaching <NSObject>
 

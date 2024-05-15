@@ -6,7 +6,7 @@
 //
 //
 
-#import "PINImageView+PINRemoteImage.h"
+#import <PINRemoteImage/PINImageView+PINRemoteImage.h>
 
 @implementation PINImageView (PINRemoteImage)
 

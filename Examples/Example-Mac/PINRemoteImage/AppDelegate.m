@@ -17,6 +17,7 @@
 #import "ProcessingViewController.h"
 #import "GIFViewController.h"
 #import "APNGViewController.h"
+#import "AnimatedWebPViewController.h"
 
 enum : NSUInteger {
     kScrollViewControllerSegment = 0,
@@ -25,7 +26,8 @@ enum : NSUInteger {
     kDegradedViewControllerSegment,
     kProcessingViewControllerSegment,
     kGIFViewControllerSegment,
-    kAPNGViewControllerSegment
+    kAPNGViewControllerSegment,
+    kAnimatedWebPViewControllerSegment,
 };
 
 @interface AppDelegate ()
@@ -75,7 +77,8 @@ enum : NSUInteger {
             @(kDegradedViewControllerSegment) : [DegradedViewController class],
             @(kProcessingViewControllerSegment) : [ProcessingViewController class],
             @(kGIFViewControllerSegment) : [GIFViewController class],
-            @(kAPNGViewControllerSegment) : [APNGViewController class]
+            @(kAPNGViewControllerSegment) : [APNGViewController class],
+            @(kAnimatedWebPViewControllerSegment) : [AnimatedWebPViewController class],
         };
     }
 

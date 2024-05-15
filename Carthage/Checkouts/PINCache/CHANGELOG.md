@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.4](https://github.com/Pinterest/PINCache/tree/3.0.4) (2024-05-13)
+
+[Full Changelog](https://github.com/Pinterest/PINCache/compare/3.0.3...3.0.4)
+
+- Add ability to configure maxConcurrentOperations [\#329](https://github.com/pinterest/PINCache/pull/329) ([andyfinnell](https://github.com/andyfinnell))
+- Add Least Frequently Used eviction strategy [\#328](https://github.com/pinterest/PINCache/pull/328) ([andyfinnell](https://github.com/andyfinnell))
+- Update project and installation methods \(CocoaPods and Swift Package Manager\) for Xcode 15 [\#327](https://github.com/pinterest/PINCache/pull/327) ([tstump-phunware](https://github.com/tstump-phunware))
+
 ## [3.0.3](https://github.com/Pinterest/PINCache/tree/3.0.3) (2020-10-22)
 
 [Full Changelog](https://github.com/Pinterest/PINCache/compare/3.0.2...3.0.3)

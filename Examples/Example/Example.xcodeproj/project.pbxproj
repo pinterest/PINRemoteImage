@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2B38B1CD5C8E405102293255 /* libPods-Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA9AA7E6E87DBD4CB132A1F /* libPods-Example.a */; };
 		0CF0743224093090008F126B /* APNGViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CF0743124093090008F126B /* APNGViewController.m */; };
+		2B38B1CD5C8E405102293255 /* libPods-Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA9AA7E6E87DBD4CB132A1F /* libPods-Example.a */; };
+		447F707A2BF4F80900C5C956 /* AnimatedWebPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 447F70792BF4F80900C5C956 /* AnimatedWebPViewController.m */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -34,6 +35,8 @@
 		25CF9DB8CF954119BAA63004 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		32A377E2A670E405B928B26E /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		3FA9AA7E6E87DBD4CB132A1F /* libPods-Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		447F70782BF4F80900C5C956 /* AnimatedWebPViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnimatedWebPViewController.h; sourceTree = "<group>"; };
+		447F70792BF4F80900C5C956 /* AnimatedWebPViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AnimatedWebPViewController.m; sourceTree = "<group>"; };
 		500C3EFB07D23E183AC04C5D /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
 		5A85B7779305DF163437777D /* libPods-PINRemoteImage Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PINRemoteImage Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58A195388D20070C39A /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -147,6 +150,8 @@
 				687666B820869C82001E825C /* GIFViewController.m */,
 				0CF0743024093090008F126B /* APNGViewController.h */,
 				0CF0743124093090008F126B /* APNGViewController.m */,
+				447F70782BF4F80900C5C956 /* AnimatedWebPViewController.h */,
+				447F70792BF4F80900C5C956 /* AnimatedWebPViewController.m */,
 			);
 			path = PINRemoteImage;
 			sourceTree = "<group>";
@@ -212,6 +217,7 @@
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
+				80872930FA6F2284B32F00DB /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -266,6 +272,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		80872930FA6F2284B32F00DB /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/PINCache/PINCache.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/PINOperation/PINOperation.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/PINRemoteImage/PINRemoteImage.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/PINCache.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/PINOperation.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/PINRemoteImage.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		D2E4FE25FDCE1E36A864F521 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -295,6 +323,7 @@
 				68B3850B1B5572BF004EB26F /* ProgressiveViewController.m in Sources */,
 				9D9328E51C3D4CC200E1F1D3 /* Kitten.m in Sources */,
 				6003F59E195388D20070C39A /* PINAppDelegate.m in Sources */,
+				447F707A2BF4F80900C5C956 /* AnimatedWebPViewController.m in Sources */,
 				682C52611B584DD300B3B813 /* ProcessingViewController.m in Sources */,
 				687666B920869C82001E825C /* GIFViewController.m in Sources */,
 				0CF0743224093090008F126B /* APNGViewController.m in Sources */,
@@ -409,6 +438,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = "PINRemoteImage/PINRemoteImage-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = Example;
 				PROVISIONING_PROFILE = "";
@@ -426,6 +456,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = "PINRemoteImage/PINRemoteImage-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = Example;
 				PROVISIONING_PROFILE = "";

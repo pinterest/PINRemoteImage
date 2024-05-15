@@ -6,15 +6,15 @@
 //  Copyright © 2017 Pinterest. All rights reserved.
 //
 
-#import "PINCachedAnimatedImage.h"
+#import <PINRemoteImage/PINCachedAnimatedImage.h>
 
 #import "PINRemoteLock.h"
-#import "PINGIFAnimatedImage.h"
+#import <PINRemoteImage/PINGIFAnimatedImage.h>
 #if PIN_WEBP
-#import "PINWebPAnimatedImage.h"
+#import <PINRemoteImage/PINWebPAnimatedImage.h>
 #endif
 #if PIN_APNG
-#import "PINAPNGAnimatedImage.h"
+#import <PINRemoteImage/PINAPNGAnimatedImage.h>
 #endif
 
 #if !__has_include(<PINOperation/PINOperation.h>)
@@ -23,7 +23,7 @@
 #import <PINOperation/PINOperation.h>
 #endif
 
-#import "NSData+ImageDetectors.h"
+#import <PINRemoteImage/NSData+ImageDetectors.h>
 
 static const NSUInteger kFramesToRenderForLargeFrames = 4;
 static const NSUInteger kFramesToRenderMinimum = 2;

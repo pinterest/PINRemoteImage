@@ -6,7 +6,7 @@
 //  Copyright © 2017 Pinterest. All rights reserved.
 //
 
-#import "PINGIFAnimatedImage.h"
+#import <PINRemoteImage/PINGIFAnimatedImage.h>
 
 #import <ImageIO/ImageIO.h>
 #if PIN_TARGET_IOS
@@ -15,8 +15,8 @@
 #import <CoreServices/CoreServices.h>
 #endif
 
-#import "PINImage+DecodedImage.h"
-#import "NSData+ImageDetectors.h"
+#import <PINRemoteImage/PINImage+DecodedImage.h>
+#import <PINRemoteImage/NSData+ImageDetectors.h>
 
 @interface PINGIFAnimatedImage ()
 {

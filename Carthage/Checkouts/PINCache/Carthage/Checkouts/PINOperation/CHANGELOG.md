@@ -1,3 +1,35 @@
+# Changelog
+
+## [1.2.3](https://github.com/Pinterest/PINOperation/tree/1.2.3) (TBD)
+
+[Full Changelog](https://github.com/Pinterest/PINOperation/compare/1.2.2...1.2.3)
+
+
+- Update project to build and run using Xcode 15
+- Update CocoaPods Podspec to include Privacy Manifest file
+- Bump minimum deployment targets to iOS 12, tvOS 12, watchOS 4, and macOS 10.13
+
+## [1.2.2](https://github.com/Pinterest/PINOperation/tree/1.2.2) (2022-11-28)
+
+[Full Changelog](https://github.com/Pinterest/PINOperation/compare/1.2.1...1.2.2)
+
+
+- Update CI to modern xcode and fix Carthage [\#47](https://github.com/pinterest/PINOperation/pull/47) ([garrettmoon](https://github.com/garrettmoon))
+- Disable asserts in release builds when using Swift Package Manager [\#44](https://github.com/pinterest/PINOperation/pull/44) ([rcancro](https://github.com/rcancro))
+- Carthage is busted on Xcode 12 [\#41](https://github.com/pinterest/PINOperation/pull/41) ([garrettmoon](https://github.com/garrettmoon))
+- Latest release script [\#40](https://github.com/pinterest/PINOperation/pull/40) ([garrettmoon](https://github.com/garrettmoon))
+- Fixes for automated release process [\#39](https://github.com/pinterest/PINOperation/pull/39) ([garrettmoon](https://github.com/garrettmoon))
+
+## [1.2.1](https://github.com/Pinterest/PINOperation/tree/1.2.1) (2020-10-22)
+
+[Full Changelog](https://github.com/Pinterest/PINOperation/compare/1.2...1.2.1)
+
+
+- Add release script [\#38](https://github.com/pinterest/PINOperation/pull/38) ([garrettmoon](https://github.com/garrettmoon))
+- Only use @import for SPM [\#36](https://github.com/pinterest/PINOperation/pull/36) ([garrettmoon](https://github.com/garrettmoon))
+- Add SPM Test [\#35](https://github.com/pinterest/PINOperation/pull/35) ([garrettmoon](https://github.com/garrettmoon))
+- Remove BUCK target [\#34](https://github.com/pinterest/PINOperation/pull/34) ([adlerj](https://github.com/adlerj))
+
 ## [1.2](https://github.com/Pinterest/PINOperation/tree/1.2) (2020-06-30)
 
 [Full Changelog](https://github.com/Pinterest/PINOperation/compare/1.1.2...1.2)

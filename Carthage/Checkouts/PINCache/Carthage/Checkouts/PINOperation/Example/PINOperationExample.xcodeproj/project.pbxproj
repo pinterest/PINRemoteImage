@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,7 +11,6 @@
 		13872758245D5BB800C1F56D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13872757245D5BB800C1F56D /* Assets.xcassets */; };
 		1387275B245D5BB800C1F56D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 13872759245D5BB800C1F56D /* LaunchScreen.storyboard */; };
 		13872765245D5D8200C1F56D /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13872764245D5D8200C1F56D /* MainViewController.m */; };
-		6DD78925193625590E803994 /* libPods-PINOperationExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BDDE545CD189CC0B424ECD0 /* libPods-PINOperationExample.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,9 +22,6 @@
 		13872762245D5D8200C1F56D /* PINOperationExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PINOperationExample-Bridging-Header.h"; sourceTree = "<group>"; };
 		13872763245D5D8200C1F56D /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		13872764245D5D8200C1F56D /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
-		15635AC2BB0501241D3126BA /* Pods-PINOperationExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINOperationExample.release.xcconfig"; path = "Target Support Files/Pods-PINOperationExample/Pods-PINOperationExample.release.xcconfig"; sourceTree = "<group>"; };
-		2F8A2FBFCEF95140E01995E8 /* Pods-PINOperationExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PINOperationExample.debug.xcconfig"; path = "Target Support Files/Pods-PINOperationExample/Pods-PINOperationExample.debug.xcconfig"; sourceTree = "<group>"; };
-		7BDDE545CD189CC0B424ECD0 /* libPods-PINOperationExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PINOperationExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,7 +29,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6DD78925193625590E803994 /* libPods-PINOperationExample.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,8 +38,6 @@
 		110EBBE34DCD59092AC3306C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				2F8A2FBFCEF95140E01995E8 /* Pods-PINOperationExample.debug.xcconfig */,
-				15635AC2BB0501241D3126BA /* Pods-PINOperationExample.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -55,7 +48,6 @@
 				1387274D245D5BB500C1F56D /* PINOperationExample */,
 				1387274C245D5BB500C1F56D /* Products */,
 				110EBBE34DCD59092AC3306C /* Pods */,
-				5C200BF654CB547E7117CE2B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -81,14 +73,6 @@
 			path = PINOperationExample;
 			sourceTree = "<group>";
 		};
-		5C200BF654CB547E7117CE2B /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				7BDDE545CD189CC0B424ECD0 /* libPods-PINOperationExample.a */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -96,7 +80,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1387275F245D5BB800C1F56D /* Build configuration list for PBXNativeTarget "PINOperationExample" */;
 			buildPhases = (
-				6C859F1C363A79193D42EFC9 /* [CP] Check Pods Manifest.lock */,
 				13872747245D5BB500C1F56D /* Sources */,
 				13872748245D5BB500C1F56D /* Frameworks */,
 				13872749245D5BB500C1F56D /* Resources */,
@@ -116,8 +99,9 @@
 		13872743245D5BB500C1F56D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1140;
-				LastUpgradeCheck = 1140;
+				LastUpgradeCheck = 1520;
 				ORGANIZATIONNAME = Pinterest;
 				TargetAttributes = {
 					1387274A245D5BB500C1F56D = {
@@ -127,7 +111,7 @@
 				};
 			};
 			buildConfigurationList = 13872746245D5BB500C1F56D /* Build configuration list for PBXProject "PINOperationExample" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -155,31 +139,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		6C859F1C363A79193D42EFC9 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-PINOperationExample-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		13872747245D5BB500C1F56D /* Sources */ = {
@@ -231,6 +190,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -255,7 +215,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -291,6 +251,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -309,7 +270,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -321,20 +282,20 @@
 		};
 		13872760245D5BB800C1F56D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2F8A2FBFCEF95140E01995E8 /* Pods-PINOperationExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = PINOperationExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINOperationExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "PINOperationExample/PINOperationExample-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -344,20 +305,20 @@
 		};
 		13872761245D5BB800C1F56D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 15635AC2BB0501241D3126BA /* Pods-PINOperationExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = PINOperationExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.pinterest.PINOperationExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "PINOperationExample/PINOperationExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
