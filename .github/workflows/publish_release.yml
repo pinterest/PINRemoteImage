@@ -41,4 +41,4 @@ jobs:
       - name: Push to Cocoapods
         env:
           COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-        run: pod trunk push
+        run: pod trunk push --allow-warnings
