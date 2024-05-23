@@ -6,9 +6,10 @@
 //  Copyright © 2017 Pinterest. All rights reserved.
 //
 
+#import <PINRemoteImage/PINWebPAnimatedImage.h>
+
 #if PIN_WEBP
 
-#import <PINRemoteImage/PINWebPAnimatedImage.h>
 #import <ImageIO/ImageIO.h>
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 #if PIN_TARGET_IOS
