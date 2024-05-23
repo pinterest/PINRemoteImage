@@ -9,11 +9,12 @@
 #import <Foundation/Foundation.h>
 
 #import <PINRemoteImage/PINRemoteImageMacros.h>
+#import <PINRemoteImage/PINRemoteImageDataConvertible.h>
 #import "PINRemoteLock.h"
 
 @class PINImage;
 
-@interface PINRemoteImageMemoryContainer : NSObject
+@interface PINRemoteImageMemoryContainer : NSObject<PINRemoteImageDataConvertible>
 
 @property (nonatomic, strong) PINImage *image;
 @property (nonatomic, strong) NSData *data;
