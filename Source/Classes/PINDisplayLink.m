@@ -18,7 +18,7 @@
 @property (nonatomic, readonly) NSRunLoop *runloop;
 @property (nonatomic, readonly) NSRunLoopMode mode;
 
-- (void)displayLinkFired;
+- (void)displayLinkFiredWithDuration:(CFTimeInterval)duration;
 
 @end
 
@@ -29,8 +29,9 @@ static CVReturn displayLinkFired (CVDisplayLinkRef displayLink,
                                   CVOptionFlags *flagsOut,
                                   void *displayLinkContext)
 {
+    CFTimeInterval duration = inOutputTime->videoRefreshPeriod / (inOutputTime->videoTimeScale * inOutputTime->rateScalar);
     PINDisplayLink *link = (__bridge PINDisplayLink *)displayLinkContext;
-    [link displayLinkFired];
+    [link displayLinkFiredWithDuration:duration];
     return kCVReturnSuccess;
 }
 
@@ -40,6 +41,7 @@ static CVReturn displayLinkFired (CVDisplayLinkRef displayLink,
     
     BOOL _paused;
     NSInteger _frameInterval;
+    CFTimeInterval _duration;
 }
 
 + (PINDisplayLink *)displayLinkWithTarget:(id)target selector:(SEL)sel
@@ -65,9 +67,10 @@ static CVReturn displayLinkFired (CVDisplayLinkRef displayLink,
     }
 }
 
-- (void)displayLinkFired
+- (void)displayLinkFiredWithDuration:(CFTimeInterval)duration
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        self.duration = duration;
         [self.runloop performSelector:self.selector target:self.target argument:self order:NSUIntegerMax modes:@[self.mode]];
     });
 }
@@ -111,6 +114,18 @@ static CVReturn displayLinkFired (CVDisplayLinkRef displayLink,
     } else {
         CVDisplayLinkStart(_displayLinkRef);
     }
+}
+
+- (CFTimeInterval)duration
+{
+    PINAssertMain();
+    return _duration;
+}
+
+- (void)setDuration:(CFTimeInterval)duration
+{
+    PINAssertMain();
+    _duration = duration;
 }
 
 - (NSInteger)frameInterval

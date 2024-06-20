@@ -20,6 +20,7 @@
 
 @property(getter=isPaused, nonatomic) BOOL paused;
 @property(nonatomic) NSInteger frameInterval;
+@property(nonatomic, readonly) CFTimeInterval duration;
 
 @end
 #endif
