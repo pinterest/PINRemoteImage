@@ -44,7 +44,7 @@ xcuserdata
 #
 Pods/
 
-Carthage/Build
+Carthage/
 
 ## SPM
 .swiftpm/
