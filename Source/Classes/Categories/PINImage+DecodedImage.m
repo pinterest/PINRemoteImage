@@ -229,6 +229,12 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
 
 + (CGImageRef)pin_decodedImageRefWithCGImageRef:(CGImageRef)imageRef
 {
+    // Guard against NULL despite the nonnull annotation: CGImageSourceCreateImageAtIndex returns
+    // NULL for corrupt/truncated frames and callers have historically passed that straight through.
+    if (imageRef == NULL) {
+        return NULL;
+    }
+
     CGSize imageSize = CGSizeMake(CGImageGetWidth(imageRef), CGImageGetHeight(imageRef));
     
     CGBitmapInfo info = pin_CGImageRefIsOpaque(imageRef) ? (kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Host) : (kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Host);
@@ -253,9 +259,15 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
         }
         CGContextRelease(ctx);
         return decodedImageRef;
-        
+
     }
-    
+
+    // match the success path's +0 autoreleased contract.
+    // Returning the borrowed imageRef directly made the animated-image callers release
+    // it and then return the same (now dangling) pointer whenever CGBitmapContextCreate
+    // failed under memory pressure — an over-release/use-after-free.
+    CGImageRetain(imageRef);
+    CFAutorelease(imageRef);
     return imageRef;
 }
 
