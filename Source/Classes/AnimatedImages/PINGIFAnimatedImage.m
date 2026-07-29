@@ -17,6 +17,7 @@
 
 #import <PINRemoteImage/PINImage+DecodedImage.h>
 #import <PINRemoteImage/NSData+ImageDetectors.h>
+#import "PINRemoteLock.h"
 
 @interface PINGIFAnimatedImage ()
 {
@@ -29,6 +30,7 @@
     size_t _loopCount;
     CFTimeInterval *_durations;
     NSError *_error;
+    PINRemoteLock *_decodeLock; // serializes frame decodes on _imageSource
 }
 @end
 
@@ -38,6 +40,7 @@
 {
     if (self = [super init]) {
         _animatedImageData = animatedImageData;
+        _decodeLock = [[PINRemoteLock alloc] initWithName:@"PINGIFAnimatedImage decode lock"];
         _imageSource =
             CGImageSourceCreateWithData((CFDataRef)animatedImageData,
                                         (CFDictionaryRef)@{(__bridge NSString *)kCGImageSourceTypeIdentifierHint:
@@ -148,7 +151,26 @@
 
 - (CGImageRef)imageAtIndex:(NSUInteger)index cacheProvider:(nullable id<PINCachedAnimatedFrameProvider>)cacheProvider
 {
-    // I believe this is threadsafe as CGImageSource *seems* immutable…
+    // serialize ALL ImageIO calls on the shared source.
+    // Despite the optimistic comment this replaced ("CGImageSource *seems* immutable"),
+    // CGImageSource is not safe for concurrent access, and PINCachedAnimatedImage
+    // reaches this concurrently from the caching queue, the init-time warmup block,
+    // and coverImage callers. The status query below also advances ImageIO parser
+    // state, so it must be inside the lock too.
+    [_decodeLock lock];
+
+    // Refuse frames whose data is affirmatively damaged. Frames are decoded lazily
+    // (kCGImageSourceShouldCache is false), so a damaged frame doesn't fail at
+    // creation — it crashes later inside CGContextDrawImage when CoreGraphics
+    // dereferences the failed decode. Only hard-failure statuses are rejected:
+    // kCGImageStatusIncomplete is what trailer-less-but-renderable GIFs (common in
+    // the wild) report, and those decode fine.
+    CGImageSourceStatus frameStatus = CGImageSourceGetStatusAtIndex(_imageSource, index);
+    if (frameStatus == kCGImageStatusInvalidData || frameStatus == kCGImageStatusUnexpectedEOF) {
+        [_decodeLock unlock];
+        return NULL;
+    }
+
     CGImageRef imageRef =
         CGImageSourceCreateImageAtIndex(_imageSource,
                                         index,
@@ -159,7 +181,8 @@
         CGImageRelease(imageRef);
         imageRef = decodedImageRef;
     }
-    
+    [_decodeLock unlock];
+
     return imageRef;
 }
 

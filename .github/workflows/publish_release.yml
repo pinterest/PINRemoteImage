@@ -7,8 +7,9 @@ on:
         required: true
 
 env:
-  # Use Xcode 15.2 or newer to support VisionOS
-  DEVELOPER_DIR: /Applications/Xcode_16.4.app
+  # Must exist on the current macos-latest runner image:
+  # https://github.com/actions/runner-images/blob/main/images/macos/macos-26-arm64-Readme.md
+  DEVELOPER_DIR: /Applications/Xcode_26.5.0.app/Contents/Developer
 
 jobs:
   create_release:

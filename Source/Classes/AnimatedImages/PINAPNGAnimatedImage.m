@@ -19,6 +19,7 @@
 
 #import <PINRemoteImage/PINImage+DecodedImage.h>
 #import <PINRemoteImage/NSData+ImageDetectors.h>
+#import "PINRemoteLock.h"
 
 @interface PINAPNGAnimatedImage ()
 {
@@ -31,6 +32,7 @@
     size_t _loopCount;
     CFTimeInterval *_durations;
     NSError *_error;
+    PINRemoteLock *_decodeLock; // serializes frame decodes on _imageSource
 }
 @end
 
@@ -40,6 +42,7 @@
 {
     if (self = [super init]) {
         _animatedImageData = animatedImageData;
+        _decodeLock = [[PINRemoteLock alloc] initWithName:@"PINAPNGAnimatedImage decode lock"];
         _imageSource =
             CGImageSourceCreateWithData((CFDataRef)animatedImageData,
                                         (CFDictionaryRef)@{(__bridge NSString *)kCGImageSourceTypeIdentifierHint:
@@ -150,7 +153,16 @@
 
 - (CGImageRef)imageAtIndex:(NSUInteger)index cacheProvider:(nullable id<PINCachedAnimatedFrameProvider>)cacheProvider
 {
-    // I believe this is threadsafe as CGImageSource *seems* immutable…
+    // same hardening as PINGIFAnimatedImage — serialize
+    // all ImageIO calls on the shared source (including the status query, which
+    // advances parser state), and refuse affirmatively damaged frames.
+    [_decodeLock lock];
+    CGImageSourceStatus frameStatus = CGImageSourceGetStatusAtIndex(_imageSource, index);
+    if (frameStatus == kCGImageStatusInvalidData || frameStatus == kCGImageStatusUnexpectedEOF) {
+        [_decodeLock unlock];
+        return NULL;
+    }
+
     CGImageRef imageRef =
         CGImageSourceCreateImageAtIndex(_imageSource,
                                         index,
@@ -161,7 +173,8 @@
         CGImageRelease(imageRef);
         imageRef = decodedImageRef;
     }
-    
+    [_decodeLock unlock];
+
     return imageRef;
 }
 

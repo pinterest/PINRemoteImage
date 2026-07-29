@@ -152,6 +152,12 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
     return [NSURL URLWithString:@"https://httpbin.org/headers"];
 }
 
+// The pinimg CDN periodically re-encodes these derivatives, drifting the pixel
+// width by a pixel or so around the nominal size in the URL (e.g. 736x has served
+// both 736- and 735-wide images). Tests only need to tell the three sizes apart,
+// so compare widths with XCTAssertEqualWithAccuracy and this tolerance.
+static const CGFloat PINSizeVariantWidthAccuracy = 2;
+
 - (NSURL *)JPEGURL_Small
 {
     return [NSURL URLWithString:@"https://i.pinimg.com/345x/1b/bc/c2/1bbcc264683171eb3815292d2f546e92.jpg"];
@@ -975,7 +981,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
                                   completion:^(PINRemoteImageManagerResult *result)
     {
         image = result.image;
-        XCTAssertEqual(image.size.width, 736, @"Large image should be downloaded. result.image: %@, result.error: %@", result.image, result.error);
+        XCTAssertEqualWithAccuracy(image.size.width, 736, PINSizeVariantWidthAccuracy, @"Large image should be downloaded. result.image: %@, result.error: %@", result.image, result.error);
         dispatch_semaphore_signal(semaphore);
     }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
@@ -991,7 +997,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
                                   completion:^(PINRemoteImageManagerResult *result)
     {
         image = result.image;
-        XCTAssertEqual(image.size.width, 736, @"Large image should be found in cache");
+        XCTAssertEqualWithAccuracy(image.size.width, 736, PINSizeVariantWidthAccuracy, @"Large image should be found in cache");
         dispatch_semaphore_signal(semaphore);
     }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
@@ -1003,7 +1009,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
                                   completion:^(PINRemoteImageManagerResult *result)
     {
         image = result.image;
-        XCTAssert(image.size.width == 345, @"Small image should be downloaded at low bps");
+        XCTAssertEqualWithAccuracy(image.size.width, 345, PINSizeVariantWidthAccuracy, @"Small image should be downloaded at low bps");
         dispatch_semaphore_signal(semaphore);
     }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
@@ -1017,7 +1023,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
                                   completion:^(PINRemoteImageManagerResult *result)
     {
         image = result.image;
-        XCTAssert(image.size.width == 345, @"Small image should be found in cache");
+        XCTAssertEqualWithAccuracy(image.size.width, 345, PINSizeVariantWidthAccuracy, @"Small image should be found in cache");
         dispatch_semaphore_signal(semaphore);
     }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
@@ -1034,7 +1040,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
                                   completion:^(PINRemoteImageManagerResult *result)
      {
          image = result.image;
-         XCTAssert(image.size.width == 564, @"Medium image should be now downloaded");
+         XCTAssertEqualWithAccuracy(image.size.width, 564, PINSizeVariantWidthAccuracy, @"Medium image should be now downloaded");
          dispatch_semaphore_signal(semaphore);
      }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");
@@ -1063,7 +1069,7 @@ static inline BOOL PINImageAlphaInfoIsOpaque(CGImageAlphaInfo info) {
                                   completion:^(PINRemoteImageManagerResult *result)
      {
          image = result.image;
-         XCTAssert(image.size.width == 345, @"Small image should be now downloaded");
+         XCTAssertEqualWithAccuracy(image.size.width, 345, PINSizeVariantWidthAccuracy, @"Small image should be now downloaded");
          dispatch_semaphore_signal(semaphore);
      }];
     XCTAssert(dispatch_semaphore_wait(semaphore, [self timeout]) == 0, @"Semaphore timed out.");

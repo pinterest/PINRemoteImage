@@ -361,10 +361,10 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
     CGImageRef imageRef = [self->_animatedImage imageAtIndex:frameIndex cacheProvider:self];
     PINLog(@"Generating: %lu", (unsigned long)frameIndex);
 
-    if (imageRef) {
-        __block PINImage *coverImage = nil;
-        __block PINAnimatedImageInfoReady coverImageReadyCallback = nil;
-        [self->_lock lockWithBlock:^{
+    __block PINImage *coverImage = nil;
+    __block PINAnimatedImageInfoReady coverImageReadyCallback = nil;
+    [self->_lock lockWithBlock:^{
+        if (imageRef) {
             [self->_frameCache setObject:(__bridge id _Nonnull)(imageRef) forKey:@(frameIndex)];
 
             // Update the cover image
@@ -373,26 +373,31 @@ static const CFTimeInterval kSecondsBetweenMemoryWarnings = 15;
                 coverImageReadyCallback = notifyCallback ? self->_coverImageReadyCallback : nil;
                 coverImage = self->_coverImage;
             }
-
-            self->_frameRenderCount--;
-            NSAssert(self->_frameRenderCount >= 0, @"playback ready is less than zero, something is wrong :(");
-
-            PINLog(@"Frames left: %ld", (long)_frameRenderCount);
-
-            dispatch_block_t notify = nil;
-            if (self->_frameRenderCount == 0 && self->_notifyOnReady) {
-                self->_notifyOnReady = NO;
-                if (self->_playbackReadyCallback) {
-                    notify = self->_playbackReadyCallback;
-                    [self->_operationQueue scheduleOperation:^{
-                        notify();
-                    }];
-                }
-            }
-        }];
-        if (coverImageReadyCallback) {
-            coverImageReadyCallback(coverImage);
+        } else {
+            // a frame that fails to decode must release its
+            // render slot; leaving it in _cachedOrCachingFrames with _frameRenderCount
+            // held meant playbackReady never fired and the frame was never retried.
+            [self->_cachedOrCachingFrames removeIndex:frameIndex];
         }
+
+        self->_frameRenderCount--;
+        NSAssert(self->_frameRenderCount >= 0, @"playback ready is less than zero, something is wrong :(");
+
+        PINLog(@"Frames left: %ld", (long)_frameRenderCount);
+
+        dispatch_block_t notify = nil;
+        if (self->_frameRenderCount == 0 && self->_notifyOnReady) {
+            self->_notifyOnReady = NO;
+            if (self->_playbackReadyCallback) {
+                notify = self->_playbackReadyCallback;
+                [self->_operationQueue scheduleOperation:^{
+                    notify();
+                }];
+            }
+        }
+    }];
+    if (coverImageReadyCallback) {
+        coverImageReadyCallback(coverImage);
     }
 }
 

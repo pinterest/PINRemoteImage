@@ -1,5 +1,5 @@
-PLATFORM="platform=iOS Simulator,name=iPhone 16,OS=18.5"
-SDK="iphonesimulator18.5"
+PLATFORM="platform=iOS Simulator,name=iPhone 17"
+SDK="iphonesimulator"
 SHELL=/bin/bash -o pipefail
 XCODE_MAJOR_VERSION=$(shell xcodebuild -version | HEAD -n 1 | sed -E 's/Xcode ([0-9]+).*/\1/')
 IOS_EXAMPLE_PROJECT="Examples/Example-Xcode-SPM/Example-Xcode-SPM.xcodeproj"
@@ -14,13 +14,13 @@ analyze:
 	xcodebuild clean analyze -destination ${PLATFORM} -sdk ${SDK} -workspace PINRemoteImage.xcworkspace -scheme PINRemoteImage \
 	CODE_SIGNING_REQUIRED=NO \
 	CLANG_ANALYZER_OUTPUT=plist-html \
-	CLANG_ANALYZER_OUTPUT_DIR="$(shell pwd)/clang" | xcpretty
+	CLANG_ANALYZER_OUTPUT_DIR="$(shell pwd)/clang" | xcbeautify
 	if [[ -n `find $(shell pwd)/clang -name "*.html"` ]] ; then rm -rf `pwd`/clang; exit 1; fi
 	rm -rf $(shell pwd)/clang
 	
 test:
 	xcodebuild clean test -destination ${PLATFORM} -sdk ${SDK} -workspace PINRemoteImage.xcworkspace -scheme PINRemoteImage \
-	CODE_SIGNING_REQUIRED=NO | xcpretty
+	CODE_SIGNING_REQUIRED=NO | xcbeautify
 	
 carthage:
 	carthage update --no-use-binaries --no-build
@@ -36,6 +36,6 @@ example:
 	fi
 	xcodebuild clean build -project ${IOS_EXAMPLE_PROJECT} -scheme ${EXAMPLE_SCHEME} -destination ${PLATFORM} -sdk ${SDK} \
 	ONLY_ACTIVE_ARCH=NO \
-	CODE_SIGNING_REQUIRED=NO | xcpretty
+	CODE_SIGNING_REQUIRED=NO | xcbeautify
 	
 all: carthage test cocoapods analyze spm example
