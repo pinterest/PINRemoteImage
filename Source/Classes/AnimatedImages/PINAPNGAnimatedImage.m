@@ -19,6 +19,7 @@
 
 #import <PINRemoteImage/PINImage+DecodedImage.h>
 #import <PINRemoteImage/NSData+ImageDetectors.h>
+#import "PINRemoteLock.h"
 
 @interface PINAPNGAnimatedImage ()
 {
@@ -31,7 +32,7 @@
     size_t _loopCount;
     CFTimeInterval *_durations;
     NSError *_error;
-    NSLock *_decodeLock; // serializes frame decodes on _imageSource
+    PINRemoteLock *_decodeLock; // serializes frame decodes on _imageSource
 }
 @end
 
@@ -41,7 +42,7 @@
 {
     if (self = [super init]) {
         _animatedImageData = animatedImageData;
-        _decodeLock = [[NSLock alloc] init];
+        _decodeLock = [[PINRemoteLock alloc] initWithName:@"PINAPNGAnimatedImage decode lock"];
         _imageSource =
             CGImageSourceCreateWithData((CFDataRef)animatedImageData,
                                         (CFDictionaryRef)@{(__bridge NSString *)kCGImageSourceTypeIdentifierHint:
