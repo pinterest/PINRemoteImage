@@ -14,6 +14,7 @@
 #import "PINRemoteImageCallbacks.h"
 #import "PINRemoteLock.h"
 #import "PINSpeedRecorder.h"
+#import "PINProgressiveImage+Private.h"
 
 @interface PINRemoteImageDownloadTask ()
 {
@@ -311,9 +312,11 @@
 #endif
                 
                 if (error.code != NSURLErrorCancelled) {
-                    NSData *data = self.progressImage.data;
-                    
-                    if (error == nil && data == nil) {
+                    // Decide emptiness and retry WITHOUT materializing the buffer -- on a retry
+                    // the copy was discarded, and the allocation itself can fail under memory
+                    // pressure. -hasData preserves today's semantics exactly:
+                    // an allocated-but-zero-length buffer is not "empty" (see PINProgressiveImage).
+                    if (error == nil && self.progressImage.hasData == NO) {
                         error = [NSError errorWithDomain:PINRemoteImageManagerErrorDomain
                                                     code:PINRemoteImageManagerErrorImageEmpty
                                                 userInfo:nil];
@@ -336,6 +339,19 @@
                             [self scheduleDownloadWithRequest:request resume:nil skipRetry:skipRetry priority:priority isRetry:YES completionHandler:completionHandler];
                         });
                         return;
+                    }
+                    
+                    // Terminal: no further data can arrive, so hand off the buffer instead of
+                    // copying it. -takeData allocates nothing, so it cannot throw under memory
+                    // pressure -- this is what actually removes the doubling.
+                    NSData *data = [self.progressImage takeData];
+                    if (error == nil && data == nil) {
+                        // Load-bearing: with -hasData gating the retry decision above, this only
+                        // fires if -progressImage itself is nil, keeping completionHandler from
+                        // ever seeing (nil, response, nil).
+                        error = [NSError errorWithDomain:PINRemoteImageManagerErrorDomain
+                                                    code:PINRemoteImageManagerErrorImageEmpty
+                                                userInfo:nil];
                     }
                     
                     completionHandler(data, response, error);

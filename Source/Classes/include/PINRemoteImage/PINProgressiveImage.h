@@ -49,4 +49,7 @@
  */
 - (nullable NSData *)data;
 
+/// YES if any data has been received. Equivalent to `[self data] != nil`, without copying.
+@property (nonatomic, readonly) BOOL hasData;
+
 @end

@@ -80,13 +80,16 @@
 #else
     pthread_mutex_lock(&_lock);
 #endif
-    block();
+    @try {
+        block();
+    } @finally {
 #if PINREMOTELOCK_DEBUG
-    [_lock unlock];
-    [_recursiveLock unlock];
+        [_lock unlock];
+        [_recursiveLock unlock];
 #else
-    pthread_mutex_unlock(&_lock);
+        pthread_mutex_unlock(&_lock);
 #endif
+    }
 }
 
 - (void)lock
