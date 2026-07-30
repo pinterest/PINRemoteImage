@@ -28,6 +28,10 @@
 @property (nonatomic, assign) NSUInteger scannedByte;
 @property (nonatomic, assign) NSInteger sosCount;
 @property (nonatomic, strong) PINRemoteLock *lock;
+// Set once -takeData has handed off mutableData. Overloads mutableData == nil (which
+// otherwise means "nothing received yet") with a second meaning: "already handed off,
+// this object is terminal." See the guard at the top of -updateProgressiveImageWithData:.
+@property (nonatomic, assign) BOOL dataTaken;
 #if DEBUG
 @property (nonatomic, assign) CFTimeInterval scanTime;
 #endif
@@ -133,6 +137,13 @@
 - (void)updateProgressiveImageWithData:(nonnull NSData *)data expectedNumberOfBytes:(int64_t)expectedNumberOfBytes isResume:(BOOL)isResume
 {
     [self.lock lock];
+        if (self.dataTaken) {
+            // Data was already handed off to the completion path (-takeData); this object
+            // is terminal. Without this guard, a late append would allocate a fresh, short
+            // buffer here and silently corrupt the incremental image source it fed earlier.
+            [self.lock unlock];
+            return;
+        }
         if (isResume) {
             NSAssert(self.mutableData == nil, @"If we're resuming, data shouldn't be setup yet.");
             self.startingBytes = data.length;
@@ -265,7 +276,43 @@
 - (NSData *)data
 {
     [self.lock lock];
-        NSData *data = [self.mutableData copy];
+        NSData *data = nil;
+        @try {
+            data = [self.mutableData copy];
+        } @catch (NSException *exception) {
+            // Foundation's page allocator raises NSInvalidArgumentException rather than
+            // returning nil when it cannot satisfy a large allocation. Callers already
+            // treat nil as "no data" (see PINRemoteImageDownloadTask).
+            data = nil;
+        }
+    [self.lock unlock];
+    return data;
+}
+
+// Exactly equivalent to `[self data] == nil` today, without materializing a copy.
+// NOT the same as `data.length == 0` -- a fresh-but-allocated zero-length buffer makes
+// `-data` return non-nil (see PINRemoteImageDownloadTask's retry/emptiness check).
+- (BOOL)hasData
+{
+    [self.lock lock];
+        BOOL hasData = (self.mutableData != nil);
+    [self.lock unlock];
+    return hasData;
+}
+
+// Transfers ownership of the accumulated buffer to the caller without copying.
+// ONLY safe once no further data can arrive for this task -- i.e. from the URL
+// session completion handler, whose per-task delegate queue is serial and has
+// already delivered every -didReceiveData: synchronously.
+// Returns a dynamically-mutable NSMutableData upcast to NSData: it is uniquely owned
+// (we drop our reference) and nothing in-repo mutates it. Foundation offers no way to
+// obtain a truly immutable NSData from an NSMutableData without copying.
+- (NSData *)takeData
+{
+    [self.lock lock];
+        NSData *data = self.mutableData;
+        self.mutableData = nil;
+        self.dataTaken = YES;
     [self.lock unlock];
     return data;
 }
