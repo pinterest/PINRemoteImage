@@ -1568,18 +1568,18 @@ static dispatch_once_t sharedDispatchToken;
     //In case the generated key exceeds PINRemoteImageManagerCacheKeyMaxLength characters,
     //we return the hash of it instead.
     if (cacheKey.length > PINRemoteImageManagerCacheKeyMaxLength) {
-        __block CC_MD5_CTX ctx;
-        CC_MD5_Init(&ctx);
+        __block CC_SHA256_CTX ctx;
+        CC_SHA256_Init(&ctx);
         NSData *data = [cacheKey dataUsingEncoding:NSUTF8StringEncoding];
         [data enumerateByteRangesUsingBlock:^(const void * _Nonnull bytes, NSRange byteRange, BOOL * _Nonnull stop) {
-            CC_MD5_Update(&ctx, bytes, (CC_LONG)byteRange.length);
+            CC_SHA256_Update(&ctx, bytes, (CC_LONG)byteRange.length);
         }];
 
-        unsigned char digest[CC_MD5_DIGEST_LENGTH];
-        CC_MD5_Final(digest, &ctx);
+        unsigned char digest[CC_SHA256_DIGEST_LENGTH];
+        CC_SHA256_Final(digest, &ctx);
 
-        NSMutableString *hexString  = [NSMutableString stringWithCapacity:(CC_MD5_DIGEST_LENGTH * 2)];
-        for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
+        NSMutableString *hexString  = [NSMutableString stringWithCapacity:(CC_SHA256_DIGEST_LENGTH * 2)];
+        for (int i = 0; i < CC_SHA256_DIGEST_LENGTH; i++) {
             [hexString appendFormat:@"%02lx", (unsigned long)digest[i]];
         }
         cacheKey = [hexString copy];
