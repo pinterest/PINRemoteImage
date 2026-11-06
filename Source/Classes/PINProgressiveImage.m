@@ -277,7 +277,7 @@
 {
     [self.lock lock];
         NSData *data = nil;
-        if (PINRemoteImageManager.isMemorySafeProgressiveDataEnabled) {
+        if (self.memorySafeDataEnabled) {
             @try {
                 data = [self.mutableData copy];
             } @catch (NSException *exception) {

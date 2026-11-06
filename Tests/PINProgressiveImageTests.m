@@ -46,29 +46,16 @@ static void PINTestMakeCopyThrowOnInstance(NSObject *object)
 
 @interface PINProgressiveImageTests : XCTestCase
 
-@property (nonatomic, assign) BOOL originalMemorySafeProgressiveDataEnabled;
-
 @end
 
 @implementation PINProgressiveImageTests
 
-- (void)setUp
-{
-    [super setUp];
-    self.originalMemorySafeProgressiveDataEnabled = PINRemoteImageManager.isMemorySafeProgressiveDataEnabled;
-    PINRemoteImageManager.memorySafeProgressiveDataEnabled = YES;
-}
-
-- (void)tearDown
-{
-    PINRemoteImageManager.memorySafeProgressiveDataEnabled = self.originalMemorySafeProgressiveDataEnabled;
-    [super tearDown];
-}
-
 - (PINProgressiveImage *)freshProgressiveImage
 {
     NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:@"https://example.com/image.jpg"]];
-    return [[PINProgressiveImage alloc] initWithDataTask:dataTask];
+    PINProgressiveImage *progressiveImage = [[PINProgressiveImage alloc] initWithDataTask:dataTask];
+    progressiveImage.memorySafeDataEnabled = YES;
+    return progressiveImage;
 }
 
 #pragma mark - hasData
@@ -177,9 +164,8 @@ static void PINTestMakeCopyThrowOnInstance(NSObject *object)
 
 - (void)testDataStillThrowsWhenCopyFailsAndMemorySafeDataIsDisabled
 {
-    PINRemoteImageManager.memorySafeProgressiveDataEnabled = NO;
-
     PINProgressiveImage *progressiveImage = [self freshProgressiveImage];
+    progressiveImage.memorySafeDataEnabled = NO;
     NSData *chunk = [@"payload" dataUsingEncoding:NSUTF8StringEncoding];
     [progressiveImage updateProgressiveImageWithData:chunk expectedNumberOfBytes:(int64_t)chunk.length isResume:NO];
 

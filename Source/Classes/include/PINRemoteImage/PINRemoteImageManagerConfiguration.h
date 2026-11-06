@@ -43,4 +43,13 @@
 /** Whether high quality images should be downloaded when a low quality image is cached if network connectivity has improved. */
 @property (nonatomic, readwrite, assign) BOOL shouldUpgradeLowQualityImages;
 
+/**
+ Opt-in switch for memory-safe handling of downloaded image data. Defaults to NO.
+
+ When YES, a finished download hands its accumulated buffer to the completion path instead of copying it, and
+ -[PINProgressiveImage data] returns nil instead of raising when Foundation fails to allocate the copy under
+ memory pressure.
+ */
+@property (nonatomic, readwrite, assign, getter=isMemorySafeProgressiveDataEnabled) BOOL memorySafeProgressiveDataEnabled;
+
 @end

@@ -141,6 +141,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse 
 @property (nonatomic, strong) NSMapTable <NSUUID *, PINRemoteImageTask *> *UUIDToTask;
 @property (nonatomic, strong) NSArray <NSNumber *> *progressThresholds;
 @property (nonatomic, assign) BOOL shouldBlurProgressive;
+@property (nonatomic, assign) BOOL memorySafeProgressiveDataEnabled;
 @property (nonatomic, assign) CGSize maxProgressiveRenderSize;
 @property (nonatomic, assign) NSTimeInterval estimatedRemainingTimeThreshold;
 @property (nonatomic, strong) dispatch_queue_t callbackQueue;
@@ -169,18 +170,6 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse 
 
 static PINRemoteImageManager *sharedImageManager = nil;
 static dispatch_once_t sharedDispatchToken;
-static atomic_bool memorySafeProgressiveDataEnabled = false;
-
-+ (BOOL)isMemorySafeProgressiveDataEnabled
-{
-    return atomic_load(&memorySafeProgressiveDataEnabled);
-}
-
-+ (void)setMemorySafeProgressiveDataEnabled:(BOOL)enabled
-{
-    atomic_store(&memorySafeProgressiveDataEnabled, enabled);
-}
-
 + (instancetype)sharedImageManager
 {
     dispatch_once(&sharedDispatchToken, ^{
@@ -274,6 +263,7 @@ static atomic_bool memorySafeProgressiveDataEnabled = false;
         _shouldUpgradeLowQualityImages = configuration.shouldUpgradeLowQualityImages;
         _shouldBlurProgressive = configuration.shouldBlurProgressive;
         _maxProgressiveRenderSize = configuration.maxProgressiveRenderSize;
+        _memorySafeProgressiveDataEnabled = configuration.memorySafeProgressiveDataEnabled;
         self.tasks = [[NSMutableDictionary alloc] init];
         self.canceledTasks = [[NSHashTable alloc] initWithOptions:NSHashTableWeakMemory capacity:5];
         self.UUIDToTask = [NSMapTable weakToWeakObjectsMapTable];

@@ -313,7 +313,7 @@
                 
                 if (error.code != NSURLErrorCancelled) {
                     // Read once so this completion stays on a single path even if the switch flips mid-flight.
-                    BOOL memorySafeData = PINRemoteImageManager.isMemorySafeProgressiveDataEnabled;
+                    BOOL memorySafeData = self.manager.memorySafeProgressiveDataEnabled;
                     // When memory-safe, decide emptiness and retry WITHOUT materializing the buffer --
                     // on a retry the copy was discarded, and the allocation itself can fail under memory
                     // pressure. -hasData preserves the copy path's semantics exactly:
@@ -364,6 +364,7 @@
                 }
             }];
         }]];
+        self->_progressImage.memorySafeDataEnabled = self.manager.memorySafeProgressiveDataEnabled;
     }];
 }
 

@@ -21,6 +21,7 @@
         _highQualityBPSThreshold = 500000;
         _lowQualityBPSThreshold = 50000; // approximately edge speed
         _shouldUpgradeLowQualityImages = NO;
+        _memorySafeProgressiveDataEnabled = NO;
     }
     return self;
 }

@@ -225,16 +225,6 @@ typedef void(^PINRemoteImageManagerMetrics)(NSURL  * __nonnull url, NSURLSession
 + (void)setSharedImageManagerWithConfiguration:(nullable NSURLSessionConfiguration *)configuration;
 
 /**
- Opt-in, process-wide switch for memory-safe handling of downloaded image data. Defaults to NO.
-
- When YES, a finished download hands its accumulated buffer to the completion path instead of copying it, and
- -[PINProgressiveImage data] returns nil instead of raising when Foundation fails to allocate the copy under
- memory pressure. Set it once, before any downloads start; each download reads it once when it completes.
- */
-@property (class, atomic, assign, getter=isMemorySafeProgressiveDataEnabled) BOOL memorySafeProgressiveDataEnabled;
-
-
-/**
  The result of this method is assigned to self.cache in init. If you wish to provide a customized cache to the manager you can subclass PINRemoteImageManager and return a custom object, implementing PINRemoteImageCaching protocol from this method. Same effect could be achieved by using initWithSessionConfiguration:alternativeRepresentationProvider:imageCache: initializer.
  @deprecated Use the class method +defaultImageCache
  @warning This method is meant only for override. It will be called *once* by an instance of PINRemoteImageManager. The default implementation creates a new cache on every call. If you're looking to access the cache being used by an instance of PINRemoteImageManager, @c cache.

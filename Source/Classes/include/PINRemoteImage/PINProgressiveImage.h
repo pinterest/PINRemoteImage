@@ -25,6 +25,8 @@
 @property (atomic, assign) CFTimeInterval estimatedRemainingTimeThreshold;
 @property (nonatomic, strong, readonly, nonnull) NSURLSessionDataTask * dataTask;
 @property (nonatomic, readonly) CFTimeInterval estimatedRemainingTime;
+/** When YES, -data returns nil instead of raising if copying the buffer fails. Defaults to NO. */
+@property (atomic, assign, getter=isMemorySafeDataEnabled) BOOL memorySafeDataEnabled;
 
 - (nonnull instancetype)init NS_UNAVAILABLE;
 - (nonnull instancetype)initWithDataTask:(nonnull NSURLSessionDataTask *)dataTask;
