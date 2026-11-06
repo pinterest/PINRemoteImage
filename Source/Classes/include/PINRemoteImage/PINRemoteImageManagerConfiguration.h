@@ -50,6 +50,6 @@
  -[PINProgressiveImage data] returns nil instead of raising when Foundation fails to allocate the copy under
  memory pressure.
  */
-@property (nonatomic, readwrite, assign, getter=isMemorySafeProgressiveDataEnabled) BOOL memorySafeProgressiveDataEnabled;
+@property (nonatomic, readwrite, assign) BOOL isMemorySafeProgressiveDataEnabled;
 
 @end

@@ -2,7 +2,7 @@
 //  PINProgressiveImage+Private.h
 //  PINRemoteImage
 //
-//  Created by Garrett Moon on 2/9/15.
+//  Created by Vitor Navarro on 30/7/26.
 //
 //
 
