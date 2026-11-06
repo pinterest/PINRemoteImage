@@ -23,6 +23,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse 
 @property (nonatomic, readonly) NSArray <NSNumber *> *progressThresholds;
 @property (nonatomic, readonly) NSTimeInterval estimatedRemainingTimeThreshold;
 @property (nonatomic, readonly) BOOL shouldBlurProgressive;
+@property (nonatomic, readonly) BOOL isMemorySafeProgressiveDataEnabled;
 @property (nonatomic, readonly) CGSize maxProgressiveRenderSize;
 
 @end

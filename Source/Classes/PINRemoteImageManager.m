@@ -140,6 +140,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSURLResponse 
 @property (nonatomic, strong) NSMapTable <NSUUID *, PINRemoteImageTask *> *UUIDToTask;
 @property (nonatomic, strong) NSArray <NSNumber *> *progressThresholds;
 @property (nonatomic, assign) BOOL shouldBlurProgressive;
+@property (nonatomic, assign) BOOL isMemorySafeProgressiveDataEnabled;
 @property (nonatomic, assign) CGSize maxProgressiveRenderSize;
 @property (nonatomic, assign) NSTimeInterval estimatedRemainingTimeThreshold;
 @property (nonatomic, strong) dispatch_queue_t callbackQueue;
@@ -262,6 +263,7 @@ static dispatch_once_t sharedDispatchToken;
         _shouldUpgradeLowQualityImages = configuration.shouldUpgradeLowQualityImages;
         _shouldBlurProgressive = configuration.shouldBlurProgressive;
         _maxProgressiveRenderSize = configuration.maxProgressiveRenderSize;
+        _isMemorySafeProgressiveDataEnabled = configuration.isMemorySafeProgressiveDataEnabled;
         self.tasks = [[NSMutableDictionary alloc] init];
         self.canceledTasks = [[NSHashTable alloc] initWithOptions:NSHashTableWeakMemory capacity:5];
         self.UUIDToTask = [NSMapTable weakToWeakObjectsMapTable];
