@@ -5,16 +5,17 @@ import PackageDescription
 
 let package = Package(
     name: "PINRemoteImage",
-    platforms: [             
-             .iOS(.v14),
-             .macOS(.v11),
-             .tvOS(.v14),
-         ],
+    platforms: [
+        .iOS(.v14),
+        .macOS(.v11),
+        .tvOS(.v14),
+    ],
     products: [
         .library(
             name: "PINRemoteImage",
             type: .static,
-            targets: ["PINRemoteImage"]),
+            targets: ["PINRemoteImage"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/pinterest/PINCache.git", from: "3.0.4"),
@@ -32,10 +33,14 @@ let package = Package(
                 .headerSearchPath("AnimatedImages"),
                 .headerSearchPath("ImageCategories"),
                 .headerSearchPath("PinCache"),
-                
+
                 .define("NS_BLOCK_ASSERTIONS", to: "1", .when(configuration: .release)),
                 .define("USE_PINCACHE", to: "1"),
                 .define("PIN_WEBP", to: "1"),
-                ]),
+            ],
+            linkerSettings: [
+                .linkedFramework("QuartzCore"),
+            ]
+        ),
     ]
 )
